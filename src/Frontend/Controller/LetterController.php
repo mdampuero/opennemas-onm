@@ -258,8 +258,7 @@ class LetterController extends Controller
                 $data['body'] = nl2br($data['body']);
 
                 if ($letter->hasBadWords($data)) {
-                    $msg = "Su carta fue rechazado debido al uso "
-                        ."de palabras malsonantes.";
+                    $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
                 } else {
                     $ip = getRealIp();
                     $params['ip']   = $ip;
@@ -292,12 +291,12 @@ class LetterController extends Controller
                         }
 
                     } else {
-                        $msg = "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
+                        $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
                             ."correctamente todos los campos.";
                     }
                 }
             } else {
-                $msg = _('<strong>Unable</strong> to save the letter.');
+                $msg = _('Unable to save the letter.');
             }
         }
 
@@ -317,53 +316,39 @@ class LetterController extends Controller
      **/
     public function saveImage($data)
     {
+        // check if category, and file sizes are properly set and category_name is valid
+        $category      = 1;
+        $category_name = 'fotos';
 
-        switch ($_SERVER['REQUEST_METHOD']) {
+        $upload        = isset($_FILES['image']) ? $_FILES['image'] : null;
+        $info          = array();
 
-            case 'POST':
+        if ($upload) {
 
-                // check if category, and filesizes are properly setted and category_name is valid
-                $category = 1;
-                $category_name = 'fotos';
+            $data = array(
+                'local_file'        => $upload['tmp_name'],
+                'original_filename' => $upload['name'] ,
+                'title'             => $data['title'],
+                'fk_category'       => $category,
+                'category'          => $category,
+                'category_name'     => $category_name,
+                'description'       => '',
+                'metadata'          => '',
+            );
 
-                $upload = isset($_FILES['image']) ? $_FILES['image'] : null;
-                $info = array();
-
+            try {
                 $photo = new \Photo();
-                if ($upload) {
-
-                    $data = array(
-                        'local_file'        => $upload['tmp_name'],
-                        'original_filename' => $upload['name'] ,
-                        'title'             => $data['title'],
-                        'fk_category'       => $category,
-                        'category'          => $category,
-                        'category_name'     => $category_name,
-                        'description'       => '',
-                        'metadata'          => '',
-                    );
-
-                    try {
-                        $photo = new \Photo();
-                        $photo = $photo->createWithImageMagick($data);
-
-
-                    } catch (Exception $e) {
-                        $info [] = array(
-                            'error'         => $e->getMessage(),
-                        );
-                    }
-
-                }
+                $photo = $photo->createFromLocalFile($data);
 
                 return $photo->id;
-                break;
-
-            default:
-                return 0;
+            } catch (Exception $e) {
+                $info [] = array(
+                    'error'         => $e->getMessage(),
+                );
+            }
         }
 
-        return 0;
+        return null;
     }
 
 

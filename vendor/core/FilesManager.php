@@ -56,9 +56,8 @@ class FilesManager
 
         chmod($path, 0755);
         if (!$created) {
-            $GLOBALS['application']->logger->emerg(
-                "Error creating directory: " . $path
-            );
+            $logger = getService('logger');
+            $logger->notice("Error creating directory: " . $path);
         }
 
         return $created;
@@ -115,9 +114,8 @@ class FilesManager
     {
         if (file_exists($path)) {
             if (rmdir($path)) {
-                $GLOBALS['application']->logger->emerg(
-                    "Error deleting directory: " . $path
-                );
+                $logger = getService('logger');
+                $logger->notice("Error deleting directory: " . $path);
             }
         }
     }
@@ -195,7 +193,8 @@ class FilesManager
 
         // open archive
         if ($zip->open($filePath) !== true) {
-            echo "Could not open archive";
+            $logger = getService('logger');
+            $logger->notice("Could not open archive");
 
             return;
         }

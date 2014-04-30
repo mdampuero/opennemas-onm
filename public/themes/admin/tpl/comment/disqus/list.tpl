@@ -2,41 +2,12 @@
 
 {block name="header-css" append}
 <style type="text/css">
-
-.iframe {
-    margin-top:60px;
-    width:100%;
-    margin:0 auto;
-    /*bottom:0;*/
-    min-height:100%;
-}
-
-iframe {
-    margin:0 auto;
-    min-height:100%%;
-    border:0 none;
-    overflow:visible;
-}
-.top-action-bar .title > * {
-    display: inline-block;
-    padding: 0;
-}
+.disqus .disqus-link { text-align: center;width: 25%;margin: 100px auto;padding: 15px 0;background-color: #444;}
+.disqus a .disqus-link { font-size: 1.4em;color: #fff;}
+.disqus a:hover { text-decoration: none;}
+.disqus a:hover .disqus-link { background-color: #666;}
+.disqus a .disqus-link img { width: 30px;margin-right: 10px;}
 </style>
-{/block}
-
-{block name="header-js" prepend}
-<script type="text/javascript">
-jQuery(document).ready(function($){
-    $('.iframe iframe').css('min-height', ($(window).height() - 140) + 'px');
-    $(window).resize(function(){
-        $('.iframe iframe').css('min-height', ($(window).height() - 140) + 'px');
-    })
-
-    $('.disqus_sync').on('click',function(e, ui) {
-        $('#modal-sync').modal('show');
-    });
-});
-</script>
 {/block}
 
 {block name="content"}
@@ -54,9 +25,14 @@ jQuery(document).ready(function($){
         </ul>
     </div>
 </div>
-<div class="iframe">
+<div class="disqus">
     {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
-    <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/?template=wordpress" style="width: 100%; height: 80%; min-height:700px;"></iframe>
+    <a href="http://{$disqus_shortname}.disqus.com/admin/moderate/" target="_blank">
+        <div class="disqus-link">
+            <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" />
+            {t}To moderate your Disqus comments, click here{/t}
+        </div>
+    </a>
     {else}
         <div class="wrapper-content center">
             <h3>{t}Disqus not configured{/t}</h3>

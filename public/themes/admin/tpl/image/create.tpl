@@ -78,7 +78,6 @@ var image_uploader ={
 {/block}
 
 {block name="footer-js" append}
-    {literal}
     <script>
     var fileUploadErrors = {
         maxFileSize: '{t}File is too big{/t}',
@@ -90,6 +89,7 @@ var image_uploader ={
     };
     </script>
 
+    {literal}
     <script id="template-upload" type="text/html">
     {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
         <tr class="template-upload fade">

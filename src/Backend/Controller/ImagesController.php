@@ -451,23 +451,21 @@ class ImagesController extends Controller
         $response = new Response();
         $response->headers->add(
             array(
-                'Pragma' => 'text/plain',
-                'Cache-Control' => 'private, no-cache',
-                'Content-Disposition' => 'inline; filename="files.json"',
-                'X-Content-Type-Options' => 'nosniff',
-                'Access-Control-Allow-Origin' => '*',
+                'Pragma'                       => 'text/plain',
+                'Cache-Control'                => 'private, no-cache',
+                'Content-Disposition'          => 'inline; filename="files.json"',
+                'X-Content-Type-Options'       => 'nosniff',
+                'Access-Control-Allow-Origin'  => '*',
                 'Access-Control-Allow-Methods' => 'OPTIONS, HEAD, GET, POST, PUT, DELETE',
                 'Access-Control-Allow-Headers' => 'X-File-Name, X-File-Type, X-File-Size',
             )
         );
 
-        switch ($_SERVER['REQUEST_METHOD']) {
+        switch ($request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                $array = array();
-                echo json_encode($array);
 
-                return $response;
+                return  $response->setContent(json_encode(array()));
                 break;
             case 'POST':
 
@@ -516,29 +514,28 @@ class ImagesController extends Controller
 
                         try {
                             $photo = new \Photo();
-                            $photo = $photo->createFromLocalFileAjax($data);
+                            $photoId = $photo->createFromLocalFile($data);
 
-
-                            $thumbnailUrl = $this->generateUrl(
-                                'asset_image',
-                                array(
-                                    'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
-                                    'parameters' => urlencode('thumbnail,150,150'),
-                                )
-                            );
+                            $photo = new \Photo($photoId);
 
                             $info [] = array(
                                 'id'            => $photo->id,
                                 'name'          => $photo->name,
-                                'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                                'thumbnail_url' => $thumbnailUrl,
                                 'size'          => $photo->size,
-                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                                                    ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                    : $upload['type'][$index],
                                 'error'         => '',
                                 'delete_url'    => '',
                                 "delete_type"   => "DELETE",
+                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                                                    ? $_SERVER['HTTP_X_FILE_TYPE']
+                                                    : $upload['type'][$index],
+                                'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
+                                'thumbnail_url' => $this->generateUrl(
+                                    'asset_image',
+                                    array(
+                                        'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                        'parameters' => urlencode('thumbnail,150,150'),
+                                    )
+                                ),
                             );
                         } catch (Exception $e) {
                             $info [] = array(
@@ -571,28 +568,28 @@ class ImagesController extends Controller
 
                     try {
                         $photo = new \Photo();
-                        $photo = $photo->createFromLocalFileAjax($data);
+                        $photoId = $photo->createFromLocalFile($data);
 
-                        $thumbnailUrl = $this->generateUrl(
-                            'asset_image',
-                            array(
-                                'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
-                                'parameters' => urlencode('thumbnail,150,150'),
-                            )
-                        );
+                        $photo = new \Photo($photoId);
 
                         $info [] = array(
                             'id'            => $photo->id,
                             'name'          => $photo->name,
-                            'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                            'thumbnail_url' => $thumbnailUrl,
                             'size'          => $photo->size,
-                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                                                ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                : $upload['type'],
                             'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",
+                            'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
+                            'thumbnail_url' => $this->generateUrl(
+                                'asset_image',
+                                array(
+                                    'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                    'parameters' => urlencode('thumbnail,150,150'),
+                                )
+                            ),
+                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                                                ? $_SERVER['HTTP_X_FILE_TYPE']
+                                                : $upload['type'],
                         );
                     } catch (Exception $e) {
                         $info [] = array(

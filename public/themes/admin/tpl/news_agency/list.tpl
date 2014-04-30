@@ -4,11 +4,16 @@
     {include file="common/angular_includes.tpl"}
 
     <script type="text/javascript">
+
         jQuery(document).ready(function ($){
             jQuery('.sync_with_server').on('click',function(e, ui) {
                 $('#modal-sync').modal('show');
             });
             $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
+
+            $('#reload_listing').on('click', function(e, ui) {
+                location.reload();
+            })
         });
     </script>
 {/block}
@@ -35,16 +40,23 @@
             <li ng-if="shvs.selected.length > 0">
 
             </li>
-			<li>
-				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
-				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
-				</a>
-			</li>
+            {acl isAllowed="ONLY_MASTERS"}
+            <li>
+                <a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
+                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
+                </a>
+            </li>
+            {/acl}
+            <li>
+                <a href="{url name=admin_news_agency}" id="reload_listing" title="{t}Reload list{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
+                </a>
+            </li>
             <li class="separator"></li>
             {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
 			<li>
-				<a href="{url name=admin_news_agency_servers}" class="admin_add" title="{t}Reload list{/t}">
-				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+				<a href="{url name=admin_news_agency_servers}" class="admin_add" title="{t}Config{/t}">
+				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config{/t}" alt="{t}Config{/t}" ><br />{t}Config{/t}
 				</a>
 			</li>
             {/acl}
@@ -71,7 +83,6 @@
                 </label>
             </div>
         </div>
-
 
         <div ng-include="'contents'"></div>
 

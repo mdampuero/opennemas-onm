@@ -57,7 +57,10 @@ class Categories
     {
         // Get category object
         $categoryManager = $this->restler->container->get('category_repository');
-        $category = $categoryManager->findBy(array('name' => $categoryName));
+        $category = $categoryManager->findBy(
+            array('name' => array(array('value' => $categoryName))),
+            '1'
+        );
 
         if (empty($category)) {
             throw new RestException(404, 'category not found');

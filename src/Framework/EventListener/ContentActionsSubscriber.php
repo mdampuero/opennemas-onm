@@ -56,6 +56,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             ),
             'author.update' => array(
                 array('deleteAllAuthorsCaches', 5),
+                array('deleteEntityRepositoryUserCache', 10),
             ),
             'opinion.update' => array(
                 array('deleteOpinionUpdateCaches', 5),
@@ -92,6 +93,21 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $this->cacheHandler->delete($contentType . "_" . $id);
 
         $this->cleanOpcode();
+
+        return false;
+    }
+    /**
+     * Perform the actions after update a user/author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     **/
+    public function deleteEntityRepositoryUserCache(Event $event)
+    {
+        $id = $event->getArgument('authorId');
+
+        $this->cacheHandler->delete('user_' . $id);
 
         return false;
     }
