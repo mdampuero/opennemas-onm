@@ -6,6 +6,7 @@
         bundles/fosjsrouting/js/router.js,
         assets/js/routes.js,
         bundles/backend/lib/angular.min.js,
+        bundles/backend/lib/angular-translate.min.js,
         bundles/backend/lib/ui-sortable.js,
         bundles/backend/lib/ui-bootstrap-tpls-0.10.0.min.js,
         bundles/backend/js/app.js,
