@@ -246,15 +246,6 @@ class VideosController extends Controller
                 }
             }
 
-            // Machine suggested contents code -----------------------------
-            $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                $video->metadata,
-                'video',
-                "pk_fk_content_category = ".$video->category.
-                " AND contents.content_status=1 AND pk_content = pk_fk_content",
-                4
-            );
-
             $this->view->assign(
                 array(
                     'video'         => $video,
@@ -263,8 +254,7 @@ class VideosController extends Controller
                     'category_name' => $video->category_name,
                     'contentId'     => $video->id,
                     'action'        => 'inner',
-                    'others_videos' => $otherVideos,
-                    'suggested'     => $machineSuggestedContents
+                    'others_videos' => $otherVideos
                 )
             );
         } //end iscached
