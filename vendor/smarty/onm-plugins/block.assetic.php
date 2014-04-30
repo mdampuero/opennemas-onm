@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 use Assetic\AssetManager;
 use Assetic\FilterManager;
 use Assetic\Filter;
@@ -9,10 +16,6 @@ use Assetic\AssetWriter;
 use Assetic\Asset\AssetCache;
 use Assetic\Cache\FilesystemCache;
 use Symfony\Component\Yaml\Parser;
-
-if (isset($_SERVER['LESSPHP'])) {
-    require_once $_SERVER['LESSPHP'];
-}
 
 /**
  * [smarty_block_assetic description]
@@ -32,20 +35,12 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
     $realpath = realpath($params['config_path']);
     $root     = mb_substr($realpath, 0, mb_strlen($realpath) - mb_strlen($params['config_path']));
 
-    // var_dump($realpath);
-    // var_dump($root);die();
-
-
     // Find the configuration directory
-    $base_path = APP_PATH . 'config';
-
-    if (isset($params['config_path'])) {
-        $base_path = $root . '/' . $params['config_path'];
-    }
+    $baseConfigPath = APP_PATH . 'config';
 
     // Load configuration
     $yaml   = new Parser();
-    $config = $yaml->parse(file_get_contents($base_path . '/config.yml'));
+    $config = $yaml->parse(file_get_contents($baseConfigPath . '/config.yml'));
     $config = $config['assetic'];
 
     // Opening tag (first call only)
@@ -65,12 +60,12 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
         $writer = new AssetWriter($params['build_path']);
 
         // Read bundles and dependencies config files
-        if (file_exists($base_path . '/bundles.json')) {
-            $bundles = json_decode(file_get_contents($base_path . '/bundles.json'));
+        if (file_exists($baseConfigPath . '/bundles.json')) {
+            $bundles = json_decode(file_get_contents($baseConfigPath . '/bundles.json'));
         }
 
-        if (file_exists($base_path . '/dependencies.json')) {
-            $dependencies = json_decode(file_get_contents($base_path . '/dependencies.json'));
+        if (file_exists($baseConfigPath . '/dependencies.json')) {
+            $dependencies = json_decode(file_get_contents($baseConfigPath . '/dependencies.json'));
         }
 
         // Parse filters to use
@@ -98,8 +93,8 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
             );
 
             $writer->writeAsset($cache);
-        // If individual assets are provided
-        } elseif (isset($params['assets'])) {
+
+        } elseif (isset($params['assets'])) { // If individual assets are provided
             $assets = array();
             // Include only the references first
             foreach ($requiredAssets as $a) {
@@ -125,15 +120,19 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
             foreach ($requiredAssets as $a) {
                 // Add the asset to the list if not already present, as a reference or as a simple asset
                 $ref = null;
-                if (isset($dependencies->$params['output']))
-                foreach ($dependencies->$params['output']->references as $name => $file) {
-                    if ($file == $a) {
-                        $ref = $name;
-                        break;
+                if (isset($dependencies->$params['output'])) {
+                    foreach ($dependencies->$params['output']->references as $name => $file) {
+                        if ($file == $a) {
+                            $ref = $name;
+                            break;
+                        }
                     }
                 }
 
-                if (array_search($a, $assets) === FALSE && ($ref === null || array_search('@' . $ref, $assets) === FALSE)) {
+
+                if (array_search($a, $assets) === false
+                    && ($ref === null || array_search('@' . $ref, $assets) === false)
+                ) {
                     $assets[] = $a;
                 }
             }
@@ -172,32 +171,33 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
 
             $count = count($assetsUrls);
 
-            if (isset($config->site_url))
+            if (isset($config->site_url)) {
                 $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-            else
+            } else {
                 $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
+            }
 
 
-        // Production mode, include an all-in-one asset
-        } else {
-            if (isset($config->site_url))
+        } else { // Production mode, include an all-in-one asset
+            if (isset($config->site_url)) {
                 $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$asset->getTargetPath());
-            else
+            } else {
                 $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$asset->getTargetPath());
-
+            }
         }
 
-    // Closing tag
-    } else {
+    } else { // Closing tag
+
         if (isset($content)) {
             // If debug mode is active, we want to include assets separately
             if ($params['debug']) {
                 $count--;
                 if ($count > 0) {
-                    if (isset($config->site_url))
+                    if (isset($config->site_url)) {
                         $template->assign($params['asset_url'], $config->site_url.'/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
-                    else
+                    } else {
                         $template->assign($params['asset_url'], '/'.$params['build_path'].'/'.$assetsUrls[$count-1]);
+                    }
                 }
                 $repeat = $count > 0;
             }
