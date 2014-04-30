@@ -401,28 +401,28 @@ class NewsletterController extends Controller
             foreach ($recipients as $mailbox) {
                 if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
-                        //  Build the message
-                        // $message = \Swift_Message::newInstance();
-                        // $message
-                        //     ->setSubject($subject)
-                        //     ->setBody($htmlContent, 'text/html')
-                        //     ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-                        //     ->setSender($params['newsletter_sender'])
-                        //     ->setTo(array($mailbox->email => $mailbox->name));
+                         // Build the message
+                        $message = \Swift_Message::newInstance();
+                        $message
+                            ->setSubject($subject)
+                            ->setBody($htmlContent, 'text/html')
+                            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+                            ->setSender($params['newsletter_sender'])
+                            ->setTo(array($mailbox->email => $mailbox->name));
 
                         // Send it
-                        // $properlySent = $this->get('mailer')->send($message);
+                        $properlySent = $this->get('mailer')->send($message);
 
-                        $headers   = array();
-                        $headers[] = "MIME-Version: 1.0";
-                        $headers[] = "Content-type: text/html; charset=utf-8";
-                        $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
-                        $headers[] = "Sender: {$params['newsletter_sender']}";
-                        $headers[] = "Subject: {$subject}";
-                        $headers[] = "Message-ID: <".$_SERVER['REQUEST_TIME'].md5($_SERVER['REQUEST_TIME'])."@".$_SERVER['SERVER_NAME'].">";
-                        $headers[] = "X-Mailer: PHP/".phpversion();
+                        // $headers   = array();
+                        // $headers[] = "MIME-Version: 1.0";
+                        // $headers[] = "Content-type: text/html; charset=utf-8";
+                        // $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
+                        // $headers[] = "Sender: {$params['newsletter_sender']}";
+                        // $headers[] = "Subject: {$subject}";
+                        // $headers[] = "Message-ID: <".$_SERVER['REQUEST_TIME'].md5($_SERVER['REQUEST_TIME'])."@".$_SERVER['SERVER_NAME'].">";
+                        // $headers[] = "X-Mailer: PHP/".phpversion();
 
-                        $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
+                        // $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
 
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
