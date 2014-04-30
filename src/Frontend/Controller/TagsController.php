@@ -45,7 +45,6 @@ class TagsController extends Controller
 
         if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $tagSearch = "%{$tag}%";
             $itemsPerPage = s::get('items_in_blog');
             if (empty($itemsPerPage)) {
                 $itemsPerPage = 8;
@@ -60,7 +59,7 @@ class TagsController extends Controller
                     array('value' => 7),
                     array('value' => 9)
                 ),
-                'metadata' => array(array('value' => '%' . $tagName . '%'))
+                'metadata' => array(array('value' => '%' . $tag . '%'))
             );
 
             $er = $this->get('entity_repository');
