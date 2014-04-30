@@ -32,8 +32,8 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
     $realpath = realpath($params['config_path']);
     $root     = mb_substr($realpath, 0, mb_strlen($realpath) - mb_strlen($params['config_path']));
 
-    var_dump($realpath);
-    var_dump($root);die();
+    // var_dump($realpath);
+    // var_dump($root);die();
 
 
     // Find the configuration directory

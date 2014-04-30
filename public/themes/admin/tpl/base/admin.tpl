@@ -29,17 +29,26 @@
 	{/block}
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/jquery/select2/select2.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/jquery.tools.min.js" common=1}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
+        {assetic
+            assets="assets/js/jquery/jquery.min.js,
+                assets/js/jquery/select2/select2.min.js,
+                assets/js/jquery-onm/jquery.onmvalidate.js,
+                assets/js/libs/bootstrap.js,
+                assets/js/libs/jquery.tools.min.js,
+                assets/js/libs/tinycon.min.js,
+                assets/js/libs/modernizr.min.js,
+                assets/js/onm/scripts.js,
+                assets/js/onm/footer-functions.js"
+            output="js"
+            build_path="style/build"
+            filters="uglifyjs"
+            asset_url=asset_url}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/assetic}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js" common=1}
     {/block}
 </head>
 <body>
@@ -166,8 +175,6 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js" common=1}
-        {script_tag src="/libs/tinycon.min.js"}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
