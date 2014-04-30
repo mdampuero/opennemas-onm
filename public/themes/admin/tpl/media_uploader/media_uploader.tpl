@@ -83,17 +83,23 @@
     </div>
 
 </div>
+{assetic
+    assets="themes/admin/js/swfobject.js,
+            themes/admin/js/jquery/load-image.min.js,
+            themes/admin/js/jquery/bootstrap-image-gallery.min.js,
+            themes/admin/js/jquery/jquery.iframe-transport.js,
+            assets/js/libs/handlebars.js,
+            assets/js/jquery/tmpl.min.js,
+            assets/js/jquery/jquery.fileupload.js,
+            assets/js/jquery/jquery.fileupload-ui.js,
+            themes/admin/js/onm/media-uploader.js"
+    output="js"
+    build_path="style/build"
+    filters="uglifyjs"
+    asset_url=asset_url}
+    <script type="text/javascript" src="{$asset_url}"></script>
+{/assetic}
 
-{script_tag src="/swfobject.js"}
-{script_tag src="/jquery/tmpl.min.js"}
-{script_tag src="/jquery/load-image.min.js"}
-{script_tag src="/jquery/bootstrap-image-gallery.min.js"}
-{script_tag src="/jquery/jquery.iframe-transport.js"}
-{script_tag src="/jquery/tmpl.min.js"}
-{script_tag src="/jquery/jquery.fileupload.js" common=1}
-{script_tag src="/jquery/jquery.fileupload-ui.js" common=1}
-{script_tag src="/libs/handlebars.js" common=1}
-{script_tag src="/onm/media-uploader.js"}
 <script>
 var fileUploadErrors = {
     maxFileSize: '{t}File is too big{/t}',
