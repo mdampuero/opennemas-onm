@@ -19,7 +19,6 @@
         bundles/backend/js/filters/*,
         bundles/backend/js/directives/*"
     output="js"
-    build_path="style/build"
     filters="uglifyjs"
     asset_url=asset_url}
     <script type="text/javascript" src="{$asset_url}"></script>

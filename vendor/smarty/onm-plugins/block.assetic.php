@@ -42,6 +42,7 @@ function smarty_block_assetic($params, $content, $template, &$repeat)
     $yaml   = new Parser();
     $config = $yaml->parse(file_get_contents($baseConfigPath . '/config.yml'));
     $config = $config['assetic'];
+    $params['build_path'] = 'compile';
 
     // Opening tag (first call only)
     if ($repeat) {
@@ -234,6 +235,7 @@ function initFilterManager($filters)
     $fm->set('uglifycss', new Filter\UglifyJsFilter($filters['uglifycss']['bin'], $filters['uglifycss']['node']));
     $fm->set('uglifyjs', new Filter\UglifyJsFilter($filters['uglifyjs']['bin'], $filters['uglifyjs']['node']));
     $fm->set('uglifyjs2', new Filter\UglifyJs2Filter($filters['uglifyjs2']['bin'], $filters['uglifyjs2']['node']));
+    $fm->set('cssrewrite', new Filter\CssRewriteFilter());
 
     return $fm;
 }

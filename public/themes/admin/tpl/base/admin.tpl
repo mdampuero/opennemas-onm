@@ -16,16 +16,23 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" common=1}
-        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css" common=1}
+        {assetic
+            assets="assets/css/bootstrap/bootstrap.css,
+                    assets/css/fontawesome/font-awesome.min.css,
+                    assets/css/style.css,
+                    assets/css/jquery/jquery-ui.css,
+                    assets/css/bootstrap/bootstrap.css,
+                    themes/admin/css/jquery/select2/select2-bootstrap.css,
+                    themes/admin/css/jquery/select2/select2.css,
+                    themes/admin/css/jquery/messenger/messenger.css,
+                    themes/admin/css/jquery/messenger/messenger-spinner.css,
+                    themes/amdin/js/jquery/bootstrap-checkbox/bootstrap-checkbox.cs"
+            output="css"
+            filters='cssrewrite'
+            asset_url=asset_url}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/assetic}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
-        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css"}
 	{/block}
 
     {block name="js-library"}
@@ -40,7 +47,6 @@
                 assets/js/onm/scripts.js,
                 assets/js/onm/footer-functions.js"
             output="js"
-            build_path="style/build"
             filters="uglifyjs"
             asset_url=asset_url}
             <script type="text/javascript" src="{$asset_url}"></script>
