@@ -769,11 +769,10 @@ class Content
 
         $sql = 'UPDATE `contents` '
                .'SET `favorite` = ?, '
-               .'`content_status` = ?, '
                .'`starttime` = ? '
                .'WHERE `pk_content`=?';
 
-        $values = array($status, $status, $date, $id);
+        $values = array($status, $date, $id);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
@@ -812,11 +811,10 @@ class Content
 
         $sql = 'UPDATE `contents` '
                .'SET `in_home` = ?, '
-               .'`content_status` = ?, '
                .'`starttime` = ? '
                .'WHERE `pk_content`=?';
 
-        $values = array($status, $status, $date, $id);
+        $values = array($status, $date, $id);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
