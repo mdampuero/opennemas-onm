@@ -353,7 +353,7 @@ class ContentsController extends Controller
                 array('id' => $content->id)
             );
 
-            $isLogged = array_key_exists('userid', $_SESSION);
+            $isLogged = is_array($_SESSION) && array_key_exists('userid', $_SESSION);
             if ($isLogged) {
                 if (array_key_exists('meta', $_SESSION)
                     && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
