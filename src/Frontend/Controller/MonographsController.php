@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -150,7 +151,7 @@ class MonographsController extends Controller
             if ($special->content_status != 1
                 || $special->in_litter != 0
             ) {
-                return new \RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
+                return new RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
             }
 
             $contents = $special->getContents($specialID);
