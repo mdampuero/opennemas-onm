@@ -133,23 +133,26 @@ class Photo extends Content
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file
      *
-     * @param array $dataSource the data for the photo, must content the photo local_file
+     * @param array $data the data for the photo, must content the photo local_file
      * @param string $dateForDirectory the date for the directory
      *
      * @return int the id of the photo created
      * @return boolean false if the photo was not created
      **/
-    public function createFromLocalFile($dataSource, $dateForDirectory = null)
+    public function createFromLocalFile($data, $dateForDirectory = null)
     {
-        $filePath = $dataSource["local_file"];
+        $filePath         = $data["local_file"];
+        $originalFileName = $data['original_filename'];
 
         if (empty($filePath)) {
-            return false;
+            throw new \Exception(_('Not valid photo data'));
         }
 
         // Check upload directory
+        $date = new DateTime();
+
         if (empty($dateForDirectory)) {
-            $dateForDirectory = date("/Y/m/d/");
+            $dateForDirectory = $date->format("/Y/m/d/");
         }
         $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
@@ -157,361 +160,109 @@ class Photo extends Content
             FilesManager::createDirectory($uploadDir);
         }
 
-        $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
+        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
+            throw new Exception(
+                sprintf(
+                    _('Upload directory doesn\'t exists or you don\'t have enough privileges to write files there'),
+                    $uploadDir.$finalPhotoFileName
+                )
+            );
+        }
+
+        $filePathInfo = pathinfo($originalFileName);
 
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName = date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
+        $finalPhotoFileName = $date->format("YmdHis"). $micro . "." . strtolower($filePathInfo['extension']);
         $fileInformation    = new MediaItem($filePath);
 
-        if (!array_key_exists('created', $dataSource)) {
-            $dataSource['created'] = $fileInformation->mtime;
+        $urn = "urn:newsml:".SITE.":".$date->format("Ymd\THisO").":".StringUtils::cleanFileName($originalFileName).":2";
+
+        $date = new \DateTime();
+        $date->setTimeStamp($fileInformation->mtime);
+        $dateString = $date->format('Y-m-d H:i:s');
+
+        if (!array_key_exists('created', $data)) {
+            $data['created'] = $dateString;
         }
-        if (!array_key_exists('changed', $dataSource)) {
-            $dataSource['changed'] = $fileInformation->mtime;
+        if (!array_key_exists('changed', $data)) {
+            $data['changed'] = $dateString;
         }
+        if (!array_key_exists('content_status', $data)) {
+            $data['content_status'] = 1;
+        }
+
         // Building information for the photo image
-        $data = array(
-            'title'          => $dataSource["title"],
+        $dataPhoto = array(
+            'title'          => $originalFileName,
             'name'           => $finalPhotoFileName,
             'path_file'      => $dateForDirectory,
-            'fk_category'    => $dataSource["fk_category"],
-            'category'       => $dataSource["fk_category"],
-            'nameCat'        => $dataSource["category_name"],
-            'created'        => $dataSource["created"],
-            'changed'        => $dataSource["changed"],
-            'date'           => $fileInformation->mtime,
+            'fk_category'    => $data["fk_category"],
+            'category'       => $data["fk_category"],
+            'nameCat'        => $data["category_name"],
+            'created'        => $data["created"],
+            'changed'        => $data["changed"],
+            'content_status' => $data['content_status'],
+            'description'    => $data['description'],
+            'metadata'       => $data["metadata"],
+            'urn_source'     => $urn,
             'size'           => round($fileInformation->size/1024, 2),
+            'date'           => $dateString,
             'width'          => $fileInformation->width,
             'height'         => $fileInformation->height,
-            'content_status' => $dataSource['content_status'],
-            'author_name'    => $dataSource['author_name'],
+            'author_name'    => isset($data['author_name']) ? $data['author_name'] : '',
             'pk_author'      => $_SESSION['userid'],
             'fk_publisher'   => $_SESSION['userid'],
-            'description'    => $dataSource['description'],
-            'metadata'       => $dataSource["metadata"],
         );
 
-        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-            m::add(
-                sprintf(
-                    'Upload directory doesn\'t exists or you don\'t '
-                    .'have enought privileges to write files there',
-                    $uploadDir.$finalPhotoFileName
-                ),
-                m::ERROR
+        $imageCreated = new \Imagine\Imagick\Imagine();
+        $image = $imageCreated->open($data['local_file']);
+
+        // Doesn't work as expected. Commented for now
+        // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
+        // $image = $filter->apply($image);
+
+        try {
+            $image->save(
+                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
+                array(
+                    'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
+                    'resolution-x'     => 72,
+                    'resolution-y'     => 72,
+                    'quality'          => 85,
+                )
             );
-            $importedID = null;
-        }
-
-        $fileCopied = copy(
-            $dataSource['local_file'],
-            realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-        );
-
-        if ($fileCopied) {
-            $photo = new Photo();
-            $photoID = $photo->create($data);
-
-            if (!$photoID) {
-                $logger = getService('logger');
-                $logger->notice(
-                    sprintf(
-                        'EFE Importer: Unable to register the '
-                        .'photo object %s (destination: %s).',
-                        $dataSource['local_file'],
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-                m::add(
-                    sprintf(
-                        'Unable to register the photo object into OpenNemas.',
-                        $uploadDir.$finalPhotoFileName
-                    ),
-                    m::ERROR
-                );
-            }
-
-            $importedID = $photoID;
-
-        } else {
-            $importedID = null;
-
+        } catch (\RuntimeException $e) {
             $logger = getService('logger');
             $logger->notice(
                 sprintf(
                     'Unable to create the photo file %s (destination: %s).',
-                    $dataSource['local_file'],
+                    $data['local_file'],
                     $uploadDir.$finalPhotoFileName
                 )
             );
-            m::add(
+            throw new Exception(_('Unable to copy the photo file'));
+        }
+
+        $photo = new Photo();
+        $photoID = $photo->create($dataPhoto);
+
+        if (!$photoID) {
+            $logger = getService('logger');
+            $logger->notice(
                 sprintf(
-                    'Unable to copy the file of the photo related to the article. ',
+                    _('Unable to register the photo object %s (destination: %s).'),
+                    $data['local_file'],
                     $uploadDir.$finalPhotoFileName
-                ),
-                m::ERROR
+                )
             );
+            throw new Exception(_('Unable to save the photo information.'));
         }
 
-        return $importedID;
+        return $photoID;
     }
 
-    /**
-     * Creates one photo register in the database from data and local file
-     * TODO: this function must content the photo local_file
-     *
-     * @param array $dataSource the data for the photo, must content the photo local_file
-     *
-     * @return Photo the photo object
-     **/
-    public function createFromLocalFileAjax($dataSource)
-    {
-        $photo = null;
-        $filePath = $dataSource["local_file"];
-        $originalFileName = $dataSource['original_filename'];
-
-        if (!empty($filePath)) {
-             // Check upload directory
-            $date = new DateTime();
-            $urn = "urn:newsml:"
-                .SITE
-                .":"
-                .$date->format("Ymd\THisO")
-                .":"
-                .StringUtils::cleanFileName($originalFileName)
-                .":2";
-
-            $dateForDirectory = $date->format("/Y/m/d/");
-            $uploadDir =
-                MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
-
-            if (!is_dir($uploadDir)) {
-                FilesManager::createDirectory($uploadDir);
-            }
-
-            $filePathInfo = pathinfo($originalFileName);
-
-            // Getting information for creating
-            $t                  = gettimeofday();
-            $micro              = intval(substr($t['usec'], 0, 5));
-            $finalPhotoFileName = $date->format("YmdHis")
-                . $micro . "." . strtolower($filePathInfo['extension']);
-            $fileInformation    = new MediaItem($filePath);
-
-            // Building information for the photo image
-            $data = array(
-                'title'        => $originalFileName,
-                'name'         => $finalPhotoFileName,
-                'path_file'    => $dateForDirectory,
-                'fk_category'  => $dataSource["fk_category"],
-                'category'     => $dataSource["fk_category"],
-                'nameCat'      => $dataSource["category_name"],
-                'created'      => $fileInformation->atime,
-                'changed'      => $fileInformation->mtime,
-                'date'         => $fileInformation->mtime,
-                'size'         => round($fileInformation->size/1024, 2),
-                'width'        => $fileInformation->width,
-                'height'       => $fileInformation->height,
-                'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
-                'pk_author'    => $_SESSION['userid'],
-                'fk_publisher' => $_SESSION['userid'],
-                'description'  => $dataSource['description'],
-                'metadata'     => $dataSource["metadata"],
-                'urn_source'   => $urn,
-            );
-
-            if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-                throw new Exception(
-                    sprintf(
-                        'Upload directory doesn\'t exists or you don\'t '
-                        .'have enought privileges to write files there',
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-            }
-
-            $fileCopied = copy(
-                $dataSource['local_file'],
-                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-            );
-
-            if ($fileCopied) {
-
-                $photo = new Photo();
-                $photoID = $photo->create($data);
-
-                if (!$photoID) {
-                    $logger = getService('logger');
-                    $logger->notice(
-                        sprintf(
-                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
-                            $dataSource['local_file'],
-                            $uploadDir.$finalPhotoFileName
-                        )
-                    );
-                    throw new Exception(
-                        sprintf(
-                            'Unable to register the photo object into OpenNemas.',
-                            $uploadDir.$finalPhotoFileName
-                        )
-                    );
-                }
-
-                $photo = new Photo($photoID);
-
-            } else {
-                $logger = getService('logger');
-                $logger->notice(
-                    sprintf(
-                        'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
-                        $dataSource['local_file'],
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-                throw new Exception(
-                    sprintf(
-                        'Unable to copy the file of the photo '
-                        .'related in EFE importer to the article.',
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-            }
-        }
-
-        return $photo;
-    }
-
-    /**
-     * Creates one photo using imagemagick and register in the database
-     *
-     * @param array $dataSource the data for the photo, must content the photo local_file
-     *
-     * @return int the id of the photo created
-     * @return boolean false if the photo was not created
-     **/
-    public function createWithImageMagick($dataSource, $dateForDirectory = null)
-    {
-        $photo = null;
-        $filePath = $dataSource["local_file"];
-        $originalFileName = $dataSource['original_filename'];
-
-        if (!empty($filePath)) {
-             // Check upload directory
-            $date = new DateTime();
-            $urn = "urn:newsml:"
-                .SITE
-                .":"
-                .$date->format("Ymd\THisO")
-                .":"
-                .StringUtils::cleanFileName($originalFileName)
-                .":2";
-
-            $dateForDirectory = $date->format("/Y/m/d/");
-            $mediaDir =
-                MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
-
-            if (!is_dir($mediaDir)) {
-                FilesManager::createDirectory($mediaDir);
-            }
-
-            $filePathInfo = pathinfo($originalFileName);
-
-            // Getting information for creating
-            $t                  = gettimeofday();
-            $micro              = intval(substr($t['usec'], 0, 5));
-            $finalPhotoFileName = $date->format("YmdHis")
-                . $micro . "." . strtolower($filePathInfo['extension']);
-            $fileInformation    = new MediaItem($filePath);
-
-            // Building information for the photo image
-            $data = array(
-                'title'        => $originalFileName,
-                'name'         => $finalPhotoFileName,
-                'path_file'    => $dateForDirectory,
-                'fk_category'  => $dataSource["fk_category"],
-                'category'     => $dataSource["fk_category"],
-                'nameCat'      => $dataSource["category_name"],
-
-                'created'      => $fileInformation->atime,
-                'changed'      => $fileInformation->mtime,
-                'date'         => $fileInformation->mtime,
-                'size'         => round($fileInformation->size/1024, 2),
-                'width'        => $fileInformation->width,
-                'height'       => $fileInformation->height,
-                'type_img'     => strtolower($filePathInfo['extension']),
-
-                'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
-                'pk_author'    => $_SESSION['userid'],
-                'fk_publisher' => $_SESSION['userid'],
-                'description'  => $dataSource['description'],
-                'metadata'     => $dataSource["metadata"],
-                'urn_source'   => $urn,
-            );
-
-            if (is_dir($mediaDir) && !is_writable($mediaDir)) {
-                throw new Exception(
-                    sprintf(
-                        'Upload directory doesn\'t exists or you don\'t '
-                        .'have enought privileges to write files there',
-                        $mediaDir.$finalPhotoFileName
-                    )
-                );
-            }
-
-            $imageCreated =  new Imagick($dataSource['local_file']);
-
-            $imageCreated->writeImage(realpath($mediaDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
-            //$imageCreated->destroy();
-
-            if ($imageCreated) {
-
-                $photo = new Photo();
-                $photoID = $photo->create($data);
-
-                if (!$photoID) {
-                    $logger = getService('logger');
-                    $logger->notice(
-                        sprintf(
-                            'Unable to register the photo object %s (destination: %s).',
-                            $dataSource['local_file'],
-                            $mediaDir.$finalPhotoFileName
-                        )
-                    );
-                    throw new Exception(
-                        sprintf(
-                            'Unable to register the photo object.',
-                            $mediaDir.$finalPhotoFileName
-                        )
-                    );
-                }
-
-                $photo = new Photo($photoID);
-
-            } else {
-                $logger = getService('logger');
-                $logger->notice(
-                    sprintf(
-                        'Participa: Unable to creathe the photo file %s (destination: %s).',
-                        $dataSource['local_file'],
-                        $mediaDir.$finalPhotoFileName
-                    )
-                );
-                throw new Exception(
-                    sprintf(
-                        'Unable to create photo.',
-                        $mediaDir.$finalPhotoFileName
-                    )
-                );
-            }
-        }
-
-        return $photo;
-
-
-
-    }
     /**
      * Returns an instance of the Photo object given a photo id
      *
@@ -560,11 +311,72 @@ class Photo extends Content
     }
 
     /**
-     * Returns an object with all information of a photo given a photo id
+     * Updates the photo object given an array with information
      *
-     * @param int $id the photo id to load
+     * @param array $data the new photo information
      *
-     * @return stdClass a dummy object with the photo information
+     * @return boolean true if the photo was updated properly
+     **/
+    public function update($data)
+    {
+        $data['fk_author'] = $_SESSION['userid'];
+        $data['fk_user_last_editor'] = $_SESSION['userid'];
+
+        parent::update($data);
+
+        $sql = "UPDATE photos
+                SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?, `author_name`=?, `address`=?
+                WHERE pk_photo=?";
+
+        $values = array(
+            $this->name,
+            $this->path_file,
+            $this->size,
+            $this->width,
+            $this->height,
+            $data['author_name'],
+            $data['address'],
+            $data['id']
+        );
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Removes a photo given its id
+     *
+     * @param int $id the photo id to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
+    public function remove($id)
+    {
+        parent::remove($id);
+
+        $sql = 'DELETE FROM photos WHERE pk_photo=?';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            return false;
+        }
+
+        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+
+        if (file_exists($image)) {
+            @unlink($image);
+        }
+
+        return true;
+    }
+
+    /**
+     * Completes the EXIF, IPTC information for the current Photo object
+     *
+     * @return Photo the Photo object with all the information
      **/
     public function getMetaData()
     {
@@ -706,93 +518,6 @@ class Photo extends Content
     }
 
     /**
-     * Updates the photo object given an array with information
-     *
-     * @see  Photo::setData()
-     *
-     * @param array $data the new photo inforamtion
-     *
-     * @return boolean true if the photo was updated properly
-     **/
-    public function update($data)
-    {
-        $data['fk_author'] = $_SESSION['userid'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-
-        parent::update($data);
-        $sql = "UPDATE photos
-                SET `name`=?, `path_file`=?, `size`=?,
-                    `width`=?, `height`=?,
-                    `author_name`=?, `address`=?
-                WHERE pk_photo=?";
-
-        $values = array(
-            $this->name,
-            $this->path_file,
-            $this->size,
-            $this->width,
-            $this->height,
-            $data['author_name'],
-            $data['address'],
-            $data['id']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Removes a photo given its id
-     *
-     * @param int $id the photo id to delete
-     *
-     * @return boolean true if the photo was deleted
-     **/
-    public function remove($id)
-    {
-        parent::remove($id);
-
-        $sql = 'DELETE FROM photos WHERE pk_photo=?';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-        if ($rs === false) {
-            return false;
-        }
-
-        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
-
-        if (file_exists($image)) {
-            @unlink($image);
-        }
-
-        return true;
-    }
-
-    /**
-     * Updates the file path of a photo
-     *
-     * @param string $path the new file path
-     * @param int $id the photo id
-     *
-     * @return boolean true if the file path was changed
-     **/
-    public function updatePath($path, $id)
-    {
-        $sql = "UPDATE `photos` SET `path_file`=? WHERE `pk_photo`=?";
-
-        $values = array($path, $id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Returns the photo path associated to an id.
      *
      * @param string $id the photo id.
@@ -809,50 +534,6 @@ class Photo extends Content
         }
 
         return (string) $rs->fields['path_file'].DS.$rs->fields['name'];
-    }
-
-    /**
-     * Checks if a image is being used by another content
-     *
-     * @param int $id the photo id
-     *
-     * @return array the list of content ids that are using this photo
-     **/
-    public function isUsed($id)
-    {
-        $sqlAlbums   = 'SELECT pk_album FROM albums_photos WHERE pk_photo=?';
-        $sqlAds      = 'SELECT pk_advertisement FROM advertisements WHERE path=?';
-        $sqlarticles = 'SELECT pk_article FROM articles WHERE img1=? OR img2=?';
-
-        $result = array();
-        $values = array($id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sqlAlbums, $values);
-        if ($rs) {
-            while (!$rs->EOF) {
-                $result[] = $rs->fields[0];
-                $rs->MoveNext();
-            }
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute($sqlAds, $values);
-        if ($rs) {
-            while (!$rs->EOF) {
-                $result[] = $rs->fields[0];
-                $rs->MoveNext();
-            }
-        }
-
-        $values = array($id, $id);
-        $rs = $GLOBALS['application']->conn->Execute($sqlarticles, $values);
-        if ($rs) {
-            while (!$rs->EOF) {
-                $result[]=$rs->fields[0];
-                $rs->MoveNext();
-            }
-        }
-
-        return $result;
     }
 
     /**
