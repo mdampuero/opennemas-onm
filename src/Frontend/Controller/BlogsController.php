@@ -243,7 +243,6 @@ class BlogsController extends Controller
                         'fileName'    => $this->generateUrl(
                             'frontend_blog_author_frontpage',
                             array(
-                                'author_id' => sprintf('%06d', $author->id),
                                 'author_slug' => $author->slug,
                             )
                         ).'/?page=%d',
