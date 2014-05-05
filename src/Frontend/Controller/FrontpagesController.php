@@ -254,9 +254,11 @@ class FrontpagesController extends Controller
 
         // Get all the ads from the list of contents dropped in this frontpage and
         // add them to the advertisements list.
-        foreach ($contentsInHomepage as $content) {
-            if ($content->content_type_name == 'advertisement') {
-                $advertisements []= $content;
+        if (is_array($contentsInHomepage)) {
+            foreach ($contentsInHomepage as $content) {
+                if ($content->content_type_name == 'advertisement') {
+                    $advertisements []= $content;
+                }
             }
         }
 
