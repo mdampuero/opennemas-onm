@@ -219,8 +219,11 @@ class PaywallController extends Controller
         $paywallSettings = s::get('paywall_settings');
 
         // Some sanity checks before continue with the payment
-        if (!array_key_exists('paywall_transaction', $_SESSION)
-            || $token != $_SESSION['paywall_transaction']['token']
+        if (is_array($_SESSION)
+            && (
+                !array_key_exists('paywall_transaction', $_SESSION)
+                || $token != $_SESSION['paywall_transaction']['token']
+            )
         ) {
             return $this->render(
                 'paywall/payment_error.tpl',
