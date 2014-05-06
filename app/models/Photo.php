@@ -232,7 +232,7 @@ class Photo extends Content
                     'resolution-x'     => 72,
                     'resolution-y'     => 72,
                     'quality'          => 85,
-                    'animated'         => $animated,
+                    'flatten'          => !$animated,
                 )
             );
         } catch (\RuntimeException $e) {
