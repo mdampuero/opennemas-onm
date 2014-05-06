@@ -223,6 +223,7 @@ class Photo extends Content
         // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
         // $image = $filter->apply($image);
 
+        $animated = ($filePathInfo['extension'] == 'gif') ? true : false;
         try {
             $image->save(
                 realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
@@ -231,6 +232,7 @@ class Photo extends Content
                     'resolution-x'     => 72,
                     'resolution-y'     => 72,
                     'quality'          => 85,
+                    'animated'         => $animated,
                 )
             );
         } catch (\RuntimeException $e) {
