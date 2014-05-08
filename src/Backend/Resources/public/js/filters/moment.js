@@ -32,6 +32,10 @@ angular.module('BackendApp.filters').filter('moment', function() {
         }
 
         moment.lang(lang);
+
+        // Avoid firefox problems with '-' and date timezone format
+        input = input.replace(/-/gi, "\/");
+
         return moment(input).tz(tmz).format(fmt);
     };
 });
