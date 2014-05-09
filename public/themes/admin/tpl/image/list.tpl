@@ -90,11 +90,8 @@
                     <td class="thumb">
                         <span ng-click="open('modal-image', null, $index)">
                             <span ng-if="content.type_img == 'swf'">
-                                <object>
-                                    <param name="wmode" value="window" value="{$MEDIA_IMG_URL}[% content.path_file%][% content.name %]" />
-                                    <embed wmode="window" src="[% content.path_file%][% content.name %]"  width="140" height="80" ></embed>
-                                </object>
-                                <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
+                                <object ng-data="'{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]'" ng-param="{ 'vmode': 'opaque' }"  style="width:100px;height:80px"></object>
+                                <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$params.IMAGE_DIR}flash.gif" />
                             </span>
                             <span ng-if="content.type_img !== 'swf'">
                                 <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
@@ -119,7 +116,7 @@
 
                         <div>
                             <span class="url">
-                                <a href="{$MEDIA_IMG_URL}[% content.path_file %]/[% content.name %]" target="_blank">
+                                <a href="{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]" target="_blank">
                                     {t}[Link]{/t}
                                 </a>
                             </span>
@@ -175,7 +172,12 @@
             </div>
             <div class="modal-body">
                 <div class="resource">
-                    <img ng-src="{$MEDIA_IMG_URL}/[% contents[index].path_file + '/' + contents[index].name %]"/>
+                    <span ng-if="contents[index].type_img == 'swf'">
+                        <object ng-data="'{$MEDIA_IMG_URL}[% contents[index].path_file %][% contents[index].name %]'" ng-param="{ 'vmode': 'opaque' }"></object>
+                    </span>
+                    <span ng-if="contents[index].type_img !== 'swf'">
+                        <img ng-src="{$MEDIA_IMG_URL}[% contents[index].path_file + contents[index].name %]"/>
+                    </span>
                 </div>
 
                 <div class="details">
