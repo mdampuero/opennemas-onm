@@ -24,6 +24,7 @@
 {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
 {script_tag src="dynamic-image.js" language="javascript" bundle="backend" basepath="js/directives"}
 {script_tag src="gravatar.js" language="javascript" bundle="backend" basepath="js/directives"}
+{script_tag src="embed.js" language="javascript" bundle="backend" basepath="js/directives"}
 
 {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
 {script_tag src="striptags.js" language="javascript" bundle="backend" basepath="js/filters"}
