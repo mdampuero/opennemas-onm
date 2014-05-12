@@ -47,18 +47,6 @@ class Template extends Smarty
 
         $this->setBasePaths($theme);
 
-        $instanceManager = getService('instance_manager');
-        $baseTheme = '';
-        if (property_exists($instanceManager, 'current_instance') && isset($instanceManager->current_instance->theme)) {
-            $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
-
-            if (!empty($baseTheme)) {
-                $this->addTemplateDir(SITE_PATH."/themes/{$baseTheme}/tpl");
-            }
-        }
-
-        $this->setupCachePath($baseTheme);
-
         $this->setPluginLoadPaths();
 
         $this->registerCustomPlugins();
@@ -85,6 +73,18 @@ class Template extends Smarty
         // Parent variables
         $this->templateBaseDir = SITE_PATH.'/themes/'.$theme.DS;
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
+
+        $instanceManager = getService('instance_manager');
+        $baseTheme = '';
+        if (property_exists($instanceManager, 'current_instance') && isset($instanceManager->current_instance->theme)) {
+            $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
+
+            if (!empty($baseTheme)) {
+                $this->addTemplateDir(SITE_PATH."/themes/{$baseTheme}/tpl");
+            }
+        }
+        $this->setupCachePath($baseTheme);
+
         $this->addTemplateDir(SITE_PATH.'/themes/'.'base'.'/tpl');
     }
 
