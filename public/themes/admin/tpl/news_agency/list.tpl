@@ -137,11 +137,11 @@
                     </td>
 
                     <td class="nowrap center">
-                        <span class="label" style="background-color:[% content.source_color %]};">[% content.source_name %]</span>
+                        <span class="label" style="background-color:[% content.source_color %];">[% content.source_name %]</span>
                     </td>
                     <td class="nowrap center">
                         <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                            [% (content.created_time.date + ' ' + content.created_time.timezone) | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                            [% content.created_time.date + ' ' + content.created_time.timezone | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                         </span>
                     </td>
 

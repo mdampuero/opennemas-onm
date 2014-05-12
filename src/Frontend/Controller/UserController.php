@@ -46,7 +46,10 @@ class UserController extends Controller
      **/
     public function showAction(Request $request)
     {
-        if (array_key_exists('userid', $_SESSION) && !empty($_SESSION['userid'])) {
+        if (is_array($_SESSION)
+            && array_key_exists('userid', $_SESSION)
+            && !empty($_SESSION['userid'])
+        ) {
             $user = new \User($_SESSION['userid']);
             $user->getMeta();
 

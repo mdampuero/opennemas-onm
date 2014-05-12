@@ -72,8 +72,6 @@ var image_uploader ={
         <input type="hidden" name="category" value="{$category}" />
     </form>
     <div id="upload-helper" data-filecount=0></div>
-
-    </div><!-- /upload-helper -->
 </div>
 {/block}
 

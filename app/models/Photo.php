@@ -216,33 +216,59 @@ class Photo extends Content
             'fk_publisher'   => $_SESSION['userid'],
         );
 
-        $imageCreated = new \Imagine\Imagick\Imagine();
-        $image = $imageCreated->open($data['local_file']);
+        if ($filePathInfo['extension'] != 'swf') {
+            $imageCreated = new \Imagine\Imagick\Imagine();
+            $image = $imageCreated->open($data['local_file']);
 
-        // Doesn't work as expected. Commented for now
-        // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
-        // $image = $filter->apply($image);
+            // Doesn't work as expected. Commented for now
+            // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
+            // $image = $filter->apply($image);
 
-        try {
-            $image->save(
-                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
-                array(
-                    'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
-                    'resolution-x'     => 72,
-                    'resolution-y'     => 72,
-                    'quality'          => 85,
-                )
+            try {
+                if ($filePathInfo['extension'] == 'gif') {
+                    $image->save(
+                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
+                        array('flatten' => false)
+                    );
+                } else {
+                    $image->save(
+                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
+                        array(
+                            'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
+                            'resolution-x'     => 72,
+                            'resolution-y'     => 72,
+                            'quality'          => 85,
+                        )
+                    );
+                }
+            } catch (\RuntimeException $e) {
+                $logger = getService('logger');
+                $logger->notice(
+                    sprintf(
+                        'Unable to create the photo file %s (destination: %s).',
+                        $data['local_file'],
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
+                throw new Exception(_('Unable to copy the photo file'));
+            }
+        } else {
+            $fileCopied = copy(
+                $data['local_file'],
+                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
             );
-        } catch (\RuntimeException $e) {
-            $logger = getService('logger');
-            $logger->notice(
-                sprintf(
-                    'Unable to create the photo file %s (destination: %s).',
-                    $data['local_file'],
-                    $uploadDir.$finalPhotoFileName
-                )
-            );
-            throw new Exception(_('Unable to copy the photo file'));
+
+            if (!$fileCopied) {
+                $logger = getService('logger');
+                $logger->notice(
+                    sprintf(
+                        'Unable to create the photo file %s (destination: %s).',
+                        $data['local_file'],
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
+                throw new Exception(_('Unable to copy the photo file'));
+            }
         }
 
         $photo = new Photo();

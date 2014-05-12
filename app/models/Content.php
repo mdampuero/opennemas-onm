@@ -769,11 +769,10 @@ class Content
 
         $sql = 'UPDATE `contents` '
                .'SET `favorite` = ?, '
-               .'`content_status` = ?, '
                .'`starttime` = ? '
                .'WHERE `pk_content`=?';
 
-        $values = array($status, $status, $date, $id);
+        $values = array($status, $date, $id);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
@@ -812,11 +811,10 @@ class Content
 
         $sql = 'UPDATE `contents` '
                .'SET `in_home` = ?, '
-               .'`content_status` = ?, '
                .'`starttime` = ? '
                .'WHERE `pk_content`=?';
 
-        $values = array($status, $status, $date, $id);
+        $values = array($status, $date, $id);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
@@ -1276,14 +1274,22 @@ class Content
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($propertyName)) {
-                    $this->{$propertyName} = $propertyValue;
+                    $this->{$propertyName} = iconv(
+                        mb_detect_encoding($propertyValue),
+                        'utf-8',
+                        $propertyValue
+                    );
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = $v;
+                    $this->{$k} = iconv(
+                        mb_detect_encoding($v),
+                        'utf-8',
+                        $v
+                    );
                 }
             }
         }

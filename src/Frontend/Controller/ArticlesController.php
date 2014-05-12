@@ -107,7 +107,6 @@ class ArticlesController extends Controller
                     array(
                         'category_name'         => $actualCategory ,
                         'actual_category_title' => $actualCategoryTitle,
-                        'actual_category'       => $actualCategory,
                         'actual_category_id'    => $actualCategoryId,
                         'category_data'         => $categoryData,
                     )
@@ -115,12 +114,12 @@ class ArticlesController extends Controller
 
                 // Associated media code --------------------------------------
                 if (isset($article->img2) && ($article->img2 > 0)) {
-                    $photoInt = new \Photo($article->img2);
+                    $photoInt = $er->find('Photo', $article->img2);
                     $this->view->assign('photoInt', $photoInt);
                 }
 
                 if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                    $videoInt = new \Video($article->fk_video2);
+                    $videoInt = $er->find('Video', $article->fk_video2);
                     $this->view->assign('videoInt', $videoInt);
                 }
 
@@ -182,11 +181,12 @@ class ArticlesController extends Controller
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
             array(
-                'cache_id'      => $cacheID,
-                'contentId'     => $articleID,
-                'category_name' => $categoryName,
-                'article'       => $article,
-                'content'       => $article,
+                'cache_id'        => $cacheID,
+                'contentId'       => $articleID,
+                'category_name'   => $categoryName,
+                'article'         => $article,
+                'content'         => $article,
+                'actual_category' => $actualCategory,
             )
         );
     }
@@ -317,7 +317,7 @@ class ArticlesController extends Controller
                 array('id' => $content->id)
             );
 
-            $isLogged = array_key_exists('userid', $_SESSION);
+            $isLogged = is_array($_SESSION) && array_key_exists('userid', $_SESSION);
             if ($isLogged) {
                 if (array_key_exists('meta', $_SESSION)
                     && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {

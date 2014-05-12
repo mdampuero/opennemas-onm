@@ -234,7 +234,10 @@ class OpinionsController extends Controller
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
     }
 
@@ -363,7 +366,10 @@ class OpinionsController extends Controller
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
     }
 
@@ -377,7 +383,6 @@ class OpinionsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
-
         // Index author's frontpage
         $authorID = $request->query->getDigits('author_id', null);
 
@@ -510,7 +515,10 @@ class OpinionsController extends Controller
 
         return $this->render(
             'opinion/opinion_author_index.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
 
     }
@@ -653,7 +661,10 @@ class OpinionsController extends Controller
 
         return $this->render(
             'opinion/opinion_author_index.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
     }
 
@@ -779,7 +790,10 @@ class OpinionsController extends Controller
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
     }
 
@@ -853,7 +867,10 @@ class OpinionsController extends Controller
         // Show in Frontpage
         return $this->render(
             'opinion/opinion.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'actual_category' => 'opinion',
+            )
         );
     }
 
