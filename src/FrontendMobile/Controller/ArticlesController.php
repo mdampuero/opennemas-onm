@@ -62,7 +62,8 @@ class ArticlesController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager();
 
-            $article->category_name = $ccm->get_name($article->category);
+            $article->category_name  = $ccm->get_name($article->category);
+            $article->category_title = $article->loadCategoryTitle($article->id);
 
             // Set inner photo if available
             if (isset($article->img2) and ($article->img2 != 0)) {
@@ -86,6 +87,8 @@ class ArticlesController extends Controller
                     'related' => $relatedContents,
                     'section' => $article->category_name,
                     'ccm'     => $ccm,
+                    'category_name'      => $article->category_name,
+                    'category_real_name' => $article->category_title,
                 )
             );
         }
