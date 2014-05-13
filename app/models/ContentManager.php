@@ -875,7 +875,7 @@ class ContentManager
                 FROM contents, comments, articles
                 WHERE contents.pk_content = comments.content_id
                 AND contents.pk_content = articles.pk_article
-                AND contents.available=1
+                AND contents.content_status=1
                 AND created >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
                 GROUP BY contents.pk_content
                 ORDER BY num_comments DESC, contents.created DESC
@@ -1379,94 +1379,6 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return $rs;
-    }
-
-    /**
-     * Used for generate the backend listings
-     *
-     * Genera las consultas de find o find_by_category y la paginacion
-     * Devuelve el array con el segmento de contents que se visualizan en la
-     * pagina dada.
-     *
-     * <code>
-     * ContentManager::find_pages($contentType, $filter=null,
-     *     $_order_by='ORDER BY 1', $page=1, $items_page=10,
-     *     $pk_fk_content_category=null);
-     * </code>
-     *
-     * @param int         $contentType            Tipo contenido.
-     * @param string|null $filter                 Clausula where.
-     * @param string      $_order_by              Orden de visualizacion
-     * @param int         $page                   Página a visualizar.
-     * @param int         $items_page             Elementos por pagina.
-     * @param int|null    $pk_fk_content_category Id de categoria (para
-     *                                             find_by_category y si null
-     *                                             es find).
-     * @param string      $url the base path used by the pager
-     *
-     * @return array Array ($items, $pager)
-     */
-    public function find_pages(
-        $contentType,
-        $filter = null,
-        $_order_by = 'ORDER BY 1',
-        $page = 1,
-        $items_page = 10,
-        $pk_fk_content_category = null,
-        $url = null
-    ) {
-        $this->init($contentType);
-        $items = array();
-        $_where = '`contents`.`in_litter`=0';
-
-        if (!is_null($filter)) {
-            if ($filter == ' `contents`.`in_litter`=1'
-               || $filter == 'in_litter=1'
-            ) {
-                //se busca desde la litter.php
-                $_where = $filter;
-            } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
-            }
-        }
-        $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
-        if (empty($page)) {
-            $page = 1;
-        }
-        $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
-
-        if (intval($pk_fk_content_category) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
-                ' WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category.
-                '  AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type
-                .'` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.
-                 $_order_by.$_limit;
-        } else {
-            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
-                . ' WHERE '.$_where
-                . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
-                . $_order_by.' '.$_limit;
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = $this->loadObject($rs, $contentType);
-
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $items_page,
-            'delta'       => 3,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countContents,
-        );
-
-        if ($url != null) {
-            $pager_options['path'] = $url;
-        }
-        $pager = Pager::factory($pager_options);
-
-        return array($items, $pager);
     }
 
     /**
@@ -2282,8 +2194,8 @@ class ContentManager
                        contents.*,
                        comments.body as comment_body, comments.author as comment_author, comments.id as comment_id
                 FROM  contents, comments
-                WHERE contents.fk_content_type=1
-                  AND contents.in_litter !=1
+                WHERE contents.fk_content_type = 1
+                  AND contents.in_litter <> 1
                   AND comments.status = ?
                   AND contents.pk_content = comments.content_id
                 GROUP BY contents.pk_content
