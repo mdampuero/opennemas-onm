@@ -62,14 +62,11 @@ class ArticlesController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager();
 
-            // TODO: Get rid of this when posible
-            require __DIR__.'/../sections.php';
-
             $article->category_name = $ccm->get_name($article->category);
 
             // Set inner photo if available
             if (isset($article->img2) and ($article->img2 != 0)) {
-                $photo = new \Photo($article->img2);
+                $photo = $er->find('Photo', $article->img2);
                 $article->photo = $photo;
                 $this->view->assign('photo', $photo->path_file.$photo->name);
             }
@@ -80,6 +77,8 @@ class ArticlesController extends Controller
             $relatedContents = $cm->getContents($relatedContentIds);
             $relatedContents = $cm->getInTime($relatedContents);
             $relatedContents = $cm->getAvailable($relatedContents);
+
+            $this->view->assign('menuMobile', $this->getMobileMenu());
 
             $this->view->assign(
                 array(
@@ -147,5 +146,29 @@ class ArticlesController extends Controller
                 $content->body = $newContent;
             }
         }
+    }
+
+    /**
+     * Get mobile menu
+     *
+     * @return Response the response object
+     **/
+    public function getMobileMenu()
+    {
+        $cache = getService('cache');
+
+        $menuMobile = $cache->fetch(CACHE_PREFIX.'_mobileMenu');
+
+        if (empty($menuMobile)) {
+
+            $menu = new \Menu();
+            $menuMobile = $menu->getMenu('mobile');
+
+            if (!empty($menuMobile->items)) {
+                $cache->save(CACHE_PREFIX.'_mobileMenu', $menuMobile, 300);
+            }
+
+        }
+        return $menuMobile->items;
     }
 }
