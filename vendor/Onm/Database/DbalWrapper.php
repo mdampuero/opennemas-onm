@@ -71,6 +71,8 @@ class DbalWrapper
             $databaseName
         );
 
+        $this->resetConnection();
+
         return $this;
     }
 
@@ -123,5 +125,16 @@ class DbalWrapper
         }
 
         return $this->connection;
+    }
+
+    /**
+     * Closes and deletes the current connection.
+     */
+    public function resetConnection()
+    {
+        if (is_object($this->connection)) {
+            $this->connection->close();
+            $this->connection = null;
+        }
     }
 }
