@@ -562,6 +562,9 @@ contents:
             primary: false
             unique: false
             flags: { fulltext: true }
+        -
+            name: urn_source
+            columns: [urn_source]
 contents_categories:
     columns:
         pk_fk_content:
@@ -586,6 +589,9 @@ contents_categories:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: catName
+            columns: [catName]
 frontpages:
     columns:
         date:
@@ -700,6 +706,9 @@ menu_items:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: pk_menu
+            columns: [pk_menu]
 menues:
     columns:
         pk_menu:
@@ -1132,6 +1141,9 @@ translation_ids:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: slug
+            columns: [slug]
 user_groups:
     columns:
         pk_user_group:
@@ -1333,3 +1345,6 @@ widgets:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: content
+            columns: [content]

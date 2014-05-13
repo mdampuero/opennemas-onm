@@ -1,0 +1,162 @@
+instances:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        internal_name:
+            type: string
+            options: { default: null, length: 100 }
+        name:
+            type: string
+            options: { default: null, length: 255 }
+        domains:
+            type: text
+            options: { default: null }
+        settings:
+            type: text
+            options: { default: null, notnull: false }
+        activated:
+            type: boolean
+            options: { default: null }
+        contact_mail:
+            type: string
+            options: { default: null, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: domain_name
+            columns: [domains]
+            primary: false
+            unique: false
+            flags: { fulltext: true }
+settings:
+    columns:
+        name:
+            type: string
+            options: { default: '', length: 128 }
+        value:
+            type: text
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [name]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups:
+    columns:
+        pk_user_group:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_user_group]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups_privileges:
+    columns:
+        pk_fk_user_group:
+            type: integer
+            options: { default: null, unsigned: true }
+        pk_fk_privilege:
+            type: integer
+            options: { default: null, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_user_group, pk_fk_privilege]
+            primary: true
+            unique: true
+            flags: {  }
+usermeta:
+    columns:
+        user_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        meta_key:
+            type: string
+            options: { default: '', length: 255 }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [user_id, meta_key]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: user_id
+            columns: [user_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: meta_key
+            columns: [meta_key]
+            primary: false
+            unique: false
+            flags: {  }
+users:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        username:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        password:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        sessionexpire:
+            type: boolean
+            options: { default: '15', unsigned: true }
+        url:
+            type: string
+            options: { default: '', notnull: false, length: 255 }
+        bio:
+            type: text
+            options: { default: null, notnull: false }
+        avatar_img_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        email:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        type:
+            type: boolean
+            options: { default: '0', comment: '0-backend, 1-frontend' }
+        deposit:
+            type: decimal
+            options: { default: '0' }
+        token:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        activated:
+            type: boolean
+            options: { default: '1', comment: '1 activated - 0 deactivated' }
+        fk_user_group:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
