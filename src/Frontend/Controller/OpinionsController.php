@@ -57,7 +57,7 @@ class OpinionsController extends Controller
     {
         if ($this->page == 1) {
             $where = '';
-            $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
+            $orderBy='ORDER BY contents.in_home DESC, position ASC, starttime DESC ';
         } else {
             $where = 'AND contents.in_home=0 ';
             $orderBy='ORDER BY starttime DESC ';
