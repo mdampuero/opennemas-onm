@@ -349,19 +349,28 @@ class FrontpagesController extends Controller
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
-        $this->view->assign(array( 'category_name' => $categoryName, 'actual_category' => $categoryName,));
+        $this->view->assign(
+            array(
+                'category_name'   => $categoryName,
+                'actual_category' => $categoryName
+            )
+        );
 
-        // Get frontpage ads
-        \Frontend\Controller\FrontpagesController::getAds($categoryName);
+        // Get the ID of the actual category from the categoryName
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId = $ccm->get_id($categoryName);
 
         $cm = new \ContentManager;
         $contentsRAW = $request->request->get('contents');
         $contents = json_decode($contentsRAW, true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
-
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+
+        // Fetch ads
+        $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
+        $this->view->assign('advertisements', $ads);
 
         /***** GET ALL FRONTPAGE'S IMAGES *******/
         $imageIdsList = array();
