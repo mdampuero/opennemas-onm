@@ -25,11 +25,18 @@ use Onm\DatabaseConnection;
 class OnmSchemaCommand extends ContainerAwareCommand
 {
     /**
-     * Path to the file with the master schema.
+     * Path to the file with the master schema for an instance.
      *
      * @var string
      */
-    protected $path = 'db/schema-instance.yml';
+    protected $instanceSchemaPath = 'db/schema-instance.yml';
+
+    /**
+     * Path to the file with the master schema for the manager database.
+     *
+     * @var string
+     */
+    protected $managerSchemaPath = 'db/schema-manager.yml';
 
     /**
      * Configures the current command.
@@ -43,6 +50,12 @@ class OnmSchemaCommand extends ContainerAwareCommand
                 'database',
                 InputArgument::REQUIRED,
                 'Database.'
+            )
+            ->addOption(
+                'manager',
+                null,
+                InputOption::VALUE_NONE,
+                'Whether to check manager schema or an instance schema (default: instance)'
             );
     }
 
@@ -56,7 +69,12 @@ class OnmSchemaCommand extends ContainerAwareCommand
     {
         $database = $input->getArgument('database');
 
-        // $this->dumpSchema('current-schema');
+        $this->path = $this->instanceSchemaPath;
+        if ($input->getOption('manager')) {
+            $this->path = $this->managerSchemaPath;
+        }
+
+        // $this->dumpSchema('onm-instances');
 
         $master = Yaml::parse(file_get_contents($this->path));
         $master = $this->createSchema($master);
@@ -78,7 +96,7 @@ class OnmSchemaCommand extends ContainerAwareCommand
      * @param  array $options Column options.
      * @return array          Cleaned column options.
      */
-    private function cleanOption($options)
+    private function cleanOptions($options)
     {
         unset($options['name']);
         unset($options['type']);
@@ -147,9 +165,9 @@ class OnmSchemaCommand extends ContainerAwareCommand
                 if (!array_key_exists('name', $value)) {
                     $value['name'] = null;
                 }
-                if ($value['primary']) {
+                if (array_key_exists('primary', $value) && $value['primary']) {
                     $table->setPrimaryKey($value['columns'], $value['name']);
-                } elseif ($value['unique']) {
+                } elseif (array_key_exists('unique', $value) && $value['unique']) {
                     $table->addUniqueIndex($value['columns'], $value['name']);
                 } else {
                     $table->addIndex($value['columns'], $value['name']);
@@ -160,7 +178,7 @@ class OnmSchemaCommand extends ContainerAwareCommand
         return $schema;
     }
 
-        /**
+    /**
      * Dumps the given database schema.
      *
      * @param string $database Database name.
