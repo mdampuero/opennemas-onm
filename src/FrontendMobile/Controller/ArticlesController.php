@@ -56,7 +56,7 @@ class ArticlesController extends Controller
 
         $cacheID = $this->view->generateCacheId('articles-mobile', '', $articleID);
         if ($this->view->caching == 0
-            || ! $this->view->isCached('mobile/article-inner.tpl', $cacheID)
+            || !$this->view->isCached('mobile/article-inner.tpl', $cacheID)
         ) {
             // Category manager to retrieve category of article
             $ccm = \ContentCategoryManager::get_instance();

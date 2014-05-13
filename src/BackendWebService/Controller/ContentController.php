@@ -47,7 +47,6 @@ class ContentController extends Controller
             );
         }
 
-
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
