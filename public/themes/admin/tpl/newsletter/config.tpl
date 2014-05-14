@@ -22,14 +22,14 @@ jQuery(document).ready(function($){
 
 
     //If newsletter is activated and recaptcha is missing don't send form
-    $('#formulario').on('submit', function(){
-        if (reCaptcha) {
-            if ($('#warnings-validation')) {
-                $('#warnings-validation').replaceWith('<div class="alert alert-error">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-            }
-            return false;
+    if (reCaptcha) {
+        if ($('#warnings-validation')) {
+            $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
         }
-    });
+        $('#formulario').on('submit', function(){
+            return false;
+        });
+    }
 });
 </script>
 {/block}
@@ -65,14 +65,14 @@ jQuery(document).ready(function($){
                 <div class="control-group">
                     <label for="name" class="control-label">{t}Newsletter subject{/t}</label>
                     <div class="controls">
-                        <input type="text" required id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge"/>
+                        <input type="text" required id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge" placeholder="{t}Your newsletter subject{/t}"/>
                         <div class="help-block">{t}The subject of the emails in this newsletter{/t}</div>
                     </div>
                  </div>
                 <div class="control-group">
                     <label for="sender" class="control-label">{t}Email from{/t}</label>
                     <div class="controls">
-                        <input type="text" required id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
+                        <input type="text" required id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge" placeholder="noreply@your_domain_name.com"/>
                     <div class="help-block">{t escape=off}Email sender{/t} (From)</div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@ jQuery(document).ready(function($){
                         <div class="help-block">
                             {t escape=off}You can choose if receive
                             new subscriptions with a checking email or using the
-                            <a href="{url name=admin_newsletter_subscriptions}" target="_blank">
+                            <a href="{url name=admin_newsletter_subscriptors}" target="_blank">
                                 table of subscribers from the application</a>.{/t}
                         </div>
                     </div>

@@ -143,8 +143,8 @@
                     <label for="site_logo" class="control-label">{t}Site logo{/t}</label>
                     <div class="controls">
                         <input type="file" id="site_logo" name="site_logo">
-                        {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:30px">
+                        {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
                         {/if}
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                     <label for="favico" class="control-label">{t}Favico{/t}</label>
                     <div class="controls">
                         <input type="file" id="favico" name="favico">
-                        {if isset($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
+                        {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
                             <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
                         {/if}
                     </div>
@@ -163,7 +163,7 @@
                     <label for="mobile_logo" class="control-label">{t}Site Mobile logo{/t}</label>
                     <div class="controls">
                         <input type="file" id="mobile_logo" name="mobile_logo">
-                        {if isset($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                        {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
                             <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
                         {/if}
                     </div>
@@ -501,7 +501,7 @@
                     <label for="recaptcha_public_key" class="control-label">{t}Public key{/t}</label>
                     <div class="controls">
                         <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}" class="input-xlarge">
-                        <div class="help-block">{t escape=off}Get your reCaptcha key from <a href="http://www.google.com/recaptcha/whyrecaptcha" target="_blank">this page</a>.{/t}<br>{t}Used when we want to test if the user is an human and not a robot.{/t}</div>
+                        <div class="help-block">{t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t}<br>{t}Used when we want to test if the user is an human and not a robot.{/t}</div>
                     </div>
                 </div>
 
