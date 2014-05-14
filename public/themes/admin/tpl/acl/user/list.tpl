@@ -41,12 +41,14 @@
                         {/acl}
                     </ul>
                 </li>
+                {if $createEnabled}
 				<li class="separator" ng-if="shvs.selected > 0"></li>
 				<li>
 					<a href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
 						<img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
+                {/if}
 			</ul>
 		</div>
 	</div>

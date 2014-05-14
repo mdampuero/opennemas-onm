@@ -222,6 +222,7 @@ class InstancesController extends Controller
                 'internal_name' => $internalName,
                 'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
                 'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
+                'max_users'     => $request->request->filter('max_users', '', FILTER_SANITIZE_NUMBER_INT),
                 'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
                 'settings'      => $settings,
                 'site_created'  => $request->request
@@ -328,6 +329,7 @@ class InstancesController extends Controller
             'internal_name' => $internalName,
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
             'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
+            'max_users'     => $request->request->filter('max_users', '', FILTER_SANITIZE_NUMBER_INT),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
             'settings'      => $settings,
             'site_created'  => $request->request->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
@@ -350,7 +352,7 @@ class InstancesController extends Controller
             'site_title', 'site_description','site_keywords',
             'site_agency','site_name','site_created',
             'contact_mail','contact_name','contact_IP','domain_expire',
-            'time_zone','site_language', 'pass_level',
+            'time_zone','site_language', 'pass_level','max_users',
             'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
             'mail_username','mail_password','google_maps_api_key',
             'google_custom_search_api_key','facebook',
@@ -363,12 +365,6 @@ class InstancesController extends Controller
             'activated_modules'
         );
 
-        // Delete the 'activated_modules' from cache service for this instance
-        s::invalidate('activated_modules', $data['internal_name']);
-        // Delete the 'site_name' from cache service for this instance
-        s::invalidate('site_name', $data['internal_name']);
-        s::invalidate('last_invoice', $data['internal_name']);
-
         $instanceManager = getService('instance_manager');
 
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
@@ -376,6 +372,8 @@ class InstancesController extends Controller
 
         foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
+                // Delete from cache service for this instance
+                s::invalidate($key, $internalName);
                 s::set($key, $value);
             }
         }

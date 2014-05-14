@@ -58,6 +58,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 array('deleteAllAuthorsCaches', 5),
                 array('deleteEntityRepositoryUserCache', 10),
             ),
+            'user.update' => array(
+                array('deleteEntityRepositoryUserCache', 10),
+            ),
             'opinion.update' => array(
                 array('deleteOpinionUpdateCaches', 5),
             ),

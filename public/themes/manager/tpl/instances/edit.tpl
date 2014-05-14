@@ -135,6 +135,15 @@ jQuery(document).ready(function($) {
                         </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
+                                <label for="activated" class="control-label">{t}Max users{/t}:</label>
+                            </th>
+                            <td class="controls">
+                                <input type="number" required="required" name="max_users" value="{$configs['max_users']|default:'0'}">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
                                 <label for="domains" class="control-label">{t}Domains:{/t}</label>
                             </th>
                             <td class="controls">

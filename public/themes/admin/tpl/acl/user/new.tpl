@@ -319,6 +319,16 @@ label {
                     {/is_module_activated}
 
                     <div class="control-group">
+                        <label for="activated" class="control-label">{t}Backend Access{/t}</label>
+                        <div class="controls">
+                            <select id="activated" name="activated">
+                                <option value="1" {if ($user->activated eq "1")}selected{/if}>{t}Yes{/t}</option>
+                                <option value="0" {if ($user->activated eq "0")}selected{/if}>{t}No{/t}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
                         <label for="meta[user_language]" class="control-label">{t}User language{/t}</label>
                         <div class="controls">
                             {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}

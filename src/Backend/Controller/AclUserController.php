@@ -42,7 +42,6 @@ class AclUserController extends Controller
      */
     public function listAction(Request $request)
     {
-
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 
@@ -51,11 +50,27 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total allowed users before creating new one
+        $createEnabled = true;
+        if ($maxUsers > 0) {
+            $createEnabled = \User::getTotalUsersRemaining($maxUsers);
+        }
+
+        if (!$createEnabled) {
+            $request->getSession()->getFlashBag()->add(
+                'notice',
+                _('You have reach the maximun users allowed. If you want to create more users, please contact us.')
+            );
+        }
+
         return $this->render(
             'acl/user/list.tpl',
             array(
                 'user_groups'     => $groups,
                 'groupsOptions'   => $groupsOptions,
+                'createEnabled'   => $createEnabled,
             )
         );
     }
@@ -173,6 +188,7 @@ class AclUserController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
             'ids_category'    => $request->request->get('ids_category'),
@@ -181,51 +197,69 @@ class AclUserController extends Controller
 
         $file = $request->files->get('avatar');
 
-        try {
-            // Upload user avatar if exists
-            if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
-                $data['avatar_img_id'] = $photoId;
-            } elseif (($data['avatar_img_id']) == 1) {
-                $data['avatar_img_id'] = $user->avatar_img_id;
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total activated users remaining before updating
+        $updateEnabled = true;
+        if ($data['activated'] == '1' && $maxUsers > 0) {
+            $updateEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+        }
+
+        if ($updateEnabled) {
+            try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } elseif (($data['avatar_img_id']) == 1) {
+                    $data['avatar_img_id'] = $user->avatar_img_id;
+                }
+
+                // Process data
+                if ($user->update($data)) {
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    // Set usermeta paywall time limit
+                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                    if (!empty($paywallTimeLimit)) {
+                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                        $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                    }
+
+                    if ($user->id == $_SESSION['userid']) {
+                        $_SESSION['user_language'] = $meta['user_language'];
+                    }
+
+                    // Check if is an author and delete caches
+                    if (in_array('3', $data['id_user_group'])) {
+                        // Clear caches
+                        $this->dispatchEvent('author.update', array('authorId' => $userId));
+                    } else {
+                        // Clear caches
+                        $this->dispatchEvent('user.update', array('authorId' => $userId));
+                    }
+
+                    $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
+                } else {
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to update the user with that information')
+                    );
+                }
+            } catch (\Exception $e) {
+                $request->getSession()->getFlashBag()->add('error', $e->getMessage());
             }
-
-            // Process data
-            if ($user->update($data)) {
-                // Set all usermeta information (twitter, rss, language)
-                $meta = $request->request->get('meta');
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-
-                // Set usermeta paywall time limit
-                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                if (!empty($paywallTimeLimit)) {
-                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                    $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                }
-
-                if ($user->id == $_SESSION['userid']) {
-                    $_SESSION['user_language'] = $meta['user_language'];
-                }
-
-                // Check if is an author and delete caches
-                if (in_array('3', $data['id_user_group'])) {
-                    // Clear caches
-                    $this->dispatchEvent('author.update', array('authorId' => $userId));
-                }
-
-                $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
-            } else {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to update the user with that information')
-                );
-            }
-        } catch (\Exception $e) {
-            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
+        } else {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to change user backend access. You have reach the maximum allowed')
+            );
         }
 
         return $this->redirect(
@@ -246,6 +280,23 @@ class AclUserController extends Controller
     {
         $user = new \User();
 
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total allowed users before creating new one
+        $createEnabled = true;
+        if ($maxUsers > 0) {
+            $createEnabled = \User::getTotalUsersRemaining($maxUsers);
+        }
+
+        if (!$createEnabled) {
+            $request->getSession()->getFlashBag()->add(
+                'notice',
+                _('You have reach the maximun users allowed. If you want to create more users, please contact us.')
+            );
+
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = array(
                 'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
@@ -258,7 +309,7 @@ class AclUserController extends Controller
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => $request->request->get('id_user_group', array()),
                 'ids_category'    => $request->request->get('ids_category', array()),
-                'activated'       => 1,
+                'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
                 'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
@@ -315,6 +366,7 @@ class AclUserController extends Controller
                 );
             }
         }
+
 
         $ccm = \ContentCategoryManager::get_instance();
         $userGroup = new \UserGroup();
@@ -443,6 +495,8 @@ class AclUserController extends Controller
     public function toogleEnabledAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
+
+        var_dump($userId);die();
 
         if (!is_null($userId)) {
             $user = new \User($userId);

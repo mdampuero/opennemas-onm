@@ -306,7 +306,7 @@ class User implements AdvancedUserInterface
         ) {
             $sql = "UPDATE users
                     SET `username`=?, `password`= ?, `sessionexpire`=?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `email`=?, `name`=?, `fk_user_group`=?, type=?
+                        `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = array(
@@ -318,6 +318,7 @@ class User implements AdvancedUserInterface
                 $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
+                $data['activated'],
                 $data['id_user_group'],
                 $data['type'],
                 intval($data['id'])
@@ -326,7 +327,7 @@ class User implements AdvancedUserInterface
         } else {
             $sql = "UPDATE users
                     SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `name`=?, `fk_user_group`=?, type=?
+                        `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = array(
@@ -337,6 +338,7 @@ class User implements AdvancedUserInterface
                 $data['bio'],
                 $data['avatar_img_id'],
                 $data['name'],
+                $data['activated'],
                 $data['id_user_group'],
                 $data['type'],
                 intval($data['id'])
@@ -1107,6 +1109,10 @@ class User implements AdvancedUserInterface
             return false;
         }
 
+        // Delete user cache
+        $cache = getService('cache');
+        $cache->delete('user_' . $id);
+
         return true;
     }
 
@@ -1124,6 +1130,10 @@ class User implements AdvancedUserInterface
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
             return false;
         }
+
+        // Delete user cache
+        $cache = getService('cache');
+        $cache->delete('user_' . $id);
 
         return true;
     }
@@ -1340,6 +1350,64 @@ class User implements AdvancedUserInterface
         $users = array_values($users);
 
         return $users;
+    }
+
+    /**
+     * Returns the total allowed users to create
+     *
+     * @param  int  $maxUsers
+     *
+     * @return int  total users
+     **/
+    public static function getTotalUsersRemaining($maxUsers = false)
+    {
+        // The value isn't set on DB or is set to 0 (no limit)
+        if (!$maxUsers) {
+            return -1;
+        }
+
+        $sql = 'SELECT count(id) as total FROM `users`
+                WHERE (type=0 AND fk_user_group<>4 AND fk_user_group<>3)
+                OR (fk_user_group<>4 AND activated=1)';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        if ($rs->fields['total'] >= $maxUsers) {
+            return false;
+        }
+
+        return $maxUsers - $rs->fields['total'];
+    }
+
+    /**
+     * Returns the total users that can be activated
+     *
+     * @param  int  $maxUsers
+     *
+     * @return int  total users
+     **/
+    public static function getTotalActivatedUsersRemaining($maxUsers = false)
+    {
+        // The value isn't set on DB or is set to 0 (no limit)
+        if (!$maxUsers) {
+            return -1;
+        }
+
+        $sql = 'SELECT count(id) as total FROM `users` WHERE fk_user_group<>4 AND activated=1';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        if ($rs->fields['total'] > $maxUsers) {
+            return false;
+        }
+
+        return $maxUsers - $rs->fields['total'];
     }
 
     /**
