@@ -689,7 +689,6 @@ class OpinionsController extends Controller
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => array(3),
-                'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '', FILTER_SANITIZE_STRING),
                 'ids_category'    => array(),
                 'activated'       => 0,
                 'type'            => 0,
@@ -716,6 +715,7 @@ class OpinionsController extends Controller
                     // Set all usermeta information (twitter, rss, language)
                     $meta = $request->request->get('meta');
                     $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
+                    $meta['inrss']   = (empty($meta['inrss'])) ? 0 : 1;
                     foreach ($meta as $key => $value) {
                         $user->setMeta(array($key => $value));
                     }
@@ -774,7 +774,6 @@ class OpinionsController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
-            'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => 60,
             'id_user_group'   => $user->id_user_group,
             'ids_category'    => $accessCategories,
@@ -803,6 +802,7 @@ class OpinionsController extends Controller
                 // Set all usermeta information (twitter, rss, language)
                 $meta = $request->request->get('meta');
                 $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
+                $meta['inrss']   = (empty($meta['inrss'])) ? 0 : 1;
                 foreach ($meta as $key => $value) {
                     $user->setMeta(array($key => $value));
                 }
