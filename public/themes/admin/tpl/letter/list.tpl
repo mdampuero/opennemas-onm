@@ -117,8 +117,6 @@
                     <td class="center">
                         {acl isAllowed="LETTER_AVAILABLE"}
                         <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" title="{t}Publish/Unpublish{/t}" type="button"></button>
-                        <button class="btn-link" ng-class="{ loading: content.loading == 1, unpublished: content.loading != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
-                        </button>
                         {/acl}
                     </td>
                     <td class="right">
@@ -126,6 +124,11 @@
                             {acl isAllowed="LETTER_UPDATE"}
                             <a class="btn" href="[% edit(content.id, 'admin_letter_show') %]">
                                 <i class="icon-pencil"></i>
+                            </a>
+                            {/acl}
+                            {acl isAllowed="LETTER_AVAILABLE"}
+                            <a class="btn" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
+                                <i class="icon-ban-circle"></i>
                             </a>
                             {/acl}
                             {acl isAllowed="LETTER_DELETE"}
