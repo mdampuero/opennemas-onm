@@ -280,7 +280,6 @@ class ArticlesController extends Controller
         }
 
         return $this->redirect($url);
-
     }
 
     /**
