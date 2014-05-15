@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+{capture name=url}{url name=admin_system_settings}{/capture}
 <script type="text/javascript">
 jQuery(document).ready(function($){
     var newsletterType = $('#newsletter_subscriptionType');
@@ -24,7 +25,7 @@ jQuery(document).ready(function($){
     //If newsletter is activated and recaptcha is missing don't send form
     if (reCaptcha) {
         if ($('#warnings-validation')) {
-            $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
+            $('#warnings-validation').replaceWith('<div class="alert alert-error messenger-message">{t escape=off 1=$smarty.capture.url}Before using newsletter you have to fill the <a href="%1#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
         }
         $('#formulario').on('submit', function(){
             return false;
@@ -97,11 +98,9 @@ jQuery(document).ready(function($){
                             <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
                             <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
                         </select>
+                        {capture name=subscriptors}{url name=admin_newsletter_subscriptors}{/capture}
                         <div class="help-block">
-                            {t escape=off}You can choose if receive
-                            new subscriptions with a checking email or using the
-                            <a href="{url name=admin_newsletter_subscriptors}" target="_blank">
-                                table of subscribers from the application</a>.{/t}
+                            {t escape=off 1=$smarty.capture.subscriptors}You can choose if receive new subscriptions with a checking email or using the <a href="%1" target="_blank"> table of subscribers from the application</a>.{/t}
                         </div>
                     </div>
                 </div>
