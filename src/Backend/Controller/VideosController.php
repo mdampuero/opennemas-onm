@@ -30,10 +30,8 @@ use Onm\Message as m;
 class VideosController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -71,28 +69,26 @@ class VideosController extends Controller
     }
 
     /**
-     * List videos
+     * List videos.
      *
-     * @param Request $request the request object
-     *
-     * @return void
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('video/list.tpl');
     }
 
     /**
-     * List videos available for widget
+     * List videos available for widget.
      *
-     * @param Request $request the request object
-     *
-     * @return void
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     */
     public function widgetAction(Request $request)
     {
         $configurations = s::get('video_settings');
@@ -108,14 +104,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Handles the form for create a new video
+     * Handles the form for create a new video.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('VIDEO_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -252,14 +247,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Handles the form for update a video given its id
+     * Handles the form for update a video given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -332,14 +326,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Deletes a video given its id
+     * Deletes a video given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_DELETE')")
-     **/
+     */
     public function deleteAction(Request $request)
     {
         $id =  $request->query->getDigits('id');
@@ -374,14 +367,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Shows the form for a video given its id
+     * Shows the form for a video given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -419,14 +411,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Returns the video information for a given url
+     * Returns the video information for a given url.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     */
     public function videoInformationAction(Request $request)
     {
         $url = $request->query->get('url', null, FILTER_DEFAULT);
@@ -453,14 +444,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Handles the form for configure the video module
+     * Handles the form for configure the video module.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_SETTINGS')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -491,14 +481,13 @@ class VideosController extends Controller
 
 
     /**
-     * Returns the relations for a given video
+     * Returns the relations for a given video.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     */
     public function relationsAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_DEFAULT);
@@ -521,14 +510,13 @@ class VideosController extends Controller
     }
 
     /**
-     * Save positions for widget
+     * Save positions for widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->request->get('positions');
@@ -567,42 +555,27 @@ class VideosController extends Controller
     /**
      * Render the content provider for videos
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_ADMIN')")
-     **/
+     * @param  Request $request The request object.
+     * @return Response         The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $cm = new  \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.') ';
-        }
-
-        list($countVideos, $videos) = $cm->getCountAndSlice(
-            'Video',
-            null,
-            'contents.content_status=1 '.$sqlExcludedOpinions,
-            'ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'video')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countVideos = $em->countBy($filters);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -617,7 +590,7 @@ class VideosController extends Controller
                 'totalItems'  => $countVideos,
                 'fileName'    => $this->generateUrl(
                     'admin_videos_content_provider',
-                    array('category' => $category)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -632,35 +605,31 @@ class VideosController extends Controller
     }
 
     /**
-     * Lists all the videos withing a category for the related manager
+     * Lists all the videos within a category for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('VIDEO_ADMIN')")
-     **/
+     * @param  Request $request The request object.
+     * @return Response         The response object.
+     */
     public function contentProviderRelatedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        if ($category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countVideos, $videos) = $cm->getCountAndSlice(
-            'Video',
-            $categoryFilter,
-            'contents.content_status=1',
-            ' ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'video')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countVideos = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -693,58 +662,42 @@ class VideosController extends Controller
     }
 
     /**
-     * Shows a paginated list of images from a category
+     * Shows a paginated list of images from a category.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('VIDEO_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderGalleryAction(Request $request)
     {
-        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $metadata   = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $categoryId = $request->query->getDigits('category', 0);
+        $page       = $request->query->getDigits('page', 1);
 
         $itemsPerPage = 16;
-        $numItems = $itemsPerPage + 1;
 
-        if ($page == 1) {
-            $limit    = "LIMIT {$numItems}";
-        } else {
-            $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$numItems;
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
+
+        $filters = array(
+            'content_type_name' => array(array('value' => 'video')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+        );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
         }
 
-        $cm = new \ContentManager();
-
-        $szWhere = '';
         if (!empty($metadata)) {
             $tokens = \Onm\StringUtils::get_tags($metadata);
             $tokens = explode(', ', $tokens);
 
-            if (count($tokens) > 0) {
-                foreach ($tokens as &$meta) {
-                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
-                }
-                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
-            }
+            $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));
+            $filters['metadata']['union'] = 'OR';
         }
 
-        if ($category == 0) {
-            $videos = $cm->find(
-                'Video',
-                'contents.fk_content_type = 9 AND contents.content_status=1 ' . $szWhere,
-                'ORDER BY created DESC '.$limit
-            );
-        } else {
-            $videos = $cm->find_by_category(
-                'Video',
-                $category,
-                'fk_content_type = 9 AND contents.content_status=1 ' . $szWhere,
-                'ORDER BY created DESC '.$limit
-            );
-        }
+        $videos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countVideos = $em->countBy($filters);
 
         if (empty($videos)) {
             return new Response(
@@ -752,25 +705,15 @@ class VideosController extends Controller
             );
         }
 
-        $total = count($videos);
-        if ($total > $itemsPerPage) {
-            array_pop($videos);
-        }
-        foreach ($videos as &$video) {
-            if (is_string($video->information)) {
-                $video->information = unserialize($video->information);
-            }
-            $video->thumb = $video->getThumb();
-        }
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
                 'page'  => $page,
                 'items' => $itemsPerPage,
-                'total' => $total,
+                'total' => $countVideos,
                 'url'   => $this->generateUrl(
                     'admin_videos_content_provider_gallery',
                     array(
-                        'category'  => $category,
+                        'category'  => $categoryId,
                         'metadatas' => $metadata,
                     )
                 )

@@ -264,9 +264,9 @@ admin_letters_content_provider:
     path:     /letters/content-provider
     defaults: { _controller  : BackendBundle:Letters:contentProvider }
 
-admin_letters_content_list_provider:
-    path:     /letters/content-list-provider
-    defaults: { _controller  : BackendBundle:Letters:contentListProvider }
+admin_letters_content_provider_related:
+    path:     /letters/content-provider-related
+    defaults: { _controller  : BackendBundle:Letters:contentProviderRelated }
 
 # Category manager routes
 admin_categories:
@@ -533,9 +533,9 @@ admin_file_save_positions:
     path:     /files/save-positions
     defaults: { _controller  : BackendBundle:Files:savePositions }
 
-admin_files_content_provider:
-    path:     /files/content-provider
-    defaults: { _controller  : BackendBundle:Files:contentListProvider }
+admin_files_content_provider_related:
+    path:     /files/content-provider-related
+    defaults: { _controller  : BackendBundle:Files:contentProviderRelated }
 
 # Search controller routes
 admin_search:
