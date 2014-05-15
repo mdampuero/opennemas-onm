@@ -24,10 +24,19 @@ use Onm\Database\DbalWrapper;
 class EntityManager extends BaseManager
 {
     /**
+     * The separator to use in cache ids.
+     *
+     * @var string
+     */
+    protected $cacheSeparator = '-';
+
+    /**
      * Initializes the entity manager
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
@@ -46,7 +55,7 @@ class EntityManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = \underscore($contentType) . "_" . $id;
+        $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -76,22 +85,21 @@ class EntityManager extends BaseManager
         $ids = array();
         $i = 0;
         foreach ($data as $value) {
-            $ids[] = $value[0] . '-' . $value[1];
+            $ids[] = $value[0] . $this->cacheSeparator . $value[1];
             $keys[$value[1]] = $i++;
         }
-
         $contents = $this->cache->fetch($ids);
 
         $cachedIds = array();
         foreach ($contents as $content) {
             $ordered[$keys[$content->id]] = $content;
-            $cachedIds[] = $content->content_type_name.'-'.$content->id;
+            $cachedIds[] = $content->content_type_name.$this->cacheSeparator.$content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $content) {
-            list($contentType, $contentId) = explode('-', $content);
+            list($contentType, $contentId) = explode($this->cacheSeparator, $content);
 
             $content = $this->find(\classify($contentType), $contentId);
             if ($content->id) {
@@ -102,14 +110,14 @@ class EntityManager extends BaseManager
         return array_values($ordered);
     }
 
-     /**
+    /**
      * Searches for content given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param  array $criteria        The criteria used to search the contents.
+     * @param  array $order           The order applied in the search.
+     * @param  int   $elementsPerPage The max number of elements to return.
+     * @param  int   $page            The offset to start with.
+     * @return array                  The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -120,11 +128,13 @@ class EntityManager extends BaseManager
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
         $sql = "SELECT content_type_name, pk_content FROM `contents` "
             ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+
+        // var_dump($sql);die();
 
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
@@ -142,6 +152,12 @@ class EntityManager extends BaseManager
         return $contents;
     }
 
+    /**
+     * Counts contents given a criteria.
+     *
+     * @param  array   $criteria The criteria used to search the contents.
+     * @return integer           The number of found contents.
+     */
     public function countBy($criteria)
     {
         // Building the SQL filter
@@ -153,29 +169,6 @@ class EntityManager extends BaseManager
 
         if (!$rs) {
             return 0;
-        }
-
-        return $rs[0];
-    }
-
-    /**
-     * Returns the number of contents given a filter
-     *
-     * @param string|array $filter the filter to apply
-     *
-     * @return int the number of comments
-     **/
-    public function count($filter)
-    {
-        // Building the SQL filter
-        $filterSQL = $this->getFilterSQL($filter);
-
-        // Executing the SQL
-        $sql = "SELECT  count(pk_content) FROM `contents` WHERE $filterSQL";
-        try {
-            $rs  = $this->dbConn->fetchArray($sql);
-        } catch (\DBalException $e) {
-            return false;
         }
 
         return $rs[0];

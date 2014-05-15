@@ -22,8 +22,10 @@ abstract class BaseManager
     /**
      * Initializes the menu manager
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DatabaseConnection $dbConn      The database connection.
+     * @param CacheInterface     $cache       The cache instance.
+     * @param string             $cachePrefix The cache prefix.
+     */
     public function __construct(DatabaseConnection $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn = $dbConn;
@@ -32,91 +34,109 @@ abstract class BaseManager
     }
 
     /**
-     * Builds the SQL WHERE filter given an array or string with the desired filter
+     * Searches one entity given a criteria and an order.
      *
-     * @param string|array $filter the filter params
-     *
-     * @return string the SQL WHERE filter
-     **/
-    protected function getFilterSQL($filters)
+     * @param  array  $criteria The criteria to search for an entity.
+     * @param  array  $order    The order used in clause.
+     * @return Object           The object searched.
+     */
+    public function findOneBy($criteria, $order)
     {
-        if (empty($filters)) {
+        $elements = $this->findBy($criteria, $order, 1);
+        $element  = null;
+        if (!empty($elements)) {
+            $element = $elements[0];
+        }
+        return $element;
+    }
+
+    /**
+     * Removes the object into database.
+     *
+     * @param  Object  $object The object to remove.
+     * @return boolean
+     */
+    public function remove($object)
+    {
+        return $object->remove();
+    }
+
+    /**
+     * Builds the SQL WHERE filter given an array or string with the desired
+     * filter.
+     *
+     * @param  string|array $criteria The filter params.
+     * @return string                 The SQL WHERE filter.
+     */
+    protected function getFilterSQL($criteria)
+    {
+        if (empty($criteria)) {
             $filterSQL = ' 1=1 ';
-        } elseif (is_array($filters)) {
+        } elseif (!is_array($criteria)) {
+            $filterSQL = $criteria;
+        } else {
             $filterSQL = array();
 
-            foreach ($filters as $field => $values) {
+            $fieldUnion = ' AND ';
+            if (array_key_exists('union', $criteria)) {
+                $fieldUnion = ' ' . trim($criteria['union']) . ' ';
+                unset($criteria['union']);
+            }
+
+            foreach ($criteria as $field => $filters) {
+                $valueUnion = ' AND ';
+                if (array_key_exists('union', $filters)) {
+                    $valueUnion = ' ' . trim($filters['union']) . ' ';
+                    unset($filters['union']);
+                }
+
                 $fieldFilters = array();
-
-                foreach ($values as $filter) {
+                foreach ($filters as $filter) {
                     $operator = "=";
-                    $value    = "";
-                    if ($filter['value'][0] == '%'
-                        && $filter['value'][strlen($filter['value']) - 1] == '%'
-                    ) {
-                        $operator = "LIKE";
-                    }
-
-                    // Check operator
                     if (array_key_exists('operator', $filter)) {
-                        $operator = $filter['operator'];
+                        $operator = trim($filter['operator']);
                     }
 
-                    // Check value
+                    $value = '';
                     if (array_key_exists('value', $filter)) {
                         $value = $filter['value'];
                     }
 
-                    $fieldFilters[] = "`$field` $operator '$value'";
+                    if (is_array($value) && !empty($value)) {
+                        if (strtoupper($operator) == 'IN'
+                            || strtoupper($operator) == 'NOT IN'
+                        ) {
+                            $fieldFilters[] = "`$field` $operator (" .
+                                implode(', ', $value) . ")";
+                        } else {
+                            $value = $this->parseValues($value, $operator);
+                            $fieldFilters[] = "`$field` $operator " .
+                                implode(' ', $value);
+                        }
+                    } else {
+                        $fieldFilters[] = "`$field` $operator '$value'";
+                    }
                 }
 
                 // Add filters for the current $field
-                $filterSQL[] = '(' . implode(' OR ', $fieldFilters) . ')';
+                $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
             }
 
             // Build filters
-            $filterSQL = implode(' AND ', $filterSQL);
-        } else {
-            $filterSQL = $filters;
+            $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
         return $filterSQL;
     }
 
     /**
-     * Builds the ORDER BY SQL clause given an array or an string
+     * Builds the LIMIT SQL clause.
      *
-     * @param array|string $order the filter to build
-     *
-     * @return string the ORDER BY clause
-     **/
-    public function getOrderBySQL($order)
-    {
-        $orderSQL  = '`id` DESC';
-        if (is_string($order)) {
-            $orderSQL = $order;
-        } elseif (is_array($order)) {
-            $tokens = array();
-            foreach ($order as $key => $order) {
-                if (in_array($order, array('DESC', 'ASC'))) {
-                    $tokens []= "`$key` $order";
-                }
-            }
-            $orderSQL = implode(', ', $tokens);
-        }
-
-        return $orderSQL;
-    }
-
-    /**
-     * Builds the LIMIT SQL clause
-     *
-     * @param int $elements number of elements
-     * @param int $offset the page number to show
-     *
-     * @return string the LIMIT SQL clause
-     **/
-    public function getLimitSQL($elements = 20, $offset = 1)
+     * @param  integer $elements Number of elements.
+     * @param  integer $offset   The page number to show.
+     * @return string            The LIMIT clause.
+     */
+    protected function getLimitSQL($elements = 20, $offset = 1)
     {
         $limitSQL = '';
         if ($offset == 1) {
@@ -129,21 +149,27 @@ abstract class BaseManager
     }
 
     /**
-     * Searches one entity given a criteria and an order
+     * Builds the ORDER BY SQL clause given an array or an string.
      *
-     * @param array|string $criteria the criteria to search for an entity
-     * @param array $order the order to
-     *
-     * @return Object the object searched
-     **/
-    public function findOneBy($criteria, $order)
+     * @param  array|string $order The filter to build.
+     * @return string              The ORDER BY clause.
+     */
+    protected function getOrderBySQL($order)
     {
-        $elements = $this->findBy($criteria, $order, 1);
-        $element  = null;
-        if (!empty($elements)) {
-            $element = $elements[0];
+        $orderSQL  = '`id` DESC';
+        if (is_string($order)) {
+            $orderSQL = $order;
+        } elseif (is_array($order)) {
+            $tokens = array();
+            foreach ($order as $key => $value) {
+                if (in_array(strtoupper($value), array('DESC', 'ASC'))) {
+                    $tokens[] = "$key $value";
+                }
+            }
+            $orderSQL = implode(', ', $tokens);
         }
-        return $element;
+
+        return $orderSQL;
     }
 
     /**
@@ -157,14 +183,24 @@ abstract class BaseManager
     }
 
     /**
-     * Removes the object into database
+     * Parses array values in filters.
      *
-     * @param Object $object the object instance to remove
-     *
-     * @return boolean
-     **/
-    public function remove($object)
+     * @param  array  $values   Values to parse.
+     * @param  string $operator Operator applied in WHERE clause.
+     * @return array            Parsed values.
+     */
+    protected function parseValues($values, $operator)
     {
-        return $object->remove();
+        $parsed = array();
+
+        foreach ($values as $value) {
+            if (strtoupper($operator) == 'LIKE') {
+                $parsed[] = '\'%' . $value . '%\'';
+            } else {
+                $parsed[] = $item;
+            }
+        }
+
+        return $parsed;
     }
 }

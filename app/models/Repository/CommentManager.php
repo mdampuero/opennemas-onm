@@ -234,7 +234,7 @@ class CommentManager extends BaseManager
     /**
      * Returns the number of pending comments
      *
-     **/
+     */
     public function countPendingComments()
     {
         return $this->countBy(

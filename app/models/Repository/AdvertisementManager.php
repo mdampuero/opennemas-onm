@@ -48,8 +48,6 @@ class AdvertisementManager extends EntityManager
             WHERE $filterSQL AND pk_content=pk_advertisement
             ORDER BY $orderBySQL $limitSQL";
 
-        // var_dump($sql);die();
-
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
@@ -87,46 +85,66 @@ class AdvertisementManager extends EntityManager
      *
      * @return string the SQL WHERE filter
      */
-    protected function getFilterSQL($filters)
+    protected function getFilterSQL($criteria)
     {
-        if (empty($filters)) {
+        if (empty($criteria)) {
             $filterSQL = ' 1=1 ';
-        } elseif (is_array($filters)) {
+        } elseif (!is_array($criteria)) {
+            $filterSQL = $filters;
+        } else {
             $filterSQL = array();
 
-            foreach ($filters as $field => $values) {
+            $fieldUnion = ' AND ';
+            if (array_key_exists('union', $criteria)) {
+                $fieldUnion = $criteria['union'];
+                unset($criteria['union']);
+            }
+
+            foreach ($criteria as $field => $filters) {
+                $valueUnion = ' AND ';
+                if (array_key_exists('union', $filters)) {
+                    $valueUnion = $filters['union'];
+                    unset($filters['union']);
+                }
+
                 $fieldFilters = array();
-
-                foreach ($values as $filter) {
+                foreach ($filters as $filter) {
                     $operator = "=";
-                    $value    = "";
-
-                    // Check operator
                     if (array_key_exists('operator', $filter)) {
-                        $operator = $filter['operator'];
+                        $operator = ' ' . trim($filter['operator']) . ' ';
                     }
 
-                    // Check value
+                    $value = '';
                     if (array_key_exists('value', $filter)) {
                         $value = $filter['value'];
                     }
 
-                    if ($field == 'fk_content_categories') {
-                        $fieldFilters[] = "`$field` REGEXP '(," . $value
-                            . ",)|(," . $value . "$)|(^" . $value . "[,\d]*$)'";
+                    if (is_array($value) && !empty($value)) {
+                        if (strtoupper($operator) == ' IN '
+                            || strtoupper($operator) == ' NOT IN '
+                        ) {
+                            $fieldFilters[] = "`$field` $operator (" .
+                                implode(', ', $filter['value']) . ")";
+                        } else {
+                            $fieldFilters[] = "`$field` $operator " .
+                                implode(' ', $filter['value']);
+                        }
                     } else {
-                        $fieldFilters[] = "`$field` $operator '$value'";
+                        if ($field == 'fk_content_categories') {
+                            $fieldFilters[] = "`$field` REGEXP '(," . $value
+                                . ",)|(," . $value . "$)|(^" . $value . "[,\d]*$)'";
+                        } else {
+                            $fieldFilters[] = "`$field` $operator '$value'";
+                        }
                     }
                 }
 
                 // Add filters for the current $field
-                $filterSQL[] = implode(' OR ', $fieldFilters);
+                $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
             }
 
             // Build filters
-            $filterSQL = implode(' AND ', $filterSQL);
-        } else {
-            $filterSQL = $filter;
+            $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
         return $filterSQL;
