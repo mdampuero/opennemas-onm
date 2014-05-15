@@ -2534,6 +2534,9 @@ gettext("Delete user");
 gettext("There is no subscriptors yet");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
+gettext("Before using newsletter you have to fill the <a href=\"%1#external\"  target=\"_blank\">reCaptcha keys on system settings</a>");
+
+/* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Newsletters");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
@@ -2592,6 +2595,9 @@ gettext("External Send");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Internal Send");
+
+/* public/themes/admin/tpl/newsletter/config.tpl */
+gettext("You can choose if receive new subscriptions with a checking email or using the <a href=\"%1\" target=\"_blank\"> table of subscribers from the application</a>.");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Mailing list address");
