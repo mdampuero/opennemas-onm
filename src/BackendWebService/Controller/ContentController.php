@@ -505,7 +505,7 @@ class ContentController extends Controller
 
         return new JsonResponse(
             array(
-                'message'  => array_merge($success, $errors)
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
