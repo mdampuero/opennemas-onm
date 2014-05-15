@@ -90,7 +90,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $id = $content->id;
         $contentType = \underscore(get_class($content));
 
-        $this->cacheHandler->delete($contentType . "_" . $id);
+        $this->cacheHandler->delete($contentType . "-" . $id);
 
         $this->cleanOpcode();
 
