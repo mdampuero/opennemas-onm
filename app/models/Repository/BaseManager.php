@@ -6,7 +6,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -16,9 +16,16 @@ use Onm\DatabaseConnection;
  * Default BaseManager contains common functions to the rest of Entity Managers
  *
  * @package Repository
- **/
+ */
 abstract class BaseManager
 {
+    /**
+     * The separator to use in cache ids.
+     *
+     * @var string
+     */
+    protected $cacheSeparator = '-';
+
     /**
      * Initializes the menu manager
      *
@@ -36,9 +43,9 @@ abstract class BaseManager
     /**
      * Searches one entity given a criteria and an order.
      *
-     * @param  array  $criteria The criteria to search for an entity.
-     * @param  array  $order    The order used in clause.
-     * @return Object           The object searched.
+     * @param  array|string $criteria The criteria to search for an entity.
+     * @param  array        $order    The order used in clause.
+     * @return Object                 The object searched.
      */
     public function findOneBy($criteria, $order)
     {
@@ -173,10 +180,10 @@ abstract class BaseManager
     }
 
     /**
-     * Indicates if the EntityRepository has the cache handler enabled
+     * Indicates if the EntityRepository has the cache handler enabled.
      *
      * @return boolean true if it has cache
-     **/
+     */
     protected function hasCache()
     {
         return $this->cache != null;

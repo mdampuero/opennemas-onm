@@ -6,31 +6,55 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class AdvertisementManager extends EntityManager
 {
-     /**
-     * Searches for content given a criteria
+    /**
+     * Counts advertisements given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param  array|string $criteria The criteria used to search.
+     * @return integer                The number of contents.
+     */
+    public function countBy($criteria)
+    {
+        // Building the SQL filter
+        $filterSQL  = $this->getFilterSQL($criteria);
+
+        // Executing the SQL
+        $sql = "SELECT COUNT(pk_content) FROM `contents`, `advertisements`"
+            ." WHERE $filterSQL AND pk_content=pk_advertisement";
+        $rs = $this->dbConn->fetchArray($sql);
+
+        if (!$rs) {
+            return 0;
+        }
+
+        return $rs[0];
+    }
+
+    /**
+     * Searches for advertisements given a criteria.
+     *
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  int          $elementsPerPage The max number of elements.
+     * @param  int          $page            The offset to start with.
+     * @return array                         The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -61,29 +85,12 @@ class AdvertisementManager extends EntityManager
         return $contents;
     }
 
-    public function countBy($criteria)
-    {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
-
-        // Executing the SQL
-        $sql = "SELECT COUNT(pk_content) FROM `contents`, `advertisements`"
-            ." WHERE $filterSQL AND pk_content=pk_advertisement";
-        $rs = $this->dbConn->fetchArray($sql);
-
-        if (!$rs) {
-            return 0;
-        }
-
-        return $rs[0];
-    }
-
     /**
-     * Builds the SQL WHERE filter given an array or string with the desired filter
+     * Builds the SQL WHERE filter given an array or string with the desired
+     * filter.
      *
-     * @param string|array $filter the filter params
-     *
-     * @return string the SQL WHERE filter
+     * @param  array|string $criteria The criteria used to search.
+     * @return string                 The SQL WHERE filter.
      */
     protected function getFilterSQL($criteria)
     {

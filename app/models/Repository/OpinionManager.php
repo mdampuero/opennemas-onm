@@ -6,30 +6,31 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class OpinionManager extends EntityManager
 {
     /**
      * Searches for content given a criteria.
      *
-     * @param  array   $criteria        The criteria used to search.
-     * @param  array   $order           The order applied in the search.
-     * @param  integer $elementsPerPage The max number of elements to return.
-     * @param  integer $page            The offset to start with.
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  integer      $elementsPerPage The max number of elements.
+     * @param  integer      $page            The offset to start with.
      * @return array                    The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
@@ -64,8 +65,8 @@ class OpinionManager extends EntityManager
     /**
      * Searches for content given a criteria.
      *
-     * @param  array $criteria The criteria used to search.
-     * @return integer         The number of matched elements.
+     * @param  array|string $criteria The criteria used to search.
+     * @return integer                The number of matched elements.
      */
     public function countBy($criteria)
     {

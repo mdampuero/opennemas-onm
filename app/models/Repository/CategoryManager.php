@@ -6,24 +6,29 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * Handles common actions in Menus
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
+ *
+ * This class is designed for inheritance and users can subclass this class to
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class CategoryManager extends BaseManager
 {
     /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param CacheInterface $cache the cache instance.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
@@ -41,7 +46,7 @@ class CategoryManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = "category_" . $id;
+        $cacheId = "category" . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -71,9 +76,8 @@ class CategoryManager extends BaseManager
         $ids = array();
         $i = 0;
 
-
         foreach ($data as $value) {
-            $ids[] = $value;
+            $ids[] = $category . $this->cacheSeparator . $value;
             $keys[$value] = $i++;
         }
 
@@ -82,12 +86,14 @@ class CategoryManager extends BaseManager
         $cachedIds = array();
         foreach ($categories as $category) {
             $ordered[$keys[$category->pk_content_category]] = $category;
-            $cachedIds[] = 'category_'. $category->pk_content_category;
+            $cachedIds[] = 'category'. $this->cacheSeparator
+                . $category->pk_content_category;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $id) {
+            list($contentType, $categoryId) = explode($this->cacheSeparator, $id);
             $category = $this->find($id);
             if ($category->pk_content_category) {
                 $ordered[$keys[$category->pk_content_category]] = $category;
@@ -97,14 +103,14 @@ class CategoryManager extends BaseManager
         return array_values($ordered);
     }
 
-     /**
-     * Searches for content given a criteria
+    /**
+     * Searches for content categories given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  int          $elementsPerPage The max number of elements.
+     * @param  int          $page            The offset to start with.
+     * @return array                         The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -135,6 +141,12 @@ class CategoryManager extends BaseManager
         return $categories;
     }
 
+    /**
+     * Counts content categories given a criteria.
+     *
+     * @param  array|string $criteria The criteria used to search.
+     * @return array                  The number of content categories.
+     */
     public function countBy($criteria)
     {
         // Building the SQL filter

@@ -6,32 +6,26 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class EntityManager extends BaseManager
 {
     /**
-     * The separator to use in cache ids.
-     *
-     * @var string
-     */
-    protected $cacheSeparator = '-';
-
-    /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
      * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
@@ -93,7 +87,7 @@ class EntityManager extends BaseManager
         $cachedIds = array();
         foreach ($contents as $content) {
             $ordered[$keys[$content->id]] = $content;
-            $cachedIds[] = $content->content_type_name.$this->cacheSeparator.$content->id;
+            $cachedIds[] = $content->content_type_name . $this->cacheSeparator.$content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
@@ -113,11 +107,11 @@ class EntityManager extends BaseManager
     /**
      * Searches for content given a criteria
      *
-     * @param  array $criteria        The criteria used to search the contents.
-     * @param  array $order           The order applied in the search.
-     * @param  int   $elementsPerPage The max number of elements to return.
-     * @param  int   $page            The offset to start with.
-     * @return array                  The matched elements.
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  int          $elementsPerPage The max number of elements.
+     * @param  int          $page            The offset to start with.
+     * @return array                         The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -155,8 +149,8 @@ class EntityManager extends BaseManager
     /**
      * Counts contents given a criteria.
      *
-     * @param  array   $criteria The criteria used to search the contents.
-     * @return integer           The number of found contents.
+     * @param  array|string $criteria The criteria used to search.
+     * @return integer                The number of found contents.
      */
     public function countBy($criteria)
     {
