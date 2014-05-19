@@ -140,16 +140,17 @@ abstract class BaseManager
      * Builds the LIMIT SQL clause.
      *
      * @param  integer $elements Number of elements.
-     * @param  integer $offset   The page number to show.
+     * @param  integer $page     The page number to show.
+     * @param  integer $offset   The offset to start with.
      * @return string            The LIMIT clause.
      */
-    protected function getLimitSQL($elements = 20, $offset = 1)
+    protected function getLimitSQL($elements = 20, $page = 1, $offset = 0)
     {
         $limitSQL = '';
-        if ($offset == 1) {
-            $limitSQL = ' LIMIT '. $elements;
-        } elseif ($offset > 1) {
-            $limitSQL = ' LIMIT '.($offset-1)*$elements.', '.$elements;
+        if ($page == 1) {
+            $limitSQL = ' LIMIT '. ($offset + $elements);
+        } elseif ($page > 1) {
+            $limitSQL = ' LIMIT ' . ($offset + ($page - 1) * $elements) . ', ' . $elements;
         }
 
         return $limitSQL;

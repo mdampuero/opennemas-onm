@@ -46,7 +46,7 @@ class CategoryManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = "category" . $this->cacheSeparator . $id;
+        $cacheId = 'category' . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -77,7 +77,7 @@ class CategoryManager extends BaseManager
         $i = 0;
 
         foreach ($data as $value) {
-            $ids[] = $category . $this->cacheSeparator . $value;
+            $ids[] = 'category' . $this->cacheSeparator . $value;
             $keys[$value] = $i++;
         }
 
@@ -94,7 +94,7 @@ class CategoryManager extends BaseManager
 
         foreach ($missedIds as $id) {
             list($contentType, $categoryId) = explode($this->cacheSeparator, $id);
-            $category = $this->find($id);
+            $category = $this->find($categoryId);
             if ($category->pk_content_category) {
                 $ordered[$keys[$category->pk_content_category]] = $category;
             }
@@ -127,13 +127,12 @@ class CategoryManager extends BaseManager
         $sql = "SELECT pk_content_category FROM `content_categories` "
             ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
-
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $result) {
-            $ids[]= $result['pk_content_category'];
+            $ids[] = $result['pk_content_category'];
         }
 
         $categories = $this->findMulti($ids);

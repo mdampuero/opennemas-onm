@@ -52,11 +52,12 @@ class AdvertisementManager extends EntityManager
      *
      * @param  array|string $criteria        The criteria used to search.
      * @param  array        $order           The order applied in the search.
-     * @param  int          $elementsPerPage The max number of elements.
-     * @param  int          $page            The offset to start with.
+     * @param  integer      $elementsPerPage The max number of elements.
+     * @param  integer      $page            The current page.
+     * @param  integer      $offset          The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -65,7 +66,7 @@ class AdvertisementManager extends EntityManager
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
         $sql = "SELECT content_type_name, pk_content FROM `contents`, `advertisements`
