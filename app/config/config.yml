@@ -50,6 +50,19 @@ swiftmailer:
         path: "%kernel.root_dir%/spool"
     logging:  "%kernel.debug%"
 
+monolog:
+    channels: ["main", "applog"]
+    handlers:
+        main:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: error
+        applog:
+            type:  stream
+            path:  %kernel.logs_dir%/application.log
+            level: info
+            channels: applog
+
 services:
     session.memcache:
         class: Memcached
@@ -67,3 +80,12 @@ services:
     session.handler.drak.memcached:
         class: Drak\NativeSession\NativeMemcachedSessionHandler
         arguments: [%session_handler_savepath%, %session_handler_options%]
+
+    monolog.processor.instance_name:
+        class: Framework\Monolog\InstanceNameFormatter
+        tags:
+            - { name: monolog.processor, method: processRecord, handler: applog }
+
+    application.log:
+        alias: monolog.logger.applog
+

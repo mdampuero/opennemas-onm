@@ -166,7 +166,7 @@ class UserController extends Controller
                         );
                     } catch (\Exception $e) {
                         // Log this error
-                        $this->get('logger')->notice(
+                        $this->get('application.log')->notice(
                             "Unable to send the user activation email for the "
                             ."user {$user->id}: ".$e->getMessage()
                         );
@@ -326,7 +326,7 @@ class UserController extends Controller
                 $this->view->assign('mailSent', true);
             } catch (\Exception $e) {
                 // Log this error
-                $this->get('logger')->notice(
+                $this->get('application.log')->notice(
                     "Unable to send the user welcome email for the "
                     ."user {$user->id}: ".$e->getMessage()
                 );
@@ -401,7 +401,7 @@ class UserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -477,7 +477,7 @@ class UserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -773,7 +773,6 @@ class UserController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
     }
 
     /**

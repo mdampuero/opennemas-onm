@@ -224,7 +224,7 @@ class ContentsController extends Controller
                 $httpCode = 200;
             } catch (\Exception $e) {
                 // Log this error
-                $logger = $this->get('logger');
+                $logger = $this->get('application.log');
                 $logger->notice("Unable to send by email the content [$contentID]: ".$e->getMessage());
 
                 $content = array(_('Unable to send the email. Please try to send it later.'));

@@ -566,7 +566,7 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $getBalanceResponse = $paypalService->GetBalance($getBalanceReq);
         } catch (\Exception $ex) {
-            $this->get('logger')->notice("Paywall: Error in getBalanceResponse API call.");
+            $this->get('application.log')->notice("Paywall: Error in getBalanceResponse API call.");
         }
 
         // Connection is ok return true
@@ -633,7 +633,7 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $setECResponse = $paypalService->SetExpressCheckout($setECReq);
         } catch (\Exception $ex) {
-            $this->get('logger')->notice("Paywall: Error in setECResponse validate IPN API call.");
+            $this->get('application.log')->notice("Paywall: Error in setECResponse validate IPN API call.");
         }
 
         if (isset($setECResponse) && $setECResponse->Ack == 'Success') {
@@ -680,7 +680,7 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
         } catch (\Exception $ex) {
-            $this->get('logger')->notice("Paywall: Error in getECResponse validate IPN API call.");
+            $this->get('application.log')->notice("Paywall: Error in getECResponse validate IPN API call.");
             $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
             return $this->redirect($this->generateUrl('admin_paywall_settings'));
         }
@@ -709,7 +709,7 @@ class PaywallController extends Controller
         try {
             $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
         } catch (\Exception $ex) {
-            $this->get('logger')->notice("Paywall: Error in DoECResponse validate IPN API call.");
+            $this->get('application.log')->notice("Paywall: Error in DoECResponse validate IPN API call.");
         }
 
         // Payment done, let's update some registries in the app
@@ -729,7 +729,7 @@ class PaywallController extends Controller
                 /* wrap API method calls on the service object with a try catch */
                 $paypalService->RefundTransaction($refundReq);
             } catch (\Exception $ex) {
-                $this->get('logger')->notice("Paywall: Error in refundResponse validate IPN API call.");
+                $this->get('application.log')->notice("Paywall: Error in refundResponse validate IPN API call.");
             }
         } else {
             $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));

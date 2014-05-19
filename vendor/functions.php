@@ -179,7 +179,7 @@ function normalizeUrl($url)
  **/
 function logContentEvent($action = null, $content = null)
 {
-    $logger = getService('logger');
+    $logger = getService('application.log');
 
     $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
     .'the action '.$action;
@@ -187,7 +187,7 @@ function logContentEvent($action = null, $content = null)
         $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
     }
 
-    $logger->notice($msg);
+    $logger->info($msg);
 }
 
 /**

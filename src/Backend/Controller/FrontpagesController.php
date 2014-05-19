@@ -191,7 +191,7 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $logger = $this->get('logger');
+            $logger = $this->get('application.log');
 
             if ($validReceivedData) {
                 $contents = array();
@@ -210,7 +210,7 @@ class FrontpagesController extends Controller
                 $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
 
                 /* Notice log of this action */
-                $logger->notice(
+                $logger->info(
                     'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                     .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
                 );
@@ -219,7 +219,7 @@ class FrontpagesController extends Controller
                 if ($dataPositionsNotValid) {
                     $message = '[data positions not valid]';
                 }
-                $logger->notice(
+                $logger->info(
                     'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
                     .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
                 );
