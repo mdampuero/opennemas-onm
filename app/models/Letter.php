@@ -155,7 +155,10 @@ class Letter extends Content
         }
 
         $this->load($rs->fields);
-        $this->ip = $this->params['ip'];
+
+        if (is_array($this->params) && array_key_exists('ip', $this->params)) {
+            $this->ip = $this->params['ip'];
+        }
 
         $this->loadAllContentProperties();
 
