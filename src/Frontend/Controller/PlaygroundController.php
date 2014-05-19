@@ -44,7 +44,7 @@ class PlaygroundController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction($request)
+    public function defaultAction(Request $request)
     {
         $action = $request->query->get('action', null);
 
@@ -71,7 +71,7 @@ class PlaygroundController extends Controller
             'Your changes were saved!'
         );
 
-        foreach ($session->getFlashBag()->get('notice', array()) as $message) {
+        foreach ($this->get('session')->getFlashBag()->get('notice', array()) as $message) {
             echo "<div class='flash-notice'>$message</div>";
         }
     }

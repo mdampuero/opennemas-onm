@@ -47,15 +47,13 @@ class BlogsController extends Controller
     }
 
     /**
-     * Renders the blog opinion frontpage
+     * Renders the blog opinion frontpage.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function frontpageAction(Request $request)
     {
-
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
 
@@ -63,28 +61,27 @@ class BlogsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/blog.tpl', $cacheID)
         ) {
-            //
-            $orderBy = 'ORDER BY starttime DESC';
-            $authorsBlog = \User::getAllUsersAuthors();
             $authors = array();
-            foreach ($authorsBlog as $author) {
+            foreach (\User::getAllUsersAuthors() as $author) {
                 if ($author->is_blog == 1) {
                     $authors[$author->id] = $author;
                 }
             }
-            $where = ' AND opinions.fk_author IN ('.implode(', ', array_keys($authors)).") ";
-            // Fetch last blog items
+
             $itemsPerPage = s::get('items_in_blog');
-            list($countItems, $blogs)= $this->cm->getCountAndSlice(
-                'Opinion',
-                null,
-                'opinions.type_opinion=0 '.
-                $where.
-                'AND contents.content_status=1 ',
-                $orderBy,
-                $this->page,
-                $itemsPerPage
+
+            $order   = array('starttime' => 'DESC');
+            $filters = array(
+                'content_type_name' => array(array('value' => 'opinion')),
+                'type_opinion'      => array(array('value' => 0)),
+                'content_status'    => array(array('value' => 1)),
+                'blog'              => array(array('value' => 1)),
             );
+
+            $em         = $this->get('opinion_repository');
+            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
+            $countItems = $em->countBy($filters);
+
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',
@@ -100,7 +97,6 @@ class BlogsController extends Controller
                     ).'/?page=%d',
                 )
             );
-
 
             foreach ($blogs as &$blog) {
                 if (array_key_exists($blog->fk_author, $authors)) {
@@ -145,7 +141,6 @@ class BlogsController extends Controller
             array('cache_id' => $cacheID)
         );
     }
-
 
     /**
      * Renders the opinion author's frontpage

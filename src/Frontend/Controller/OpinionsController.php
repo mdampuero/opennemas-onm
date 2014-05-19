@@ -55,13 +55,17 @@ class OpinionsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
+        $filters = array('content_status' => array(array('value' => 1)));
+        $order   = array('starttime' => 'DESC');
+        $em      = $this->get('opinion_repository');
+
         if ($this->page == 1) {
-            $where = '';
-            $orderBy='ORDER BY contents.in_home DESC, position ASC, starttime DESC ';
+            $order['in_home']  = 'DESC';
+            $order['position'] = 'ASC';
         } else {
-            $where = 'AND contents.in_home=0 ';
-            $orderBy='ORDER BY starttime DESC ';
+            $filters['in_home'] = array(array('value' => 0));
         }
+
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
 
@@ -83,13 +87,12 @@ class OpinionsController extends Controller
 
             $editorial = array();
             if (!empty($totalEditorial)) {
-                $editorial = $this->cm->find(
-                    'Opinion',
-                    'opinions.type_opinion=1 '.
-                    'AND contents.content_status=1 '.$where,
-                    $orderBy.
-                    'LIMIT '.$totalEditorial
+                $ef = array_merge(
+                    $filters,
+                    array('type_opinion' => array(array('value' => 1)))
                 );
+
+                $editorial = $em->findBy($ef, $order, $totalEditorial);
             }
 
             foreach ($editorial as &$op) {
@@ -106,13 +109,12 @@ class OpinionsController extends Controller
             // Fetch last opinions from director
             $director = array();
             if (!empty($totalDirector)) {
-                $director = $this->cm->find(
-                    'Opinion',
-                    'opinions.type_opinion=2 '.
-                    'AND contents.content_status=1 '.$where,
-                    $orderBy.
-                    ' LIMIT '.$totalDirector
+                $ef = array_merge(
+                    $filters,
+                    array('type_opinion' => array(array('value' => 2)))
                 );
+
+                $director = $em->findBy($ef, $order, $totalDirector);
             }
 
             if (isset($director) && !empty($director)) {
@@ -160,16 +162,14 @@ class OpinionsController extends Controller
                 $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
             }
 
-            list($countOpinions, $opinions)= $this->cm->getCountAndSlice(
-                'Opinion',
-                null,
-                'opinions.type_opinion=0 '.
-                $where.
-                'AND contents.content_status=1 ',
-                $orderBy,
-                $this->page,
-                $itemsPerPage
+            $of = array_merge(
+                $filters,
+                array('type_opinion' => array(array('value' => 0)))
             );
+
+            $opinions      = $em->findBy($of, $order, $itemsPerPage, $this->page);
+            $countOpinions = $em->countBy($of);
+
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',

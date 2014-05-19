@@ -40,17 +40,14 @@ class LetterController extends Controller
     }
 
     /**
-     * Renders letters frontpage
+     * Renders letters frontpage.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function frontpageAction(Request $request)
     {
         $page = $request->query->getDigits('page', 1);
-
-        $cm = new \ContentManager();
 
         $this->view->setConfig('letter-frontpage');
 
@@ -58,33 +55,31 @@ class LetterController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
         ) {
-
             $itemsPerPage = 12;
 
-
-            list($countLetters, $otherLetters) = $cm->getCountAndSlice(
-                'Letter',
-                null,
-                'in_litter != 1 AND contents.content_status=1',
-                'ORDER BY created DESC',
-                $page,
-                $itemsPerPage
+            $order   = array('created' => 'DESC');
+            $filters = array(
+                'content_type_name' => array(array('value' => 'letter')),
+                'content_status'    => array(array('value' => 1)),
+                'in_litter'         => array(array('value' => 0)),
             );
 
-            foreach ($otherLetters as &$letter) {
+            $em           = $this->get('entity_repository');
+            $letters      = $em->findBy($filters, $order, $itemsPerPage, $page);
+            $countLetters = $em->countBy($filters);
+
+            foreach ($letters as &$letter) {
                 $letter->loadAllContentProperties();
                 if (!empty($letter->image)) {
                     $letter->photo = $letter->photo;
                 }
             }
 
-            $total = count($otherLetters)+1;
-
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $total,
+                    'total' => $countLetters,
                     'url'   => $this->generateUrl(
                         'frontend_letter_frontpage'
                     )
@@ -93,7 +88,7 @@ class LetterController extends Controller
 
             $this->view->assign(
                 array(
-                    'otherLetters' => $otherLetters,
+                    'otherLetters' => $letters,
                     'pagination'   => $pagination,
                 )
             );
