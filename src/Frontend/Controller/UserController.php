@@ -613,7 +613,7 @@ class UserController extends Controller
                     ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
-                $contentsCount  = $er->count($searchCriteria);
+                $contentsCount  = $er->countBy($searchCriteria);
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
 
                 foreach ($contents as &$item) {
