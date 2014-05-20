@@ -14,7 +14,7 @@
     bootstrap                   = "bootstrap.php.cache" >
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Opennemas">
             <directory>tests/*</directory>
             <directory>../src/*/Tests</directory>
             <directory>../src/*/*Bundle/Tests</directory>
