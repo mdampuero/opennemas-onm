@@ -68,7 +68,7 @@ class FrontpageManager extends EntityManager
      * @param  integer      $page            The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
