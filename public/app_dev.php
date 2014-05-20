@@ -1,19 +1,25 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
-*
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- **/
+
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\Debug\Debug;
+
+// If you don't want to setup permissions the proper way, just uncomment the following PHP line
+// read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
+//umask(0000);
+
+// This check prevents access to debug front controllers that are deployed by accident to production servers.
+// Feel free to remove this, extend it, or make something more sophisticated.
+// if (isset($_SERVER['HTTP_CLIENT_IP'])
+//     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+//     || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1'))
+// ) {
+//     header('HTTP/1.0 403 Forbidden');
+//     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+// }
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+Debug::enable();
+
 require_once __DIR__.'/../app/AppKernel.php';
 
 // Little hack to allow final slashes in the url
@@ -21,7 +27,6 @@ $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
-//$kernel = new AppCache($kernel);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
