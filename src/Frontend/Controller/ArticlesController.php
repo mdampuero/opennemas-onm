@@ -186,7 +186,7 @@ class ArticlesController extends Controller
                 'category_name'   => $categoryName,
                 'article'         => $article,
                 'content'         => $article,
-                'actual_category' => $actualCategory,
+                'actual_category' => $categoryName,
             )
         );
     }
