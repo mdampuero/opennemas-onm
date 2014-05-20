@@ -106,6 +106,7 @@
         </td>
     </tr>
     {foreach from=$opinions item=opinion}
+    {if $opinion->author->meta['is_blog'] neq 1}
     <tr class="normal-opinion" data-id="{$opinion->id}">
         <td>
            <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$opinion->id}">
@@ -151,8 +152,10 @@
                 <i class="icon-pencil"></i>
             </a>
             {/acl}
+            </div>
         </td>
     </tr>
+    {/if}
     {/foreach}
     </tbody>
     {/if}
