@@ -73,8 +73,6 @@ EOF
         $request = Request::createFromGlobals();
         $request->setTrustedProxies(array('127.0.0.1'));
 
-        $sc = include __DIR__.'/../app/container.php';
-
         $framework = $sc->get('framework');
         $response = $framework->handle($request);
         $response->send();
