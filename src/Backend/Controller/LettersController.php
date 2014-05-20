@@ -208,7 +208,8 @@ class LettersController extends Controller
                 'urlVar'      => 'page',
                 'totalItems'  => $countLetters,
                 'fileName'    => $this->generateUrl(
-                    'admin_letters_content_provider'
+                    'admin_letters_content_provider',
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );

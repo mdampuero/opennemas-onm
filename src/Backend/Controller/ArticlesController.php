@@ -581,6 +581,7 @@ class ArticlesController extends Controller
     public function contentProviderInFrontpageAction(Request $request)
     {
         $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
 
         $em = $this->get('entity_repository');
 
@@ -590,8 +591,8 @@ class ArticlesController extends Controller
             'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
 
-        if ($categoryId != 0) {
-            $filters['fk_category'] = array(array('value' => $categoryId));
+        if ($category != 0) {
+            $filters['fk_category'] = array(array('value' => $category));
         }
 
         $articles = $em->findBy($filters, array('created' => 'desc'), 8, $page);

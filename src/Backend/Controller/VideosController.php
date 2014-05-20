@@ -643,7 +643,7 @@ class VideosController extends Controller
                 'totalItems'  => $countVideos,
                 'fileName'    => $this->generateUrl(
                     'admin_videos_content_provider_related',
-                    array('category' => $category,)
+                    array('category' => $categoryId,)
                 ).'&page=%d',
             )
         );
