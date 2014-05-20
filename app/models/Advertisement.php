@@ -256,6 +256,13 @@ class Advertisement extends Content
         $this->script = base64_decode($this->script);
         // FIXME: revisar que non se utilice ->img
         $this->img = $this->path;
+
+        // Initialize the categories array of this advertisement
+        if (!is_array($this->fk_content_categories)) {
+            $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        }
+
+        return $this;
     }
 
     /**
@@ -419,6 +426,7 @@ class Advertisement extends Content
         $banners = array();
         $finalBanners = array();
 
+        // If not advertisement types are passed return earlier
         if (!is_array($types) || count($types) <= 0) {
             return $banners;
         }
@@ -444,32 +452,37 @@ class Advertisement extends Content
             $catsSQL = 'AND advertisements.fk_content_categories=0 ';
         }
 
-        $sql = "SELECT * FROM contents, advertisements "
-              ."WHERE contents.pk_content = advertisements.pk_advertisement "
-              ."AND contents.in_litter!=1 "
-              .'AND contents.content_status=1 AND advertisements.type_advertisement IN ('.$types.') '
-              .$catsSQL
-              ."ORDER BY contents.created";
+        $sql = "SELECT pk_advertisement as id FROM advertisements "
+              ."WHERE advertisements.type_advertisement IN (".$types.") "
+              .$catsSQL.' ORDER BY id';
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $conn = getService('dbal_connection');
+        $result = $conn->fetchAll($sql);
 
-        if (!$rs) {
+        if (count($result) <= 0) {
             return $banners;
         }
 
-        $adsData = $rs->GetArray();
-        foreach ($adsData as $data) {
-            $advertisement = new \Advertisement();
-            $advertisement->load($data);
+        $result = array_map(function ($element) {
+            return array('Advertisement', $element['id']);
+        }, $result);
 
+        $adManager = getService('advertisement_repository');
+        $advertisements = $adManager->findMulti($result);
+
+        foreach ($advertisements as $advertisement) {
             // Dont use this ad if is not in time
-            if (!$advertisement->isInTime()) {
+            if (!$advertisement->isInTime()
+                || $advertisement->content_status != 1
+                || $advertisement->in_litter != 0) {
                 continue;
             }
 
-            // Initialize the categories array of this advertisement
-            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+            // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
+            // already stored ad objects. This should be removed after caches will be regenerated
+            if (!is_array($this->fk_content_categories)) {
+                $this->fk_content_categories = explode(',', $this->fk_content_categories);
+            }
 
             // If the ad doesn't belong to the given category or home, skip it
             if (!in_array($category, $advertisement->fk_content_categories)
