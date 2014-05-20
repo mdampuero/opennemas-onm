@@ -480,8 +480,8 @@ class Advertisement extends Content
 
             // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
             // already stored ad objects. This should be removed after caches will be regenerated
-            if (!is_array($this->fk_content_categories)) {
-                $this->fk_content_categories = explode(',', $this->fk_content_categories);
+            if (!is_array($advertisement->fk_content_categories)) {
+                $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
             }
 
             // If the ad doesn't belong to the given category or home, skip it
