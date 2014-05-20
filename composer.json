@@ -1,7 +1,7 @@
 {
     "name": "openhost/opennemas",
     "description": "High performance and scalable NMS focused in journalism workflow",
-    "keywords": ["nms", "newspapres", "magazines", "content management system"],
+    "keywords": ["nms", "newspapers", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
     "type": "cms",
     "license": "proprietary",
