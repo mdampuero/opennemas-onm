@@ -220,7 +220,9 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        if (!is_array($ad->fk_content_categories)) {
+            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        }
 
         if (!empty($ad->img)) {
             //Buscar foto where pk_foto=img1
