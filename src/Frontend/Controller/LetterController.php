@@ -241,7 +241,7 @@ class LetterController extends Controller
                 }
 
                 $data['url']        = $url;
-                $data['body']       = $lettertext;
+                $data['body']       = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
                 $data['author']     = $name;
                 $data['title']      = $subject;
                 $data['email']      = $mail;

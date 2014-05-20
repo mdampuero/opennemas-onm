@@ -160,7 +160,7 @@ class Comment
                     } else {
                         $this->{$name} = iconv(
                             mb_detect_encoding($data[$name]),
-                            'utf-8',
+                            "UTF-8",
                             $data[$name]
                         );
                     }
@@ -220,7 +220,7 @@ class Comment
             $data['author_url'],
             $data['author_ip'],
             $data['date'],
-            $data['body'],
+            iconv(mb_detect_encoding($data['body']), "UTF-8", $data['body']),
             $data['status'],
             $data['agent'],
             $data['type'],
