@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Yaml;
 
 use Onm\DatabaseConnection;
 
-class OnmSchemaCommand extends ContainerAwareCommand
+class DatabacheCheckSchemaCommand extends ContainerAwareCommand
 {
     /**
      * Path to the file with the master schema for an instance.
@@ -44,7 +44,7 @@ class OnmSchemaCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('onm:schema')
+            ->setName('database:check-schema')
             ->setDescription('Handles the current database schema.')
             ->addArgument(
                 'database',
@@ -86,7 +86,7 @@ class OnmSchemaCommand extends ContainerAwareCommand
         $sql = $schema->getMigrateToSql($master, $conn->getDatabasePlatform());
 
         foreach ($sql as $value) {
-            $output->writeln($value);
+            $output->writeln($value.';');
         }
     }
 
