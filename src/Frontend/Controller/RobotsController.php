@@ -28,17 +28,7 @@ use Onm\Settings as s;
 class RobotsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
-     * Displays a prebuild robots.txt file
+     * Displays a prebuilt robots.txt file
      *
      * @param Request $request the request object
      *

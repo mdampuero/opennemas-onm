@@ -35,9 +35,6 @@ class FrontpagesController extends Controller
     public function init()
     {
         $this->view = new \Template(TEMPLATE_USER);
-
-        // Redirect Mobile browsers to mobile site unless a cookie exists.
-        // mobileRouter();
     }
 
     /**
