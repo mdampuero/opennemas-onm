@@ -600,7 +600,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_ADMIN')")
      */
     public function listAuthorAction(Request $request)
     {
@@ -613,7 +613,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_UPDATE')")
      */
     public function showAuthorAction(Request $request)
     {
@@ -647,7 +647,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_CREATE')")
      */
     public function createAuthorAction(Request $request)
     {
@@ -717,7 +717,7 @@ class OpinionsController extends Controller
      * @param  Request  $request The request object.
      * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_UPDATE')")
      */
     public function updateAuthorAction(Request $request)
     {
