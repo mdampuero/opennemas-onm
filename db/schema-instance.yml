@@ -1345,6 +1345,3 @@ widgets:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: content
-            columns: [content]
