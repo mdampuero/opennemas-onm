@@ -311,7 +311,8 @@ class ContentManager
 
         $cache = getService('cache');
         $contentsFromCache = $cache->fetch('frontpage_elements_'.$categoryID);
-        if (is_array($contentsFromCache)) {
+
+        if (is_array($contentsFromCache) && count($contentsFromCache) > 0) {
             return $contentsFromCache;
         }
 
