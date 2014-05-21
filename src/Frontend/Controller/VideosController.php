@@ -89,7 +89,7 @@ class VideosController extends Controller
 
             if ($this->category_name != 'home') {
                 // Fetch total of videos for this category
-                $allVideos = $this->cm->find_all(
+                $allVideos = $this->cm->findAll(
                     'Video',
                     'content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $this->category . '',
@@ -103,7 +103,7 @@ class VideosController extends Controller
                 $videos       = array_slice($allVideos, $totalVideosFrontpage, $totalVideosBlockInCategory);
 
                 // Videos on others videos block
-                $othersVideos = $this->cm->find_all(
+                $othersVideos = $this->cm->findAll(
                     'Video',
                     'content_status=1 ',
                     'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
@@ -120,7 +120,7 @@ class VideosController extends Controller
 
             } else {
                 // Videos on top of the homepage
-                $videos = $this->cm->find_all(
+                $videos = $this->cm->findAll(
                     'Video',
                     'content_status=1 ',
                     'ORDER BY created DESC LIMIT '.$totalVideosFrontpageOffset
@@ -236,7 +236,7 @@ class VideosController extends Controller
             $video->author = $ur->find($video->fk_author);
 
             //Get other_videos for widget video most
-            $otherVideos = $this->cm->find_all(
+            $otherVideos = $this->cm->findAll(
                 'Video',
                 ' content_status=1 AND pk_content <> '.$videoID,
                 ' ORDER BY created DESC LIMIT 4'
@@ -286,7 +286,7 @@ class VideosController extends Controller
 
         $limit = ($this->page-1)*$totalVideosBlockOther.', '.$totalVideosBlockOther;
 
-        $videos = $this->cm->find_all(
+        $videos = $this->cm->findAll(
             'Video',
             'content_status=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
             'ORDER BY created DESC  LIMIT ' . $limit
@@ -329,7 +329,7 @@ class VideosController extends Controller
 
         $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
 
-        $videos = $this->cm->find_all(
+        $videos = $this->cm->findAll(
             'Video',
             'content_status=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
             'ORDER BY created DESC LIMIT ' . $limit
