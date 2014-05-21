@@ -134,9 +134,8 @@ class ContentManager
         }
 
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` '
-             . 'WHERE '.$_where
-             . ' AND `contents`.`pk_content`= `'.$this->table
-             . '`.`pk_'.$this->content_type.'` '
+             . 'WHERE `contents`.`pk_content`= `'.$this->table. '`.`pk_'.$this->content_type.'`'
+             .' AND '.$_where
              . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -155,6 +154,8 @@ class ContentManager
      *
      * @deprecated deprecated since version 1.0
      * @see ContentManager::findAll()
+     *
+     * TODO: drop it
      **/
     public function find_all(
         $contentType,
@@ -1361,8 +1362,7 @@ class ContentManager
         if (intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
                  . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`='
-                 . $pk_fk_content_category
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='. $pk_fk_content_category
                  . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $_where;
