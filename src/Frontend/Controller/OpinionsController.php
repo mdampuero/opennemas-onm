@@ -678,14 +678,18 @@ class OpinionsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID   = $request->query->getDigits('opinion_id');
-        $opinionID = \Content::resolveID($dirtyID);
+
+        // Resolve article ID
+        $er = $this->get('entity_repository');
+        $opinionID = $er->resolveID($dirtyID);
+
 
         // Redirect to opinion frontpage if opinion_id wasn't provided
         if (empty($opinionID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
 
-        $opinion = new \Opinion($opinionID);
+        $opinion = $er->find('Opinion', $opinionID);
 
         // TODO: Think that this comments related code can be deleted.
         if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
@@ -701,13 +705,11 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
-
             $this->view->assign('contentId', $opinionID);
 
-            $author = new \User($opinion->fk_author);
-            $opinion->author = $author;
+            $opinion->author = $this->get('user_repository')->find($opinion->fk_author);
 
-            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+            if (array_key_exists('is_blog', $opinion->author->meta) && $opinion->author->meta['is_blog'] == 1) {
                 return new RedirectResponse(
                     $this->generateUrl(
                         'frontend_blog_show',
@@ -733,7 +735,7 @@ class OpinionsController extends Controller
 
             // Get author slug for suggested opinions
             foreach ($machineSuggestedContents as &$suggest) {
-                $element = new \Opinion($suggest['pk_content']);
+                $element = $er->find('Opinion', $suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
                     $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
@@ -747,7 +749,7 @@ class OpinionsController extends Controller
 
             // Associated media code --------------------------------------
             if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                $photo = new \Photo($opinion->img2);
+                $photo = $er->find('Photo', $opinion->img2);
                 $this->view->assign('photo', $photo);
             }
 
