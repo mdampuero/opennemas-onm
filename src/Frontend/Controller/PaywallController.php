@@ -192,7 +192,7 @@ class PaywallController extends Controller
             foreach ($setECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
             );
 
@@ -250,7 +250,7 @@ class PaywallController extends Controller
             foreach ($getECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
@@ -307,7 +307,7 @@ class PaywallController extends Controller
             foreach ($DoECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in DoExpressCheckoutPayment API call. Original errors: ".implode(' ;', $errors)
             );
 
@@ -409,7 +409,7 @@ class PaywallController extends Controller
             foreach ($getECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
@@ -499,7 +499,7 @@ class PaywallController extends Controller
             foreach ($createRPProfileResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in CreateRecurringPaymentsProfile API call. Original errors: ".implode(' ;', $errors)
             );
 
@@ -583,7 +583,7 @@ class PaywallController extends Controller
             foreach ($manageRPPStatusResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in ManageRecurringPaymentsProfileStatus API call. Original errors: ".implode(' ;', $errors)
             );
         }
@@ -640,7 +640,7 @@ class PaywallController extends Controller
             foreach ($getRPPDetailsResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
-            $this->get('logger')->notice(
+            $this->get('application.log')->notice(
                 "Paywall: Error in GetRecurringPaymentsProfileDetails API call. Original errors: ".implode(' ;', $errors)
             );
         }
@@ -751,7 +751,7 @@ class PaywallController extends Controller
                 foreach ($setECResponse->Errors as $error) {
                     $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
                 }
-                $this->get('logger')->notice(
+                $this->get('application.log')->notice(
                     "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
                 );
 

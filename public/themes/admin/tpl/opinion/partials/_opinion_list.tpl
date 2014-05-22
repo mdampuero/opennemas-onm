@@ -69,7 +69,7 @@
                     [% content.views %]
                 </td>
                 <td class="center">
-                    {acl isAllowed="OPINION_FRONTPAGE"}
+                    {acl isAllowed="OPINION_HOME"}
                         <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
                         <span ng-if="content.author.meta.is_blog == 1">
                             Blog
@@ -82,7 +82,7 @@
                     {/acl}
                 </td>
                 <td class="center">
-                    {acl isAllowed="OPINION_HOME"}
+                    {acl isAllowed="OPINION_FAVORITE"}
                     <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button"></button>
                     {/acl}
                 </td>
@@ -94,9 +94,15 @@
                         </a>
                         {/acl}
                         {acl isAllowed="OPINION_DELETE"}
+                        {acl isAllowed="CONTENT_OTHER_DELETE"}
                         <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                             <i class="icon-trash icon-white"></i>
+                        {aclelse}
                         </button>
+                        <button ng-if="content.fk_author == {$smarty.session.userid}" class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                            <i class="icon-trash icon-white"></i>
+                        </button>
+                        {/acl}
                         {/acl}
                     </ul>
                 </td>

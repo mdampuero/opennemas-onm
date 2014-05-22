@@ -202,34 +202,22 @@ class WidgetsController extends Controller
      */
     public function contentProviderAction(Request $request)
     {
-        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $cm = new  \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_widget` NOT IN ('.$contentsExcluded.')';
-        }
-
-        list($countWidgets, $widgets) = $cm->getCountAndSlice(
-            'Widget',
-            null,
-            'contents.content_status=1 AND contents.in_litter != 1 '.$sqlExcludedOpinions,
-            'ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'widget')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $widgets      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countWidgets = $em->countBy($filters);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -244,7 +232,7 @@ class WidgetsController extends Controller
                 'totalItems'  => $countWidgets,
                 'fileName'    => $this->generateUrl(
                     'admin_widgets_content_provider',
-                    array('category' => $category)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );

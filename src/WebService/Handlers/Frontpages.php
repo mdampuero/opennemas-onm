@@ -119,16 +119,22 @@ class Frontpages
 
         $itemsPerPage = 10;
 
-        // Get all articles for this page
-        $cm = new \ContentManager();
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            (int) $category->pk_content_category,
-            'in_litter != 1 AND contents.content_status=1',
-            'ORDER BY created DESC, content_status ASC',
-            $page,
-            $itemsPerPage
+        $order = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );
+
+        if ($category != 0) {
+            $cat = getService('category_repository')->find($category);
+            $filters['category_name'] = array(array('value' => $cat->name));
+        }
+
+        // Get all articles for this page
+        $em            = getService('entity_repository');
+        $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
+        $countArticles = $em->countBy($filters);
 
         $imageIdsList = array();
         foreach ($articles as $content) {

@@ -1274,14 +1274,22 @@ class Content
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($propertyName)) {
-                    $this->{$propertyName} = $propertyValue;
+                    $this->{$propertyName} = iconv(
+                        mb_detect_encoding($propertyValue),
+                        'utf-8',
+                        $propertyValue
+                    );
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = $v;
+                    $this->{$k} = iconv(
+                        mb_detect_encoding($v),
+                        'utf-8',
+                        $v
+                    );
                 }
             }
         }

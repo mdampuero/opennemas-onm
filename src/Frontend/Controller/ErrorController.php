@@ -73,7 +73,7 @@ class ErrorController extends Controller
                 $page->content = 'Whoups!';
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
+                // error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMessage;
                 } else {

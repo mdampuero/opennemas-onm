@@ -524,7 +524,7 @@ class AclUserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -611,7 +611,7 @@ class AclUserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );

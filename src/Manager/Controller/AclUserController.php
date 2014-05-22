@@ -41,9 +41,6 @@ class AclUserController extends Controller
      **/
     public function listAction(Request $request)
     {
-        // TODO : Check Acl in manager
-        // $this->checkAclOrForward('USER_ADMIN');
-
         $filter    = $request->query->get('filter', array());
 
         if (!$this->getUser()->isMaster()) {
@@ -87,13 +84,6 @@ class AclUserController extends Controller
             $id = $request->query->getDigits('id');
         }
 
-        // TODO : Check Acl in manager
-        // // Check if the user is the same as the one that we want edit or
-        // // if we have permissions for editting other user information.
-        // if ($id != $_SESSION['userid']) {
-        //     $this->checkAclOrForward('USER_UPDATE');
-        // }
-
         $user = new \User($id);
         if (is_null($user->id)) {
             m::add(sprintf(_("Unable to find the user with the id '%d'"), $id), m::ERROR);
@@ -129,11 +119,6 @@ class AclUserController extends Controller
     {
         $userId = $request->query->getDigits('id');
         $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
-
-        // TODO : Check Acl in manager
-        // if ($userId != $_SESSION['userid']) {
-        //     $this->checkAclOrForward('USER_UPDATE');
-        // }
 
         $data = array(
             'id'              => $userId,
@@ -302,9 +287,6 @@ class AclUserController extends Controller
      **/
     public function deleteAction(Request $request)
     {
-        // TODO : Check Acl in manager
-        // $this->checkAclOrForward('USER_DELETE');
-
         $userId = $request->query->getDigits('id');
 
         if (!is_null($userId)) {
@@ -333,9 +315,6 @@ class AclUserController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-        // TODO : Check Acl in manager
-        // $this->checkAclOrForward('USER_DELETE');
-
         $selected = $request->query->get('selected');
 
         if (count($selected) > 0) {

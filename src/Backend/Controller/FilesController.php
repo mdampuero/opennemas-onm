@@ -29,10 +29,8 @@ use Onm\Message as m;
 class FilesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -67,28 +65,26 @@ class FilesController extends Controller
     }
 
     /**
-     * Lists the files for a given category
+     * Lists the files for a given category.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('files/list.tpl');
     }
 
     /**
-     * Shows the files in the widget
+     * Shows the files in the widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
-     **/
+     */
     public function widgetAction(Request $request)
     {
         return $this->render(
@@ -100,14 +96,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Shows the file usage statistics
+     * Shows the file usage statistics.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
-     **/
+     */
     public function statisticsAction(Request $request)
     {
         $cm               = new \ContentManager();
@@ -202,14 +197,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Creates a file
+     * Creates a file.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
@@ -272,14 +266,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Shows file data given its id
+     * Shows file data given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id      = $request->query->getDigits('id');
@@ -306,14 +299,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Updates a file given the data sent by POST
+     * Updates a file given the data sent by POST.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->request->getDigits('id');
@@ -330,6 +322,7 @@ class FilesController extends Controller
             );
 
         if ($file->update($data)) {
+            dispatchEventWithParams('content.update', array('content' => $file));
             m::add(sprintf(_('File information updated successfully.')), m::SUCCESS);
         } else {
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
@@ -341,14 +334,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Save positions for widget
+     * Save positions for widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
-     **/
+     */
     public function savePositionsAction(Request $request)
     {
         $request = $this->get('request');
@@ -384,28 +376,31 @@ class FilesController extends Controller
 
 
     /**
-     * Return list of files for content rovider & related contents
+     * Lists all the files within a category for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function contentListProviderAction(Request $request)
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
+    public function contentProviderRelatedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countPolls, $polls) = $cm->getCountAndSlice(
-            'Attachment',
-            null,
-            'contents.content_status=1',
-            ' ORDER BY starttime DESC, contents.title ASC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'attachment')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $files      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countFiles = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -416,10 +411,10 @@ class FilesController extends Controller
                 'delta'       => 4,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
+                'totalItems'  => $countFiles,
                 'fileName'    => $this->generateUrl(
-                    'admin_files_content_provider',
-                    array( 'category' => $category,)
+                    'admin_files_content_provider_related',
+                    array( 'category' => $categoryId,)
                 ).'&page=%d',
             )
         );
@@ -428,11 +423,11 @@ class FilesController extends Controller
             'common/content_provider/_container-content-list.tpl',
             array(
                 'contentType'           => 'Attachment',
-                'contents'              => $polls,
+                'contents'              => $files,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
                 'pagination'            => $pagination->links,
-                'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider'),
+                'contentProviderUrl'    => $this->generateUrl('admin_files_content_provider_related'),
             )
         );
     }

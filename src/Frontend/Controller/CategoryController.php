@@ -49,15 +49,14 @@ class CategoryController extends Controller
         $this->view->assign(array('actual_category' => $categoryName));
 
         $categoryManager = $this->get('category_repository');
-        $category = $categoryManager->findBy(
+        $category = $categoryManager->findOneBy(
             array('name' => array(array('value' => $categoryName))),
-            'name ASC'
+            array('name' => 'ASC')
         );
 
         if (empty($category)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
-        $category = $category[0];
 
         $this->view->setConfig('frontpages');
 
@@ -69,16 +68,24 @@ class CategoryController extends Controller
                 $itemsPerPage = 8;
             }
 
-            $cm      = new \ContentManager();
-            list($countArticles, $articles)= $cm->getCountAndSlice(
-                'Article',
-                (int) $category->pk_content_category,
-                'in_litter != 1 AND contents.content_status=1 AND '.
-                '( starttime="0000-00-00 00:00:00" OR starttime<=NOW() )',
-                'ORDER BY starttime DESC',
-                $page,
-                $itemsPerPage
+            $em = $this->get('entity_repository');
+
+            $filters = array(
+                'category_name'     => array(array('value' => $category->name)),
+                'content_status'    => array(array('value' => 1)),
+                'content_type_name' => array(array('value' => 'article')),
+                'in_litter'         => array(array('value' => 0)),
+                'starttime'         => array(
+                    'union' => 'OR',
+                    array('value' => '0000-00-00 00:00:00'),
+                    array('value' => date('Y-m-d H:i:s'), 'operator' => '<='),
+                )
             );
+
+            $order = array('starttime' => 'DESC');
+
+            $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
+            $countArticles = $em->countBy($filters);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
@@ -89,7 +96,13 @@ class CategoryController extends Controller
             $imageIdsList = array_unique($imageIdsList);
 
             if (count($imageIdsList) > 0) {
-                $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+                // $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+                $imageList = $em->findBy(
+                    array(
+                        'content_type_name' => array(array('value' => 'photo')),
+                        'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN'))
+                    )
+                );
             } else {
                 $imageList = array();
             }

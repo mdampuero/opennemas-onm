@@ -129,15 +129,18 @@ EOF
 
         $this->tpl = new \TemplateAdmin('admin');
 
-        $cm = new \ContentManager();
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            null,
-            null,
-            'ORDER BY created DESC',
-            1,
-            $limit
+
+        $order   = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article'))
         );
+
+        $conn = $this->getContainer()->get('dbal_connection');
+        $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
+
+        $em            = getService('entity_repository');
+        $articles      = $em->findBy($filters, $order, $limit, 1);
+        $countArticles = $em->countBy($filters);
 
         $imageIds = array();
         foreach ($articles as $article) {
@@ -152,7 +155,12 @@ EOF
         }
 
         if (count($imageIds) > 0) {
-            $images = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIds) .')');
+            $images = $em->findBy(
+                array(
+                    'content_type_name' => array(array('value' => 'photo')),
+                    'pk_content'        => array(array('value' => $imageIds, 'operator' => 'IN'))
+                )
+            );
         } else {
             $images = array();
         }

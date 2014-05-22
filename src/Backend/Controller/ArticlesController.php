@@ -527,7 +527,6 @@ class ArticlesController extends Controller
                 }
             }
         }
-
     }
 
     /**
@@ -574,38 +573,66 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Lists all the articles with the suggested flag activated
+     * Shows the content provider with articles in newsletter.
      *
-     * @param Request $request the request object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
+    public function contentProviderInFrontpageAction(Request $request)
+    {
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+
+        $em = $this->get('entity_repository');
+
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+        );
+
+        if ($category != 0) {
+            $filters['fk_category'] = array(array('value' => $category));
+        }
+
+        $articles = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+
+        return $this->render(
+            'common/content_provider/_container-content-list.tpl',
+            array(
+                'contentType'           => 'Article',
+                'contents'              => $articles,
+                'contentTypeCategories' => $this->parentCategories,
+                'category'              => $this->category,
+                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
+            )
+        );
+    }
+
+    /**
+     * Lists all the articles with the suggested flag activated.
      *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderSuggestedAction(Request $request)
     {
         $category = $request->query->getDigits('category', 0);
         $page     = $request->query->getDigits('page', 1);
 
-        $cm = new  \ContentManager();
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
 
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
-        }
-
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            null,
-            ' contents.frontpage=1 AND contents.content_status=1 AND '.
-            ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
-            ' ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'content_status'    => array(array('value' => 1)),
+            'frontpage'         => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+        $countArticles = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -634,41 +661,28 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Lists all the articles withing a category
+     * Lists all the articles within a category.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request $request The request object.
+     * @return Response         The response object.
+     */
     public function contentProviderCategoryAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId = $request->query->getDigits('category', 0);
+        $page       = $request->query->getDigits('page', 1);
 
-        $cm = new  \ContentManager();
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
 
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
-        }
-
-        if ($category == 0) {
-            $category = null;
-        };
-
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            $category,
-            'contents.content_status=1 AND in_litter != 1 ' . $sqlExcludedOpinions,
-            ' ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+        $countArticles = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -682,7 +696,7 @@ class ArticlesController extends Controller
                 'totalItems'  => $countArticles,
                 'fileName'    => $this->generateUrl(
                     'admin_articles_content_provider_category',
-                    array('category' => (empty($category) ? '0' : $category),)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -697,33 +711,31 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Lists all the articles withing a category for the related manager
+     * Lists all the articles within a category for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderRelatedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        if ($category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            $categoryFilter,
-            '',
-            ' ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countArticles = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -737,8 +749,7 @@ class ArticlesController extends Controller
                 'totalItems'  => $countArticles,
                 'fileName'    => $this->generateUrl(
                     'admin_articles_content_provider_related',
-                    array(
-                        'category' => $category,)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -752,44 +763,6 @@ class ArticlesController extends Controller
                 'category'              => $this->category,
                 'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_related'),
-            )
-        );
-    }
-
-    /**
-     * Shows the content provider with articles suggested for frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function contentProviderInFrontpageAction(Request $request)
-    {
-        $category = $request->query->getDigits('category', 0);
-
-        $cm = new  \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($category);
-
-        // Sort all the elements by its position
-        $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
-
-        $articles = array();
-        foreach ($contentElementsInFrontpage as $content) {
-            if ($content->content_type =='1') {
-                $articles[] = $content;
-            }
-        }
-
-        return $this->render(
-            'common/content_provider/_container-content-list.tpl',
-            array(
-                'contentType'           => 'Article',
-                'contents'              => $articles,
-                'contentTypeCategories' => $this->parentCategories,
-                'category'              => $this->category,
-                'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
             )
         );
     }

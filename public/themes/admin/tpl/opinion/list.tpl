@@ -41,6 +41,7 @@
                     <br/>{t}Batch actions{/t}
                 </a>
                 <ul class="dropdown-menu" style="margin-top: 1px;">
+                    {acl isAllowed="CONTENT_OTHER_UPDATE"}
                     {acl isAllowed="OPINION_AVAILABLE"}
                     <li>
                         <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
@@ -54,6 +55,8 @@
                             {t}Unpublish{/t}
                         </a>
                     </li>
+                    {/acl}
+                    {acl isAllowed="OPINION_HOME"}
                     <li class="divider"></li>
                     <li>
                         <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')">
@@ -68,6 +71,8 @@
                         </a>
                     </li>
                     {/acl}
+                    {/acl}
+                    {acl isAllowed="CONTENT_OTHER_DELETE"}
                     {acl isAllowed="OPINION_DELETE"}
                         <li class="divider"></li>
                         <li>
@@ -76,6 +81,7 @@
                                 {t}Delete{/t}
                             </a>
                         </li>
+                    {/acl}
                     {/acl}
                 </ul>
             </li>

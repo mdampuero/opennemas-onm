@@ -84,6 +84,10 @@ services:
         class: Repository\EntityManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
+    frontpage_repository:
+        class: Repository\FrontpageManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
     user_repository:
         class: Repository\UserManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]

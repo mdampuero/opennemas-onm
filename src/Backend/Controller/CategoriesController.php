@@ -210,8 +210,8 @@ class CategoriesController extends Controller
 
             $categories = array();
             foreach ($allcategorys as $categoryItem) {
-                if ($categoryItem->pk_content_category != $id &&
-                   ($categoryItem->internal_category != 0 && $categoryItem->fk_content_category == 0)
+                if ($categoryItem->pk_content_category != $id
+                    && ($categoryItem->internal_category != 0 && $categoryItem->fk_content_category == 0)
                 ) {
                     $categories[] = $categoryItem;
                 }

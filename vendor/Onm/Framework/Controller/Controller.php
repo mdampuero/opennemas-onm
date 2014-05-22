@@ -148,16 +148,4 @@ class Controller extends SymfonyController
 
         return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
     }
-
-    /**
-     * Checks if the user can access an specific aclname or redirects him to wellcome page
-     *
-     * @param string $aclName the name of the acl
-     *
-     * @return boolean true if the user has rights for the given ACL
-     **/
-    public function checkAclOrForward($aclName)
-    {
-        $this->container->get('acl_checker')->isGranted($aclName);
-    }
 }

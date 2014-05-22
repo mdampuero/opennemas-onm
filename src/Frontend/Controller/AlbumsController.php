@@ -85,15 +85,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Renders the album frontpage
+     * Renders the album frontpage.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function frontpageAction(Request $request)
     {
-
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
@@ -106,51 +104,42 @@ class AlbumsController extends Controller
            || (!$this->view->isCached('gallery/gallery-frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
-            $itemsPerPage = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
-            $days  = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
-            $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
+            $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
+            $days          = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
+            $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            if ($order == 'favorite') {
+            $order = array();
+            $filters = array(
+                'content_type_name' => array(array('value' => 'album')),
+                'content_status'    => array(array('value' => 1)),
+                'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            );
 
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1',
-                    'ORDER BY favorite DESC, created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
-
-            } elseif ($order == 'views') {
-
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1 '
-                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)',
-                    'ORDER BY views DESC, created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
-            } else {
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1',
-                    'ORDER BY created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
+            if ($this->category != 0) {
+                $category = $this->get('category_repository')->find($this->category);
+                $filters['category_name'] = array(array('value' => $category->name));
             }
 
+            if ($orderBy == 'favorite') {
+                $order = array('favorite' => 'DESC', 'created' => 'DESC');
+            } elseif ($orderBy == 'views') {
+                $order = array('views' => 'DESC', 'created' => 'DESC');
 
-            $total = count($albums)+1;
+                $date = strtotime("-$days day");
+                $filters['created'] = array(array('value' => date('Y-m-d H:i:s', $date), 'operator' => '>=' ));
+            } else {
+                $order = array('created' => 'DESC');
+            }
+
+            $em          = $this->get('entity_repository');
+            $albums      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
+            $countAlbums = $em->countBy($filters);
 
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $this->page,
                     'items' => $itemsPerPage,
-                    'total' => $total,
+                    'total' => $countAlbums,
                     'url'   => $this->generateUrl(
                         'frontend_album_frontpage_category',
                         array(
@@ -159,11 +148,6 @@ class AlbumsController extends Controller
                     )
                 )
             );
-
-            foreach ($albums as &$album) {
-                $album->cover_image = new \Photo($album->cover_id);
-                $album->cover       = $album->cover_image->path_file.$album->cover_image->name;
-            }
         }
 
         // Send the response to the user
@@ -336,24 +320,23 @@ class AlbumsController extends Controller
             $this->category = $this->request->query->getDigits('category', 0);
         }
 
-        // Fetch Albums paginated
-        list($countAlbums, $othersAlbums)= $this->cm->getCountAndSlice(
-            'Album',
-            (int) $this->category,
-            'in_litter != 1 AND contents.content_status=1',
-            'ORDER BY created DESC',
-            $this->page,
-            $totalAlbumMoreFrontpage
+        $order = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'album')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );
 
-        if ($countAlbums > 0) {
-            foreach ($othersAlbums as &$album) {
-                $album->category_name  = $album->loadCategoryName($album->id);
-                $album->category_title = $album->loadCategoryTitle($album->id);
-                $album->cover_image    = new \Photo($album->cover_id);
-                $album->cover          = $album->cover_image->path_file.$album->cover_image->name;
-            }
-        } else {
+        if ($this->category != 0) {
+            $category = $this->get('category_repository')->find($this->category);
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $em          = $this->get('entity_repository');
+        $othersAlbums = $em->findBy($filters, $order, $totalAlbumMoreFrontpage, $this->page);
+        $countAlbums = $em->countBy($filters);
+
+        if ($countAlbums == 0) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_album_ajax_paginated')
             );

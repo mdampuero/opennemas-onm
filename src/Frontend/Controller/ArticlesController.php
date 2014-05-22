@@ -107,7 +107,6 @@ class ArticlesController extends Controller
                     array(
                         'category_name'         => $actualCategory ,
                         'actual_category_title' => $actualCategoryTitle,
-                        'actual_category'       => $actualCategory,
                         'actual_category_id'    => $actualCategoryId,
                         'category_data'         => $categoryData,
                     )
@@ -115,12 +114,12 @@ class ArticlesController extends Controller
 
                 // Associated media code --------------------------------------
                 if (isset($article->img2) && ($article->img2 > 0)) {
-                    $photoInt = new \Photo($article->img2);
+                    $photoInt = $er->find('Photo', $article->img2);
                     $this->view->assign('photoInt', $photoInt);
                 }
 
                 if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
-                    $videoInt = new \Video($article->fk_video2);
+                    $videoInt = $er->find('Video', $article->fk_video2);
                     $this->view->assign('videoInt', $videoInt);
                 }
 
@@ -145,7 +144,7 @@ class ArticlesController extends Controller
                     foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
                         if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
-                             $content->photo = new \Photo($content->img1);
+                             $content->photo = $er->find('Photo', $content->img1);
                         }
                     }
                 }
@@ -182,11 +181,12 @@ class ArticlesController extends Controller
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
             array(
-                'cache_id'      => $cacheID,
-                'contentId'     => $articleID,
-                'category_name' => $categoryName,
-                'article'       => $article,
-                'content'       => $article,
+                'cache_id'        => $cacheID,
+                'contentId'       => $articleID,
+                'category_name'   => $categoryName,
+                'article'         => $article,
+                'content'         => $article,
+                'actual_category' => $categoryName,
             )
         );
     }
@@ -280,7 +280,6 @@ class ArticlesController extends Controller
         }
 
         return $this->redirect($url);
-
     }
 
     /**

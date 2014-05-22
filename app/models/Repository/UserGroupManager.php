@@ -6,24 +6,31 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * Handles common actions in UserGroups
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
+ *
+ * This class is designed for inheritance and users can subclass this class to
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class UserGroupManager extends BaseManager
 {
     /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
@@ -58,14 +65,14 @@ class UserGroupManager extends BaseManager
     /**
      * Finds one usergroup from the given a user id.
      *
-     * @param  integer $id Menu id
-     * @return Menu
+     * @param  integer   $id User group id.
+     * @return UserGroup
      */
     public function find($id)
     {
         $entity = null;
 
-        $cacheId = "usergroup_" . $id;
+        $cacheId = "usergroup" . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -112,9 +119,9 @@ class UserGroupManager extends BaseManager
             $ids[] = $resultElement['pk_user_group'];
         }
 
-        $users = $this->findMulti($ids);
+        $groups = $this->findMulti($ids);
 
-        return $users;
+        return $groups;
     }
 
     /**
@@ -129,23 +136,25 @@ class UserGroupManager extends BaseManager
 
         $ids = array();
         foreach ($data as $value) {
-            $ids[] = 'user_' . $value;
+            $ids[] = 'usergroup' . $this->cacheSeparator . $value;
         }
 
-        $users = array_values($this->cache->fetch($ids));
+        $groups = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
-        foreach ($users as $user) {
-            $ordered[$user->id] = $user;
-            $cachedIds[] = 'usergroup_' . $user->id;
+
+        foreach ($groups as $group) {
+            $ordered[$group->id] = $group;
+            $cachedIds[] = 'usergroup' . $this->cacheSeparator . $group->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $content) {
-            list($contentType, $contentId) = explode('_', $content);
-            $user = $this->find($contentId);
-            $ordered[$user->id] = $user;
+            list($contentType, $contentId) = explode($this->cacheSeparator, $content);
+            $group = $this->find($contentId);
+            $ordered[$group->id] = $group;
+
         }
 
         return array_values($ordered);
@@ -162,6 +171,6 @@ class UserGroupManager extends BaseManager
             $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
         });
 
-        $this->cache->delete('usergroup_' . $id);
+        $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }
 }

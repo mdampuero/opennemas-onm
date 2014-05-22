@@ -166,7 +166,7 @@ class UserController extends Controller
                         );
                     } catch (\Exception $e) {
                         // Log this error
-                        $this->get('logger')->notice(
+                        $this->get('application.log')->notice(
                             "Unable to send the user activation email for the "
                             ."user {$user->id}: ".$e->getMessage()
                         );
@@ -326,7 +326,7 @@ class UserController extends Controller
                 $this->view->assign('mailSent', true);
             } catch (\Exception $e) {
                 // Log this error
-                $this->get('logger')->notice(
+                $this->get('application.log')->notice(
                     "Unable to send the user welcome email for the "
                     ."user {$user->id}: ".$e->getMessage()
                 );
@@ -401,7 +401,7 @@ class UserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -477,7 +477,7 @@ class UserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -613,7 +613,7 @@ class UserController extends Controller
                     ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
-                $contentsCount  = $er->count($searchCriteria);
+                $contentsCount  = $er->countBy($searchCriteria);
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
 
                 foreach ($contents as &$item) {
@@ -773,7 +773,6 @@ class UserController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
     }
 
     /**

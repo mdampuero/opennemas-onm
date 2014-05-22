@@ -134,9 +134,8 @@ class ContentManager
         }
 
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` '
-             . 'WHERE '.$_where
-             . ' AND `contents`.`pk_content`= `'.$this->table
-             . '`.`pk_'.$this->content_type.'` '
+             . 'WHERE `contents`.`pk_content`= `'.$this->table. '`.`pk_'.$this->content_type.'`'
+             .' AND '.$_where
              . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -155,6 +154,8 @@ class ContentManager
      *
      * @deprecated deprecated since version 1.0
      * @see ContentManager::findAll()
+     *
+     * TODO: drop it
      **/
     public function find_all(
         $contentType,
@@ -310,7 +311,8 @@ class ContentManager
 
         $cache = getService('cache');
         $contentsFromCache = $cache->fetch('frontpage_elements_'.$categoryID);
-        if (is_array($contentsFromCache)) {
+
+        if (is_array($contentsFromCache) && count($contentsFromCache) > 0) {
             return $contentsFromCache;
         }
 
@@ -797,9 +799,7 @@ class ContentManager
         $_tables = '`contents`, `'.$this->table.'` ';
         $_where  = '`contents`.`in_litter`=0 ';
         if (!$all) {
-            //  $_where .= 'AND `contents`.`content_status`=1
-            //  AND `contents`.`available`=1 ';
-            $_where .= '  AND `contents`.`available`=1 ';
+            $_where .= '  AND `contents`.`content_status`=1 ';
         }
         $_days     = 'AND  `contents`.`created`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT '.$num;
@@ -875,7 +875,7 @@ class ContentManager
                 FROM contents, comments, articles
                 WHERE contents.pk_content = comments.content_id
                 AND contents.pk_content = articles.pk_article
-                AND contents.available=1
+                AND contents.content_status=1
                 AND created >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
                 GROUP BY contents.pk_content
                 ORDER BY num_comments DESC, contents.created DESC
@@ -948,7 +948,7 @@ class ContentManager
         $_fields = ' * ';
         $_where = '`contents`.in_litter=0 ';
         if (!$all) {
-            $_where .= ' AND `contents`.`available`=1 ';
+            $_where .= ' AND `contents`.`content_status`=1 ';
         }
 
         $_days = 'AND  `contents`.created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
@@ -1016,7 +1016,7 @@ class ContentManager
         $_tables = '`contents`  ';
         $_where = '`contents`.`in_litter`=0 AND `fk_content_type` IN (1,3,4,7,9,11) ';
         if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
+            $_where .= 'AND `contents`.`content_status`=1 ';
         }
         $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
@@ -1084,7 +1084,7 @@ class ContentManager
         $_fields = '*';
         $_where = '`contents`.in_litter=0 ';
         if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
+            $_where .= 'AND `contents`.`content_status`=1 ';
         }
         $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
@@ -1146,7 +1146,7 @@ class ContentManager
         $_where_slave = '';
         $_days = 'starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         if (!$all) {
-            $_where_slave = ' content_status=1 AND available=1 ';
+            $_where_slave = ' content_status=1 ';
             $_days = 'AND starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         }
 
@@ -1195,7 +1195,7 @@ class ContentManager
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         $sql = 'SELECT fk_content, count(pk_comment) AS num '
              . 'FROM   contents, comments '
-             . 'WHERE available=1 AND fk_content IN ('.$pk_list.') '
+             . 'WHERE content_status=1 AND fk_content IN ('.$pk_list.') '
              . 'GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1213,7 +1213,7 @@ class ContentManager
         $sql = 'SELECT `contents`.`pk_content`, '
              . '`contents`.`title`, `contents`.`slug` '
              . 'FROM contents, comments '
-             . 'WHERE available=1 AND pk_content IN ('.$pk_list.')';
+             . 'WHERE content_status=1 AND pk_content IN ('.$pk_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->loadObject($rs, 'content');
         if (empty($items)) {
@@ -1260,7 +1260,7 @@ class ContentManager
         $cm       = new ContentManager();
         $contents = $cm->findAll(
             'Article',
-            'content_status=1 AND available=1 AND frontpage=1'.
+            'content_status=1 AND content_status=1 AND frontpage=1'.
             ' AND in_home=2',
             'ORDER BY  created DESC,  title ASC '
         );
@@ -1316,11 +1316,11 @@ class ContentManager
         if (is_array($items)) {
             foreach ($items as $item) {
                 if (is_object($item)) {
-                    if (($item->available==1) && ($item->in_litter==0)) {
+                    if (($item->content_status==1) && ($item->in_litter==0)) {
                         $filtered[] = $item;
                     }
                 } else {
-                    if (($item['available']==1) && ($item['in_litter']==0)) {
+                    if (($item['content_status']==1) && ($item['in_litter']==0)) {
                         $filtered[] = $item;
                     }
                 }
@@ -1363,8 +1363,7 @@ class ContentManager
         if (intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
                  . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`='
-                 . $pk_fk_content_category
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='. $pk_fk_content_category
                  . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $_where;
@@ -1379,94 +1378,6 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return $rs;
-    }
-
-    /**
-     * Used for generate the backend listings
-     *
-     * Genera las consultas de find o find_by_category y la paginacion
-     * Devuelve el array con el segmento de contents que se visualizan en la
-     * pagina dada.
-     *
-     * <code>
-     * ContentManager::find_pages($contentType, $filter=null,
-     *     $_order_by='ORDER BY 1', $page=1, $items_page=10,
-     *     $pk_fk_content_category=null);
-     * </code>
-     *
-     * @param int         $contentType            Tipo contenido.
-     * @param string|null $filter                 Clausula where.
-     * @param string      $_order_by              Orden de visualizacion
-     * @param int         $page                   Página a visualizar.
-     * @param int         $items_page             Elementos por pagina.
-     * @param int|null    $pk_fk_content_category Id de categoria (para
-     *                                             find_by_category y si null
-     *                                             es find).
-     * @param string      $url the base path used by the pager
-     *
-     * @return array Array ($items, $pager)
-     */
-    public function find_pages(
-        $contentType,
-        $filter = null,
-        $_order_by = 'ORDER BY 1',
-        $page = 1,
-        $items_page = 10,
-        $pk_fk_content_category = null,
-        $url = null
-    ) {
-        $this->init($contentType);
-        $items = array();
-        $_where = '`contents`.`in_litter`=0';
-
-        if (!is_null($filter)) {
-            if ($filter == ' `contents`.`in_litter`=1'
-               || $filter == 'in_litter=1'
-            ) {
-                //se busca desde la litter.php
-                $_where = $filter;
-            } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
-            }
-        }
-        $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
-        if (empty($page)) {
-            $page = 1;
-        }
-        $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
-
-        if (intval($pk_fk_content_category) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
-                ' WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category.
-                '  AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type
-                .'` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.
-                 $_order_by.$_limit;
-        } else {
-            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
-                . ' WHERE '.$_where
-                . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
-                . $_order_by.' '.$_limit;
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = $this->loadObject($rs, $contentType);
-
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $items_page,
-            'delta'       => 3,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countContents,
-        );
-
-        if ($url != null) {
-            $pager_options['path'] = $url;
-        }
-        $pager = Pager::factory($pager_options);
-
-        return array($items, $pager);
     }
 
     /**
@@ -1657,7 +1568,6 @@ class ContentManager
             ON (`contents`.`pk_content`=`contents_categories`.`pk_fk_content`)
         WHERE `contents`.`content_status` =1
             AND `contents`.`frontpage` =1
-            AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
         ORDER BY `starttime` DESC ';
@@ -1707,7 +1617,6 @@ class ContentManager
         WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
             AND `contents`.`pk_content`=`articles`.`pk_article`
             AND `contents`.`content_status` =1
-            AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
         ORDER BY `created` DESC LIMIT 400 ';
@@ -2159,7 +2068,7 @@ class ContentManager
             $content = new Content($contentID);
             // Filter by scheduled {{{
             if ($content->isInTime()
-                && $content->available == 1
+                && $content->content_status == 1
                 && $content->in_litter == 0
             ) {
                 $content->category_name = $ccm->get_name($content->category);
@@ -2199,7 +2108,7 @@ class ContentManager
         $sql = 'SELECT * FROM contents, contents_categories '
               .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
               .'AND DATE(starttime) = "'.$date.'" '
-              .'AND available=1 AND in_litter=0 '
+              .'AND content_status=1 AND in_litter=0 '
               .'AND pk_fk_content = pk_content '.$where
               .' ORDER BY  fk_content_type ASC, starttime DESC ';
 
@@ -2282,8 +2191,8 @@ class ContentManager
                        contents.*,
                        comments.body as comment_body, comments.author as comment_author, comments.id as comment_id
                 FROM  contents, comments
-                WHERE contents.fk_content_type=1
-                  AND contents.in_litter !=1
+                WHERE contents.fk_content_type = 1
+                  AND contents.in_litter <> 1
                   AND comments.status = ?
                   AND contents.pk_content = comments.content_id
                 GROUP BY contents.pk_content

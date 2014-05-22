@@ -31,9 +31,15 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
                 ){
                     if (name.indexOf('_like') !== -1) {
                         var shortName = name.substring(0, name.indexOf('_like'));
+                        var values = filters[name][i]['value'].split(' ');
+
                         cleaned[shortName] = [];
-                        cleaned[shortName][i] = {
-                            value: '%' + filters[name][i]['value'] + '%'
+                        for (var i = 0; i < values.length; i++) {
+
+                            cleaned[shortName][i] = {
+                                value: '%' + values[i] + '%',
+                                operator: 'LIKE'
+                            };
                         };
                     } else {
                         if (!cleaned[name]) {

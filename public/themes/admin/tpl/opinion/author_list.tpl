@@ -16,7 +16,7 @@
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="ARTICLE_DELETE"}
+                        {acl isAllowed="AUTHOR_DELETE"}
                             <li>
                                 <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')">
                                     <i class="icon-trash"></i>
@@ -86,12 +86,16 @@
                     </td>
                     <td class="right nowrap">
                         <div class="btn-group">
+                            {acl isAllowed="AUTHOR_UPDATE"}
                             <a class="btn" href="[% edit(content.id, 'admin_opinion_author_show') %]" title="{t}Edit user{/t}">
                                 <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
+                            {/acl}
+                            {acl isAllowed="AUTHOR_DELETE"}
                             <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)" type="button">
                                 <i class="icon-trash icon-white"></i>
                             </button>
+                            {/acl}
                         </div>
                     </td>
                 </tr>
