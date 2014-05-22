@@ -86,7 +86,7 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
         $sql = $schema->getMigrateToSql($master, $conn->getDatabasePlatform());
 
         if (count($sql) > 0) {
-            $output->writeln("use($database);");
+            $output->writeln("use $database;");
             foreach ($sql as $value) {
                 $output->writeln($value.';');
             }
