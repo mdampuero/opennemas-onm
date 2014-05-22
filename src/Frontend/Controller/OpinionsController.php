@@ -102,7 +102,7 @@ class OpinionsController extends Controller
                 $op->summary = $item->summary;
                 $op->img1_footer = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $op->img1 = new \Photo($item->img1);
+                    $op->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
             }
 
@@ -119,7 +119,7 @@ class OpinionsController extends Controller
 
             if (isset($director) && !empty($director)) {
                 // Fetch the photo image of the director
-                $aut = new \User($director[0]->fk_author);
+                $aut = $this->get('user_repository')->find($director[0]->fk_author);
                 if (isset($aut->photo->path_file)) {
                     $dir['photo'] = $aut->photo->path_file;
                 }
@@ -128,7 +128,7 @@ class OpinionsController extends Controller
                 $dir['summary'] = $item->summary;
                 $dir['img1_footer'] = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $dir['img1'] = new \Photo($item->img1);
+                    $dir['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
                 $dir['name'] = $aut->name;
                 $item = new \Content();
@@ -136,7 +136,7 @@ class OpinionsController extends Controller
                 $director[0]->summary = $item->summary;
                 $director[0]->img1_footer = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $director[0]->img1 = new \Photo($item->img1);
+                    $director[0]->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
 
                 $this->view->assign(
@@ -190,12 +190,21 @@ class OpinionsController extends Controller
             $opinionsResult = array();
             foreach ($opinions as $opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
-                    $author = new \User($opinion->fk_author);
+                    $author = $this->get('user_repository')->find($opinion->fk_author);
+
+                    if (!is_object($author)) {
+                        $author = new \User();
+                    }
+
                     $authors[$opinion->fk_author] = $author;
                 } else {
                     $author = $authors[$opinion->fk_author];
                 }
-                if (!array_key_exists('is_blog', $author->meta) || $author->meta['is_blog'] != 1) {
+
+                if (is_array($author->meta)
+                    && array_key_exists('is_blog', $author->meta)
+                    && $author->meta['is_blog'] == 1
+                ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
                     $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
@@ -204,7 +213,7 @@ class OpinionsController extends Controller
                     $opinion->summary = $item->summary;
                     $opinion->img1_footer = $item->img1_footer;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $opinion->img1 = new \Photo($item->img1);
+                        $opinion->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
 
                     $opinion->author->uri = \Uri::generate(
@@ -398,7 +407,7 @@ class OpinionsController extends Controller
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
         ) {
             // Get author info
-            $author = new \User($authorID);
+            $author = $this->get('user_repository')->find($authorID);
             $author->params = $author->getMeta();
             $author->slug   = strtolower(
                 $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
@@ -454,7 +463,7 @@ class OpinionsController extends Controller
                     $opinion['author_name_slug']  = $author->slug;
                     $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $opinion['img1'] = new \Photo($item->img1);
+                        $opinion['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
 
                     // Generate opinion uri
@@ -707,9 +716,14 @@ class OpinionsController extends Controller
         ) {
             $this->view->assign('contentId', $opinionID);
 
-            $opinion->author = $this->get('user_repository')->find($opinion->fk_author);
+            $author = $this->get('user_repository')->find($opinion->fk_author);
+            $opinion->author = $author;
 
-            if (array_key_exists('is_blog', $opinion->author->meta) && $opinion->author->meta['is_blog'] == 1) {
+            if (is_object($author)
+                && is_array($author->meta)
+                && array_key_exists('is_blog', $author->meta)
+                && $author->meta['is_blog'] == 1
+            ) {
                 return new RedirectResponse(
                     $this->generateUrl(
                         'frontend_blog_show',
