@@ -700,8 +700,11 @@ class ArticlesController extends Controller
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
             'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN')),
-            'category_name'     => array(array('value' => $category->name)),
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
 
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
         $countArticles = $em->countBy($filters);
