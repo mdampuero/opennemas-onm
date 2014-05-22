@@ -136,7 +136,7 @@ class ContentManager
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` '
              . 'WHERE `contents`.`pk_content`= `'.$this->table. '`.`pk_'.$this->content_type.'`'
              .' AND '.$_where
-             . $orderBy;
+             .' '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->loadObject($rs, $contentType);
