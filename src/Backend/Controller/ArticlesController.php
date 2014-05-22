@@ -691,14 +691,16 @@ class ArticlesController extends Controller
         $categoryId = $request->query->getDigits('category', 0);
         $page       = $request->query->getDigits('page', 1);
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
+        $em       = $this->get('entity_repository');
+        $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
+        $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'article')),
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN')),
+            'category_name'     => array(array('value' => $category->name)),
         );
 
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
