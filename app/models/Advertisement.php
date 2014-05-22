@@ -558,16 +558,14 @@ class Advertisement extends Content
             $params['afterHTML']  = "</div>";
         }
 
-        $width   = $this->params['width'];
-        $height  = $this->params['height'];
         $overlap = (isset($this->params['overlap']))? $this->params['overlap']: false;
 
         // Extract width and height properties from CSS
         $width  = $params['width'];
         $height = $params['height'];
 
-        if (!is_null($this->params['width'])
-            && !is_null($this->params['height'])
+        if (array_key_exists('width', $this->params) && !is_null($this->params['width'])
+            && array_key_exists('height', $this->params) && !is_null($this->params['height'])
         ) {
             $width = $this->params['width'];
             $height = $this->params['height'];
