@@ -71,7 +71,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             // Fetch last opinions from editorial
             $configurations = s::get('opinion_settings');
@@ -271,7 +271,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
 
             // Getting Synchronize setting params
@@ -404,7 +404,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
             $author = $this->get('user_repository')->find($authorID);
@@ -554,7 +554,8 @@ class OpinionsController extends Controller
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
+        ) {
 
             // Getting Synchronize setting params
             $wsUrl = '';
