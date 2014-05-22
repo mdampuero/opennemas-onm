@@ -484,6 +484,13 @@ class Advertisement extends Content
                 $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
             }
 
+            if (is_string($advertisement->params)) {
+                $advertisement->params = unserialize($advertisement->params);
+                if (!is_array($advertisement->params)) {
+                    $advertisement->params = array();
+                }
+            }
+
             // If the ad doesn't belong to the given category or home, skip it
             if (!in_array($category, $advertisement->fk_content_categories)
                 && !in_array(0, $advertisement->fk_content_categories)
