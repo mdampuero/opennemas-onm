@@ -580,10 +580,12 @@ class ArticlesController extends Controller
      */
     public function contentProviderInFrontpageAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $em = $this->get('entity_repository');
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'article')),
@@ -591,12 +593,29 @@ class ArticlesController extends Controller
             'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
 
-        if ($category != 0) {
-            $filters['fk_category'] = array(array('value' => $category));
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
         }
 
-        $articles = $em->findBy($filters, array('created' => 'desc'), 8, $page);
+        $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countArticles = $em->countBy($filters);
 
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 1,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countArticles,
+                'fileName'    => $this->generateUrl(
+                    'admin_articles_content_provider_in_frontpage',
+                    array('category' => $categoryId)
+                ).'&page=%d',
+            )
+        );
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
             array(
@@ -604,6 +623,7 @@ class ArticlesController extends Controller
                 'contents'              => $articles,
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
+                'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
             )
         );
