@@ -76,7 +76,7 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
 
         // $this->dumpSchema('onm-instances');
 
-        $master = Yaml::parse(file_get_contents($this->path));
+        $master = Yaml::parse(file_get_contents(APPLICATION_PATH.'/'.$this->path));
         $master = $this->createSchema($master);
 
         $schema = $this->getSchema($database);
