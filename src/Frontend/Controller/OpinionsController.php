@@ -755,10 +755,12 @@ class OpinionsController extends Controller
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
+                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
+                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }
