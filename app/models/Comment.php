@@ -158,7 +158,7 @@ class Comment
                             new \DateTimeZone('UTC')
                         );
                     } else {
-                        $this->{$name} = iconv(
+                        $this->{$name} = @iconv(
                             mb_detect_encoding($data[$name]),
                             "UTF-8",
                             $data[$name]

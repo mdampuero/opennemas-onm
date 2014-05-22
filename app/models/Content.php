@@ -1274,7 +1274,7 @@ class Content
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($propertyName)) {
-                    $this->{$propertyName} = iconv(
+                    $this->{$propertyName} = @iconv(
                         mb_detect_encoding($propertyValue),
                         'utf-8',
                         $propertyValue
@@ -1285,7 +1285,7 @@ class Content
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = iconv(
+                    $this->{$k} = @iconv(
                         mb_detect_encoding($v),
                         'utf-8',
                         $v
