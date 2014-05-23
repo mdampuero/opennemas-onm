@@ -121,7 +121,7 @@ class MonographsController extends Controller
         }
 
         return $this->render(
-            'special/frontpage_special.tpl',
+            'special/special_frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
             )
