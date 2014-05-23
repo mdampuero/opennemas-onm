@@ -59,7 +59,7 @@ class BlogsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('blog/blog.tpl', $cacheID)
+            || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
             $authors = array();
             foreach (\User::getAllUsersAuthors() as $author) {
@@ -162,7 +162,7 @@ class BlogsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('blog/frontpage_author.tpl', $cacheID)
+            || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
             $itemsPerPage = s::get('items_per_page');
 

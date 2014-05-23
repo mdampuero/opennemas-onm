@@ -846,7 +846,9 @@ class OpinionsController extends Controller
 
         $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
 
-        if (($this->view->caching == 0) || !$this->view->isCached('opinion.tpl', $cacheID)) {
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
+        ) {
 
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);
