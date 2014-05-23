@@ -62,8 +62,9 @@ class OpinionsController extends Controller
         if ($this->page == 1) {
             $order['in_home']  = 'DESC';
             $order['position'] = 'ASC';
+            $filters['in_home'] = array(array('value' => 1));
         } else {
-            $filters['in_home'] = array(array('value' => 0));
+            $order['starttime'] = 'DESC';
         }
 
         // Index frontpage
@@ -92,7 +93,7 @@ class OpinionsController extends Controller
                     array('type_opinion' => array(array('value' => 1)))
                 );
 
-                $editorial = $em->findBy($ef, $order, $totalEditorial);
+                $editorial = $em->findBy($ef, $order, $totalEditorial, $this->page);
             }
 
             foreach ($editorial as &$op) {
@@ -114,7 +115,7 @@ class OpinionsController extends Controller
                     array('type_opinion' => array(array('value' => 2)))
                 );
 
-                $director = $em->findBy($ef, $order, $totalDirector);
+                $director = $em->findBy($ef, $order, $totalDirector, $this->page);
             }
 
             if (isset($director) && !empty($director)) {
@@ -203,7 +204,7 @@ class OpinionsController extends Controller
 
                 if (is_array($author->meta)
                     && array_key_exists('is_blog', $author->meta)
-                    && $author->meta['is_blog'] == 1
+                    && $author->meta['is_blog'] == 0
                 ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
@@ -225,6 +226,7 @@ class OpinionsController extends Controller
                     );
                     $opinionsResult[] = $opinion;
                 }
+
             }
 
             $this->view->assign(
