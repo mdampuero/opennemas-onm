@@ -153,6 +153,7 @@ class MenuManager extends BaseManager
             $ordered[$menu->pk_menu] = $menu;
         }
 
+        ksort($ordered);
         return array_values($ordered);
     }
 
