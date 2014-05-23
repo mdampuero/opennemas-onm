@@ -77,7 +77,7 @@ class VideosController extends Controller
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->caching == 0)
-            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
             $videosSettings = s::get('video_settings');

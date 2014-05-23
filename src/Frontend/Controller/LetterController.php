@@ -53,7 +53,7 @@ class LetterController extends Controller
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
         if ($this->view->caching == 0
-            || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
+            || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
             $itemsPerPage = 12;
 

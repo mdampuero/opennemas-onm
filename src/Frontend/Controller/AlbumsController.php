@@ -101,7 +101,7 @@ class AlbumsController extends Controller
 
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('gallery/gallery-frontpage.tpl', $cacheID))
+           || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
             $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
@@ -191,7 +191,7 @@ class AlbumsController extends Controller
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
-            || (!$this->view->isCached('gallery/gallery.tpl', $cacheID))
+            || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
             // Get the album from the id and increment the numviews for it
             $album = new \Album($albumID);
