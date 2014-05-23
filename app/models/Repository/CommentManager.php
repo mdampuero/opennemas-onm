@@ -153,6 +153,7 @@ class CommentManager extends BaseManager
             $ordered[$comment->id] = $comment;
         }
 
+        ksort($ordered);
         return array_values($ordered);
     }
 

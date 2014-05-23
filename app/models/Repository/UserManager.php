@@ -163,6 +163,7 @@ class UserManager extends BaseManager
             }
         }
 
+        ksort($ordered);
         return array_values($ordered);
     }
 
