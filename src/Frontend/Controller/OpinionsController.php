@@ -159,6 +159,7 @@ class OpinionsController extends Controller
                     $authorsBlog[$authorData->id] = $authorData;
                 }
             }
+            $where ='';
             if (!empty($authorsBlog)) {
                 $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
             }
@@ -410,6 +411,9 @@ class OpinionsController extends Controller
         ) {
             // Get author info
             $author = $this->get('user_repository')->find($authorID);
+            if (is_null($author)) {
+                 return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+            }
             $author->params = $author->getMeta();
             $author->slug   = strtolower(
                 $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
