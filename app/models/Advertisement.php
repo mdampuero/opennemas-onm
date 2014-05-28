@@ -594,9 +594,16 @@ class Advertisement extends Content
             }
 
         } elseif ($this->with_script == 2) {
-            $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
-OA_show('zone_{$this->id}');
-// ]]> --></script>";
+
+            if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
+                $url = url('frontend_ad_get', array('id' => $this->pk_content));
+                $content = '<iframe src="'.$url.'" stye="width:800px; height:600px; overflow: hidden;" '.
+                ' scrolling="no"></iframe>';
+            } else {
+                $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
+                OA_show('zone_{$this->id}');
+                // ]]> --></script>";
+            }
         } elseif ($this->with_script == 3) {
             $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'><script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
 googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
