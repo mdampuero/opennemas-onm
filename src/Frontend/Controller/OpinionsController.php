@@ -203,9 +203,9 @@ class OpinionsController extends Controller
                     $author = $authors[$opinion->fk_author];
                 }
 
-                if (is_array($author->meta)
-                    && array_key_exists('is_blog', $author->meta)
-                    && $author->meta['is_blog'] == 0
+                if (empty($author->meta)
+                    || !array_key_exists('is_blog', $author->meta)
+                    || $author->meta['is_blog'] == 0
                 ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
