@@ -145,6 +145,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             );
 
             $this->cleanOpcode();
+        } elseif (property_exists($content, 'pk_opinion')) {
+            $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+            $tplManager->delete('blog', 'blog_frontpage.tpl');
         }
 
         return false;
