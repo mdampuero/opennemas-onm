@@ -692,7 +692,7 @@ class ArticlesController extends Controller
         $page       = $request->query->getDigits('page', 1);
 
         $em       = $this->get('entity_repository');
-        $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory(0);
+        $ids      = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory($categoryId);
         $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
