@@ -70,22 +70,18 @@ class CategoryManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $keys    = array();
-        $ordered = array();
 
-        $ids = array();
-        $i = 0;
-
+        $ids  = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'category' . $this->cacheSeparator . $value;
-            $keys[$value] = $i++;
+            $keys[] = $value;
         }
 
-        $categories = $this->cache->fetch($ids);
+        $categories = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($categories as $category) {
-            $ordered[$keys[$category->pk_content_category]] = $category;
             $cachedIds[] = 'category'. $this->cacheSeparator
                 . $category->pk_content_category;
         }
@@ -96,12 +92,25 @@ class CategoryManager extends BaseManager
             list($contentType, $categoryId) = explode($this->cacheSeparator, $id);
             $category = $this->find($categoryId);
             if ($category->pk_content_category) {
-                $ordered[$keys[$category->pk_content_category]] = $category;
+                $categories[] = $category;
             }
         }
 
-        ksort($ordered);
-        return array_values($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($categories)
+                && $categories[$i]->pk_content_category != $id
+            ) {
+                $i++;
+            }
+
+            if ($i < count($categories)) {
+                $ordered[] = $categories[$i];
+            }
+        }
+
+        return $ordered;
     }
 
     /**

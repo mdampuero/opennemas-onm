@@ -134,21 +134,17 @@ class UserManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $keys = array();
-        $ordered = array();
-
         $ids = array();
-        $i = 0;
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'user' . $this->cacheSeparator . $value;
-            $keys[$value] = $i++;
+            $keys[] = $value;
         }
 
-        $users = $this->cache->fetch($ids);
+        $users = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($users as $user) {
-            $ordered[$keys[$user->id]] = $user;
             $cachedIds[] = 'user' . $this->cacheSeparator . $user->id;
         }
 
@@ -159,11 +155,22 @@ class UserManager extends BaseManager
 
             $user = $this->find($contentId);
             if ($user && $user->id) {
-                $ordered[$keys[$user->id]] = $user;
+                $users = $user;
             }
         }
 
-        ksort($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($users) && $users[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($users)) {
+                $ordered[] = $users[$i];
+            }
+        }
+
         return array_values($ordered);
     }
 

@@ -73,21 +73,18 @@ class EntityManager extends BaseManager
      */
     public function findMulti(array $data)
     {
+        $ids  = array();
         $keys = array();
-        $ordered = array();
-
-        $ids = array();
-        $i = 0;
         foreach ($data as $value) {
             $ids[] = $value[0] . $this->cacheSeparator . $value[1];
-            $keys[$value[1]] = $i++;
+            $keys[] = $value[1];
         }
-        $contents = $this->cache->fetch($ids);
+
+        $contents = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($contents as $content) {
-            $ordered[$keys[$content->id]] = $content;
-            $cachedIds[] = $content->content_type_name . $this->cacheSeparator.$content->id;
+            $cachedIds[] = $content->content_type_name . $this->cacheSeparator . $content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
@@ -97,12 +94,23 @@ class EntityManager extends BaseManager
 
             $content = $this->find(\classify($contentType), $contentId);
             if ($content->id) {
-                $ordered[$keys[$content->pk_content]] = $content;
+                $contents[] = $content;
             }
         }
 
-        ksort($ordered);
-        return array_values($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($contents) && $contents[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($contents)) {
+                $ordered[] = $contents[$i];
+            }
+        }
+
+        return $ordered;
     }
 
     /**

@@ -130,18 +130,18 @@ class CommentManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $ordered = array_flip($data);
 
-        $ids = array();
+        $ids  = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'comment' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
         $comments = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($comments as $comment) {
-            $ordered[$comment->id] = $comment;
             $cachedIds[] = 'comment' . $this->cacheSeparator . $comment->id;
         }
 
@@ -150,7 +150,22 @@ class CommentManager extends BaseManager
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
             $comment = $this->find($contentId);
-            $ordered[$comment->id] = $comment;
+
+            if ($comment->id) {
+                $comments[] = $comment;
+            }
+        }
+
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($comments) && $comments[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($comments)) {
+                $ordered[] = $comments[$i];
+            }
         }
 
         return array_values($ordered);

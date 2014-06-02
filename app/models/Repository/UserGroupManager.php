@@ -132,11 +132,11 @@ class UserGroupManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        $ordered = array_flip($data);
-
         $ids = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'usergroup' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
         $groups = array_values($this->cache->fetch($ids));
@@ -144,7 +144,6 @@ class UserGroupManager extends BaseManager
         $cachedIds = array();
 
         foreach ($groups as $group) {
-            $ordered[$group->id] = $group;
             $cachedIds[] = 'usergroup' . $this->cacheSeparator . $group->id;
         }
 
@@ -153,11 +152,22 @@ class UserGroupManager extends BaseManager
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
             $group = $this->find($contentId);
-            $ordered[$group->id] = $group;
+            $groups[] = $group;
 
         }
 
-        ksort($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($groups) && $groups[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($groups)) {
+                $ordered[] = $groups[$i];
+            }
+        }
+
         return array_values($ordered);
     }
 
