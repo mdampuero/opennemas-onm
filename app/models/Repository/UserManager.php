@@ -155,7 +155,7 @@ class UserManager extends BaseManager
 
             $user = $this->find($contentId);
             if ($user && $user->id) {
-                $users = $user;
+                $users[] = $user;
             }
         }
 
