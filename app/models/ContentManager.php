@@ -533,22 +533,23 @@ class ContentManager
         $categoryID,
         $elements = array()
     ) {
-
         // Starting the Transaction
         $GLOBALS['application']->conn->StartTrans();
 
-        // Clean all the contents for this category after insert the new ones
-        $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
-            $categoryID
-        );
-
-        if (!$clean) {
-            return false;
-        }
         $positions = array();
         $contentIds = array();
 
         if (count($elements) > 0) {
+            // Clean all the contents for this category after insert the new ones
+            $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
+                $categoryID
+            );
+
+            if (!$clean) {
+                $GLOBALS['application']->conn->RollbackTrans();
+                return false;
+            }
+
             // Foreach element setup the sql values statement part
             foreach ($elements as $element) {
                 $positions[] = array(
