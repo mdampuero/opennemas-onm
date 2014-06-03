@@ -120,8 +120,10 @@ abstract class BaseManager
                             $fieldFilters[] = "`$field` $operator " .
                                 implode(' ', $value);
                         }
-                    } elseif (!is_array($value) && !empty($value)) {
+                    } elseif (!is_array($value) && !is_null($value)) {
                         $fieldFilters[] = "`$field` $operator '$value'";
+                    } elseif (is_null($value)) {
+                        $fieldFilters[] = "`$field` $operator NULL";
                     }
                 }
 
