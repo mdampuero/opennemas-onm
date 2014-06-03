@@ -1096,3 +1096,14 @@ admin_media_uploader_months:
     path:     /media-uploader/months
     defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
+admin_getting_started:
+    path:     /getting-started
+    defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
+
+admin_getting_started_accept_terms:
+    path:     /getting-started/accept-terms
+    defaults: { _controller  : BackendBundle:GettingStarted:acceptTerms }
+
+admin_getting_started_finish:
+    path:     /getting-started/finish
+    defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }

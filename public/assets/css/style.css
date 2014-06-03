@@ -3538,3 +3538,20 @@ border-bottom-left-radius: 2px;
   border: 1px solid #CCCCCC;
   width:200px;
 }
+
+
+/* =============================================================================
+   Wizard
+   ========================================================================== */
+.terms-of-use {
+  height: 400px;
+  width: 80%;
+}
+
+.accept-terms {
+  width: 80%; margin: 20px auto;
+}
+
+.accept-terms input[type=checkbox] {
+  margin-top: 4px;
+}

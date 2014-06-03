@@ -22,6 +22,10 @@ security:
             pattern:  ^/admin/login$
             security: false
 
+        backend_getting_started:
+            pattern:  ^/admin/getting-started$
+            security: false
+
         manager_login:
             pattern:  ^/manager/login$
             security: false
