@@ -115,18 +115,20 @@ abstract class BaseManager
                         ) {
                             $fieldFilters[] = "`$field` $operator (" .
                                 implode(', ', $value) . ")";
-                        } elseif (!is_array($value) && !empty($value)) {
+                        } else {
                             $value = $this->parseValues($value, $operator);
                             $fieldFilters[] = "`$field` $operator " .
                                 implode(' ', $value);
                         }
-                    } else {
+                    } elseif (!is_array($value) && !empty($value)) {
                         $fieldFilters[] = "`$field` $operator '$value'";
                     }
                 }
 
-                // Add filters for the current $field
-                $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
+                if (!empty($fieldFilters)) {
+                    // Add filters for the current $field
+                    $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
+                }
             }
 
             // Build filters
