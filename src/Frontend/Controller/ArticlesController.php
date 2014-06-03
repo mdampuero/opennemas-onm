@@ -154,7 +154,7 @@ class ArticlesController extends Controller
                 $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                     $article->metadata,
                     'article',
-                    "pk_fk_content_category= ".$article->category.
+                    "pk_fk_content_category= ".$article->category." AND pk_content <>".$article->id.
                     " AND contents.content_status=1 AND pk_content = pk_fk_content",
                     4
                 );
