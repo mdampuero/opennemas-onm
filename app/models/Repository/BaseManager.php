@@ -115,7 +115,7 @@ abstract class BaseManager
                         ) {
                             $fieldFilters[] = "`$field` $operator (" .
                                 implode(', ', $value) . ")";
-                        } else {
+                        } elseif (!is_array($value) && !empty($value)) {
                             $value = $this->parseValues($value, $operator);
                             $fieldFilters[] = "`$field` $operator " .
                                 implode(' ', $value);
