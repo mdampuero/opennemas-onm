@@ -57,6 +57,15 @@ class EntityManager extends BaseManager
         ) {
             $entity = new $contentType($id);
 
+            if (!is_object($entity)
+                || (is_object($entity)
+                    && property_exists($entity, 'id')
+                    && is_null($entity->id)
+                )
+            ) {
+                return null;
+            }
+
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $entity);
             }
