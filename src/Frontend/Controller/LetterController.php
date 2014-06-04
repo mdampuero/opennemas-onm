@@ -227,10 +227,12 @@ class LetterController extends Controller
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
                 $items   = $request->request->get('items');
 
+                $moreData = '';
                 if (!empty($items)) {
                     foreach ($items as $key => $value) {
                         if (!empty($key) && !empty($value)) {
                             $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                            $moreData = " {$key}: {$value}\n ";
                         }
                     }
                 }
@@ -250,7 +252,7 @@ class LetterController extends Controller
 
                 // Prevent XSS attack
                 $data = array_map('strip_tags', $data);
-                $data['body'] = nl2br($data['body']);
+                $data['body'] = nl2br($moreData.$data['body']);
 
                 if ($letter->hasBadWords($data)) {
                     $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
