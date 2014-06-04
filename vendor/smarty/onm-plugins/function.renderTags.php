@@ -20,16 +20,17 @@ function smarty_function_renderTags($params, &$smarty)
     }
 
     global $generator;
-    if (array_key_exists('internal', $params) && ($params['internal'] == true)) {
+    if (array_key_exists('internal', $params) && ($params['internal'] == 'hastag')) {
+            $url = 'https://twitter.com/hashtag/';
+    } elseif (array_key_exists('internal', $params) && ($params['internal'] == true)) {
         if (is_object($generator)) {
             $name ='tag_frontpage';
             $url = $generator->generate($name);
         } else {
             $url = '/tag';
         }
-
-
     } else {
+
         $params['internal'] = false;
         if (!array_key_exists('url', $params)) {
             $url ='';
@@ -59,18 +60,25 @@ function smarty_function_renderTags($params, &$smarty)
     foreach ($params['metas'] as $tag) {
         $tag = trim($tag);
         if (!empty($tag)) {
-            if ($params['internal']) {
-                $tag2 = \Onm\StringUtils::generateSlug($tag);
-                $fullUrl = htmlentities($url.'/'.$tag2, ENT_QUOTES);
-            } else {
-                $fullUrl = htmlentities($url.'&q='.$tag, ENT_QUOTES);
-            }
-            $output .= ' <a '.$class.' href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+            $result = preg_match('/^#(.*)/', $tag, $matchs);
+            if (!empty($params['internal']) && $params['internal'] == 'hastag' && !empty($matchs[1])) {
+                $fullUrl = htmlentities($url.$matchs[1], ENT_QUOTES);
+                $output .= ' <a '.$class.' target="_blank" href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
 
-            if (array_key_exists('limit', $params) && $params['limit'] <= $i) {
-                return $output;
+            } elseif ($params['internal'] != 'hastag' && empty($result)) {
+                if ($params['internal'] == 'true') {
+                    $tag2 = \Onm\StringUtils::generateSlug($tag);
+                    $fullUrl = htmlentities($url.'/'.$tag2, ENT_QUOTES);
+                } else {
+                    $fullUrl = htmlentities($url.'&q='.$tag, ENT_QUOTES);
+                }
+                $output .= ' <a '.$class.' href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+
+                if (array_key_exists('limit', $params) && $params['limit'] <= $i) {
+                    return $output;
+                }
+                $i++;
             }
-            $i++;
         }
     }
 
