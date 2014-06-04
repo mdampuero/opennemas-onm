@@ -148,6 +148,12 @@ class AlbumsController extends Controller
                     )
                 )
             );
+            $this->view->assign(
+                array(
+                    'albums'     => $albums,
+                    'pagination' => $pagination,
+                )
+            );
         }
 
         // Send the response to the user
@@ -155,8 +161,6 @@ class AlbumsController extends Controller
             'album/album_frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
-                'albums'              => $albums,
-                'pagination'            => $pagination,
             )
         );
     }
