@@ -377,7 +377,7 @@ class VideosController extends Controller
 
         $order = array('created' => 'DESC');
         $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
+            'content_type_name' => array(array('value' => 'video')),
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );
