@@ -154,11 +154,12 @@ class Advertisement extends Content
         parent::__construct($id);
 
         // Check if it contains a flash element
-        $img = getService('entity_repository')->find('Photo', $this->path);
-        if ($img->type_img == "swf") {
-            $this->is_flash = 1;
-        } else {
-            $this->is_flash = 0;
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
+            }
         }
     }
 
