@@ -93,10 +93,12 @@ class MachineSearcher
             $cm = new \ContentManager();
             $result = $cm->getInTime($result);
 
+            $er = getService('entity_repository');
             foreach ($result as &$content) {
-
-                if (array_key_exists('img2', $content)) {
-                    $content['image'] = new \Photo($content['img2']);
+                if (array_key_exists('img2', $content) && $content['img2'] != '0') {
+                    $content['image'] = $er->find('Photo', $content['img2']);
+                } elseif (array_key_exists('img1', $content) && $content['img1'] != '0') {
+                    $content['image'] = $er->find('Photo', $content['img1']);
                 }
             }
 
