@@ -20,7 +20,7 @@ function smarty_function_renderTags($params, &$smarty)
     }
 
     global $generator;
-    if (array_key_exists('internal', $params) && ($params['internal'] == 'hastag')) {
+    if (array_key_exists('internal', $params) && ($params['internal'] == 'hashtag')) {
             $url = 'https://twitter.com/hashtag/';
     } elseif (array_key_exists('internal', $params) && ($params['internal'] == true)) {
         if (is_object($generator)) {
