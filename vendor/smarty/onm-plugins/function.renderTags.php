@@ -20,8 +20,10 @@ function smarty_function_renderTags($params, &$smarty)
     }
 
     global $generator;
-    if (array_key_exists('internal', $params) && ($params['internal'] == 'hashtag')) {
+    $method = '';
+    if (array_key_exists('internal', $params) && ($params['internal'] === 'hashtag')) {
             $url = 'https://twitter.com/hashtag/';
+            $method = 'hashtag';
     } elseif (array_key_exists('internal', $params) && ($params['internal'] == true)) {
         if (is_object($generator)) {
             $name ='tag_frontpage';
@@ -29,7 +31,9 @@ function smarty_function_renderTags($params, &$smarty)
         } else {
             $url = '/tag';
         }
+        $method = 'tags';
     } else {
+        $method = 'google';
 
         $params['internal'] = false;
         if (!array_key_exists('url', $params)) {
@@ -61,12 +65,12 @@ function smarty_function_renderTags($params, &$smarty)
         $tag = trim($tag);
         if (!empty($tag)) {
             $result = preg_match('/^#(.*)/', $tag, $matchs);
-            if (!empty($params['internal']) && $params['internal'] == 'hastag' && !empty($matchs[1])) {
+            if ($method == 'hashtag' && !empty($matchs[1])) {
                 $fullUrl = htmlentities($url.$matchs[1], ENT_QUOTES);
                 $output .= ' <a '.$class.' target="_blank" href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
 
-            } elseif ($params['internal'] != 'hastag' && empty($result)) {
-                if ($params['internal'] == 'true') {
+            } elseif (($method != 'hashtag') && empty($result)) {
+                if ($method == 'tags') {
                     $tag2 = \Onm\StringUtils::generateSlug($tag);
                     $fullUrl = htmlentities($url.'/'.$tag2, ENT_QUOTES);
                 } else {
