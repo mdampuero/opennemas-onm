@@ -46,7 +46,13 @@ class Frontpages
             }
 
             if (count($imageIdsList) > 0) {
-                $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+                $em = getService('entity_repository');
+                $order = array('created' => 'DESC');
+                $imgFilters = array(
+                    'content_type_name' => array(array('value' => 'photo')),
+                    'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
+                );
+                $imageList = $em->findBy($imgFilters, $order);
             } else {
                 $imageList = array();
             }
@@ -55,6 +61,7 @@ class Frontpages
                 $img->media_url = MEDIA_IMG_PATH_WEB;
             }
 
+            $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
 
@@ -62,9 +69,10 @@ class Frontpages
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
-                $content->author = new \User($content->fk_author);
-                $content->author->external = 1;
-
+                $content->author = $ur->find($content->fk_author);
+                if (!is_null($content->author)) {
+                    $content->author->external = 1;
+                }
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
@@ -124,12 +132,8 @@ class Frontpages
             'content_type_name' => array(array('value' => 'article')),
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'category_name'     => array(array('value' => $category->name))
         );
-
-        if ($category != 0) {
-            $cat = getService('category_repository')->find($category);
-            $filters['category_name'] = array(array('value' => $cat->name));
-        }
 
         // Get all articles for this page
         $em            = getService('entity_repository');
@@ -145,7 +149,11 @@ class Frontpages
         $imageIdsList = array_unique($imageIdsList);
 
         if (count($imageIdsList) > 0) {
-            $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+            $imgFilters = array(
+                'content_type_name' => array(array('value' => 'photo')),
+                'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
+            );
+            $imageList = $em->findBy($imgFilters, $order);
         } else {
             $imageList = array();
         }
@@ -154,16 +162,19 @@ class Frontpages
             $img->media_url = MEDIA_IMG_PATH_WEB;
         }
 
+        $ur = getService('user_repository');
         // Overloading information for contents
         foreach ($articles as &$content) {
 
             // Load category related information
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
-            $content->author         = new \User($content->fk_author);
-            $content->author->photo  = $content->author->getPhoto();
-            $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
-            $content->author->external = 1;
+            $content->author         = $ur->find($content->fk_author);
+            if (!is_null($content->author)) {
+                $content->author->photo  = $content->author->getPhoto();
+                $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
+                $content->author->external = 1;
+            }
 
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
