@@ -140,7 +140,7 @@ class AdvertisementManager extends EntityManager
                     } else {
                         if ($field == 'fk_content_categories') {
                             $fieldFilters[] = "`$field` REGEXP '(," . $value
-                                . ",)|(," . $value . "$)|(^" . $value . "[,\d]*$)'";
+                                . ",)|(," . $value . "$)|(^" . $value . "[,\d]*)'";
                         } else {
                             $fieldFilters[] = "`$field` $operator '$value'";
                         }
