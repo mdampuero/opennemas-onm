@@ -51,7 +51,15 @@ class SubscriptionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->view->assign('actual_category', 'newsletter');
+        $ads = $this->getAds();
+
+        $this->view->assign(
+            array(
+                'advertisements'  => $ads,
+                'actual_category' => 'newsletter'
+            )
+        );
+
         return $this->render('static_pages/subscription.tpl');
     }
 
@@ -248,5 +256,21 @@ class SubscriptionsController extends Controller
                 'class'   => $class,
             )
         );
+    }
+
+    /**
+     * Returns the advertisements for the subscription page
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $category = 0;
+
+        // Get letter positions
+        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
