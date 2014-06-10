@@ -87,7 +87,7 @@ class ArticlesController extends Controller
 
         $this->view->assign('layoutFile', $layoutFile);
 
-        if (($this->view->caching == 0)
+        if ($this->view->caching == 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
             if (($article->content_status == 1) && ($article->in_litter == 0)
@@ -144,7 +144,7 @@ class ArticlesController extends Controller
                     foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
                         if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
-                             $content->photo = $er->find('Photo', $content->img1);
+                            $content->photo = $er->find('Photo', $content->img1);
                         }
                     }
                 }
@@ -152,24 +152,10 @@ class ArticlesController extends Controller
 
                 // Machine suggested contents code -----------------------------
                 $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                    $article->metadata,
                     'article',
-                    "pk_fk_content_category= ".$article->category." AND pk_content <>".$article->id.
-                    " AND contents.content_status=1 AND pk_content = pk_fk_content",
+                    "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
                     4
                 );
-
-                foreach ($machineSuggestedContents as &$element) {
-                    $element['uri'] = \Uri::generate(
-                        'article',
-                        array(
-                            'id'       => $element['pk_content'],
-                            'date'     => date('YmdHis', strtotime($element['created'])),
-                            'category' => $element['catName'],
-                            'slug'     => StringUtils::get_title($element['title']),
-                        )
-                    );
-                }
 
                 $this->view->assign('suggested', $machineSuggestedContents);
             } else {
