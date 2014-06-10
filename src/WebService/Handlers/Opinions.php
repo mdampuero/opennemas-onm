@@ -343,10 +343,9 @@ class Opinions
 
         $machineSearcher = $this->restler->container->get('automatic_contents');
 
-        $suggestedContents = $machineSearcher->SearchSuggestedContents(
-            $opinion->metadata,
+        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             'opinion',
-            " contents.content_status=1 AND pk_content = pk_fk_content",
+            " pk_content <>".$opinion->id,
             4
         );
 

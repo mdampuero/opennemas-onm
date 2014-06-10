@@ -122,7 +122,7 @@ services:
 
     automatic_contents:
         class: Onm\MachineSearcher
-        arguments: [ @cache ]
+        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
 
     acl_checker:
         class: Onm\Security\Acl
