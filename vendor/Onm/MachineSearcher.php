@@ -67,6 +67,10 @@ class MachineSearcher
                     $contentProps []= array($content['content_type_name'], $content['pk_content']);
                 }
 
+                if (count($contentProps) < 1) {
+                    return array();
+                }
+
                 $contents = $this->er->findMulti($contentProps);
 
                 // TODO: nasty hack to convert content objects to the old array way
