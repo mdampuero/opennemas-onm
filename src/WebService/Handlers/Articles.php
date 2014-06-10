@@ -117,26 +117,11 @@ class Articles
         $article->relatedContents = $relatedContents;
 
         // Retrieve the related contents for the given
-        $machineSuggestedContents = $machineSearcher->searchSuggestedContents(
-            $article->metadata,
+        $article->suggested = $this->get('automatic_contents')->searchSuggestedContents(
             'article',
-            "pk_fk_content_category= ".$article->category.
-            " AND contents.content_status=1 AND pk_content = pk_fk_content",
+            "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
             4
         );
-        foreach ($machineSuggestedContents as &$element) {
-            $element['uri'] = 'ext'.\Uri::generate(
-                'article',
-                array(
-                    'id'       => $element['pk_content'],
-                    'date'     => date('YmdHis', strtotime($element['created'])),
-                    'category' => $element['catName'],
-                    'slug'     => StringUtils::get_title($element['title']),
-                )
-            );
-        }
-
-        $article->suggested = $machineSuggestedContents;
 
         return serialize($article);
     }

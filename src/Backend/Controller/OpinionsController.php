@@ -834,9 +834,8 @@ class OpinionsController extends Controller
 
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            $opinion->metadata,
             'opinion',
-            " contents.content_status=1 AND pk_content = pk_fk_content",
+            " pk_content <>".$opinion->id,
             4
         );
 
