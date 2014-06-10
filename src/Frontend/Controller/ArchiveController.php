@@ -47,6 +47,9 @@ class ArchiveController extends Controller
         $this->year          = $this->request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $this->month         = $this->request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $this->day           = $this->request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
     }
 
 
@@ -179,5 +182,21 @@ class ArchiveController extends Controller
         }
 
         return new Response($html);
+    }
+
+    /**
+     * Returns the advertisements for the archive template
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $category = 0;
+
+        // Get letter positions
+        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
