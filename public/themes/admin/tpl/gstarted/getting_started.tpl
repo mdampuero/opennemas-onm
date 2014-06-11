@@ -140,6 +140,8 @@
         {script_tag src="/onm/footer-functions.js" common=1}
         {script_tag src="/libs/tinycon.min.js"}
         {script_tag src="/jquery/bootstrap-nav-wizard.js"}
+        {script_tag src="/onm/md5.min.js" common=1}
+        {script_tag src="/admin.js" common=1}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>

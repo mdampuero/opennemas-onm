@@ -10,41 +10,6 @@
         <div class="span12">
             <div class="row-fluid">
                 <div class="span12">
-                    <h4>
-                        Connect Opennemas with your social networks
-                    </h4>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span6">
-                    <a class="btn btn-large" href="{url name=facebook_login}">
-                        <i class="icon-facebook"></i>
-                        Facebook
-                    </a>
-                </div>
-                <div class="span6">
-                    <div class="btn btn-large">
-                        <i class="icon-twitter"></i>
-                        Twitter
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid wizard-buttons">
-                <div class="span12">
-                    <div class="pull-left">
-                        <button data-target="#step3" class="btn btn-primary btn-large activate">{t}Previous{/t}</button>
-                    </div>
-                    <div class="pull-right">
-                        <button data-target="#step5" class="btn btn-primary btn-large activate">{t}Next{/t}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid wizard-content" id="step6">
-        <div class="span12">
-            <div class="row-fluid">
-                <div class="span12">
                     <h3>{t}Welcome!{/t}</h3>
                 </div>
             </div>
@@ -120,7 +85,49 @@
             </div>
         </div>
     </div>
-
+    <div class="row-fluid wizard-content" id="step4">
+        <div class="span12">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>
+                        Connect Opennemas with your social networks
+                    </h4>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{{hwi_oauth_login_url('facebook')}}" type="button">
+                        {if $facebook}
+                            <i class="icon-ok"></i>
+                        {else}
+                            <i class="icon-facebook"></i>
+                        {/if}
+                        Facebook
+                    </button>
+                </div>
+                <div class="span6">
+                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{{hwi_oauth_login_url('twitter')}}" type="button">
+                        {if $twitter}
+                            <i class="icon-ok"></i>
+                        {else}
+                            <i class="icon-twitter"></i>
+                        {/if}
+                        Twitter
+                    </button>
+                </div>
+            </div>
+            <div class="row-fluid wizard-buttons">
+                <div class="span12">
+                    <div class="pull-left">
+                        <button data-target="#step3" class="btn btn-primary btn-large activate">{t}Previous{/t}</button>
+                    </div>
+                    <div class="pull-right">
+                        <button data-target="#step5" class="btn btn-primary btn-large activate">{t}Next{/t}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row-fluid wizard-content" id="step5">
         <div class="span12">
             <div class="row-fluid">
