@@ -11,6 +11,8 @@
  * @package    Model
  **/
 
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
@@ -18,7 +20,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  *
  * @package    Model
  **/
-class User implements AdvancedUserInterface
+class User extends OAuthUser implements AdvancedUserInterface
 {
     /**
      * The user id
