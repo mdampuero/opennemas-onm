@@ -11,7 +11,9 @@ class Authors
     {
         $this->validateInt($id);
 
-        $author = new User($id);
+        $ur = getService('user_repository');
+
+        $author = $ur->find($id);
 
         return $author;
     }
@@ -31,7 +33,8 @@ class Authors
         }
 
         // Get photo object from avatar_img_id
-        $photo = new Photo($rs->fields['avatar_img_id']);
+        $er = getService('entity_repository');
+        $photo = $er->find('Photo', $rs->fields['avatar_img_id']);
 
         return $photo;
     }
