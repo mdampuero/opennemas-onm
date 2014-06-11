@@ -125,3 +125,15 @@ footer select {
         width:200px;
     }
 }
+
+.social-network-login {
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+
+.social-network-login:hover {
+    color: #4D90FE;
+}
