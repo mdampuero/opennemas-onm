@@ -127,6 +127,45 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Searches for users given a criteria.
+     *
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  integer      $elementsPerPage The max number of elements.
+     * @param  integer      $page            The offset to start with.
+     * @return array                         The matched elements.
+     */
+    public function findByUserMeta($criteria, $order, $elementsPerPage = null, $page = null)
+    {
+        // Building the SQL filter
+        $whereSQL = $this->getFilterSQL($criteria);
+
+        $orderSQL = '`id` DESC';
+        if (!empty($order)) {
+            $orderSQL = $this->getOrderBySQL($order);
+        }
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
+
+        // Executing the SQL
+        $sql = "SELECT id FROM `users`,`usermeta` "
+            . "WHERE `users`.`id`=`usermeta`.`user_id` AND $whereSQL "
+            . "ORDER BY $orderSQL $limitSQL";
+
+        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['id'];
+        }
+
+        $users = $this->findMulti($ids);
+
+        return $users;
+    }
+
+
+    /**
      * Find multiple users from a given array of content ids.
      *
      * @param  array $data Array of preprocessed content ids.
