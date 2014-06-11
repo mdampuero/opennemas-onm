@@ -27,6 +27,8 @@ class AuthenticationController extends Controller
 {
     /**
      * Displays the login form template.
+     *
+     * @return Response The response object.
      */
     public function loginAction(Request $request)
     {
@@ -119,5 +121,15 @@ class AuthenticationController extends Controller
                 'referer'               => $referer
             )
         );
+    }
+
+    /**
+     * Displays a popup after login/connect with social accounts.
+     *
+     * @return Response The response object.
+     */
+    public function connectPopupAction()
+    {
+        return $this->render('common/close_popup.tpl');
     }
 }
