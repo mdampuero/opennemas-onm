@@ -37,7 +37,19 @@ class GettingStartedController extends Controller
      */
     public function gettingStartedAction(Request $request)
     {
-        return $this->render('gstarted/getting_started.tpl', array());
+        $params = array();
+
+        $user = $this->get('user_repository')->find($this->getUser()->id);
+
+        if ($user->getMeta('facebook_id')) {
+            $params['facebook'] = true;
+        }
+
+        if ($user->getMeta('twitter_id')) {
+            $params['twitter'] = true;
+        }
+
+        return $this->render('gstarted/getting_started.tpl', $params);
     }
 
     /**
