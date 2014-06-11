@@ -607,3 +607,10 @@ function debug()
         call_user_func_array('var_dump', $functionArgs);
     }
 }
+
+function hwi_oauth_login_url($name)
+{
+    $helper = getService('hwi_oauth.templating.helper.oauth');
+
+    return $helper->getLoginUrl($name);
+}
