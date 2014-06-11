@@ -11,7 +11,8 @@ class Images
     {
         $this->validateInt(func_get_args());
 
-        $image = new Photo($id);
+        $er = getService('entity_repository');
+        $image = $er->find('Photo', $id);
 
         return $image;
     }
