@@ -41,3 +41,24 @@ manager_welcome:
 frontendmobile_root:
     path: '/mobile'
     defaults: { _controller : FrontendMobileBundle:Frontpages:show }
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /admin/connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /admin/login
+
+
+facebook_login:
+    pattern: /admin/login/check-facebook
+
+google_login:
+    pattern: /admin/login/check-google
+
+custom_login:
+    pattern: /admin/login/check-custom
+
+github_login:
+    pattern: /admin/login/check-github

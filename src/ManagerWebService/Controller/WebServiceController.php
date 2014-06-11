@@ -124,7 +124,7 @@ class WebServiceController extends Controller
                 'success'      => true,
                 'instance_url' => $data['domains'],
                 'enable_url'   => $data['domains']
-                    . '/admin/getting-started?token=' . $token
+                    . '/admin/login?token=' . $token
             ),
             200
         );

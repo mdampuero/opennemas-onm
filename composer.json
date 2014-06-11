@@ -54,6 +54,7 @@
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php": "v2.4.103",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
+        "hwi/oauth-bundle": "0.3.*@dev",
         "smarty/smarty" : "3.1.14"
     },
     "scripts": {

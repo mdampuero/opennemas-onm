@@ -28,7 +28,7 @@ use Onm\Settings as s;
  * @package Backend_Controllers
  **/
 class GettingStartedController extends Controller
-{r
+{
     /**
      * Shows the getting started page.
      *
@@ -37,44 +37,7 @@ class GettingStartedController extends Controller
      */
     public function gettingStartedAction(Request $request)
     {
-        $token = $request->get('token');
-
-        if (!$token && !$this->getUser()) {
-            $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
-            return $this->redirect($this->generateUrl('admin_login_form'));
-        }
-
-        if (!$this->getUser()) {
-            $user = $this->get('user_repository')->findBy(
-                array(
-                    'token' => array(array('value' => $token))
-                ),
-                array('token' => 'asc'),
-                1,
-                1
-            );
-
-            if (!$user) {
-                $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
-                return $this->redirect($this->generateUrl('admin_login_form'));
-            }
-
-            $user = array_pop($user);
-            $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
-
-            $securityContext = $this->get('security.context');
-            $securityContext->setToken($token);
-
-            $request = $this->getRequest();
-            $session = $request->getSession();
-            $session->set('_security_backend', serialize($token));
-        }
-
-        return $this->render(
-            'gstarted/getting_started.tpl',
-            array(
-            )
-        );
+        return $this->render('gstarted/getting_started.tpl', array());
     }
 
     /**
@@ -99,6 +62,12 @@ class GettingStartedController extends Controller
         return new Response('Not accepted', 412);
     }
 
+    /**
+     * Finish the wizard and deletes the user's token.
+     *
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function finishWizardAction(Request $request)
     {
         $user = $this->getUser();

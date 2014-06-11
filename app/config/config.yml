@@ -91,3 +91,14 @@ services:
     application.log:
         alias: monolog.logger.applog
 
+    hwi_oauth.user.provider.entity:
+        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+
+hwi_oauth:
+    firewall_name: backend
+    resource_owners:
+        facebook:
+            type:          facebook
+            client_id:     530213073734818
+            client_secret: 528db880a91f19e557de2b74c8901826
+            scope:         email

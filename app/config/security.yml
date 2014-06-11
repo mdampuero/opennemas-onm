@@ -10,7 +10,9 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [ users ]
+                providers: [ users, oauth_provider ]
+        oauth_provider:
+            id: onm_oauth_user_provider
         users:
             id: onm_user_provider
     firewalls:
@@ -57,8 +59,17 @@ security:
                 use_referer:                    true
                 success_handler:                login_success_handler
             logout:
-                path:   admin_logout
-                target: admin_login_form
+                path:   /admin/logout
+                target: /admin/login
+            oauth:
+                resource_owners:
+                    facebook:      "/admin/login/check-facebook"
+                login_path: /admin/login
+                check_path: admin_login_processform
+                use_forward: false
+                failure_path: /admin/login
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider.entity
 
         manager:
             pattern:    ^/manager/*
@@ -91,5 +102,6 @@ security:
 
     access_control:
         - { path: ^/admin/*, roles: [ ROLE_BACKEND ] }
-        - { path: ^/manager/*, roles: [ ROLE_MASTER ] }
-        - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/manager/*, roles: [ ROLE_MASTER ] }
+        # - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }

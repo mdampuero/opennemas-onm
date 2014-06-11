@@ -11,9 +11,11 @@
 namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Onm\Framework\Controller\Controller;
 
@@ -31,6 +33,41 @@ class AuthenticationController extends Controller
         $error   = null;
         $route   = $request->get('_route');
         $referer = $this->generateUrl('admin_welcome');
+        $token = $request->get('token');
+
+        if ($token) {
+            $user = $this->get('user_repository')->findBy(
+                array(
+                    'token' => array(array('value' => $token))
+                ),
+                array('token' => 'asc'),
+                1,
+                1
+            );
+
+            if (!$user) {
+                $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
+                return $this->redirect($this->generateUrl('admin_login_form'));
+            }
+
+            $user = array_pop($user);
+            $user->updateUserToken($user->id, null);
+            $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
+
+            $securityContext = $this->get('security.context');
+            $securityContext->setToken($token);
+
+            $request = $this->getRequest();
+            $session = $request->getSession();
+            $session->set('_security_backend', serialize($token));
+
+            if ($this->session->get('_security.backend.target_path')) {
+                $referer = $this->session->get('_security.backend.target_path');
+            }
+
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
 
         if ($this->session->get('_security.backend.target_path')) {
             $referer = $this->session->get('_security.backend.target_path');

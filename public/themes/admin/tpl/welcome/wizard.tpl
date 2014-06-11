@@ -3,9 +3,45 @@
       <li class="active"><a href='#step1'>1. {t}Welcome{/t}</a></li>
       <li class="disabled"><a href='#step2'>2. {t}Terms of use{/t}</a></li>
       <li class="disabled"><a href="#step3">3. {t}Help{/t}</a></li>
-      <li class="disabled"><a href="#step4">4. {t}Finish{/t}</a></li>
+      <li class="disabled"><a href="#step4">4. {t}Connect{/t}</a></li>
+      <li class="disabled"><a href="#step5">5. {t}Finish{/t}</a></li>
     </ul>
     <div class="row-fluid wizard-content" id="step1">
+        <div class="span12">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>
+                        Connect Opennemas with your social networks
+                    </h4>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    <a class="btn btn-large" href="{url name=facebook_login}">
+                        <i class="icon-facebook"></i>
+                        Facebook
+                    </a>
+                </div>
+                <div class="span6">
+                    <div class="btn btn-large">
+                        <i class="icon-twitter"></i>
+                        Twitter
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid wizard-buttons">
+                <div class="span12">
+                    <div class="pull-left">
+                        <button data-target="#step3" class="btn btn-primary btn-large activate">{t}Previous{/t}</button>
+                    </div>
+                    <div class="pull-right">
+                        <button data-target="#step5" class="btn btn-primary btn-large activate">{t}Next{/t}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid wizard-content" id="step6">
         <div class="span12">
             <div class="row-fluid">
                 <div class="span12">
@@ -77,14 +113,15 @@
                         <button data-target="#step2" class="btn btn-primary btn-large activate">{t}Previous{/t}</button>
                     </div>
                     <div class="pull-right">
-                        <a href="/admin">{t}Skip tour{/t}</a>
+                        <a href="{url name='admin_getting_started_finish'}">{t}Skip tour{/t}</a>
                         <button data-target="#step4" class="btn btn-primary btn-large activate">{t}Next{/t}</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row-fluid wizard-content" id="step4">
+
+    <div class="row-fluid wizard-content" id="step5">
         <div class="span12">
             <div class="row-fluid">
                 <div class="span12">
