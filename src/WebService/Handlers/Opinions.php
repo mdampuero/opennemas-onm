@@ -11,14 +11,17 @@ class Opinions
     {
         $this->validateInt($id);
 
+        $er = getService('entity_repository');
+
         // Resolve dirty Id
         $opinionId = Content::resolveID($id);
 
         // Load opinion
-        $opinion = new Opinion($opinionId);
+        $opinion = $er->find('Opinion', $opinionId);
 
         // Get author information
-        $author = new User($opinion->fk_author);
+        $ur = getService('user_repository');
+        $author = $ur->find($opinion->fk_author);
         $opinion->author = $author;
 
         // Get author name slug
@@ -43,7 +46,9 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = new Opinion($id);
+        $er = getService('entity_repository');
+
+        $opinion = $er->find('Opinion', $id);
 
         return $opinion;
     }
@@ -53,26 +58,33 @@ class Opinions
     */
     public function editorialInHome()
     {
-        $cm = new ContentManager();
-        // Fetch last opinions from editorial
-        $editorial = $cm->find(
-            'Opinion',
-            'opinions.type_opinion=1 '.
-            'AND contents.content_status=1 '.
-            'AND contents.in_home=1 ',
-            'ORDER BY created DESC LIMIT 2'
+        $or = getService('opinion_repository');
+
+        $filters = array(
+            'in_home'        => array(array('value' => 1)),
+            'type_opinion'   => array(array('value' => 1)),
+            'content_status' => array(array('value' => 1)),
         );
 
+        $order = array(
+            'starttime' => 'DESC'
+        );
+        // Fetch last opinions from editorial
+        $editorial = $or->findBy($filters, $order, 2);
+
+        $ur = getService('user_repository');
         foreach ($editorial as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = new User(1);
-            $opinion->author->uri = 'ext'.Uri::generate(
-                'opinion_author_frontpage',
-                array(
-                    'slug' => 'editorial',
-                    'id' => 1
-                )
-            );
+            $opinion->author = $ur->find(1);
+            if (!is_null($opinion->author)) {
+                $opinion->author->uri = 'ext'.Uri::generate(
+                    'opinion_author_frontpage',
+                    array(
+                        'slug' => 'editorial',
+                        'id' => 1
+                    )
+                );
+            }
         }
 
         return $editorial;
@@ -83,26 +95,33 @@ class Opinions
     */
     public function directorInHome()
     {
-        $cm = new ContentManager();
-        // Fetch last opinions from director
-        $director = $cm->find(
-            'Opinion',
-            'opinions.type_opinion=2 '.
-            'AND contents.content_status=1 '.
-            'AND contents.in_home=1 ',
-            'ORDER BY created DESC LIMIT 2'
+        $or = getService('opinion_repository');
+
+        $filters = array(
+            'in_home'        => array(array('value' => 1)),
+            'type_opinion'   => array(array('value' => 2)),
+            'content_status' => array(array('value' => 1)),
         );
 
+        $order = array(
+            'starttime' => 'DESC'
+        );
+        // Fetch last opinions from editorial
+        $director = $or->findBy($filters, $order, 2);
+
+        $ur = getService('user_repository');
         foreach ($director as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = new User(2);
-            $opinion->author->uri = 'ext'.Uri::generate(
-                'opinion_author_frontpage',
-                array(
-                    'slug' => 'director',
-                    'id' => 2
-                )
-            );
+            $opinion->author = $ur->find(2);
+            if (!is_null($opinion->author)) {
+                $opinion->author->uri = 'ext'.Uri::generate(
+                    'opinion_author_frontpage',
+                    array(
+                        'slug' => 'director',
+                        'id' => 2
+                    )
+                );
+            }
         }
 
         return $director;
@@ -113,13 +132,20 @@ class Opinions
     */
     public function authorsInHome()
     {
-        $cm = new ContentManager();
-        // Fetch all available opinions in home of authors
-        $opinions = $cm->find(
-            'Opinion',
-            'in_home=1 and content_status=1 and type_opinion=0',
-            'ORDER BY position ASC, starttime DESC '
+        $or = getService('opinion_repository');
+
+        $filters = array(
+            'in_home'        => array(array('value' => 1)),
+            'type_opinion'   => array(array('value' => 0)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $order = array(
+            'position' => 'ASC',
+            'starttime' => 'DESC'
+        );
+        // Fetch all available opinions in home of authors
+        $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
@@ -133,13 +159,20 @@ class Opinions
     */
     public function authorsNotInHome()
     {
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $opinions = $cm->find(
-            'Opinion',
-            'in_home=0 and content_status=1 and type_opinion=0',
-            'ORDER BY created DESC '
+        $filters = array(
+            'in_home'        => array(array('value' => 0)),
+            'type_opinion'   => array(array('value' => 0)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $order = array(
+            'position' => 'ASC',
+            'starttime' => 'DESC'
+        );
+        // Fetch all available opinions in home of authors
+        $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
@@ -155,15 +188,19 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $limit ='LIMIT '.(($page-2)*ITEMS_PAGE).', '.(($page-1)*ITEMS_PAGE);
-
-        $opinions = $cm->find(
-            'Opinion',
-            'in_home=0 and content_status=1 and type_opinion=0',
-            'ORDER BY starttime DESC '.$limit
+        $filters = array(
+            'in_home'        => array(array('value' => 0)),
+            'type_opinion'   => array(array('value' => 0)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $order = array(
+            'starttime' => 'DESC'
+        );
+        // Fetch all available opinions in home of authors
+        $opinions = $or->findBy($filters, $order, 20, $page);
 
         foreach ($opinions as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
@@ -240,13 +277,15 @@ class Opinions
     */
     public function countAuthorsNotInHome()
     {
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $numOpinions = $cm->cache->count(
-            'Opinion',
-            'in_home=0 and content_status=1 and type_opinion=0',
-            'ORDER BY created DESC '
+        $filters = array(
+            'in_home'        => array(array('value' => 0)),
+            'type_opinion'   => array(array('value' => 0)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $numOpinions = $or->countBy($filters);
 
         return $numOpinions;
     }
@@ -256,13 +295,15 @@ class Opinions
     */
     public function countAuthorOpinions($id = null)
     {
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $numOpinions = $cm->cache->count(
-            'Opinion',
-            'opinions.type_opinion=0 AND opinions.fk_author='.$id.
-            ' AND contents.content_status=1'
+        $filters = array(
+            'in_home'        => array(array('value' => 0)),
+            'fk_author'      => array(array('value' => $id)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $numOpinions = $or->countBy($filters);
 
         return $numOpinions;
     }
@@ -272,12 +313,14 @@ class Opinions
     */
     public function countEditorialOpinions()
     {
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $countOpinions = $cm->cache->count(
-            'Opinion',
-            'opinions.type_opinion=1 AND contents.content_status=1'
+        $filters = array(
+            'type_opinion'   => array(array('value' => 1)),
+            'content_status' => array(array('value' => 1)),
         );
+
+        $numOpinions = $or->countBy($filters);
 
         return $numOpinions;
     }
@@ -287,13 +330,14 @@ class Opinions
     */
     public function countDirectorOpinions()
     {
-        $cm = new ContentManager();
+        $or = getService('opinion_repository');
 
-        $numOpinions = $cm->cache->count(
-            'Opinion',
-            'opinions.type_opinion=2 AND contents.content_status=1'
+        $filters = array(
+            'type_opinion'   => array(array('value' => 2)),
+            'content_status' => array(array('value' => 1)),
         );
 
+        $numOpinions = $or->countBy($filters);
         return $numOpinions;
     }
 
@@ -304,30 +348,33 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = new Opinion($id);
+        $er = getService('entity_repository');
+        $opinion = $er->find('Opinion', $id);
 
+        $filters = array();
         if ($opinion->type_opinion == 1) {
-            $where=' opinions.type_opinion = 1';
-            $opinion->name ='Editorial';
+            $filters['type_opinion'] = array(array('value' => 1));
         } elseif ($opinion->type_opinion == 2) {
-            $where=' opinions.type_opinion = 2';
-            $opinion->name ='Director';
+            $filters['type_opinion'] = array(array('value' => 2));
         } else {
-            $where=' opinions.fk_author='.($opinion->fk_author);
+            $filters['type_opinion'] = array(array('value' => 0));
+            $filters['fk_author'] = array(array('value' => $opinion->fk_author));
         }
 
-        $cm = new ContentManager();
-        $otherOpinions = $cm->cache->find(
-            'Opinion',
-            $where.' AND `pk_opinion` <> '.$id.' AND content_status = 1',
-            ' ORDER BY created DESC LIMIT 0,9'
+        $or = getService('opinion_repository');
+        $filters['pk_opinion']     = array(array('value' => $id, 'operator' => '<>'));
+        $filters['content_status'] = array(array('value' => 1));
+
+        $order = array(
+            'starttime' => 'DESC'
         );
+        // Fetch all available opinions in home of authors
+        $otherOpinions = $or->findBy($filters, $order, 9);
 
         foreach ($otherOpinions as &$otherOpinion) {
             $otherOpinion->author_name_slug  = $opinion->author_name_slug;
             $otherOpinion->uri = 'ext'.$otherOpinion->uri;
         }
-
 
         return $otherOpinions;
     }
@@ -339,19 +386,21 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = new Opinion($id);
+        $er = getService('entity_repository');
 
-        $machineSearcher = $this->restler->container->get('automatic_contents');
+        // Load opinion
+        $opinion = $er->find('Opinion', $id);
 
-        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
+        $machineSuggestedContents = getService('automatic_contents')->searchSuggestedContents(
             'opinion',
             " pk_content <>".$opinion->id,
             4
         );
 
-        foreach ($suggestedContents as &$element) {
+        foreach ($machineSuggestedContents as &$element) {
             $origElem = $element;
-            $element = new Opinion($origElem['pk_content']);
+            // Load opinion
+            $element = $er->find('Opinion', $origElem['pk_content']);
             if (!empty($element->author)) {
                 $origElem['author_name'] = $element->author;
                 $origElem['author_name_slug'] = StringUtils::get_title($element->author);
@@ -369,7 +418,7 @@ class Opinions
             );
         }
 
-        return $suggestedContents;
+        return $machineSuggestedContents;
     }
 
     private function validateInt($number)

@@ -69,8 +69,8 @@ class Agency
     {
         $this->validateInt($id);
 
-        $cm  = new \ContentManager();
-        $article = new \Article($id);
+        $er = getService('entity_repository');
+        $article = $er->find('Article', $id);
 
         if (is_null($article->id)) {
             throw new RestException(400, 'parameter is not valid');
@@ -90,7 +90,7 @@ class Agency
         $imageInnerId = $article->img2;
 
         if (!empty($imageId)) {
-            $image = $this->cm->find('Photo', 'pk_content = '.$imageId);
+            $image = $er->find('Photo', $imageId);
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
             // Add DateTime with format Y-m-d H:i:s
@@ -102,7 +102,7 @@ class Agency
         }
 
         if (!empty($imageInnerId)) {
-            $image = $this->cm->find('Photo', 'pk_content = '.$imageInnerId);
+            $image = $er->find('Photo', $imageInnerId);
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
             // Add DateTime with format Y-m-d H:i:s
@@ -114,10 +114,11 @@ class Agency
         }
 
         // Get author obj
-        $article->author = new \User($article->fk_author);
+        $ur = getService('user_repository');
+        $article->author = $ur->find($article->fk_author);
 
         // Get author photo
-        $authorPhoto = new \Photo($article->author->avatar_img_id);
+        $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
         $article->author->photo = $authorPhoto;
         $article->author = json_encode($article->author);
 

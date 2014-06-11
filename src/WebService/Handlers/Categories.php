@@ -56,7 +56,7 @@ class Categories
     public function object($categoryName)
     {
         // Get category object
-        $categoryManager = $this->restler->container->get('category_repository');
+        $categoryManager = getService('category_repository');
         $category = $categoryManager->findBy(
             array('name' => array(array('value' => $categoryName))),
             '1'
