@@ -11,7 +11,10 @@ class Videos
     {
         $this->validateInt(func_get_args());
 
-        $videoInt = new Video($id);
+        $er = getService('entity_repository');
+
+        // Load video
+        $videoInt = $er->find('Video', $id);
 
         return $videoInt;
     }

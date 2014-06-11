@@ -30,9 +30,7 @@ class Frontpages
             }
 
             $cm = new ContentManager;
-
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
             // Filter articles if some of them has time scheduling and sort them by position
             $contentsInHomepage = $cm->getInTime($contentsInHomepage);
             $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
@@ -46,13 +44,13 @@ class Frontpages
             }
 
             if (count($imageIdsList) > 0) {
-                $em = getService('entity_repository');
+                $er = getService('entity_repository');
                 $order = array('created' => 'DESC');
                 $imgFilters = array(
                     'content_type_name' => array(array('value' => 'photo')),
                     'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
                 );
-                $imageList = $em->findBy($imgFilters, $order);
+                $imageList = $er->findBy($imgFilters, $order);
             } else {
                 $imageList = array();
             }
@@ -114,7 +112,7 @@ class Frontpages
     public function allContentBlog($categoryName, $page = 1)
     {
         // Get category object
-        $categoryManager = $this->restler->container->get('category_repository');
+        $categoryManager = getService('category_repository');
         $category = $categoryManager->findBy(
             array('name' => array(array('value' => $categoryName))),
             '1'
@@ -136,9 +134,9 @@ class Frontpages
         );
 
         // Get all articles for this page
-        $em            = getService('entity_repository');
-        $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
-        $countArticles = $em->countBy($filters);
+        $er            = getService('entity_repository');
+        $articles      = $er->findBy($filters, $order, $itemsPerPage, $page);
+        $countArticles = $er->countBy($filters);
 
         $imageIdsList = array();
         foreach ($articles as $content) {
@@ -153,7 +151,7 @@ class Frontpages
                 'content_type_name' => array(array('value' => 'photo')),
                 'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
             );
-            $imageList = $em->findBy($imgFilters, $order);
+            $imageList = $er->findBy($imgFilters, $order);
         } else {
             $imageList = array();
         }
@@ -188,7 +186,7 @@ class Frontpages
         }
 
         // Get url generator
-        $generator = $this->restler->container->get('router');
+        $generator = getService('router');
 
         // Set pagination
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
