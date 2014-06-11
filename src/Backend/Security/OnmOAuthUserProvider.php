@@ -8,37 +8,42 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class OnmOAuthUserProvider extends BaseOAuthUserProvider
 {
-
-    protected $admins;
+    protected $cache;
+    protected $container;
     protected $session;
-    protected $doctrine;
 
     /**
      * Creates a new OAuthUserProvider
      *
      * @param $session
-     * @param $doctrine
      * @param $service_container
      */
-    public function __construct($session, $service_container)
+    public function __construct($cache, $session, $service_container)
     {
-        $this->session = $session;
-        // $this->doctrine = $doctrine;
+        $this->cache     = $cache;
+        $this->session   = $session;
         $this->container = $service_container;
     }
 
     /**
      * Returns an user by the given username.
      *
-     * @param string $username   User's email.
-     *
+     * @param  string $username User's email.
      * @return User
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->doctrine->getManager()
-            ->getRepository('ModelBundle:User')
-            ->findOneByEmail($username);
+        $user = $this->container->get('user_repository')
+            ->findBy(
+                array(
+                    'username' => array(
+                        array('value' => $username)
+                    )
+                ),
+                array('username' => 'asc'),
+                1,
+                0
+            );
 
         if ($user) {
             return $user;
@@ -52,8 +57,7 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
     /**
      * Returns an user basing on the oauth response.
      *
-     * @param UserResponseInterface $response   Response from the server.
-     *
+     * @param  UserResponseInterface $response Response from the server.
      * @return User
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
@@ -61,93 +65,48 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         // Data from Google response
         $avatar   = $response->getProfilePicture();
         $email    = $response->getEmail();
-        $userId   = $response->getUsername(); /* An ID like: 112259658235204980084 */
+        $userId   = $response->getUsername();
         $realname = $response->getRealName();
         $token    = $response->getAccessToken();
+        $resource = $response->getResourceOwner()->getName();
 
-        // Check if this user already exists in DB
-        $em   = $this->doctrine->getManager();
-        $user = $em->getRepository('ModelBundle:User')->findOneByEmail($email);
+        $user = null;
+        if ($this->container->get('security.context')->getToken() &&
+            $this->container->get('security.context')->getToken()->getUser()
+        ) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
 
-        if (!$user) {
-            // Create user with basic data
-            $user = new User();
-            $user->setName($realname);
-            $user->setType(2);
-            $user->setEmail($email);
-            $user->setCreatedAt(new \DateTime('now'));
-            $em->persist($user);
-            $em->flush();
+            // Connect accounts
+            $user->setMeta(array($resource . '_email' => $email));
+            $user->setMeta(array($resource . '_id' => $userId));
+            $user->setMeta(array($resource . '_realname' => $realname));
+            $user->setMeta(array($resource . '_token' => $token));
 
-            // Set slug
-            $user->setSlug(
-                StringUtils::slugify($user->getId() . '-' . $user->getName())
+            $this->cache->delete('user_' . $user->id);
+        } else {
+            // Log in
+            $user = $this->container->get('user_repository')->findByUserMeta(
+                array(
+                    'meta_key' => array(
+                        array('value' => $resource . '_id')
+                    ),
+                    'meta_value' => array(
+                        array('value' => $userId)
+                    )
+                ),
+                array('username' => 'asc'),
+                1,
+                0
             );
 
-            $em->flush();
+            $user = array_pop($user);
         }
 
-        // Update picture only if it hasn't got one.
-        if (!$user->getPicture()) {
-            $user->setPicture($avatar);
-        }
-
-        // Enable user account
-        $meta = $user->getMeta('email_checked');
-        if (!count($meta)) {
-            $meta = new UserMeta();
-            $meta->setUser($user);
-            $meta->setName('email_checked');
-            $meta->setValue(1);
-            $em->persist($meta);
-        } else {
-            $meta = $meta->first();
-        }
-
-        $meta->setValue(1);
-        $em->flush();
-
-        // Add resource owner user id to database.
-        $userIdMeta = $response->getResourceOwner()->getName() . '_id';
-        $meta = $user->getMeta($userIdMeta);
-        if (!count($meta)) {
-            $meta = new UserMeta();
-            $meta->setUser($user);
-            $meta->setName($userIdMeta);
-            $meta->setValue($userId);
-            $em->persist($meta);
-            $em->flush();
-        } else {
-            $meta = $meta->first();
-            $meta->setValue($userId);
-            $em->flush();
-        }
-
-        $userTokenMeta = $response->getResourceOwner()->getName() . '_token';
-        $meta = $user->getMeta($userTokenMeta);
-        if (!count($meta)) {
-            $meta = new UserMeta();
-            $meta->setUser($user);
-            $meta->setName($userTokenMeta);
-            $meta->setValue($token);
-            $em->persist($meta);
-            $em->flush();
-        } else {
-            $meta = $meta->first();
-            $meta->setValue($token);
-            $em->flush();
-        }
-
-        $user->setUpdatedAt(new \DateTime('now'));
-        $em->flush();
-
-        $em->refresh($user);
-
-        return $this->loadUserByUsername($email);
+        return $user;
     }
 
     public function supportsClass($class)
     {
-        return $class === 'Common\\ModelBundle\\Entity\\User';
+        return $class === 'User';
     }
 }

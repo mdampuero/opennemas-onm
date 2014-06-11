@@ -8,7 +8,7 @@ services:
         arguments: [ '@security.context', '@router', '@session' ]
     onm_oauth_user_provider:
         class:     %onm_oauth_user_provider.class%
-        arguments: [@session, @service_container]
+        arguments: [ @cache, @session, @service_container]
     onm_password_encoder:
         class:     Backend\Security\OnmPasswordEncoder
     onm_user_provider:
