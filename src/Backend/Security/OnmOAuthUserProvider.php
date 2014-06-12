@@ -105,6 +105,12 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         return $user;
     }
 
+    /**
+     * Whether this provider supports the given user class
+     *
+     * @param  string  $class
+     * @return boolean
+     */
     public function supportsClass($class)
     {
         return $class === 'User';
