@@ -52,10 +52,10 @@
                 <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                 <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                <span class="social-network-login" data-url="{{hwi_oauth_login_url('facebook')}}">
+                <span class="social-network-login" data-url="{hwi_oauth_authorization_url name=facebook}">
                     <i class="icon-facebook"></i>
                 </span>
-                <span class="social-network-login" data-url="{{hwi_oauth_login_url('twitter')}}">
+                <span class="social-network-login" data-url="{hwi_oauth_authorization_url name=twitter}">
                     <i class="icon-twitter"></i>
                 </span>
                 {if $failed_login_attempts >= 3}

@@ -96,7 +96,7 @@
             </div>
             <div class="row-fluid">
                 <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{{hwi_oauth_login_url('facebook')}}" type="button">
+                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=facebook}" type="button">
                         {if $facebook}
                             <i class="icon-ok"></i>
                         {else}
@@ -106,7 +106,7 @@
                     </button>
                 </div>
                 <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{{hwi_oauth_login_url('twitter')}}" type="button">
+                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=twitter}" type="button">
                         {if $twitter}
                             <i class="icon-ok"></i>
                         {else}
