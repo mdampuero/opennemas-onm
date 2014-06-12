@@ -139,6 +139,7 @@ class SitemapController extends Controller
             $articlesByCategory = array();
             $maxArticlesByCategory = floor(900 / count($this->availableCategories));
 
+            $er = getService('entity_repository');
             // Foreach available category and retrieve articles from 700 days ago
             foreach ($this->availableCategories as $category) {
                 if ($category->inmenu == 1
@@ -152,6 +153,15 @@ class SitemapController extends Controller
                     );
                     $articlesByCategory[$category->name] =
                         $this->cm->getInTime($articlesByCategory[$category->name]);
+
+                    foreach ($articlesByCategory[$category->name] as &$value) {
+                        $aux = $er->find('Article', $value['pk_content']);
+                        if (!empty($aux->img1)) {
+                            $value['image_path'] = \Photo::getPhotoPath($aux->img1);
+                        } elseif (!empty($aux->img2)) {
+                            $value['image_path'] = \Photo::getPhotoPath($aux->img2);
+                        }
+                    }
                 }
             }
 
