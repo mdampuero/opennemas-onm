@@ -90,7 +90,7 @@ class Agency
         $imageInnerId = $article->img2;
 
         if (!empty($imageId)) {
-            $image = $er->find('Photo', $imageId);
+            $image[] = $er->find('Photo', $imageId);
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
             // Add DateTime with format Y-m-d H:i:s
@@ -102,7 +102,7 @@ class Agency
         }
 
         if (!empty($imageInnerId)) {
-            $image = $er->find('Photo', $imageInnerId);
+            $image[] = $er->find('Photo', $imageInnerId);
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
             // Add DateTime with format Y-m-d H:i:s
