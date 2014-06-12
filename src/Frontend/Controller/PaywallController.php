@@ -771,7 +771,6 @@ class PaywallController extends Controller
                 )
             );
         }
-
     }
 
     /**
@@ -803,7 +802,6 @@ class PaywallController extends Controller
     public function ipnPaymentAction(Request $request)
     {
         return $this->redirect($this->generateUrl(''));
-        // var_dump('IPN_PAYMENT_ACTION', $request);die();
     }
 
     /**

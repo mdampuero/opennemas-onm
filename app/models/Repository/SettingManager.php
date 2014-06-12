@@ -50,7 +50,7 @@ class SettingManager extends BaseManager
                     return false;
                 }
 
-                if ($rs === null && !is_null($default)) {
+                if ($rs === null && empty($rs) && !is_null($default)) {
                     $settingValue = $default;
                 } else {
                     $settingValue = unserialize($rs);
@@ -119,7 +119,7 @@ class SettingManager extends BaseManager
      * Invalidates the cache for a setting from its name.
      *
      * @param string $settingName  the name of the setting.
-     * @param string $instanceName the name of the instance.
+     * @param string $cachePrefix the name of the instance.
      *
      * @return boolean true if the setting cache was invalidated.
      */

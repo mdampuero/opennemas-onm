@@ -55,7 +55,6 @@ EOF
         $cache->setNamespace($instance->internal_name);
 
         // Initialize the instance database connection
-        $databaseName               = $instance->getDatabaseName();
         $databaseInstanceConnection = $this->getContainer()->get('db_conn');
 
         // CRAP: take this out, Workaround
@@ -134,7 +133,7 @@ EOF
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
             $newFile = $basePath.$category_name.".html";
-            $result  = file_put_contents($newFile, $htmlOut);
+            file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);
         }

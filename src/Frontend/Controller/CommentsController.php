@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for comments
+ * Defines the frontend controller for the comment content type
  *
  * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -26,16 +26,6 @@ use Onm\Settings as s;
  **/
 class CommentsController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
     /**
      * Returns the list of comments for a given content id
      *
@@ -71,6 +61,7 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
+            $this->view = new \Template(TEMPLATE_USER);
             $output = $this->renderView(
                 'comments/loader.tpl',
                 array(
@@ -121,6 +112,7 @@ class CommentsController extends Controller
                 $comment->votes = $vote;
             }
 
+            $this->view = new \Template(TEMPLATE_USER);
             $contents = $this->renderView(
                 'comments/partials/comment_element.tpl',
                 array(
@@ -235,12 +227,12 @@ class CommentsController extends Controller
                 $message = _('Your comment was rejected due insults usage.');
             } else {
                 try {
-                    $data          = array(
+                    $data = array(
                         'content_id'   => $contentId,
                         'body'         => $body,
                         'author'       => $authorName,
                         'author_email' => $authorEmail,
-                        'author_ip'    => $ip,
+                        'author_ip'    => $ip
                     );
                     $data = array_map('strip_tags', $data);
 

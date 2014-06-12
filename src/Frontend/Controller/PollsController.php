@@ -167,7 +167,7 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $poll = new \Poll($pollId);
+        $poll = $this->get('entity_repository')->find('Poll', $pollId);
 
         if (empty($poll->id)) {
             throw new ResourceNotFoundException();
@@ -260,7 +260,7 @@ class PollsController extends Controller
         if (is_null($pollId)) {
             throw new ResourceNotFoundException();
         }
-        $poll = new \Poll($pollId);
+        $poll = $this->get('entity_repository')->find('Poll', $pollId);
 
         if (empty($poll->id)) {
             throw new ResourceNotFoundException();

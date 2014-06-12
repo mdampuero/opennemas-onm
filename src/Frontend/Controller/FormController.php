@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for newsletter subscriptions
+ * Defines the frontend controller for the form reception
  *
  * @package Frontend_Controllers
  **/
@@ -29,21 +29,7 @@ use Onm\Settings as s;
 class FormController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        require_once 'recaptchalib.php';
-
-        \Frontend\Controller\StaticPagesController::getAds();
-    }
-
-    /**
-     * Description of the action
+     * Shows the form page
      *
      * @param Request $request the request object
      *
@@ -51,7 +37,14 @@ class FormController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        return $this->render('static_pages/form.tpl');
+        $this->view = new \Template(TEMPLATE_USER);
+
+        return $this->render(
+            'static_pages/form.tpl',
+            array(
+                'advertisements' => \Frontend\Controller\StaticPagesController::getAds()
+            )
+        );
     }
 
     /**
@@ -67,10 +60,17 @@ class FormController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
+
+        require_once 'recaptchalib.php';
+
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
 
         // Get request params
+        $name             = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+        $subject          = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
+        $recipient        = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
         $verify           = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
         $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
         $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
@@ -91,10 +91,8 @@ class FormController extends Controller
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
-
                 // Correct CAPTCHA, bad mail and name empty
                 $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
-
 
                 if (empty($email)) {
                     $message = _(
@@ -107,23 +105,18 @@ class FormController extends Controller
                     // Correct CAPTCHA, correct mail and name not empty
                     // check data form is correcty and serialize form
                     $body ='';
-                    $notAllowed = array("subject", "cx", "security_code", "submit",
-                        "recaptcha_challenge_field", "recaptcha_response_field");
+                    $notAllowed = array(
+                        "subject", "cx", "security_code", "submit",
+                        "recaptcha_challenge_field", "recaptcha_response_field"
+                    );
                     foreach ($request->request as $key => $value) {
                         if (!in_array($key, $notAllowed)) {
                             $body .= "<p>$key => $value </p> \n";
                         }
                     }
 
-                    $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-                    $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-                    $recipient = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
+                    $mailSender = s::get('mail_sender', "no-reply@postman.opennemas.com");
 
-
-                    $mailSender = s::get('mail_sender');
-                    if (empty($mailSender)) {
-                        $mailSender = "no-reply@postman.opennemas.com";
-                    }
                     //  Build the message
                     $text = \Swift_Message::newInstance();
                     $text
@@ -134,16 +127,16 @@ class FormController extends Controller
                         ->setSender(array($mailSender => s::get('site_name')));
 
                     if (isset($_FILES['image1']) && !empty($_FILES['image1']["name"])) {
-                        $file = $_FILES["image1"]["tmp_name"];
+                        $file     = $_FILES["image1"]["tmp_name"];
                         $filename = $_FILES["image1"]["name"];
-                        $type =$_FILES["image1"]["type"];
+                        $type     = $_FILES["image1"]["type"];
                         $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
 
                     }
                     if (isset($_FILES['image2']) && !empty($_FILES['image2']["name"])) {
-                        $file = $_FILES["image2"]["tmp_name"];
+                        $file     = $_FILES["image2"]["tmp_name"];
                         $filename = $_FILES["image2"]["name"];
-                        $type =$_FILES["image2"]["type"];
+                        $type     = $_FILES["image2"]["type"];
                         $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
                     }
 
@@ -152,12 +145,13 @@ class FormController extends Controller
                         $mailer->send($text);
 
                         $action = new \Action();
-                        $action->set(array('action_name'=>'form_1','counter'=>1));
+                        $action->set(array(
+                            'action_name' => 'form_1',
+                            'counter'     => 1
+                        ));
 
                         $message = _("The information has been sent");
-
                         $class   = 'success';
-
                     } catch (\Swift_SwiftException $e) {
                         $message = _(
                             "Sorry, we were unable to complete your request.\n"
@@ -165,8 +159,6 @@ class FormController extends Controller
                         );
                         $class = 'error';
                     }
-
-
                 }
             }
         }

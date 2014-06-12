@@ -23,8 +23,9 @@ class MaintenanceController extends Controller
     /**
      * Shows the maintenance mode page
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return string the response string
-     **/
+     */
     public function defaultAction(Request $request)
     {
         $preferedLanguage = $request->getPreferredLanguage();

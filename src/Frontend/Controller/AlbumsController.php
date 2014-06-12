@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for frontend albums
+ * Defines the frontend controller for the album content type
  *
  * @package Frontend_Controllers
  **/
@@ -13,7 +13,6 @@
  * file that was distributed with this source code.
  **/
 namespace Frontend\Controller;
-
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -88,18 +87,19 @@ class AlbumsController extends Controller
      * Renders the album frontpage.
      *
      * @param  Request  $request The request object.
+     *
      * @return Response          The response object.
      */
     public function frontpageAction(Request $request)
     {
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
+        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
            || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
@@ -192,13 +192,14 @@ class AlbumsController extends Controller
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
-
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
-            // Get the album from the id and increment the numviews for it
-            $album = new \Album($albumID);
+            // Get the album from the id
+            $album = $this->get('entity_repository')->find('Album', $albumID);
+
+            // Show the album only if it is properly published
             if (($album->content_status == 1) && ($album->in_litter == 0)) {
                 $this->view->assign('album', $album);
                 $album->with_comment = 1;
@@ -211,21 +212,19 @@ class AlbumsController extends Controller
                 $otherAlbums = $this->cm->find(
                     'Album',
                     'content_status=1 AND pk_content !='.$albumID
-                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
-                    . $days . ' DAY) ',
+                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
                 );
 
                 foreach ($otherAlbums as &$content) {
-                    $content->cover_image    = new \Photo($content->cover_id);
+                    $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
                     $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
                     $content->category_name  = $content->loadCategoryName($content->id);
                     $content->category_title = $content->loadCategoryTitle($content->id);
                 }
 
                 // Fetch album author
-                $ur = getService('user_repository');
-                $album->author = $ur->find($album->fk_author);
+                $album->author = $this->get('user_repository')->find($album->fk_author);
 
                 // Load category and photos
                 $album->category_name  = $album->loadCategoryName($album->id);
@@ -282,12 +281,12 @@ class AlbumsController extends Controller
         }
 
         // Get the album from the id and increment the numviews for it
-        $album = new \Album($albumID);
+        $album = $this->get('entity_repository')->find('Album', $albumID);
 
         $album->category_name  = $album->loadCategoryName($album->id);
         $album->category_title = $album->loadCategoryTitle($album->id);
-        $_albumArray           = $album->_getAttachedPhotos($album->id);
-        $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
+        $albumPhotos           = $album->_getAttachedPhotos($album->id);
+        $albumPhotosPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
         if (count($_albumArrayPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);
@@ -296,8 +295,8 @@ class AlbumsController extends Controller
         return $this->render(
             'album/partials/_gallery_thumbs.tpl',
             array(
-                'album_photos'       => $_albumArray,
-                'album_photos_paged' => $_albumArrayPaged,
+                'album_photos'       => $albumPhotos,
+                'album_photos_paged' => $albumPhotosPaged,
                 'page'               => $page,
                 'items_page'         => $itemsPage,
                 'album'              => $album,
@@ -305,7 +304,6 @@ class AlbumsController extends Controller
         );
 
     }
-
 
     /**
      * Returns via ajax the albums of the category in a page
@@ -336,9 +334,9 @@ class AlbumsController extends Controller
             $filters['category_name'] = array(array('value' => $category->name));
         }
 
-        $em          = $this->get('entity_repository');
+        $em           = $this->get('entity_repository');
         $othersAlbums = $em->findBy($filters, $order, $totalAlbumMoreFrontpage, $this->page);
-        $countAlbums = $em->countBy($filters);
+        $countAlbums  = $em->countBy($filters);
 
         if ($countAlbums == 0) {
             return new RedirectResponse(
@@ -368,7 +366,6 @@ class AlbumsController extends Controller
                 'pagination'         => $pagination,
             )
         );
-
     }
 
     /**

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the frontend mobile bundle
+ *
+ * @package FrontendMobile
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -11,6 +16,11 @@ namespace FrontendMobile;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Initializes the FrontendMobileBundle
+ *
+ * @package FrontendMobile
+ **/
 class FrontendMobileBundle extends Bundle
 {
 }

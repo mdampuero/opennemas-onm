@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for advertisements
+ * Defines the frontend controller for the advertisement content type
  *
  * @package Frontend_Controllers
  **/
@@ -21,22 +21,12 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Defines the frontend controller for the advertisement content type
  *
  * @package Frontend_Controllers
  **/
 class AdvertisementController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
     /**
      * Displays an advertisement given its id
      *
@@ -48,11 +38,10 @@ class AdvertisementController extends Controller
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
-        $er = $this->get('entity_repository');
-
-        $advertisement = $er->find('Advertisement', $id);
+        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
 
         // Returns the HTML for the add and a header to varnish
+        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'ads/advertisement.tpl',
             array(
@@ -64,7 +53,7 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * Redirects the user to the target url defined by an advertisement
+     * Redirects the user to the target URL defined by an advertisement
      *
      * @param Request $request the request object
      *

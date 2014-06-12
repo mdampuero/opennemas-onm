@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for newslibrary
+ * Defines the frontend controller for the content archives
  *
  * @package Frontend_Controllers
  **/
@@ -30,31 +30,7 @@ use Onm\Settings as s;
 class ArchiveController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->ccm = new \ContentCategoryManager();
-        $this->request = $this->get('request');
-        $today = new \DateTime();
-        $today->modify('-1 day');
-        // Fetch HTTP variables
-        $this->categoryName  = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $this->page          = $this->request->query->getDigits('page', 1);
-        $this->year          = $this->request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
-        $this->month         = $this->request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
-        $this->day           = $this->request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-    }
-
-
-    /**
-     * Get newslibrary from content table in database
+     * Get news library from content table in database
      *
      * @param Request $request the request object
      *
@@ -62,15 +38,25 @@ class ArchiveController extends Controller
      **/
     public function archiveAction(Request $request)
     {
-        $this->view->setConfig('newslibrary');
-        $date = "{$this->year}-{$this->month}-{$this->day}";
-        $cacheID = $this->view->generateCacheId($date, '', $this->page);
+        $today = new \DateTime();
+        $today->modify('-1 day');
 
+        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+
+        $view = new \Template(TEMPLATE_USER);
+        $view->setConfig('newslibrary');
+
+        $date = "{$year}-{$month}-{$day}";
+
+        $cacheID = $this->view->generateCacheId($date, '', $page);
         if (($this->view->caching == 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-
             $cm = new \ContentManager();
+            $this->ccm = new \ContentCategoryManager();
             $allCategories = $this->ccm->categories;
 
             $library  = array();
@@ -91,7 +77,8 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-        // $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'archive/archive.tpl',
@@ -108,24 +95,34 @@ class ArchiveController extends Controller
      *
      * @return Response the response object
      **/
-    public function archiveCategoryAction()
+    public function archiveCategoryAction(Request $request)
     {
+        $today = new \DateTime();
+        $today->modify('-1 day');
+        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $page          = $request->query->getDigits('page', 1);
+        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        if (empty($this->categoryName) || ($this->categoryName == 'home')) {
+        $this->ccm = new \ContentCategoryManager();
+        if (empty($categoryName) || ($categoryName == 'home')) {
             $categoryID = 0;
-            $this->categoryName = 'home';
         } else {
-            $categoryID = $this->ccm->get_id($this->categoryName);
+            $categoryID = $this->ccm->get_id($categoryName);
         }
 
-        $date = "{$this->year}-{$this->month}-{$this->day}";
+        $date = "{$year}-{$month}-{$day}";
+
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('newslibrary');
-        $cacheID = $this->view->generateCacheId($date.'_'.$this->categoryName, '', $this->page);
 
+        $cacheID = $this->view->generateCacheId($date.'_'.$categoryName, '', $page);
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('archive/archive.tpl', $cacheID))) {
+           || (!$this->view->isCached('archive/archive.tpl', $cacheID))
+        ) {
 
-             $cm = new \ContentManager();
+            $cm = new \ContentManager();
 
             $library  = array();
             $library[$categoryID] = new \stdClass();
@@ -134,7 +131,7 @@ class ArchiveController extends Controller
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $library[$categoryID]->id         = $categoryID;
-                    $library[$categoryID]->title      = $this->categoryName;
+                    $library[$categoryID]->title      = $categoryName;
                     $library[$categoryID]->contents[] = $content;
                 }
             }
@@ -142,13 +139,14 @@ class ArchiveController extends Controller
             $this->view->assign('library', $library);
         }
 
-        // $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'archive/archive.tpl',
             array(
                 'cache_id' => $cacheID,
-                'category_name'   => $this->categoryName,
+                'category_name'   => $categoryName,
                 'actual_category' => 'archive',
                 'newslibraryDate' => $date,
             )
@@ -158,19 +156,28 @@ class ArchiveController extends Controller
     /**
      * Get frontpage version from file
      *
+     * "/archive/content/yyyy/mm/dd"
+     * "/archive/content/yyyy/mm/dd/category.html"
+     *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
-    public function digitalFrontpageAction()
+    public function digitalFrontpageAction(Request $request)
     {
+        $today = new \DateTime();
+        $today->modify('-1 day');
+        $year  = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $categoryName  = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        $path = "{$this->year}/{$this->month}/{$this->day}";
+        $path = "{$year}/{$month}/{$day}";
         $html = '';
-        $file = MEDIA_PATH."/library/{$path}/{$this->categoryName}.html";
-        //"/archive/content/yyyy/mm/dd"
-        //"/archive/content/yyyy/mm/dd/category.html"
+        $file = MEDIA_PATH."/library/{$path}/{$categoryName}.html";
         $url = "/archive/content/{$path}/";
         if (file_exists($file) && is_readable($file)) {
-            $html = file_get_contents(SITE_URL.INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
+            $html = file_get_contents(SITE_URL.INSTANCE_MEDIA."library/{$path}/{$categoryName}.html");
         } else {
             return new RedirectResponse($url, 301);
             //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
@@ -178,7 +185,6 @@ class ArchiveController extends Controller
 
         if (empty($html)) {
             return new RedirectResponse($url, 301);
-            //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         return new Response($html);
@@ -187,7 +193,7 @@ class ArchiveController extends Controller
     /**
      * Returns the advertisements for the archive template
      *
-     * @return void
+     * @return array the list of advertisement objects
      **/
     public function getAds()
     {

@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class PlaygroundController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-    }
-
-    /**
      * Dispatches the actions through the rest of methods in this class
      *
      * @param Request $request the request object
