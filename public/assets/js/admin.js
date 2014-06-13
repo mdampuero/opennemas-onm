@@ -60,26 +60,6 @@ $(document).ready(function () {
         form.submit();
     });
 
-    $('.social-network-login').on('click', function(e) {
-        var redirect = $('[name=_referer]').val();
-        var btn = $(this);
-        var win = window.open(
-            $(this).data('url'),
-            $(this).attr('id'),
-            'height=400, width=400'
-        );
-
-        var interval = window.setInterval(function() {
-            if (win == null || win.closed) {
-                window.clearInterval(interval);
-
-                if (win.success) {
-                    window.location.href = redirect;
-                }
-            }
-        }, 1000);
-    });
-
     $('.social-network-connect').on('click', function(e) {
         var btn = $(this);
         var win = window.open(
