@@ -38,13 +38,16 @@ class Agency
 
         $timeLimit = date('Y-m-d H:i:s', time() - $until);
 
-        // Get articles by time limit
-        $articles = $this->cm->find(
-            'Article',
-            'fk_content_type=1 AND content_status=1 AND '.
-            'created >= \''.$timeLimit.'\'',
-            ' ORDER BY created DESC'
+        $er = getService('entity_repository');
+
+        $criteria = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'fk_content_type'   => array(array('value' => 1)),
+            'content_status'    => array(array('value' => 1)),
+            'created'           => array(array('value' => $timeLimit, 'operator' => '>=')),
         );
+
+        $articles = $er->findBy($criteria, 'created DESC');
 
         $tpl = new \TemplateAdmin('admin');
 
