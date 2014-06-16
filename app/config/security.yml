@@ -62,7 +62,7 @@ security:
                     facebook: "/admin/login/check-facebook"
                     twitter:  "/admin/login/check-twitter"
                 login_path: admin_login
-                default_target_path: admin_welcome
+                default_target_path: admin_login_callback
                 check_path: admin_login_check
                 use_forward: false
                 failure_path: admin_login

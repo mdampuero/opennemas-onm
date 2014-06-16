@@ -1059,9 +1059,9 @@ admin_login_check:
     defaults: { _controller  : BackendBundle:Authentication:check }
     methods:  [POST]
 
-admin_login_popup:
-    path:     /login/popup
-    defaults: { _controller  : BackendBundle:Authentication:connectPopup }
+admin_login_callback:
+    path:     /login/callback
+    defaults: { _controller  : BackendBundle:Authentication:loginCallback }
 
 admin_logout:
     path:     /logout
