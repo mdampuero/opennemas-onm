@@ -81,14 +81,13 @@ class CategoryController extends Controller
 
             $imageIdsList = array();
             foreach ($articles as $content) {
-                if (isset($content->img1)) {
+                if (isset($content->img1) && !empty($content->img1)) {
                     $imageIdsList []= $content->img1;
                 }
             }
             $imageIdsList = array_unique($imageIdsList);
 
             if (count($imageIdsList) > 0) {
-                // $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
                 $imageList = $em->findBy(
                     array(
                         'content_type_name' => array(array('value' => 'photo')),
