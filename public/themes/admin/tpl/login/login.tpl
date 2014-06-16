@@ -40,36 +40,96 @@
 </head>
 <body id="loginpage">
 
-    <div id="logo">
-        <h1>OpenNeMaS</h1>
-        <div>{t}The journalism CMS{/t}</div>
-    </div>
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
 
-    <div class="form-wrapper">
-        {render_messages}
-    	<form method="post" autocomplete="off" action="{url name=admin_login_check}" id="loginform" name="loginform" class="clearfix">
-			<div class="input-wrapper">
-                <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
-                <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                <a class="social-network-login" href="{hwi_oauth_login_url name=facebook }">
-                    <i class="icon-facebook"></i>
-                </a>
-                <a class="social-network-login" href="{hwi_oauth_login_url name=twitter}">
-                    <i class="icon-twitter"></i>
-                </a>
-                {if $failed_login_attempts >= 3}
-                <div class="control-group clearfix">
-                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
-                    <noscript>
-                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
-                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-                    </noscript>
+                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a><div class="nav-collapse collapse navbar-inverse-collapse">
+                <ul class="nav pull-left">
+                    <li>
+                        <a href="http://www.opennemas.com">{t}The CMS for journalism{/t}</a>
+                    </li>
+                </ul>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        <li class="help dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-                {/if}
+            </div>
+        </div>
+    </header>
+    <div class="form-wrapper">
+        <h2>{t}Log in{/t}</h2>
+
+        {render_messages}
+
+    	<form method="post" autocomplete="off" action="{url name=admin_login_check}" id="loginform" name="loginform" class="clearfix form-horizontal">
+			<div class="input-wrapper">
+                <div class="control-group">
+                    <label class="control-label" for="_username">{t}Username or email{/t}</label>
+                    <div class="controls">
+                        <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">{t}Password{/t}</label>
+                    <div class="controls">
+                        <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        {if $failed_login_attempts >= 3}
+                        <div class="control-group clearfix">
+                            <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                            <noscript>
+                                <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                                <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                            </noscript>
+                        </div>
+                        {/if}
+
+                        <div class="submit">
+                            <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Log in{/t}</span></button>
+                            <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="or"><span class="text">{t}or{/t}</span></div>
+
+                <div class="social-network-buttons row-fluid">
+                    <a class="span6 btn" href="{hwi_oauth_login_url name=facebook}">
+                        <i class="social-icon icon-facebook"></i> Facebook
+                    </a>
+                    <a class="span6 btn" href="{hwi_oauth_login_url name=twitter}">
+                        <i class="social-icon icon-twitter"></i> Twitter
+                    </a>
+                </div>
+
                 <p class="left {if $smarty.session.failed_login_attempts >= 3}toomuchfails{/if}">
-                    <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
+
                 </p>
             </div>
             <input type="hidden" name="_token" value="{$token}">

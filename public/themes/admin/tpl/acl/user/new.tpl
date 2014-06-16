@@ -179,6 +179,7 @@ label {
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
+                <li><a href="#social" title="{t}Social Networks{/t}">{t}Social Networks{/t}</a></li>
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
                 {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
                 <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
@@ -295,6 +296,18 @@ label {
                     </fieldset>
                 </div>
             </div><!-- /personal -->
+
+            <div id="social">
+                <div class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
+                        <div class="controls">
+
+                            <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div id="settings">
                 <div class="form-horizontal">
