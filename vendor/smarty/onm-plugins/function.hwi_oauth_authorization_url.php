@@ -9,11 +9,17 @@
 function smarty_function_hwi_oauth_authorization_url($params, &$smarty)
 {
     $helper = getService('hwi_oauth.templating.helper.oauth');
+    $router = getService('router');
 
-    $redirect = array_key_exists('redirect_url', $params) ?
-        $params['redirect_url'] : null;
+    $redirect = null;
+    if (array_key_exists('redirect_url', $params)) {
+        $redirect = $router->generate($params['redirect_url'], array(), true);
+    }
 
-    $extra = array_key_exists('extra', $params) ? $params['extra'] : array();
+    $extra = array();
+    if (array_key_exists('extra', $params)) {
+        $extra = $params['extra'];
+    }
 
     return $helper->getAuthorizationUrl($params['name'], $redirect, $extra);
 }
