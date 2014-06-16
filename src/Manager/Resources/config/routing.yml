@@ -26,22 +26,6 @@ manager_instance_update:
     path: /instance/{id}/update
     defaults: { _controller:  ManagerBundle:Instances:update }
 
-manager_instance_delete:
-    path: /instance/{id}/delete
-    defaults: { _controller:  ManagerBundle:Instances:delete }
-
-manager_instance_batch_delete:
-    path: /instance/batch-delete
-    defaults: { _controller:  ManagerBundle:Instances:batchDelete }
-
-manager_instance_batch_available:
-    path: /instance/batch-available
-    defaults: { _controller:  ManagerBundle:Instances:batchAvailable }
-
-manager_instance_toggleavailable:
-    path: /instance/{id}/toggle-available
-    defaults: { _controller:  ManagerBundle:Instances:toggleAvailable }
-
 manager_framework_check_dependencies:
     path: /framework/check-dependencies
     defaults: { _controller:  ManagerBundle:FrameworkStatus:checkDependencies }
