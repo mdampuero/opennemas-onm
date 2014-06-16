@@ -120,7 +120,8 @@ class AuthenticationController extends Controller
                 'failed_login_attempts' => $failedLoginAttempts,
                 'current_language'      => $currentLanguage,
                 'token'                 => $token,
-                'referer'               => $referer
+                'referer'               => $referer,
+                'languages'             => $this->container->getParameter('available_languages')
             )
         );
     }
