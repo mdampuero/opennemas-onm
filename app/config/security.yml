@@ -47,25 +47,25 @@ security:
         backend:
             pattern:    ^/admin/*
             form_login:
-                check_path:                     admin_login_processform
-                login_path:                     admin_login_form
+                check_path:                     admin_login_check
+                login_path:                     admin_login
                 always_use_default_target_path: false
                 default_target_path:            admin_welcome
                 target_path_parameter:          _referer
                 use_referer:                    true
                 success_handler:                login_success_handler
             logout:
-                path:   /admin/logout
-                target: /admin/login
+                path:   admin_logout
+                target: admin_login
             oauth:
                 resource_owners:
                     facebook: "/admin/login/check-facebook"
                     twitter:  "/admin/login/check-twitter"
-                login_path: /admin/login
-                default_target_path: /admin
-                check_path: admin_login_processform
+                login_path: admin_login
+                default_target_path: admin_welcome
+                check_path: admin_login_check
                 use_forward: false
-                failure_path: /admin/login
+                failure_path: admin_login
                 oauth_user_provider:
                     service: onm_oauth_user_provider
 

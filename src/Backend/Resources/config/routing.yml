@@ -1050,12 +1050,12 @@ admin_utils_calculate_tags:
     defaults: { _controller  : BackendBundle:Utils:calculateTags }
 
 # Auth system routes
-admin_login_form:
+admin_login:
     path:     /login
     defaults: { _controller  : BackendBundle:Authentication:login }
 
-admin_login_processform:
-    path:     /login/process
+admin_login_check:
+    path:     /login/check
     defaults: { _controller  : BackendBundle:Authentication:check }
     methods:  [POST]
 
