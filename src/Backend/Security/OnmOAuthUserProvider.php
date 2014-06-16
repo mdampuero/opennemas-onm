@@ -18,9 +18,8 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
      * @param $session
      * @param $service_container
      */
-    public function __construct($cache, $session, $service_container)
+    public function __construct($session, $service_container)
     {
-        $this->cache     = $cache;
         $this->session   = $session;
         $this->container = $service_container;
     }
@@ -81,8 +80,6 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
             $user->setMeta(array($resource . '_id' => $userId));
             $user->setMeta(array($resource . '_realname' => $realname));
             $user->setMeta(array($resource . '_token' => $token));
-
-            $this->cache->delete('user_' . $user->id);
         } else {
             // Log in
             $user = $this->container->get('user_repository')->findByUserMeta(
@@ -103,7 +100,7 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
         }
 
         if (is_null($user) || empty($user)) {
-            throw new UsernameNotFoundException('Invalid user');
+            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
         }
 
         return $user;
