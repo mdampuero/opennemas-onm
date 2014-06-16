@@ -51,6 +51,7 @@
         "frandieguez/panorama-php": "1.0.*",
         "friendsofsymfony/jsrouting-bundle": "@stable",
         "imagine/imagine": "dev-develop",
+        "paypal/sdk-core-php": "v1.4.2",
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php": "v2.4.103",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
