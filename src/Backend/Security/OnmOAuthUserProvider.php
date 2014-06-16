@@ -102,6 +102,10 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
             $user = array_pop($user);
         }
 
+        if (is_null($user) || empty($user)) {
+            throw new UsernameNotFoundException('Invalid user');
+        }
+
         return $user;
     }
 
