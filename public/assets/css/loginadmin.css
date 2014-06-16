@@ -190,10 +190,22 @@ footer select {
         float:none;
         max-width:100%;
     }
+    .form-horizontal .input-wrapper .control-label {
+        width:100%;
+        text-align:left;
+    }
+    .form-horizontal .input-wrapper .controls {
+        width:100%;
+        margin:0;
+    }
+    .form-horizontal .submit,
+     {
+        margin-bottom:5px;
+    }
 }
 /* Media Queries for iPad Portrait and Laptop */
 @media only screen and (min-width: 768px) {
-    .form-wrapper input, .form-wrapper button[type=submit] {
+    /*.form-wrapper input, .form-wrapper button[type=submit] {
         width:200px;
-    }
+    }*/
 }
