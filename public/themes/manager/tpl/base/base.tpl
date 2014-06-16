@@ -21,6 +21,11 @@
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
     {/block}
 
     {block name="js-library"}
