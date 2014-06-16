@@ -1,5 +1,5 @@
 <div class="wizard">
-    <ul class='nav nav-wizard'>
+    <ul class="nav nav-wizard">
       <li class="active"><a href='#step1'>1. {t}Welcome{/t}</a></li>
       <li class="disabled"><a href='#step2'>2. {t}Terms of use{/t}</a></li>
       <li class="disabled"><a href="#step3">3. {t}Help{/t}</a></li>
@@ -96,7 +96,7 @@
             </div>
             <div class="row-fluid">
                 <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=facebook}" type="button">
+                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=facebook redirect_url='admin_login_popup'}" type="button">
                         {if $facebook}
                             <i class="icon-ok"></i>
                         {else}
@@ -106,7 +106,7 @@
                     </button>
                 </div>
                 <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=twitter}" type="button">
+                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{hwi_oauth_authorization_url name=twitter redirect_url='admin_login_popup'}" type="button">
                         {if $twitter}
                             <i class="icon-ok"></i>
                         {else}
