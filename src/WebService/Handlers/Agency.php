@@ -122,7 +122,11 @@ class Agency
 
         // Get author photo
         $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
-        $article->author->photo = $authorPhoto;
+        if (is_object($authorPhoto) && !empty($authorPhoto)) {
+            $article->author->photo = $authorPhoto;
+        }
+
+        // Encode author in json format
         $article->author = json_encode($article->author);
 
         $output = $tpl->fetch(
