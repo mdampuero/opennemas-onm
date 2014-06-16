@@ -146,30 +146,6 @@
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
-        <script>
-        var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
-        </script>
-        {script_tag src="/ckeditor/ckeditor.js" common=1}
-        {script_tag src="/onm/jquery.onm-editor.js" common=1}
-        <script type="text/javascript">
-        $(function() {
-            $.onmEditor({
-                language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
-            });
-
-            $('.select2').select2({
-                formatSelection: function(state) {
-                    var element = state.element;
-                    if ($(element).parents('.select2').data('label') != null) {
-                        return $(element).parents('.select2').data('label')
-                            + ': ' + state.text;
-                    }
-
-                    return state.text
-                }
-            });
-        })
-        </script>
 	{/block}
 </body>
 </html>

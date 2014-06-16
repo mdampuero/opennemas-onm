@@ -21,17 +21,6 @@
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
         {css_tag href="/loginadmin.css" media="screen" common=1}
-        <style type="text/css">
-            .form-wrapper button[type="submit"] {
-                float: none;
-                max-width: 100px;
-                height: 34px;
-                margin-bottom: 9px;
-            }
-            .input-wrapper {
-                text-align: center;
-            }
-        </style>
     {/block}
 
 </head>
@@ -73,14 +62,11 @@
         </div>
     </header>
 
-    <div class="form-wrapper  form-horizontal">
+    <div class="form-wrapper">
+        <h2>Reset password</h2>
         {render_messages}
 
         {if $mailSent}
-        <div class="doubleRule">
-            <div class="mcSectionHeader opposingFloatControl wrap">
-                <h2 class="element1">{t}Check Your E-Mail{/t}</h2>
-            </div>
             <div>
                 <div class="insetV">
                     <p>
@@ -88,12 +74,6 @@
                     </p>
                     <p>
                         {t}Please check your e-mail now for a message with the subject line "Password reminder" from{/t}&nbsp;{setting name="site_title"}.
-                    </p>
-                    <p>
-                        {t}Click the link in the e-mail to set a password for your account.{/t}
-                    </p>
-                    <p>
-                        {t}To protect your privacy, we only send this information to the e-mail address associated with this account.{/t}
                     </p>
                 </div>
                 <div class="insetV">
@@ -106,41 +86,47 @@
                     </p>
                 </div>
             </div>
-        </div>
         {else}
         <form class="form-horizontal" id="formulario" action="{url name=admin_acl_user_recover_pass}" method="POST">
-
+            <p>
+                {t}Enter your e-mail address and click Submit to recover your password.{/t}
+            </p>
             <div class="input-wrapper">
-                <p>
-                    {t}Enter your e-mail address and click Submit to recover your password.{/t}
-                </p>
 
-                <input type="email" class="input-xlarge" name="email" required="required" autofocus placeholder="{t}E-mail{/t}">
+                <div class="control-group">
+                    <label class="control-label">{t}Email{/t}</label>
+                    <div class="controls">
+                        <input type="email" class="input-xlarge" name="email" required="required" autofocus placeholder="example@example.com">
+                    </div>
+                </div>
 
-                <button type="submit" class="onm-button blue">{t}Submit{/t}</button>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="onm-button blue">{t}Submit{/t}</button>
+                        <a href="{url name=admin_login}">{t}Cancel{/t}</a>
+                    </div>
+                </div>
             </div>
         </form>
         {/if}
     </div>
 
     <footer>
-        <div class="container">
-            <div class="muted credit">
-                &copy; {strftime("%Y")} OpenHost S.L.
-                <nav>
-                    <ul>
-                        <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                        <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                        <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                        <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                    </ul>
-                </nav>
-                <select name="language" id="language" class="input-small">
-                    {foreach from=$languages key=key item=language}
-                        <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
-                    {/foreach}
-                </select>
-            </div>
+        <div class="muted credit">
+            &copy; {strftime("%Y")} OpenHost S.L.
+            <nav>
+                <ul>
+                    <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
+                    <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                    <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                </ul>
+            </nav>
+            <select name="language" id="language" class="input-small">
+                {foreach from=$languages key=key item=language}
+                    <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
+                {/foreach}
+            </select>
         </div>
     </footer>
 

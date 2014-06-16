@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label">{t}Password{/t}</label>
+                    <label class="control-label" for="_password">{t}Password{/t}</label>
                     <div class="controls">
                         <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                     </div>
@@ -117,7 +117,7 @@
                     </div>
                 </div>
 
-                <div class="or"><span class="text">{t}or{/t}</span></div>
+                <div class="or"><span class="text">{t}or use{/t}</span></div>
 
                 <div class="social-network-buttons row-fluid">
                     <a class="span6 btn" href="{hwi_oauth_login_url name=facebook}">
@@ -127,10 +127,6 @@
                         <i class="social-icon icon-twitter"></i> Twitter
                     </a>
                 </div>
-
-                <p class="left {if $smarty.session.failed_login_attempts >= 3}toomuchfails{/if}">
-
-                </p>
             </div>
             <input type="hidden" name="_token" value="{$token}">
             <input type="hidden" name="_referer" value="{$referer}">
@@ -138,25 +134,23 @@
     </div>
 
     <footer>
-        <div class="container">
-            <div class="muted credit">
-                &copy; {strftime("%Y")} OpenHost S.L.
-                <nav>
-                    <ul>
-                        <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
-                        <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                        <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-                               target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                        <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-                               target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                    </ul>
-                </nav>
-                <select name="language" id="language" class="input-small">
-                    {foreach from=$languages key=key item=language}
-                        <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
-                    {/foreach}
-                </select>
-            </div>
+        <div class="muted credit">
+            &copy; {strftime("%Y")} OpenHost S.L.
+            <nav>
+                <ul>
+                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
+                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
+                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
+                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                </ul>
+            </nav>
+            <select name="language" id="language" class="input-small">
+                {foreach from=$languages key=key item=language}
+                    <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
+                {/foreach}
+            </select>
         </div>
     </footer>
 
@@ -171,6 +165,7 @@
             BackendAuthentication.init()
         });
         </script>
+        {uservoice_widget}
     {/block}
 </body>
 </html>

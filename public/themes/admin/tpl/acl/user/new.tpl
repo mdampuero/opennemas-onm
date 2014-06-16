@@ -7,6 +7,7 @@
 {script_tag src="/jquery/localization/messages_es.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
+{script_tag src="/admin.js" common=1}
 <script>
     jQuery(document).ready(function($){
         // Password strength checker
@@ -299,10 +300,32 @@ label {
 
             <div id="social">
                 <div class="form-horizontal">
+
                     <div class="control-group">
                         <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
-
+                            <button class="social-network-connect btn {if $facebook} btn-success{/if}" data-url="{hwi_oauth_login_url name=facebook}" type="button">
+                                {if $facebook}
+                                    <i class="icon-ok"></i>
+                                {else}
+                                    <i class="icon-facebook"></i>
+                                {/if}
+                                {t}Connect with Facebook{/t}
+                            </button>
+                            <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{t}Twitter{/t}</label>
+                        <div class="controls">
+                            <button class="social-network-connect btn {if $twitter} btn-success{/if}" data-url="{hwi_oauth_login_url name=twitter}" type="button">
+                                {if $twitter}
+                                    <i class="icon-ok"></i>
+                                {else}
+                                    <i class="icon-twitter"></i>
+                                {/if}
+                                {t}Connect with Twitter{/t}
+                            </button>
                             <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
                         </div>
                     </div>
@@ -311,7 +334,7 @@ label {
 
             <div id="settings">
                 <div class="form-horizontal">
-                        <div class="control-group">
+                    <div class="control-group">
                         <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
                         <div class="controls">
                             <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>

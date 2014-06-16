@@ -81,7 +81,7 @@ class AclUserController extends Controller
 
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editing other user information.
-        if ($id != $_SESSION['userid']) {
+        if (array_key_exists('userid', $_SESSION) && $id != $_SESSION['userid']) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }

@@ -28,9 +28,6 @@
                 height: 34px;
                 margin-bottom: 9px;
             }
-            .input-wrapper {
-                text-align: center;
-            }
         </style>
     {/block}
 
