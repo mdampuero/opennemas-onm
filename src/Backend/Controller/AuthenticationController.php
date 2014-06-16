@@ -35,7 +35,10 @@ class AuthenticationController extends Controller
         $error   = null;
         $route   = $request->get('_route');
         $referer = $this->generateUrl('admin_welcome');
-        $token = $request->get('token');
+        $session = $request->getSession();
+        $token   = $request->get('token');
+
+        $session->set('login_callback', $referer);
 
         if ($token) {
             $user = $this->get('user_repository')->findBy(
@@ -60,19 +63,18 @@ class AuthenticationController extends Controller
             $securityContext->setToken($token);
 
             $request = $this->getRequest();
-            $session = $request->getSession();
             $session->set('_security_backend', serialize($token));
 
-            if ($this->session->get('_security.backend.target_path')) {
-                $referer = $this->session->get('_security.backend.target_path');
+            if ($session->get('_security.backend.target_path')) {
+                $referer = $session->get('_security.backend.target_path');
             }
 
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
 
-        if ($this->session->get('_security.backend.target_path')) {
-            $referer = $this->session->get('_security.backend.target_path');
+        if ($session->get('_security.backend.target_path')) {
+            $referer = $session->get('_security.backend.target_path');
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -93,7 +95,7 @@ class AuthenticationController extends Controller
                 $msg = $error->getMessage();
             }
 
-            $this->session->getFlashBag()->add('error', $msg);
+            $session->getFlashBag()->add('error', $msg);
 
             $_SESSION['failed_login_attempts'] =
                 isset($_SESSION['failed_login_attempts']) ?
@@ -128,8 +130,14 @@ class AuthenticationController extends Controller
      *
      * @return Response The response object.
      */
-    public function connectPopupAction()
+    public function loginCallbackAction(Request $request)
     {
-        return $this->render('common/close_popup.tpl');
+        $redirect = $this->get('session')->get('login_callback');
+
+        if ($redirect == 'popup') {
+            return $this->render('common/close_popup.tpl');
+        } else {
+            return $this->redirect($redirect);
+        }
     }
 }

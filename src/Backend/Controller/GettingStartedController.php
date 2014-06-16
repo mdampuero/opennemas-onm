@@ -37,6 +37,9 @@ class GettingStartedController extends Controller
      */
     public function gettingStartedAction(Request $request)
     {
+        $session = $request->getSession();
+        $session->set('login_callback', 'popup');
+
         $params = array();
 
         $user = $this->get('user_repository')->find($this->getUser()->id);
