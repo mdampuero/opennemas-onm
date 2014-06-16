@@ -220,7 +220,7 @@ class LetterController extends Controller
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
                 $items   = $request->request->get('items');
 
-                $moreData = _("Name")." {$name} \n "._("Email"). "{$mail} \n ";
+                $moreData = _("Name").": {$name} \n "._("Email"). ": {$mail} \n ";
                 if (!empty($items)) {
                     foreach ($items as $key => $value) {
                         if (!empty($key) && !empty($value)) {
