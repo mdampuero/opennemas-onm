@@ -1093,6 +1093,7 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
+        dispatchEventWithParams('user.update', array('id' => $this->id));
         return true;
     }
 
@@ -1112,6 +1113,7 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
+        dispatchEventWithParams('user.update', array('id' => $this->id));
         return true;
     }
 

@@ -732,4 +732,36 @@ class AclUserController extends Controller
             )
         );
     }
+
+    /**
+     * Disconnects the accounts.
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The user's id.
+     * @return Response          The response object.
+     */
+    public function disconnectAction(Request $request, $id, $resource)
+    {
+        $user = $this->get('user_repository')->find($id);
+
+        if (!$user) {
+            return new Response();
+        }
+
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_id');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_email');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
+
+        return $this->render(
+            'acl/user/social.tpl',
+            array(
+                'current_user_id' => $this->getUser()->id,
+                'connected'       => false,
+                'resource_id'     => null,
+                'resource'        => $resource,
+                'user'            => $user,
+            )
+        );
+    }
 }

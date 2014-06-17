@@ -22,7 +22,7 @@
                 {if $connected}
                     <p>
                         {t}Your account is connected to {if $resource == 'facebook'}Facebook{else}Twitter{/if}.{/t}
-                        <a href="#" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a>
+                        <a href="{url name=admin_acl_user_social_disconnect id=$user->id resource=$resource}" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a>
                     </p>
                     <ul class="social-connection">
                         <li>
