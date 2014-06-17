@@ -600,7 +600,7 @@ class AclUserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
-                    $url = $this->generateUrl('admin_login_form', array(), true);
+                    $url = $this->generateUrl('admin_login', array(), true);
 
                     $this->view->assign(
                         array(
@@ -661,13 +661,10 @@ class AclUserController extends Controller
                 );
 
                 $this->view->assign('userNotValid', true);
-            } else {
-                $this->view->assign(
-                    array(
-                        'user' => $user
-                    )
-                );
+                return $this->redirect($this->generateUrl('admin_login'));
             }
+
+            $this->view->assign('user', $user);
         } else {
             $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
             $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
@@ -678,7 +675,7 @@ class AclUserController extends Controller
 
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
-                return $this->redirect($this->generateUrl('admin_login_form'));
+                return $this->redirect($this->generateUrl('admin_login'));
 
             } elseif ($password != $passwordVerify) {
                 $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
@@ -687,6 +684,8 @@ class AclUserController extends Controller
                     'error',
                     _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
+
+                return $this->redirect($this->generateUrl('admin_login'));
             }
 
         }
