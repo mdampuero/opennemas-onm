@@ -77,7 +77,6 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['valid']            = $valid;
         $_SESSION['meta']             = $user->getMeta();
 
-
         if ($this->session->get('_security.backend.target_path')) {
             $referer = $this->session->get('_security.backend.target_path');
         }

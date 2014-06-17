@@ -133,9 +133,9 @@ class AuthenticationController extends Controller
      */
     public function loginCallbackAction(Request $request)
     {
-        $redirect = $this->get('session')->get('login_callback');
+        $redirect = $request->getSession()->get('_security.backend.target_path');
 
-        if ($redirect == 'popup') {
+        if ($redirect == '/admin/login/callback') {
             return $this->render('common/close_popup.tpl');
         } else {
             return $this->redirect($redirect);

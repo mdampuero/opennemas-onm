@@ -710,6 +710,12 @@ class AclUserController extends Controller
     {
         $user = $this->get('user_repository')->find($id);
 
+        $session = $request->getSession();
+        $session->set(
+            '_security.backend.target_path',
+            $this->generateUrl('admin_login_callback')
+        );
+
         if (!$user) {
             return new Response();
         }
