@@ -299,34 +299,75 @@ label {
             </div><!-- /personal -->
 
             <div id="social">
-                <div class="form-horizontal">
-
+                <div class="form-horizontal social-connections">
                     <div class="control-group">
                         <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
-                            <button class="social-network-connect btn {if $facebook} btn-success{/if}" data-url="{hwi_oauth_login_url name=facebook}" type="button">
-                                {if $facebook}
-                                    <i class="icon-ok"></i>
-                                {else}
-                                    <i class="icon-facebook"></i>
-                                {/if}
-                                {t}Connect with Facebook{/t}
+                            {if $user->meta['facebook_id']}
+                            <p>{t}Your account is connected to Facebook.{/t}</p>
+                            <ul class="social-connection">
+                                <li>
+                                    {if $user->photo->name}
+                                    <div style="width: 40px; height: 40px;">
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                                    </div>
+                                    {else}
+                                    <div style="width: 40px; height: 40px;" >
+                                        {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="40"}
+                                    </div>
+                                    {/if}
+                                </li>
+                                <li class="arrow">→</li>
+                                <li>
+                                    <div class="btn btn-social btn-facebook">
+                                        <i class="icon-facebook"></i>
+                                        {$user->meta['facebook_realname']}
+                                    </div>
+                                </li>
+                            </ul>
+                            <p>Allows you to login into Opennemas with Facebook</p>
+                            <p><a href="#" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
+                            {else}
+                            <button class="social-network-connect btn btn-social btn-facebook" data-url="{hwi_oauth_login_url name=facebook}" type="button">
+                                <i class="icon-facebook"></i> {t}Connect with Facebook{/t}
                             </button>
                             <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
+                            {/if}
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">{t}Twitter{/t}</label>
                         <div class="controls">
-                            <button class="social-network-connect btn {if $twitter} btn-success{/if}" data-url="{hwi_oauth_login_url name=twitter}" type="button">
-                                {if $twitter}
-                                    <i class="icon-ok"></i>
-                                {else}
-                                    <i class="icon-twitter"></i>
-                                {/if}
-                                {t}Connect with Twitter{/t}
+                            {if $user->meta['twitter_id']}
+                            <p>{t}Your account is connected to Twitter.{/t}</p>
+                            <ul class="social-connection">
+                                <li>
+                                    {if $user->photo->name}
+                                    <div style="width: 40px; height: 40px;">
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                                    </div>
+                                    {else}
+                                    <div style="width: 40px; height: 40px;" >
+                                        {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="40"}
+                                    </div>
+                                    {/if}
+                                </li>
+                                <li class="arrow">→</li>
+                                <li>
+                                    <div class="btn btn-social btn-twitter">
+                                        <i class="icon-facebook"></i>
+                                        {$user->meta['twitter_realname']}
+                                    </div>
+                                </li>
+                            </ul>
+                            <p>Allows you to login into Opennemas with Twitter</p>
+                            <p><a href="#" title="{t}Disconnect from Twitter{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
+                            {else}
+                            <button class="social-network-connect btn btn-social btn-twitter" data-url="{hwi_oauth_login_url name=twitter}" type="button">
+                                <i class="icon-twitter"></i> {t}Connect with Twitter{/t}
                             </button>
-                            <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
+                            <div class="help-block">{t}Associate your Twitter account to login into Opennemas with it{/t}</div>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -334,14 +375,6 @@ label {
 
             <div id="settings">
                 <div class="form-horizontal">
-                    <div class="control-group">
-                        <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
-                        <div class="controls">
-                            <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
-                            <span>{t}minutes{/t}</span>
-                        </div>
-                    </div>
-
                     {is_module_activated name="PAYWALL"}
                     <div class="control-group">
                         <label for="user_language" class="control-label">{t}User type{/t}</label>
