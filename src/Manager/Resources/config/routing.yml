@@ -10,10 +10,6 @@ manager_instances:
     path: /instances
     defaults: { _controller:  ManagerBundle:Instances:list }
 
-manager_instances_list_export:
-    path: /instance/list-export.csv
-    defaults: { _controller:  ManagerBundle:Instances:listExport }
-
 manager_instance_show:
     path: /instance/{id}/show
     defaults: { _controller:  ManagerBundle:Instances:show }
