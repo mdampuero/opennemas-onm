@@ -72,7 +72,10 @@ class AclUserController extends Controller
     public function showAction(Request $request)
     {
         $session = $request->getSession();
-        $session->set('login_callback', 'popup');
+        $session->set(
+            '_security.backend.target_path',
+            $this->generateUrl('admin_login_callback')
+        );
 
         // User can modify his data
         $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
@@ -714,7 +717,7 @@ class AclUserController extends Controller
         $resourceId = $user->getMeta($resource . '_id');
 
         $connected = false;
-        if ($this->getUser()->getMeta($resource . '_id')) {
+        if ($resourceId) {
             $connected = true;
         }
 

@@ -38,7 +38,10 @@ class GettingStartedController extends Controller
     public function gettingStartedAction(Request $request)
     {
         $session = $request->getSession();
-        $session->set('login_callback', 'popup');
+        $session->set(
+            '_security.backend.target_path',
+            $this->generateUrl('admin_login_callback')
+        );
 
         $params = array();
 
