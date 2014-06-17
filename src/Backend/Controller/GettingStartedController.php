@@ -51,6 +51,7 @@ class GettingStartedController extends Controller
         if ($user->getMeta('twitter_id')) {
             $params['twitter'] = true;
         }
+        $params['user'] = $this->getUser();
 
         return $this->render('gstarted/getting_started.tpl', $params);
     }

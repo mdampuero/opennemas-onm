@@ -95,25 +95,19 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $facebook} btn-success{/if}" data-url="{hwi_oauth_login_url name=facebook}" type="button">
-                        {if $facebook}
-                            <i class="icon-ok"></i>
-                        {else}
-                            <i class="icon-facebook"></i>
-                        {/if}
-                        Facebook
-                    </button>
-                </div>
-                <div class="span6">
-                    <button class="social-network-connect btn btn-large{if $twitter} btn-success{/if}" data-url="{hwi_oauth_login_url name=twitter}" type="button">
-                        {if $twitter}
-                            <i class="icon-ok"></i>
-                        {else}
-                            <i class="icon-twitter"></i>
-                        {/if}
-                        Twitter
-                    </button>
+                <div class="form-horizontal social-connections">
+                    <div class="control-group">
+                        <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
+                        <div class="controls">
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{t}Twitter{/t}</label>
+                        <div class="controls">
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row-fluid wizard-buttons">

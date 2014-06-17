@@ -7,6 +7,14 @@
             {css_tag href="/fontawesome/font-awesome.min.css" common=1}
             {css_tag href="/style.css" common=1}
         {/block}
+        <style>
+            html, body {
+                margin:0 auto;
+                padding:0;
+                min-height:0;
+                overflow-y:hidden;
+            }
+        </style>
     </head>
     <body>
         <div class="social-connections">

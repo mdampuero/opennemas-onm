@@ -303,13 +303,13 @@ label {
                     <div class="control-group">
                         <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
-                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" width="100%"></iframe>
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">{t}Twitter{/t}</label>
                         <div class="controls">
-                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" width="100%"></iframe>
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                         </div>
                     </div>
                 </div>
