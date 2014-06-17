@@ -270,7 +270,6 @@ class InstanceManager
         $rs = $this->connection->Execute($sql);
 
         if (!$rs) {
-
             return false;
         }
 

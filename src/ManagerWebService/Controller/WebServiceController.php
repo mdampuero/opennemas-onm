@@ -21,10 +21,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class WebServiceController extends Controller
 {
     /**
+     * Creates a new instance.
      *
-     *
-     * @return mixed
-    */
+     * @param  Request      $request The request object.
+     * @return JsonResponse          The response object.
+     */
     public function createAction(Request $request)
     {
         $authResult = $this->checkAuth($request);
