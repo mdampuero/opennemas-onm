@@ -304,7 +304,7 @@ label {
                         <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
                             {if $user->meta['facebook_id']}
-                            <p>{t}Your account is connected to Facebook.{/t}</p>
+                            <p>{t}Your account is connected to Facebook.{/t} <a href="#" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
                             <ul class="social-connection">
                                 <li>
                                     {if $user->photo->name}
@@ -326,7 +326,6 @@ label {
                                 </li>
                             </ul>
                             <p>Allows you to login into Opennemas with Facebook</p>
-                            <p><a href="#" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
                             {else}
                             <button class="social-network-connect btn btn-social btn-facebook" data-url="{hwi_oauth_login_url name=facebook}" type="button">
                                 <i class="icon-facebook"></i> {t}Connect with Facebook{/t}
@@ -339,7 +338,7 @@ label {
                         <label class="control-label">{t}Twitter{/t}</label>
                         <div class="controls">
                             {if $user->meta['twitter_id']}
-                            <p>{t}Your account is connected to Twitter.{/t}</p>
+                            <p>{t}Your account is connected to Twitter.{/t} <a href="#" title="{t}Disconnect from Twitter{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
                             <ul class="social-connection">
                                 <li>
                                     {if $user->photo->name}
@@ -361,7 +360,6 @@ label {
                                 </li>
                             </ul>
                             <p>Allows you to login into Opennemas with Twitter</p>
-                            <p><a href="#" title="{t}Disconnect from Twitter{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
                             {else}
                             <button class="social-network-connect btn btn-social btn-twitter" data-url="{hwi_oauth_login_url name=twitter}" type="button">
                                 <i class="icon-twitter"></i> {t}Connect with Twitter{/t}

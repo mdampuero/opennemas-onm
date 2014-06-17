@@ -38,7 +38,7 @@ body {
 .form-wrapper {
     max-width:600px;
     margin:0 auto;
-    margin-top:50px;
+    margin-top:80px;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -179,6 +179,8 @@ footer select {
     .form-wrapper {
         padding:10px;
         padding-top:0;
+        margin:2%;
+        margin-top:50px;
     }
 
     .form-wrapper input, .form-wrapper button {
