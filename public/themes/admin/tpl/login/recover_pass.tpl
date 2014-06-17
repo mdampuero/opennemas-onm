@@ -73,13 +73,7 @@
                         {t}We've sent an e-mail to{/t}:<strong>&nbsp;&nbsp;{$user->email}</strong>.
                     </p>
                     <p>
-                        {t}Please check your e-mail now for a message with the subject line "Password reminder" from{/t}&nbsp;{setting name="site_title"}.
-                    </p>
-                </div>
-                <div class="insetV">
-                    <p>
-                        <strong>{t}PLEASE NOTE{/t}:</strong>
-                        {t}If this is not the e-mail address associated with your account, click the link to resubmit the "Reset Your Password" request with the correct e-mail address{/t}:&nbsp;&nbsp;<a href="{url name=admin_acl_user_recover_pass}">{t}Recover password{/t}</a>
+                        {t}Please check your e-mail now for a message with the subject line "Password reminder".{/t}
                     </p>
                     <p>
                         {t}If you use e-mail filtering or anti-spam software,please make sure our e-mail is not filtered or blocked.{/t}
