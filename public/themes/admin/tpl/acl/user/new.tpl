@@ -303,69 +303,13 @@ label {
                     <div class="control-group">
                         <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
-                            {if $user->meta['facebook_id']}
-                            <p>{t}Your account is connected to Facebook.{/t} <a href="#" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
-                            <ul class="social-connection">
-                                <li>
-                                    {if $user->photo->name}
-                                    <div style="width: 40px; height: 40px;">
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
-                                    </div>
-                                    {else}
-                                    <div style="width: 40px; height: 40px;" >
-                                        {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="40"}
-                                    </div>
-                                    {/if}
-                                </li>
-                                <li class="arrow">→</li>
-                                <li>
-                                    <div class="btn btn-social btn-facebook">
-                                        <i class="icon-facebook"></i>
-                                        {$user->meta['facebook_realname']}
-                                    </div>
-                                </li>
-                            </ul>
-                            <p>Allows you to login into Opennemas with Facebook</p>
-                            {else}
-                            <button class="social-network-connect btn btn-social btn-facebook" data-url="{hwi_oauth_login_url name=facebook}" type="button">
-                                <i class="icon-facebook"></i> {t}Connect with Facebook{/t}
-                            </button>
-                            <div class="help-block">{t}Associate your Facebook account to login into Opennemas with it{/t}</div>
-                            {/if}
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" width="100%"></iframe>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">{t}Twitter{/t}</label>
                         <div class="controls">
-                            {if $user->meta['twitter_id']}
-                            <p>{t}Your account is connected to Twitter.{/t} <a href="#" title="{t}Disconnect from Twitter{/t}" class="disconnect">{t}Disconnect{/t}</a></p>
-                            <ul class="social-connection">
-                                <li>
-                                    {if $user->photo->name}
-                                    <div style="width: 40px; height: 40px;">
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
-                                    </div>
-                                    {else}
-                                    <div style="width: 40px; height: 40px;" >
-                                        {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="40"}
-                                    </div>
-                                    {/if}
-                                </li>
-                                <li class="arrow">→</li>
-                                <li>
-                                    <div class="btn btn-social btn-twitter">
-                                        <i class="icon-facebook"></i>
-                                        {$user->meta['twitter_realname']}
-                                    </div>
-                                </li>
-                            </ul>
-                            <p>Allows you to login into Opennemas with Twitter</p>
-                            {else}
-                            <button class="social-network-connect btn btn-social btn-twitter" data-url="{hwi_oauth_login_url name=twitter}" type="button">
-                                <i class="icon-twitter"></i> {t}Connect with Twitter{/t}
-                            </button>
-                            <div class="help-block">{t}Associate your Twitter account to login into Opennemas with it{/t}</div>
-                            {/if}
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" width="100%"></iframe>
                         </div>
                     </div>
                 </div>

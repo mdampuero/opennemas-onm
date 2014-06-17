@@ -1003,6 +1003,10 @@ admin_acl_user_show:
     options:
         expose: true
 
+admin_acl_user_social:
+    path:     /acl/user/{id}/{resource}
+    defaults: { _controller  : BackendBundle:AclUser:social }
+
 admin_acl_user_update:
     path:     /acl/user/{id}/update
     defaults: { _controller  : BackendBundle:AclUser:update }

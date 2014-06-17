@@ -3569,11 +3569,16 @@ border-bottom-left-radius: 2px;
 /* =============================================================================
    Social connection
    ========================================================================== */
+    .social-connections p {
+      padding-top: 5px;
+    }
+
     .social-connections .disconnect {
-        color:Red;
+        background: #fff;
+        color: Red;
     }
     .social-connection {
-        margin:10px 0;
+        margin: 10px 0;
     }
     .social-connection li {
         display:inline-block;

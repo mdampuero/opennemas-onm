@@ -71,6 +71,9 @@ class AclUserController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $session = $request->getSession();
+        $session->set('login_callback', 'popup');
+
         // User can modify his data
         $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         if ($idRAW === 'me') {
@@ -691,5 +694,39 @@ class AclUserController extends Controller
         }
 
         return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+    }
+
+    /**
+     * Displays the facebook iframe to connect accounts.
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The user's id.
+     * @return Response          The response object.
+     */
+    public function socialAction(Request $request, $id, $resource)
+    {
+        $user = $this->get('user_repository')->find($id);
+
+        if (!$user) {
+            return new Response();
+        }
+
+        $resourceId = $user->getMeta($resource . '_id');
+
+        $connected = false;
+        if ($this->getUser()->getMeta($resource . '_id')) {
+            $connected = true;
+        }
+
+        return $this->render(
+            'acl/user/social.tpl',
+            array(
+                'current_user_id' => $this->getUser()->id,
+                'connected'       => $connected,
+                'resource_id'     => $resourceId,
+                'resource'        => $resource,
+                'user'            => $user,
+            )
+        );
     }
 }
