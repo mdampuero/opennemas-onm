@@ -5,7 +5,10 @@ parameters:
 services:
     login_success_handler:
         class:     Backend\EventListener\LoginSuccessHandler
-        arguments: [ '@security.context', '@router', '@session' ]
+        arguments: [ @security.context, @router, @session ]
+    oauth_login_success_handler:
+        class:     Backend\EventListener\OAuthLoginSuccessHandler
+        arguments: [ @security.context, @router, @session ]
     onm_oauth_user_provider:
         class:     %onm_oauth_user_provider.class%
         arguments: [ @session, @service_container]
