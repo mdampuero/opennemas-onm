@@ -1,18 +1,18 @@
 manager_ws_instance_delete:
     path:     /instance/{id}/delete
-    defaults: { _controller: ManagerBundle:Instance:delete }
+    defaults: { _controller: ManagerWebServiceBundle:Instance:delete }
     options:
         expose: true
 
-manager_ws_instance_toggle_available:
-    path:     /instance/{id}/toggle-available
-    defaults: { _controller: ManagerWebServiceBundle:Instance:toggleAvailable }
+manager_ws_instance_set_activated:
+    path:     /instance/{id}/set-activated
+    defaults: { _controller: ManagerWebServiceBundle:Instance:setActivated }
     options:
         expose: true
 
 manager_ws_instances_delete:
     path:     /instances/delete
-    defaults: { _controller: ManagerBundle:Instance:batchDelete }
+    defaults: { _controller: ManagerWebServiceBundle:Instance:batchDelete }
     options:
         expose: true
 
@@ -22,8 +22,12 @@ manager_ws_instances_list:
     options:
         expose: true
 
-manager_ws_instances_toggle_available:
-    path:     /instances/toggle-available
-    defaults: { _controller: ManagerWebServiceBundle:Instance:batchAvailable }
+manager_ws_instances_list_export:
+    path: /instance/list-export.csv
+    defaults: { _controller:  ManagerWebServiceBundle:Instance:export }
+
+manager_ws_instances_set_activated:
+    path:     /instances/set-activated
+    defaults: { _controller: ManagerWebServiceBundle:Instance:batchSetActivated }
     options:
         expose: true
