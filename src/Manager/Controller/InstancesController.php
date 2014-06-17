@@ -39,100 +39,15 @@ class InstancesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $findParams = array(
-            'name'  => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
-            'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
-        );
-
-        $instanceManager = getService('instance_manager');
-        $instances = $instanceManager->findAll($findParams);
-
-        foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
-        }
-
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
 
         return $this->render(
             'instances/list.tpl',
             array(
-                'instances'     => $instances,
-                'filter_name'   => $findParams['name'],
-                'filter_email'  => $findParams['email'],
-                'timeZones'     => $availableTimeZones,
+                'timeZones'     => $timezones,
             )
         );
-    }
-
-    /**
-     * Returns a CSV file with all the instances information
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function listExportAction(Request $request)
-    {
-        $findParams = array(
-            'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
-        );
-
-        $instanceManager = getService('instance_manager');
-
-        $instances = $instanceManager->findAll($findParams);
-
-        foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
-        }
-
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
-        $response = $this->render(
-            'instances/csv.tpl',
-            array(
-                'instances'   => $instances,
-                'filter_name' => $findParams['name'],
-            )
-        );
-
-        if ($findParams['name'] != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($findParams['name']);
-        } else {
-            $fileNameFilter = '-complete';
-        }
-        $fileName = 'opennemas-instances'.$fileNameFilter.'-'.date("Y_m_d_His").'.csv';
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
     }
 
     /**
@@ -393,40 +308,6 @@ class InstancesController extends Controller
     }
 
     /**
-     * Deletes an instance given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (!empty($id)) {
-            $instanceManager = getService('instance_manager');
-
-            $delete = $instanceManager->delete($id);
-            if (!$delete) {
-                m::add(_("Unable to delete the instance."), m::ERROR);
-                if (is_array($delete) && count($delete) > 0) {
-                    m::add($delete, m::ERROR);
-                }
-            } else {
-                m::add(_("Instance deleted successfully."), m::SUCCESS);
-            }
-        } else {
-            m::add(_('You must provide an id for delete an instance.'), m::ERROR);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('manager_instances'));
-        } else {
-            return new Response('ok');
-        }
-    }
-
-    /**
      * Batch Delete instances given its ids
      *
      * @param Request $request the request object
@@ -462,62 +343,5 @@ class InstancesController extends Controller
                 array('filter_name' => $filter_name, 'filter_email' => $filter_email)
             )
         );
-    }
-
-    /**
-     * Toggle the availability of an instance given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $instanceManager = getService('instance_manager');
-        $instance = $instanceManager->read($id);
-
-        if ($instance === false) {
-            m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
-
-            return $this->redirect($this->generateUrl('manager_instances'));
-        }
-
-        $instanceManager->changeActivated(
-            $instance->id,
-            ($instance->activated+1) % 2
-        );
-
-        return $this->redirect($this->generateUrl('manager_instances'));
-    }
-
-    /**
-     * Set the activated flag for instances in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function batchAvailableAction(Request $request)
-    {
-        $selected = $request->query->get('selected', null);
-        $status   = $request->query->getDigits('status', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $instanceManager = getService('instance_manager');
-
-            foreach ($selected as $id) {
-                $instance = $instanceManager->read($id);
-                if ($instance === false) {
-                    m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
-                } else {
-                    $instanceManager->changeActivated($id, $status);
-                    m::add(sprintf(_("Instance %d updated successfully."), $id), m::SUCCESS);
-                }
-            }
-        }
-
-        return new Response('ok', 200);
     }
 }
