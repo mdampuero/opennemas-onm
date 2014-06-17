@@ -46,9 +46,7 @@ $(document).ready(function() {
                 window.clearInterval(interval);
 
                 if (win.success) {
-                    btn.addClass('btn-success');
-                    btn.find('i').removeClass();
-                    btn.find('i').addClass('icon-ok');
+                    window.location.reload();
                 }
             }
         }, 1000);
