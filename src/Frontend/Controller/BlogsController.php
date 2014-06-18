@@ -181,7 +181,7 @@ class BlogsController extends Controller
                 $this->cm = new \ContentManager();
 
                 // Get the number of total opinions for this author for pagination purpouses
-                $countItems = $this->cm->cache->count(
+                $countItems = $this->cm->count(
                     'Opinion',
                     $filter
                     .' AND contents.content_status=1 '
