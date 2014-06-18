@@ -2,8 +2,13 @@
 
 {block name="header-js" append}
     <style>
+        .domains ul {
+            margin:0;
+        }
         .domains li{
             margin:0;
+            list-style:none;
+            padding:0;
         }
     </style>
 {/block}
@@ -94,8 +99,8 @@
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th width="25px">{t}#{/t}</th>
                     <th width="">{t}Name{/t}</th>
-                    <th class="center">{t}Last access{/t}</th>
-                    <th width="100px" class="center">{t}Created{/t}</th>
+                    <th class="left">{t}Domains{/t}</th>
+                    <th class="left">{t}Last access{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
                 </tr>
@@ -122,9 +127,11 @@
                                 <a ng-href="mailto:[% instance.configs.contact_mail %]" title="Send an email to the instance manager"> [% instance.configs.contact_mail %]</a>
                             </small>
                         </div>
+                        <small>{t}Created{/t}: [% instance.configs.last_login.date  | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
+                    </td>
+                    <td class="left">
                         <div class="domains">
                             <small>
-                                Domains:
                                 <ul ng-if="instance.domains.length > 1">
                                     <li ng-repeat="domain in instance.domains">
                                         <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
@@ -138,11 +145,7 @@
                             </small>
                         </div>
                     </td>
-                    <td class="center">
-                        [% instance.configs.last_login.date  | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    </td>
-                     <td class="nowrap center">
-                        [% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <td class="nowrap left">[% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td class="center">
                         <button class="btn-link" ng-class="{ loading: instance.loading == 1, published: instance.activated == '1', unpublished: instance.activated == '0' }" ng-click="updateItem($index, instance.id, 'manager_ws_instance_set_activated', 'activated', instance.activated != 1 ? 1 : 0, 'loading')" type="button"></button>
