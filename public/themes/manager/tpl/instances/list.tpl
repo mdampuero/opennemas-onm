@@ -1,6 +1,15 @@
 {extends file="base/base.tpl"}
 
 {block name="header-js" append}
+    <style>
+        .domains li{
+            margin:0;
+        }
+    </style>
+{/block}
+
+
+{block name="header-js" append}
     {include file="common/angular_includes.tpl"}
 {/block}
 
@@ -54,9 +63,9 @@
             <div class="form-inline">
                 <strong>{t}FILTER:{/t}</strong>
                 &nbsp;&nbsp;
-                <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="filter_email" ng-model="shvs.search.filter_email"/>
+                <input type="text" placeholder="{t}Filter by instance name{/t}" name="filter_name" ng-model="shvs.search.filter_name"/>
                 &nbsp;&nbsp;
-                <input type="text" placeholder="{t}Filter by name{/t}" name="filter_name" ng-model="shvs.search.filter_name"/>
+                <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="filter_email" ng-model="shvs.search.filter_email"/>
                 &nbsp;&nbsp;
                 <select ng-model="shvs.elements_per_page" class="input-small">
                     <option value="10">10</option>
@@ -107,18 +116,25 @@
                         <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
                             [% instance.name %]
                         </a>
-                        <div class="domains">
-                            <small>
-                                Domains:
-                                <span ng-repeat="domain in instance.domains">
-                                    <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
-                                </span>
-                            </small>
-                        </div>
                         <div class="creator">
                             <small>
                                 Creator:
                                 <a ng-href="mailto:[% instance.configs.contact_mail %]" title="Send an email to the instance manager"> [% instance.configs.contact_mail %]</a>
+                            </small>
+                        </div>
+                        <div class="domains">
+                            <small>
+                                Domains:
+                                <ul ng-if="instance.domains.length > 1">
+                                    <li ng-repeat="domain in instance.domains">
+                                        <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
+                                    </li>
+                                </ul>
+                                <span ng-if="instance.domains.length <= 1">
+                                    <span ng-repeat="domain in instance.domains">
+                                        <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
+                                    </span>
+                                </span>
                             </small>
                         </div>
                     </td>

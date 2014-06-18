@@ -75,6 +75,12 @@ class InstancesController extends Controller
 
         list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
 
+
+        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$instance->internal_name));
+        if (is_array($size)) {
+            $size = $size[0] / 1024;
+        }
+
         return $this->render(
             'instances/edit.tpl',
             array(
@@ -88,6 +94,7 @@ class InstancesController extends Controller
                 ),
                 'instance'          => $instance,
                 'templates'         => $templates,
+                'size'              => $size,
             )
         );
     }
