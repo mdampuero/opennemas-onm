@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html style="width: 100%">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
@@ -20,21 +20,12 @@
         {css_tag href="/fontawesome/font-awesome.min.css" common=1}
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
-        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css"}
         {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css"}
 	{/block}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/jquery/select2/select2.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/jquery.tools.min.js" common=1}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
     {/block}
 
     {block name="header-js"}
@@ -56,24 +47,7 @@
 
                 <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
                 <div class="nav-collapse collapse navbar-inverse-collapse">
-                    {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
                     <ul class="nav pull-right">
-                        <li>
-                            <form action="{url name=admin_search}" class="navbar-search global-search nofillonhover pull-right">
-                                <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
-                            </form>
-                        </li>
-                        {if is_null($errorMessage)}
-                        {if {count_pending_comments} gt 0}
-                        <li class="notification-messages">
-                            <a class="" title="{count_pending_comments} {t}Pending comments{/t}"
-                                href="{url name=admin_comments}">
-                                <span class="icon icon-inbox icon-large"></span>
-                                <span class="icon count">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
-                            </a>
-                        </li>
-                        {/if}
-                        {/if}
                         <li class="help dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="icon-large icon-question-sign"></span> {t}Help{/t}
@@ -87,31 +61,15 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <li>
+                            <a href="#">
                             {if $smarty.session.avatar_url}
                             <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
                             {else}
                                 {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="18"}
                             {/if}
-                            <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
-                            <div class="dropdown-menu">
-                                <div class="avatar">
-                                {if $smarty.session.avatar_url}
-                                    <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
-                                {else}
-                                    {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
-                                {/if}
-                                </div><!-- /.avatar -->
-                                <div class="user-info">
-                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                                    <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                                        <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                                    </ul><!-- /.links -->
-                                </div><!-- /.user-info -->
-                            </div>
+                            <span class="longtext">{$smarty.session.username}</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -119,12 +77,24 @@
         </div>
     </header>
     {/acl}
-    <div id="content" role="main">
-    {block name="content"}{/block}
-    </div>
-
+    {block name="content"}
+        <div class="welcome-page" style="background-position-y: 40px; margin-top: 0; margin-bottom: 40px;">
+            <div style="height: 40px;"></div>
+            <div class="wrapper-content ">
+                {render_messages}
+                <div class="brand-link">
+                    {t}Welcome to Opennemas{/t}
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        {include file="welcome/wizard.tpl"}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/block}
     {block name="copyright"}
-    <footer>
+    <footer style="bottom: 0; width: 100%;">
         <div class="wrapper-content clearfix">
             <nav class="left">
                 <ul>
@@ -170,34 +140,12 @@
         {script_tag src="/onm/footer-functions.js" common=1}
         {script_tag src="/libs/tinycon.min.js"}
         {script_tag src="/jquery/bootstrap-nav-wizard.js"}
+        {script_tag src="/onm/md5.min.js" common=1}
+        {script_tag src="/admin.js" common=1}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
-        <script>
-        var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
-        </script>
-        {script_tag src="/ckeditor/ckeditor.js" common=1}
-        {script_tag src="/onm/jquery.onm-editor.js" common=1}
-        <script type="text/javascript">
-        $(function() {
-            $.onmEditor({
-                language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
-            });
-
-            $('.select2').select2({
-                formatSelection: function(state) {
-                    var element = state.element;
-                    if ($(element).parents('.select2').data('label') != null) {
-                        return $(element).parents('.select2').data('label')
-                            + ': ' + state.text;
-                    }
-
-                    return state.text
-                }
-            });
-        })
-        </script>
 	{/block}
 </body>
 </html>

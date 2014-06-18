@@ -1003,6 +1003,14 @@ admin_acl_user_show:
     options:
         expose: true
 
+admin_acl_user_social:
+    path:     /acl/user/{id}/{resource}
+    defaults: { _controller  : BackendBundle:AclUser:social }
+
+admin_acl_user_social_disconnect:
+    path:     /acl/user/{id}/{resource}/disconnect
+    defaults: { _controller  : BackendBundle:AclUser:disconnect }
+
 admin_acl_user_update:
     path:     /acl/user/{id}/update
     defaults: { _controller  : BackendBundle:AclUser:update }
@@ -1050,14 +1058,18 @@ admin_utils_calculate_tags:
     defaults: { _controller  : BackendBundle:Utils:calculateTags }
 
 # Auth system routes
-admin_login_form:
+admin_login:
     path:     /login
     defaults: { _controller  : BackendBundle:Authentication:login }
 
-admin_login_processform:
-    path:     /login/process
+admin_login_check:
+    path:     /login/check
     defaults: { _controller  : BackendBundle:Authentication:check }
     methods:  [POST]
+
+admin_login_callback:
+    path:     /login/callback
+    defaults: { _controller  : BackendBundle:Authentication:loginCallback }
 
 admin_logout:
     path:     /logout
@@ -1096,3 +1108,14 @@ admin_media_uploader_months:
     path:     /media-uploader/months
     defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
+admin_getting_started:
+    path:     /getting-started
+    defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
+
+admin_getting_started_accept_terms:
+    path:     /getting-started/accept-terms
+    defaults: { _controller  : BackendBundle:GettingStarted:acceptTerms }
+
+admin_getting_started_finish:
+    path:     /getting-started/finish
+    defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }

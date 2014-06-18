@@ -10,7 +10,9 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [ users ]
+                providers: [ users, oauth_provider ]
+        oauth_provider:
+            id: onm_oauth_user_provider
         users:
             id: onm_user_provider
     firewalls:
@@ -19,7 +21,7 @@ security:
             security: false
 
         backend_login:
-            pattern:  ^/admin/login$
+            pattern:  ^/admin/(login$|connect)
             security: false
 
         manager_login:
@@ -45,8 +47,8 @@ security:
         backend:
             pattern:    ^/admin/*
             form_login:
-                check_path:                     admin_login_processform
-                login_path:                     admin_login_form
+                check_path:                     admin_login_check
+                login_path:                     admin_login
                 always_use_default_target_path: false
                 default_target_path:            admin_welcome
                 target_path_parameter:          _referer
@@ -54,7 +56,19 @@ security:
                 success_handler:                login_success_handler
             logout:
                 path:   admin_logout
-                target: admin_login_form
+                target: admin_login
+            oauth:
+                resource_owners:
+                    facebook: "/admin/login/check-facebook"
+                    twitter:  "/admin/login/check-twitter"
+                login_path:          admin_login
+                default_target_path: admin_login_callback
+                check_path:          admin_login_check
+                use_forward:         false
+                failure_path:        admin_login
+                success_handler:     oauth_login_success_handler
+                oauth_user_provider:
+                    service: onm_oauth_user_provider
 
         manager:
             pattern:    ^/manager/*
@@ -86,6 +100,7 @@ security:
                 target: frontend_auth_login
 
     access_control:
+        - { path: ^/admin/(login$|connect), roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/*, roles: [ ROLE_BACKEND ] }
         - { path: ^/manager/*, roles: [ ROLE_MASTER ] }
         - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
