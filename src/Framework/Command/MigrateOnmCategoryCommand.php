@@ -315,7 +315,7 @@ EOF
      *
      * @return void
      **/
-    protected  function updateFields($contentID, $params)
+    protected function updateFields($contentID, $params)
     {
         if (isset($contentID) && isset($params)) {
             $sql = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
@@ -331,5 +331,4 @@ EOF
             //$output->writeln("Please provide a contentID and views to update it.");
         }
     }
-
 }

@@ -619,8 +619,6 @@ class InstanceManager
             } elseif ($emailExists) {
                 echo 'mail_exists';
             }
-
-            die();
         } else {
             //If instance name or contact mail already exists and comes from manager
             if ($instanceExists) {

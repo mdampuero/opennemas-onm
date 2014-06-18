@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for books
+ * Defines the frontend controller for the books content type
  *
  * @package Frontend_Controllers
  **/
@@ -35,7 +35,6 @@ class BooksController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
         $this->view->assign(
             array(
@@ -56,17 +55,15 @@ class BooksController extends Controller
     {
         $this->page = $request->query->getDigits('page', 1);
 
-        $this->view->setConfig('gallery-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
-
         // Setup caching system
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
 
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
         // Setting up available categories for menu.
-        $this->cm  = new \ContentManager();
+        $contentManager  = new \ContentManager();
         $this->ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) =
             $this->ccm->getArraysMenu('', $contentType);
@@ -74,12 +71,12 @@ class BooksController extends Controller
         $bookCategories = array();
         $i = 0;
         foreach ($parentCategories as $cat) {
-            //only books categories
+            // get only books categories
             if ($cat->internal_category == $contentType) {
                 $bookCategories[$i] = new \stdClass();
                 $bookCategories[$i]->id    = $cat->pk_content_category;
                 $bookCategories[$i]->title = $cat->title;
-                $bookCategories[$i]->books = $this->cm->find_by_category(
+                $bookCategories[$i]->books = $contentManager->find_by_category(
                     'Book',
                     $cat->pk_content_category,
                     'content_status=1',
@@ -105,10 +102,10 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the book is not available
      **/
     public function showAction(Request $request)
     {
-
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $id      = \Content::resolveID($dirtyID);
 
@@ -116,11 +113,12 @@ class BooksController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $book = new \Book($id);
+        $book = $this->get('entity_repository')->find('Book', $id);
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-inner');
-        $cacheID = $this->view->generateCacheId($this->categoryName, null, $book->id);
 
+        $cacheID = $this->view->generateCacheId($this->categoryName, null, $book->id);
         if ($this->view->caching == 0
             || (!$this->view->isCached('books/book_viewer.tpl', $cacheID))
         ) {
@@ -128,8 +126,8 @@ class BooksController extends Controller
 
             $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
 
-            $this->cm  = new \ContentManager();
-            $books = $this->cm->find_by_category(
+            $contentManager  = new \ContentManager();
+            $books = $contentManager->find_by_category(
                 'Book',
                 $book->category,
                 'content_status=1',
@@ -166,7 +164,7 @@ class BooksController extends Controller
      **/
     public function ajaxPaginationListAction(Request $request)
     {
-        $this->cm   = new \ContentManager();
+        $contentManager   = new \ContentManager();
         $category   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         $this->page = $request->query->getDigits('page', 1);
         $last       = false;
@@ -175,7 +173,7 @@ class BooksController extends Controller
         }
 
         $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
-        $books = $this->cm->find_by_category(
+        $books = $contentManager->find_by_category(
             'Book',
             $category,
             'content_status=1',
@@ -185,16 +183,16 @@ class BooksController extends Controller
         if (count($books) == 0) {
             $this->page = $this->page - 1;
             $limit = 'LIMIT '.(($this->page - 1) * 5).',  5';
-            $books  = $this->cm->find_by_category(
+            $books  = $contentManager->find_by_category(
                 'Book',
                 $category,
                 'content_status=1',
                 'ORDER BY position ASC, created DESC '. $limit
             );
             $last = true;
-
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
         $output = $this->renderView(
             'books/widget_books.tpl',
             array(

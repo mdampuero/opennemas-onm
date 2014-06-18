@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class RssController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Shows a page that shows a list of available RSS sources
      *
      * @param Request $request the request object
@@ -46,10 +36,8 @@ class RssController extends Controller
      **/
     public function indexAction()
     {
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
-
-        // Fetch information for Advertisements
-        \Frontend\Controller\ArticlesController::getAds();
 
         if (($this->view->caching == 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
@@ -63,7 +51,12 @@ class RssController extends Controller
             $this->view->assign('opinionAuthors', $opinionAuthors);
         }
 
-        return $this->render('rss/index.tpl', array('cache_id' => $cacheID));
+        return $this->render(
+            'rss/index.tpl',
+            array(
+                'cache_id'       => $cacheID
+            )
+        );
     }
 
     /**
@@ -79,6 +72,7 @@ class RssController extends Controller
         $subcategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
         $author          = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
         $title_rss = "";
         $rss_url   = SITE_URL;
@@ -111,7 +105,7 @@ class RssController extends Controller
                     $title_rss .= " > ". !empty($subcategory_title)?$subcategory_title:$subcategoryName;
                 }
             } else {
-                $rss_url .= "home".SS;
+                $rss_url   .= "home".SS;
                 $title_rss .= "PORTADA";
             }
 
@@ -248,6 +242,7 @@ class RssController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 50;
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId('authorRSS-'.$slug, '', $page);

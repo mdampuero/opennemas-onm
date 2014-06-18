@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc71b60544c264d46d04bb4cd91e3cfa",
+    "hash": "f606e296a8173adeddccbedc84084252",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1122,12 +1122,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "5b0ab2fd704a031daf0ce4a5487d8c4305fd8317"
+                "reference": "35a0e9dc50e9f30a949248d674c2a684c6c10529"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/5b0ab2fd704a031daf0ce4a5487d8c4305fd8317",
-                "reference": "5b0ab2fd704a031daf0ce4a5487d8c4305fd8317",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/35a0e9dc50e9f30a949248d674c2a684c6c10529",
+                "reference": "35a0e9dc50e9f30a949248d674c2a684c6c10529",
                 "shasum": ""
             },
             "require": {
@@ -1144,7 +1144,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-develop": "0.6-dev"
+                    "dev-develop": "0.7-dev"
                 }
             },
             "autoload": {
@@ -1171,7 +1171,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2014-05-08 12:03:32"
+            "time": "2014-06-16 23:35:32"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1592,16 +1592,16 @@
         },
         {
             "name": "paypal/sdk-core-php",
-            "version": "v1.4.3",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/sdk-core-php.git",
-                "reference": "3b568a9b74debec2deb850e18368676f4c508e0e"
+                "reference": "2ee73c75be510af7c2c153ff2eaba086972c8bf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/3b568a9b74debec2deb850e18368676f4c508e0e",
-                "reference": "3b568a9b74debec2deb850e18368676f4c508e0e",
+                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/2ee73c75be510af7c2c153ff2eaba086972c8bf7",
+                "reference": "2ee73c75be510af7c2c153ff2eaba086972c8bf7",
                 "shasum": ""
             },
             "require": {
@@ -1631,7 +1631,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2014-05-12 13:52:52"
+            "time": "2013-09-11 14:22:45"
         },
         {
             "name": "php-ffmpeg/php-ffmpeg",
@@ -1639,12 +1639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "aec1c67178eb04de0d3057908c3f23b3e8856f80"
+                "reference": "5bc3da7bda1b3d295d36a7a5ff32eacba64cec78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/aec1c67178eb04de0d3057908c3f23b3e8856f80",
-                "reference": "aec1c67178eb04de0d3057908c3f23b3e8856f80",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/5bc3da7bda1b3d295d36a7a5ff32eacba64cec78",
+                "reference": "5bc3da7bda1b3d295d36a7a5ff32eacba64cec78",
                 "shasum": ""
             },
             "require": {
@@ -1700,7 +1700,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2014-06-03 10:49:57"
+            "time": "2014-06-11 11:45:43"
         },
         {
             "name": "psr/log",
@@ -1937,16 +1937,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/2b9af56cc676c338d52fca4c657e5bdff73bb7af",
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af",
                 "shasum": ""
             },
             "require": {
@@ -1987,7 +1987,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-05-08 08:11:19"
+            "time": "2014-06-13 11:44:54"
         },
         {
             "name": "symfony/assetic-bundle",

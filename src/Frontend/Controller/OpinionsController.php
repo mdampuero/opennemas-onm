@@ -42,8 +42,6 @@ class OpinionsController extends Controller
 
         $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
         $this->view->assign('actual_category', 'opinion'); // Used in renderMenu
-
-        $this->cm = new \ContentManager();
     }
 
     /**
@@ -288,6 +286,8 @@ class OpinionsController extends Controller
                 }
             }
 
+            $this->cm = new \ContentManager();
+
             // Fetch last external opinions from editorial
             $editorial = $this->cm->getUrlContent($wsUrl.'/ws/opinions/editorialinhome/', true);
 
@@ -319,7 +319,7 @@ class OpinionsController extends Controller
             }
 
             // Sum of total opinions in home + not in home for the pager
-            $totalOpinions =  ITEMS_PAGE + (int)$this->cm->getUrlContent(
+            $totalOpinions =  ITEMS_PAGE + (int) $this->cm->getUrlContent(
                 $wsUrl.'/ws/opinions/countauthorsnotinhome/',
                 true
             );
@@ -443,6 +443,8 @@ class OpinionsController extends Controller
             // generate pagination params
             $itemsPerPage = s::get('items_per_page');
             $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
+
+            $this->cm = new \ContentManager();
 
             // Get the number of total opinions for this author for pagination purpouses
             $countOpinions = $this->cm->cache->count(
@@ -574,6 +576,8 @@ class OpinionsController extends Controller
                 }
             }
 
+            $this->cm = new \ContentManager();
+
             // Get author info
             $author = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$authorID, true);
             $author->slug = strtolower($authorSlug);
@@ -636,6 +640,8 @@ class OpinionsController extends Controller
                     $opinion = (array)$opinion; // template dependency
                 }
             }
+
+            $this->cm = new \ContentManager();
 
             $itemsPerPage = s::get('items_per_page');
             // Get external media url for author images
@@ -748,9 +754,8 @@ class OpinionsController extends Controller
 
             // Machine suggested contents code -----------------------------
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                $opinion->metadata,
                 'opinion',
-                " contents.content_status=1 AND pk_content = pk_fk_content",
+                " pk_content <>".$opinion->id,
                 4
             );
 
@@ -787,6 +792,8 @@ class OpinionsController extends Controller
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }
+
+            $this->cm = new \ContentManager();
 
             $otherOpinions = $this->cm->find(
                 'Opinion',
@@ -855,6 +862,7 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
+            $this->cm = new \ContentManager();
 
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);

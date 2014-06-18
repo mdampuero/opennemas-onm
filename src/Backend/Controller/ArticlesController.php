@@ -867,24 +867,10 @@ class ArticlesController extends Controller
 
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            $article->metadata,
             'article',
-            "pk_fk_content_category= ".$article->category.
-            " AND contents.content_status=1 AND pk_content = pk_fk_content",
+            "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
             4
         );
-
-        foreach ($machineSuggestedContents as &$element) {
-            $element['uri'] = \Uri::generate(
-                'article',
-                array(
-                    'id'       => $element['pk_content'],
-                    'date'     => date('YmdHis', strtotime($element['created'])),
-                    'category' => $element['catName'],
-                    'slug'     => \Onm\StringUtils::get_title($element['title']),
-                )
-            );
-        }
 
         $this->view->caching = 0;
 

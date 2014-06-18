@@ -58,6 +58,6 @@ class WebServiceController extends Controller
         $r->addAuthenticationClass('OnmAuth');
 
         $r->handle();
-        die();
+        return;
     }
 }

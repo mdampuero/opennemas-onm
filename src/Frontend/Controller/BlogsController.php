@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for advertisements
+ * Defines the frontend controller for the opinion-blog content type
  *
  * @package Frontend_Controllers
  **/
@@ -35,15 +35,8 @@ class BlogsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->setConfig('opinion');
-
-        $this->page = $this->request->query->getDigits('page', 1);
-
         $this->category_name = $this->request->query->filter('category_name', 'blog', FILTER_SANITIZE_STRING);
         $this->view->assign('actual_category', 'blog'); // Used in renderMenu
-
-        $this->cm = new \ContentManager();
     }
 
     /**
@@ -54,8 +47,13 @@ class BlogsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
+        $page = $this->request->query->getDigits('page', 1);
+
         // Index frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('opinion');
+
+        $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
@@ -79,7 +77,7 @@ class BlogsController extends Controller
             );
 
             $em         = $this->get('opinion_repository');
-            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
+            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
             $countItems = $em->countBy($filters);
 
             $pagination = \Pager::factory(
@@ -110,7 +108,7 @@ class BlogsController extends Controller
                     $blog->summary = $item->summary;
                     $blog->img1_footer = $item->img1_footer;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog->img1 = new \Photo($item->img1);
+                        $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(
@@ -128,7 +126,7 @@ class BlogsController extends Controller
                     'opinions'   => $blogs,
                     'authors'    => $authors,
                     'pagination' => $pagination,
-                    'page'       => $this->page
+                    'page'       => $page
                 )
             );
         }
@@ -151,14 +149,16 @@ class BlogsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
-        // Index author's frontpage
-        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $page = $this->request->query->getDigits('page', 1);
+        $slug       = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+
         if (empty($slug)) {
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
-        // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $slug, $this->page);
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('opinion');
+        $cacheID = $this->view->generateCacheId($this->category_name, $slug, $page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
@@ -170,13 +170,15 @@ class BlogsController extends Controller
             $author = $ur->findOneBy("username='{$slug}'", 'ID DESC');
             if (!empty($author)) {
                 $author->slug = $author->username;
-                $author->photo = new \Photo($author->avatar_img_id);
+                $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
                 $author->getMeta();
 
                 $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
                   // generate pagination params
 
-                $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
+                $_limit = ' LIMIT '.(($page-1)*$itemsPerPage).', '.($itemsPerPage);
+
+                $this->cm = new \ContentManager();
 
                 // Get the number of total opinions for this author for pagination purpouses
                 $countItems = $this->cm->cache->count(
@@ -203,7 +205,7 @@ class BlogsController extends Controller
                         $blog['author_name_slug']  = $author->slug;
                         $blog['comments']          = $item->comments;
                         if (isset($item->img1) && ($item->img1 > 0)) {
-                            $blog['img1'] = new \Photo($item->img1);
+                            $blog['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                         }
 
                         // Generate blog item uri
@@ -249,7 +251,7 @@ class BlogsController extends Controller
                         'pagination' => $pagination,
                         'blogs'      => $blogs,
                         'author'     => $author,
-                        'page'       => $this->page,
+                        'page'       => $page,
                     )
                 );
             }
@@ -286,12 +288,15 @@ class BlogsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
-        $blog = new \Opinion($blogID);
+        $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
 
         // TODO: Think that this comments related code can be deleted.
         if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('opinion');
 
         //Fetch information for Advertisements
         $ads = $this->getAds('inner');
@@ -302,10 +307,9 @@ class BlogsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
-
             $this->view->assign('contentId', $blogID);
 
-            $author = new \User($blog->fk_author);
+            $author = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
@@ -325,7 +329,7 @@ class BlogsController extends Controller
 
             // Associated media code --------------------------------------
             if (isset($blog->img2) && ($blog->img2 > 0)) {
-                $photo = new \Photo($blog->img2);
+                $photo = $this->get('entity_repository')->find('Photo', $blog->img2);
                 $this->view->assign('photo', $photo);
             }
             $this->view->assign(
@@ -345,11 +349,12 @@ class BlogsController extends Controller
         );
     }
 
-
     /**
      * Fetches the advertisement
      *
      * @param string $context the context to fetch ads from
+     *
+     * @return array the list of advertisement objects
      */
     private function getAds($context = '')
     {

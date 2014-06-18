@@ -217,11 +217,8 @@ class AclUserController extends Controller
                     $_SESSION['user_language'] = $meta['user_language'];
                 }
 
-                // Check if is an author and delete caches
-                if (in_array('3', $data['id_user_group'])) {
-                    // Clear caches
-                    $this->dispatchEvent('author.update', array('authorId' => $userId));
-                }
+                // Clear caches
+                $this->dispatchEvent('author.update', array('authorId' => $userId));
 
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {

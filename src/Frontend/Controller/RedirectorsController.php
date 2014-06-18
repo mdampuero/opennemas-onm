@@ -28,15 +28,6 @@ use Onm\Settings as s;
 class RedirectorsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
-    /**
      * Handles the redirections for all the contents.
      *
      * @param Request $request the request object
@@ -67,10 +58,10 @@ class RedirectorsController extends Controller
         $er = $this->get('entity_repository');
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
-            $content = new \Article($newContentID);
+            $content = $this->get('entity_repository')->find('Article', $newContentID);
             $content->category_name = $content->catName;
         } elseif ($type == 'opinion') {
-            $content = new \Opinion($newContentID);
+            $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
         } else {
             $content = new \Content($newContentID);
         }

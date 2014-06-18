@@ -104,7 +104,7 @@ class MonographsController extends Controller
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
                     if (!empty($monograph->img1)) {
-                        $img                  = new \Photo($monograph->img1);
+                        $img                  = $this->get('entity_repository')->find('Photo', $monograph->img1);
                         $monograph->img1_path = $img->path_file.$img->name;
                         $monograph->img       = $img;
                     }
@@ -142,9 +142,9 @@ class MonographsController extends Controller
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
         $specialID = \Content::resolveID($dirtyID);
-        $cacheID   = $this->view->generateCacheId($this->categoryName, null, $specialID);
-        $special   = new \Special($specialID);
 
+        $cacheID   = $this->view->generateCacheId($this->categoryName, null, $specialID);
+        $special   = $this->get('entity_repository')->find('Special', $specialID);
         if (($this->view->caching == 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
@@ -170,13 +170,13 @@ class MonographsController extends Controller
                         $content = \Content::get($item['fk_content']);
 
                         if (isset($content->img1)) {
-                            $photo                = new \Photo($content->img1);
+                            $photo                = $this->get('entity_repository')->find('Photo', $content->img1);
                             $content->img1_path = $photo->path_file.$photo->name;
                             $content->img1      = $photo;
                         }
 
                         if (isset($content->fk_video)) {
-                            $video              = new \Video($content->fk_video);
+                            $video              = $this->get('entity_repository')->find('Video', $content->fk_video);
                             $content->obj_video = $video;
                         }
 
@@ -199,7 +199,7 @@ class MonographsController extends Controller
             }
 
             if (!empty($special->img1)) {
-                $photo               = new \Photo($special->img1);
+                $photo               = $this->get('entity_repository')->find('Photo', $special->img1);
                 $special->path_img = $photo->path_file.$photo->name;
                 $special->img      = $photo;
             }

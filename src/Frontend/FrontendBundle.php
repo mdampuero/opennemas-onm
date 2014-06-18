@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the frontend bundle
+ *
+ * @package Frontend
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -11,6 +16,11 @@ namespace Frontend;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Initializes the FrontendBundle
+ *
+ * @package Frontend
+ **/
 class FrontendBundle extends Bundle
 {
 }

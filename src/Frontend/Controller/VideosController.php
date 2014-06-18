@@ -226,7 +226,7 @@ class VideosController extends Controller
         ) {
 
             // Load Video and categories
-            $video = new \Video($videoID);
+            $video = $this->get('entity_repository')->find('Video', $videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;
@@ -377,7 +377,7 @@ class VideosController extends Controller
 
         $order = array('created' => 'DESC');
         $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
+            'content_type_name' => array(array('value' => 'video')),
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );

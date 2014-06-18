@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * Loads the bundle configuration
+ *
+ * @package Framework_DependencyInjection
+ **/
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 namespace Framework\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;

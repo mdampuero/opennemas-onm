@@ -53,6 +53,7 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = \Content::resolveID($dirtyID);
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         $content = new \Content($contentID);
@@ -65,7 +66,7 @@ class ContentsController extends Controller
 
 
         if (isset($content->img2) && ($content->img2 != 0)) {
-            $photoInt = new \Photo($content->img2);
+            $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
@@ -106,6 +107,7 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
         // Fetch content
@@ -113,7 +115,7 @@ class ContentsController extends Controller
         $content = unserialize($content);
 
         if (isset($content->img2) && ($content->img2 != 0)) {
-            $photoInt = new \Photo($content->img2);
+            $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
         }
 
@@ -245,6 +247,7 @@ class ContentsController extends Controller
 
             $content = new \Content($contentId);
 
+            $this->view = new \Template(TEMPLATE_USER);
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(
@@ -265,8 +268,7 @@ class ContentsController extends Controller
      **/
     public function rateContentAction(Request $request)
     {
-        // If is POST request perform the vote action
-        // if not render the vote
+        // If is POST request perform the vote action if not render the vote
         if ('POST' == $request->getMethod()) {
             $ip        = getRealIp();
             $contentId = $request->request->getDigits('content_id', null);

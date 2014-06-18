@@ -37,8 +37,8 @@ class Articles
     {
         $this->validateInt($id);
 
-        $machineSearcher = $this->restler->container->get('automatic_contents');
-        $er              = $this->restler->container->get('entity_repository');
+        $machineSearcher = getService('automatic_contents');
+        $er              = getService('entity_repository');
         $ccm             = ContentCategoryManager::get_instance();
 
         // Resolve dirty Id
@@ -55,7 +55,7 @@ class Articles
 
         // Get inner image for this article
         if (isset($article->img2) && ($article->img2 != 0)) {
-            $photoInt = new Photo($article->img2);
+            $photoInt = $er->find('Photo', $article->img2);
             $photoInt->media_url = MEDIA_IMG_PATH_WEB;
             $article->photoInt = $photoInt;
         }
@@ -68,7 +68,7 @@ class Articles
 
         // Get inner video for this article
         if (isset($article->fk_video2)) {
-            $videoInt = new Video($article->fk_video2);
+            $videoInt = $er->find('Video', $article->fk_video2);
             $article->videoInt = $videoInt;
         } else {
             $video =  $this->cm->find_by_category_name(
@@ -86,13 +86,13 @@ class Articles
         $relContent      = new RelatedContent();
         $relatedContents = array();
 
-        $relationIDs     = $relContent->cache->getRelationsForInner($articleId);
+        $relationIDs     = $relContent->getRelationsForInner($articleId);
         if (count($relationIDs) > 0) {
-            $relatedContents = $this->cm->cache->getContents($relationIDs);
+            $relatedContents = $this->cm->getContents($relationIDs);
 
             // Drop contents that are not available or not in time
             $relatedContents = $this->cm->getInTime($relatedContents);
-            $relatedContents = $this->cm->cache->getAvailable($relatedContents);
+            $relatedContents = $this->cm->getAvailable($relatedContents);
 
             // Add category name
             foreach ($relatedContents as &$content) {
@@ -117,14 +117,14 @@ class Articles
         $article->relatedContents = $relatedContents;
 
         // Retrieve the related contents for the given
-        $machineSuggestedContents = $machineSearcher->searchSuggestedContents(
-            $article->metadata,
+        $article->suggested = getService('automatic_contents')->searchSuggestedContents(
             'article',
-            "pk_fk_content_category= ".$article->category.
-            " AND contents.content_status=1 AND pk_content = pk_fk_content",
+            "category_name= '".$article->category_name."' AND pk_content <>".$article->id,
             4
         );
-        foreach ($machineSuggestedContents as &$element) {
+
+        // Generate external url for suggested
+        foreach ($article->suggested as &$element) {
             $element['uri'] = 'ext'.\Uri::generate(
                 'article',
                 array(
@@ -135,8 +135,6 @@ class Articles
                 )
             );
         }
-
-        $article->suggested = $machineSuggestedContents;
 
         return serialize($article);
     }
