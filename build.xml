@@ -7,8 +7,13 @@
 
     <path id="project.paths.php">
         <pathelement path="${basedir}/src/Backend" />
+        <pathelement path="${basedir}/src/BackendWebService" />
+        <pathelement path="${basedir}/src/Framework" />
         <pathelement path="${basedir}/src/Frontend" />
+        <pathelement path="${basedir}/src/FrontendMobile" />
         <pathelement path="${basedir}/src/Manager" />
+        <pathelement path="${basedir}/src/ManagerWebService" />
+        <pathelement path="${basedir}/src/WebService" />
         <pathelement path="${basedir}/app/models" />
         <pathelement path="${basedir}/vendor/Onm" />
         <pathelement path="${basedir}/vendor/core" />
@@ -127,7 +132,7 @@
         </exec>
     </target>
 
-    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+    <target name="phpcpd" description="Find duplicated code using PHPCPD">
         <exec executable="phpcpd">
             <arg line="--log-pmd" />
             <arg value="${basedir}/build/logs/pmd-cpd.xml" />

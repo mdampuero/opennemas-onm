@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class UserController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Shows the user information
      *
      * @param Request $request the request object
@@ -63,6 +53,7 @@ class UserController extends Controller
             // Fetch paywall settings
             $paywallSettings = s::get('paywall_settings');
 
+            $this->view = new \Template(TEMPLATE_USER);
             return $this->render(
                 'user/show.tpl',
                 array(
@@ -88,6 +79,8 @@ class UserController extends Controller
      **/
     public function registerAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
+
         $errors = array();
 
         // What happens when the CAPTCHA was entered incorrectly
@@ -220,7 +213,7 @@ class UserController extends Controller
         }
 
         // Fetch user data and update
-        $user = new \User($_SESSION['userid']);
+        $user = $this->get('user_repository')->find($_SESSION['userid']);
 
         if ($user->id > 0) {
             if ($user->update($data)) {
@@ -235,6 +228,8 @@ class UserController extends Controller
             m::add(_('The user does not exists.'), m::ERROR);
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
+
         return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
@@ -247,6 +242,8 @@ class UserController extends Controller
      **/
     public function userBoxAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
+
         return $this->render('user/user_box.tpl');
     }
 
@@ -260,9 +257,9 @@ class UserController extends Controller
     public function activateAction(Request $request)
     {
         // When user confirms registration from email
-        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-        $captcha = '';
-        $user = new \User();
+        $token    = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+        $captcha  = '';
+        $user     = new \User();
         $userData = $user->findByToken($token);
 
         if ($userData) {
@@ -357,68 +354,69 @@ class UserController extends Controller
     {
         if ('POST' != $request->getMethod()) {
             return $this->render('user/recover_pass.tpl');
-        } else {
-            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        }
 
-            // Get user by email
-            $user = new \User();
-            $user->findByEmail($email);
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
 
-            // If e-mail exists in DB
-            if (!is_null($user->id)) {
-                // Generate and update user with new token
-                $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($user->id, $token);
+        // Get user by email
+        $user = new \User();
+        $user->findByEmail($email);
 
-                $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
+        // If e-mail exists in DB
+        if (!is_null($user->id)) {
+            // Generate and update user with new token
+            $token = md5(uniqid(mt_rand(), true));
+            $user->updateUserToken($user->id, $token);
 
-                $tplMail = new \Template(TEMPLATE_USER);
-                $tplMail->caching = 0;
+            $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
 
-                $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
-                $mailBody = $tplMail->fetch(
-                    'user/emails/recoverpassword.tpl',
+            $tplMail = new \Template(TEMPLATE_USER);
+            $tplMail->caching = 0;
+
+            $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
+            $mailBody = $tplMail->fetch(
+                'user/emails/recoverpassword.tpl',
+                array(
+                    'user' => $user,
+                    'url'  => $url,
+                )
+            );
+
+            //  Build the message
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($mailSubject)
+                ->setBody($mailBody, 'text/plain')
+                ->setTo($user->email)
+                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+            try {
+                $mailer = $this->get('mailer');
+                $mailer->send($message);
+
+                $this->view->assign(
                     array(
-                        'user' => $user,
-                        'url'  => $url,
+                        'mailSent' => true,
+                        'user' => $user
                     )
                 );
+            } catch (\Exception $e) {
+                // Log this error
+                $this->get('application.log')->notice(
+                    "Unable to send the recover password email for the "
+                    ."user {$user->id}: ".$e->getMessage()
+                );
 
-                //  Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($user->email)
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-                try {
-                    $mailer = $this->get('mailer');
-                    $mailer->send($message);
-
-                    $this->view->assign(
-                        array(
-                            'mailSent' => true,
-                            'user' => $user
-                        )
-                    );
-                } catch (\Exception $e) {
-                    // Log this error
-                    $this->get('application.log')->notice(
-                        "Unable to send the recover password email for the "
-                        ."user {$user->id}: ".$e->getMessage()
-                    );
-
-                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
-                }
-
-            } else {
-                m::add(_('Unable to find an user with that email.'), m::ERROR);
+                m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
             }
 
-            // Display form
-            return $this->render('user/recover_pass.tpl');
+        } else {
+            m::add(_('Unable to find an user with that email.'), m::ERROR);
         }
+
+        // Display form
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render('user/recover_pass.tpl');
     }
 
     /**
@@ -433,68 +431,69 @@ class UserController extends Controller
     {
         if ('POST' != $request->getMethod()) {
             return $this->render('user/recover_username.tpl');
-        } else {
-            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        }
 
-            // Get user by email
-            $user = new \User();
-            $user->findByEmail($email);
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
 
-            // If e-mail exists in DB
-            if (!is_null($user->id)) {
-                // Generate and update user with new token
-                $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($user->id, $token);
+        // Get user by email
+        $user = new \User();
+        $user->findByEmail($email);
 
-                $tplMail = new \Template(TEMPLATE_USER);
-                $tplMail->caching = 0;
+        // If e-mail exists in DB
+        if (!is_null($user->id)) {
+            // Generate and update user with new token
+            $token = md5(uniqid(mt_rand(), true));
+            $user->updateUserToken($user->id, $token);
 
-                $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
-                $mailBody = $tplMail->fetch(
-                    'user/emails/recoverusername.tpl',
+            $tplMail = new \Template(TEMPLATE_USER);
+            $tplMail->caching = 0;
+
+            $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
+            $mailBody = $tplMail->fetch(
+                'user/emails/recoverusername.tpl',
+                array(
+                    'user' => $user,
+                )
+            );
+
+            //  Build the message
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($mailSubject)
+                ->setBody($mailBody, 'text/plain')
+                ->setTo($user->email)
+                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+            try {
+                $mailer = $this->get('mailer');
+                $mailer->send($message);
+
+                $url = $this->generateUrl('frontend_auth_login', array(), true);
+
+                $this->view->assign(
                     array(
+                        'mailSent' => true,
                         'user' => $user,
+                        'url' => $url
                     )
                 );
+            } catch (\Exception $e) {
+                // Log this error
+                $this->get('application.log')->notice(
+                    "Unable to send the recover password email for the "
+                    ."user {$user->id}: ".$e->getMessage()
+                );
 
-                //  Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($user->email)
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-                try {
-                    $mailer = $this->get('mailer');
-                    $mailer->send($message);
-
-                    $url = $this->generateUrl('frontend_auth_login', array(), true);
-
-                    $this->view->assign(
-                        array(
-                            'mailSent' => true,
-                            'user' => $user,
-                            'url' => $url
-                        )
-                    );
-                } catch (\Exception $e) {
-                    // Log this error
-                    $this->get('application.log')->notice(
-                        "Unable to send the recover password email for the "
-                        ."user {$user->id}: ".$e->getMessage()
-                    );
-
-                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
-                }
-
-            } else {
-                m::add(_('Unable to find an user with that email.'), m::ERROR);
+                m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
             }
 
-            // Display form
-            return $this->render('user/recover_username.tpl');
+        } else {
+            m::add(_('Unable to find an user with that email.'), m::ERROR);
         }
+
+        // Display form
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render('user/recover_username.tpl');
     }
     /**
      * Regenerates the pass for a user
@@ -521,11 +520,7 @@ class UserController extends Controller
                 );
                 $this->view->assign('userNotValid', true);
             } else {
-                $this->view->assign(
-                    array(
-                        'user' => $user
-                    )
-                );
+                $this->view->assign('user', $user);
             }
         } else {
             $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
@@ -542,8 +537,8 @@ class UserController extends Controller
 
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
         return $this->render('user/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
-
     }
 
     /**
@@ -555,9 +550,9 @@ class UserController extends Controller
      **/
     public function getUserMenuAction(Request $request)
     {
-        $login = $this->generateUrl('frontend_auth_login');
-        $logout = $this->generateUrl('frontend_auth_logout');
-        $register = $this->generateUrl('frontend_user_register');
+        $login     = $this->generateUrl('frontend_auth_login');
+        $logout    = $this->generateUrl('frontend_auth_logout');
+        $register  = $this->generateUrl('frontend_user_register');
         $myAccount = $this->generateUrl('frontend_user_show');
 
         if (isset($_SESSION['userid'])) {
@@ -594,13 +589,12 @@ class UserController extends Controller
      **/
     public function authorFrontpageAction(Request $request)
     {
-
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
-
 
         if (($this->view->caching == 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
@@ -609,10 +603,10 @@ class UserController extends Controller
             $ur = $this->get('user_repository');
             $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
             if (!empty($user)) {
-                $user->photo = new \Photo($user->avatar_img_id);
+                $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
                 $user->getMeta();
 
-                $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
+                $searchCriteria = "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
                     ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
@@ -623,13 +617,13 @@ class UserController extends Controller
                     $item = $item->get($item->id);
                     $item->author = $user;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = new \Photo($item->img1);
+                        $image = $this->get('entity_repository')->find('Photo', $item->img1);
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1 = $image;
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $image = new \Photo($item->cover_id);
+                        $image = $this->get('entity_repository')->find('Photo', $item->cover_id);
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1 = $image;
                         $item->summary = $item->subtitle;
@@ -642,7 +636,7 @@ class UserController extends Controller
                     }
 
                     if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = new \Video($item->fk_video2);
+                        $item->video = $this->get('entity_repository')->find('Video', $item->fk_video2);
                     }
                 }
                 // Build the pager
@@ -674,7 +668,6 @@ class UserController extends Controller
                 'cache_id' => $cacheID,
             )
         );
-
     }
 
     /**
@@ -719,6 +712,7 @@ class UserController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 16;
 
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 
         if (($this->view->caching == 0)

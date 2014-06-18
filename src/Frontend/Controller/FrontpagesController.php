@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for frontpages
+ * Defines the frontend controller for the frontpage content type
  *
  * @package Frontend_Controllers
  **/
@@ -28,26 +28,19 @@ use Onm\Settings as s;
 class FrontpagesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Shows the frontpage given a category name
      *
      * @param Request $request the request object
      *
      * @return Response the response object
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException if the frontpage doesn't exists
      **/
     public function showAction(Request $request)
     {
         // Fetch HTTP variables
         $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $cacheID = $this->view->generateCacheId('frontpage', '', $categoryName);
@@ -71,7 +64,6 @@ class FrontpagesController extends Controller
         // Fetch ads
         $ads = $this->getAds($actualCategoryId, $contentsInHomepage);
         $this->view->assign('advertisements', $ads);
-
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
@@ -157,6 +149,7 @@ class FrontpagesController extends Controller
     {
         // Fetch HTTP variables
         $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         // Setup view
@@ -235,11 +228,12 @@ class FrontpagesController extends Controller
     /**
      * Retrieves the advertisement for the frontpage
      *
-     * @param string $categoryName the category name where fetch ads from
+     * @param string $category           the category name where fetch ads from
+     * @param array  $contentsInHomepage list of contents that are already present in the frontpage
      *
-     * @return void
+     * @return array the list of advertisement objects
      **/
-    public static function getAds($category = 'home', $contentsInHomepage)
+    public static function getAds($category, $contentsInHomepage)
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 

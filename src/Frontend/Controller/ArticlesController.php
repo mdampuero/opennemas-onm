@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for the articles
+ * Defines the frontend controller for the article content type
  *
  * @package Frontend_Controllers
  **/
@@ -24,25 +24,12 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the articles
+ * Defines the frontend controller for the articles content type
  *
  * @package Frontend_Controllers
  **/
 class ArticlesController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        $this->cm   = new \ContentManager();
-        $this->ccm  = \ContentCategoryManager::get_instance();
-    }
-
     /**
      * Displays the article given its id or slug
      *
@@ -54,6 +41,8 @@ class ArticlesController extends Controller
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+
+        $this->ccm  = \ContentCategoryManager::get_instance();
 
         // Resolve article ID
         $er = $this->get('entity_repository');
@@ -69,24 +58,22 @@ class ArticlesController extends Controller
         }
 
         // Load config
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
         $this->paywallHook($article);
-
-        $cm = new \ContentManager();
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
         $ads = $this->getAds($actualCategoryId);
         $this->view->assign('advertisements', $ads);
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
-
+        // Fetch general layout
         $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
-
         $this->view->assign('layoutFile', $layoutFile);
 
+        $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
         if ($this->view->caching == 0
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
@@ -134,6 +121,7 @@ class ArticlesController extends Controller
 
                 $relationIDs     = $relContent->getRelationsForInner($articleID);
                 if (count($relationIDs) > 0) {
+                    $cm = new \ContentManager;
                     $relatedContents = $cm->getContents($relationIDs);
 
                     // Drop contents that are not available or not in time
@@ -192,8 +180,8 @@ class ArticlesController extends Controller
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Setup view
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
-
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
         // Get sync params
@@ -293,16 +281,19 @@ class ArticlesController extends Controller
      **/
     public function paywallHook(&$content)
     {
+        $this->cm   = new \ContentManager();
+
         $paywallActivated = ModuleManager::isActivated('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
+        $this->view = new \Template(TEMPLATE_USER);
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $newContent = $this->renderView(
                 'paywall/partials/content_only_for_subscribers.tpl',
                 array('id' => $content->id)
             );
 
-            $isLogged = is_array($_SESSION) && array_key_exists('userid', $_SESSION);
+            $isLogged = isset($_SESSION) && is_array($_SESSION) && array_key_exists('userid', $_SESSION);
             if ($isLogged) {
                 if (array_key_exists('meta', $_SESSION)
                     && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {

@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class UtilitiesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Displays an advertisement given its id
      *
      * @param Request $request the request object
@@ -154,7 +144,6 @@ class UtilitiesController extends Controller
         }
 
         $cache->save($encUrl, $content, $cacheTimeout);
-
 
         return $content;
     }

@@ -28,23 +28,6 @@ use Onm\Settings as s;
 class SitemapController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-        $this->view->setConfig('sitemap');
-
-        $this->cm  = new \ContentManager();
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        list($this->availableCategories, $this->subcats, $this->other) =
-            $this->ccm->getArraysMenu(0, 1);
-    }
-
-    /**
      * Renders the index sitemap
      *
      * @param Request $request the request object
@@ -54,6 +37,9 @@ class SitemapController extends Controller
     public function indexAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', '');
 
         return $this->buildResponse($format, $cacheID, null);
@@ -69,6 +55,9 @@ class SitemapController extends Controller
     public function webAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'web');
 
         if (($this->view->caching == 0)
@@ -76,6 +65,12 @@ class SitemapController extends Controller
         ) {
             //TODO: add this value in a config file for easy editing
             $maxArticlesByCategory = 250;
+
+            $this->cm  = new \ContentManager();
+            $this->ccm = \ContentCategoryManager::get_instance();
+
+            list($this->availableCategories, $this->subcats, $this->other) =
+                $this->ccm->getArraysMenu(0, 1);
 
             // Foreach available category retrieve last $maxArticlesByCategory articles in there
             $articlesByCategory = array();
@@ -131,14 +126,24 @@ class SitemapController extends Controller
     public function newsAction(Request $request)
     {
         $format = $request->query->filter('_format', 'xml', FILTER_SANITIZE_STRING);
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('sitemap');
         $cacheID = $this->view->generateCacheId('sitemap', '', 'news');
 
         if (($this->view->caching == 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
+            $this->cm  = new \ContentManager();
+            $this->ccm = \ContentCategoryManager::get_instance();
+
+            list($this->availableCategories, $this->subcats, $this->other) =
+                $this->ccm->getArraysMenu(0, 1);
+
             $articlesByCategory = array();
             $maxArticlesByCategory = floor(900 / count($this->availableCategories));
 
+            $er = getService('entity_repository');
             // Foreach available category and retrieve articles from 700 days ago
             foreach ($this->availableCategories as $category) {
                 if ($category->inmenu == 1
@@ -152,6 +157,15 @@ class SitemapController extends Controller
                     );
                     $articlesByCategory[$category->name] =
                         $this->cm->getInTime($articlesByCategory[$category->name]);
+
+                    foreach ($articlesByCategory[$category->name] as &$value) {
+                        $aux = $er->find('Article', $value['pk_content']);
+                        if (!empty($aux->img1)) {
+                            $value['image_path'] = \Photo::getPhotoPath($aux->img1);
+                        } elseif (!empty($aux->img2)) {
+                            $value['image_path'] = \Photo::getPhotoPath($aux->img2);
+                        }
+                    }
                 }
             }
 

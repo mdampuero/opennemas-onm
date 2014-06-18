@@ -37,13 +37,13 @@ class WebServiceController extends Controller
         $siteName     = $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING);
         $userName     = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
         $password     = substr(hash_hmac('sha512', rand(), $this->webserviceParameters["api_key"]), 0, 12);
+        $userPass     = $request->request->filter('user_password', '', FILTER_SANITIZE_STRING);
         $contactMail  = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
         $contactIP    = $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING);
         $timezone     = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
         $token        = md5(uniqid(mt_rand(), true));
         $language     = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
         $plan         = $request->request->filter('plan', '', FILTER_SANITIZE_STRING);
-
 
         $errors = $this->validateInstanceData(array(
             'subdomain'     => $internalName,
@@ -79,7 +79,8 @@ class WebServiceController extends Controller
             'name'          => $siteName,
             'user_name'     => $userName,
             'user_mail'     => $contactMail,
-            'user_pass'     => $password,
+            'user_password' => $userPass,
+            'token'         => $token,
             'internal_name' => $internalName,
             'domains'       => $internalName.'.'.$instanceCreator['base_domain'],
             'activated'     => 1,
@@ -121,8 +122,10 @@ class WebServiceController extends Controller
 
         return new JsonResponse(
             array(
-                'success' => true,
-                'instance_url' => $data['domains']
+                'success'      => true,
+                'instance_url' => $data['domains'],
+                'enable_url'   => $data['domains']
+                    . '/admin/login?token=' . $token
             ),
             200
         );

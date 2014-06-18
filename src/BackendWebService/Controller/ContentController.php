@@ -903,7 +903,6 @@ class ContentController extends Controller
         $success   = array();
         $updated   = array();
 
-        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0

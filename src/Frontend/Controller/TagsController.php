@@ -142,7 +142,6 @@ class TagsController extends Controller
         );
     }
 
-
     /**
      * Fetches advertisements for article inner
      *

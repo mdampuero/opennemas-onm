@@ -41,9 +41,7 @@ class FrontpagesController extends Controller
     {
         $this->view->setConfig('frontpage-mobile');
 
-        //Get category vars
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
 
         $cacheID = $this->view->generateCacheId($categoryName, '', 0);
         if (($this->view->caching == 0)

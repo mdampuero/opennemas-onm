@@ -29,16 +29,6 @@ use Onm\Settings as s;
 class StaticPagesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Displays the static page given its id
      *
      * @param Request $request the request object
@@ -58,6 +48,7 @@ class StaticPagesController extends Controller
 
         $ads = $this->getAds();
 
+        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/statics.tpl',
             array(

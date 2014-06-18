@@ -2,9 +2,7 @@
 
 {t}Your Opennemas' Newspaper is now available{/t}.
 
-{t}Your data are{/t}:
-- {t}User{/t}: {$data['user_name']}
-- {t}Password{/t}: {$data['user_pass']}
+{t}To enable your account go to:{/t} http://{$data['internal_name']}.{$domain}/getting-started
 
 {t}You can access to newspaper with this link{/t} http://{$data['internal_name']}.{$domain}.
 {t}You can also access the administrative area through this link{/t} http://{$data['internal_name']}.{$domain}/admin/

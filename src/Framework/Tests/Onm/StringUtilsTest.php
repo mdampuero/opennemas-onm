@@ -36,10 +36,9 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Onm\StringUtils::normalize_name
      */
-    public function testNormalize_name()
+    public function testNormalizeName()
     {
-        $this->assertEquals('the-great-boy',
-            $this->object->normalize_name('The great boy'));
+        $this->assertEquals('the-great-boy', $this->object->normalize_name('The great boy'));
     }
 
     /**
@@ -180,8 +179,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags('Lorem ipsum dolor sit amet, consectetur adipiscing'.
-            ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.')
+            $this->object->get_tags(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing'.
+                ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
+            )
         );
     }
 
@@ -301,9 +302,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testClearBadChars()
     {
         $text = $this->object->clearBadChars('Text'.chr(226).chr(128).chr(169));
-        $this->assertTrue(
-          strpos(chr(226), $text) == false
-        );
+        $this->assertTrue(strpos(chr(226), $text) == false);
     }
 
     /**

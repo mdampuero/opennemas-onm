@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the frontend controller for the dynamic assets
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -37,15 +42,6 @@ class AssetController extends Controller
         $parameters = explode(',', urldecode($parameters));
 
         $method = array_shift($parameters);
-
-        // $finalParameters = array();
-        // $hash = substr(md5($parameters.$path), 0, 2);
-
-        // var_dump($hash);die();
-
-        // if ($finalParameters['hash'] !== $hash) {
-        //     die('Me cago en tu puta madre hickajer de los webos');
-        // }
 
         if (file_exists($path)) {
             $imagine = new \Imagine\Imagick\Imagine();

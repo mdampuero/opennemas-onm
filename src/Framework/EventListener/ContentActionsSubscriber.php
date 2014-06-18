@@ -72,7 +72,10 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             'category.update' => array(
                 array('deleteCustomCss', 5),
                 array('deleteCategoryCache', 5)
-            )
+            ),
+            'user.update' => array(
+                array('deleteUserCache', 10),
+            ),
         );
     }
 
@@ -382,5 +385,21 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $name = $event->getArgument('category')->name;
         $this->cacheHandler->delete('category_' . $name);
+    }
+
+    /**
+     * Perform the actions after update a user/author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     */
+    public function deleteUserCache(Event $event)
+    {
+        $id = $event->getArgument('id');
+
+        $this->cacheHandler->delete('user-' . $id);
+
+        return false;
     }
 }
