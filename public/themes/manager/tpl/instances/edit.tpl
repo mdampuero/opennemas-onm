@@ -1,95 +1,7 @@
 {extends file="base/base.tpl"}
 
 {block name="header-css" append}
-<style type="text/css">
-.form-horizontal .control-group {
-    margin-bottom: 0px;
-}
-.form-horizontal input+.help-block, .form-horizontal select+.help-block, .form-horizontal textarea+.help-block, .form-horizontal .uneditable-input+.help-block, .form-horizontal .input-prepend+.help-block, .form-horizontal .input-append+.help-block {
-    margin-top:0px;
-    margin-bottom:5px;
-}
-/* Sidenav for Docs
--------------------------------------------------- */
-.sidebar {
-    width: 228px;
-    margin: 30px 0 0;
-    padding: 0;
-    background-color: #fff;
-    border-radius:6px ;
-    box-shadow: 0 1px 4px rgba(0,0,0,.065);
-    position:fixed;
-    top:100px;
-}
-.sidebar > li > a,
-.sidebar .instance-summary {
-    display: block;
-    width: 190px \9;
-    margin: 0 0 -1px;
-    padding: 8px 14px;
-    border: 1px solid #e5e5e5;
-}
-.sidebar > li:first-child > a,
-.sidebar .instance-summary {
-    border-radius: 6px 6px 0 0;
-}
-.sidebar > li:last-child > a {
-    border-radius: 0 0 6px 6px;
-}
-.sidebar > .active > a {
-    position: relative;
-    z-index: 2;
-    padding: 9px 15px;
-    border: 0;
-    text-shadow: 0 1px 0 rgba(0,0,0,.15);
-    box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-    color:#0088cc;
-    font-size:14px;
-}
-/* Chevrons */
-.sidebar .icon-chevron-right {
-    float: right;
-    margin-top: 2px;
-    margin-right: -6px;
-    opacity: .25;
-}
-.sidebar > li > a:hover {
-    background-color: #f5f5f5;
-}
-.sidebar a:hover .icon-chevron-right {
-  opacity: .5;
-}
-.sidebar .active .icon-chevron-right,
-.sidebar .active a:hover .icon-chevron-right {
-  background-image: url(../img/glyphicons-halflings-white.png);
-  opacity: 1;
-}
-.sidebar.affix {
-  top: 40px;
-}
-.sidebar.affix-bottom {
-  position: absolute;
-  top: auto;
-  bottom: 270px;
-}
-
-.settings {
-    padding-left:300px;
-}
-.settings > div:first-child {
-    padding-top:20px;
-}
-.settings > div {
-    padding-top:50px;
-}
-.module_activated {
-    border:1px solid #eee;
-    display:inline-block;
-    margin-right:5px;
-    padding:2px 4px;
-    line-height:1.7em;
-}
-</style>
+{css_tag href="/manager.css" common=1}
 {/block}
 
 {block name="footer-js"}
@@ -145,9 +57,23 @@ jQuery(document).ready(function($) {
                 <ul class="nav nav-list sidebar" data-spy="affix" data-offset-top="100">
                     <li class="instance-summary">
                         <h4>{$instance->name}</h4>
+
+                    </li>
+                    <li class="instance-summary">
                         <p><strong>Media size:</strong> {$size} Mb</p>
                         <p><strong>Owner mail:</strong> {$configs['contact_mail']}</p>
                         <p><strong>Created at:</strong> {$configs['site_created']}</p>
+                        <p>
+                            <label>
+                            <input type="checkbox" class="ios-switch green tinyswitch"  /><div><div></div></div>
+                            </label>
+
+                            <label>
+                                <strong>Activated</strong>
+                                <input type="checkbox" class="ios-switch green bigswitch" name="activated" id="activated" value=1 {if $instance->activated == 1}checked{/if} />
+                                <div><div></div></div>
+                            </label>
+                        </p>
                     </li>
                     <li><a href="#general">{t}General information{/t} <i class="icon-chevron-right"></i></a></li>
                     <li><a href="#domains" title="{t}Domains{/t}">{t}Domains{/t} <i class="icon-chevron-right"></i></a></li>
@@ -183,17 +109,6 @@ jQuery(document).ready(function($) {
                     </div>
                     <div class="control-group">
                         <label class="control-label">
-                            <label for="activated" class="control-label">{t}Activated{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <select name="activated" id="activated">
-                                <option value="1" {if isset($instance) && $instance->activated == 1}selected="selected"{/if}>{t}Yes{/t}</option>
-                                <option value="0" {if isset($instance) && $instance->activated == 0}selected="selected"{/if}>{t}No{/t}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">
                             <label for="template_user" class="control-label">{t}Template{/t}</label>
                         </label>
                         <div class="controls">
@@ -214,14 +129,18 @@ jQuery(document).ready(function($) {
                     <h4>Domains</h4>
 
                     <div class="control-group">
-                        <label class="control-label">
-                            <label for="domains" class="control-label">{t}Domains:{/t}</label>
-                        </label>
                         <div class="controls">
-                            <textarea id="domains" name="domains" cols="50" rows="5" required="required">{$instance->domains}</textarea>
-                            <div class="help-block">
-                                {t escape=off}List of domains separated by commas. You can use wildcards, i.e. *.example.com{/t}
-                            </div>
+                            <ul class="domain-list">
+                                {foreach $instance->domains as $domain}
+                                <li>
+                                    <a href="http://{$domain}" target="_blank" title=""><i class="icon icon-anchor"></i> </a>
+                                    <input type="text" name="domains[]" value="{$domain}">
+                                </li>
+                                {/foreach}
+                                <li class="center">
+                                    <a href="#" title=""><i class="icon icon-plus"></i></a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -334,10 +253,10 @@ jQuery(document).ready(function($) {
                         <tbody>
                             <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="mail_server" class="control-label">{t}Activated modules{/t}</label>
+                                    <label for="activated_modules" class="control-label"></label>
                                 </th>
-                                <td class="form-inline" class="controls">
-                                    {html_checkboxes name='activated_modules' values=array_keys($available_modules) output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
+                                <td class="controls modules-list">
+                                    {html_checkboxes name='activated_modules' values=array_keys($available_modules) output=$available_modules selected=$configs['activated_modules']}
                                 </td>
                             </tr>
                         </tbody>

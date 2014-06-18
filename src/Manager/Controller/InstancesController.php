@@ -74,7 +74,7 @@ class InstancesController extends Controller
         }
 
         list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
-
+        $instance->domains = explode(',', $instance->domains);
 
         $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$instance->internal_name));
         if (is_array($size)) {
