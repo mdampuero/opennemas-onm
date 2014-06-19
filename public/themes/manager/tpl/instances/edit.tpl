@@ -32,22 +32,22 @@ jQuery(document).ready(function($) {
     $('.affix').affix();
     $('#activated_modules').twosidedmultiselect();
 
-    $('.domain .del').on('click', function(e, ui) {
+    $('.domain-list').on('click', '.domain .del', function(e, ui) {
         e.preventDefault();
         $(this).closest('.domain').remove();
     });
-    $('.domain-list .add-domain').on('click', function(e, ui) {
+    $('.domain-list').on('click', '.add-domain a', function(e, ui) {
         e.preventDefault();
+        console.log('add new')
 
-        new_domain = $(this).prev('.domain').clone();
+        new_domain = $(this).closest('.domain-list').find('.domain:first').clone();
         new_domain.find('input').val('');
         new_domain.insertBefore('.add-domain');
     })
-    $('.domain-list .visit-domain').on('click', function(e, ui) {
+    $('.domain-list').on('click', '.visit-domain', function(e, ui) {
         e.preventDefault();
 
         url = $(this).closest('.domain').find('input').val();
-        console.log(url)
         window.open('http://'+url, '_blank').focus();
     })
 });
@@ -89,7 +89,7 @@ jQuery(document).ready(function($) {
                     </li>
                     <li class="instance-summary">
                         <p><strong>Media size:</strong> {$size} Mb</p>
-                        <p><strong>Owner mail:</strong> {$configs['contact_mail']}</p>
+                        <p><strong>Owner mail:</strong> <a href="mailto:{$configs['contact_mail']}" title="Send email to the owner">{$configs['contact_mail']}</a></p>
                         <p><strong>Created at:</strong> {$configs['site_created']}</p>
                         <p><strong>Created from IP:</strong> {$configs['contact_IP']}</p>
                         <p>
@@ -159,18 +159,27 @@ jQuery(document).ready(function($) {
 
                     <div class="control-group">
                         <div class="controls">
-                            <ul class="domain-list">
+                            <table class="domain-list">
                                 {foreach $instance->domains as $domain}
-                                <li class="domain">
-                                    <input type="text" name="domains[]" value="{$domain}" placeholder="Insert your new domain here">
-                                    <button title="Delete domain" class="side-tool del"><i class="icon icon-trash"></i> </button>
-                                    <button title="Visit domain" class="side-tool visit-domain"><i class="icon icon-anchor"></i> </button>
-                                </li>
+                                <tr class="domain">
+                                    <td>
+                                        <input type="text" name="domains[]" value="{$domain}" placeholder="Insert your new domain here">
+                                    </td>
+                                    <!-- <td class="side-tool" style="width:0px">
+                                        <button title="Delete domain" class="mark-main" title="mark as the main domain"><i class="icon icon-certificate"></i> </button>
+                                    </td> -->
+                                    <td class="side-tool" style="width:0px">
+                                        <button title="Delete domain" class="del"><i class="icon icon-trash"></i> </button>
+                                    </td>
+                                    <td class="side-tool" style="width:0px">
+                                        <button title="Visit domain" class="visit-domain"><i class="icon icon-external-link"></i> </button>
+                                    </td>
+                                </tr>
                                 {/foreach}
-                                <li class="center add-domain">
-                                    <a href="#" title=""><i class="icon icon-plus"></i></a>
-                                </li>
-                            </ul>
+                                <tfoot class="center add-domain">
+                                    <tr><td colspan=3><a href="#" title="Add new domain" ><i class="icon icon-plus"></i></a></td></tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
 

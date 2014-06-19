@@ -73,7 +73,7 @@
     padding-left:300px;
 }
 .settings > div:first-child {
-    padding-top:20px;
+    padding-top:0px;
 }
 .settings > div {
     padding-top:20px;
@@ -192,26 +192,27 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     margin:0;
     padding:0;
     margin-bottom:25px;
+    width:100%;
+    border-collapse: collapse;
 }
-.domain-list li {
+.domain-list tr {
     border:1px solid #ddd;
-    border-top-width:0;
-    padding:10px 15px;
-    padding-right:0;
 }
-.domain-list li:first-child {
-    border-top-width:1px;
+
+.domain-list, .domain-list tr, .domain-list td {
+    border:1px solid #ccc;
 }
-.domain-list li::last-child {
-    border-top: 0;
+
+.domain-list td {
+    padding:7px;
 }
-.domain-list li a {
+.domain-list a {
     color:#333;
 }
-.domain-list li input {
+.domain-list input {
     margin-right:5px;
+    width:90%;
     border:1px solid transparent;
-    width: 80%;
     box-shadow:0 0 0 transparent;
 }
 .domain-list li input:hover,
@@ -227,19 +228,30 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     transition: border linear .2s, box-shadow linear .2s;
 }
 .domain-list .domain .side-tool {
-    display:inline-block;
-    float:right;
-    min-height:100%;
-    padding:15px;
+    width:0px;
+    position:relative;
+}
+.domain-list .domain button {
     border:0 none;
-    border-left:1px solid #ccc;
     margin:0;
     font-size:1.3em;
-    margin-top:-10px;
     background:none;
+    display:inline-block;
+    position:absolute;
+    top:30%;
+    left:20%;
+    color:#aaa;
 }
+.domain-list .domain:hover button {
+    color:#333;
+}
+
 .domain-list .domain .side-tool:hover {
     background:#eee;
+}
+.domain-list .domain .side-tool i {
+    margin:0;
+    padding:0;
 }
 
 .modules-list > div {
