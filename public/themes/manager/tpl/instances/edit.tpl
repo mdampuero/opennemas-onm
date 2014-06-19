@@ -13,25 +13,49 @@ jQuery(document).ready(function($) {
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
 
-    jQuery('#domain_expire').datepicker({
+    jQuery('#domain_expire').datetimepicker({
         hourGrid: 4,
         showAnim: 'fadeIn',
         dateFormat: 'yy-mm-dd',
+        timeFormat: 'hh:mm:ss',
+        minuteGrid: 10
     });
 
-    jQuery('#last_invoice').datepicker({
+    jQuery('#last_invoice').datetimepicker({
         hourGrid: 4,
-        showAnim: 'fadeIn'
+        showAnim: 'fadeIn',
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'hh:mm:ss',
+        minuteGrid: 10
     });
 
     $('.affix').affix();
     $('#activated_modules').twosidedmultiselect();
+
+    $('.domain .del').on('click', function(e, ui) {
+        e.preventDefault();
+        $(this).closest('.domain').remove();
+    });
+    $('.domain-list .add-domain').on('click', function(e, ui) {
+        e.preventDefault();
+
+        new_domain = $(this).prev('.domain').clone();
+        new_domain.find('input').val('');
+        new_domain.insertBefore('.add-domain');
+    })
+    $('.domain-list .visit-domain').on('click', function(e, ui) {
+        e.preventDefault();
+
+        url = $(this).closest('.domain').find('input').val();
+        console.log(url)
+        window.open('http://'+url, '_blank').focus();
+    })
 });
 </script>
 {/block}
 
 {block name="content" append}
-<form action="{if !isset($instance->id)}{url name=manager_instance_create}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario"  data-spy="scroll" data-target=".sidebar">
+<form action="{if !isset($instance->id)}{url name=manager_instance_create}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title">
@@ -67,6 +91,7 @@ jQuery(document).ready(function($) {
                         <p><strong>Media size:</strong> {$size} Mb</p>
                         <p><strong>Owner mail:</strong> {$configs['contact_mail']}</p>
                         <p><strong>Created at:</strong> {$configs['site_created']}</p>
+                        <p><strong>Created from IP:</strong> {$configs['contact_IP']}</p>
                         <p>
                             <label>
                             <input type="checkbox" class="ios-switch green tinyswitch"  /><div><div></div></div>
@@ -81,10 +106,9 @@ jQuery(document).ready(function($) {
                     </li>
                     <li><a href="#general">{t}General information{/t} <i class="icon-chevron-right"></i></a></li>
                     <li><a href="#domains" title="{t}Domains{/t}">{t}Domains{/t} <i class="icon-chevron-right"></i></a></li>
+                    <li><a href="#modules">{t}Modules{/t} <i class="icon-chevron-right"></i></a></li>
                     <li><a href="#internals">{t}Internal information{/t} <i class="icon-chevron-right"></i></a> </li>
                     <li><a href="#external">{t}External Services{/t} <i class="icon-chevron-right"></i></a></li>
-                    <li><a href="#modules">{t}Modules{/t} <i class="icon-chevron-right"></i></a></li>
-                    <li><a href="#owner-information" title="{t}Owner information{/t}">{t}Owner information{/t} <i class="icon-chevron-right"></i></a></li>
                 </ul>
             </div>
             <div class="span9 settings form-horizontal">
@@ -137,12 +161,13 @@ jQuery(document).ready(function($) {
                         <div class="controls">
                             <ul class="domain-list">
                                 {foreach $instance->domains as $domain}
-                                <li>
-                                    <a href="http://{$domain}" target="_blank" title=""><i class="icon icon-anchor"></i> </a>
-                                    <input type="text" name="domains[]" value="{$domain}">
+                                <li class="domain">
+                                    <input type="text" name="domains[]" value="{$domain}" placeholder="Insert your new domain here">
+                                    <button title="Delete domain" class="side-tool del"><i class="icon icon-trash"></i> </button>
+                                    <button title="Visit domain" class="side-tool visit-domain"><i class="icon icon-anchor"></i> </button>
                                 </li>
                                 {/foreach}
-                                <li class="center">
+                                <li class="center add-domain">
                                     <a href="#" title=""><i class="icon icon-plus"></i></a>
                                 </li>
                             </ul>
@@ -157,6 +182,27 @@ jQuery(document).ready(function($) {
                             <input type="datetime" id="domain_expire" name="domain_expire" value="{$configs['domain_expire']|default:""}">
                         </div>
                     </div>
+                </div>
+
+                <div id="modules">
+                    <h4>Modules</h4>
+                    <table>
+                        <tbody>
+                            <tr valign="top" class="control-group">
+                                <th scope="row">
+                                    <label for="activated_modules" class="control-label"></label>
+                                </th>
+                                <td class="controls modules-list">
+                                    <select id="activated_modules" name="activated_modules[]" size="{count($available_modules)}" multiple="multiple" class="validate-selection">
+                                        {foreach $available_modules as $module_key => $module_name}
+                                            <option  value="{$module_key}" {if in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
+                                        {/foreach}
+                                    </select>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div id="internals">
@@ -250,75 +296,6 @@ jQuery(document).ready(function($) {
 
                         </tbody>
                     </table>
-                </div>
-
-                <div id="modules">
-                    <h4>Modules</h4>
-                    <table>
-                        <tbody>
-                            <tr valign="top" class="control-group">
-                                <th scope="row">
-                                    <label for="activated_modules" class="control-label"></label>
-                                </th>
-                                <td class="controls modules-list">
-                                    <select id="activated_modules" name="activated_modules[]" size="{count($available_modules)}" multiple="multiple" class="validate-selection">
-                                        {foreach $available_modules as $module_key => $module_name}
-                                            <option  value="{$module_key}" {if in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
-                                        {/foreach}
-                                    </select>
-
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="owner-information">
-                    <h4>{t}Owner information{/t}</h4>
-
-                    <div class="control-group">
-                        <label class="control-label">
-                            <label for="site_created" class="control-label">{t}Created{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%Y-%m-%d - %H:%M:%S"}{/if}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">
-                            <label for="contact_name" class="control-label">{t}User name{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <input type="text" id="contact_name" name="contact_name" value="{$configs['contact_name']|default:""}" required="required">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">
-                            <label for="password" class="control-label">{t}User password{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <input type="password" id="password" class="{if !isset($instance)}required validate-password required="required"{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
-                            <div class="help-block">
-                                {t}(The password must have between 8 and 16 characters){/t}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">
-                            <label for="contact_IP" class="control-label">{t}User contact IP{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <input type="text" readonly id="contact_IP" name="contact_IP" value="{$configs['contact_IP']|default:""}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">
-                            <label for="contact_mail" class="control-label">{t}User contact mail:{/t}</label>
-                        </label>
-                        <div class="controls">
-                            <input type="email" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}" required="required">
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

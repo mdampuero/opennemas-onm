@@ -76,7 +76,7 @@ class InstancesController extends Controller
         list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
         $instance->domains = explode(',', $instance->domains);
 
-        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$instance->internal_name));
+        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$instance->internal_name.'/'));
         if (is_array($size)) {
             $size = $size[0] / 1024;
         }
@@ -138,9 +138,7 @@ class InstancesController extends Controller
             $data = array(
                 'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('site_name', '', FILTER_SANITIZE_STRING),
-                'user_name'     => $request->request->filter('contact_name', '', FILTER_SANITIZE_STRING),
                 'user_mail'     => $request->request->filter('contact_mail', '', FILTER_SANITIZE_STRING),
-                'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
                 'internal_name' => $internalName,
                 'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
                 'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),

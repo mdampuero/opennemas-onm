@@ -197,6 +197,7 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     border:1px solid #ddd;
     border-top-width:0;
     padding:10px 15px;
+    padding-right:0;
 }
 .domain-list li:first-child {
     border-top-width:1px;
@@ -224,6 +225,21 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     -moz-transition: border linear .2s, box-shadow linear .2s;
     -o-transition: border linear .2s, box-shadow linear .2s;
     transition: border linear .2s, box-shadow linear .2s;
+}
+.domain-list .domain .side-tool {
+    display:inline-block;
+    float:right;
+    min-height:100%;
+    padding:15px;
+    border:0 none;
+    border-left:1px solid #ccc;
+    margin:0;
+    font-size:1.3em;
+    margin-top:-10px;
+    background:none;
+}
+.domain-list .domain .side-tool:hover {
+    background:#eee;
 }
 
 .modules-list > div {
