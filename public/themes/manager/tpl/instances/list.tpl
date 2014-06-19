@@ -1,20 +1,6 @@
 {extends file="base/base.tpl"}
 
 {block name="header-js" append}
-    <style>
-        .domains ul {
-            margin:0;
-        }
-        .domains li{
-            margin:0;
-            list-style:none;
-            padding:0;
-        }
-    </style>
-{/block}
-
-
-{block name="header-js" append}
     {include file="common/angular_includes.tpl"}
 {/block}
 

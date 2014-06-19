@@ -231,12 +231,7 @@ class InstancesController extends Controller
         $settingsRAW = $request->request->get('settings');
         $settings = array(
             'TEMPLATE_USER' => filter_var($settingsRAW['TEMPLATE_USER'], FILTER_SANITIZE_STRING),
-            'MEDIA_URL'     => filter_var($settingsRAW['MEDIA_URL'], FILTER_SANITIZE_STRING),
-            'BD_TYPE'       => filter_var($settingsRAW['BD_TYPE'], FILTER_SANITIZE_STRING),
-            'BD_HOST'       => filter_var($settingsRAW['BD_HOST'], FILTER_SANITIZE_STRING),
             'BD_DATABASE'   => filter_var($settingsRAW['BD_DATABASE'], FILTER_SANITIZE_STRING),
-            'BD_USER'       => filter_var($settingsRAW['BD_USER'], FILTER_SANITIZE_STRING),
-            'BD_PASS'       => filter_var($settingsRAW['BD_PASS'], FILTER_SANITIZE_STRING),
         );
 
         //Get all the Post data
@@ -269,39 +264,40 @@ class InstancesController extends Controller
         $errors = array();
 
         $configurationsKeys = array(
-            'site_title', 'site_description','site_keywords',
-            'site_agency','site_name','site_created',
-            'contact_mail','contact_name','contact_IP','domain_expire',
-            'time_zone','site_language', 'pass_level',
-            'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
-            'mail_username','mail_password','google_maps_api_key',
-            'google_custom_search_api_key','facebook',
-            'google_analytics','piwik',
-            'recaptcha',
-            'items_per_page',
-            'refresh_interval',
-            'advertisements_enabled',
-            'log_enabled', 'log_db_enabled', 'log_level',
-            'activated_modules'
+            'activated_modules',
+            'contact_IP',
+            'contact_mail',
+            'contact_name',
+            'domain_expire',
+            'last_invoice',
+            'max_mailing',
+            'pass_level',
+            'piwik',
+            'site_created',
+            'site_language',
+            'site_name',
+            'time_zone',
         );
-
-        // Delete the 'activated_modules' from cache service for this instance
-        s::invalidate('activated_modules', $data['internal_name']);
-        // Delete the 'site_name' from cache service for this instance
-        s::invalidate('site_name', $data['internal_name']);
-        s::invalidate('last_invoice', $data['internal_name']);
 
         $instanceManager = getService('instance_manager');
 
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
         $GLOBALS['application']->conn = $instanceManager->getConnection($settings);
 
+        // Update instance data
+        $errors = $instanceManager->update($data);
+
+        // Update instance configurations
         foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
                 s::set($key, $value);
             }
         }
-        $errors = $instanceManager->update($data);
+
+        // Delete the 'activated_modules' from cache service for this instance
+        s::invalidate('activated_modules', $data['internal_name']);
+        s::invalidate('site_name', $data['internal_name']);
+        s::invalidate('last_invoice', $data['internal_name']);
 
         if (is_array($errors) && count($errors) > 0) {
             m::add($errors, m::ERROR);

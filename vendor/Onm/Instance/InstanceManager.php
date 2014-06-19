@@ -1220,6 +1220,10 @@ class InstanceManager
     {
         $instance = $this->fetchInstanceFromInternalName($data['internal_name']);
 
+        if (is_array($data['domains'])) {
+            $data['domains'] = implode(',', $data['domains']);
+        }
+
         $sql = "UPDATE instances SET name=?, internal_name=?, "
              . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(

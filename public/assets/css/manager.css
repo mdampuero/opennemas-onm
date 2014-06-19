@@ -226,8 +226,10 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     transition: border linear .2s, box-shadow linear .2s;
 }
 
-
-.modules-list label {
+.modules-list > div {
     display:inline-block;
-    width:49%;
+}
+.modules-list .tsmsoptions {
+    width:40px;
+    text-align:center;
 }

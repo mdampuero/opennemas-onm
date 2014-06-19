@@ -6,6 +6,7 @@
 
 {block name="footer-js"}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
+{script_tag src="/jquery/jquery.multiselect.js" common=1}
 <script>
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
@@ -18,7 +19,13 @@ jQuery(document).ready(function($) {
         dateFormat: 'yy-mm-dd',
     });
 
-    $('.affix').affix()
+    jQuery('#last_invoice').datepicker({
+        hourGrid: 4,
+        showAnim: 'fadeIn'
+    });
+
+    $('.affix').affix();
+    $('#activated_modules').twosidedmultiselect();
 });
 </script>
 {/block}
@@ -47,9 +54,6 @@ jQuery(document).ready(function($) {
             </ul>
         </div>
     </div>
-    <div class="wrapper-content">
-        {render_messages}
-    </div><!-- / -->
     <div class="wrapper-content">
 
         <div id="instance-edit" class="row ">
@@ -84,6 +88,7 @@ jQuery(document).ready(function($) {
                 </ul>
             </div>
             <div class="span9 settings form-horizontal">
+                {render_messages}
                 <!-- <div id="summary">
                     <h3>{$instance->name}</h3>
                     <p>
@@ -256,7 +261,12 @@ jQuery(document).ready(function($) {
                                     <label for="activated_modules" class="control-label"></label>
                                 </th>
                                 <td class="controls modules-list">
-                                    {html_checkboxes name='activated_modules' values=array_keys($available_modules) output=$available_modules selected=$configs['activated_modules']}
+                                    <select id="activated_modules" name="activated_modules[]" size="{count($available_modules)}" multiple="multiple" class="validate-selection">
+                                        {foreach $available_modules as $module_key => $module_name}
+                                            <option  value="{$module_key}" {if in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
+                                        {/foreach}
+                                    </select>
+
                                 </td>
                             </tr>
                         </tbody>
