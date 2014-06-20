@@ -113,15 +113,6 @@ jQuery(document).ready(function($) {
             </div>
             <div class="span9 settings form-horizontal">
                 {render_messages}
-                <!-- <div id="summary">
-                    <h3>{$instance->name}</h3>
-                    <p>
-                        <strong>Modules activated: ({count($configs['activated_modules'])})</strong><br>
-                        {foreach $configs['activated_modules'] as $activated_module}
-                            <span class="module_activated">{$available_modules[$activated_module]}</span>
-                        {/foreach}
-                    </p>
-                </div> -->
                 <div id="general">
                     <h4>General information</h4>
 
@@ -141,7 +132,11 @@ jQuery(document).ready(function($) {
                             <label for="template_user" class="control-label">{t}Template{/t}</label>
                         </label>
                         <div class="controls">
-                            {html_options name="settings[TEMPLATE_USER]" options=$templates selected=$instance->settings['TEMPLATE_USER']}
+                            <select name="settings[TEMPLATE_USER]" id="template_user">
+                                {foreach $templates as $template_internal_name => $template_info}
+                                <option value="{$template_internal_name}" {if $instance->settings['TEMPLATE_USER'] == $template_internal_name}selected{/if}>{$template_info->name}</option>
+                                {/foreach}
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">

@@ -32,7 +32,6 @@ class InstanceManager
 
     /*
      * Get available templates
-     *
      */
     public static function getAvailableTemplates()
     {
@@ -40,7 +39,10 @@ class InstanceManager
         foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value) {
             $parts             = preg_split("@/@", $value);
             $name              = $parts[count($parts)-1];
-            $templates [$name] = ucfirst($name);
+            if (file_exists($value.'/init.php')) {
+                $themeInfo         =  include_once($value.'/init.php');
+                $templates [$name] = $themeInfo;
+            }
         }
         unset($templates['admin']);
         unset($templates['manager']);
