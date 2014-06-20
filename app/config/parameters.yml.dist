@@ -1,5 +1,6 @@
 parameters:
-    secret: test
+    framework.trusted_proxies: ~
+    framework.secret: test
     locale: en
     # environment:       production
     environment:       development
@@ -33,10 +34,13 @@ parameters:
     mailer_port:       ~
     mailer_no_reply_address: no-reply@postman.opennemas.com
 
+    session.name:          __onm_sess
+    session.gc_maxlifetime: 86400
+
     session_memcache_host:   127.0.0.1
     session_memcache_port:   11211
     session_memcache_prefix: sess
-    session_memcache_expire: 84600
+    session_memcache_expire: %session.gc_maxlifetime%
     session_handler_id:      session.handler.drak.memcached
     #session_handler_id:     session.handler.drak.redis
 
@@ -49,9 +53,6 @@ parameters:
     # Savepath for Redis (tcp://ip:port?<options>)
     # session_handler_savepath: tcp://localhost:6379?timeout=2
 
-    locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
-
     cache_handler:     Onm\Cache\Apc
     cache_handler_params:
         server: 127.0.0.1
@@ -61,9 +62,6 @@ parameters:
             server: localhost
             prefix: onm
 
-    session_params:
-        name:          __onm_sess
-        gc_maxlifetime: 86400
 
     logger_file_path: tmp/log/application.log
     dev_token: 1234
@@ -88,3 +86,5 @@ parameters:
             server1:
                 host: localhost
                 port: 80
+    opennemas.backend_force_ssl: false
+    opennemas.base_domain: .opennemas.com
