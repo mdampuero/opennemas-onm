@@ -39,7 +39,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
         // Loads one ONM instance from database
         $im = getService('instance_manager');
-        $instance = $im->load($request->server->get('SERVER_NAME'));
+        $instance = $im->load($request->getHost());
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
@@ -63,6 +63,29 @@ class InstanceLoaderListener implements EventSubscriberInterface
         // CRAP: take this out, Workaround
         \Application::load();
         \Application::initDatabase($databaseInstanceConnection);
+
+        // Check if the request is for backend and it is done to the proper
+        // domain and protocol. If not redirect to the proper url
+        if (strpos($request->getRequestUri(), '/admin') === 0) {
+            $host = $request->getHost();
+            $instance->domains = explode(',', $instance->domains);
+            $forceSSL = getContainerParameter('opennemas.backend_force_ssl');
+
+            $scheme = ($forceSSL) ? 'https://' : 'http://';
+            $domainRoot = getContainerParameter('opennemas.base_domain');
+            $port       = (in_array($_SERVER['SERVER_PORT'], array(80, 443)))? '' : ':'.$_SERVER['SERVER_PORT'];
+            $supposedInstanceDomain = $instance->internal_name.$domainRoot;
+
+            if ($host !== $supposedInstanceDomain
+                || ($forceSSL && !$request->isSecure())
+            ) {
+                $uri = $request->getRequestUri();
+                $url = $scheme.$supposedInstanceDomain.$port.$uri;
+
+                $event->setResponse(new RedirectResponse($url, 302));
+            }
+
+        }
     }
 
     public static function getSubscribedEvents()
