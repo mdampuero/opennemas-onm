@@ -145,7 +145,10 @@ label {
                         <div class="control-group">
                             <label for="meta[twitter]" class="control-label">{t}View as Blog{/t}</label>
                             <div class="controls">
-                                <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
+                                <label>
+                                    <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
+                                    {t}If this option is activated page author will be showed as blog{/t}
+                                </label>
                             </div>
                         </div>
 
@@ -173,7 +176,7 @@ label {
                         <div class="control-group">
                             <label for="meta[inrss]" class="control-label">{t}Show in RSS{/t}</label>
                             <div class="controls">
-                                <label class="checkbox">
+                                <label>
                                     <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on'} checked="checked"{/if}>
                                     {t}If this option is activated this author will be showed in rss{/t}
                                 </label>
