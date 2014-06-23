@@ -465,9 +465,6 @@ contents:
         fk_user_last_editor:
             type: integer
             options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
-        views:
-            type: integer
-            options: { default: null, notnull: false, unsigned: true }
         position:
             type: integer
             options: { default: '100', notnull: false, unsigned: true }
@@ -592,6 +589,21 @@ contents_categories:
         -
             name: catName
             columns: [catName]
+content_views:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { default: null, unsigned: true }
+        views:
+            type: integer
+            options: { default: 0, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content]
+            primary: true
+            unique: true
+            flags: {  }
 frontpages:
     columns:
         date:
