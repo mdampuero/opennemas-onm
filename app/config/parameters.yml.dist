@@ -53,7 +53,7 @@ parameters:
     # Savepath for Redis (tcp://ip:port?<options>)
     # session_handler_savepath: tcp://localhost:6379?timeout=2
 
-    cache_handler:     Onm\Cache\Apc
+    cache_handler:     Onm\Cache\Memcache
     cache_handler_params:
         server: 127.0.0.1
         port: 11211
