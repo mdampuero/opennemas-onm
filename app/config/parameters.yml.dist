@@ -91,5 +91,7 @@ parameters:
 
     api.facebook.client_id: 325850407572280
     api.facebook.client_secret: f5092fc72b68aa96b535dff5d7812712
+    api.facebook.client_id: 330535510437103
+    api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
     api.twitter.client_id: 2uP5o5b7ruolJLjEqZhDQPfO4
     api.twitter.client_secret: Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
