@@ -326,9 +326,25 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        $userAgent = $request->headers->get('User-Agent');
+        $bots = array(
+            "archiver", "bot", "crawl", "curl", "eventbox", "facebookexternal",
+            "google", "msnbot", "monitor", "mechanize", "nambu", "perl",
+            "python", "sphere", "spider", "PEAR", "java", "radian", "twitter",
+            "wordpress", "yahoo", "yandex"
+        );
+
+        $i = 0;
+        while ($i < count($bots) && stristr($userAgent, $bots[$i]) != false) {
+            $i++;
+        }
+
         // Increment view only if the request is performed with an AJAX request
-        if ($request->isXmlHttpRequest()) {
-            \Content::setNumViews($contentId);
+        if ($i >= count($bots)) {
+            $httpCode = 400;
+            $content = "Bot detected";
+        } elseif ($request->isXmlHttpRequest()) {
+            $this->get('content_views_repository')->setViews($contentId);
             $httpCode = 200;
             $content = "Ok";
         } else {
