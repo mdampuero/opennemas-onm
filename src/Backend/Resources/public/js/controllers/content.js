@@ -430,6 +430,29 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
     }, true);
 
     /**
+     * Load the value of elements per page variable in scope when it changes.
+     *
+     * @param  Event  event Event object.
+     * @param  Object vars  Shared variables object.
+     */
+    $scope.$watch('shvs.elements_per_page', function(newValues, oldValues) {
+        if (searchTimeout) {
+            $timeout.cancel(searchTimeout);
+        }
+
+        if (newValues !== oldValues) {
+            $location.search('elements_per_page', newValues);
+
+            $scope.shvs.page = 1;
+            $location.search('page', null);
+
+            searchTimeout = $timeout(function() {
+                $scope.list($scope.route);
+            }, 500);
+        }
+    }, true);
+
+    /**
      * Load the value of shared variables object in scope when it changes.
      *
      * @param  Event  event Event object.

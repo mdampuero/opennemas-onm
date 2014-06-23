@@ -12,6 +12,9 @@ instances:
         domains:
             type: text
             options: { default: null }
+        main_domain:
+            type: string
+            options: {default: null, length: 255 }
         settings:
             type: text
             options: { default: null, notnull: false }

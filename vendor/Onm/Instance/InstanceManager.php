@@ -32,7 +32,6 @@ class InstanceManager
 
     /*
      * Get available templates
-     *
      */
     public static function getAvailableTemplates()
     {
@@ -40,7 +39,10 @@ class InstanceManager
         foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value) {
             $parts             = preg_split("@/@", $value);
             $name              = $parts[count($parts)-1];
-            $templates [$name] = ucfirst($name);
+            if (file_exists($value.'/init.php')) {
+                $themeInfo         =  include_once($value.'/init.php');
+                $templates [$name] = $themeInfo;
+            }
         }
         unset($templates['admin']);
         unset($templates['manager']);
@@ -424,8 +426,7 @@ class InstanceManager
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
         //// is used in settings set
         $im = getService('instance_manager');
-        $GLOBALS['application']->conn =
-            $im->getConnection($data['settings']);
+        $GLOBALS['application']->conn = $im->getConnection($data['settings']);
 
         if (isset($data['user_name'])
             && isset ($data['token'])
@@ -1220,12 +1221,17 @@ class InstanceManager
     {
         $instance = $this->fetchInstanceFromInternalName($data['internal_name']);
 
+        if (is_array($data['domains'])) {
+            $data['domains'] = implode(',', $data['domains']);
+        }
+
         $sql = "UPDATE instances SET name=?, internal_name=?, "
-             . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
+             . "domains=?, main_domain=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
+            $data['main_domain'],
             $data['activated'],
             $data['user_mail'],
             serialize($data['settings']),

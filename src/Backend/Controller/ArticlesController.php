@@ -42,7 +42,7 @@ class ArticlesController extends Controller
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
 
-        $this->ccm        = \ContentCategoryManager::get_instance();
+        $this->ccm      = \ContentCategoryManager::get_instance();
         $this->category = ($this->category == 'all') ? 0 : $this->category;
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category);

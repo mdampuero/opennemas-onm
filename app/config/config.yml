@@ -20,11 +20,11 @@ framework:
         engines: ['twig']
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
-    trusted_proxies: ~
+    trusted_proxies: %framework.trusted_proxies%
     trusted_hosts:   ~
     session:
         name:            __onm_sess
-        gc_maxlifetime:  %session_memcache_expire%
+        gc_maxlifetime:  %session.gc_maxlifetime%
         handler_id:      %session_handler_id%
     fragments:       ~
     http_method_override: true
