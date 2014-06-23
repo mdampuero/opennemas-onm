@@ -115,6 +115,7 @@ class EntityManager extends BaseManager
             }
 
             if ($i < count($contents)) {
+                $contents[$i]->views = $this->findViews($id);
                 $ordered[] = $contents[$i];
             }
         }
@@ -144,10 +145,9 @@ class EntityManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents` "
-            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-
-        // var_dump($sql);die();
+        $sql = "SELECT content_type_name, pk_content FROM `contents`, `content_views` "
+            ."WHERE `contents`.`pk_content`=`content_views`.`pk_fk_content` AND "
+            ."$filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
@@ -232,5 +232,26 @@ class EntityManager extends BaseManager
         }
 
         return $contentID;
+    }
+
+    /**
+     * Searches the views for a given id.
+     *
+     * @param  integer $id The content id.
+     * @return array       The matched elements.
+     */
+    public function findViews($id)
+    {
+        $sql = "SELECT views FROM `content_views`"
+            ." WHERE pk_fk_content = $id";
+
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchAll($sql);
+
+        if (!$rs) {
+            return 0;
+        }
+
+        return $rs[0]['views'];
     }
 }
