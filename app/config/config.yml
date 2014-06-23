@@ -9,7 +9,7 @@ parameters:
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
-    secret:          %secret%
+    secret:          %framework.secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -96,10 +96,10 @@ hwi_oauth:
     resource_owners:
         facebook:
             type:          facebook
-            client_id:     325850407572280
-            client_secret: f5092fc72b68aa96b535dff5d7812712
+            client_id:     %api.facebook.client_id%
+            client_secret: %api.facebook.client_secret%
             scope:         email
         twitter:
             type:          twitter
-            client_id:     2uP5o5b7ruolJLjEqZhDQPfO4
-            client_secret: Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
+            client_id:     %api.twitter.client_id%
+            client_secret: %api.twitter.client_secret%
