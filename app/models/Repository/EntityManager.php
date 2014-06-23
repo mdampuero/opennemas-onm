@@ -115,7 +115,8 @@ class EntityManager extends BaseManager
             }
 
             if ($i < count($contents)) {
-                $contents[$i]->views = $this->findViews($id);
+                $contents[$i]->views = getService('content_views_repository')
+                    ->getViews($id);
                 $ordered[] = $contents[$i];
             }
         }
@@ -232,26 +233,5 @@ class EntityManager extends BaseManager
         }
 
         return $contentID;
-    }
-
-    /**
-     * Searches the views for a given id.
-     *
-     * @param  integer $id The content id.
-     * @return array       The matched elements.
-     */
-    public function findViews($id)
-    {
-        $sql = "SELECT views FROM `content_views`"
-            ." WHERE pk_fk_content = $id";
-
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
-
-        if (!$rs) {
-            return 0;
-        }
-
-        return $rs[0]['views'];
     }
 }
