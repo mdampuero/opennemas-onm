@@ -242,6 +242,7 @@ class InstancesController extends Controller
             'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
             'internal_name' => $internalName,
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+            'main_domain'   => $request->request->filter('main_domain', '', FILTER_SANITIZE_STRING),
             'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
             'settings'      => $settings,

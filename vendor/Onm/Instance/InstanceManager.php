@@ -426,8 +426,7 @@ class InstanceManager
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
         //// is used in settings set
         $im = getService('instance_manager');
-        $GLOBALS['application']->conn =
-            $im->getConnection($data['settings']);
+        $GLOBALS['application']->conn = $im->getConnection($data['settings']);
 
         if (isset($data['user_name'])
             && isset ($data['token'])
@@ -1227,11 +1226,12 @@ class InstanceManager
         }
 
         $sql = "UPDATE instances SET name=?, internal_name=?, "
-             . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
+             . "domains=?, main_domain=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
+            $data['main_domain'],
             $data['activated'],
             $data['user_mail'],
             serialize($data['settings']),

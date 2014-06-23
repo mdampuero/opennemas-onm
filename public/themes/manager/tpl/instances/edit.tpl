@@ -180,6 +180,15 @@ jQuery(document).ready(function($) {
 
                     <div class="control-group">
                         <label class="control-label">
+                            <label for="domain_expire" class="control-label">{t}Main domain{/t}</label>
+                        </label>
+                        <div class="controls">
+                            {html_options name=main_domain options=array_merge(array(''),$instance->domains) selected=$instance->main_domain}
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">
                             <label for="domain_expire" class="control-label">{t}Domain expire date:{/t}</label>
                         </label>
                         <div class="controls">

@@ -84,7 +84,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
                 $event->setResponse(new RedirectResponse($url, 302));
             }
-
         }
     }
 
