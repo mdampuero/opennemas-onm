@@ -814,6 +814,12 @@ class ContentManager
         $order = array('views' => 'desc');
 
         if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
+            }
+
             $criteria['category_name'] = array(array('value' => $category));
         }
 
@@ -1031,6 +1037,12 @@ class ContentManager
         $order = array('views' => 'desc');
 
         if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
+            }
+
             $criteria['category_name'] = array(array('value' => $category));
         }
 
