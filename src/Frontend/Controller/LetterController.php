@@ -168,6 +168,9 @@ class LetterController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
+
         return $this->render('letter/letter_form.tpl');
     }
 

@@ -38,6 +38,9 @@ class FormController extends Controller
     public function frontpageAction(Request $request)
     {
         $this->view = new \Template(TEMPLATE_USER);
+		
+		$ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'static_pages/form.tpl',
@@ -170,5 +173,21 @@ class FormController extends Controller
                 'class'   => $class,
             )
         );
+    }
+
+    /**
+     * Returns the advertisements for the letters frontpage
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $category = 0;
+
+        // Get letter positions
+        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
