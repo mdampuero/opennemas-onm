@@ -174,6 +174,8 @@ class LetterController extends Controller
      **/
     public function showFormAction(Request $request)
     {
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render('letter/letter_form.tpl');
 
