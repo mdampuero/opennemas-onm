@@ -54,14 +54,15 @@ class OpinionsController extends Controller
     public function frontpageAction(Request $request)
     {
         $filters = array('content_status' => array(array('value' => 1)));
-        $order   = array('starttime' => 'DESC');
         $em      = $this->get('opinion_repository');
 
         if ($this->page == 1) {
             $order['in_home']  = 'DESC';
             $order['position'] = 'ASC';
+            $order['starttime'] = 'DESC';
             $filters['in_home'] = array(array('value' => 1));
         } else {
+            $order['in_home']  = 'DESC';
             $order['starttime'] = 'DESC';
         }
 
@@ -147,7 +148,10 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $numOpinions  = s::get('items_per_page');
+            if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+                $numOpinions = $configurations['total_opinions'];
+            }
              // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -157,9 +161,13 @@ class OpinionsController extends Controller
                     $authorsBlog[$authorData->id] = $authorData;
                 }
             }
-            $where ='';
+
             if (!empty($authorsBlog)) {
-                $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+                // Must drop the blogs
+                $filters = array_merge(
+                    $filters,
+                    array('opinions`.`fk_author'  => array(array('value' => array_keys($authorsBlog), 'operator' => 'NOT IN')))
+                );
             }
 
             $of = array_merge(
@@ -167,13 +175,21 @@ class OpinionsController extends Controller
                 array('type_opinion' => array(array('value' => 0)))
             );
 
-            $opinions      = $em->findBy($of, $order, $itemsPerPage, $this->page);
-            $countOpinions = $em->countBy($of);
+            $opinions  = $em->findBy($of, $order, $numOpinions, $this->page);
 
+            if ($this->page == 1) {
+                // Make pagination using all opinions. Overwriting filter
+                $of = array_merge(
+                    $of,
+                    array('in_home' => array(array('value' => array(0,1), 'operator' => 'IN' )))
+                );
+
+            }
+            $countOpinions = $em->countBy($of);
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
+                    'perPage'     => $numOpinions,
                     'append'      => false,
                     'path'        => '',
                     'delta'       => 3,
