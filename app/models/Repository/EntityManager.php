@@ -115,8 +115,6 @@ class EntityManager extends BaseManager
             }
 
             if ($i < count($contents)) {
-                $contents[$i]->views = getService('content_views_repository')
-                    ->getViews($id);
                 $ordered[] = $contents[$i];
             }
         }
@@ -136,32 +134,39 @@ class EntityManager extends BaseManager
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $fromSQL = 'contents';
 
-        $orderBySQL  = '`pk_content` DESC';
+        if (array_key_exists('tables', $criteria)) {
+            $fromSQL .= implode(',', $criteria['tables']);
+        }
+
+        $sql = "SELECT content_type_name, pk_content FROM $fromSQL ";
+
+        if (array_key_exists('join', $criteria)) {
+            $join = $criteria['join'];
+            unset($criteria['join']);
+            $sql .= $this->getJoinSQL($join);
+        }
+
+        $sql .= " WHERE " . $this->getFilterSQL($criteria);
+
+        $orderBySQL  = '`pk_content` ASC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
+
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents`, `content_views` "
-            ."WHERE `contents`.`pk_content`=`content_views`.`pk_fk_content` AND "
-            ."$filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql .= " ORDER BY $orderBySQL $limitSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = array();
-        foreach ($rs as $resultElement) {
-            $contentIdentifiers[]= array(
-                $resultElement['content_type_name'],
-                $resultElement['pk_content']
-            );
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = array($item['content_type_name'], $item['pk_content']);
         }
 
-        $contents = $this->findMulti($contentIdentifiers);
+        $contents = $this->findMulti($ids);
 
         return $contents;
     }
@@ -174,11 +179,21 @@ class EntityManager extends BaseManager
      */
     public function countBy($criteria)
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $fromSQL = 'contents';
+        if (array_key_exists('tables', $criteria)) {
+            $fromSQL .= implode(',', $criteria['tables']);
+        }
 
-        // Executing the SQL
-        $sql = "SELECT COUNT(pk_content) FROM `contents` WHERE $filterSQL";
+        $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
+
+        if (array_key_exists('join', $criteria) && $criteria['join']) {
+            unset($criteria['join']);
+            $sql .= $this->getJoinSQL($criteria);
+        } else {
+            unset($criteria['join']);
+            $sql .= " WHERE" . $this->getFilterSQL($criteria);
+        }
+
         $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
