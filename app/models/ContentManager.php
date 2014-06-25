@@ -801,6 +801,18 @@ class ContentManager
         $date = $date->format('Y-M-d H:i:s');
 
         $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.views',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
             'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), $contentType, 'operator' => 'IN')),
             'in_litter'       => array(array('value' => 0)),
             'created'         => array(array('value' => $date, 'operator' => '>=')),
@@ -811,7 +823,8 @@ class ContentManager
                 array('value' => $now, 'operator' => '>')
             ),
         );
-        $order = array('views' => 'desc');
+
+        $order = array('content_views.views' => 'desc');
 
         if ($category) {
             $category = getService('category_repository')->find($category);
@@ -1024,6 +1037,18 @@ class ContentManager
         $date = $date->format('Y-M-d H:i:s');
 
         $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.views',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
             'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), $contentType, 'operator' => 'IN')),
             'in_litter'       => array(array('value' => 0)),
             'created'         => array(array('value' => $date, 'operator' => '>=')),
@@ -1034,7 +1059,8 @@ class ContentManager
                 array('value' => $now, 'operator' => '>')
             ),
         );
-        $order = array('views' => 'desc');
+
+        $order = array('content_views.views' => 'desc');
 
         if ($category) {
             $category = getService('category_repository')->find($category);
