@@ -18,22 +18,34 @@ class ContentViewsManager extends EntityManager
     /**
      * Gets the amount of views for a given content id.
      *
-     * @param  integer $id The content id.
-     * @return integer     The amount of views.
+     * @param  integer $id The content id(s).
+     * @return mixed       The amount of views.
      */
     public function getViews($id)
     {
-        $sql = "SELECT views FROM `content_views`"
-            ." WHERE pk_fk_content = $id";
+        $sql = "SELECT * FROM `content_views`";
+        if (is_array($id)) {
+            $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
+        } else {
+            $sql .= " WHERE pk_fk_content = $id";
+        }
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
         if (!$rs) {
             return 0;
         }
 
-        return $rs[0]['views'];
+        if (is_array($id)) {
+            $views = array();
+
+            foreach ($rs as $value) {
+                $views[$value['pk_fk_content']] = $value['views'];
+            }
+            return $views;
+        } else {
+            return $rs[0]['views'];
+        }
     }
 
     /**
