@@ -48,11 +48,10 @@ class ContentViewsManager extends EntityManager
             $views = $this->getViews($id) + 1;
         }
 
-        $sql = "UPDATE `content_views` SET `views`=$views "
-            ."WHERE  `pk_fk_content`=$id";
+        $sql = 'REPLACE INTO `content_views` (`pk_fk_content`, `views`) VALUES (?, ?)';
 
-        $this->dbConn->transactional(function ($em) use ($sql) {
-            $em->executeQuery($sql);
+        $this->dbConn->transactional(function ($em) use ($sql, $id, $views) {
+            $em->executeQuery($sql, array($id, $views));
         });
     }
 }
