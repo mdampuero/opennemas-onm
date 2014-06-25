@@ -225,6 +225,10 @@ abstract class BaseManager
             $value = $filter['value'];
         }
 
+        if (array_key_exists('field', $filter)) {
+            $isField = $filter['field'];
+        }
+
         if (is_array($value) && !empty($value)) {
             if (strtoupper($operator) == 'IN'
                 || strtoupper($operator) == 'NOT IN'
