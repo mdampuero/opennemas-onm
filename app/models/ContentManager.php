@@ -807,20 +807,20 @@ class ContentManager
                     'type'                => 'left',
                     'contents.pk_content' => array(
                         array(
-                            'value' => 'content_views.views',
+                            'value' => 'content_views.pk_fk_content',
                             'field' => true
                         )
                     )
                 )
             ),
-            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), $contentType, 'operator' => 'IN')),
-            'in_litter'       => array(array('value' => 0)),
-            'created'         => array(array('value' => $date, 'operator' => '>=')),
-            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
-            'endtime'         => array(
+            'content_type_name' => array(array('value' => $contentType)),
+            'in_litter'         => array(array('value' => 0)),
+            'created'           => array(array('value' => $date, 'operator' => '>=')),
+            'starttime'         => array(array('value' => $date, 'operator' => '>=')),
+            'endtime'           => array(
                 'union' => 'OR',
                 array('value' => '0000-00-00 00:00:00', 'operator' => '='),
-                array('value' => $now, 'operator' => '>')
+                array('value' => $date, 'operator' => '>')
             ),
         );
 
@@ -1043,13 +1043,13 @@ class ContentManager
                     'type'                => 'left',
                     'contents.pk_content' => array(
                         array(
-                            'value' => 'content_views.views',
+                            'value' => 'content_views.pk_fk_content',
                             'field' => true
                         )
                     )
                 )
             ),
-            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), $contentType, 'operator' => 'IN')),
+            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
             'in_litter'       => array(array('value' => 0)),
             'created'         => array(array('value' => $date, 'operator' => '>=')),
             'starttime'       => array(array('value' => $date, 'operator' => '>=')),
@@ -1070,10 +1070,6 @@ class ContentManager
             }
 
             $criteria['category_name'] = array(array('value' => $category));
-        }
-
-        if ($author) {
-            $criteria['fk_author'] = array(array('value' => $author));
         }
 
         if (!$all) {
