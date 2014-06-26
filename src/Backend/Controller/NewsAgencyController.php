@@ -943,71 +943,75 @@ class NewsAgencyController extends Controller
 
                 // Get author object,decode it and create new author
                 $authorObj = json_decode($element->getRightsOwner());
-                $authorArray = get_object_vars($authorObj);
-                $user = new \User();
 
-                // Create author
-                if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
-                    // Create new user
-                    $user->create($authorArray);
+                if(!is_null($authorObj)) {
+                    // Fetch author data
+                    $authorArray = get_object_vars($authorObj);
 
-                    // Set user meta if exists
-                    if ($authorObj->meta) {
-                        $userMeta = get_object_vars($authorObj->meta);
-                        $user->setMeta($userMeta);
-                    }
+                    // Create author
+                    $user = new \User();
+                    if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
+                        // Create new user
+                        $user->create($authorArray);
 
-                    // Fetch and save author image if exists
-                    $authorImgUrl = $element->getRightsOwnerPhoto();
-                    $cm = new \ContentManager();
-                    $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
-                    if ($authorPhotoRaw) {
-                        $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
-                        $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
-                        if (!is_dir($localImageDir)) {
-                            \FilesManager::createDirectory($localImageDir);
+                        // Set user meta if exists
+                        if ($authorObj->meta) {
+                            $userMeta = get_object_vars($authorObj->meta);
+                            $user->setMeta($userMeta);
                         }
-                        if (file_exists($localImagePath)) {
-                            unlink($localImagePath);
+
+                        // Fetch and save author image if exists
+                        $authorImgUrl = $element->getRightsOwnerPhoto();
+                        $cm = new \ContentManager();
+                        $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
+                        if ($authorPhotoRaw) {
+                            $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
+                            $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
+                            if (!is_dir($localImageDir)) {
+                                \FilesManager::createDirectory($localImageDir);
+                            }
+                            if (file_exists($localImagePath)) {
+                                unlink($localImagePath);
+                            }
+                            file_put_contents($localImagePath, $authorPhotoRaw);
+
+                            // Get all necessary data for the photo
+                            $infor = new \MediaItem($localImagePath);
+                            $data = array(
+                                'title'       => $authorObj->photo->name,
+                                'name'        => $authorObj->photo->name,
+                                'user_name'   => $authorObj->photo->name,
+                                'path_file'   => $authorObj->photo->path_file,
+                                'nameCat'     => $authorObj->username,
+                                'category'    => '',
+                                'created'     => $infor->atime,
+                                'changed'     => $infor->mtime,
+                                'date'        => $infor->mtime,
+                                'size'        => round($infor->size/1024, 2),
+                                'width'       => $infor->width,
+                                'height'      => $infor->height,
+                                'type'        => $infor->type,
+                                'type_img'    => substr($authorObj->photo->name, -3),
+                                'media_type'  => 'image',
+                                'author_name' => $authorObj->username,
+                            );
+
+                            $photo = new \Photo();
+                            $photoId = $photo->create($data);
+
+                            // Get new author id and update avatar_img_id
+                            $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
+                            $authorId = $newAuthor['id'];
+                            $newAuthor['avatar_img_id'] = $photoId;
+                            unset($newAuthor['password']);
+                            $user->update($newAuthor);
                         }
-                        file_put_contents($localImagePath, $authorPhotoRaw);
-
-                        // Get all necessary data for the photo
-                        $infor = new \MediaItem($localImagePath);
-                        $data = array(
-                            'title'       => $authorObj->photo->name,
-                            'name'        => $authorObj->photo->name,
-                            'user_name'   => $authorObj->photo->name,
-                            'path_file'   => $authorObj->photo->path_file,
-                            'nameCat'     => $authorObj->username,
-                            'category'    => '',
-                            'created'     => $infor->atime,
-                            'changed'     => $infor->mtime,
-                            'date'        => $infor->mtime,
-                            'size'        => round($infor->size/1024, 2),
-                            'width'       => $infor->width,
-                            'height'      => $infor->height,
-                            'type'        => $infor->type,
-                            'type_img'    => substr($authorObj->photo->name, -3),
-                            'media_type'  => 'image',
-                            'author_name' => $authorObj->username,
-                        );
-
-                        $photo = new \Photo();
-                        $photoId = $photo->create($data);
-
-                        // Get new author id and update avatar_img_id
-                        $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
-                        $authorId = $newAuthor['id'];
-                        $newAuthor['avatar_img_id'] = $photoId;
-                        unset($newAuthor['password']);
-                        $user->update($newAuthor);
-                    }
-                } else {
-                    // Fetch the user if exists and is not null
-                    if (!is_null($authorObj->email)) {
-                        $author = $user->findByEmail($authorObj->email);
-                        $authorId = $author->id;
+                    } else {
+                        // Fetch the user if exists and is not null
+                        if (!is_null($authorObj->email)) {
+                            $author = $user->findByEmail($authorObj->email);
+                            $authorId = $author->id;
+                        }
                     }
                 }
             }
