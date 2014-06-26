@@ -120,17 +120,21 @@ class OpinionsController extends Controller
             if (isset($director) && !empty($director)) {
                 // Fetch the photo image of the director
                 $aut = $this->get('user_repository')->find($director[0]->fk_author);
-                if (isset($aut->photo->path_file)) {
-                    $dir['photo'] = $aut->photo->path_file;
+                if (!empty($aut)) {
+                    if (isset($aut->photo->path_file)) {
+                        $dir['photo'] = $aut->photo->path_file;
+                    }
+                    $dir['name'] = $aut->name;
                 }
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
-                $dir['summary'] = $item->summary;
+                $dir['summary']     = $item->summary;
                 $dir['img1_footer'] = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
                     $dir['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
-                $dir['name'] = $aut->name;
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
                 $director[0]->summary = $item->summary;
