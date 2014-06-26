@@ -120,10 +120,15 @@ class Agency
         $ur = getService('user_repository');
         $article->author = $ur->find($article->fk_author);
 
-        // Get author photo
-        $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
-        if (is_object($authorPhoto) && !empty($authorPhoto)) {
-            $article->author->photo = $authorPhoto;
+        $authorPhoto = '';
+        if (isset($article->author->avatar_img_id) &&
+            !empty($article->author->avatar_img_id)
+        ) {
+            // Get author photo
+            $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
+            if (is_object($authorPhoto) && !empty($authorPhoto)) {
+                $article->author->photo = $authorPhoto;
+            }
         }
 
         // Encode author in json format
