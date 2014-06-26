@@ -46,8 +46,8 @@ class ArchiveController extends Controller
         $day   = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
         $page  = $request->query->getDigits('page', 1);
 
-        $view = new \Template(TEMPLATE_USER);
-        $view->setConfig('newslibrary');
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('newslibrary');
 
         $date = "{$year}-{$month}-{$day}";
 
