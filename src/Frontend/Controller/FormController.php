@@ -29,20 +29,6 @@ use Onm\Settings as s;
 class FormController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        require_once 'recaptchalib.php';
-
-        \Frontend\Controller\StaticPagesController::getAds();
-    }
-
-    /**
      * Description of the action
      *
      * @param Request $request the request object
