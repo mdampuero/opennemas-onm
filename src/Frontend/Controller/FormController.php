@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the frontend controller for the form reception
+ * Handles the actions for newsletter subscriptions
  *
  * @package Frontend_Controllers
  **/
@@ -29,7 +29,21 @@ use Onm\Settings as s;
 class FormController extends Controller
 {
     /**
-     * Shows the form page
+     * Common code for all the actions
+     *
+     * @return void
+     **/
+    public function init()
+    {
+        $this->view = new \Template(TEMPLATE_USER);
+
+        require_once 'recaptchalib.php';
+
+        \Frontend\Controller\StaticPagesController::getAds();
+    }
+
+    /**
+     * Description of the action
      *
      * @param Request $request the request object
      *
@@ -45,7 +59,7 @@ class FormController extends Controller
         return $this->render(
             'static_pages/form.tpl',
             array(
-                'advertisements' => \Frontend\Controller\StaticPagesController::getAds()
+                'advertisements' => $this->getAds();
             )
         );
     }
@@ -71,9 +85,6 @@ class FormController extends Controller
         $configRecaptcha = s::get('recaptcha');
 
         // Get request params
-        $name             = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
-        $subject          = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
-        $recipient        = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
         $verify           = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);
         $rcChallengeField = $request->request->filter('recaptcha_challenge_field', null, FILTER_SANITIZE_STRING);
         $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
@@ -108,18 +119,23 @@ class FormController extends Controller
                     // Correct CAPTCHA, correct mail and name not empty
                     // check data form is correcty and serialize form
                     $body ='';
-                    $notAllowed = array(
-                        "subject", "cx", "security_code", "submit",
-                        "recaptcha_challenge_field", "recaptcha_response_field"
-                    );
+                    $notAllowed = array("subject", "cx", "security_code", "submit",
+                        "recaptcha_challenge_field", "recaptcha_response_field");
                     foreach ($request->request as $key => $value) {
                         if (!in_array($key, $notAllowed)) {
                             $body .= "<p>$key => $value </p> \n";
                         }
                     }
 
-                    $mailSender = s::get('mail_sender', "no-reply@postman.opennemas.com");
+                    $name      = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
+                    $subject   = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
+                    $recipient = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
 
+
+                    $mailSender = s::get('mail_sender');
+                    if (empty($mailSender)) {
+                        $mailSender = "no-reply@postman.opennemas.com";
+                    }
                     //  Build the message
                     $text = \Swift_Message::newInstance();
                     $text

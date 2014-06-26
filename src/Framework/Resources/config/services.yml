@@ -80,6 +80,10 @@ services:
         class: Repository\CommentManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
+    content_views_repository:
+        class: Repository\ContentViewsManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
     entity_repository:
         class: Repository\EntityManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]

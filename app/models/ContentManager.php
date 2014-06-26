@@ -794,53 +794,67 @@ class ContentManager
         $num = 9,
         $all = false
     ) {
-        $this->init($contentType);
+        $em = getService('entity_repository');
 
-        $items   = array();
-        $_tables = '`contents`, `'.$this->table.'` ';
-        $_where  = '`contents`.`in_litter`=0 ';
-        if (!$all) {
-            $_where .= '  AND `contents`.`content_status`=1 ';
-        }
-        $_days     = 'AND  `contents`.`created`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT '.$num;
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P' . $days . 'D'));
+        $date = $date->format('Y-M-d H:i:s');
 
-        if (intval($category) > 0) {
-            $_category = 'AND pk_fk_content_category='.$category
-            .'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
-            $_tables   .= ', `contents_categories` ';
-        } else {
-            $_category = '';
-        }
+        $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
+            'content_type_name' => array(array('value' => $contentType)),
+            'in_litter'         => array(array('value' => 0)),
+            'created'           => array(array('value' => $date, 'operator' => '>=')),
+            'starttime'         => array(array('value' => $date, 'operator' => '>=')),
+            'endtime'           => array(
+                'union' => 'OR',
+                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
+                array('value' => $date, 'operator' => '>')
+            ),
+        );
 
-        if (intval($author) > 0) {
-            if ($contentType=='Opinion') {
-                $_author = 'AND `opinions`.`fk_author`='.$author.' ';
-            } else {
-                $_author = 'AND `opinions`.`fk_author`='.$author.' ';
+        $order = array('content_views.views' => 'desc');
+
+        if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
             }
-        } else {
-            $_author = '';
+
+            $criteria['category_name'] = array(array('value' => $category));
         }
 
-        $sql = 'SELECT * FROM '.$_tables
-             . 'WHERE '.$_where.$_category.$_author.$_days
-             . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
-             . $_order_by;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs->_numOfRows<$num && $notEmpty) {
-            $sql = 'SELECT * FROM '.$_tables
-                 . 'WHERE '.$_where.$_category.$_author
-                 . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
-                 . $_order_by;
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($author) {
+            $criteria['fk_author'] = array(array('value' => $author));
         }
 
-        $items = $this->loadObject($rs, $contentType);
+        if (!$all) {
+            $criteria['content_status'] = array(array('value' => 1));
+        }
 
-        return $this->getInTime($items);
+        $contents = $em->findBy($criteria, $order, $num, 1);
+
+        // Repeat without 'created' filter
+        if (count($contents) == 0) {
+            unset($criteria['created']);
+            unset($criteria['starttime']);
+            unset($criteria['endtime']);
+            $contents = $em->findBy($criteria, $order, $num, 1);
+        }
+
+        return $contents;
     }
 
     /**
@@ -1013,43 +1027,66 @@ class ContentManager
         $num = 6,
         $all = false
     ) {
-        $items = array();
-        $_tables = '`contents`  ';
-        $_where = '`contents`.`in_litter`=0 AND `fk_content_type` IN (1,3,4,7,9,11) ';
-        if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 ';
-        }
-        $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
+        $em = getService('entity_repository');
 
-        if (intval($category) > 0) {
-            $_category = 'AND pk_fk_content_category='.$category
-                .'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
-            $_tables .= ', `contents_categories` ';
-        } else {
-            $_category = '';
-        }
+        $now = new \DateTime();
+        $now = $now->format('Y-M-d H:i:s');
 
-        $sql = 'SELECT * FROM '.$_tables .
-                'WHERE '.$_where.$_category.$_days.
-                $_order_by;
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P' . $days . 'D'));
+        $date = $date->format('Y-M-d H:i:s');
 
-        if ($rs->_numOfRows<$num && $notEmpty) {
-            while ($rs->_numOfRows<$num && $days<30) {
-                $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
+            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
+            'in_litter'       => array(array('value' => 0)),
+            'created'         => array(array('value' => $date, 'operator' => '>=')),
+            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
+            'endtime'         => array(
+                'union' => 'OR',
+                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
+                array('value' => $now, 'operator' => '>')
+            ),
+        );
 
-                $sql = 'SELECT * FROM '.$_tables .
-                        'WHERE '.$_where.$_category. $_days.
-                        ' '.$_order_by;
-                $rs = $GLOBALS['application']->conn->Execute($sql);
-                $days+=1;
+        $order = array('content_views.views' => 'desc');
+
+        if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
             }
+
+            $criteria['category_name'] = array(array('value' => $category));
         }
 
-        $items = $this->loadObject($rs, 'content');
+        if (!$all) {
+            $criteria['content_status'] = array(array('value' => 1));
+        }
 
-        return $this->getInTime($items);
+        $contents = $em->findBy($criteria, $order, $num, 1);
+
+        // Repeat without 'created' filter
+        if (count($contents) == 0) {
+            unset($criteria['created']);
+            unset($criteria['starttime']);
+            unset($criteria['endtime']);
+            $contents = $em->findBy($criteria, $order, $num, 1);
+        }
+
+        return $contents;
     }
 
      /**
