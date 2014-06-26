@@ -67,7 +67,7 @@ function smarty_function_renderTags($params, &$smarty)
             $result = preg_match('/^#(.*)/', $tag, $matchs);
             if ($method == 'hashtag' && !empty($matchs[1])) {
                 $fullUrl = htmlentities($url.$matchs[1], ENT_QUOTES);
-                $output .= ' <a '.$class.' target="_blank" href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+                $output .= '<a '.$class.' target="_blank" href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
 
             } elseif (($method != 'hashtag') && empty($result)) {
                 if ($method == 'tags') {
