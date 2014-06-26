@@ -52,14 +52,11 @@ class FormController extends Controller
     public function frontpageAction(Request $request)
     {
         $this->view = new \Template(TEMPLATE_USER);
-		
-		$ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'static_pages/form.tpl',
             array(
-                'advertisements' => $this->getAds();
+                'advertisements' => $this->getAds()
             )
         );
     }
