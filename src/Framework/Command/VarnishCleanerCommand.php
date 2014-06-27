@@ -34,6 +34,13 @@ order to purge cache elements that matches a given criteria.
 
 <info>php app/console clean:varnish</info>
 
+Examples:
+
+Clean all from one instance:
+app/console clean:varnish obj.http.x-instance == "internal_name"
+
+Clean element with tag "sometag" from one instance:
+app/console clean:varnish obj.http.x-instance == "internal_name" && obj.http.x-tags == "sometag"
 EOF
             );
     }

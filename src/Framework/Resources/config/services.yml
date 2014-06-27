@@ -133,7 +133,7 @@ services:
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @logger ]
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
         tags:
             - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
