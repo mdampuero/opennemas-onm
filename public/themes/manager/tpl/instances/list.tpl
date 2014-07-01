@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { filter_email: '', filter_name: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -54,9 +54,9 @@
             <div class="form-inline">
                 <strong>{t}FILTER:{/t}</strong>
                 &nbsp;&nbsp;
-                <input type="text" placeholder="{t}Filter by instance name{/t}" name="filter_name" ng-model="shvs.search.filter_name"/>
+                <input type="text" placeholder="{t}Filter by instance name{/t}" name="name" ng-model="shvs.search.name_like"/>
                 &nbsp;&nbsp;
-                <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="filter_email" ng-model="shvs.search.filter_email"/>
+                <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="contact_mail" ng-model="shvs.search.contact_mail_like"/>
                 &nbsp;&nbsp;
                 <select ng-model="shvs.elements_per_page" class="input-small">
                     <option value="10">10</option>
@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="pull-left">
-            <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.filter_name %]&email=[% shvs.search.filter_email %]">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
+            <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
         </div>
     </div>
     <div ng-include="'instances'"></div>
@@ -176,33 +176,4 @@
         {include file="instances/modals/_modalBatchDelete.tpl"}
     </script>
 </form>
-{/block}
-
-{block name="footer-js" append}
-    <script type="text/javascript">
-        $(document).ready(function(){
-
-            $('#batch-activate').on('click', function (e, ui) {
-                e.preventDefault();
-                $.get(
-                    '{url name=manager_instance_batch_available status=1}',
-                    $('#formulario').serializeArray()
-                ).done(function() {
-                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
-                }).fail(function() {
-                });
-            });
-
-            $('#batch-desactivate').on('click', function (e, ui) {
-                e.preventDefault();
-                $.get(
-                    '{url name=manager_instance_batch_available status=0}',
-                    $('#formulario').serializeArray()
-                ).done(function(data) {
-                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
-                }).fail(function() {
-                });
-            });
-        });
-    </script>
 {/block}
