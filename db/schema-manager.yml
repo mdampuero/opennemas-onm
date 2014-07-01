@@ -24,6 +24,21 @@ instances:
         contact_mail:
             type: string
             options: { default: null, length: 255 }
+        content_size:
+            type: integer
+            options: { default: 0, unsigned: true }
+        media_size:
+            type: float
+            options: { default: 0 }
+        alexa:
+            type: integer
+            options: { default: null, unsigned: true }
+        pageViews:
+            type: bigint
+            options: { default: 0, unsigned: true }
+        users:
+            type: integer
+            options: { default: 0, unsigned: true }
     index:
         -
             name: PRIMARY
