@@ -238,6 +238,21 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
         }
     };
 
+    $scope.sort = function(field) {
+        if ($scope.shvs.sort_by == field) {
+            if ($scope.shvs.sort_order == 'asc') {
+                $scope.shvs.sort_order = 'desc';
+            } else {
+                $scope.shvs.sort_order = 'asc';
+            }
+        } else {
+            $scope.shvs.sort_by = field;
+            $scope.shvs.sort_order == 'asc';
+        }
+
+        $scope.list($scope.route);
+    }
+
     /**
      * Updates an item.
      *
