@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { filter_email: '', filter_name: '' }, 'created', 'desc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { filter_email: '', filter_name: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -83,9 +83,9 @@
             <thead ng-if="shvs.contents.length >= 0">
                 <tr>
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th width="25px">{t}#{/t}</th>
-                    <th width="">{t}Name{/t}</th>
-                    <th class="left">{t}Domains{/t}</th>
+                    <th width="25px" ng-click="sort('id')">{t}#{/t}</th>
+                    <th width="" ng-click="sort('name')">{t}Name{/t}</th>
+                    <th class="left" ng-click="sort('domains')">{t}Domains{/t}</th>
                     <th class="left">{t}Last access{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
