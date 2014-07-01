@@ -183,7 +183,11 @@ jQuery(document).ready(function($) {
                             <label for="domain_expire" class="control-label">{t}Main domain{/t}</label>
                         </label>
                         <div class="controls">
-                            {html_options name=main_domain options=array_merge(array(''),$instance->domains) selected=$instance->main_domain}
+                            {if $instance}
+                                {html_options name=main_domain options=array_merge(array(''),$instance->domains) selected=$instance->main_domain}
+                            {else}
+                                {html_options name=main_domain options=array() selected=$instance->main_domain}
+                            {/if}
                         </div>
                     </div>
 
@@ -208,7 +212,7 @@ jQuery(document).ready(function($) {
                                 <td class="controls modules-list">
                                     <select id="activated_modules" name="activated_modules[]" size="{count($available_modules)}" multiple="multiple" class="validate-selection">
                                         {foreach $available_modules as $module_key => $module_name}
-                                            <option  value="{$module_key}" {if in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
+                                            <option  value="{$module_key}" {if array_key_exists('activated_modules', $configs) && in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
                                         {/foreach}
                                     </select>
 
