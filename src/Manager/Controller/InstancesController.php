@@ -33,21 +33,12 @@ class InstancesController extends Controller
     /**
      * Shows a list of instances
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response.
+     */
     public function listAction(Request $request)
     {
-        $timezones = \DateTimeZone::listIdentifiers();
-        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
-
-        return $this->render(
-            'instances/list.tpl',
-            array(
-                'timeZones'     => $timezones,
-            )
-        );
+        return $this->render('instances/list.tpl');
     }
 
     /**
@@ -127,10 +118,6 @@ class InstancesController extends Controller
             $settings = array(
                 'TEMPLATE_USER' => "base",
                 'MEDIA_URL'     => "",
-                'BD_TYPE'       => "mysqli",
-                'BD_HOST'       => "localhost",
-                'BD_USER'       => $internalNameShort,
-                'BD_PASS'       => $password,
                 'BD_DATABASE'   => "c-".$internalNameShort,
             );
 
@@ -162,7 +149,9 @@ class InstancesController extends Controller
             $instanceManager = getService('instance_manager');
 
             // Check for reapeted internalnameshort and if so, add a number at the end
-            $data   = $instanceManager->checkInternalShortName($data);
+            $data['settings']['BD_DATABASE'] = $instanceManager
+                ->checkInternalName($data['settings']['BD_DATABASE']);
+
             $errors = $instanceManager->create($data);
 
             if (is_array($errors) && count($errors) > 0) {
@@ -306,44 +295,6 @@ class InstancesController extends Controller
 
         return $this->redirect(
             $this->generateUrl('manager_instance_show', array('id' => $id))
-        );
-    }
-
-    /**
-     * Batch Delete instances given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $filter_name  = $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING);
-        $filter_email = $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING);
-
-        $selected = $request->query->get('selected', null);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $instanceManager = getService('instance_manager');
-
-            foreach ($selected as $id) {
-                $delete = $instanceManager->delete($id);
-                if (!$delete) {
-                    m::add(sprintf(_("Unable to delete instance %d."), $id), m::ERROR);
-                    if (is_array($delete) && count($delete) > 0) {
-                        m::add($delete, m::ERROR);
-                    }
-                } else {
-                    m::add(sprintf(_("Instance %d deleted successfully."), $id), m::SUCCESS);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'manager_instances',
-                array('filter_name' => $filter_name, 'filter_email' => $filter_email)
-            )
         );
     }
 }

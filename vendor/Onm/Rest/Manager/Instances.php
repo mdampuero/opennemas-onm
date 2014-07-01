@@ -91,7 +91,9 @@ class Instances extends \Onm\Rest\RestBase
         $errors = array();
         $im = getService('instance_manager');
         // Check for reapeted internalnameshort and if so, add a number at the end
-        $data = $im->checkInternalShortName($data);
+        $data['settings']['BD_DATABASE'] = $im->checkInternalName(
+            $data['settings']['BD_DATABASE']
+        );
         $errors = $im->create($data);
 
         if (is_array($errors)) {
@@ -181,7 +183,7 @@ class Instances extends \Onm\Rest\RestBase
     {
         $im = getService('instance_manager');
         $url = filter_var($url, FILTER_SANITIZE_STRING);
-        return $im->checkInstanceExists($url);
+        return $im->instanceExists($url);
     }
 
     /**
@@ -195,6 +197,6 @@ class Instances extends \Onm\Rest\RestBase
     {
         $im = getService('instance_manager');
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-        return $im->checkMailExists($email);
+        return $im->emailExists($email);
     }
 }

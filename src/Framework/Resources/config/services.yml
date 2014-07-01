@@ -118,7 +118,7 @@ services:
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
@@ -146,7 +146,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @db_conn_manager, @cache ]
+        arguments: [ @dbal_connection, @cache ]
 
     onm_templating:
         class: Onm\Templating\Templating

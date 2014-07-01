@@ -10,6 +10,8 @@
 namespace Repository;
 
 use Repository\BaseManager;
+use Onm\Database\DbalWrapper;
+use Onm\Cache\CacheInterface;
 
 /**
  * Handles common actions in Menus
@@ -18,6 +20,19 @@ use Repository\BaseManager;
  **/
 class SettingManager extends BaseManager
 {
+    /*
+     * Initializes the InstanceManager
+     *
+     * @param DbalWrapper    $dbConn The custom DBAL wrapper.
+     * @param CacheInterface $cache  The cache instance.
+     */
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, $prefix)
+    {
+        $this->conn        = $conn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $prefix;
+    }
+
     /**
      * Fetches a setting from its name.
      *
@@ -41,7 +56,7 @@ class SettingManager extends BaseManager
 
             // If was not fetched from cache now is turn of DB
             if (!$settingValue) {
-                $rs = $this->dbConn->GetOne(
+                $rs = $this->conn->fetchArray(
                     "SELECT value FROM `settings` WHERE name = ?",
                     array($settingName)
                 );
@@ -53,7 +68,7 @@ class SettingManager extends BaseManager
                 if ($rs === null && empty($rs) && !is_null($default)) {
                     $settingValue = $default;
                 } else {
-                    $settingValue = unserialize($rs);
+                    $settingValue = unserialize($rs[0]);
                 }
 
                 $this->cache->save($settingName, $settingValue);
@@ -66,7 +81,7 @@ class SettingManager extends BaseManager
             if (is_null($settingValue) || empty($settingValue)) {
                 $settings = implode("', '", $settingName);
                 $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
-                $rs       = $this->dbConn->Execute($sql);
+                $rs       = $this->conn->executeQuery($sql);
 
                 if (!$rs) {
                     return false;
@@ -105,7 +120,7 @@ class SettingManager extends BaseManager
                 ."VALUES ('{$settingName}','{$settingValueSerialized}')"
                 ."ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
 
-        $rs = $this->dbConn->Execute($sql);
+        $rs = $this->conn->executeQuery($sql);
 
         if (!$rs) {
             return false;

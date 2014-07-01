@@ -184,14 +184,23 @@ class InstanceController extends Controller
         $name  = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
         $email = $request->query->filter('email', '', FILTER_SANITIZE_STRING);
 
-        $findParams = array(
-            'name'  => $name,
-            'email' => $email,
-        );
+        $criteria = array();
+        $order    = array('id' => 'asc');
 
-        $im = getService('instance_manager');
+        if (!empty($name)) {
+            $criteria['name'] = array(
+                array('value' => "%$name%", 'operator' => 'LIKE')
+            );
+        }
 
-        $instances = $im->findAll($findParams);
+        if (!empty($email)) {
+            $criteria['contact_mail'] = array(
+                array('value' => "%$email%", 'operator' => 'LIKE')
+            );
+        }
+
+        $im = $this->get('instance_manager');
+        $instances = $im->findBy($criteria, $order);
 
         foreach ($instances as &$instance) {
             list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
@@ -213,13 +222,12 @@ class InstanceController extends Controller
         $response = $this->render(
             'instances/csv.tpl',
             array(
-                'instances'   => $instances,
-                'filter_name' => $findParams['name'],
+                'instances' => $instances
             )
         );
 
-        if ($findParams['name'] != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($findParams['name']);
+        if ($name != '*') {
+            $fileNameFilter = '-'.\Onm\StringUtils::get_title($name);
         } else {
             $fileNameFilter = '-complete';
         }
@@ -244,23 +252,17 @@ class InstanceController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp   = $request->request->getDigits('elements_per_page', 10);
-        $page  = $request->request->getDigits('page', 1);
-        $name  = $request->request->filter('search[filter_name]', '', FILTER_SANITIZE_STRING);
-        $email = $request->request->filter('search[filter_email]', '', FILTER_SANITIZE_STRING);
+        $epp       = $request->request->getDigits('elements_per_page', 10);
+        $page      = $request->request->getDigits('page', 1);
+        $criteria  = $request->request->filter('search');
+        $sortBy    = $request->request->filter('sort_by');
+        $sortOrder = $request->request->filter('sort_order');
+        $order     = array($sortBy => $sortOrder);
 
-        $name  = (is_array($name) && array_key_exists(0, $name)) ? $name[0]['value'] : '';
-        $email = (is_array($email) && array_key_exists(0, $email)) ? $email[0]['value'] : '';
+        unset($criteria['content_type_name']);
 
-        $findParams = array(
-            'elements_per_page' => $epp,
-            'page'              => $page,
-            'name'              => $name,
-            'email'             => $email,
-        );
-
-        $im = getService('instance_manager');
-        $instances = $im->findAll($findParams);
+        $im = $this->get('instance_manager');
+        $instances = $im->findBy($criteria, $order, $epp, $page);
 
         foreach ($instances as &$instance) {
             list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);

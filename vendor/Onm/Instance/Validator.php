@@ -170,7 +170,7 @@ class Validator
 
     public function validateCheckMailInUse($field, $params)
     {
-        $exists = $this->instanceManager->checkMailExists($this->data[$field]);
+        $exists = $this->instanceManager->emailExists($this->data[$field]);
 
         if ($exists) {
             $this->errors []= _('The email that you entered is already in use');
@@ -182,7 +182,7 @@ class Validator
 
     public function validateInstanceNameInUse($field, $params)
     {
-        $exists = $this->instanceManager->checkInstanceExists($this->data[$field]);
+        $exists = $this->instanceManager->instanceExists($this->data[$field]);
 
         if ($exists) {
             $this->errors []= _('The address that you entered is already in use');
