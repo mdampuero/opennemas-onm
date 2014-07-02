@@ -263,6 +263,7 @@ class InstanceController extends Controller
 
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $order, $epp, $page);
+        $total = $im->countBy($criteria);
 
         foreach ($instances as &$instance) {
             list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
@@ -287,7 +288,7 @@ class InstanceController extends Controller
             'extra'             => array(),
             'page'              => $page,
             'results'           => $instances,
-            'total'             => count($instances),
+            'total'             => $total,
         ));
     }
 

@@ -785,8 +785,6 @@ class InstanceManager extends BaseManager
             return false;
         }
 
-
-
         foreach ($rs as $value) {
             $instance            = new \stdClass();
             $instance->id        = $value["id"];
@@ -798,6 +796,32 @@ class InstanceManager extends BaseManager
         }
 
         return $instances;
+    }
+
+    /**
+     * Counts the instances for content given a criteria
+     *
+     * @param  array $criteria The criteria used to search.
+     */
+    public function countBy($criteria)
+    {
+        $instances = array();
+
+        // Building the SQL filter
+        $filterSQL  = $this->getFilterSQL($criteria);
+
+        // Executing the SQL
+        $sql = "SELECT COUNT(*) FROM `instances` "
+            ."WHERE $filterSQL";
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchArray($sql);
+
+        if (!$rs) {
+            return false;
+        }
+
+        return $rs[0];
     }
 
     /*
