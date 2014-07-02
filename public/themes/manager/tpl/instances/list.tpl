@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); name = 1; domains = 1; last_access = 1;">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -70,6 +70,33 @@
         <div class="pull-left">
             <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
         </div>
+        <div class="pull-right">
+            <div class="dropdown">
+                <div class="btn dropdown-toggle">
+                    <span class="caret"></span>
+                </div>
+                <ul class="dropdown-menu pull-right form-horizontal" role="menu">
+                    <li ng-click="name = !name;">
+                        <a href="#">
+                            <i class="pull-right" ng-class="{ 'icon-ok': name }"></i>
+                            {t}Name{/t}
+                        </a>
+                    </li>
+                    <li ng-click="domains = !domains">
+                        <a href="#">
+                            <i class="pull-right" ng-class="{ 'icon-ok': domains }"></i>
+                            {t}Domains{/t}
+                        </a>
+                    </li>
+                    <li ng-click="last_access = !last_access">
+                        <a href="#">
+                            <i class="pull-right" ng-class="{ 'icon-ok': last_access }"></i>
+                            {t}Last access{/t}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div ng-include="'instances'"></div>
     <script type="text/ng-template" id="instances">
@@ -84,9 +111,9 @@
                 <tr>
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th width="25px" ng-click="sort('id')">{t}#{/t}</th>
-                    <th width="" ng-click="sort('name')">{t}Name{/t}</th>
-                    <th class="left" ng-click="sort('domains')">{t}Domains{/t}</th>
-                    <th class="left">{t}Last access{/t}</th>
+                    <th width="" ng-click="sort('name')" ng-show="name">{t}Name{/t}</th>
+                    <th class="left" ng-click="sort('domains')" ng-show="domains">{t}Domains{/t}</th>
+                    <th class="left" ng-show="last_access">{t}Last access{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
                 </tr>
@@ -103,7 +130,7 @@
                     <td>
                         [% instance.id %]
                     </td>
-                    <td>
+                    <td ng-show="name">
                         <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
                             [% instance.name %]
                         </a>
@@ -115,7 +142,7 @@
                         </div>
                         <small>{t}Created{/t}: [% instance.configs.last_login.date  | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
                     </td>
-                    <td class="left">
+                    <td class="left" ng-show="domains">
                         <div class="domains">
                             <small>
                                 <ul ng-if="instance.domains.length > 1">
@@ -131,7 +158,7 @@
                             </small>
                         </div>
                     </td>
-                    <td class="nowrap left">[% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <td class="nowrap left" ng-show="last_access">[% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td class="center">
                         <button class="btn-link" ng-class="{ loading: instance.loading == 1, published: instance.activated == '1', unpublished: instance.activated == '0' }" ng-click="updateItem($index, instance.id, 'manager_ws_instance_set_activated', 'activated', instance.activated != 1 ? 1 : 0, 'loading')" type="button"></button>
