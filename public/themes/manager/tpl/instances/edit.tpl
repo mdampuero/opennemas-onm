@@ -155,22 +155,39 @@ jQuery(document).ready(function($) {
                     <div class="control-group">
                         <div class="controls">
                             <table class="domain-list">
-                                {foreach $instance->domains as $domain}
-                                <tr class="domain">
-                                    <td>
-                                        <input type="text" name="domains[]" value="{$domain}" placeholder="Insert your new domain here">
-                                    </td>
-                                    <!-- <td class="side-tool" style="width:0px">
-                                        <button title="Delete domain" class="mark-main" title="mark as the main domain"><i class="icon icon-certificate"></i> </button>
-                                    </td> -->
-                                    <td class="side-tool" style="width:0px">
-                                        <button title="Delete domain" class="del"><i class="icon icon-trash"></i> </button>
-                                    </td>
-                                    <td class="side-tool" style="width:0px">
-                                        <button title="Visit domain" class="visit-domain"><i class="icon icon-external-link"></i> </button>
-                                    </td>
-                                </tr>
-                                {/foreach}
+                                {if $instance && $instance->domains}
+                                    {foreach $instance->domains as $domain}
+                                    <tr class="domain">
+                                        <td>
+                                            <input type="text" name="domains[]" value="{$domain}" placeholder="Insert your new domain here">
+                                        </td>
+                                        <!-- <td class="side-tool" style="width:0px">
+                                            <button title="Delete domain" class="mark-main" title="mark as the main domain"><i class="icon icon-certificate"></i> </button>
+                                        </td> -->
+                                        <td class="side-tool" style="width:0px">
+                                            <button title="Delete domain" class="del"><i class="icon icon-trash"></i> </button>
+                                        </td>
+                                        <td class="side-tool" style="width:0px">
+                                            <button title="Visit domain" class="visit-domain"><i class="icon icon-external-link"></i> </button>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                {else}
+                                    <tr class="domain">
+                                        <td>
+                                            <input type="text" name="domains[]" placeholder="Insert your new domain here">
+                                        </td>
+                                        <!-- <td class="side-tool" style="width:0px">
+                                            <button title="Delete domain" class="mark-main" title="mark as the main domain"><i class="icon icon-certificate"></i> </button>
+                                        </td> -->
+                                        <td class="side-tool" style="width:0px">
+                                            <button title="Delete domain" class="del"><i class="icon icon-trash"></i> </button>
+                                        </td>
+                                        <td class="side-tool" style="width:0px">
+                                            <button title="Visit domain" class="visit-domain"><i class="icon icon-external-link"></i> </button>
+                                        </td>
+                                    </tr>
+                                {/if}
                                 <tfoot class="center add-domain">
                                     <tr><td colspan=3><a href="#" title="Add new domain" ><i class="icon icon-plus"></i></a></td></tr>
                                 </tfoot>
