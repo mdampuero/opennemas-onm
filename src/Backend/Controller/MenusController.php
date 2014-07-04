@@ -202,6 +202,9 @@ class MenusController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+            foreach ($subcat as $subcategory) {
+                $parentCategories = array_merge($parentCategories, $subcategory);
+            }
             $albumCategories = $videoCategories = $pollCategories = array();
             foreach ($ccm->categories as $category) {
                 if ($category->internal_category == $this->pages['album']) {
