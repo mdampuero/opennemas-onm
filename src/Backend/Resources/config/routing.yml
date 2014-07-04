@@ -1006,6 +1006,8 @@ admin_acl_user_show:
 admin_acl_user_social:
     path:     /acl/user/{id}/{resource}
     defaults: { _controller  : BackendBundle:AclUser:social }
+    requirements:
+        resource: facebook|twitter
 
 admin_acl_user_social_disconnect:
     path:     /acl/user/{id}/{resource}/disconnect
