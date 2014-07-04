@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); name = 1; domains = 1; last_access = 1;">
+<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); name = 1; domains = 1; contact_mail = 1; last_access = 1; created = 1; articles = 1">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -94,6 +94,18 @@
                             {t}Last access{/t}
                         </a>
                     </li>
+                    <li ng-click="created = !created">
+                        <a href="#">
+                            <i class="pull-right" ng-class="{ 'icon-ok': created }"></i>
+                            {t}Created{/t}
+                        </a>
+                    </li>
+                    <li ng-click="articles = !articles">
+                        <a href="#">
+                            <i class="pull-right" ng-class="{ 'icon-ok': articles }"></i>
+                            {t}Artcicles{/t}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -110,10 +122,13 @@
             <thead ng-if="shvs.contents.length >= 0">
                 <tr>
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th width="25px" ng-click="sort('id')">{t}#{/t}</th>
-                    <th width="" ng-click="sort('name')" ng-show="name">{t}Name{/t}</th>
-                    <th class="left" ng-click="sort('domains')" ng-show="domains">{t}Domains{/t}</th>
+                    <th class="pointer" width="25px" ng-click="sort('id')">{t}#{/t}</th>
+                    <th class="pointer" width="" ng-click="sort('name')" ng-show="name">{t}Name{/t}</th>
+                    <th class="left pointer" ng-click="sort('domains')" ng-show="domains">{t}Domains{/t}</th>
+                    <th class="left pointer" ng-click="sort('contact_email')" ng-show="contact_mail">{t}Contact{/t}</th>
                     <th class="left" ng-show="last_access">{t}Last access{/t}</th>
+                    <th class="left" ng-show="created">{t}Created{/t}</th>
+                    <th class="left" ng-show="articles">{t}Articles{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
                 </tr>
@@ -134,13 +149,6 @@
                         <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
                             [% instance.name %]
                         </a>
-                        <div class="creator">
-                            <small>
-                                Creator:
-                                <a ng-href="mailto:[% instance.configs.contact_mail %]" title="Send an email to the instance manager"> [% instance.configs.contact_mail %]</a>
-                            </small>
-                        </div>
-                        <small>{t}Created{/t}: [% instance.configs.last_login.date  | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
                     </td>
                     <td class="left" ng-show="domains">
                         <div class="domains">
@@ -158,7 +166,18 @@
                             </small>
                         </div>
                     </td>
-                    <td class="nowrap left" ng-show="last_access">[% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    <td class="left" ng-show="contact_mail"
+                        <div class="creator">
+                            <a ng-href="mailto:[% instance.configs.contact_mail %]" title="Send an email to the instance manager"> [% instance.configs.contact_mail %]</a>
+                        </div>
+                    </td>
+                    <td class="center" ng-show="last_access">
+                        [% instance.configs.last_login.date  | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    </td>
+                    <td class="nowrap left" ng-show="created">[% instance.configs.site_created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    </td>
+                    <td class="center">
+                        [% instance.totals[1] %]
                     </td>
                     <td class="center">
                         <button class="btn-link" ng-class="{ loading: instance.loading == 1, published: instance.activated == '1', unpublished: instance.activated == '0' }" ng-click="updateItem($index, instance.id, 'manager_ws_instance_set_activated', 'activated', instance.activated != 1 ? 1 : 0, 'loading')" type="button"></button>

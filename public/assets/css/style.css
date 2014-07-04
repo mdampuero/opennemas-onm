@@ -327,7 +327,7 @@ a.btn-inverse {
 .left { text-align:left !important; }
 .right { text-align:right !important; }
 .center { text-align:center !important; }
-
+.pointer { cursor: pointer; }
 table {border-spacing:0;}
 
 table.adminform {
