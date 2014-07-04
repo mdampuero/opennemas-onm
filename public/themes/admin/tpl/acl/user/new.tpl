@@ -241,16 +241,6 @@ label {
                         </div>
 
                         <div class="control-group">
-                            <label for="meta[twitter]" class="control-label">{t}Twitter user{/t}</label>
-                            <div class="controls">
-                                <div class="input-prepend">
-                                    <span class="add-on">@</span>
-                                    <input class="span2" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[twitter]" name="meta[twitter]" value="{$user->meta['twitter']|default:""}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label for="url" class="control-label">{t}Blog Url{/t}</label>
                             <div class="controls">
                                 <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
