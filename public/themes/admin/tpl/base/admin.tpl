@@ -21,11 +21,12 @@
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
-        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css"}
+        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
 	{/block}
 
     {block name="js-library"}
@@ -89,18 +90,18 @@
                         <li class="dropdown usermenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             {if $smarty.session.avatar_url}
-                            <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
+                                <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
                             {else}
-                                {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="18"}
+                                {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="24"}
                             {/if}
                             <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
                                 <div class="avatar">
-                                {if $smarty.session.avatar_url}
-                                    <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
-                                {else}
-                                    {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
-                                {/if}
+                                    {if $smarty.session.avatar_url}
+                                        <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
+                                    {else}
+                                        {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
+                                    {/if}
                                 </div><!-- /.avatar -->
                                 <div class="user-info">
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
@@ -168,6 +169,7 @@
         {browser_update}
         {script_tag src="/onm/footer-functions.js" common=1}
         {script_tag src="/libs/tinycon.min.js"}
+        {script_tag src="/jquery/bootstrap-nav-wizard.js"}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>

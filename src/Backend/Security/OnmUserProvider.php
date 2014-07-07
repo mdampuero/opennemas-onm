@@ -35,7 +35,7 @@ class OnmUserProvider implements UserProviderInterface
 
             return $user;
         } else {
-            throw new UsernameNotFoundException('Could not find user. Sorry!');
+            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
         }
     }
 

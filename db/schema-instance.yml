@@ -1,0 +1,1359 @@
+action_counters:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        action_name:
+            type: string
+            options: { default: null, length: 255 }
+        date:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+        counter:
+            type: integer
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: action_name
+            columns: [action_name]
+            primary: false
+            unique: false
+            flags: {  }
+advertisements:
+    columns:
+        pk_advertisement:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        type_advertisement:
+            type: smallint
+            options: { default: '1', notnull: false, unsigned: true }
+        fk_content_categories:
+            type: string
+            options: { default: '', notnull: false, length: 255 }
+        path:
+            type: string
+            options: { default: null, notnull: false, length: 150 }
+        url:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        type_medida:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        num_clic:
+            type: integer
+            options: { default: '0', notnull: false }
+        num_clic_count:
+            type: integer
+            options: { default: '0', notnull: false, unsigned: true }
+        num_view:
+            type: integer
+            options: { default: '0', notnull: false, unsigned: true }
+        with_script:
+            type: smallint
+            options: { default: '0', notnull: false }
+        script:
+            type: text
+            options: { default: null, notnull: false }
+        overlap:
+            type: boolean
+            options: { default: '0', comment: 'Flag esconder eventos flash' }
+        timeout:
+            type: integer
+            options: { default: '-1' }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_advertisement]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: type_advertisement
+            columns: [type_advertisement]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_content_categories
+            columns: [fk_content_categories]
+            primary: false
+            unique: false
+            flags: {  }
+albums:
+    columns:
+        pk_album:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        subtitle:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        agency:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        cover_id:
+            type: bigint
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_album]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_album
+            columns: [pk_album]
+            primary: false
+            unique: true
+            flags: {  }
+        -
+            name: pk_album_2
+            columns: [pk_album]
+            primary: false
+            unique: false
+            flags: {  }
+albums_photos:
+    columns:
+        pk_album:
+            type: bigint
+            options: { default: null, unsigned: true }
+        pk_photo:
+            type: bigint
+            options: { default: null, unsigned: true }
+        position:
+            type: integer
+            options: { default: '1', notnull: false }
+        description:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+    index:
+        -
+            name: pk_album_2
+            columns: [pk_album, pk_photo]
+            primary: false
+            unique: false
+            flags: {  }
+articles:
+    columns:
+        pk_article:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        summary:
+            type: text
+            options: { default: null, notnull: false }
+        img1:
+            type: bigint
+            options: { default: null, notnull: false, unsigned: true }
+        subtitle:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        img1_footer:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        img2:
+            type: bigint
+            options: { default: null, notnull: false, unsigned: true }
+        img2_footer:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        agency:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        fk_video:
+            type: bigint
+            options: { default: null, notnull: false, unsigned: true }
+        with_comment:
+            type: smallint
+            options: { default: '1', notnull: false }
+        fk_video2:
+            type: bigint
+            options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
+        footer_video2:
+            type: string
+            options: { default: null, notnull: false, length: 150 }
+        footer_video1:
+            type: string
+            options: { default: null, notnull: false, length: 150 }
+        title_int:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_article]
+            primary: true
+            unique: true
+            flags: {  }
+attachments:
+    columns:
+        pk_attachment:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        title:
+            type: string
+            options: { default: null, length: 200 }
+        path:
+            type: string
+            options: { default: null, length: 200 }
+        category:
+            type: integer
+            options: { default: '1' }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_attachment]
+            primary: true
+            unique: true
+            flags: {  }
+books:
+    columns:
+        pk_book:
+            type: bigint
+            options: { default: null, unsigned: true }
+        author:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        file:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        file_img:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        editorial:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+    index: {  }
+comments:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        content_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        author:
+            type: string
+            options: { default: null, notnull: false, length: 200 }
+        author_email:
+            type: string
+            options: { default: '', notnull: false, length: 200 }
+        author_url:
+            type: string
+            options: { default: '', notnull: false, length: 200 }
+        author_ip:
+            type: string
+            options: { default: '', notnull: false, length: 100 }
+        date:
+            type: datetime
+            options: { default: '0000-00-00 00:00:00' }
+        body:
+            type: text
+            options: { default: null, notnull: false }
+        status:
+            type: string
+            options: { default: pending, length: 20 }
+        agent:
+            type: string
+            options: { default: '', length: 255 }
+        type:
+            type: string
+            options: { default: '', length: 20 }
+        parent_id:
+            type: bigint
+            options: { default: '0' }
+        user_id:
+            type: integer
+            options: { default: '0' }
+        content_type_referenced:
+            type: string
+            options: { default: null, length: 20 }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: comment_content_id
+            columns: [content_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: comment_status_date
+            columns: [status, date]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: comment_parent_id
+            columns: [parent_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: comment_date
+            columns: [date]
+            primary: false
+            unique: false
+            flags: {  }
+commentsmeta:
+    columns:
+        fk_content:
+            type: bigint
+            options: { default: null }
+        meta_name:
+            type: string
+            options: { default: null, length: 255 }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [fk_content, meta_name]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content
+            columns: [fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+content_categories:
+    columns:
+        pk_content_category:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        title:
+            type: string
+            options: { default: null, length: 255 }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        inmenu:
+            type: integer
+            options: { default: '0', notnull: false }
+        posmenu:
+            type: integer
+            options: { default: '10', notnull: false }
+        internal_category:
+            type: smallint
+            options: { default: '0', comment: 'equal content_type & global=0 ' }
+        fk_content_category:
+            type: integer
+            options: { default: '0', notnull: false }
+        params:
+            type: text
+            options: { default: null, notnull: false }
+        logo_path:
+            type: string
+            options: { default: null, notnull: false, length: 200 }
+        color:
+            type: string
+            options: { default: '#638F38', notnull: false, length: 10 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_content_category]
+            primary: true
+            unique: true
+            flags: {  }
+content_positions:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { default: null }
+        fk_category:
+            type: integer
+            options: { default: null }
+        position:
+            type: integer
+            options: { default: '0' }
+        placeholder:
+            type: string
+            options: { default: '', length: 45 }
+        params:
+            type: text
+            options: { default: null, notnull: false }
+        content_type:
+            type: string
+            options: { default: null, notnull: false, length: 45 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content, fk_category, position, placeholder]
+            primary: true
+            unique: true
+            flags: {  }
+contentmeta:
+    columns:
+        fk_content:
+            type: bigint
+            options: { default: null }
+        meta_name:
+            type: string
+            options: { default: null, length: 255 }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [fk_content, meta_name]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content
+            columns: [fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+contents:
+    columns:
+        pk_content:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        fk_content_type:
+            type: integer
+            options: { default: null, unsigned: true }
+        content_type_name:
+            type: string
+            options: { default: null, length: 20 }
+        title:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        description:
+            type: text
+            options: { default: null, notnull: false }
+        body:
+            type: text
+            options: { default: null }
+        metadata:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        starttime:
+            type: datetime
+            options: { default: null, notnull: false }
+        endtime:
+            type: datetime
+            options: { default: null, notnull: false }
+        created:
+            type: datetime
+            options: { default: null, notnull: false }
+        changed:
+            type: datetime
+            options: { default: null, notnull: false }
+        content_status:
+            type: integer
+            options: { default: '0', notnull: false, unsigned: true }
+        fk_author:
+            type: integer
+            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+        fk_publisher:
+            type: integer
+            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+        fk_user_last_editor:
+            type: integer
+            options: { default: null, notnull: false, unsigned: true, comment: 'Clave foranea de user' }
+        position:
+            type: integer
+            options: { default: '100', notnull: false, unsigned: true }
+        frontpage:
+            type: boolean
+            options: { default: '1', notnull: false }
+        in_litter:
+            type: boolean
+            options: { default: '0', notnull: false, comment: '0publicado 1papelera' }
+        in_home:
+            type: smallint
+            options: { default: '0', notnull: false }
+        home_pos:
+            type: integer
+            options: { default: '100', notnull: false, comment: '10' }
+        slug:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        available:
+            type: smallint
+            options: { default: '1', notnull: false }
+        params:
+            type: text
+            options: { default: null, notnull: false }
+        category_name:
+            type: string
+            options: { default: null, length: 255 }
+        favorite:
+            type: boolean
+            options: { default: null, notnull: false }
+        urn_source:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_content]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content_type
+            columns: [fk_content_type]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: in_litter
+            columns: [in_litter]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_status
+            columns: [content_status]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: in_home
+            columns: [in_home]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: frontpage
+            columns: [frontpage]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: available
+            columns: [available]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: starttime
+            columns: [starttime, endtime]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: created
+            columns: [created]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: metadata
+            columns: [metadata]
+            primary: false
+            unique: false
+            flags: { fulltext: true }
+        -
+            name: urn_source
+            columns: [urn_source]
+contents_categories:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { default: null, unsigned: true }
+        pk_fk_content_category:
+            type: integer
+            options: { default: null, unsigned: true }
+        catName:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content, pk_fk_content_category]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_fk_content_category
+            columns: [pk_fk_content_category]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: catName
+            columns: [catName]
+content_views:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { default: null, unsigned: true }
+        views:
+            type: integer
+            options: { default: 0, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content]
+            primary: true
+            unique: true
+            flags: {  }
+frontpages:
+    columns:
+        date:
+            type: integer
+            options: { default: null, comment: 'date as 20110720' }
+        category:
+            type: integer
+            options: { default: null, comment: category }
+        pk_frontpage:
+            type: bigint
+            options: { default: null }
+        version:
+            type: bigint
+            options: { default: null, notnull: false }
+        content_positions:
+            type: text
+            options: { default: null, comment: 'serialized id of contents' }
+        promoted:
+            type: boolean
+            options: { default: null, notnull: false }
+        day_frontpage:
+            type: boolean
+            options: { default: null, notnull: false }
+        params:
+            type: text
+            options: { default: null, comment: 'serialized params' }
+    index:
+        -
+            name: PRIMARY
+            columns: [date, category]
+            primary: true
+            unique: true
+            flags: {  }
+kioskos:
+    columns:
+        pk_kiosko:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, length: 100 }
+        path:
+            type: string
+            options: { default: null, length: 200 }
+        date:
+            type: date
+            options: { default: null }
+        type:
+            type: boolean
+            options: { default: '0', comment: '0-item, 1-subscription' }
+        price:
+            type: decimal
+            options: { default: '0' }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_kiosko]
+            primary: true
+            unique: true
+            flags: {  }
+letters:
+    columns:
+        pk_letter:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        author:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        email:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_letter]
+            primary: true
+            unique: true
+            flags: {  }
+menu_items:
+    columns:
+        pk_item:
+            type: integer
+            options: { default: null, autoincrement: true }
+        pk_menu:
+            type: integer
+            options: { default: null }
+        title:
+            type: string
+            options: { default: null, length: 255 }
+        link_name:
+            type: string
+            options: { default: null, length: 255 }
+        type:
+            type: string
+            options: { default: null, length: 255, comment: '''category'',''external'',''static'', internal''' }
+        position:
+            type: integer
+            options: { default: null }
+        pk_father:
+            type: integer
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_item, pk_menu]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_item
+            columns: [pk_item]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: pk_menu
+            columns: [pk_menu]
+menues:
+    columns:
+        pk_menu:
+            type: integer
+            options: { default: null, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, length: 255 }
+        type:
+            type: string
+            options: { default: null, length: 255 }
+        position:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        params:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_menu]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: name
+            columns: [name]
+            primary: false
+            unique: true
+            flags: {  }
+        -
+            name: position
+            columns: [position]
+            primary: false
+            unique: false
+            flags: {  }
+newsletter_archive:
+    columns:
+        pk_newsletter:
+            type: integer
+            options: { default: null, autoincrement: true }
+        title:
+            type: string
+            options: { default: null, length: 255 }
+        data:
+            type: text
+            options: { default: null, notnull: false }
+        html:
+            type: text
+            options: { default: null, notnull: false }
+        created:
+            type: datetime
+            options: { default: '0000-00-00 00:00:00' }
+        updated:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+        sent:
+            type: string
+            options: { default: null, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_newsletter]
+            primary: true
+            unique: true
+            flags: {  }
+opinions:
+    columns:
+        pk_opinion:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        fk_content_categories:
+            type: integer
+            options: { default: '7', notnull: false, unsigned: true }
+        fk_author:
+            type: integer
+            options: { default: null, notnull: false }
+        fk_author_img:
+            type: integer
+            options: { default: null, notnull: false }
+        with_comment:
+            type: smallint
+            options: { default: '1', notnull: false }
+        type_opinion:
+            type: string
+            options: { default: null, notnull: false, length: 150 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_opinion]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: type_opinion
+            columns: [type_opinion]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_author
+            columns: [fk_author]
+            primary: false
+            unique: false
+            flags: {  }
+orders:
+    columns:
+        id:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        user_id:
+            type: bigint
+            options: { default: null }
+        content_id:
+            type: bigint
+            options: { default: null }
+        created:
+            type: datetime
+            options: { default: null }
+        payment_id:
+            type: string
+            options: { default: null, length: 50 }
+        payment_status:
+            type: string
+            options: { default: null, length: 150 }
+        payment_amount:
+            type: decimal
+            options: { default: null, scale: 2 }
+        payment_method:
+            type: string
+            options: { default: null, length: 200 }
+        type:
+            type: string
+            options: { default: null, length: 50 }
+        params:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+pc_users:
+    columns:
+        pk_pc_user:
+            type: integer
+            options: { default: null, autoincrement: true }
+        email:
+            type: string
+            options: { default: null, length: 255 }
+        name:
+            type: string
+            options: { default: null, length: 255 }
+        firstname:
+            type: string
+            options: { default: null, length: 255 }
+        lastname:
+            type: string
+            options: { default: null, length: 255 }
+        status:
+            type: integer
+            options: { default: null }
+        subscription:
+            type: integer
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_pc_user]
+            primary: true
+            unique: true
+            flags: {  }
+pclave:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        pclave:
+            type: string
+            options: { default: null, length: 60 }
+        value:
+            type: string
+            options: { default: null, notnull: false, length: 240 }
+        tipo:
+            type: string
+            options: { default: intsearch, length: 20 }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+photos:
+    columns:
+        pk_photo:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        path_file:
+            type: string
+            options: { default: null, length: 150 }
+        size:
+            type: float
+            options: { default: null, notnull: false }
+        width:
+            type: integer
+            options: { default: null, notnull: false }
+        height:
+            type: integer
+            options: { default: null, notnull: false }
+        nameCat:
+            type: string
+            options: { default: '1', notnull: false, length: 250 }
+        author_name:
+            type: string
+            options: { default: null, notnull: false, length: 200 }
+        address:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_photo]
+            primary: true
+            unique: true
+            flags: {  }
+poll_items:
+    columns:
+        pk_item:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        fk_pk_poll:
+            type: bigint
+            options: { default: null, unsigned: true }
+        item:
+            type: string
+            options: { default: null, length: 255 }
+        metadata:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        votes:
+            type: integer
+            options: { default: '0', notnull: false, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_item]
+            primary: true
+            unique: true
+            flags: {  }
+polls:
+    columns:
+        pk_poll:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        total_votes:
+            type: integer
+            options: { default: '0' }
+        used_ips:
+            type: text
+            options: { default: null, notnull: false }
+        subtitle:
+            type: string
+            options: { default: null, notnull: false, length: 150 }
+        visualization:
+            type: smallint
+            options: { default: '0', notnull: false }
+        with_comment:
+            type: smallint
+            options: { default: '1', notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_poll]
+            primary: true
+            unique: true
+            flags: {  }
+ratings:
+    columns:
+        pk_rating:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        total_votes:
+            type: smallint
+            options: { default: '0', unsigned: true }
+        total_value:
+            type: integer
+            options: { default: '0', unsigned: true }
+        ips_count_rating:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_rating]
+            primary: true
+            unique: true
+            flags: {  }
+related_contents:
+    columns:
+        pk_content1:
+            type: bigint
+            options: { default: null, unsigned: true }
+        pk_content2:
+            type: bigint
+            options: { default: null, unsigned: true }
+        relationship:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        text:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        position:
+            type: integer
+            options: { default: '0' }
+        posinterior:
+            type: integer
+            options: { default: '0' }
+        verportada:
+            type: integer
+            options: { default: '0' }
+        verinterior:
+            type: integer
+            options: { default: '0' }
+    index:
+        -
+            name: pk_content1
+            columns: [pk_content1]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: verportada
+            columns: [verportada]
+            primary: false
+            unique: false
+            flags: {  }
+settings:
+    columns:
+        name:
+            type: string
+            options: { default: '', length: 128 }
+        value:
+            type: text
+            options: { default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [name]
+            primary: true
+            unique: true
+            flags: {  }
+special_contents:
+    columns:
+        fk_content:
+            type: string
+            options: { default: null, length: 250 }
+        fk_special:
+            type: integer
+            options: { default: null }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 200 }
+        position:
+            type: integer
+            options: { default: '10', notnull: false }
+        visible:
+            type: smallint
+            options: { default: '1', notnull: false }
+        type_content:
+            type: string
+            options: { default: null, length: 100 }
+    index: {  }
+specials:
+    columns:
+        pk_special:
+            type: integer
+            options: { default: null, unsigned: true }
+        subtitle:
+            type: string
+            options: { default: null, notnull: false, length: 250 }
+        pdf_path:
+            type: string
+            options: { default: '0', notnull: false, length: 250 }
+        img1:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_special]
+            primary: true
+            unique: true
+            flags: {  }
+static_pages:
+    columns:
+        pk_static_page:
+            type: bigint
+            options: { default: null, autoincrement: true, comment: BIGINT(20) }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_static_page]
+            primary: true
+            unique: true
+            flags: {  }
+translation_ids:
+    columns:
+        pk_content_old:
+            type: bigint
+            options: { default: null }
+        pk_content:
+            type: bigint
+            options: { default: null }
+        type:
+            type: string
+            options: { default: null, length: 20 }
+        slug:
+            type: string
+            options: { default: '', notnull: false, length: 200 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_content_old, pk_content]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: slug
+            columns: [slug]
+user_groups:
+    columns:
+        pk_user_group:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_user_group]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups_privileges:
+    columns:
+        pk_fk_user_group:
+            type: integer
+            options: { default: null, unsigned: true }
+        pk_fk_privilege:
+            type: integer
+            options: { default: null, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_user_group, pk_fk_privilege]
+            primary: true
+            unique: true
+            flags: {  }
+usermeta:
+    columns:
+        user_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        meta_key:
+            type: string
+            options: { default: '', length: 255 }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [user_id, meta_key]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: user_id
+            columns: [user_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: meta_key
+            columns: [meta_key]
+            primary: false
+            unique: false
+            flags: {  }
+users:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        username:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        password:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        sessionexpire:
+            type: boolean
+            options: { default: '15', unsigned: true }
+        url:
+            type: string
+            options: { default: '', length: 255 }
+        bio:
+            type: text
+            options: { default: null }
+        avatar_img_id:
+            type: bigint
+            options: { default: '0', unsigned: true }
+        email:
+            type: string
+            options: { default: null, notnull: false, length: 255 }
+        name:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+        type:
+            type: boolean
+            options: { default: '0', comment: '0-backend, 1-frontend' }
+        deposit:
+            type: decimal
+            options: { default: '0' }
+        token:
+            type: string
+            options: { default: null, notnull: false, length: 50 }
+        activated:
+            type: boolean
+            options: { default: '1', comment: '1 activated - 0 deactivated' }
+        fk_user_group:
+            type: string
+            options: { default: null, notnull: false, length: 100 }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: user_username
+            columns: [username]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: user_email
+            columns: [email]
+            primary: false
+            unique: false
+            flags: {  }
+users_content_categories:
+    columns:
+        pk_fk_user:
+            type: integer
+            options: { default: null, unsigned: true }
+        pk_fk_content_category:
+            type: integer
+            options: { default: null, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_user, pk_fk_content_category]
+            primary: true
+            unique: true
+            flags: {  }
+videos:
+    columns:
+        pk_video:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        video_url:
+            type: string
+            options: { default: null, length: 255 }
+        information:
+            type: text
+            options: { default: null, notnull: false }
+        author_name:
+            type: string
+            options: { default: null, notnull: false, length: 200 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_video]
+            primary: true
+            unique: true
+            flags: {  }
+votes:
+    columns:
+        pk_vote:
+            type: bigint
+            options: { default: null, autoincrement: true }
+        value_pos:
+            type: smallint
+            options: { default: '0' }
+        value_neg:
+            type: smallint
+            options: { default: '0' }
+        ips_count_vote:
+            type: text
+            options: { default: null, notnull: false }
+        karma:
+            type: integer
+            options: { default: '100', notnull: false, unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_vote]
+            primary: true
+            unique: true
+            flags: {  }
+widgets:
+    columns:
+        pk_widget:
+            type: bigint
+            options: { default: null, unsigned: true, autoincrement: true }
+        content:
+            type: text
+            options: { default: null }
+        renderlet:
+            type: string
+            options: { default: html, notnull: false, length: 50 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_widget]
+            primary: true
+            unique: true
+            flags: {  }

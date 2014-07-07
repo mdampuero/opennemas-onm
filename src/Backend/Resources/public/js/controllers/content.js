@@ -31,9 +31,15 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
                 ){
                     if (name.indexOf('_like') !== -1) {
                         var shortName = name.substring(0, name.indexOf('_like'));
+                        var values = filters[name][i]['value'].split(' ');
+
                         cleaned[shortName] = [];
-                        cleaned[shortName][i] = {
-                            value: '%' + filters[name][i]['value'] + '%'
+                        for (var i = 0; i < values.length; i++) {
+
+                            cleaned[shortName][i] = {
+                                value: '%' + values[i] + '%',
+                                operator: 'LIKE'
+                            };
                         };
                     } else {
                         if (!cleaned[name]) {
@@ -232,6 +238,21 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
         }
     };
 
+    $scope.sort = function(field) {
+        if ($scope.shvs.sort_by == field) {
+            if ($scope.shvs.sort_order == 'asc') {
+                $scope.shvs.sort_order = 'desc';
+            } else {
+                $scope.shvs.sort_order = 'asc';
+            }
+        } else {
+            $scope.shvs.sort_by = field;
+            $scope.shvs.sort_order == 'asc';
+        }
+
+        $scope.list($scope.route);
+    }
+
     /**
      * Updates an item.
      *
@@ -413,6 +434,29 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
                     }
                 }
             };
+
+            $scope.shvs.page = 1;
+            $location.search('page', null);
+
+            searchTimeout = $timeout(function() {
+                $scope.list($scope.route);
+            }, 500);
+        }
+    }, true);
+
+    /**
+     * Load the value of elements per page variable in scope when it changes.
+     *
+     * @param  Event  event Event object.
+     * @param  Object vars  Shared variables object.
+     */
+    $scope.$watch('shvs.elements_per_page', function(newValues, oldValues) {
+        if (searchTimeout) {
+            $timeout.cancel(searchTimeout);
+        }
+
+        if (newValues !== oldValues) {
+            $location.search('elements_per_page', newValues);
 
             $scope.shvs.page = 1;
             $location.search('page', null);

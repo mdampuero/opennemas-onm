@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `instances` (
   `internal_name` varchar(100) NOT NULL,
   `name` varchar(255) NOT NULL,
   `domains` text NOT NULL,
+  `main_domain` varchar(255) not null,
   `settings` text,
   `activated` tinyint(1) NOT NULL,
   `contact_mail` varchar(255) NOT NULL,

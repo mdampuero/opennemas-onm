@@ -107,7 +107,7 @@ class DisqusSync
                 }
 
             } catch (\DisqusAPIError $e) {
-                $this->get('logger')->notice(
+                $this->get('application.log')->notice(
                     "Unable to import disqus comment ".$e->getMessage()
                 );
             }

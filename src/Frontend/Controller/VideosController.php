@@ -77,7 +77,7 @@ class VideosController extends Controller
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->caching == 0)
-            || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
+                || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
             // Fetch video settings
             $videosSettings = s::get('video_settings');
@@ -89,7 +89,7 @@ class VideosController extends Controller
 
             if ($this->category_name != 'home') {
                 // Fetch total of videos for this category
-                $allVideos = $this->cm->find_all(
+                $allVideos = $this->cm->findAll(
                     'Video',
                     'content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $this->category . '',
@@ -103,7 +103,7 @@ class VideosController extends Controller
                 $videos       = array_slice($allVideos, $totalVideosFrontpage, $totalVideosBlockInCategory);
 
                 // Videos on others videos block
-                $othersVideos = $this->cm->find_all(
+                $othersVideos = $this->cm->findAll(
                     'Video',
                     'content_status=1 ',
                     'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
@@ -120,20 +120,24 @@ class VideosController extends Controller
 
             } else {
                 // Videos on top of the homepage
-                $videos = $this->cm->find_all(
+                $videos = $this->cm->findAll(
                     'Video',
                     'content_status=1 ',
                     'ORDER BY created DESC LIMIT '.$totalVideosFrontpageOffset
                 );
 
-                // Videos on more videos block
-                list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
-                    'Video',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1',
-                    'ORDER BY created DESC',
-                    $this->page,
+                $order = array('created' => 'DESC');
+                $filters = array(
+                    'content_type_name' => array(array('value' => 'video')),
+                    'content_status'    => array(array('value' => '1')),
+                );
+
+                $em = $this->get('entity_repository');
+                $othersVideos = $em->findBy(
+                    $filters,
+                    $order,
                     $totalVideosMoreFrontpage,
+                    $this->page,
                     $totalVideosFrontpageOffset
                 );
 
@@ -222,7 +226,7 @@ class VideosController extends Controller
         ) {
 
             // Load Video and categories
-            $video = new \Video($videoID);
+            $video = $this->get('entity_repository')->find('Video', $videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;
@@ -232,7 +236,7 @@ class VideosController extends Controller
             $video->author = $ur->find($video->fk_author);
 
             //Get other_videos for widget video most
-            $otherVideos = $this->cm->find_all(
+            $otherVideos = $this->cm->findAll(
                 'Video',
                 ' content_status=1 AND pk_content <> '.$videoID,
                 ' ORDER BY created DESC LIMIT 4'
@@ -282,7 +286,7 @@ class VideosController extends Controller
 
         $limit = ($this->page-1)*$totalVideosBlockOther.', '.$totalVideosBlockOther;
 
-        $videos = $this->cm->find_all(
+        $videos = $this->cm->findAll(
             'Video',
             'content_status=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
             'ORDER BY created DESC  LIMIT ' . $limit
@@ -325,7 +329,7 @@ class VideosController extends Controller
 
         $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
 
-        $videos = $this->cm->find_all(
+        $videos = $this->cm->findAll(
             'Video',
             'content_status=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
             'ORDER BY created DESC LIMIT ' . $limit
@@ -371,24 +375,23 @@ class VideosController extends Controller
             $this->category = $this->request->query->getDigits('category', 0);
         }
 
-        // Fetch videos paginated
-        list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
-            'Video',
-            (int) $this->category,
-            'in_litter != 1 AND contents.content_status=1',
-            'ORDER BY created DESC',
-            $this->page,
-            $totalVideosMoreFrontpage,
-            $totalVideosFrontpageOffset
+        $order = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'video')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );
 
-        if ($countVideos > 0) {
-            foreach ($othersVideos as &$video) {
-                $video->thumb          = $video->getThumb();
-                $video->category_name  = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-        } else {
+        if ($this->category != 0) {
+            $category = $this->get('category_repository')->find($this->category);
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $em = $this->get('entity_repository');
+        $othersVideos = $em->findBy($filters, $order, $totalVideosMoreFrontpage, $this->page, $totalVideosFrontpageOffset);
+        $countVideos = $em->countBy($filters);
+
+        if ($countVideos == 0) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_paginated')
             );

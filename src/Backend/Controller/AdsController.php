@@ -30,10 +30,8 @@ use Onm\Message as m;
 class AdsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('ADS_MANAGER');
@@ -62,14 +60,13 @@ class AdsController extends Controller
     }
 
     /**
-     * Lists all the available ads
+     * Lists all the available ads.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         // Get ads positions
@@ -105,14 +102,13 @@ class AdsController extends Controller
     }
 
     /**
-     * Handles the form for create a new ad
+     * Handles the form for create a new ad.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         $page = $request->request->getDigits('page', 1);
@@ -192,14 +188,13 @@ class AdsController extends Controller
     }
 
     /**
-     * Shows the editing form for a advertisement given its id
+     * Shows the editing form for a advertisement given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id     = $request->query->getDigits('id', null);
@@ -225,7 +220,9 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
 
-        $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        if (!is_array($ad->fk_content_categories)) {
+            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
+        }
 
         if (!empty($ad->img)) {
             //Buscar foto where pk_foto=img1
@@ -244,17 +241,16 @@ class AdsController extends Controller
                 'server_url'    => $serverUrl,
             )
         );
-
     }
+
     /**
-     * Updates the advertisement information given data send by POST
+     * Updates the advertisement information given data send by POST.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -328,43 +324,27 @@ class AdsController extends Controller
     }
 
     /**
-     * Lists the available advertisements for the frontpage manager
+     * Lists the available advertisements for the frontpage manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('ADVERTISEMENT_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $page = $request->query->getDigits('page', 1);
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $cm = new \ContentManager();
+        $em  = $this->get('advertisement_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedAds = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $adsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedAds = ' AND `pk_advertisement` NOT IN ('.$adsExcluded.')';
-        }
-
-        list($countAds, $ads) = $cm->getCountAndSlice(
-            'Advertisement',
-            null,
-            'contents.available=1 AND in_litter != 1 AND type_advertisement = 37 '. $sqlExcludedAds,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name'  => array(array('value' => 'advertisement')),
+            'type_advertisement' => array(array('value' => 37)),
         );
+
+        $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countAds = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -378,7 +358,7 @@ class AdsController extends Controller
                 'totalItems'  => $countAds,
                 'fileName'    => $this->generateUrl(
                     'admin_ads_content_provider',
-                    array('category' => $category,)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -393,14 +373,13 @@ class AdsController extends Controller
     }
 
     /**
-     * Handles and shows the advertisement configuration form
+     * Handles and shows the advertisement configuration form.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {

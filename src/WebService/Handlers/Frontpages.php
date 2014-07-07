@@ -30,9 +30,7 @@ class Frontpages
             }
 
             $cm = new ContentManager;
-
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
             // Filter articles if some of them has time scheduling and sort them by position
             $contentsInHomepage = $cm->getInTime($contentsInHomepage);
             $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
@@ -46,7 +44,13 @@ class Frontpages
             }
 
             if (count($imageIdsList) > 0) {
-                $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+                $er = getService('entity_repository');
+                $order = array('created' => 'DESC');
+                $imgFilters = array(
+                    'content_type_name' => array(array('value' => 'photo')),
+                    'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
+                );
+                $imageList = $er->findBy($imgFilters, $order);
             } else {
                 $imageList = array();
             }
@@ -55,6 +59,7 @@ class Frontpages
                 $img->media_url = MEDIA_IMG_PATH_WEB;
             }
 
+            $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
 
@@ -62,9 +67,10 @@ class Frontpages
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
-                $content->author = new \User($content->fk_author);
-                $content->author->external = 1;
-
+                $content->author = $ur->find($content->fk_author);
+                if (!is_null($content->author)) {
+                    $content->author->external = 1;
+                }
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
@@ -106,7 +112,7 @@ class Frontpages
     public function allContentBlog($categoryName, $page = 1)
     {
         // Get category object
-        $categoryManager = $this->restler->container->get('category_repository');
+        $categoryManager = getService('category_repository');
         $category = $categoryManager->findBy(
             array('name' => array(array('value' => $categoryName))),
             '1'
@@ -119,16 +125,18 @@ class Frontpages
 
         $itemsPerPage = 10;
 
-        // Get all articles for this page
-        $cm = new \ContentManager();
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            (int) $category->pk_content_category,
-            'in_litter != 1 AND contents.content_status=1',
-            'ORDER BY created DESC, content_status ASC',
-            $page,
-            $itemsPerPage
+        $order = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'category_name'     => array(array('value' => $category->name))
         );
+
+        // Get all articles for this page
+        $er            = getService('entity_repository');
+        $articles      = $er->findBy($filters, $order, $itemsPerPage, $page);
+        $countArticles = $er->countBy($filters);
 
         $imageIdsList = array();
         foreach ($articles as $content) {
@@ -139,7 +147,11 @@ class Frontpages
         $imageIdsList = array_unique($imageIdsList);
 
         if (count($imageIdsList) > 0) {
-            $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+            $imgFilters = array(
+                'content_type_name' => array(array('value' => 'photo')),
+                'pk_content'        => array(array('value' => $imageIdsList, 'operator' => 'IN')),
+            );
+            $imageList = $er->findBy($imgFilters, $order);
         } else {
             $imageList = array();
         }
@@ -148,16 +160,19 @@ class Frontpages
             $img->media_url = MEDIA_IMG_PATH_WEB;
         }
 
+        $ur = getService('user_repository');
         // Overloading information for contents
         foreach ($articles as &$content) {
 
             // Load category related information
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
-            $content->author         = new \User($content->fk_author);
-            $content->author->photo  = $content->author->getPhoto();
-            $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
-            $content->author->external = 1;
+            $content->author         = $ur->find($content->fk_author);
+            if (!is_null($content->author)) {
+                $content->author->photo  = $content->author->getPhoto();
+                $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
+                $content->author->external = 1;
+            }
 
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
@@ -171,7 +186,7 @@ class Frontpages
         }
 
         // Get url generator
-        $generator = $this->restler->container->get('router');
+        $generator = getService('router');
 
         // Set pagination
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(

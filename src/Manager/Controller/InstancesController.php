@@ -33,106 +33,12 @@ class InstancesController extends Controller
     /**
      * Shows a list of instances
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response.
+     */
     public function listAction(Request $request)
     {
-        $findParams = array(
-            'name'  => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
-            'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
-        );
-
-        $instanceManager = getService('instance_manager');
-        $instances = $instanceManager->findAll($findParams);
-
-        foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
-        }
-
-        $availableTimeZones = \DateTimeZone::listIdentifiers();
-
-        return $this->render(
-            'instances/list.tpl',
-            array(
-                'instances'     => $instances,
-                'filter_name'   => $findParams['name'],
-                'filter_email'  => $findParams['email'],
-                'timeZones'     => $availableTimeZones,
-            )
-        );
-    }
-
-    /**
-     * Returns a CSV file with all the instances information
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function listExportAction(Request $request)
-    {
-        $findParams = array(
-            'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
-        );
-
-        $instanceManager = getService('instance_manager');
-
-        $instances = $instanceManager->findAll($findParams);
-
-        foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
-        }
-
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
-        $response = $this->render(
-            'instances/csv.tpl',
-            array(
-                'instances'   => $instances,
-                'filter_name' => $findParams['name'],
-            )
-        );
-
-        if ($findParams['name'] != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($findParams['name']);
-        } else {
-            $fileNameFilter = '-complete';
-        }
-        $fileName = 'opennemas-instances'.$fileNameFilter.'-'.date("Y_m_d_His").'.csv';
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Description', 'Submissions Export');
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
-
-        return $response;
+        return $this->render('instances/list.tpl');
     }
 
     /**
@@ -159,6 +65,12 @@ class InstancesController extends Controller
         }
 
         list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
+        $instance->domains = explode(',', $instance->domains);
+
+        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$instance->internal_name.'/'));
+        if (is_array($size)) {
+            $size = $size[0] / 1024;
+        }
 
         return $this->render(
             'instances/edit.tpl',
@@ -173,6 +85,7 @@ class InstancesController extends Controller
                 ),
                 'instance'          => $instance,
                 'templates'         => $templates,
+                'size'              => $size,
             )
         );
     }
@@ -205,10 +118,6 @@ class InstancesController extends Controller
             $settings = array(
                 'TEMPLATE_USER' => "base",
                 'MEDIA_URL'     => "",
-                'BD_TYPE'       => "mysqli",
-                'BD_HOST'       => "localhost",
-                'BD_USER'       => $internalNameShort,
-                'BD_PASS'       => $password,
                 'BD_DATABASE'   => "c-".$internalNameShort,
             );
 
@@ -216,9 +125,7 @@ class InstancesController extends Controller
             $data = array(
                 'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('site_name', '', FILTER_SANITIZE_STRING),
-                'user_name'     => $request->request->filter('contact_name', '', FILTER_SANITIZE_STRING),
                 'user_mail'     => $request->request->filter('contact_mail', '', FILTER_SANITIZE_STRING),
-                'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
                 'internal_name' => $internalName,
                 'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
                 'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
@@ -243,7 +150,9 @@ class InstancesController extends Controller
             $instanceManager = getService('instance_manager');
 
             // Check for reapeted internalnameshort and if so, add a number at the end
-            $data   = $instanceManager->checkInternalShortName($data);
+            $data['settings']['BD_DATABASE'] = $instanceManager
+                ->checkInternalName($data['settings']['BD_DATABASE']);
+
             $errors = $instanceManager->create($data);
 
             if (is_array($errors) && count($errors) > 0) {
@@ -310,12 +219,7 @@ class InstancesController extends Controller
         $settingsRAW = $request->request->get('settings');
         $settings = array(
             'TEMPLATE_USER' => filter_var($settingsRAW['TEMPLATE_USER'], FILTER_SANITIZE_STRING),
-            'MEDIA_URL'     => filter_var($settingsRAW['MEDIA_URL'], FILTER_SANITIZE_STRING),
-            'BD_TYPE'       => filter_var($settingsRAW['BD_TYPE'], FILTER_SANITIZE_STRING),
-            'BD_HOST'       => filter_var($settingsRAW['BD_HOST'], FILTER_SANITIZE_STRING),
             'BD_DATABASE'   => filter_var($settingsRAW['BD_DATABASE'], FILTER_SANITIZE_STRING),
-            'BD_USER'       => filter_var($settingsRAW['BD_USER'], FILTER_SANITIZE_STRING),
-            'BD_PASS'       => filter_var($settingsRAW['BD_PASS'], FILTER_SANITIZE_STRING),
         );
 
         //Get all the Post data
@@ -328,6 +232,7 @@ class InstancesController extends Controller
             'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
             'internal_name' => $internalName,
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+            'main_domain'   => $request->request->filter('main_domain', '', FILTER_SANITIZE_STRING),
             'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
             'max_users'     => $request->request->filter('max_users', '', FILTER_SANITIZE_NUMBER_INT),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
@@ -349,20 +254,20 @@ class InstancesController extends Controller
         $errors = array();
 
         $configurationsKeys = array(
-            'site_title', 'site_description','site_keywords',
-            'site_agency','site_name','site_created',
-            'contact_mail','contact_name','contact_IP','domain_expire',
-            'time_zone','site_language', 'pass_level','max_users',
-            'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
-            'mail_username','mail_password','google_maps_api_key',
-            'google_custom_search_api_key','facebook',
-            'google_analytics','piwik',
-            'recaptcha',
-            'items_per_page',
-            'refresh_interval',
-            'advertisements_enabled',
-            'log_enabled', 'log_db_enabled', 'log_level',
-            'activated_modules'
+            'activated_modules',
+            'contact_IP',
+            'contact_mail',
+            'contact_name',
+            'domain_expire',
+            'last_invoice',
+            'max_mailing',
+            'max_users',
+            'pass_level',
+            'piwik',
+            'site_created',
+            'site_language',
+            'site_name',
+            'time_zone',
         );
 
         $instanceManager = getService('instance_manager');
@@ -370,6 +275,10 @@ class InstancesController extends Controller
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
         $GLOBALS['application']->conn = $instanceManager->getConnection($settings);
 
+        // Update instance data
+        $errors = $instanceManager->update($data);
+
+        // Update instance configurations
         foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
                 // Delete from cache service for this instance
@@ -377,7 +286,11 @@ class InstancesController extends Controller
                 s::set($key, $value);
             }
         }
-        $errors = $instanceManager->update($data);
+
+        // Delete the 'activated_modules' from cache service for this instance
+        s::invalidate('activated_modules', $data['internal_name']);
+        s::invalidate('site_name', $data['internal_name']);
+        s::invalidate('last_invoice', $data['internal_name']);
 
         if (is_array($errors) && count($errors) > 0) {
             m::add($errors, m::ERROR);
@@ -388,134 +301,5 @@ class InstancesController extends Controller
         return $this->redirect(
             $this->generateUrl('manager_instance_show', array('id' => $id))
         );
-    }
-
-    /**
-     * Deletes an instance given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (!empty($id)) {
-            $instanceManager = getService('instance_manager');
-
-            $delete = $instanceManager->delete($id);
-            if (!$delete) {
-                m::add(_("Unable to delete the instance."), m::ERROR);
-                if (is_array($delete) && count($delete) > 0) {
-                    m::add($delete, m::ERROR);
-                }
-            } else {
-                m::add(_("Instance deleted successfully."), m::SUCCESS);
-            }
-        } else {
-            m::add(_('You must provide an id for delete an instance.'), m::ERROR);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('manager_instances'));
-        } else {
-            return new Response('ok');
-        }
-    }
-
-    /**
-     * Batch Delete instances given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $filter_name  = $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING);
-        $filter_email = $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING);
-
-        $selected = $request->query->get('selected', null);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $instanceManager = getService('instance_manager');
-
-            foreach ($selected as $id) {
-                $delete = $instanceManager->delete($id);
-                if (!$delete) {
-                    m::add(sprintf(_("Unable to delete instance %d."), $id), m::ERROR);
-                    if (is_array($delete) && count($delete) > 0) {
-                        m::add($delete, m::ERROR);
-                    }
-                } else {
-                    m::add(sprintf(_("Instance %d deleted successfully."), $id), m::SUCCESS);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'manager_instances',
-                array('filter_name' => $filter_name, 'filter_email' => $filter_email)
-            )
-        );
-    }
-
-    /**
-     * Toggle the availability of an instance given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $instanceManager = getService('instance_manager');
-        $instance = $instanceManager->read($id);
-
-        if ($instance === false) {
-            m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
-
-            return $this->redirect($this->generateUrl('manager_instances'));
-        }
-
-        $instanceManager->changeActivated(
-            $instance->id,
-            ($instance->activated+1) % 2
-        );
-
-        return $this->redirect($this->generateUrl('manager_instances'));
-    }
-
-    /**
-     * Set the activated flag for instances in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function batchAvailableAction(Request $request)
-    {
-        $selected = $request->query->get('selected', null);
-        $status   = $request->query->getDigits('status', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $instanceManager = getService('instance_manager');
-
-            foreach ($selected as $id) {
-                $instance = $instanceManager->read($id);
-                if ($instance === false) {
-                    m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
-                } else {
-                    $instanceManager->changeActivated($id, $status);
-                    m::add(sprintf(_("Instance %d updated successfully."), $id), m::SUCCESS);
-                }
-            }
-        }
-
-        return new Response('ok', 200);
     }
 }

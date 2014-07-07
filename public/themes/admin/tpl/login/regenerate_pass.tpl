@@ -26,17 +26,62 @@
 </head>
 <body id="loginpage">
 
-    <div id="logo">
-        <h1>OpenNeMaS</h1>
-        <div>{t}The journalism CMS{/t}</div>
-    </div>
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a><div class="nav-collapse collapse navbar-inverse-collapse">
+                <ul class="nav pull-left">
+                    <li>
+                        <a href="http://www.opennemas.com">{t}The CMS for journalism{/t}</a>
+                    </li>
+                </ul>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        <li class="help dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
 
     <div class="form-wrapper">
+        <h2>{t}Recover password{/t}</h2>
         {render_messages}
 
         {if $userNotValid == true}
         <form method="post" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
             <div class="input-wrapper">
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls"></div>
+                </div>
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                 <button id="login-submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
@@ -51,36 +96,51 @@
         </form>
         {else}
         <form class="form-horizontal" action="{url name=admin_acl_user_reset_pass token=$token}" method="POST">
-            <p>
-                {t}Please enter your new password in both fields below, and then click Submit.{/t}
-            </p>
+            <div class="input-wrapper">
+                <p>
+                    {t}Please enter your new password in both fields below, and then click Submit.{/t}
+                </p>
 
-            <input type="password" name="password" class="input-medium" required="required" tabindex="1" value="" placeholder="{t}Password{/t}">
-            <input type="password" name="password-verify" class="input-medium" required="required" tabindex="2" value="" placeholder="{t}Re-Enter Password{/t}">
 
-            <button type="submit" tabindex="3" class="onm-button blue">{t}Submit{/t}</button>
+                <div class="control-group">
+                    <label class="control-label">{t}Password{/t}</label>
+                    <div class="controls">
+                        <input type="password" name="password" class="input-medium" required="required" tabindex="1" value="">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">{t}Password confirmation{/t}</label>
+                    <div class="controls">
+                        <input type="password" name="password-verify" class="input-medium" required="required" tabindex="2" value="">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <button type="submit" tabindex="3" class="onm-button blue">{t}Submit{/t}</button>
+                    </div>
+                </div>
+            </div>
         </form>
         {/if}
     </div>
 
     <footer>
-        <div class="container">
-            <div class="muted credit">
-                &copy; {strftime("%Y")} OpenHost S.L.
-                <nav>
-                    <ul>
-                        <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                        <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                        <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                        <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                    </ul>
-                </nav>
-                <select name="language" id="language" class="input-small">
-                    {foreach from=$languages key=key item=language}
-                        <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
-                    {/foreach}
-                </select>
-            </div>
+        <div class="muted credit">
+            &copy; {strftime("%Y")} OpenHost S.L.
+            <nav>
+                <ul>
+                    <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
+                    <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                    <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                </ul>
+            </nav>
+            <select name="language" id="language" class="input-small">
+                {foreach from=$languages key=key item=language}
+                    <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
+                {/foreach}
+            </select>
         </div>
     </footer>
 

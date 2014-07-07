@@ -106,6 +106,7 @@
         </td>
     </tr>
     {foreach from=$opinions item=opinion}
+    {if $opinion->author->meta['is_blog'] neq 1}
     <tr class="normal-opinion" data-id="{$opinion->id}">
         <td>
            <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$opinion->id}">
@@ -145,14 +146,15 @@
         </td>
         <td class="right">
             <div class="btn-group">
-                {acl isAllowed="OPINION_UPDATE"}
-                <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
-                    <i class="icon-pencil"></i>
-                </a>
-                {/acl}
+            {acl isAllowed="OPINION_UPDATE"}
+            <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
+                <i class="icon-pencil"></i>
+            </a>
+            {/acl}
             </div>
         </td>
     </tr>
+    {/if}
     {/foreach}
     </tbody>
     {/if}

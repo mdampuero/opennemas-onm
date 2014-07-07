@@ -3,12 +3,12 @@
     <div style="width:330px; display:inline-block;" class="pull-left clearfix">
         <div class="thumbnail">
             {if preg_match('/^swf$/i', $photo->type_img)}
-                <object width="" height="">
-                    <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"/>
-                    <embed wmode="window" src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+                <object>
+                    <param name="wmode" value="opaque" />
+                    <embed src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
                 </object>
             {else}
-                {dynamic_image src="{$photo->path_file}/{$photo->name}" transform="thumbnail,330,330" onunload="GUnload()"}
+                {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,330,330" onunload="GUnload()"}
             {/if}
         </div>
 
@@ -28,7 +28,7 @@
             <div class="control-group">
                 <label class="control-label">{t}Link{/t}</label>
                 <div class="controls">
-                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">{$smarty.const.SITE_URL}{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}</a>
+                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">{$smarty.const.SITE_URL}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}</a>
                 </div>
             </div>
             <div class="control-group">

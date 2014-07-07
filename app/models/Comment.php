@@ -152,14 +152,17 @@ class Comment
             foreach ($allowedProperties as $name) {
                 if (array_key_exists($name, $data)) {
                     if ($name == 'date') {
-
                         $this->date = \DateTime::createFromFormat(
                             'Y-m-d H:i:s',
                             $data[$name],
                             new \DateTimeZone('UTC')
                         );
                     } else {
-                        $this->{$name} = $data[$name];
+                        $this->{$name} = @iconv(
+                            mb_detect_encoding($data[$name]),
+                            "UTF-8",
+                            $data[$name]
+                        );
                     }
                 }
             }
@@ -217,7 +220,7 @@ class Comment
             $data['author_url'],
             $data['author_ip'],
             $data['date'],
-            $data['body'],
+            iconv(mb_detect_encoding($data['body']), "UTF-8", $data['body']),
             $data['status'],
             $data['agent'],
             $data['type'],

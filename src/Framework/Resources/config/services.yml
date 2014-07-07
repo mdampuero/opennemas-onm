@@ -80,8 +80,16 @@ services:
         class: Repository\CommentManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
+    content_views_repository:
+        class: Repository\ContentViewsManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
     entity_repository:
         class: Repository\EntityManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
+    frontpage_repository:
+        class: Repository\FrontpageManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     user_repository:
@@ -110,7 +118,7 @@ services:
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
@@ -118,14 +126,14 @@ services:
 
     automatic_contents:
         class: Onm\MachineSearcher
-        arguments: [ @cache ]
+        arguments: [ @dbal_connection, @entity_repository, @cache, %cache_prefix% ]
 
     acl_checker:
         class: Onm\Security\Acl
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @logger ]
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
         tags:
             - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
@@ -138,7 +146,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @db_conn_manager, @cache ]
+        arguments: [ @dbal_connection, @cache ]
 
     onm_templating:
         class: Onm\Templating\Templating

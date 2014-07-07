@@ -65,7 +65,7 @@ class LocalRepository
             }
 
             $filePath = $this->syncPath.DIRECTORY_SEPARATOR.$file;
-            if (filesize($filePath) <= 0) {
+            if (@filesize($filePath) <= 0) {
                 continue;
             }
             try {

@@ -21,6 +21,11 @@
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
     {/block}
 
     {block name="js-library"}
@@ -56,10 +61,21 @@
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav pull-right">
                         <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {if $smarty.session.email}
+                                    {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="24"}
+                                {else}
+                                    <span class="usericon"></span>
+                                {/if}
+                                <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b>
+                            </a>
                             <div class="dropdown-menu">
                                 <div class="avatar">
-                                    {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
+                                    {if $smarty.session.email}
+                                        {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
+                                    {else}
+                                        <span class="usericon"></span>
+                                    {/if}
                                 </div><!-- /.avatar -->
                                 <div class="user-info">
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>

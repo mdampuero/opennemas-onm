@@ -29,21 +29,7 @@ use Onm\Settings as s;
 class SubscriptionsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        require_once 'recaptchalib.php';
-
-        \Frontend\Controller\StaticPagesController::getAds();
-    }
-
-    /**
-     * Description of the action
+     * Shows the subscription form
      *
      * @param Request $request the request object
      *
@@ -51,7 +37,16 @@ class SubscriptionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->view->assign('actual_category', 'newsletter');
+        $ads = $this->getAds();
+
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->assign(
+            array(
+                'advertisements'  => $ads,
+                'actual_category' => 'newsletter'
+            )
+        );
+
         return $this->render('static_pages/subscription.tpl');
     }
 
@@ -79,6 +74,8 @@ class SubscriptionsController extends Controller
         $rcResponseField  = $request->request->filter('recaptcha_response_field', null, FILTER_SANITIZE_STRING);
         $message          = null;
         $class            = "";
+
+        require_once 'recaptchalib.php';
 
         if (empty($verify)) {
 
@@ -240,6 +237,7 @@ class SubscriptionsController extends Controller
             }
         }
 
+        $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'static_pages/subscription.tpl',
             array(
@@ -248,5 +246,21 @@ class SubscriptionsController extends Controller
                 'class'   => $class,
             )
         );
+    }
+
+    /**
+     * Returns the advertisements for the subscription page
+     *
+     * @return void
+     **/
+    public function getAds()
+    {
+        $category = 0;
+
+        // Get letter positions
+        $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

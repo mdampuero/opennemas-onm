@@ -30,10 +30,8 @@ use Onm\Message as m;
 class AlbumsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -64,28 +62,26 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Lists all albums
+     * Lists all albums.
      *
-     * @param Request $request the request object
-     *
-     * @return void
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('album/list.tpl');
     }
 
     /**
-     * Lists all the albums for the widget
+     * Lists all the albums for the widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
-     **/
+     */
     public function widgetAction(Request $request)
     {
         return $this->render(
@@ -97,14 +93,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Shows and handles the form for create a new album
+     * Shows and handles the form for create a new album.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {
@@ -170,14 +165,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Deletes an album given its id
+     * Deletes an album given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_DELETE')")
-     **/
+     */
     public function deleteAction(Request $request)
     {
         $request = $this->get('request');
@@ -212,14 +206,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Shows the information for an album given its id
+     * Shows the information for an album given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $request = $this->get('request');
@@ -255,14 +248,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Updates the album information
+     * Updates the album information.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $request  = $this->get('request');
@@ -326,14 +318,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Save positions for widget
+     * Save positions for widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
-     **/
+     */
     public function savePositionsAction(Request $request)
     {
         $positions = $request->query->get('positions');
@@ -362,44 +353,29 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Render the content provider for albums
+     * Render the content provider for albums.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('ALBUM_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = 8;
 
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $cm = new  \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_album` NOT IN ('.$contentsExcluded.') ';
-        }
-
-        list($countAlbums, $albums) = $cm->getCountAndSlice(
-            'Album',
-            null,
-            'contents.content_status=1 '.$sqlExcludedOpinions,
-            'ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'album')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $albums      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countAlbums = $em->countBy($filters);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -414,7 +390,7 @@ class AlbumsController extends Controller
                 'totalItems'  => $countAlbums,
                 'fileName'    => $this->generateUrl(
                     'admin_albums_content_provider',
-                    array('category' => $category)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -429,35 +405,31 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Lists all the albums withing a category for the related manager
+     * Lists all the albums withing a category for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('ALBUM_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderRelatedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        if ($category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countAlbums, $albums) = $cm->getCountAndSlice(
-            'Album',
-            $categoryFilter,
-            '1=1',
-            ' ORDER BY created DESC, contents.title ASC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'album')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $albums      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countAlbums = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -471,7 +443,7 @@ class AlbumsController extends Controller
                 'totalItems'  => $countAlbums,
                 'fileName'    => $this->generateUrl(
                     'admin_albums_content_provider_related',
-                    array( 'category' => $category,)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -482,7 +454,7 @@ class AlbumsController extends Controller
                 'contentType'           => 'Album',
                 'contents'              => $albums,
                 'contentTypeCategories' => $this->parentCategories,
-                'category'              => $category,
+                'category'              => $categoryId,
                 'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_albums_content_provider_related'),
             )
@@ -490,14 +462,13 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Handles and shows the album configuration form
+     * Handles and shows the album configuration form.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_SETTINGS')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {

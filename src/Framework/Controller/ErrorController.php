@@ -9,9 +9,9 @@
  **/
 namespace Framework\Controller;
 
-use Onm\Framework\Controller\Controller,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-    Onm\Message as m;
+use Onm\Framework\Controller\Controller;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Onm\Message as m;
 
 /**
  * Handles all the request for Welcome actions
@@ -21,17 +21,6 @@ use Onm\Framework\Controller\Controller,
  **/
 class ErrorController extends Controller
 {
-
-    /**
-     * Common actions for all the actions
-     *
-     * @return void
-     * @author
-     **/
-    public function init()
-    {
-    }
-
     // TODO: find a way to render a simple file with smarty without initializing
     // all the
     /**
@@ -68,5 +57,4 @@ class ErrorController extends Controller
 
         return include __DIR__."/../Views/ErrorController/default-production.php";
     }
-
 }

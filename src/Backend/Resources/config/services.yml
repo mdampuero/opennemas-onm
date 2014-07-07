@@ -1,15 +1,18 @@
 parameters:
-#    onm_test.example.class: Onm\TestBundle\Example
-    onm_user_provider.class: Backend\Security\OnmUserProvider
+    onm_user_provider.class:       Backend\Security\OnmUserProvider
+    onm_oauth_user_provider.class: Backend\Security\OnmOAuthUserProvider
 
 services:
-#    onm_test.example:
-#        class: %onm_test.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
-    onm_user_provider:
-        class: %onm_user_provider.class%
     login_success_handler:
-        class: Backend\EventListener\LoginSuccessHandler
-        arguments: ['@security.context', '@router', '@session']
+        class:     Backend\EventListener\LoginSuccessHandler
+        arguments: [ @security.context, @router, @session ]
+    oauth_login_success_handler:
+        class:     Backend\EventListener\OAuthLoginSuccessHandler
+        arguments: [ @security.context, @router, @session ]
+    onm_oauth_user_provider:
+        class:     %onm_oauth_user_provider.class%
+        arguments: [ @session, @service_container]
     onm_password_encoder:
-        class: Backend\Security\OnmPasswordEncoder
+        class:     Backend\Security\OnmPasswordEncoder
+    onm_user_provider:
+        class:     %onm_user_provider.class%

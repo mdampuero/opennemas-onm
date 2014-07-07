@@ -6,28 +6,31 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class EntityManager extends BaseManager
 {
     /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
@@ -46,13 +49,22 @@ class EntityManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = \underscore($contentType) . "_" . $id;
+        $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity)
         ) {
             $entity = new $contentType($id);
+
+            if (!is_object($entity)
+                || (is_object($entity)
+                    && property_exists($entity, 'id')
+                    && is_null($entity->id)
+                )
+            ) {
+                return null;
+            }
 
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $entity);
@@ -70,112 +82,122 @@ class EntityManager extends BaseManager
      */
     public function findMulti(array $data)
     {
+        $ids  = array();
         $keys = array();
-        $ordered = array();
-
-        $ids = array();
-        $i = 0;
         foreach ($data as $value) {
-            $ids[] = $value[0] . '-' . $value[1];
-            $keys[$value[1]] = $i++;
+            $ids[] = $value[0] . $this->cacheSeparator . $value[1];
+            $keys[] = $value[1];
         }
 
-        $contents = $this->cache->fetch($ids);
+        $contents = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($contents as $content) {
-            $ordered[$keys[$content->id]] = $content;
-            $cachedIds[] = $content->content_type_name.'-'.$content->id;
+            $cachedIds[] = $content->content_type_name . $this->cacheSeparator . $content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $content) {
-            list($contentType, $contentId) = explode('-', $content);
+            list($contentType, $contentId) = explode($this->cacheSeparator, $content);
 
             $content = $this->find(\classify($contentType), $contentId);
             if ($content->id) {
-                $ordered[$keys[$content->pk_content]] = $content;
+                $contents[] = $content;
             }
         }
 
-        return array_values($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($contents) && $contents[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($contents)) {
+                $ordered[] = $contents[$i];
+            }
+        }
+
+        return $ordered;
     }
 
-     /**
+    /**
      * Searches for content given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  integer      $elementsPerPage The max number of elements.
+     * @param  integer      $page            The current page.
+     * @param  integer      $offset          The offset to start with.
+     * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $fromSQL = 'contents';
 
-        $orderBySQL  = '`pk_content` DESC';
+        if (array_key_exists('tables', $criteria)) {
+            $fromSQL .= implode(',', $criteria['tables']);
+        }
+
+        $sql = "SELECT content_type_name, pk_content FROM $fromSQL ";
+
+        if (array_key_exists('join', $criteria)) {
+            $join = $criteria['join'];
+            unset($criteria['join']);
+            $sql .= $this->getJoinSQL($join);
+        }
+
+        $sql .= " WHERE " . $this->getFilterSQL($criteria);
+
+        $orderBySQL  = '`pk_content` ASC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
-        // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents` "
-            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $sql .= " ORDER BY $orderBySQL $limitSQL";
+
         $rs = $this->dbConn->fetchAll($sql);
 
-        $contentIdentifiers = array();
-        foreach ($rs as $resultElement) {
-            $contentIdentifiers[]= array(
-                $resultElement['content_type_name'],
-                $resultElement['pk_content']
-            );
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = array($item['content_type_name'], $item['pk_content']);
         }
 
-        $contents = $this->findMulti($contentIdentifiers);
+        $contents = $this->findMulti($ids);
 
         return $contents;
     }
 
+    /**
+     * Counts contents given a criteria.
+     *
+     * @param  array|string $criteria The criteria used to search.
+     * @return integer                The number of found contents.
+     */
     public function countBy($criteria)
     {
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $fromSQL = 'contents';
+        if (array_key_exists('tables', $criteria)) {
+            $fromSQL .= implode(',', $criteria['tables']);
+        }
 
-        // Executing the SQL
-        $sql = "SELECT COUNT(pk_content) FROM `contents` WHERE $filterSQL";
+        $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
+
+        if (array_key_exists('join', $criteria) && $criteria['join']) {
+            unset($criteria['join']);
+            $sql .= $this->getJoinSQL($criteria);
+        } else {
+            unset($criteria['join']);
+            $sql .= " WHERE" . $this->getFilterSQL($criteria);
+        }
+
         $rs = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
-        }
-
-        return $rs[0];
-    }
-
-    /**
-     * Returns the number of contents given a filter
-     *
-     * @param string|array $filter the filter to apply
-     *
-     * @return int the number of comments
-     **/
-    public function count($filter)
-    {
-        // Building the SQL filter
-        $filterSQL = $this->getFilterSQL($filter);
-
-        // Executing the SQL
-        $sql = "SELECT  count(pk_content) FROM `contents` WHERE $filterSQL";
-        try {
-            $rs  = $this->dbConn->fetchArray($sql);
-        } catch (\DBalException $e) {
-            return false;
         }
 
         return $rs[0];

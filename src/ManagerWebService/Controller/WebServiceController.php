@@ -21,33 +21,32 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class WebServiceController extends Controller
 {
     /**
+     * Creates a new instance.
      *
-     *
-     * @return mixed
-    */
+     * @param  Request      $request The request object.
+     * @return JsonResponse          The response object.
+     */
     public function createAction(Request $request)
     {
-        $authResult = $this->checkAuth($request);
-        if (is_object($authResult)) {
-            return $authResult;
+        if (is_object($this->checkAuth($request))) {
+            return new JsonResponse('Auth not valid', 403);
         }
 
         $internalName = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
         $siteName     = $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING);
-        $userName     = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
-        $password     = substr(hash_hmac('sha512', rand(), $this->webserviceParameters["api_key"]), 0, 12);
-        $contactMail  = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
+        $password     = $request->request->filter('user_password', '', FILTER_SANITIZE_STRING);
+        $email        = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
+        $username     = $email;
         $contactIP    = $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING);
         $timezone     = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
         $token        = md5(uniqid(mt_rand(), true));
         $language     = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
-        $plan         = $request->request->filter('plan', '', FILTER_SANITIZE_STRING);
-
+        $plan         = 'basic';
 
         $errors = $this->validateInstanceData(array(
             'subdomain'     => $internalName,
             'instance_name' => $siteName,
-            'user_email'    => $contactMail,
+            'user_email'    => $email,
         ));
         if (count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
@@ -61,12 +60,7 @@ class WebServiceController extends Controller
         $settings = array(
             'TEMPLATE_USER' => $instanceCreator['template'],
             'MEDIA_URL'     => "",
-            'BD_TYPE'       => "mysqli",
-            'BD_HOST'       => "localhost",
-            'BD_USER'       => $internalNameShort,
-            'BD_PASS'       => \Onm\StringUtils::generatePassword(16),
-            'BD_DATABASE'   => $internalNameShort,
-            'TOKEN'         => $token,
+            'BD_DATABASE'   => $internalNameShort
         );
 
         $date = new \DateTime();
@@ -76,9 +70,10 @@ class WebServiceController extends Controller
         $data = array(
             'contact_IP'    => $contactIP,
             'name'          => $siteName,
-            'user_name'     => $userName,
-            'user_mail'     => $contactMail,
-            'user_pass'     => $password,
+            'user_name'     => $username,
+            'user_mail'     => $email,
+            'user_password' => $password,
+            'token'         => $token,
             'internal_name' => $internalName,
             'domains'       => $internalName.'.'.$instanceCreator['base_domain'],
             'activated'     => 1,
@@ -102,8 +97,11 @@ class WebServiceController extends Controller
         $errors = array();
         $im = $this->get('instance_manager');
         // Check for repeated internalnameshort and if so, add a number at the end
-        $data = $im->checkInternalShortName($data);
+        $data['settings']['BD_DATABASE'] = $im->checkInternalName(
+            $data['settings']['BD_DATABASE']
+        );
         $errors = $im->create($data);
+
         if (is_array($errors) && count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
@@ -120,17 +118,64 @@ class WebServiceController extends Controller
 
         return new JsonResponse(
             array(
-                'success' => true,
-                'instance_url' => $data['domains']
+                'success'      => true,
+                'instance_url' => $data['domains'],
+                'enable_url'   => $data['domains']
+                    . '/admin/login?token=' . $token
             ),
             200
         );
     }
 
-    private function sendMails($data, $companyMail, $domain, $language, $plan)
+    /**
+     * Checks if it is an authorized request.
+     *
+     * @param  Request $request The request object.
+     * @return boolean          True if the request is authorized. Otherwise,
+     *                          returns false.
+     */
+    private function checkAuth(Request $request)
     {
-        $this->sendMailToUser($data, $companyMail, $domain);
-        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
+        $this->webserviceParameters = $this->container
+            ->getParameter("manager_webservice");
+
+        $signature = hash_hmac(
+            'sha1',
+            $request->request->get('timestamp'),
+            $this->webserviceParameters["api_key"]
+        );
+
+        if ($signature === $request->request->get('signature', null)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function sendMailToCompany($data, $companyMail, $domain, $plan)
+    {
+        $this->view = new \TemplateManager();
+
+        // Prepare message
+        $message = \Swift_Message::newInstance();
+        $message->setFrom($companyMail['from_mail'])
+                ->setTo(array($companyMail['info_mail'] => $companyMail['info_mail']))
+                ->setSender($companyMail['sender_mail'], "Opennemas")
+                ->setSubject(_("A new opennemas instance has been created"))
+                ->setBody(
+                    $this->renderView(
+                        'instances/mails/newInstanceToCompany.tpl',
+                        array(
+                            'data'        => $data,
+                            'domain'      => $domain,
+                            'plan'        => $plan
+                        )
+                    )
+                );
+
+        // Send message
+        $sent = $this->get('mailer')->send($message, $failures);
+        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']}- new instance - {$data['name']}");
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
@@ -161,30 +206,10 @@ class WebServiceController extends Controller
         $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
-    private function sendMailToCompany($data, $companyMail, $domain, $plan)
+    private function sendMails($data, $companyMail, $domain, $language, $plan)
     {
-        $this->view = new \TemplateManager();
-
-        // Prepare message
-        $message = \Swift_Message::newInstance();
-        $message->setFrom($companyMail['from_mail'])
-                ->setTo(array($companyMail['info_mail'] => $companyMail['info_mail']))
-                ->setSender($companyMail['sender_mail'], "Opennemas")
-                ->setSubject(_("A new opennemas instance has been created"))
-                ->setBody(
-                    $this->renderView(
-                        'instances/mails/newInstanceToCompany.tpl',
-                        array(
-                            'data'        => $data,
-                            'domain'      => $domain,
-                            'plan'        => $plan
-                        )
-                    )
-                );
-
-        // Send message
-        $sent = $this->get('mailer')->send($message, $failures);
-        $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']}- new instance - {$data['name']}");
+        $this->sendMailToUser($data, $companyMail, $domain);
+        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
     }
 
     /**
@@ -196,53 +221,6 @@ class WebServiceController extends Controller
     {
         $validator = new \Onm\Instance\Validator($data, $this->get('instance_manager'));
 
-        $correct = $validator->validate();
-
-        return $correct;
-    }
-
-    /**
-     * Checks if the request was done through encrypted HTTP
-     *
-     * @return boolean true if the request was done with HTTPS
-     **/
-    private function isHttps()
-    {
-        if (!empty($_SERVER['HTTPS'])
-            && $_SERVER['HTTPS']!="off"
-        ) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    private function checkAuth($request)
-    {
-        $this->webserviceParameters = $this->container->getParameter("manager_webservice");
-
-        // return true;
-        // if (!$this->isHttps()) {
-        //     throw new \Exception;
-        // }
-
-        $signature = hash_hmac(
-            'sha1',
-            $request->request->get('timestamp'),
-            $this->webserviceParameters["api_key"]
-        );
-
-        $signatureRequest = $request->request->get('signature', null);
-        if ($signature === $signatureRequest
-        ) {
-            return true;
-        }
-
-        return new JsonResponse('Auth not valid', 403);
+        return $validator->validate();
     }
 }

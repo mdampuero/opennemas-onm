@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for letters
+ * Defines the frontend controller for the letter content type
  *
  * @package Frontend_Controllers
  **/
@@ -30,61 +30,47 @@ use Onm\Settings as s;
 class LetterController extends Controller
 {
     /**
-     * Common code for all the actions
+     * Renders letters frontpage.
      *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
-     * Renders letters frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function frontpageAction(Request $request)
     {
         $page = $request->query->getDigits('page', 1);
 
-        $cm = new \ContentManager();
-
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
         if ($this->view->caching == 0
-            || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
+            || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
         ) {
-
             $itemsPerPage = 12;
 
-
-            list($countLetters, $otherLetters) = $cm->getCountAndSlice(
-                'Letter',
-                null,
-                'in_litter != 1 AND contents.content_status=1',
-                'ORDER BY created DESC',
-                $page,
-                $itemsPerPage
+            $order   = array('created' => 'DESC');
+            $filters = array(
+                'content_type_name' => array(array('value' => 'letter')),
+                'content_status'    => array(array('value' => 1)),
+                'in_litter'         => array(array('value' => 0)),
             );
 
-            foreach ($otherLetters as &$letter) {
+            $em           = $this->get('entity_repository');
+            $letters      = $em->findBy($filters, $order, $itemsPerPage, $page);
+            $countLetters = $em->countBy($filters);
+
+            foreach ($letters as &$letter) {
                 $letter->loadAllContentProperties();
                 if (!empty($letter->image)) {
                     $letter->photo = $letter->photo;
                 }
             }
 
-            $total = count($otherLetters)+1;
-
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $total,
+                    'total' => $countLetters,
                     'url'   => $this->generateUrl(
                         'frontend_letter_frontpage'
                     )
@@ -93,7 +79,7 @@ class LetterController extends Controller
 
             $this->view->assign(
                 array(
-                    'otherLetters' => $otherLetters,
+                    'otherLetters' => $letters,
                     'pagination'   => $pagination,
                 )
             );
@@ -119,6 +105,7 @@ class LetterController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-inner');
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
@@ -132,7 +119,7 @@ class LetterController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $letter = new \Letter($letterId);
+            $letter = $this->get('entity_repository')->find('Letter', $letterId);
             $letter->with_comment = 1;
 
             if (empty($letter)
@@ -179,9 +166,14 @@ class LetterController extends Controller
      **/
     public function showFormAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
+
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render('letter/letter_form.tpl');
-
     }
 
     /**
@@ -193,6 +185,7 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
 
         require_once 'recaptchalib.php';
 
@@ -232,16 +225,18 @@ class LetterController extends Controller
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
                 $items   = $request->request->get('items');
 
+                $moreData = _("Name")." {$name} \n "._("Email"). "{$mail} \n ";
                 if (!empty($items)) {
                     foreach ($items as $key => $value) {
                         if (!empty($key) && !empty($value)) {
                             $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                            $moreData .= " {$key}: {$value}\n ";
                         }
                     }
                 }
 
                 $data['url']        = $url;
-                $data['body']       = $lettertext;
+                $data['body']       = iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext);
                 $data['author']     = $name;
                 $data['title']      = $subject;
                 $data['email']      = $mail;
@@ -255,7 +250,7 @@ class LetterController extends Controller
 
                 // Prevent XSS attack
                 $data = array_map('strip_tags', $data);
-                $data['body'] = nl2br($data['body']);
+                $data['body'] = nl2br($moreData.$data['body']);
 
                 if ($letter->hasBadWords($data)) {
                     $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
@@ -324,7 +319,6 @@ class LetterController extends Controller
         $info          = array();
 
         if ($upload) {
-
             $data = array(
                 'local_file'        => $upload['tmp_name'],
                 'original_filename' => $upload['name'] ,
@@ -363,7 +357,7 @@ class LetterController extends Controller
 
         // Get letter positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

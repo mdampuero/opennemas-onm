@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for newsstand
+ * Defines the frontend controller for the kiosko content type
  *
  * @package Frontend_Controllers
  **/
@@ -22,7 +22,7 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for newsstand
+ * Handles the actions for kiosko content type
  *
  * @package Frontend_Controllers
  **/
@@ -208,7 +208,7 @@ class NewStandController extends Controller
             || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
         ) {
 
-            $epaper = new \Kiosko($epaperId);
+            $epaper = $this->get('entity_repository')->find('Kiosko', $epaperId);
 
             $format_date = strtotime($epaper->date);
             $month       = date('m', $format_date);

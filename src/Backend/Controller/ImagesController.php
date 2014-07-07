@@ -1,10 +1,5 @@
 <?php
 /**
- * Handles the actions for the images
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -29,10 +24,8 @@ use Onm\Message as m;
 class ImagesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -69,28 +62,26 @@ class ImagesController extends Controller
     }
 
     /**
-     * Lists images from an specific category
+     * Lists images from an specific category.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('image/list.tpl');
     }
 
     /**
-     * Handles the form for configure the images module
+     * Handles the form for configure the images module.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -126,160 +117,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Handles the form for searching images
+     * Show the page for upload new images.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('PHOTO_ADMIN')")
-     **/
-    public function searchAction(Request $request)
-    {
-        $page            = $request->query->getDigits('page', 1);
-        $category        = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $searchStringRAW = $request->query->filter('string_search', null, FILTER_SANITIZE_STRING);
-
-        // If the form was not completed show the form
-        if (empty($searchStringRAW)) {
-            return $this->render(
-                'image/search.tpl',
-                array(
-                    'category' => $category,
-                )
-            );
-        } else {
-            $cm     = new \ContentManager();
-            $search = "";
-
-            $itemsPerPage = s::get('items_per_page', 20);
-
-            $searchCriteria['maxWidth']  = $request->query->getDigits('max_width', null);
-            $searchCriteria['minWidth']  = $request->query->getDigits('min_width', null);
-            $searchCriteria['maxHeight'] = $request->query->getDigits('max_height', null);
-            $searchCriteria['minHeight'] = $request->query->getDigits('min_height', null);
-            $searchCriteria['maxWeight'] = $request->query->getDigits('max_weight', null);
-            $searchCriteria['minWeight'] = $request->query->getDigits('min_weight', null);
-            $searchCriteria['type']      = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
-            $searchCriteria['color']     = $request->query->filter('color', '', FILTER_SANITIZE_STRING);
-            $searchCriteria['author']    = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
-            $searchCriteria['starttime'] = $request->query->filter('starttime', '', FILTER_SANITIZE_STRING);
-            $searchCriteria['endtime']   = $request->query->filter('endtime', '', FILTER_SANITIZE_STRING);
-
-            $sqlWhere    = array();
-
-            // If search string was provided split it by tokens and build the LIKE based SQL
-            if (!empty($searchStringRAW)) {
-                $searchString    = preg_split('/[\s\,]+/', $searchStringRAW);
-                $searchStringSQL = '';
-                foreach ($searchString as &$token) {
-                    $token = addslashes($token);
-                    $token = "%{$token}%";
-                }
-                $searchStringSQL = implode('" OR `contents`.`metadata` LIKE "', $searchString);
-                $sqlWhere      []= "`contents`.`metadata` LIKE '{$searchStringSQL}'";
-            }
-            if ($category == 'all') {
-                $category = null;
-            }
-            if (!empty($searchCriteria['maxWidth'])) {
-                $sqlWhere []= '`photos`.`width` <= "'.$searchCriteria['maxWidth'].'"' ;
-            }
-            if (!empty($searchCriteria['minWidth'])) {
-                $sqlWhere []= '`photos`.`width` >= "'.$searchCriteria['minWidth'].'"' ;
-            }
-            if (!empty($searchCriteria['maxHeight'])) {
-                $sqlWhere []= '`photos`.`height` <= "'.$searchCriteria['maxHeight'].'"' ;
-            }
-            if (!empty($searchCriteria['minHeight'])) {
-                $sqlWhere []= '`photos`.`height` >= "'.$searchCriteria['minHeight'].'"' ;
-            }
-            if (!empty($searchCriteria['author'])) {
-                $sqlWhere []= '`photos`.`author_name` LIKE \'%'.addslashes($searchCriteria['author']).'%\'' ;
-            }
-            if (!empty($searchCriteria['endtime'])) {
-                $sqlWhere []= '`photos`.`date` <= "'.addslashes($searchCriteria['endtime']).'"' ;
-            }
-            if (!empty($searchCriteria['starttime'])) {
-                $sqlWhere []= '`photos`.`date` >= "'.addslashes($searchCriteria['starttime']).'"' ;
-            }
-            if (!empty($searchCriteria['minWeight'])) {
-                $sqlWhere []= '`photos`.`size` <= "'.addslashes($searchCriteria['maxWeight']).'" ' ;
-            }
-            if (!empty($searchCriteria['minWeight'])) {
-                $sqlWhere []= '`photos`.`size` >= "'.addslashes($searchCriteria['minWeight']).'"' ;
-            }
-            if (!empty($searchCriteria['tipo'])) {
-                $sqlWhere []= '`photos`.`type_img` = "'.addslashes($searchCriteria['type']).'"' ;
-            }
-            if (!empty($searchCriteria['color'])) {
-                $sqlWhere []= '`photos`.`color` = "'.addslashes($searchCriteria['color']).'"' ;
-            }
-
-            $sqlWhere = implode(' AND ', $sqlWhere);
-
-            list($countPhotos, $photos) = $cm->getCountAndSlice(
-                'Photo',
-                $category,
-                'contents.fk_content_type=8 AND '.$sqlWhere,
-                'ORDER BY  created DESC ',
-                $page,
-                $itemsPerPage
-            );
-
-            foreach ($photos as &$photo) {
-                $photo->extension       = strtolower($photo->type_img);
-                $photo->description_utf = html_entity_decode($photo->description);
-                $photo->metadata_utf    = html_entity_decode($photo->metadata);
-                $photo->category_name   = $photo->loadCategoryName($photo->id);
-            }
-
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'fileName'    => $this->generateUrl('admin_images_search').'?page=%d',
-                    'delta'       => 4,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countPhotos,
-                )
-            );
-
-            $_SESSION['desde'] = 'search';
-            $adsModule = 'false';
-            if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
-                $adsModule = 'true';
-            }
-
-
-            return $this->render(
-                'image/search.tpl',
-                array(
-                    'photos'          => $photos,
-                    'search_criteria' => $searchCriteria,
-                    'search_string'   => $searchStringRAW,
-                    'paginacion'      => $pagination,
-                    'search'          => $search,
-                    'pages'           => $pagination,
-                    'category'        => $category,
-                    'adsModule'       => $adsModule,
-                )
-            );
-        }
-    }
-
-    /**
-     * Show the page for upload new images
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
-     **/
+     */
     public function newAction(Request $request)
     {
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
@@ -296,14 +140,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Displays the image information given its id
+     * Displays the image information given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $ids         = $request->query->get('id');
@@ -357,14 +200,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Updates the image information given its id
+     * Updates the image information given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $photosRAW = $request->request->get('description');
@@ -403,14 +245,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Deletes an image given its id
+     * Deletes an image given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_DELETE')")
-     **/
+     */
     public function deleteAction(Request $request)
     {
         $request = $this->get('request');
@@ -438,14 +279,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Uploads and creates
+     * Uploads and creates.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         $response = new Response();
@@ -626,59 +466,44 @@ class ImagesController extends Controller
     }
 
     /**
-     * Shows a paginated list of images from a category
+     * Shows a paginated list of images from a category.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
-     **/
+     */
     public function contentProviderGalleryAction(Request $request)
     {
-        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $metadata   = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $categoryId = $request->query->getDigits('category', 0);
+        $page       = $request->query->getDigits('page', 1);
 
         $itemsPerPage = 16;
-        $numItems = $itemsPerPage + 1;
 
-        if ($page == 1) {
-            $limit    = "LIMIT {$numItems}";
-        } else {
-            $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$numItems;
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
+
+        $filters = array(
+            'content_type_name' => array(array('value' => 'photo')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+        );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
         }
 
-        $cm = new \ContentManager();
-
-        $szWhere = '';
         if (!empty($metadata)) {
             $tokens = \Onm\StringUtils::get_tags($metadata);
             $tokens = explode(', ', $tokens);
 
-
-            if (count($tokens) > 0) {
-                foreach ($tokens as &$meta) {
-                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
-                }
-                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
-            }
+            $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));
+            $filters['metadata']['union'] = 'OR';
         }
 
-        if (empty($category)) {
-            $photos = $cm->find(
-                'Photo',
-                'contents.fk_content_type = 8 AND contents.content_status=1 ' . $szWhere,
-                'ORDER BY created DESC '.$limit
-            );
-        } else {
-            $photos = $cm->find_by_category(
-                'Photo',
-                $category,
-                'fk_content_type = 8 AND contents.content_status=1 ' . $szWhere,
-                'ORDER BY created DESC '.$limit
-            );
-        }
+        $photos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countPhotos = $em->countBy($filters);
 
         if (empty($photos)) {
             return new Response(
@@ -686,20 +511,15 @@ class ImagesController extends Controller
             );
         }
 
-        $total = count($photos);
-        if ($total > $itemsPerPage) {
-            array_pop($photos);
-        }
-
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
                 'page'  => $page,
                 'items' => $itemsPerPage,
-                'total' => $total,
+                'total' => $countPhotos,
                 'url'   => $this->generateUrl(
                     'admin_images_content_provider_gallery',
                     array(
-                        'category'  => $category,
+                        'category'  => $categoryId,
                         'metadatas' => $metadata,
                     )
                 )

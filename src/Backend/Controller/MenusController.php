@@ -38,15 +38,16 @@ class MenusController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
 
         $this->pages = array(
-            'frontpage' => 1,
-            'opinion'   => 4,
-            'album'     => 7,
-            'video'     => 9,
-            'poll'      => 11,
-            'letter'    => 17,
-            'kiosko'    => 14,
-            'boletin'   => 13,
-            'participa' => 18,
+            'frontpage'  => 1,
+            'opinion'    => 4,
+            'album'      => 7,
+            'video'      => 9,
+            'poll'       => 11,
+            'letter'     => 17,
+            'kiosko'     => 14,
+            'boletin'    => 13,
+            'participa'  => 18,
+            'hemeroteca' => 19,
         );
 
         $this->menuPositions = array('' => _('Without position'));
@@ -201,6 +202,9 @@ class MenusController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+            foreach ($subcat as $subcategory) {
+                $parentCategories = array_merge($parentCategories, $subcategory);
+            }
             $albumCategories = $videoCategories = $pollCategories = array();
             foreach ($ccm->categories as $category) {
                 if ($category->internal_category == $this->pages['album']) {

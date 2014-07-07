@@ -29,10 +29,8 @@ use Onm\Settings as s;
 class PollsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
@@ -64,28 +62,26 @@ class PollsController extends Controller
     }
 
     /**
-     * Lists all the available polls
+     * Lists all the available polls.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('poll/list.tpl');
     }
 
     /**
-     * Lists all the polls in the widget
+     * Lists all the polls in the widget.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_ADMIN')")
-     **/
+     */
     public function widgetAction(Request $request)
     {
         $configurations = s::get('poll_settings');
@@ -105,14 +101,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Handles the form for create new polls
+     * Handles the form for create new polls.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -158,14 +153,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Shows the poll information form
+     * Shows the poll information form.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -188,14 +182,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Updates the poll information
+     * Updates the poll information.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -249,14 +242,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Delete a poll given its id
+     * Delete a poll given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_DELETE')")
-     **/
+     */
     public function deleteAction(Request $request)
     {
         $id       = $request->query->getDigits('id');
@@ -287,14 +279,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Change available status for one poll given its id
+     * Change available status for one poll given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_AVAILABLE')")
-     **/
+     */
     public function toggleAvailableAction(Request $request)
     {
         $id       = $request->query->getDigits('id', 0);
@@ -326,14 +317,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Change available status for one poll given its id
+     * Change available status for one poll given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_FAVORITE')")
-     **/
+     */
     public function toggleFavoriteAction(Request $request)
     {
         $id       = $request->query->getDigits('id', 0);
@@ -362,14 +352,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Change available status for one poll given its id
+     * Change available status for one poll given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_AVAILABLE')")
-     **/
+     */
     public function toggleInHomeAction(Request $request)
     {
         $id       = $request->query->getDigits('id', 0);
@@ -398,14 +387,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Deletes multiple polls at once given their ids
+     * Deletes multiple polls at once given their ids.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_DELETE')")
-     **/
+     */
     public function batchDeleteAction(Request $request)
     {
         $selected = $request->query->get('selected_fld', null);
@@ -443,18 +431,16 @@ class PollsController extends Controller
         } else {
             return new Response('Ok', 200);
         }
-
     }
 
     /**
-     * Changes the available status for polls given their ids
+     * Changes the available status for polls given their ids.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object
+     * @return Response          The response object
      *
      * @Security("has_role('POLL_AVAILABLE')")
-     **/
+     */
     public function batchPublishAction(Request $request)
     {
         $status   = $request->query->getDigits('status', 0);
@@ -495,44 +481,29 @@ class PollsController extends Controller
     }
 
     /**
-     * Render the content provider for polls
+     * Render the content provider for polls.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('POLL_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage = 8;
 
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        $cm = new  \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_poll` NOT IN ('.$contentsExcluded.') ';
-        }
-
-        list($countPolls, $polls) = $cm->getCountAndSlice(
-            'Poll',
-            null,
-            'contents.available=1 '.$sqlExcludedOpinions,
-            'ORDER BY created DESC ',
-            $page,
-            8
+        $filters = array(
+            'content_type_name' => array(array('value' => 'poll')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countPolls = $em->countBy($filters);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -547,7 +518,7 @@ class PollsController extends Controller
                 'totalItems'  => $countPolls,
                 'fileName'    => $this->generateUrl(
                     'admin_polls_content_provider',
-                    array('category' => $category)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -562,35 +533,31 @@ class PollsController extends Controller
     }
 
     /**
-     * Lists all the polls withing a category for the related manager
+     * Lists all the polls withing a category for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('POLL_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderRelatedAction(Request $request)
     {
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        if ($category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countPolls, $polls) = $cm->getCountAndSlice(
-            'Poll',
-            $categoryFilter,
-            'contents.available=1',
-            ' ORDER BY starttime DESC, contents.title ASC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'poll')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countPolls = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -604,7 +571,7 @@ class PollsController extends Controller
                 'totalItems'  => $countPolls,
                 'fileName'    => $this->generateUrl(
                     'admin_polls_content_provider_related',
-                    array('category' => $category,)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -615,7 +582,7 @@ class PollsController extends Controller
                 'contentType'           => 'Poll',
                 'contents'              => $polls,
                 'contentTypeCategories' => $this->parentCategories,
-                'category'              => $category,
+                'category'              => $categoryId,
                 'pagination'            => $pagination->links,
                 'contentProviderUrl'    => $this->generateUrl('admin_polls_content_provider_related'),
             )
@@ -623,14 +590,13 @@ class PollsController extends Controller
     }
 
     /**
-     * Handles the configuration for the polls module
+     * Handles the configuration for the polls module.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('POLL_SETTINGS')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {

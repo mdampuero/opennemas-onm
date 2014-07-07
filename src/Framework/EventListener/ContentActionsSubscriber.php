@@ -75,7 +75,10 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             'category.update' => array(
                 array('deleteCustomCss', 5),
                 array('deleteCategoryCache', 5)
-            )
+            ),
+            'user.update' => array(
+                array('deleteUserCache', 10),
+            ),
         );
     }
 
@@ -93,7 +96,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $id = $content->id;
         $contentType = \underscore(get_class($content));
 
-        $this->cacheHandler->delete($contentType . "_" . $id);
+        $this->cacheHandler->delete($contentType . "-" . $id);
 
         $this->cleanOpcode();
 
@@ -110,7 +113,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     {
         $id = $event->getArgument('authorId');
 
-        $this->cacheHandler->delete('user_' . $id);
+        $this->cacheHandler->delete('user-' . $id);
 
         return false;
     }
@@ -148,6 +151,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             );
 
             $this->cleanOpcode();
+        } elseif (property_exists($content, 'pk_opinion')) {
+            $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+            $tplManager->delete('blog', 'blog_frontpage.tpl');
         }
 
         return false;
@@ -168,11 +174,15 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $content = $event->getArgument('content');
 
-        $banRequest = 'obj.http.x-tags ~ '.$content->id;
+        $instanceName = getService('instance_manager')->current_instance->internal_name;
+
+        $baseRequest = "obj.http.x-instance ~ \"{$instanceName}\" && ";
+
+        $banRequest = $baseRequest." obj.http.x-tags ~ \"{$content->id}\"";
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
-        $banRequest = 'obj.http.x-tags ~ sitemap ';
+        $banRequest = $baseRequest.' obj.http.x-tags ~ "sitemap" ';
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
-        $banRequest = 'obj.http.x-tags ~ rss ';
+        $banRequest = $baseRequest.' obj.http.x-tags ~ "rss" ';
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
     }
 
@@ -382,5 +392,21 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $name = $event->getArgument('category')->name;
         $this->cacheHandler->delete('category_' . $name);
+    }
+
+    /**
+     * Perform the actions after update a user/author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     */
+    public function deleteUserCache(Event $event)
+    {
+        $id = $event->getArgument('id');
+
+        $this->cacheHandler->delete('user-' . $id);
+
+        return false;
     }
 }

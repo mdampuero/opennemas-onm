@@ -35,7 +35,6 @@ class TagsController extends Controller
     {
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
-
         $tagName = \StringUtils::normalize($tagName);
 
         // Load config
@@ -57,9 +56,10 @@ class TagsController extends Controller
                     array('value' => 1),
                     array('value' => 4),
                     array('value' => 7),
-                    array('value' => 9)
+                    array('value' => 9),
+                    'union' => 'OR'
                 ),
-                'metadata' => array(array('value' => '%' . $tag . '%'))
+                'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
             );
 
             $er = $this->get('entity_repository');
@@ -117,7 +117,7 @@ class TagsController extends Controller
                     'url'   => $this->generateUrl(
                         'tag_frontpage',
                         array(
-                            'tag_name' => $tagName,
+                            'tag_name' => preg_replace('/[^a-z0-9]/', '-', $tag),
                         )
                     )
                 )
@@ -141,7 +141,6 @@ class TagsController extends Controller
             )
         );
     }
-
 
     /**
      * Fetches advertisements for article inner

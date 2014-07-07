@@ -53,12 +53,12 @@ class VarnishCleanerListener implements EventSubscriberInterface
         ) {
             $banRequests = $this->messageExchanger->getMessages();
 
-            $varnishCleaner = $this->varnishCleaner;
+
             foreach ($banRequests as $banRequest) {
-                $response = $varnishCleaner->ban($banRequest);
+                $response = $this->varnishCleaner->ban($banRequest);
 
                 foreach ($response as $message) {
-                    $this->logger->notice($message);
+                    $this->logger->info($message);
                 }
             }
         }

@@ -29,7 +29,7 @@
 
         {is_module_activated name="FILE_MANAGER"}
         <li>
-            <a href="{url name=admin_files_content_provider category=$category}">{t}Files{/t}</a>
+            <a href="{url name=admin_files_content_provider_related category=$category}">{t}Files{/t}</a>
         </li>
         {/is_module_activated}
     </ul>

@@ -7,27 +7,41 @@
  * @version         1.0
  *
  ******************************************/
-;(function($){
+;
+(function($) {
     $.extend({
-        onmEditor: function( options ) {
+        onmEditor: function(options) {
 
             var load_plugins = 'a11yhelp,about,imageresize,autogrow,autokeywords,,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,pastespecial,removeformat,resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
             var presets = {
 
-                simple : {
+                simple: {
                     plugins: load_plugins,
                     removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText,Table,HorizontalRule',
-                    toolbarGroups: [
-                      { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                      { name: 'align', groups: [ 'align' ]},
-                      { name: 'editing', groups: [ 'find', 'selection' ] },
-                      { name: 'forms' },
-                      { name: 'styles' },
-                      { name: 'links' },
-                      { name: 'others', groups: [ 'undo' ] },
-                      { name: 'insert'},
-                      { name: 'document', groups: [ 'mode', 'document', 'doctools' ] }
-                    ],
+                    toolbarGroups: [{
+                        name: 'basicstyles',
+                        groups: ['basicstyles', 'cleanup']
+                    }, {
+                        name: 'align',
+                        groups: ['align']
+                    }, {
+                        name: 'editing',
+                        groups: ['find', 'selection']
+                    }, {
+                        name: 'forms'
+                    }, {
+                        name: 'styles'
+                    }, {
+                        name: 'links'
+                    }, {
+                        name: 'others',
+                        groups: ['undo']
+                    }, {
+                        name: 'insert'
+                    }, {
+                        name: 'document',
+                        groups: ['mode', 'document', 'doctools']
+                    }],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500,
                     wordcount: {
@@ -36,49 +50,84 @@
                     }
                 },
 
-                full : {
+                full: {
                     plugins: load_plugins,
                     removeButtons: 'Cut,Copy,Paste,PasteText',
-                    toolbarGroups: [
-                      { name: 'align', groups: [ 'align' ]},
-                      { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                      { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ] },
-                      { name: 'forms' },
-                      '/',
-                      { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                      { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align' ] },
-                      { name: 'links' },
-                      { name: 'insert' },
-                      '/',
-                      { name: 'styles' },
-                      { name: 'tools' },
-                      { name: 'others', groups: [ 'undo' ] },
+                    toolbarGroups: [{
+                            name: 'align',
+                            groups: ['align']
+                        }, {
+                            name: 'document',
+                            groups: ['mode', 'document', 'doctools']
+                        }, {
+                            name: 'editing',
+                            groups: ['find', 'selection', 'spellchecker']
+                        }, {
+                            name: 'forms'
+                        },
+                        '/', {
+                            name: 'basicstyles',
+                            groups: ['basicstyles', 'cleanup']
+                        }, {
+                            name: 'paragraph',
+                            groups: ['list', 'indent', 'blocks', 'align']
+                        }, {
+                            name: 'links'
+                        }, {
+                            name: 'insert'
+                        },
+                        '/', {
+                            name: 'styles'
+                        }, {
+                            name: 'tools'
+                        }, {
+                            name: 'others',
+                            groups: ['undo']
+                        },
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
-                  },
+                },
 
-                  standard: {
+                standard: {
                     plugins: load_plugins,
                     removeButtons: 'Strike,Subscript,Superscript,Cut,Copy,Paste,PasteText',
-                    toolbarGroups : [
-                        { name: 'styles' },
+                    toolbarGroups: [{
+                            name: 'styles'
+                        },
                         // { name: 'clipboard',   groups: [ 'clipboard' ] },
-                        { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-                        { name: 'forms' },
-                        { name: 'others' , groups: [ 'undo' ]},
-                        { name: 'tools' },
-                        { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-                        '/',
-                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                        { name: 'align', groups: [ 'align' ]},
-                        { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks' ] },
-                        { name: 'links' },
-                        { name: 'insert' },
+                        {
+                            name: 'editing',
+                            groups: ['find', 'selection', 'spellchecker']
+                        }, {
+                            name: 'forms'
+                        }, {
+                            name: 'others',
+                            groups: ['undo']
+                        }, {
+                            name: 'tools'
+                        }, {
+                            name: 'document',
+                            groups: ['mode', 'document', 'doctools']
+                        },
+                        '/', {
+                            name: 'basicstyles',
+                            groups: ['basicstyles', 'cleanup']
+                        }, {
+                            name: 'align',
+                            groups: ['align']
+                        }, {
+                            name: 'paragraph',
+                            groups: ['list', 'indent', 'blocks']
+                        }, {
+                            name: 'links'
+                        }, {
+                            name: 'insert'
+                        },
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
-                  }
+                }
             };
 
             var defaultOptions = {
@@ -98,8 +147,8 @@
                     language: settings.language,
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
-                    forcePasteAsPlainText : false,
-                    ignoreEmptyParagraph : true,
+                    forcePasteAsPlainText: false,
+                    ignoreEmptyParagraph: true,
                 };
 
                 var editor_preset;

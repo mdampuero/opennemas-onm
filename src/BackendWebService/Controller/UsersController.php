@@ -28,6 +28,28 @@ class UsersController extends ContentController
      */
     public function batchDeleteAction(Request $request, $contentType = null)
     {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('user_repository');
         $errors  = array();
         $success = array();
@@ -83,7 +105,7 @@ class UsersController extends ContentController
      */
     public function batchSetEnabledAction(Request $request)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'user');
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
         if (!$hasRoles) {
             $roles = '';
@@ -178,6 +200,28 @@ class UsersController extends ContentController
      */
     public function deleteAction($id, $contentType = null)
     {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
+                        )
+                    )
+                )
+            );
+        }
+
         $em       = $this->get('user_repository');
         $messages = array();
 
@@ -187,20 +231,20 @@ class UsersController extends ContentController
             try {
                 $user->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => _('Item deleted successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
-                $errors[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with the id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
-            $errors[] = array(
+            $messages[] = array(
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with the id "%d"'), $id),
                 'type'    => 'error'
@@ -274,7 +318,7 @@ class UsersController extends ContentController
      */
     public function setEnabledAction(Request $request, $id)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'user');
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
         if (!$hasRoles) {
             $roles = '';
