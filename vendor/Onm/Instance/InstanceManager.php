@@ -786,13 +786,14 @@ class InstanceManager extends BaseManager
         }
 
         foreach ($rs as $value) {
-            $instance            = new \stdClass();
-            $instance->id        = $value["id"];
-            $instance->name      = $value["name"];
-            $instance->activated = $value["activated"];
-            $instance->domains   = $value["domains"];
-            $instance->settings  = unserialize($value['settings']);
-            $instances[]         = $instance;
+            $instance                = new \stdClass();
+            $instance->id            = $value["id"];
+            $instance->internal_name = $value["internal_name"];
+            $instance->name          = $value["name"];
+            $instance->activated     = $value["activated"];
+            $instance->domains       = $value["domains"];
+            $instance->settings      = unserialize($value['settings']);
+            $instances[]             = $instance;
         }
 
         return $instances;
