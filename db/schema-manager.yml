@@ -24,7 +24,7 @@ instances:
         contact_mail:
             type: string
             options: { default: null, length: 255 }
-        content_size:
+        contents:
             type: integer
             options: { default: 0, unsigned: true }
         media_size:
@@ -33,8 +33,11 @@ instances:
         alexa:
             type: integer
             options: { default: null, unsigned: true }
-        pageViews:
+        page_views:
             type: bigint
+            options: { default: 0, unsigned: true }
+        emails:
+            type: integer
             options: { default: 0, unsigned: true }
         users:
             type: integer
