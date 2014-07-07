@@ -361,10 +361,6 @@ class BlogsController extends Controller
             $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $category = $ccm->get_id($this->category_name);
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return \Advertisement::findForPositionIdsAndCategory($positions, '4');
     }
 }
