@@ -882,7 +882,7 @@ class InstanceManager extends BaseManager
             );
         }
 
-        $this->conn->selectDatabase('onm-instances');
+        $this->conn->selectDatabase($settings['BD_DATABASE']);
         $sql = "SELECT * FROM `settings`";
 
         $rs = $this->conn->executeQuery($sql);

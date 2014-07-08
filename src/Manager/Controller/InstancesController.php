@@ -269,23 +269,26 @@ class InstancesController extends Controller
 
         $instanceManager = getService('instance_manager');
 
-        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
-        $GLOBALS['application']->conn = $instanceManager->getConnection($settings);
-
         // Update instance data
         $errors = $instanceManager->update($data);
+
+        $settingsManager = getService('setting_repository');
+        $settingsManager->setConfig([
+            'database'     => $settingsRAW['BD_DATABASE'],
+            'cache_prefix' => $internalName
+        ]);
 
         // Update instance configurations
         foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
-                s::set($key, $value);
+                $settingsManager->set($key, $value);
             }
         }
 
         // Delete the 'activated_modules' from cache service for this instance
-        s::invalidate('activated_modules', $data['internal_name']);
-        s::invalidate('site_name', $data['internal_name']);
-        s::invalidate('last_invoice', $data['internal_name']);
+        $settingsManager->invalidate('activated_modules', $data['internal_name']);
+        $settingsManager->invalidate('site_name', $data['internal_name']);
+        $settingsManager->invalidate('last_invoice', $data['internal_name']);
 
         if (is_array($errors) && count($errors) > 0) {
             m::add($errors, m::ERROR);

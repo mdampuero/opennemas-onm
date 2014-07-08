@@ -34,6 +34,25 @@ class SettingManager extends BaseManager
     }
 
     /**
+     * Sets a new database name and cache prefix to use in the service
+     *
+     * @return boolean
+     **/
+    public function setConfig($config)
+    {
+        if (array_key_exists('database', $config)) {
+            $this->conn->selectDatabase($config['database']);
+        }
+
+        if (array_key_exists('cache_prefix', $config)) {
+            $this->cachePrefix = $config['cache_prefix'];
+            $this->cache->setNamespace($config['cache_prefix']);
+        }
+
+        return true;
+    }
+
+    /**
      * Fetches a setting from its name.
      *
      * @param string $settingName the name of the setting.
