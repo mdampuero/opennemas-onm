@@ -243,6 +243,12 @@ class Widget extends Content
     {
         $paths = array();
         $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $instanceManager = getService('instance_manager');
+        $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
+
+        if (!empty($baseTheme)) {
+             $paths[] = SITE_PATH.DS.'themes'.DS.$baseTheme.DS.'tpl/widgets/';
+        }
         $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
 
         $allWidgets = array();
