@@ -98,7 +98,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
         // domain and protocol. If not redirect to the proper url
         if (strpos($request->getRequestUri(), '/admin') === 0) {
             $host = $request->getHost();
-            $instance->domains = explode(',', $instance->domains);
             $forceSSL = getContainerParameter('opennemas.backend_force_ssl');
 
             $scheme = ($forceSSL) ? 'https://' : 'http://';
