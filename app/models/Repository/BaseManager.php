@@ -33,11 +33,25 @@ abstract class BaseManager
      * @param CacheInterface     $cache       The cache instance.
      * @param string             $cachePrefix The cache prefix.
      */
-    public function __construct(DatabaseConnection $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DatabaseConnection $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn = $dbConn;
+        $this->conn = $conn;
         $this->cache = $cache;
         $this->cachePrefix = $cachePrefix;
+    }
+
+    /**
+     * Redirects all the calls to the DbalConnection instance
+     *
+     * @param  string $method the method to call
+     * @param  array  $params the list of parameters to pass to the method
+     * @return mixed          the result of the method call
+     */
+    public function __call($method, $params)
+    {
+        $rs = call_user_func_array(array($this->conn, $method), $params);
+
+        return $rs;
     }
 
     /**
