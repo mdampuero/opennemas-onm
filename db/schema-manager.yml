@@ -23,7 +23,7 @@ instances:
             options: { default: null }
         last_login:
             type: datetime
-            options: { default: null }
+            options: { default: null, notnull: false }
         activated:
             type: boolean
             options: { default: null }
