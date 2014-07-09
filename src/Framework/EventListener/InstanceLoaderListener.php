@@ -35,11 +35,41 @@ class InstanceLoaderListener implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
+        $request  = $event->getRequest();
+        $instance = null;
+
+        $host = $request->getHost();
 
         // Loads one ONM instance from database
         $im = getService('instance_manager');
-        $instance = $im->load($request->getHost());
+
+        if (preg_match("@^\/manager@", $request->getRequestUri())) {
+            $instance = $im->loadManager();
+        } else {
+            $criteria = array(
+                'domains' => array(
+                    array(
+                        'value' => "^$host|,$host|$host$",
+                        'operator' => 'REGEXP'
+                    )
+                )
+            );
+
+            $instance = $im->findOneBy($criteria);
+        }
+
+        if (is_object($instance)) {
+            $this->instance = $instance;
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if (!$instance->activated) {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+        }
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
