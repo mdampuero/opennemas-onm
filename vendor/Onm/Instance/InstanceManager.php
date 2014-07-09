@@ -24,20 +24,6 @@ use Onm\Cache\CacheInterface;
  */
 class InstanceManager extends BaseManager
 {
-    /**
-     * The database connection.
-     *
-     * @var DbalWrapper
-     */
-    private $conn = null;
-
-    /**
-     * The cache object.
-     *
-     * @var CacheInterface
-     */
-    private $cache = null;
-
     /*
      * Get available templates.
      *
@@ -61,7 +47,7 @@ class InstanceManager extends BaseManager
         return $templates;
     }
 
-    /*
+    /**
      * Initializes the InstanceManager
      *
      * @param DbalWrapper    $dbConn The custom DBAL wrapper.
@@ -154,30 +140,6 @@ class InstanceManager extends BaseManager
             fm::deleteDirectoryRecursively($path);
             return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Change activated flag for one instance given its id.
-     *
-     * @param  integer $id   The instance id.
-     * @param  integer $flag The activated flag.
-     * @return boolean       True if action was successful. Otherwise, returns
-     *                       false.
-     */
-    public function changeActivated($id, $flag)
-    {
-        $instance = $this->read($id);
-
-        $sql = "UPDATE instances SET activated = ? WHERE id = ?";
-        $rs = $this->conn->executeQuery($sql, array($flag, $id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        $this->deleteCacheForInstancedomains($instance->domains);
 
         return true;
     }
@@ -517,7 +479,7 @@ class InstanceManager extends BaseManager
      */
     public function delete($id)
     {
-        $instance = $this->read($id);
+        $instance = $this->find($id);
 
         if (!$instance) {
             return false;
@@ -532,7 +494,7 @@ class InstanceManager extends BaseManager
 
         try {
             $this->backupInstanceReference($id, $backupPath);
-            $this->deleteInstanceReferenceInManager($id);
+            $this->remove($instance);
 
             $this->backupAssets($assetFolder, $backupPath);
             $this->deleteDefaultAssets($instance->internal_name);
@@ -575,7 +537,6 @@ class InstanceManager extends BaseManager
             $domain = trim($domain);
             $this->cache->delete($domain, 'instance');
         }
-        // die();
     }
 
     /**
@@ -622,28 +583,6 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Delete one instance reference from the instances table.
-     *
-     * @param integer $id The instance id.
-     *
-     * @throws DeleteRegisteredInstanceException If reference couldn't be
-     *                                           deleted.
-     */
-    public function deleteInstanceReferenceInManager($id)
-    {
-        $this->conn->selectDatabase('onm-instances');
-
-        $sql = "DELETE FROM instances WHERE id=?";
-        $rs = $this->conn->executeQuery($sql, array($id));
-
-        if (!$rs) {
-            throw new DeleteRegisteredInstanceException(
-                "Could not delete instance reference."
-            );
-        }
-    }
-
-    /**
      * Check if a contact email is already in use.
      *
      * @param  string  $mail The email to check.
@@ -652,20 +591,11 @@ class InstanceManager extends BaseManager
      */
     public function emailExists($email)
     {
-        $this->conn->selectDatabase('onm-instances');
+        $instances = $this->countBy(
+            array('contact_mail' => array(array('value' => $email)))
+        );
 
-        $sql = "SELECT count(*) as email_exists FROM instances "
-              . "WHERE `contact_mail` = ?";
-        $rs = $this->conn->fetchAssoc($sql, array($email));
-
-        if (!$rs) {
-            throw new Exception(
-                'Error in sql execution:'
-                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
-            );
-        }
-
-        if ($rs['email_exists'] > 0) {
+        if ($instances > 0) {
             return true;
         }
 
@@ -673,82 +603,63 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Builds the instance object given a server name.
+     * Counts the instances for content given a criteria
      *
-     * @param  string   $serverName The instance server name.
-     * @return Instance             The instance object.
+     * @param  array   $criteria The criteria used to search.
+     * @return integer           The number of found instances.
      */
-    public function fetchInstance($serverName)
+    public function countBy($criteria)
     {
-        $previousNamespace = $this->cache->getNamespace();
+        $instances = array();
 
-        $this->cache->setNamespace('instance');
-        $instancesMatched = $this->cache->fetch($serverName);
-        $instancesMatched = $this->cache->delete($serverName);
+        // Building the SQL filter
+        $filterSQL  = $this->getFilterSQL($criteria);
 
-        if (!is_array($instancesMatched)) {
-            $this->conn->selectDatabase('onm-instances');
+        // Executing the SQL
+        $sql = "SELECT COUNT(id) FROM `instances` "
+            ."WHERE $filterSQL";
 
-            //TODO: improve search for allowing subdomains with wildcards
-            $sql = "SELECT * FROM instances WHERE domains REGEXP "
-                . "'^$serverName|,$serverName|,$serverName$'";
-            $rs = $this->conn->fetchAll($sql);
-
-            if (!$rs) {
-                return false;
-            }
-
-            $instancesMatched = $rs;
-            $this->cache->save($serverName, $instancesMatched);
-        }
-
-        if (!(is_array($instancesMatched) && count($instancesMatched) > 0)) {
-            return false;
-        }
-
-        $matchedInstance = null;
-        foreach ($instancesMatched as $element) {
-            $domains = explode(',', $element['domains']);
-            $domains = array_map(
-                function ($instanceDataElem) {
-                    return trim(strtolower($instanceDataElem));
-                },
-                $domains
-            );
-
-            if (in_array($serverName, $domains)) {
-                $matchedInstance = $element;
-                break;
-            }
-        }
-
-        $instance = $this->loadInstanceProperties($matchedInstance);
-
-        $this->cache->setNamespace($previousNamespace);
-
-        return $instance;
-    }
-
-    /**
-     * Builds the instance object given an internal name.
-     *
-     * @param  string   $internalName The instance internal name.
-     * @return Instance               The instance object.
-     */
-    public function fetchInstanceFromInternalName($internalName)
-    {
         $this->conn->selectDatabase('onm-instances');
-
-        $sql = "SELECT SQL_CACHE * FROM instances WHERE internal_name = ?";
-        $rs = $this->conn->fetchAssoc($sql, array($internalName));
+        $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
             return false;
         }
 
-        $instance = $this->loadInstanceProperties($rs);
+        return $rs[0];
+    }
 
-        return $instance;
+    /**
+     * Finds one instance from the given a instance id.
+     *
+     * @param  integer  $id Instance id.
+     * @return Instance
+     */
+    public function find($id)
+    {
+        $previousNamespace = $this->cache->getNamespace();
+        $this->cache->setNamespace('instance');
+
+        $cacheId = "instance" . $this->cacheSeparator . $id;
+        $entity  = null;
+
+        if (!$this->hasCache()
+            || ($entity = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $entity = new Instance();
+            $entity->id = $id;
+
+            $this->refresh($entity);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $entity);
+            }
+        }
+
+        $this->cache->setNamespace($previousNamespace);
+
+        return $entity;
     }
 
     /**
@@ -775,77 +686,79 @@ class InstanceManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
-        $sql = "SELECT * FROM `instances` "
+        $sql = "SELECT id FROM `instances` "
             ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $this->conn->selectDatabase('onm-instances');
-        $rs = $this->conn->executeQuery($sql);
+        $rs = $this->conn->fetchAll($sql);
 
-        if (!$rs) {
-            return false;
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = $item['id'];
         }
 
-        foreach ($rs as $value) {
-            $instance                = new \stdClass();
-            $instance->id            = $value["id"];
-            $instance->internal_name = $value["internal_name"];
-            $instance->name          = $value["name"];
-            $instance->activated     = $value["activated"];
-            $instance->domains       = $value["domains"];
-            $instance->settings      = unserialize($value['settings']);
-            $instances[]             = $instance;
-        }
-
-        return $instances;
+        return $this->findMulti($ids);
     }
 
     /**
-     * Counts the instances for content given a criteria
+     * Find multiple contents from a given array of instance ids.
      *
-     * @param  array $criteria The criteria used to search.
+     * @param  array $data Array of instance ids.
+     * @return array       Array of contents.
      */
-    public function countBy($criteria)
+    public function findMulti($data)
     {
-        $instances = array();
+        $previousNamespace = $this->cache->getNamespace();
+        $this->cache->setNamespace('instance');
 
-        // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
-
-        // Executing the SQL
-        $sql = "SELECT COUNT(*) FROM `instances` "
-            ."WHERE $filterSQL";
-
-        $this->conn->selectDatabase('onm-instances');
-        $rs = $this->conn->fetchArray($sql);
-
-        if (!$rs) {
-            return false;
+        $ids  = array();
+        $keys = array();
+        foreach ($data as $value) {
+            $ids[]  = 'instance' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
-        return $rs[0];
+        $instances = array_values($this->cache->fetch($ids));
+
+        $cachedIds = array();
+        foreach ($instances as $instance) {
+            $cachedIds[] = 'instance' . $this->cacheSeparator . $instance->id;
+        }
+
+        $missedIds = array_diff($ids, $cachedIds);
+
+        foreach ($missedIds as $instance) {
+            list($prefix, $instanceId) = explode($this->cacheSeparator, $instance);
+
+            $instance = $this->find($instanceId);
+            if ($instance) {
+                $instances[] = $instance;
+            }
+        }
+
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($instances) && $instances[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($instances)) {
+                $ordered[] = $instances[$i];
+            }
+        }
+
+        $this->cache->setNamespace($previousNamespace);
+        return $ordered;
     }
 
     /*
      * Gets one Database connection
      *
-     * @param array $connectionData the parameters to build the connection
-     *
-     * @return Onm\DatabaseConnection the database connection object instance
+     * @return DbalWrapper The database connection.
      */
-    public function getConnection($connectionData = null)
+    public function getConnection()
     {
-        // Database
-        // $conn = getService('db_conn_manager');
-        // if (!is_null($connectionData)
-        //     && is_array($connectionData)
-        // ) {
-        //     $conn = getService('db_conn');
-        //     $conn = $conn->selectDatabase($connectionData['BD_DATABASE']);
-        // }
-
-        // // Check if adodb is log enabled
-        // $conn->LogSQL();
-
         return $this->conn;
     }
 
@@ -854,20 +767,23 @@ class InstanceManager extends BaseManager
      *
      * @param array $settings The instance settings.
      */
-    public function getDBInformation($settings)
+    public function getDBInformation(Instance &$instance)
     {
+        $database = $instance->getDatabaseName();
 
-        // Fetch caches if exist
-        $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
-        $totals = $this->cache->fetch($key);
+        $cacheId = 'instance' . $this->cacheSeparator . $instance->id
+            . $this->cacheSeparator . 'information';
+
+        $totals = $this->cache->fetch($cacheId);
 
         // If was not fetched from APC now is turn of DB
         if (!$totals) {
-            $sql = 'SELECT count(*) as total, fk_content_type as type '
+            $sql = 'SELECT content_type_name as type, count(*) as total '
                  .'FROM contents GROUP BY `fk_content_type`';
 
-            $this->conn->selectDatabase($settings['BD_DATABASE']);
-            $rs = $this->conn->executeQuery($sql);
+            $this->conn->selectDatabase($database);
+            $rs = $this->conn->fetchAll($sql);
+
 
             if ($rs !== false) {
                 foreach ($rs as $value) {
@@ -875,27 +791,22 @@ class InstanceManager extends BaseManager
                 }
             }
 
-            $this->cache->save(
-                CACHE_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
-                $totals,
-                300
-            );
+            $this->cache->save($cacheId, $totals, 300);
         }
 
-        $this->conn->selectDatabase($settings['BD_DATABASE']);
+        $this->conn->selectDatabase($database);
         $sql = "SELECT * FROM `settings`";
 
         $rs = $this->conn->executeQuery($sql);
 
-        $information = array();
+        $settings = array();
         if ($rs !== false) {
             foreach ($rs as $value) {
-                $information[$value['name'] ] =
-                    @unserialize($value['value']);
+                $settings[$value['name'] ] = unserialize($value['value']);
             }
         }
 
-        return array($totals, $information);
+        return array($totals, $settings);
     }
 
     /**
@@ -906,20 +817,11 @@ class InstanceManager extends BaseManager
      */
     public function instanceExists($name)
     {
-        $this->conn->selectDatabase('onm-instances');
+        $instances = $this->countBy(
+            array('internal_name' => array(array('value' => $name)))
+        );
 
-        $sql = "SELECT count(*) as instance_exists FROM instances "
-             . "WHERE `internal_name` = ?";
-        $rs = $this->conn->fetchAssoc($sql, array($name));
-
-        if (!$rs) {
-            throw new Exception(
-                'Error in sql execution:'
-                .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}'
-            );
-        }
-
-        if ($rs['instance_exists'] > 0) {
+        if ($instances > 0) {
             return true;
         }
 
@@ -927,118 +829,22 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Fetches one instance from DB given a server name.
+     * Returns the instance object for manager.
      *
-     * @param  string   $serverName The instance domain name.
-     * @return Instance             The instance.
+     * @return Instance The instance.
      */
-    public function load($serverName)
-    {
-        $instance = false;
-        if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
-            $instance = new Instance();
-            $instance->internal_name = 'onm_manager';
-            $instance->activated = true;
-
-            $instance->settings = array(
-                'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
-                'MEDIA_URL'            => '',
-                'TEMPLATE_USER'        => '',
-                'BD_DATABASE'        => 'onm-instances',
-            );
-
-            $this->instance = $instance;
-            $instance->boot();
-
-            return $instance;
-        }
-
-        $instance = $this->fetchInstance($serverName);
-
-        //If found matching instance initialize its contants and return it
-        if (is_object($instance)) {
-            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-            $this->instance = $instance;
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Fetches one instance from DB given its internal name
-     *
-     * @param  string   $internalName The instance internal name.
-     * @return Instance               The instance object.
-     */
-    public function loadFromInternalName($internalName)
-    {
-        $instance = $this->fetchInstanceFromInternalName($internalName);
-
-        //If found matching instance initialize its contants and return it
-        if (is_object($instance)) {
-            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Builds an Instance object from an array of instance properties.
-     *
-     * @param  array    $matchedInstance Array of properties to load.
-     * @return Instance                  The instance object.
-     */
-    public function loadInstanceProperties($matchedInstance)
+    public function loadManager()
     {
         $instance = new Instance();
-        foreach ($matchedInstance as $key => $value) {
-            $instance->{$key} = $value;
-        }
+        $instance->internal_name = 'onm_manager';
+        $instance->activated = true;
 
-        return $instance;
-    }
+        $instance->settings = array(
+            'TEMPLATE_USER' => '',
+            'BD_DATABASE'   => 'onm-instances',
+        );
 
-    /**
-     * Gets one instance.
-     *
-     * @param  integer  $id The instance id.
-     * @return Instance     The instance object.
-     */
-    public function read($id)
-    {
-        $this->conn->selectDatabase('onm-instances');
-
-        $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";
-        $rs = $this->conn->fetchAssoc($sql, array($id));
-        if (!$rs) {
-            return false;
-        }
-
-        $instance = new \stdClass();
-        foreach ($rs as $key => $value) {
-            $instance->{$key} = $value;
-        }
-        $instance->settings = unserialize($instance->settings);
+        $this->instance = $instance;
 
         return $instance;
     }
@@ -1120,7 +926,10 @@ class InstanceManager extends BaseManager
      */
     public function update($data)
     {
-        $instance = $this->fetchInstanceFromInternalName($data['internal_name']);
+        $instance = $im->findBy(
+            array('internal_name' => array(array('value' => $data['internal_name']))),
+            array('id' => 'asc')
+        );
 
         if (is_array($data['domains'])) {
             $data['domains'] = implode(',', $data['domains']);
@@ -1147,5 +956,114 @@ class InstanceManager extends BaseManager
         $this->deleteCacheForInstancedomains($data['domains']);
 
         return true;
+    }
+
+    /**
+     * Saves an instance to database.
+     *
+     * @param Instance $instance The instance to save.
+     */
+    public function persist(Instance &$instance)
+    {
+        $previousNamespace = $this->cache->getNamespace();
+        $this->cache->setNamespace('instance');
+
+        $ref = new \ReflectionClass($instance);
+        $properties = array();
+        foreach ($ref->getProperties() as $property) {
+            $properties[] = $property->name;
+        }
+
+        $values = array();
+        foreach ($properties as $key) {
+            $value = $instance->{$key};
+            if (is_array($value)) {
+                if ($key == 'domains') {
+                    $values[$key] = "'" . implode(',', $value) . "'";
+                } else {
+                    $values[$key] = "'" . serialize($value) . "'";
+                }
+            } elseif (!is_null($value)) {
+                $values[$key] = "'$value'";
+            } else {
+                $values[$key] = $value;
+            }
+        }
+
+        unset($values['id']);
+        if (is_null($instance->id)) {
+            $sql = 'INSERT INTO instances('
+                . implode(', ', array_keys($values)) . ') VALUES ('
+                . implode(', ', array_values($values)) .')';
+        } else {
+            $sql = 'UPDATE instances SET ';
+
+            foreach ($values as $key => $value) {
+                $sql .= $key . ' = ' . $value . ',';
+            }
+
+            $sql = rtrim($sql, ',') . 'WHERE id = ' . $instance->id;
+        }
+
+        $this->conn->selectDatabase('onm-instances');
+        $this->conn->executeQuery($sql);
+
+        if (is_null($instance->id)) {
+            $instance->id = $this->conn->lastInsertId();
+        }
+
+        $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
+        $this->cache->setNamespace($previousNamespace);
+    }
+
+    /**
+     * Reload the instance properties from database.
+     *
+     * @param Instance $instance The instance object.
+     */
+    public function refresh(Instance &$instance)
+    {
+        if (!$instance->id) {
+            throw new InstanceNotRegisteredException();
+        }
+
+        $sql = 'SELECT * FROM instances WHERE id = ' . $instance->id;
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAssoc($sql);
+
+        $instance = new Instance();
+        foreach ($rs as $key => $value) {
+            if (is_array($instance->{$key})) {
+                if ($key == 'domains') {
+                    $instance->{$key} = explode(',', $value);
+                } else {
+                    $instance->{$key} = unserialize($value);
+                }
+            } else {
+                $instance->{$key} = $value;
+            }
+        }
+    }
+
+    /**
+     * Deletes the instance from database.
+     *
+     * @param Instance $instance The instance to remove.
+     */
+    public function remove($instance)
+    {
+        $this->conn->selectDatabase('onm-instances');
+
+        $sql = "DELETE FROM instances WHERE id=?";
+        $rs = $this->conn->executeQuery($sql, array($id));
+
+        if (!$rs) {
+            throw new DeleteRegisteredInstanceException(
+                "Could not delete instance reference."
+            );
+        }
+
+        $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
     }
 }
