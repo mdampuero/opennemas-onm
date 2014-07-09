@@ -1188,6 +1188,22 @@ img[src="non"] { display:none !important; }
 .table-info .center { text-align:center; }
 .table-info form {margin:0;}
 
+.table-info .dropdown-menu.container {
+  height: auto;
+  padding: 5px;
+  width: 390px;
+}
+
+.table-info .dropdown-menu.container .span2 div {
+  cursor: pointer;
+  padding: 4px 10px;
+  width: 100%;
+}
+
+.table-info .dropdown-menu.container .span2 div:hover {
+  background: #eee;
+}
+
 /* -------------------------------------------------------------
   Article edit form: image assignment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
