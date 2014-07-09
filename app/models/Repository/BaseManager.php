@@ -43,13 +43,16 @@ abstract class BaseManager
     /**
      * Searches one entity given a criteria and an order.
      *
-     * @param  array|string $criteria The criteria to search for an entity.
-     * @param  array        $order    The order used in clause.
-     * @return Object                 The object searched.
+     * @param  array   $criteria        The criteria used to search.
+     * @param  array   $order           The order applied in the search.
+     * @param  integer $elementsPerPage The max number of elements.
+     * @param  integer $page            The current page.
+     * @param  integer $offset          The offset to start with.
+     * @return Object                   The object searched.
      */
-    public function findOneBy($criteria, $order)
+    public function findOneBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $elements = $this->findBy($criteria, $order, 1);
+        $elements = $this->findBy($criteria, $order, $elementsPerPage, $page, $offset);
         $element  = null;
         if (!empty($elements)) {
             $element = $elements[0];
