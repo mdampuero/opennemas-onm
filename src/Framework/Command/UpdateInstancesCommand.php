@@ -80,7 +80,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         foreach ($instances as $instance) {
             $counters = $this->getInstanceInfo($instance, $alexa, $views);
-            $this->setDatabaseInfo($instance->id, $counters);
+            $this->im->persist($instance);
         }
     }
 
@@ -119,25 +119,26 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      * @param  boolean  $alexa Whether to get the Alexa's rank.
      * @param  boolean  $views Whether to get the page views.
      */
-    private function getInstanceInfo($i, $alexa = false, $views = false)
+    private function getInstanceInfo(&$i, $alexa = false, $views = false)
     {
-        $counters = array(
-            'contents'   => 0,
-            'media_size' => 0,
-            'alexa'      => 0,
-            'page_views' => 0,
-            'users'      => 0,
-            'emails'     => 0
-        );
-
-        $this->im->getConnection()->selectDatabase($i->settings['BD_DATABASE']);
+        $this->im->getConnection()->selectDatabase($i->getDatabaseName());
 
         // Count contents
-        $sql = 'SELECT COUNT(pk_content) FROM contents';
-        $rs  = $this->im->getConnection()->fetchArray($sql);
+        $sql = 'SELECT content_type_name as type, count(*) as total '
+            .'FROM contents GROUP BY `fk_content_type`';
+
+        $rs = $this->im->conn->fetchAll($sql);
 
         if ($rs !== false && !empty($rs)) {
-            $counters['contents'] = $rs[0];
+            $i->contents = 0;
+
+            foreach ($rs as $value) {
+                $type = $value['type'] . 's';
+                $i->deltas[$type] = $value['total'] - $i->{$type};
+                $i->{$type} = $value['total'];
+                $i->contents += $value['total'];
+            }
+            $i->deltas['contents'] = $i->contents - $i->deltas['contents'];
         }
 
         // Count users
@@ -145,13 +146,13 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $rs  = $this->im->getConnection()->fetchArray($sql);
 
         if ($rs !== false && !empty($rs)) {
-            $counters['users'] = $rs[0];
+            $i->users = $rs[0];
         }
 
         // Check domain's rank in Alexa
         if ($alexa && !empty($i->domains)) {
             $domains = explode(',', $i->domains);
-            $counters['alexa'] = $this->getAlexa($domains[0]);
+            $i->alexa = $this->getAlexa($domains[0]);
         }
 
         // Count emails
@@ -159,41 +160,49 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $rs  = $this->im->getConnection()->fetchArray($sql);
 
         if ($rs) {
-            $counters['emails'] = $rs[0];
+            $i->emails = $rs[0];
+        }
+
+        // Update created data
+        if (!$i->created) {
+            $sql = 'SELECT * FROM settings WHERE name=\'site_created\'';
+            $rs  = $this->im->getConnection()->fetchAssoc($sql);
+
+            if ($rs) {
+                $i->created = $rs['value'];
+            }
         }
 
         // Get Piwik config and last invoice date
-        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_invoice\'';
+        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_invoice\' OR name=\'last_login\'';
         $rs  = $this->im->getConnection()->fetchAll($sql);
 
         $piwik       = null;
         $lastInvoice = null;
+
         if ($rs !== false && !empty($rs)) {
             foreach ($rs as $value) {
-                if (array_key_exists('name', $value)
-                    &&  $value['name'] == 'piwik'
-                ) {
+                if ($value['name'] == 'piwik') {
                     $piwik = unserialize($value['value']);
-                } elseif (array_key_exists('name', $value)
-                    &&  $value['name'] == 'last_invoice'
+                } elseif ($value['name'] == 'last_invoice'
                 ) {
                     $lastInvoice = unserialize($value['value']);
+                } else {
+                    $i->last_login = unserialize($value['value']);
                 }
             }
         }
 
         // Get the page views from Piwik
         if ($views && !empty($piwik) && !empty($lastInvoice)) {
-            $counters['page_views'] = $this->getViews($piwik['page_id'], $lastInvoice);
+            $i->page_views = $this->getViews($piwik['page_id'], $lastInvoice);
         }
 
         // Get media size
         $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$i->internal_name.'/'));
         if (is_array($size)) {
-            $counters['media_size'] = $size[0] / 1024;
+            $i->media_size = $size[0] / 1024;
         }
-
-        return $counters;
     }
 
     /**
@@ -238,26 +247,5 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         return 0;
-    }
-
-    /**
-     * Updates the instance with the new information.
-     *
-     * @param array $id       The instance id.
-     * @param array $counters Array of counters.
-     */
-    private function setDatabaseInfo($id, $counters)
-    {
-        $inserts = array();
-        foreach ($counters as $key => $value) {
-            $inserts[] = $key . ' = ' . $value;
-        }
-
-        $this->im->getConnection()->selectDatabase('onm-instances');
-
-        $sql = 'UPDATE instances SET ' . implode(',', $inserts)
-            . ' WHERE id=' . $id;
-
-        $rs  = $this->im->getConnection()->executeQuery($sql);
     }
 }
