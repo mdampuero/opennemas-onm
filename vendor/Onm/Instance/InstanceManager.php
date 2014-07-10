@@ -684,7 +684,6 @@ class InstanceManager extends BaseManager
 
         $this->cache->setNamespace('instance');
         $instancesMatched = $this->cache->fetch($serverName);
-        $instancesMatched = $this->cache->delete($serverName);
 
         if (!is_array($instancesMatched)) {
             $this->conn->selectDatabase('onm-instances');
