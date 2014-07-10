@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  *
  * @package  Onm
- **/
+ */
 namespace Onm\Instance;
 
 /**
