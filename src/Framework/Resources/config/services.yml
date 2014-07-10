@@ -9,6 +9,7 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
+        arguments: [ @instance_manager, @cache ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 

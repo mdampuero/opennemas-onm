@@ -15,19 +15,52 @@ use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Onm\Settings as s;
+
+use Onm\Instance\InstanceManager;
+use Onm\Cache\AbstractCache;
 
 /**
- * InstanceLoaderListener initializes the instance from the request object
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Initializes the instance from the request object.
  */
 class InstanceLoaderListener implements EventSubscriberInterface
 {
     /**
+     * The cache object.
+     *
+     * @var AbstractCache
+     */
+    private $cache;
+
+    /**
+     * The instance manager.
+     *
+     * @var InstanceManager
+     */
+    private $im;
+
+    /**
+     * The current instance.
+     *
+     * @var Instance.
+     */
+    public $instance;
+
+    /**
+     * Initializes the instance manager and cache.
+     *
+     * @param InstanceManager $im    The instance manager.
+     * @param AbstractCache   $cache The cache service.
+     */
+    public function __construct(InstanceManager $im, AbstractCache $cache)
+    {
+        $this->im    = $im;
+        $this->cache = $cache;
+    }
+
+    /**
      * Filters the Response.
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance
+     * @param GetResponseEvent $event A GetResponseEvent object.
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -35,58 +68,53 @@ class InstanceLoaderListener implements EventSubscriberInterface
             return;
         }
 
-        $request  = $event->getRequest();
-        $instance = null;
-
-        $host = $request->getHost();
-
-        // Loads one ONM instance from database
-        $im = getService('instance_manager');
+        $request = $event->getRequest();
+        $host    = $request->getHost();
 
         if (preg_match("@^\/manager@", $request->getRequestUri())) {
-            $instance = $im->loadManager();
+            $this->instance = $this->im->loadManager();
         } else {
-            $criteria = array(
-                'domains' => array(
-                    array(
-                        'value' => "^$host|,$host|$host$",
-                        'operator' => 'REGEXP'
-                    )
-                )
-            );
+            $this->instance = $this->cache->fetch($host);
 
-            $instance = $im->findOneBy($criteria);
+            if (!$this->instance) {
+                $criteria = array(
+                    'domains' => array(
+                        array(
+                            'value' => "^$host|,$host|$host$",
+                            'operator' => 'REGEXP'
+                        )
+                    )
+                );
+
+                $this->instance = $this->im->findOneBy($criteria);
+            }
         }
 
-        if (is_object($instance)) {
-            $this->instance = $instance;
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if (!$instance->activated) {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
+        if (!is_object($this->instance)) {
             throw new \Onm\Instance\NotFoundException(_('Instance not found'));
         }
 
-        $im->current_instance = $instance;
-        $im->cache_prefix     = $instance->internal_name;
+        $this->cache->save($host, $this->instance);
 
-        $cache = getService('cache');
-        $cache->setNamespace($instance->internal_name);
+        // If this instance is not activated throw an exception
+        if (!$this->instance->activated) {
+            $message =_('Instance not activated');
+            throw new \Onm\Instance\NotActivatedException($message);
+        }
+
+        $this->instance->boot();
+        $this->cache->setNamespace($this->instance->internal_name);
 
         // Initialize the instance database connection
-        if ($instance->internal_name !== 'onm_manager') {
-            $databaseName               = $instance->getDatabaseName();
+        if ($this->instance->internal_name != 'onm_manager') {
+            $databaseName               = $this->instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn');
             $databaseInstanceConnection->selectDatabase($databaseName);
 
             $dbalConnection = getService('dbal_connection');
             $dbalConnection->selectDatabase($databaseName);
         } else {
-            $databaseName               = $instance->getDatabaseName();
+            $databaseName               = $this->instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn_manager');
         }
 
@@ -97,19 +125,20 @@ class InstanceLoaderListener implements EventSubscriberInterface
         // Check if the request is for backend and it is done to the proper
         // domain and protocol. If not redirect to the proper url
         if (strpos($request->getRequestUri(), '/admin') === 0) {
-            $host = $request->getHost();
             $forceSSL = getContainerParameter('opennemas.backend_force_ssl');
 
-            $scheme = ($forceSSL) ? 'https://' : 'http://';
-            $domainRoot = getContainerParameter('opennemas.base_domain');
-            $port       = (in_array($_SERVER['SERVER_PORT'], array(80, 443)))? '' : ':'.$_SERVER['SERVER_PORT'];
-            $supposedInstanceDomain = $instance->internal_name.$domainRoot;
+            $scheme = $forceSSL ? 'https://' : 'http://';
+            $port   = in_array($request->getPort(), array(80, 443)) ?
+                '' : ':' . $request->getPort();
 
-            if ($host !== $supposedInstanceDomain
+            $domainRoot = getContainerParameter('opennemas.base_domain');
+            $supposedDomain = $this->instance->internal_name . $domainRoot;
+
+            if ($host !== $supposedDomain
                 || ($forceSSL && !$request->isSecure())
             ) {
                 $uri = $request->getRequestUri();
-                $url = $scheme.$supposedInstanceDomain.$port.$uri;
+                $url = $scheme . $supposedDomain . $port . $uri;
 
                 $event->setResponse(new RedirectResponse($url, 302));
             }
