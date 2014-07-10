@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Instance\DefaultAssetsForInstanceNotCopiedException
+ * Defines the Onm\Exception\AssetsNotRestoredException
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  *
  * @package    Onm
- * @subpackage Instance
+ * @subpackage Exception
  */
-namespace Onm\Instance;
+namespace Onm\Exception;
 
-class DefaultAssetsForInstanceNotCopiedException extends \Exception
+class AssetsNotRestoredException extends \Exception
 {
 }

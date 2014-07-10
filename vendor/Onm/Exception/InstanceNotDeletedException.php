@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Instance\DatabaseForInstanceNotCreatedException
+ * Defines the Onm\Instance\InstanceNotDeletedException
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,8 +11,8 @@
  * @package    Onm
  * @subpackage Instance
  */
-namespace Onm\Instance;
+namespace Onm\Exception;
 
-class DatabaseForInstanceNotCreatedException extends \Exception
+class InstanceNotDeletedException extends \Exception
 {
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Instance\NotFoundException clas
+ * Defines the Onm\Exception\BackupException
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -9,16 +9,10 @@
  * file that was distributed with this source code.
  *
  * @package    Onm
- * @subpackage Instance
+ * @subpackage Exception
  */
-namespace Onm\Instance;
+namespace Onm\Exception;
 
-/**
- * Extends exception for handling not found instances.
- *
- * @package    Onm
- * @subpackage Instance
- **/
-class NotFoundException extends \Exception
+class BackupException extends \Exception
 {
 }
