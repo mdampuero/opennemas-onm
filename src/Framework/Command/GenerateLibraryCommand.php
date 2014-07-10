@@ -61,7 +61,7 @@ EOF
                 throw new \Onm\Instance\NotActivatedException($message);
             }
         } else {
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
         }
 
         $im->current_instance = $instance;

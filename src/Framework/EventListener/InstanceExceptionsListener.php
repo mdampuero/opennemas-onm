@@ -51,7 +51,7 @@ class InstanceExceptionsListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // only handle not valid instance exceptions
-        if ($exception instanceof \Onm\Instance\NotFoundException
+        if ($exception instanceof \Onm\Exception\InstanceNotRegisteredException
             || $exception instanceof \Onm\Instance\NotActivatedException
         ) {
             // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
