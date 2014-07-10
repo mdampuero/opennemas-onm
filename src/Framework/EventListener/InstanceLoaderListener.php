@@ -16,8 +16,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-use Onm\Instance\InstanceManager;
 use Onm\Cache\AbstractCache;
+use Onm\Instance\InstanceManager;
+use Onm\Exception\InstanceNotFoundException;
+use Onm\Exception\InstanceNotRegisteredException;
 
 /**
  * Initializes the instance from the request object.
@@ -76,7 +78,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
         } else {
             $this->instance = $this->cache->fetch($host);
 
-            if (!$this->instance) {
+            if ($this->instance === false) {
                 $criteria = array(
                     'domains' => array(
                         array(
@@ -87,14 +89,13 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 );
 
                 $this->instance = $this->im->findOneBy($criteria);
+                $this->cache->save($host, $this->instance);
             }
         }
 
-        if (!is_object($this->instance)) {
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+        if (!$this->instance && !is_object($this->instance)) {
+            throw new InstanceNotRegisteredException(_('Instance not found'));
         }
-
-        $this->cache->save($host, $this->instance);
 
         // If this instance is not activated throw an exception
         if (!$this->instance->activated) {
