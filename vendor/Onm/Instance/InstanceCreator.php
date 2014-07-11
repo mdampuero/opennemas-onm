@@ -9,6 +9,8 @@
  */
 namespace Onm\Instance;
 
+use FilesManager as fm;
+use Onm\Database\DbalWrapper;
 use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\AssetsNotRestoredException;
@@ -60,7 +62,7 @@ class InstanceCreator
             );
         }
 
-        if (!fm::compressTgz($mediaPath, $tgzFile)) {
+        if (!fm::compressTgz($tgzFile, $mediaPath)) {
             throw new BackupException(
                 "Could not create a backup of the directory"
             );
@@ -120,8 +122,7 @@ class InstanceCreator
         $dump = "mysqldump -u" . $this->conn->connectionParams['user']
             . " -p" . $this->conn->connectionParams['password']
             . " --no-create-info --where 'id=" . $id . "' "
-            . $database
-            . " instances > " . $path . DS . "instance.sql";
+            . " onm-instances instances > " . $path . DS . "instance.sql";
 
         exec($dump, $output, $result);
 
