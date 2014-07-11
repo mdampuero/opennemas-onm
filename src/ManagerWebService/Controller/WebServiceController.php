@@ -10,8 +10,14 @@
 namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Onm\Framework\Controller\Controller;
+use Onm\Instance\Instance;
+use Onm\Instance\InstanceCreator;
+use Onm\Exception\AssetsNotCopiedException;
+use Onm\Exception\InstanceNotConfiguredException;
+use Onm\Exception\DatabaseNotRestoredException;
 
 /**
  * Handles the actions for the manager web service
@@ -28,90 +34,123 @@ class WebServiceController extends Controller
      */
     public function createAction(Request $request)
     {
+        $instanceCreator = $this->container->getParameter("instance_creator");
+
         if (is_object($this->checkAuth($request))) {
             return new JsonResponse('Auth not valid', 403);
         }
 
-        $internalName = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
-        $siteName     = $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING);
-        $password     = $request->request->filter('user_password', '', FILTER_SANITIZE_STRING);
-        $email        = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
-        $username     = $email;
-        $contactIP    = $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING);
-        $timezone     = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
-        $token        = md5(uniqid(mt_rand(), true));
-        $language     = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
-        $plan         = 'basic';
+        $instance = new Instance();
+
+        $instance->internal_name = $request->request->filter('subdomain', '', FILTER_SANITIZE_STRING);
+        $instance->name          = $request->request->filter('instance_name', '', FILTER_SANITIZE_STRING);
+        $instance->contact_mail  = $request->request->filter('user_email', '', FILTER_SANITIZE_STRING);
 
         $errors = $this->validateInstanceData(array(
-            'subdomain'     => $internalName,
-            'instance_name' => $siteName,
-            'user_email'    => $email,
+            'subdomain'     => $instance->internal_name,
+            'instance_name' => $instance->name,
+            'user_email'    => $instance->contact_mail,
         ));
+
         if (count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
 
-        //Force internal_name lowercase
-        //If is creating a new instance, get DB params on the fly
-        $internalNameShort = strtolower(trim(substr($internalName, 0, 11)));
-
-        $instanceCreator = $this->container->getParameter("instance_creator");
-        $settings = array(
-            'TEMPLATE_USER' => $instanceCreator['template'],
-            'MEDIA_URL'     => "",
-            'BD_DATABASE'   => $internalNameShort
-        );
+        $instance->domains       = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
+        $instance->main_domain   = 1;
+        $instance->activated     = 1;
+        $instance->plan          = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
+        $instance->price         = 0;
 
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone("UTC"));
+        $instance->created = $date->format('Y-m-d H:i:s');
 
-        //Get all the Post data
-        $data = array(
-            'contact_IP'    => $contactIP,
-            'name'          => $siteName,
-            'user_name'     => $username,
-            'user_mail'     => $email,
-            'user_password' => $password,
-            'token'         => $token,
-            'internal_name' => $internalName,
-            'domains'       => $internalName.'.'.$instanceCreator['base_domain'],
-            'activated'     => 1,
-            'settings'      => $settings,
-            'site_created'  => $date->format('Y-m-d H:i:s'),
-            'owner_fk_user' => 0,
-            'price'         => 0,
-            'plan'          => $plan,
+        $instance->settings = array(
+            'TEMPLATE_USER' => $instanceCreator['template'],
+            'MEDIA_URL'     => "",
         );
 
         // Also get timezone if comes from openhost form
+        $timezone = $request->request->filter('timezone', '', FILTER_SANITIZE_STRING);
         if (!empty ($timezone)) {
             $allTimezones = \DateTimeZone::listIdentifiers();
             foreach ($allTimezones as $key => $value) {
                 if ($timezone == $value) {
-                    $data['timezone'] = $key;
+                    $timezone = $key;
                 }
             }
         }
 
-        $errors = array();
-        $im = $this->get('instance_manager');
-        // Check for repeated internalnameshort and if so, add a number at the end
-        $data['settings']['BD_DATABASE'] = $im->checkInternalName(
-            $data['settings']['BD_DATABASE']
+        $instance->external = array(
+            'contact_IP'    => $request->request->filter('contact_IP', '', FILTER_SANITIZE_STRING),
+            'contact_mail'  => $instance->contact_mail,
+            'contact_name'  => $instance->contact_mail,
+            'site_language' => $request->request->filter('language', '', FILTER_SANITIZE_STRING),
+            'time_zone'     => $timezone,
+            'site_created'  => $date->format('Y-m-d H:i:s'),
+            'name'          => $instance->name,
+            'internal_name' => $instance->internal_name,
         );
-        $errors = $im->create($data);
+
+        $user = array(
+            'username' => $instance->contact_mail,
+            'email'    => $instance->contact_mail,
+            'password' => $request->request->filter('user_password', '', FILTER_SANITIZE_STRING),
+            'token'    => md5(uniqid(mt_rand(), true))
+        );
+
+        $errors = array();
+
+        $im = $this->get('instance_manager');
+        $creator = new InstanceCreator($im->getConnection());
+
+        // Check for repeated internalnameshort and if so, add a number at the end
+        $im->checkInternalName($instance);
+
+        try {
+            $im->persist($instance);
+            $creator->createDatabase($instance->id);
+            $creator->copyDefaultAssets($instance->internal_name);
+
+            $im->configureInstance($instance->external, $instance->id);
+            $im->createUser($instance->id, $user);
+        } catch (DatabaseNotRestoredException $e) {
+            $errors[] = $e->getMessage();
+
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+
+        } catch (AssetsNotCopiedException $e) {
+        } catch (InstanceNotConfigured $e) {
+            // Assets folder in use (wrong deletion) or permissions issue
+            $errors[] = $e->getMessage();
+
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+        }
 
         if (is_array($errors) && count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
 
         $companyMail = array(
-            'company_mail' => $this->webserviceParameters["company_mail"],
-            'info_mail'    => $this->webserviceParameters["info_mail"],
-            'sender_mail'  => $this->webserviceParameters["no_reply_sender"],
-            'from_mail'    => $this->webserviceParameters["no_reply_from"],
+            'company_mail' => $this->params["company_mail"],
+            'info_mail'    => $this->params["info_mail"],
+            'sender_mail'  => $this->params["no_reply_sender"],
+            'from_mail'    => $this->params["no_reply_from"],
         );
+
+        $data = array(
+            'name'          => $instance->name,
+            'internal_name' => $instance->internal_name,
+            'user_mail'     => $instance->contact_mail,
+            'user_name'     => $instance->contact_mail,
+        );
+
+        $language = $instance->external['site_language'];
+        $plan = $instance->plan;
 
         $domain = $instanceCreator['base_domain'];
         $this->sendMails($data, $companyMail, $domain, $language, $plan);
@@ -119,9 +158,9 @@ class WebServiceController extends Controller
         return new JsonResponse(
             array(
                 'success'      => true,
-                'instance_url' => $data['domains'],
-                'enable_url'   => $data['domains']
-                    . '/admin/login?token=' . $token
+                'instance_url' => $instance->domains[0],
+                'enable_url'   => $instance->domains[0]
+                    . '/admin/login?token=' . $user['token']
             ),
             200
         );
@@ -136,13 +175,13 @@ class WebServiceController extends Controller
      */
     private function checkAuth(Request $request)
     {
-        $this->webserviceParameters = $this->container
+        $this->params = $this->container
             ->getParameter("manager_webservice");
 
         $signature = hash_hmac(
             'sha1',
             $request->request->get('timestamp'),
-            $this->webserviceParameters["api_key"]
+            $this->params["api_key"]
         );
 
         if ($signature === $request->request->get('signature', null)) {
