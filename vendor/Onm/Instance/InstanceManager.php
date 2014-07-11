@@ -77,16 +77,24 @@ class InstanceManager extends BaseManager
     {
         $this->conn->selectDatabase('onm-instances');
 
+        $internalName = $instance->internal_name;
+        if (empty($instance->internal_name)) {
+            $domain = explode('.', $instance->domains[0]);
+            var_dump($domain);
+            $internalName = $domain[0];
+        }
+
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internal_exists FROM instances "
              . "WHERE `internal_name` REGEXP '"
-             . $instance->internal_name . "[0-9]*'";
+             . $internalName . "[0-9]*'";
         $rs = $this->conn->fetchAssoc($sql);
 
         if ($rs && $rs['internal_exists'] > 0) {
-            $instance->internal_name = $instance->internal_name
-                . $rs['internal_exists'];
+            $internalName .= $rs['internal_exists'];
         }
+
+        $instance->internal_name = $internalName;
     }
 
     /**
