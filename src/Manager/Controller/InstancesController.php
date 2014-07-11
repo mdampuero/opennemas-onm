@@ -119,7 +119,7 @@ class InstancesController extends Controller
         $im      = $this->get('instance_manager');
         $creator = new InstanceCreator($im->getConnection());
 
-        $instance->internal_name = $im->checkInternalName($instance->internal_name);
+        $im->checkInternalName($instance);
 
         try {
             $im->persist($instance);
@@ -129,14 +129,14 @@ class InstancesController extends Controller
         } catch (DatabaseNotRestoredException $e) {
             $errors[] = $e->getMessage();
 
-            $this->deleteDatabase($instance->id);
+            $creator->deleteDatabase($instance->id);
             $im->remove($instance);
 
         } catch (AssetsNotCopiedException $e) {
             $errors[] = $e->getMessage();
 
-            $this->deleteAssets($instance->internal_name);
-            $this->deleteDatabase($instance->id);
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($instance->id);
             $im->remove($instance);
         }
 
