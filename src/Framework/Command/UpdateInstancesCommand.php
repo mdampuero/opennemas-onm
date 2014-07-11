@@ -130,15 +130,15 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $rs = $this->im->conn->fetchAll($sql);
 
         if ($rs !== false && !empty($rs)) {
-            $i->contents = 0;
+            $contents = 0;
 
             foreach ($rs as $value) {
                 $type = $value['type'] . 's';
                 $i->deltas[$type] = $value['total'] - $i->{$type};
                 $i->{$type} = $value['total'];
-                $i->contents += $value['total'];
+                $contents += $value['total'];
             }
-            $i->deltas['contents'] = $i->contents - $i->deltas['contents'];
+            $i->deltas['contents'] = $contents - $i->contents;
         }
 
         // Count users
