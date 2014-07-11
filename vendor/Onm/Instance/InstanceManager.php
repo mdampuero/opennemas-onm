@@ -19,10 +19,11 @@ use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotCreatedException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Exception\DatabaseNotRestoredException;
+use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\InstanceNotDeletedException;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\InstanceNotRestoredException;
-use Onm\Settings as s;
+use Repository\SettingManager;
 
 /**
  * Class for manage ONM instances.
@@ -61,10 +62,11 @@ class InstanceManager extends BaseManager
      * @param DbalWrapper    $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
      */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache)
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, SettingManager $sm)
     {
         $this->conn  = $conn;
         $this->cache = $cache;
+        $this->sm    = $sm;
     }
 
 
@@ -168,7 +170,7 @@ class InstanceManager extends BaseManager
             $this->refresh($entity);
 
             if ($this->hasCache()) {
-                // $this->cache->save($cacheId, $entity);
+                $this->cache->save($cacheId, $entity);
             }
         }
 
@@ -435,7 +437,7 @@ class InstanceManager extends BaseManager
                 $sql .= $key . ' = ' . $value . ',';
             }
 
-            $sql = rtrim($sql, ',') . 'WHERE id = ' . $instance->id;
+            $sql = rtrim($sql, ',') . ' WHERE id = ' . $instance->id;
         }
 
         $this->conn->selectDatabase('onm-instances');
@@ -447,9 +449,8 @@ class InstanceManager extends BaseManager
             $instance->settings['BD_DATABASE'] = $instance->id;
 
             $sql = 'UPDATE instances SET settings = \''
-                . serialize($instance->settings)
-                . 'WHERE id = ' . $instance->id . '\'';
-
+                . serialize($instance->settings) . '\''
+                . ' WHERE id = ' . $instance->id;
             $this->conn->executeQuery($sql);
         }
 
@@ -532,16 +533,17 @@ class InstanceManager extends BaseManager
     /**
      * If data, create an user in new database.
      *
-     * @param  array $data The user data.
+     * @param  array $database The database name.
+     * @param  array $data     The user data.
      */
-    public function createUser($data, $database)
+    public function createUser($database, $data)
     {
         $this->conn->selectDatabase($database);
 
-        if (isset($data['user_name'])
+        if (isset($data['username'])
+            && isset ($data['email'])
+            && isset ($data['password'])
             && isset ($data['token'])
-            && isset ($data['user_mail'])
-            && isset ($data['user_password'])
         ) {
             // Insert user into instance database
             $sql = "INSERT INTO users (`username`, `token`, `sessionexpire`,
@@ -549,13 +551,13 @@ class InstanceManager extends BaseManager
                 VALUES (?,?,?,?,?,?,?)";
 
             $values = array(
-                $data['user_name'], $data['token'], 60, $data['user_mail'],
-                md5($data['user_password']), $data['user_name'], 5
+                $data['username'], $data['token'], 60, $data['email'],
+                md5($data['password']), $data['username'], 5
             );
 
             if (!$this->conn->executeQuery($sql, $values)) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance -creating user'
+                throw new UserNotCreatedException(
+                    'Could not create the user'
                 );
             }
 
@@ -568,77 +570,88 @@ class InstanceManager extends BaseManager
                 . "($userId, 28), ($userId, 29), ($userId, 30), ($userId, 31)";
 
             if (!$this->conn->executeQuery($sql)) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance - privileges'
+                throw new UserNotCreatedException(
+                    'Could not create the user'
                 );
             }
-
-            $sm = getService('setting_repository');
-            $sm->setConfig(array('database' => $database));
-
-            $sm->set('contact_mail', $data['contact_mail']);
-            $sm->set('contact_name', $data['contact_name']);
-            $sm->set('contact_IP', $data['contact_IP']);
         }
     }
 
     /**
      * Configures the instance with the given data.
      *
-     * @param array  $data     The instance data.
+     * @param array  $data     The instance settings.
      * @param string $database The database name.
      */
     public function configureInstance($data, $database)
     {
-        //Change and insert some data with instance information
-        if (!s::set('site_name', $data['name'])) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance - site_name'
+        $namespace = $this->cache->getNamespace();
+
+        $this->cache->setNamespace($data['internal_name']);
+        $this->sm->setConfig(array('database' => $database));
+
+        if (!$this->sm->set('contact_IP', $data['contact_IP'])) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        if (!s::set('site_created', $data['site_created'])) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance site_created'
+        if (!$this->sm->set('contact_mail', $data['contact_mail'])) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        s::invalidate('site_title');
-        $title = $data['name'] . ' - ' . s::get('site_title');
-        if (!s::set('site_title', $title)) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance - site_title'
+        if (!$this->sm->set('site_name', $data['name'])) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        s::invalidate('site_description');
-        $description = $data['name'].' - '.s::get('site_description');
-        if (!s::set('site_description', $description)) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance - site_description'
+        if (!$this->sm->set('site_created', $data['site_created'])) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        s::invalidate('site_keywords');
-        $keywords = $data['name'].' - '.s::get('site_keywords');
-        if (!s::set('site_keywords', $keywords)) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance site_keywords'
+        $this->sm->invalidate('site_title');
+        $title = $data['name'] . ' - ' . $this->sm->get('site_title');
+        if (!$this->sm->set('site_title', $title)) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        if (!s::set('site_agency', $data['internal_name'].'.opennemas.com')) {
-            throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance - site_keywords'
+        $this->sm->invalidate('site_description');
+        $description = $data['name'].' - '.$this->sm->get('site_description');
+        if (!$this->sm->set('site_description', $description)) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
             );
         }
 
-        if (isset ($data['timezone'])) {
-            if (!s::set('time_zone', $data['timezone'])) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance - timezone'
+        $this->sm->invalidate('site_keywords');
+        $keywords = $data['name'].' - '.$this->sm->get('site_keywords');
+        if (!$this->sm->set('site_keywords', $keywords)) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
+            );
+        }
+
+        if (!$this->sm->set('site_agency', $data['internal_name'].'.opennemas.com')) {
+            throw new InstanceNotConfiguredException(
+                'The instance could not be configured'
+            );
+        }
+
+        if (isset ($data['time_zone'])) {
+            if (!$this->sm->set('time_zone', $data['time_zone'])) {
+                throw new InstanceNotConfiguredException(
+                    'The instance could not be configured'
                 );
             }
         }
+
+        $this->cache->setNamespace($namespace);
     }
 }

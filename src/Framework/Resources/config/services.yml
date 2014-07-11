@@ -147,7 +147,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @dbal_connection, @cache ]
+        arguments: [ @dbal_connection, @cache, @setting_repository ]
 
     onm_templating:
         class: Onm\Templating\Templating
