@@ -299,7 +299,7 @@ CREATE TABLE `content_categories` (
   `posmenu` int(10) DEFAULT '10',
   `internal_category` smallint(1) NOT NULL DEFAULT '0' COMMENT 'equal content_type & global=0 ',
   `fk_content_category` int(10) DEFAULT '0',
-  `params` longtext,
+  `params` text,
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT '#638F38',
   PRIMARY KEY (`pk_content_category`)
@@ -406,7 +406,7 @@ CREATE TABLE `contents` (
   `content_type_name` varchar(20) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `description` text,
-  `body` longtext NOT NULL,
+  `body` text NOT NULL,
   `metadata` varchar(255) DEFAULT NULL,
   `starttime` datetime DEFAULT NULL,
   `endtime` datetime DEFAULT NULL,
@@ -423,7 +423,7 @@ CREATE TABLE `contents` (
   `home_pos` int(10) DEFAULT '100' COMMENT '10',
   `slug` varchar(255) DEFAULT NULL,
   `available` smallint(1) DEFAULT '1',
-  `params` longtext,
+  `params` text,
   `category_name` varchar(255) NOT NULL,
   `favorite` tinyint(1) DEFAULT NULL,
   `urn_source` varchar(255) DEFAULT NULL,
@@ -490,10 +490,10 @@ CREATE TABLE `frontpages` (
   `date` int(11) NOT NULL COMMENT 'date as 20110720',
   `category` int(11) NOT NULL COMMENT 'category',
   `version` bigint(20) DEFAULT NULL,
-  `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
+  `content_positions` text NOT NULL COMMENT 'serialized id of contents',
   `promoted` tinyint(1) DEFAULT NULL,
   `day_frontpage` tinyint(1) DEFAULT NULL,
-  `params` longtext NOT NULL COMMENT 'serialized params',
+  `params` text NOT NULL COMMENT 'serialized params',
   PRIMARY KEY (`date`,`category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -629,8 +629,8 @@ DROP TABLE IF EXISTS `newsletter_archive`;
 CREATE TABLE `newsletter_archive` (
   `pk_newsletter` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `data` longtext,
-  `html` longtext,
+  `data` text,
+  `html` text,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `sent` varchar(255) NOT NULL,
@@ -694,7 +694,7 @@ CREATE TABLE `orders` (
   `payment_amount` decimal(10,2) NOT NULL,
   `payment_method` varchar(200) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `params` longtext,
+  `params` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -829,7 +829,7 @@ DROP TABLE IF EXISTS `polls`;
 CREATE TABLE `polls` (
   `pk_poll` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` int(11) NOT NULL DEFAULT '0',
-  `used_ips` longtext,
+  `used_ips` text,
   `subtitle` varchar(150) DEFAULT NULL,
   `visualization` smallint(1) DEFAULT '0',
   `with_comment` smallint(1) DEFAULT '1',
@@ -858,7 +858,7 @@ CREATE TABLE `ratings` (
   `pk_rating` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` smallint(5) unsigned NOT NULL DEFAULT '0',
   `total_value` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `ips_count_rating` longtext,
+  `ips_count_rating` text,
   PRIMARY KEY (`pk_rating`)
 ) ENGINE=MyISAM AUTO_INCREMENT=218 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -912,7 +912,7 @@ DROP TABLE IF EXISTS `settings`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `settings` (
   `name` varchar(128) NOT NULL DEFAULT '',
-  `value` longtext NOT NULL,
+  `value` text NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1085,7 +1085,7 @@ DROP TABLE IF EXISTS `usermeta`;
 CREATE TABLE `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) NOT NULL DEFAULT '',
-  `meta_value` longtext,
+  `meta_value` text,
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)
@@ -1201,7 +1201,7 @@ CREATE TABLE `votes` (
   `pk_vote` bigint(20) NOT NULL AUTO_INCREMENT,
   `value_pos` smallint(4) NOT NULL DEFAULT '0',
   `value_neg` smallint(4) NOT NULL DEFAULT '0',
-  `ips_count_vote` longtext,
+  `ips_count_vote` text,
   `karma` int(10) unsigned DEFAULT '100',
   PRIMARY KEY (`pk_vote`)
 ) ENGINE=MyISAM AUTO_INCREMENT=224 DEFAULT CHARSET=utf8;
