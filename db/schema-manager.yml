@@ -15,22 +15,22 @@ instances:
         main_domain:
             type: string
             options: {default: null, length: 255 }
-        contact_mail:
-            type: string
-            options: { default: null, length: 255 }
-        created:
-            type: datetime
-            options: { default: null }
-        last_login:
-            type: datetime
-            options: { default: null, notnull: false }
-        activated:
-            type: boolean
-            options: { default: null }
         settings:
             type: text
             options: { default: null, length: 65532, notnull: false }
+        activated:
+            type: boolean
+            options: { default: null }
+        contact_mail:
+            type: string
+            options: { default: null, length: 255 }
         contents:
+            type: integer
+            options: { default: 0, unsigned: true }
+        articles:
+            type: integer
+            options: { default: 0, unsigned: true }
+        opinions:
             type: integer
             options: { default: 0, unsigned: true }
         advertisements:
@@ -39,31 +39,16 @@ instances:
         albums:
             type: integer
             options: { default: 0, unsigned: true }
-        articles:
-            type: integer
-            options: { default: 0, unsigned: true }
-        attachments:
-            type: integer
-            options: { default: 0, unsigned: true }
-        letters:
-            type: integer
-            options: { default: 0, unsigned: true }
-        opinions:
-            type: integer
-            options: { default: 0, unsigned: true }
         photos:
-            type: integer
-            options: { default: 0, unsigned: true }
-        polls:
-            type: integer
-            options: { default: 0, unsigned: true }
-        static_pages:
             type: integer
             options: { default: 0, unsigned: true }
         videos:
             type: integer
             options: { default: 0, unsigned: true }
         widgets:
+            type: integer
+            options: { default: 0, unsigned: true }
+        static_pages:
             type: integer
             options: { default: 0, unsigned: true }
         media_size:
@@ -75,10 +60,10 @@ instances:
         page_views:
             type: bigint
             options: { default: 0, unsigned: true }
-        users:
+        emails:
             type: integer
             options: { default: 0, unsigned: true }
-        emails:
+        users:
             type: integer
             options: { default: 0, unsigned: true }
         deltas:
