@@ -153,16 +153,17 @@ class SitemapController extends Controller
         ) {
             // Fetch contents
             $contents = $this->fetchContents(
-                array('content_type_name' => array(array('value' => 'photo')))
+                array('content_type_name' => array(array('value' => 'photo'))),
+                250
             );
 
             // Get contents referenced for this image
             foreach ($contents as $key => &$content) {
                 $content->referenced = $this->getContentsWithReferencedImage($content->id);
-                if (!$content->referenced) {
-                    // Remove images without content referenced
-                    unset($contents[$key]);
-                } elseif (!empty($content->params['bodyLink'])) {
+
+                if (!$content->referenced ||
+                    !empty($content->referenced->params['bodyLink'])
+                ) {
                     // Remove external articles
                     unset($contents[$key]);
                 }
@@ -266,6 +267,10 @@ class SitemapController extends Controller
         $er = getService('entity_repository');
         $contents = $er->findBy($filters, array('created' => 'desc'), $limit, 1);
 
+        // Filter by scheduled
+        $cm = new \ContentManager();
+        $contents = $cm->getInTime($contents);
+
         return $contents;
     }
 
@@ -283,32 +288,51 @@ class SitemapController extends Controller
         $content = $cache->fetch(CACHE_PREFIX."_image_".$imageId);
 
         if (!$content) {
-            $sql = "SELECT `pk_article` as id FROM `articles`
-                    WHERE `img1` = ? OR `img2` = ?";
-
-            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($imageId, $imageId));
-
             $er = getService('entity_repository');
-            if (!$rs || $rs->fields === false) {
-                $sql = "SELECT `pk_album` as id FROM `albums_photos`
-                        WHERE `pk_photo` = ?";
 
-                $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-                $rs = $GLOBALS['application']->conn->Execute($sql, array($imageId));
+            // Set sql filters for article
+            $filters = array(
+                'tables'            => array('articles'),
+                'pk_content'        => array(array('value' => 'pk_article', 'field' => true)),
+                'content_type_name' => array(array('value' => 'article')),
+                'content_status'    => array(array('value' => 1)),
+                'in_litter'         => array(array('value' => 1, 'operator' => '<>')),
+                'img2'              => array(array('value' => $imageId)),
+            );
 
-                if (!$rs || $rs->fields === false) {
-                    return false;
-                } else {
-                    $content = $er->find('Album', $rs->fields['id']);
+            $content = $er->findBy($filters, array('created' => 'desc'));
+
+            if (!$content) {
+                // Set sql filters for opinion
+                unset($filters['img2']);
+                $filters['tables']            = array('contentmeta');
+                $filters['pk_content']        = array(array('value' => 'fk_content', 'field' => true));
+                $filters['content_type_name'] = array(array('value' => 'opinion'));
+                $filters['meta_value']        = array(array('value' => $imageId));
+
+                $content = $er->findBy($filters, array('created' => 'desc'));
+
+                if (!$content) {
+                    // Set sql filters for album
+                    unset($filters['meta_value']);
+                    $filters['tables']            = array('albums_photos');
+                    $filters['pk_content']        = array(array('value' => 'pk_album', 'field' => true));
+                    $filters['pk_photo']          = array(array('value' => $imageId));
+                    $filters['content_type_name'] = array(array('value' => 'album'));
+
+                    $content = $er->findBy($filters, array('created' => 'desc'));
                 }
-            } else {
-                $content = $er->find('Article', $rs->fields['id']);
             }
+
             // Save the content in cache
             $cache->save(CACHE_PREFIX."_image_".$imageId, $content, 300);
         }
 
-        return $content;
+        if (empty($content)) {
+            return false;
+        }
+
+        return $content[0];
+
     }
 }

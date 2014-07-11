@@ -102,7 +102,7 @@ class EntityManager extends BaseManager
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
 
             $content = $this->find(\classify($contentType), $contentId);
-            if ($content->id) {
+            if (!is_null($content) && $content->id) {
                 $contents[] = $content;
             }
         }
@@ -137,7 +137,8 @@ class EntityManager extends BaseManager
         $fromSQL = 'contents';
 
         if (array_key_exists('tables', $criteria)) {
-            $fromSQL .= implode(',', $criteria['tables']);
+            $fromSQL .= ', '.implode(',', $criteria['tables']);
+            unset($criteria['tables']);
         }
 
         $sql = "SELECT content_type_name, pk_content FROM $fromSQL ";
