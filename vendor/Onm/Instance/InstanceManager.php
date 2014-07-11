@@ -8,13 +8,10 @@
  */
 namespace Onm\Instance;
 
-use FilesManager as fm;
-use Onm\Settings as s;
-use Onm\Instance\Instance;
-
 use Repository\BaseManager;
 use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
+use Onm\Instance\Instance;
 use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\AssetsNotRestoredException;
@@ -25,6 +22,7 @@ use Onm\Exception\DatabaseNotRestoredException;
 use Onm\Exception\InstanceNotDeletedException;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\InstanceNotRestoredException;
+use Onm\Settings as s;
 
 /**
  * Class for manage ONM instances.
@@ -73,135 +71,23 @@ class InstanceManager extends BaseManager
     /**
      * Check for repeated internal name and returns it, corrected if necessary.
      *
-     * @param  string $name The internal name to check.
-     * @return string       The checked and corrected internal name.
+     * @param string $instance The instance to check.
      */
-    public function checkInternalName($name)
+    public function checkInternalName(&$instance)
     {
         $this->conn->selectDatabase('onm-instances');
 
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internal_exists FROM instances "
-             . "WHERE `internal_name` REGEXP '" . $name . "[0-9]*'";
+             . "WHERE `internal_name` REGEXP '"
+             . $instance->internal_name . "[0-9]*'";
         $rs = $this->conn->fetchAssoc($sql);
 
         if ($rs && $rs['internal_exists'] > 0) {
-            $name = $name . $rs['internal_exists'];
-        }
-
-        return $name;
-    }
-
-
-
-    /**
-     * Creates one instance.
-     *
-     * @param  array $data The instance data.
-     * @return mixed       True if the instance was created successfully.
-     *                     Otherwise, return an array of errors.
-     */
-    public function create($data)
-    {
-        $errors = array();
-
-        try {
-            $data = $this->createInstanceReference($data);
-
-            $this->createDatabase($data);
-
-            $this->copyDefaultAssets($data['internal_name']);
-
-        } catch (InstanceNotRegisteredException $e) {
-            $errors []= $e->getMessage();
-        } catch (DatabaseForInstanceNotCreatedException $e) {
-            $errors []= $e->getMessage();
-            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
-            $this->deleteInstanceUserFromDatabaseManager($data['settings']['BD_USER']);
-            $this->deleteInstanceReferenceInManager($data['id']);
-        } catch (DefaultAssetsForInstanceNotCopiedException $e) {
-            $errors []= $e->getMessage();
-
-            $this->deleteDefaultAssets($data['internal_name']);
-            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
-        }
-
-        if (count($errors) > 0) {
-            return $errors;
-        }
-
-        return true;
-    }
-
-    /**
-     * Deletes one instance given its id.
-     *
-     * @param  integer $id The instance id.
-     * @return boolean     True, if the instance is deleted successfully.
-     *                     Otherwise, returns false.
-     */
-    public function delete($id)
-    {
-        $instance = $this->find($id);
-
-        if (!$instance) {
-            return false;
-        }
-
-        $assetFolder = realpath(
-            SITE_PATH . DS . 'media' . DS . $instance->internal_name
-        );
-        $backupPath = BACKUP_PATH . DS . $instance->id . "-"
-            . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
-        $errors = array();
-
-        try {
-            $database = $instance->getDatabaseName();
-
-            $this->backupAssets($assetFolder, $backupPath);
-            $this->backupDatabase($database, $backupPath);
-            $this->backupInstanceReference($id, $backupPath);
-
-            $this->deleteDefaultAssets($instance->internal_name);
-            $this->deleteDatabaseForInstance($database);
-            $this->remove($instance);
-        } catch (BackupException $e) {
-            $creator->deleteBackup($backupPath);
-        } catch (AssetsNotDeletedException $e) {
-            $creator->restoreAssets($backupPath);
-        } catch (DatabaseNotDeletedException $e) {
-            $creator->restoreAssets($backupPath);
-            $creator->restoreDatabase($backupPath . DS . 'database.sql');
-        } finally {
-            $errors[] = $e->getMessage();
-        }
-
-        if (count($errors) > 0) {
-            return $errors;
-        }
-
-        $this->deleteCacheForInstancedomains($instance->domains);
-
-        return true;
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function deleteCacheForInstancedomains($domains)
-    {
-        foreach ($domains as $domain) {
-            $domain = trim($domain);
-            $this->cache->delete($domain, 'instance');
+            $instance->internal_name = $instance->internal_name
+                . $rs['internal_exists'];
         }
     }
-
-
-
-
 
     /**
      * Check if a contact email is already in use.
@@ -534,6 +420,7 @@ class InstanceManager extends BaseManager
                 . implode(', ', array_keys($values)) . ') VALUES ('
                 . implode(', ', array_values($values)) .')';
         } else {
+
             $sql = 'UPDATE instances SET ';
 
             foreach ($values as $key => $value) {
@@ -546,17 +433,26 @@ class InstanceManager extends BaseManager
         $this->conn->selectDatabase('onm-instances');
         $this->conn->executeQuery($sql);
 
+        // Update instance id and database after INSERT
         if (is_null($instance->id)) {
             $instance->id = $this->conn->lastInsertId();
+            $instance->settings['BD_DATABASE'] = $instance->id;
+
+            $sql = 'UPDATE instances SET settings = \''
+                . serialize($instance->settings)
+                . 'WHERE id = ' . $instance->id . '\'';
+
+            $this->conn->executeQuery($sql);
         }
 
-        $sm = getService('setting_repository');
-        $sm->setConfig(array('database' => $instance->getDatabaseName()));
-        foreach ($instance->external as $key => $value) {
-            $sm->set($key, $value);
+        // Delete cache for domains
+        foreach ($instance->domains as $domain) {
+            $this->cache->delete($domain, 'instance');
         }
 
+        // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
+
         $this->cache->setNamespace($previousNamespace);
     }
 
@@ -616,6 +512,12 @@ class InstanceManager extends BaseManager
             );
         }
 
+        // Delete cache for domains
+        foreach ($instance->domains as $domain) {
+            $this->cache->delete($domain, 'instance');
+        }
+
+        // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
     }
 
