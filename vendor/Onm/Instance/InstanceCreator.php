@@ -96,7 +96,7 @@ class InstanceCreator
         exec($dump, $output, $result);
 
         if ($result != 0) {
-            throw new BackupException($output);
+            throw new BackupException($dump);
         }
     }
 
