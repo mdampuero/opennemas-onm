@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  *
  * @package  Onm
- **/
+ */
 namespace Onm\Instance;
 
 /**
@@ -21,18 +21,230 @@ namespace Onm\Instance;
 class Instance
 {
     /**
-     * Initializes all the application values for the instance
+     * The instance id.
      *
-     * @return void
-     **/
+     * @var integer
+     */
+    public $id = null;
+
+    /**
+     * The instance internal name.
+     *
+     * @var string
+     */
+    public $internal_name = '';
+
+    /**
+     * The instance name (human readable).
+     *
+     * @var string
+     */
+    public $name = '';
+
+    /**
+     * The array of allowed domains to access the instance.
+     *
+     * @var array
+     */
+    public $domains = array();
+
+    /**
+     * The index of the main domain in the array of domains.
+     *
+     * @var integer
+     */
+    public $main_domain = 0;
+
+    /**
+     * Contact email of user that owns the instance.
+     *
+     * @var string
+     */
+    public $contact_mail = '';
+
+    /**
+     * The creation date.
+     *
+     * @var \Datetime
+     */
+    public $created = null;
+
+    /**
+     * The date when the last user logged in.
+     *
+     * @var \Datetime
+     */
+    public $last_login = null;
+
+    /**
+     * Flag to indicate that the instance is enabled or disabled.
+     *
+     * @var boolean
+     */
+    public $activated = 0;
+
+    /**
+     * The array of settings.
+     *
+     * @var array
+     */
+    public $settings = array();
+
+    /**
+     * Number of contents of the instance.
+     *
+     * @var integer
+     */
+    public $contents = 0;
+
+    /**
+     * The number of advertisements.
+     *
+     * @var integer
+     */
+    public $advertisements = 0;
+
+    /**
+     * The number of albums.
+     *
+     * @var integer
+     */
+    public $albums = 0;
+
+    /**
+     * The number of articles.
+     *
+     * @var integer
+     */
+    public $articles = 0;
+
+    /**
+     * The number of advertisements.
+     *
+     * @var integer
+     */
+    public $attachments = 0;
+
+    /**
+     * The number of articles.
+     *
+     * @var integer
+     */
+    public $letters = 0;
+
+    /**
+     * The number of opinions.
+     *
+     * @var integer
+     */
+    public $opinions = 0;
+
+    /**
+     * The number of photos.
+     *
+     * @var integer
+     */
+    public $photos = 0;
+
+    /**
+     * The number of polls.
+     *
+     * @var integer
+     */
+    public $polls = 0;
+
+    /**
+     * The number of static_pages.
+     *
+     * @var integer
+     */
+    public $static_pages = 0;
+
+    /**
+     * The number of videos.
+     *
+     * @var integer
+     */
+    public $videos = 0;
+
+    /**
+     * The number of widgets.
+     *
+     * @var integer
+     */
+    public $widgets = 0;
+
+    /**
+     * Size in Mb of the instance.
+     *
+     * @var float
+     */
+    public $media_size = 0;
+
+    /**
+     * Rank of the instance in Alexa.
+     *
+     * @var integer
+     */
+    public $alexa = 0;
+
+    /**
+     * Number of page views.
+     *
+     * @var integer
+     */
+    public $page_views = 0;
+
+    /**
+     * Number of backend users.
+     *
+     * @var integer
+     */
+    public $users = 0;
+
+    /**
+     * Number of sent emails.
+     *
+     * @var integer
+     */
+    public $emails = 0;
+
+    /**
+     * Array of deltas for counters.
+     *
+     * @var array
+     */
+    public $deltas = array(
+        'contents'       => 0,
+        'articles'       => 0,
+        'opinions'       => 0,
+        'advertisements' => 0,
+        'attachments'    => 0,
+        'albums'         => 0,
+        'photos'         => 0,
+        'videos'         => 0,
+        'widgets'        => 0,
+        'static_pages'   => 0,
+        'letters'        => 0,
+        'media_size'     => 0,
+        'alexa'          => 0,
+        'page_views'     => 0,
+        'users'          => 0,
+        'emails'         => 0
+    );
+
+    /**
+     * Initializes all the application values for the instance.
+     */
     public function boot()
     {
-        // Transform all the intance settings into application constants.
         if (!is_array($this->settings)) {
             $this->settings = unserialize($this->settings);
         }
 
-        if (empty($this->settings['MEDIA_URL'])) {
+        if (!array_key_exists('MEDIA_URL', $this->settings)
+            || empty($this->settings['MEDIA_URL'])
+        ) {
             $this->settings['MEDIA_URL'] = '/media/';
         }
 
@@ -48,41 +260,19 @@ class Instance
     }
 
     /**
-     * Loads the theme configuration
-     *
-     * @return void
-     **/
-    public function initTheme()
-    {
-        $theme = include_once TEMPLATE_USER_PATH.'/init.php';
-
-        $this->theme = $theme;
-    }
-
-    /**
-     * Initializes all the internal application constants
-     *
-     * @return void
+     * Initializes all the internal application constants.
      */
     public function initInternalConstants()
     {
+        define('INSTANCE_UNIQUE_NAME', $this->internal_name);
+
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
-        define('SITE_ADMIN_DIR', "admin");
-        define('SITE_ADMIN_TMP_DIR', "tmp");
-        define('SITE_ADMIN_PATH', SITE_PATH.'/'.SITE_ADMIN_DIR.'/');
-        define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.'/');
-        $cachepath = APPLICATION_PATH.DS.'tmp'
-            .DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
+        $cachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
             mkdir($cachepath, 0755, true);
         }
         define('CACHE_PATH', realpath($cachepath));
-
-        /**
-         * Logging settings
-         **/
-        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.INSTANCE_UNIQUE_NAME.'-application.log');
 
         /**
          * Media paths and urls configurations
@@ -107,18 +297,24 @@ class Instance
         // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL.MEDIA_DIR.'/'.IMG_DIR);
 
-        /**
-        * Template settings
-        **/
+        // Template settings
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', "/themes".'/'.TEMPLATE_USER.'/');
     }
 
     /**
-     * Returns the database name for the instance
+     * Loads the theme configuration.
+     */
+    public function initTheme()
+    {
+        $this->theme = include_once TEMPLATE_USER_PATH . '/init.php';
+    }
+
+    /**
+     * Returns the database name.
      *
-     * @return string the database name
-     **/
+     * @return string The database name.
+     */
     public function getDatabaseName()
     {
         return $this->settings['BD_DATABASE'];

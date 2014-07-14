@@ -46,7 +46,23 @@ EOF
 
         // Loads one ONM instance from database
         $im = $this->getContainer()->get('instance_manager');
-        $instance = $im->loadFromInternalName($internalName);
+
+        $instance = $im->findOneBy(
+            array('internal_name' => array(array('value' => $internalName)))
+        );
+
+        //If found matching instance initialize its contants and return it
+        if (is_object($instance)) {
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+        }
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;

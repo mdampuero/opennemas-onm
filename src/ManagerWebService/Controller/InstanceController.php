@@ -6,6 +6,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 
+use Onm\Exception\InstanceNotFoundException;
+use Onm\Exception\AssetsNotDeletedException;
+use Onm\Exception\BackupException;
+use Onm\Exception\DatabaseNotDeletedException;
+use Onm\Instance\InstanceCreator;
+
 class InstanceController extends Controller
 {
     /**
@@ -16,7 +22,7 @@ class InstanceController extends Controller
      */
     public function batchDeleteAction(Request $request)
     {
-        $error   = array();
+        $errors  = array();
         $success = array();
         $updated = array();
 
@@ -24,29 +30,72 @@ class InstanceController extends Controller
         $activated = $request->request->getDigits('value', 0);
 
         if (is_array($selected) && count($selected) > 0) {
-            $im = $this->get('instance_manager');
+            $im      = $this->get('instance_manager');
+            $creator = new InstanceCreator($im->getConnection());
 
             foreach ($selected as $id) {
-                $instance = $im->read($id);
-                if ($instance !== false) {
-                    try {
-                        $delete = $im->delete($id);
-                        if (!$delete) {
-                            throw new \Exception();
-                        }
+                try {
+                    $instance = $im->find($id);
 
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $messages[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $error[] = array(
+                    $assetFolder = realpath(
+                        SITE_PATH . DS . 'media' . DS . $instance->internal_name
+                    );
+
+                    $backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                        . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+                    $database = $instance->getDatabaseName();
+
+                    $creator->backupAssets($assetFolder, $backupPath);
+                    $creator->backupDatabase($database, $backupPath);
+                    $creator->backupInstance($database, $instance->id, $backupPath);
+
+                    $creator->deleteAssets($instance->internal_name);
+                    $creator->deleteDatabase($database);
+                    $im->remove($instance);
+
+                    $updated[] = $id;
+                } catch (InstanceNotFoundException $e) {
+                    $errors[] = array(
                         'id'      => $id,
                         'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                        'type'    => 'error'
+                    );
+                } catch (BackupException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->deleteBackup($backupPath);
+
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_($message), $id),
+                        'type'    => 'error'
+                    );
+                } catch (AssetsNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_($message), $id),
+                        'type'    => 'error'
+                    );
+                } catch (DatabaseNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+                    $creator->restoreDatabase($backupPath . DS . 'database.sql');
+
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_($message), $id),
+                        'type'    => 'error'
+                    );
+                } catch (\Exception $e) {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -64,7 +113,7 @@ class InstanceController extends Controller
 
         return new JsonResponse(
             array(
-                'messages' => array_merge($success, $error)
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -88,10 +137,11 @@ class InstanceController extends Controller
             $im = $this->get('instance_manager');
 
             foreach ($selected as $id) {
-                $instance = $im->read($id);
-                if ($instance !== false) {
+                $instance = $im->find($id);
+                if ($instance) {
                     try {
-                        $im->changeActivated($id, $activated);
+                        $instance->activated = $activated;
+                        $im->persist($instance);
                         $updated++;
                     } catch (Exception $e) {
                         $error[] = array(
@@ -134,34 +184,76 @@ class InstanceController extends Controller
      */
     public function deleteAction($id)
     {
-        $im        = $this->get('instance_manager');
-        $messages  = array();
+        $im       = $this->get('instance_manager');
+        $creator  = new InstanceCreator($im->getConnection());
+        $messages = array();
 
-        $instance = $im->read($id);
-        if ($instance !== false) {
-            try {
-                $delete = $im->delete($id);
-                if (!$delete) {
-                    throw new \Exception();
-                }
+        try {
+            $instance = $im->find($id);
 
-                $messages[] = array(
-                    'id'        => $id,
-                    'activated' => $activated,
-                    'message'   => _('Instance deleted successfully.'),
-                    'type'      => 'success'
-                );
-            } catch (Exception $e) {
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                    'type'    => 'error'
-                );
-            }
-        } else {
+            $assetFolder = realpath(
+                SITE_PATH . DS . 'media' . DS . $instance->internal_name
+            );
+
+            $backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+            $database = $instance->getDatabaseName();
+
+            $creator->backupAssets($assetFolder, $backupPath);
+            $creator->backupDatabase($database, $backupPath);
+            $creator->backupInstance($database, $instance->id, $backupPath);
+
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($database);
+            $im->remove($instance);
+
+            $messages[] = array(
+                'id'        => $id,
+                'message'   => _('Instance deleted successfully.'),
+                'type'      => 'success'
+            );
+        } catch (InstanceNotFoundException $e) {
             $messages[] = array(
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type'    => 'error'
+            );
+        } catch (BackupException $e) {
+            $message = $e->getMessage();
+
+            $creator->deleteBackup($backupPath);
+
+            $messages[] = array(
+                'id'      => $id,
+                'message' => sprintf(_($message), $id),
+                'type'    => 'error'
+            );
+        } catch (AssetsNotDeletedException $e) {
+            $message = $e->getMessage();
+
+            $creator->restoreAssets($backupPath);
+
+            $messages[] = array(
+                'id'      => $id,
+                'message' => sprintf(_($message), $id),
+                'type'    => 'error'
+            );
+        } catch (DatabaseNotDeletedException $e) {
+            $message = $e->getMessage();
+
+            $creator->restoreAssets($backupPath);
+            $creator->restoreDatabase($backupPath . DS . 'database.sql');
+
+            $messages[] = array(
+                'id'      => $id,
+                'message' => sprintf(_($message), $id),
+                'type'    => 'error'
+            );
+        } catch (\Exception $e) {
+            $messages[] = array(
+                'id'      => $id,
+                'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
                 'type'    => 'error'
             );
         }
@@ -203,18 +295,7 @@ class InstanceController extends Controller
         $instances = $im->findBy($criteria, $order);
 
         foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
+            $im->getExternalInformation($instance);
         }
 
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
@@ -266,21 +347,10 @@ class InstanceController extends Controller
         $total = $im->countBy($criteria);
 
         foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            unset($instance->settings);
-
-            $instance->domains = preg_split("@,@", $instance->domains);
-            $instance->show_url = $this->generateUrl('manager_instance_show', array('id' => $instance->id));
+            $instance->show_url = $this->generateUrl(
+                'manager_instance_show',
+                array('id' => $instance->id)
+            );
         }
 
         return new JsonResponse(array(
@@ -304,10 +374,11 @@ class InstanceController extends Controller
         $im        = $this->get('instance_manager');
         $messages  = array();
 
-        $instance = $im->read($id);
-        if ($instance !== false) {
+        $instance = $im->find($id);
+        if ($instance) {
             try {
-                $im->changeActivated($instance->id, $activated);
+                $instance->activated = $activated;
+                $im->persist($instance);
 
                 $messages[] = array(
                     'id'        => $id,

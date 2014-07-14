@@ -9,6 +9,7 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
+        arguments: [ @instance_manager, @cache ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
@@ -146,7 +147,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @dbal_connection, @cache ]
+        arguments: [ @dbal_connection, @cache, @setting_repository ]
 
     onm_templating:
         class: Onm\Templating\Templating

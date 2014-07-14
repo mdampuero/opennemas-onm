@@ -1,3 +1,9 @@
+manager_instance:
+    prefix: /
+    resource: "@ManagerBundle/Resources/config/routing/instance.yml"
+
+
+
 manager_framework_commands:
     path: /commands
     defaults: { _controller:  ManagerBundle:Commands:list }
@@ -5,22 +11,6 @@ manager_framework_commands:
 manager_framework_command_execute:
     path: /commands/execute
     defaults: { _controller:  ManagerBundle:Commands:executeCommand }
-
-manager_instances:
-    path: /instances
-    defaults: { _controller:  ManagerBundle:Instances:list }
-
-manager_instance_show:
-    path: /instance/{id}/show
-    defaults: { _controller:  ManagerBundle:Instances:show }
-
-manager_instance_create:
-    path: /instance/create
-    defaults: { _controller:  ManagerBundle:Instances:create }
-
-manager_instance_update:
-    path: /instance/{id}/update
-    defaults: { _controller:  ManagerBundle:Instances:update }
 
 manager_framework_check_dependencies:
     path: /framework/check-dependencies

@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Instance\InstanceNotRegisteredException
+ * Defines the Onm\Exception\InstanceNotFoundException
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,11 +11,8 @@
  * @package    Onm
  * @subpackage Instance
  */
-namespace Onm\Instance;
+namespace Onm\Exception;
 
-/**
- * Exceptions for handling unsuccessfull instance creation
- **/
-class InstanceNotRegisteredException extends \Exception
+class InstanceNotFoundException extends \Exception
 {
 }

@@ -33,23 +33,40 @@ abstract class BaseManager
      * @param CacheInterface     $cache       The cache instance.
      * @param string             $cachePrefix The cache prefix.
      */
-    public function __construct(DatabaseConnection $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DatabaseConnection $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn = $dbConn;
+        $this->conn = $conn;
         $this->cache = $cache;
         $this->cachePrefix = $cachePrefix;
     }
 
     /**
+     * Redirects all the calls to the DbalConnection instance
+     *
+     * @param  string $method the method to call
+     * @param  array  $params the list of parameters to pass to the method
+     * @return mixed          the result of the method call
+     */
+    public function __call($method, $params)
+    {
+        $rs = call_user_func_array(array($this->conn, $method), $params);
+
+        return $rs;
+    }
+
+    /**
      * Searches one entity given a criteria and an order.
      *
-     * @param  array|string $criteria The criteria to search for an entity.
-     * @param  array        $order    The order used in clause.
-     * @return Object                 The object searched.
+     * @param  array   $criteria        The criteria used to search.
+     * @param  array   $order           The order applied in the search.
+     * @param  integer $elementsPerPage The max number of elements.
+     * @param  integer $page            The current page.
+     * @param  integer $offset          The offset to start with.
+     * @return Object                   The object searched.
      */
-    public function findOneBy($criteria, $order)
+    public function findOneBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $elements = $this->findBy($criteria, $order, 1);
+        $elements = $this->findBy($criteria, $order, $elementsPerPage, $page, $offset);
         $element  = null;
         if (!empty($elements)) {
             $element = $elements[0];

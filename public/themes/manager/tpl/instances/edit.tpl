@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content" append}
-<form action="{if !isset($instance->id)}{url name=manager_instance_create}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario">
+<form action="{if !$instance}{url name=manager_instance_save}{else}{url name=manager_instance_update id=$instance->id}{/if}" method="post" name="formulario" id="formulario">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title">
@@ -88,10 +88,10 @@ jQuery(document).ready(function($) {
 
                     </li>
                     <li class="instance-summary">
-                        <p><strong>Media size:</strong> {$size} Mb</p>
-                        <p><strong>Owner mail:</strong> <a href="mailto:{$configs['contact_mail']}" title="Send email to the owner">{$configs['contact_mail']}</a></p>
-                        <p><strong>Created at:</strong> {$configs['site_created']}</p>
-                        <p><strong>Created from IP:</strong> {$configs['contact_IP']}</p>
+                        <p><strong>Media size:</strong> {$instance->media_size} Mb</p>
+                        <p><strong>Owner mail:</strong> <a href="mailto:{$instance->contact_mail}" title="Send email to the owner">{$instance->contact_mail}</a></p>
+                        <p><strong>Created at:</strong> {$instance->created}</p>
+                        <p><strong>Created from IP:</strong> {$instance->external['contact_IP']}</p>
                         <p>
                             <label>
                             <input type="checkbox" class="ios-switch green tinyswitch"  /><div><div></div></div>
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
                             <label for="name" class="control-label">{t}Site name{/t}</label>
                         </label>
                         <div class="controls">
-                            <input type="text" id="name" name="site_name" value="{$instance->name}" required="required">
+                            <input type="text" id="name" name="name" value="{$instance->name}" required="required">
                             <div class="help-block">
                                 {t}(Human readable name){/t}
                             </div>
@@ -144,7 +144,7 @@ jQuery(document).ready(function($) {
                             <label for="last_invoice" class="control-label">{t}Last invoice date{/t}</label>
                         </label>
                         <div class="controls">
-                            <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">
+                            <input type="text" id="last_invoice" name="external[last_invoice]" value="{if $instance->external['last_invoice']}{$instance->external['last_invoice']}{/if}">
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@ jQuery(document).ready(function($) {
                                 {else}
                                     <tr class="domain">
                                         <td>
-                                            <input type="text" name="domains[]" placeholder="Insert your new domain here">
+                                            <input type="url" name="domains[]" placeholder="Insert your new domain here" required="required">
                                         </td>
                                         <!-- <td class="side-tool" style="width:0px">
                                             <button title="Delete domain" class="mark-main" title="mark as the main domain"><i class="icon icon-certificate"></i> </button>
@@ -197,11 +197,11 @@ jQuery(document).ready(function($) {
 
                     <div class="control-group">
                         <label class="control-label">
-                            <label for="domain_expire" class="control-label">{t}Main domain{/t}</label>
+                            <label for="main_domain" class="control-label">{t}Main domain{/t}</label>
                         </label>
                         <div class="controls">
                             {if $instance}
-                                {html_options name=main_domain options=array_merge(array(''),$instance->domains) selected=$instance->main_domain}
+                                {html_options name=main_domain options=array_merge(array(''), $instance->domains) selected=$instance->main_domain}
                             {else}
                                 {html_options name=main_domain options=array() selected=$instance->main_domain}
                             {/if}
@@ -213,7 +213,7 @@ jQuery(document).ready(function($) {
                             <label for="domain_expire" class="control-label">{t}Domain expire date:{/t}</label>
                         </label>
                         <div class="controls">
-                            <input type="datetime" id="domain_expire" name="domain_expire" value="{$configs['domain_expire']|default:""}">
+                            <input type="datetime" id="domain_expire" name="external[domain_expire]" value="{$instance->external['domain_expire']|default:""}">
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@ jQuery(document).ready(function($) {
                                 <td class="controls modules-list">
                                     <select id="activated_modules" name="activated_modules[]" size="{count($available_modules)}" multiple="multiple" class="validate-selection">
                                         {foreach $available_modules as $module_key => $module_name}
-                                            <option  value="{$module_key}" {if array_key_exists('activated_modules', $configs) && in_array($module_key, $configs['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
+                                            <option  value="{$module_key}" {if $instance->external && array_key_exists('activated_modules', $instance->external) && in_array($module_key, $instance->external['activated_modules'])}selected="selected"{/if}>{$module_name}</option>
                                         {/foreach}
                                     </select>
 
@@ -267,11 +267,11 @@ jQuery(document).ready(function($) {
                             <label for="pass_level" class="control-label">{t}Minimum password level{/t}</label>
                         </label>
                         <div class="controls">
-                            <select name="pass_level" id="pass_level">
-                                <option value="-1" {if !isset($configs['pass_level']) || $configs['pass_level'] eq -1}selected="selected"{/if}>{t}Default{/t}</option>
-                                <option value="0" {if $configs['pass_level'] eq "0"}selected="selected"{/if}>{t}Weak{/t}</option>
-                                <option value="1" {if $configs['pass_level'] eq "1"}selected="selected"{/if}>{t}Good{/t}</option>
-                                <option value="2" {if $configs['pass_level'] eq "2"}selected="selected"{/if}>{t}Strong{/t}</option>
+                            <select name="external[pass_level]" id="pass_level">
+                                <option value="-1" {if !isset($instance->external['pass_level']) || $instance->external['pass_level'] eq -1}selected="selected"{/if}>{t}Default{/t}</option>
+                                <option value="0" {if $instance->external['pass_level'] eq "0"}selected="selected"{/if}>{t}Weak{/t}</option>
+                                <option value="1" {if $instance->external['pass_level'] eq "1"}selected="selected"{/if}>{t}Good{/t}</option>
+                                <option value="2" {if $instance->external['pass_level'] eq "2"}selected="selected"{/if}>{t}Strong{/t}</option>
                             </select>
                         </div>
                     </div>
@@ -281,7 +281,7 @@ jQuery(document).ready(function($) {
                             <label for="site_title" class="control-label">{t}Time Zone{/t}</label>
                         </label>
                         <div class="controls">
-                            {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
+                            {html_options name="external[time_zone]" options=$timezones selected=$instance->external['time_zone']}
                         </div>
                     </div>
 
@@ -290,7 +290,7 @@ jQuery(document).ready(function($) {
                             <label for="site_title" class="control-label">{t}Language{/t}</label>
                         </label>
                         <div class="controls">
-                            {html_options name=site_language options=$languages selected=$configs['site_language']}
+                            {html_options name="external[site_language]" options=$languages selected=$instance->external['site_language']}
                         </div>
                     </div>
                     <div class="control-group">
@@ -298,7 +298,7 @@ jQuery(document).ready(function($) {
                             <label for="max_mailing" class="control-label">{t}Num Max emails sent by month{/t}</label>
                         </label>
                         <div class="controls">
-                            <input type="text" id="max_mailing" name="max_mailing" value="{$configs['max_mailing']|default:'12000'}">
+                            <input type="text" id="max_mailing" name="external[max_mailing]" value="{$instance->external['max_mailing']|default:'12000'}">
                         </div>
                     </div>
 
@@ -313,7 +313,7 @@ jQuery(document).ready(function($) {
                                     <label for="piwik_page_id" class="control-label">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
                                 </th>
                                 <td class="controls">
-                                    <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
+                                    <input type="text" id="piwik_page_id" name="external[piwik][page_id]" value="{$instance->external['piwik']['page_id']|default:""}">
                                     <div class="help-block">
                                         {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
                                     </div>
@@ -324,10 +324,9 @@ jQuery(document).ready(function($) {
                                     <label for="piwik_server_url" class="control-label">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
                                 </th>
                                 <td class="controls">
-                                    <input type="text" id="piwik_server_url" name="piwik[server_url]" value="{$configs['piwik']['server_url']|default:""}">
+                                    <input type="text" id="piwik_server_url" name="external[piwik][server_url]" value="{$instance->external['piwik']['server_url']|default:""}">
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
