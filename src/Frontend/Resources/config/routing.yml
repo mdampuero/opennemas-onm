@@ -199,6 +199,18 @@ frontend_sitemapweb:
     requirements:
         _format: "xml|xml.gz"
 
+frontend_sitemapimage:
+    path: /sitemapimage.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:image, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapvideo:
+    path: /sitemapvideo.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:video, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
 frontend_sitemapindex:
     path: /sitemap.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:index, _format:xml }
