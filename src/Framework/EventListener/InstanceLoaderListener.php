@@ -91,6 +91,8 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $this->instance = $this->im->findOneBy($criteria);
                 $this->cache->save($host, $this->instance);
             }
+
+            $this->im->current_instance = $this->instance;
         }
 
         if (!$this->instance && !is_object($this->instance)) {
