@@ -133,6 +133,21 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             $contents = 0;
 
             foreach ($rs as $value) {
+                $allowedContentTypes = array(
+                    'article',
+                    'opinion',
+                    'advertisement',
+                    'album',
+                    'photo',
+                    'video',
+                    'widget',
+                    'static_page'
+                );
+
+                if (!in_array($value['type'], $allowedContentTypes)) {
+                    continue;
+                }
+
                 $type = $value['type'] . 's';
                 $i->deltas[$type] = $value['total'] - $i->{$type};
                 $i->{$type} = $value['total'];
