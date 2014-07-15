@@ -175,6 +175,13 @@ class Instance
     public $widgets = 0;
 
     /**
+     * The number of covers.
+     *
+     * @var string
+     **/
+    public $kioskos = 0;
+
+    /**
      * Size in Mb of the instance.
      *
      * @var float
