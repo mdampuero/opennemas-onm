@@ -88,7 +88,7 @@ jQuery(document).ready(function($) {
 
                     </li>
                     <li class="instance-summary">
-                        <p><strong>Media size:</strong> {$instance->media_size} Mb</p>
+                        <p><strong>Media size:</strong> {number_format($instance->media_size, 2)} Mb</p>
                         <p><strong>Owner mail:</strong> <a href="mailto:{$instance->contact_mail}" title="Send email to the owner">{$instance->contact_mail}</a></p>
                         <p><strong>Created at:</strong> {$instance->created}</p>
                         <p><strong>Created from IP:</strong> {$instance->external['contact_IP']}</p>
