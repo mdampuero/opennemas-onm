@@ -538,7 +538,7 @@ class ContentManager
 
         $positions = array();
         $contentIds = array();
-
+        $returnValue = false;
         if (count($elements) > 0) {
             // Clean all the contents for this category after insert the new ones
             $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
@@ -570,7 +570,6 @@ class ContentManager
             $sqlPrep = $GLOBALS['application']->conn->Prepare($stmt);
 
             $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
-
 
             // Handling if there were some errors into the execution
             if (!$rs) {
