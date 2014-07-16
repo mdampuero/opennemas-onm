@@ -169,9 +169,13 @@ class FrontpagesController extends Controller
 
             $categoryID = ($category == 'home') ? 0 : $category;
 
+            // Fetch old contents
+            $cm = new \ContentManager();
+            $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
+
             // Check if data send by user is valid
             $validReceivedData = is_array($contentsPositions)
-                                 && !empty($contentsPositions)
+                                 && count($contentsPositions) > 0
                                  && !is_null($categoryID)
                                  && !is_null($lastVersion)
                                  && count($contentsPositions) === (int) $numberOfContents;
@@ -191,6 +195,7 @@ class FrontpagesController extends Controller
                 }
             }
 
+            // Get application logger
             $logger = $this->get('application.log');
 
             if ($validReceivedData) {
@@ -242,6 +247,21 @@ class FrontpagesController extends Controller
             );
             $response = new Response(json_encode($responseData));
         } else {
+            // Iterate over each element and fetch its parameters to save.
+            $oldItems = array();
+            foreach ($oldContents as $item) {
+                $oldItems[] = array(
+                    'id'           => $item->id,
+                    'category'     => $categoryID,
+                    'placeholder'  => $item->placeholder,
+                    'position'     => $item->position,
+                    'content_type' => ucfirst($item->content_type_name),
+                );
+            }
+
+            // Restore old frontpage
+            $restore = \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
             } else {
