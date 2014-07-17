@@ -24,7 +24,7 @@
         {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
         {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
         {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css" common=1}
+        {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css"}
         {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
         {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
 	{/block}
