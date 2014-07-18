@@ -162,15 +162,21 @@ class InstancesController extends Controller
         $im = $this->get('instance_manager');
         $sm = $this->get('setting_repository');
 
+        $errors = null;
         try {
             $instance = $im->find($id);
+
+            if (!array_key_exists('activated', $request->request->all())) {
+                $request->request->set('activated', 0);
+                $_REQUEST['activated'] = 0;
+            }
 
             foreach (array_keys($request->request->all()) as $key) {
                 $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
 
-                if ($value) {
+                // if ($value) {
                     $instance->{$key} = $value;
-                }
+                // }
             }
 
             $instance->external['activated_modules'] = $request->request
