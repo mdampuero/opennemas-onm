@@ -254,7 +254,12 @@ class Advertisement extends Content
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
 
-        $this->script = base64_decode($this->script);
+        // Decode base64 if isn't decoded yet
+        $isBase64 = base64_decode($this->script);
+        if ($isBase64) {
+            $this->script = $isBase64;
+        }
+
         // FIXME: revisar que non se utilice ->img
         $this->img = $this->path;
 

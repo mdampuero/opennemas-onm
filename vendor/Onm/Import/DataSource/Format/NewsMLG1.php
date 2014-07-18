@@ -325,7 +325,9 @@ class NewsMLG1 implements FormatInterface
         $tags = array();
         foreach ($tagGroups as $group) {
             preg_match('@(.*):(.*)@', $group, $matches);
-            $tags [$matches[1]]= $matches[2];
+            if (!empty($matches)) {
+                $tags [$matches[1]]= $matches[2];
+            }
         }
 
         return $tags;
