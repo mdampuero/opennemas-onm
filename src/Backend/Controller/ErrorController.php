@@ -83,7 +83,7 @@ class ErrorController extends Controller
 
                 $errorMessage = _('Instance not activated');
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'error/instance_not_activated.tpl',
