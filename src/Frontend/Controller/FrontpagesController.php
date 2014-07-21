@@ -59,6 +59,7 @@ class FrontpagesController extends Controller
 
         $cm = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
 
         // Fetch ads

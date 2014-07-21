@@ -85,7 +85,7 @@ class EntityManager extends BaseManager
         $ids  = array();
         $keys = array();
         foreach ($data as $value) {
-            $ids[] = $value[0] . $this->cacheSeparator . $value[1];
+            $ids[] = underscore($value[0]) . $this->cacheSeparator . $value[1];
             $keys[] = $value[1];
         }
 

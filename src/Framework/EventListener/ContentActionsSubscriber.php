@@ -235,7 +235,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             $tplManager->delete('last|RSS');
 
             $tplManager->delete('frontpage|'.$categoryName);
-            $this->cacheHandler->delete('frontpage_elements_' . $category);
+            $this->cacheHandler->delete('frontpage_elements_map_' . $category);
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
