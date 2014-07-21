@@ -86,14 +86,14 @@ jQuery(document).ready(function($) {
         <div class="control-group">
             <label for="username" class="control-label">{t}Username{/t}</label>
             <div class="controls">
-                <input type="text" id="username" name="username" value="{$server['username']}" class="input-xlarge" required="required"/>
+                <input type="text" id="username" name="username" value="{$server['username']}" class="input-xlarge"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="password" class="control-label">{t}Password{/t}</label>
             <div class="controls">
-                <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge" required="required"/>
+                <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge"/>
                 <button class="check-pass">{t}Show password{/t}</button>
             </div>
         </div>
