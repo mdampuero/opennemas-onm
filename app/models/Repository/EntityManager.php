@@ -88,7 +88,7 @@ class EntityManager extends BaseManager
         $ids = array();
         $i = 0;
         foreach ($data as $value) {
-            $ids[] = $value[0] . $this->cacheSeparator . $value[1];
+            $ids[] = underscore($value[0]) . $this->cacheSeparator . $value[1];
             $keys[$value[1]] = $i++;
         }
         $contents = $this->cache->fetch($ids);
@@ -96,7 +96,7 @@ class EntityManager extends BaseManager
         $cachedIds = array();
         foreach ($contents as $content) {
             $ordered[$keys[$content->id]] = $content;
-            $cachedIds[] = $content->content_type_name . $this->cacheSeparator.$content->id;
+            $cachedIds[] = underscore($content->content_type_name) . $this->cacheSeparator.$content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);

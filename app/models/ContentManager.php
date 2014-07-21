@@ -310,45 +310,62 @@ class ContentManager
         $contents = array();
 
         $cache = getService('cache');
-        $contentsFromCache = $cache->fetch('frontpage_elements_'.$categoryID);
+        $contentsFromCache = $cache->fetch('frontpage_elements_map_'.$categoryID);
 
-        if (is_array($contentsFromCache) && count($contentsFromCache) > 0) {
-            return $contentsFromCache;
+        if (!is_array($contentsFromCache) || count($contentsFromCache) <= 0) {
+            // Fetch the id, placeholder, position, and content_type
+            // in this category's frontpage
+            // The second parameter is the id for the homepage category
+            $contentIds = $this->getContentIdsInHomePageWithIDs(
+                array((int) $categoryID, 0)
+            );
+
+            $contentsInFrontpage = array_unique(
+                array_map(
+                    function (
+                        $content
+                    ) {
+                        if ($content['frontpage_id'] == 0) {
+                            return $content['content_id'];
+                        } else {
+                            return null;
+                        }
+                    },
+                    $contentIds
+                )
+            );
         }
 
-        // Fetch the id, placeholder, position, and content_type
-        // in this category's frontpage
-        // The second parameter is the id for the homepage category
-        $contentIds = $this->getContentIdsInHomePageWithIDs(
-            array((int) $categoryID, 0)
-        );
-
-        $contentsInFrontpage = array_unique(
-            array_map(
-                function (
-                    $content
-                ) {
-                    if ($content['frontpage_id'] == 0) {
-                        return $content['content_id'];
-                    } else {
-                        return null;
-                    }
-                },
-                $contentIds
-            )
-        );
-
+        $cache->save('frontpage_elements_map_'.$categoryID, $contentIds);
 
         if (is_array($contentIds) && count($contentIds) > 0) {
 
-            // iterate over all found contents and initialize them
+            $er = getService('entity_repository');
+
+            // Retrieve contents from cache
+            $contentsMap = array_map(function ($content) {
+                return array($content['content_type'], $content['content_id']);
+            }, $contentIds);
+            $contentsRaw = $er->findMulti($contentsMap);
+
+            // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
+
                 // Only add elements for the requested category id
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
                 }
+                $content = array_filter($contentsRaw, function ($content) use ($element) {
+                    if ($element['content_id'] == $content->id) {
+                        return $content;
+                    }
+                });
+                if (is_array($content) && (count($content) == 1)) {
 
-                $content = new $element['content_type']($element['content_id']);
+                    $content = array_shift($content);
+                } else {
+                    continue;
+                }
 
                 // add all the additional properties related with positions
                 // and params
@@ -379,8 +396,6 @@ class ContentManager
                 }
             }
         }
-
-        $cache->save('frontpage_elements_'.$categoryID, $contents);
 
         // Return all the objects of contents initialized
         return $contents;
