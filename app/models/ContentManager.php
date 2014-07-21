@@ -310,31 +310,29 @@ class ContentManager
         $contents = array();
 
         $cache = getService('cache');
-        $contentsFromCache = $cache->fetch('frontpage_elements_map_'.$categoryID);
+        $contentIds = $cache->fetch('frontpage_elements_map_'.$categoryID);
 
-        if (!is_array($contentsFromCache) || count($contentsFromCache) <= 0) {
+        if (!is_array($contentIds) || count($contentIds) <= 0) {
             // Fetch the id, placeholder, position, and content_type
             // in this category's frontpage
             // The second parameter is the id for the homepage category
             $contentIds = $this->getContentIdsInHomePageWithIDs(
                 array((int) $categoryID, 0)
             );
-
-            $contentsInFrontpage = array_unique(
-                array_map(
-                    function (
-                        $content
-                    ) {
-                        if ($content['frontpage_id'] == 0) {
-                            return $content['content_id'];
-                        } else {
-                            return null;
-                        }
-                    },
-                    $contentIds
-                )
-            );
         }
+
+        $contentsInFrontpage = array_unique(
+            array_map(
+                function ($content) {
+                    if ($content['frontpage_id'] == 0) {
+                        return $content['content_id'];
+                    } else {
+                        return null;
+                    }
+                },
+                $contentIds
+            )
+        );
 
         $cache->save('frontpage_elements_map_'.$categoryID, $contentIds);
 
