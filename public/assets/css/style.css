@@ -3568,19 +3568,71 @@ border-bottom-left-radius: 2px;
 /* =============================================================================
    Wizard
    ========================================================================== */
-.terms-of-use {
+.wizard-content {
+  font-size:1.1em;
+}
+.wizard-content .terms-of-use {
   height: 400px;
-  width: 80%;
+  width: 100%;
+  border:1px solid #ccc;
+}
+.wizard-content .terms {
+  width:80%;
+  margin:0 auto;
+}
+.wizard-content .accept-terms {
+  margin: 20px auto;
+}
+.wizard-content .accept-terms label {
+  font-weight:bold;
 }
 
-.accept-terms {
-  width: 80%; margin: 20px auto;
-}
-
-.accept-terms input[type=checkbox] {
+.wizard-content .accept-terms input[type=checkbox] {
   margin-top: 4px;
 }
+.wizard-content .screenshot {
+  text-align:right;
+}
+.wizard-content .opennemas-screenshot {
+  text-align:right;
+}
+.wizard-content .presentation {
+}
+.presentation .click-next {
+  margin-top:30px;
+  font-size:.96em !important;
+  float:right;
+  margin-right:30px;
+  color:#666;
+}
+.presentation .click-next .icon {
+}
+.presentation .click-next .icon img {
+  transform:rotate(20deg);
+  -ms-transform:rotate(20deg); /* IE 9 */
+  -webkit-transform:rotate(20deg); /* Opera, Chrome, and Safari */
+  width:70px;
+  height:40px;
+  margin-left:10px;
+}
+.wizard-buttons .btn {
+  background: #47a447 !important;
+  border: 0;
+  color: #fff;
+  margin-top: 30px;
+  padding: 15px;
+  text-transform: uppercase;
+}
+.wizard-buttons .btn:active {
+  background: #3a3a3a !important;
 
+}
+.icon-huuge {
+  font-size:11em;
+}
+.color-green {
+  color:#47a447;
+}
 
 /* =============================================================================
    Social connection
