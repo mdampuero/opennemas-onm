@@ -144,6 +144,9 @@ class Rss extends ServerAbstract implements ServerInterface
 
         file_put_contents($path, $newsMLString);
 
+        $time = $article->created_datetime->getTimestamp();
+        touch($path, $time);
+
         return true;
     }
 
