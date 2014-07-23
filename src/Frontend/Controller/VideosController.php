@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,11 @@ class VideosController extends Controller
      **/
     public function init()
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
