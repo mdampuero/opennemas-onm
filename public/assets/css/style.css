@@ -3598,12 +3598,15 @@ border-bottom-left-radius: 2px;
 }
 .wizard-content .presentation {
 }
+.presentation .icon-question-sign {
+  color: #729fcf
+}
 .presentation .click-next {
   margin-top:30px;
   font-size:.96em !important;
   float:right;
   margin-right:30px;
-  color:#666;
+  color:#c20101;
 }
 .presentation .click-next .icon {
 }

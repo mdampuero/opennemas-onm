@@ -84,6 +84,9 @@
     <div class="row-fluid wizard-content" id="step3">
         <div class="span12">
             <div class="row-fluid">
+                <div class="span12"></div>
+            </div>
+            <div class="row-fluid">
                 <div class="span8">
                     <p>{t}You can read and learn how to use your Opennemas by using our online documentation and videos.
                     Take a look around and you will find it.{/t}</p>
@@ -92,7 +95,7 @@
                         <li>{t escape=off}See our <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank">video tutorials</a> for getting step-by-step guidance.{/t}</li>
                     </ul>
 
-                    <p>{t escape=off}If you need further information you can always contact us by using the  <button class="btn btn.mini"><span class="icon-large icon-question-sign"></span> Help</button> button in the upper right corner.{/t}</p>
+                    <p>{t escape=off}If you need further information you can always contact us by using the  <span class="icon-large icon-question-sign"></span> Help button in the upper right corner.{/t}</p>
                 </div>
                 <div class="span4 text-center">
                     <span class="icon-large icon-question-sign icon-huuge"></span>
