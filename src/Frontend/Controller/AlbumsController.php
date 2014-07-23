@@ -36,6 +36,11 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         // Setting up available categories for menu.
