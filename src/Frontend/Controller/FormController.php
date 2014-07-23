@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,10 @@ class FormController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
+        if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         return $this->render(
