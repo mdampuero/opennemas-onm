@@ -33,6 +33,13 @@ use Repository\SettingManager;
  */
 class InstanceManager extends BaseManager
 {
+    /**
+     * The current instance.
+     *
+     * @var Instance
+     */
+    public $current_instance;
+
     /*
      * Get available templates.
      *
