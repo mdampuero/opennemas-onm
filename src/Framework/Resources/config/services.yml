@@ -45,6 +45,11 @@ services:
         arguments: [ @cache, @logger ]
         tags:
             - {name: kernel.event_subscriber}
+    kernel.listener.user_listener:
+        class: Framework\EventListener\UserListener
+        arguments: [ @security.context, @onm_user_provider ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     kernel.listener.news_agency:
         class: Framework\EventListener\NewsAgencyCronActionSubscriber

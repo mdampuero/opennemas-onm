@@ -11,7 +11,7 @@
 
 namespace Framework\EventListener;
 
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -20,17 +20,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class AdminAuthenticationListener implements EventSubscriberInterface
+class UserListener implements EventSubscriberInterface
 {
     /**
      * @var Symfony\Component\Security\Core\SecurityContextInterface
      */
     private $context;
 
+    /**
+     * The user provider
+     *
+     * @var OnmUserProvider
+     */
+    private $provider;
 
-    public function __construct($context)
+
+    public function __construct($context, $provider)
     {
-        $this->context = $context;
+        $this->context  = $context;
+        $this->provider = $provider;
     }
 
     /**
@@ -38,7 +46,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
         if (preg_match('@^/_.*@', $event->getRequest()->getRequestUri()) != 1
             && $this->context->getToken()
@@ -47,10 +55,10 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             $user = $token->getUser();
 
             if ($user && $user != 'anon.') {
+                $user = $this->provider->loadUserByUsername($user->getUsername());
                 $user->eraseCredentials();
+                $token->setUser($user);
             }
-
-            $token->setAuthenticated(false);
         }
     }
 
