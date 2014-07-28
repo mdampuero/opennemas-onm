@@ -29,9 +29,9 @@ class UserManager extends BaseManager
      *
      * @param CacheInterface $cache The cache instance.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn      = $dbConn;
+        $this->conn        = $conn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
     }
@@ -50,8 +50,8 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchArray($sql);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -113,8 +113,9 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT id FROM `users` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+
+        $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -151,8 +152,8 @@ class UserManager extends BaseManager
             . "WHERE `users`.`id`=`usermeta`.`user_id` AND $whereSQL "
             . "ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -220,7 +221,7 @@ class UserManager extends BaseManager
      */
     public function delete($id)
     {
-        $this->dbConn->transactional(function ($em) use ($id) {
+        $this->conn->transactional(function ($em) use ($id) {
             $em->executeQuery('DELETE FROM `users` WHERE `id`= ' . $id);
             $em->executeQuery('DELETE FROM `usermeta` WHERE `user_id`= ' . $id);
         });
