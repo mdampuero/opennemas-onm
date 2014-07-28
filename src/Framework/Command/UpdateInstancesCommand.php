@@ -154,6 +154,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
                 $contents += $value['total'];
             }
             $i->deltas['contents'] = $contents - $i->contents;
+            $i->contents = $contents;
         }
 
         // Count users
