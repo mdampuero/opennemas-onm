@@ -48,13 +48,13 @@ class NewsletterManager extends BaseManager
             $limit = '';
         }
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
 
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-        $rs  = $this->dbConn->Execute($sql);
+        $rs  = $this->conn->Execute($sql);
 
         $sql2    = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
-        $countNm = $this->dbConn->GetOne($sql2);
+        $countNm = $this->conn->GetOne($sql2);
 
         if (!$rs) {
             return;
