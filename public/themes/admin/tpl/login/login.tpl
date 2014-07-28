@@ -90,12 +90,11 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="_password">{t}Password{/t}</label>
+                    <label class="control-label" for="password">{t}Password{/t}</label>
                     <div class="controls">
-                        <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                        <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                     </div>
                 </div>
-
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
@@ -109,16 +108,13 @@
                             </noscript>
                         </div>
                         {/if}
-
                         <div class="submit">
                             <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Log in{/t}</span></button>
                             <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
                         </div>
                     </div>
                 </div>
-
                 <div class="or"><span class="text">{t}or use{/t}</span></div>
-
                 <div class="social-network-buttons row-fluid">
                     <a class="span6 btn" href="{hwi_oauth_login_url name=facebook}">
                         <i class="social-icon icon-facebook"></i> Facebook
@@ -128,9 +124,10 @@
                     </a>
                 </div>
             </div>
-            <input type="hidden" name="_token" value="{$token}">
-            <input type="hidden" name="_referer" value="{$referer}">
-    	</form>
+            <input type="hidden" id="_password" name="_password">
+            <input type="hidden" id="_token" name="_token" value="{$token}">
+            <input type="hidden" id="_referer" name="_referer" value="{$referer}">
+        </form>
     </div>
 
     <footer>

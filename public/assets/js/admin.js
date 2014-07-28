@@ -19,15 +19,10 @@ $(document).ready(function() {
         e.preventDefault();
 
         var form = $('#loginform');
-        var time = form.find('input[name="time"]').val();
         var password;
 
-        if (form.find('input[name="_password"]').length > 0) {
-            password = form.find('input[name="_password"]');
-            password.val('md5:' + hex_md5(password.val()));
-        } else {
-            password = form.find('input[name="password"]');
-            password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
+        if (form.find('input[name="password"]').length > 0) {
+            $('#_password').val('md5:' + hex_md5($('#password').val()));
         }
 
         form.submit();
