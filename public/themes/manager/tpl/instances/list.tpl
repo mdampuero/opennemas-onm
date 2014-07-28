@@ -204,11 +204,11 @@
                         {t}Contact{/t}
                         <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contact_mail', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contact_mail' }"></i>
                     </th>
-                    <th class="left" ng-click="sort('last_login')" ng-show="last_login">
+                    <th class="left pointer" ng-click="sort('last_login')" ng-show="last_login">
                         {t}Last access{/t}
                         <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'last_login', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'last_login' }"></i>
                     </th>
-                    <th class="left" ng-click="sort('created')" ng-show="created">
+                    <th class="left pointer" ng-click="sort('created')" ng-show="created">
                         {t}Created{/t}
                         <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'created', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'created' }"></i>
                     </th>
