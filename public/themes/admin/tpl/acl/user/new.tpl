@@ -180,7 +180,9 @@ label {
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
+                {if isset($user->id)}
                 <li><a href="#social" title="{t}Social Networks{/t}">{t}Social Networks{/t}</a></li>
+                {/if}
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
                 {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
                 <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
@@ -287,7 +289,7 @@ label {
                     </fieldset>
                 </div>
             </div><!-- /personal -->
-
+            {if isset($user->id)}
             <div id="social">
                 <div class="form-horizontal social-connections">
                     <div class="control-group">
@@ -304,7 +306,7 @@ label {
                     </div>
                 </div>
             </div>
-
+            {/if}
             <div id="settings">
                 <div class="form-horizontal">
                     {is_module_activated name="PAYWALL"}
