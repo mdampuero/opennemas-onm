@@ -222,7 +222,7 @@ class ArticlesController extends Controller
             return $this->render(
                 'article/new.tpl',
                 array(
-                    'availableSizes'=> array(
+                    'availableSizes' => array(
                         16 => '16',
                         18 => '18',
                         20 => '20',
@@ -234,7 +234,8 @@ class ArticlesController extends Controller
                         32 => '32',
                         34 => '34'
                     ),
-                    'authors' => $authors,
+                    'authors'        => $authors,
+                    'commentsConfig' => s::get('comments_config'),
                     // TODO: clean this from here
                     'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
                 )
@@ -367,6 +368,7 @@ class ArticlesController extends Controller
             array(
                 'article'      => $article,
                 'authors'      => $authors,
+                'commentsConfig' => s::get('comments_config'),
                 'availableSizes' => array(
                     16 => '16', 18 => '18', 20 => '20', 22 => '22',
                     24 => '24', 26 => '26', 28 => '28',30 => '30',
