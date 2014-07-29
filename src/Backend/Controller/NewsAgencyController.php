@@ -1058,10 +1058,12 @@ class NewsAgencyController extends Controller
             }
         }
 
+        $commentsConfig = s::get('comments_config');
+
         $values = array(
             'title'          => $element->title,
             'category'       => $category,
-            'with_comment'   => 1,
+            'with_comment'   => (array_key_exists('with_comments', $commentsConfig) ? $commentsConfig['with_comments'] : 1),
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,
