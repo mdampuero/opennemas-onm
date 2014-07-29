@@ -355,6 +355,7 @@ class CommentsController extends Controller
 
             $defaultConfigs = array(
                 'moderation'      => false,
+                'with_comments'   => false,
                 'number_elements' => 10,
             );
             $configs = array_merge($defaultConfigs, $configs);

@@ -224,9 +224,10 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/new.tpl',
             array(
-                'opinion'      => $opinion,
-                'all_authors'  => $allAuthors,
-                'author'       => $author,
+                'opinion'        => $opinion,
+                'all_authors'    => $allAuthors,
+                'author'         => $author,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }
@@ -293,7 +294,13 @@ class OpinionsController extends Controller
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
-            return $this->render('opinion/new.tpl', array('all_authors' => $allAuthors));
+            return $this->render(
+                'opinion/new.tpl',
+                array(
+                    'all_authors'    => $allAuthors,
+                    'commentsConfig' => s::get('comments_config'),
+                )
+            );
         }
     }
 
