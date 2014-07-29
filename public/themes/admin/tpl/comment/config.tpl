@@ -43,6 +43,13 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label for="config[with_comments]" class="control-label">{t}Allow comments by default in contents{/t}</label>
+                    <div class="controls">
+                        <input type="checkbox" id="name" name="configs[with_comments]" value="1" {if $configs['with_comments'] == true}checked="checked"{/if} >
+                        <div class="help-block help-block-inline">{t} Contents are added with comments activated{/t}</div>
+                    </div>
+                </div>
+                <div class="control-group">
                     <label for="config[autoaccept]" class="control-label">{t}Before a comment appears{/t}</label>
                     <div class="controls">
                         <input type="checkbox" id="name" name="configs[moderation]" value="1" {if $configs['moderation'] == true}checked="checked"{/if} >
