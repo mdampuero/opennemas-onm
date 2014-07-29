@@ -145,6 +145,29 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
                 $event->setResponse(new RedirectResponse($url, 302));
             }
+        } elseif (getContainerParameter('opennemas.redirect_frontend')
+            && strpos($request->getRequestUri(), '/admin') !== 0
+            && strpos($request->getRequestUri(), '/manager') !== 0
+            && strpos($request->getRequestUri(), '/ws') !== 0
+        ) {
+            $port = in_array($request->getPort(), array(80, 443)) ?
+                '' : ':' . $request->getPort();
+
+            $domain = null;
+            if (!empty($this->instance->domains)) {
+                $domain = $this->instance->domains[0];
+
+                if ($this->instance->main_domain) {
+                    $domain = $this->instance->domains[$this->instance->main_domain - 1];
+                }
+            }
+
+            if ($domain && $host !== $domain) {
+                $uri  = $request->getRequestUri();
+                $url = 'http://' . $domain . $port . $uri;
+
+                $event->setResponse(new RedirectResponse($url, 302));
+            }
         }
     }
 

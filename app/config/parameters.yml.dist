@@ -88,6 +88,7 @@ parameters:
 
     opennemas.backend_force_ssl: false
     opennemas.base_domain: .opennemas.com
+    opennemas.redirect_frontend: false
 
     api.facebook.client_id: 330535510437103
     api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
