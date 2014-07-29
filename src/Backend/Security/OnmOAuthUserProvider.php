@@ -101,7 +101,7 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
 
         if (is_null($user) || empty($user)) {
             throw new UsernameNotFoundException(_(
-                'Unable to found an user associated to that social account.'
+                'Unable to find an associated user to that social account.'
                 .' Notice that you have to associated it from your user account.'
             ));
         }
