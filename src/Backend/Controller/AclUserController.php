@@ -756,14 +756,10 @@ class AclUserController extends Controller
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
 
-        return $this->render(
-            'acl/user/social.tpl',
-            array(
-                'current_user_id' => $this->getUser()->id,
-                'connected'       => false,
-                'resource_id'     => null,
-                'resource'        => $resource,
-                'user'            => $user,
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_acl_user_social',
+                array('id' => $id, 'resource' => $resource)
             )
         );
     }
