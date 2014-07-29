@@ -987,9 +987,12 @@ class Content
         }
 
         if ($this->id !== null) {
+            $views = getService('content_views_repository')->getViews($this->id);
+
             return array(
                 'title'           => $this->title,
                 'category'        => $ccm->get_name($this->category),
+                'views'           => $views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
                 'scheduled_state' => $this->getSchedulingState(),
