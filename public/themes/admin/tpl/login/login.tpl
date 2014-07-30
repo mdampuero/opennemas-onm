@@ -90,9 +90,9 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="password">{t}Password{/t}</label>
+                    <label class="control-label" for="_password">{t}Password{/t}</label>
                     <div class="controls">
-                        <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                        <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                     </div>
                 </div>
                 <div class="control-group">
@@ -124,7 +124,6 @@
                     </a>
                 </div>
             </div>
-            <input type="hidden" id="_password" name="_password">
             <input type="hidden" id="_token" name="_token" value="{$token}">
             <input type="hidden" id="_referer" name="_referer" value="{$referer}">
         </form>
