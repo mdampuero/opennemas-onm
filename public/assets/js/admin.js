@@ -16,19 +16,17 @@ $(document).ready(function() {
 
     // Encode password in md5 on backend login
     $('#loginform').on('submit', function(e, ui) {
-        e.preventDefault();
+        var form = $('#loginform');
 
-        var source = $('#loginform');
-        var target = $('#loginform').clone();
-        var password;
+        if (form.find('input[name="_password"]').length > 0) {
+            var password = form.find('input[name="_password"]').val();
 
-        if (source.find('input[name="_password"]').length > 0) {
-            target.find('input[name="_password"]').val(
-                'md5:' + hex_md5(source.find('input[name="_password"]').val())
-            );
+            if (password.indexOf('md5:') === -1) {
+                password = 'md5:' + hex_md5(password);
+            }
+
+            form.find('input[name="_password"]').val(password);
         }
-
-        target.submit();
     });
 
     $('.social-network-connect').on('click', function(e) {
