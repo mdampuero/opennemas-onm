@@ -14,13 +14,14 @@
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
  * User
  *
  * @package    Model
  **/
-class User extends OAuthUser implements AdvancedUserInterface
+class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface
 {
     /**
      * The user id
@@ -1678,6 +1679,33 @@ class User extends OAuthUser implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->activated;
+    }
+
+    /**
+     * The equality comparison should neither be done by referential equality
+     * nor by comparing identities (i.e. getId() === getId()).
+     *
+     * However, you do not need to compare every attribute, but only those that
+     * are relevant for assessing whether re-authentication is required.
+     *
+     * @param  UserInterface $user
+     * @return boolean
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if ($user instanceof User
+            && $this->getUsername() === $this->getUsername()
+        ) {
+            $isEqual = count($this->getRoles()) == count($user->getRoles());
+            if ($isEqual) {
+                foreach ($this->getRoles() as $role) {
+                    $isEqual = $isEqual && in_array($role, $user->getRoles());
+                }
+            }
+            return $isEqual;
+        }
+
+        return false;
     }
 
     /**
