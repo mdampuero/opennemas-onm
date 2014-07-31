@@ -3308,6 +3308,9 @@ gettext("Showing");
 gettext("of");
 
 /* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Your account is connected to %1.");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
 gettext("Disconnect from Facebook");
 
 /* public/themes/admin/tpl/acl/user/social.tpl */
@@ -3315,6 +3318,9 @@ gettext("Disconnect");
 
 /* public/themes/admin/tpl/acl/user/social.tpl */
 gettext("Photo");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Allows you to login into Opennemas with %1");
 
 /* public/themes/admin/tpl/search_advanced/content-provider.tpl */
 gettext("Write here the text for search...");

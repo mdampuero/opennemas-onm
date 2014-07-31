@@ -724,6 +724,12 @@ class AclUserController extends Controller
             $connected = true;
         }
 
+        if ($resource == 'facebook') {
+            $resourceName = 'Facebook';
+        } else {
+            $resourceName = 'Twitter';
+        }
+
         return $this->render(
             'acl/user/social.tpl',
             array(
@@ -731,6 +737,7 @@ class AclUserController extends Controller
                 'connected'       => $connected,
                 'resource_id'     => $resourceId,
                 'resource'        => $resource,
+                'resource_name'   => $resourceName,
                 'user'            => $user,
             )
         );

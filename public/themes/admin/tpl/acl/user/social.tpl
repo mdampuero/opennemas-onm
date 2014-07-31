@@ -21,7 +21,7 @@
             {if $current_user_id == $user->id}
                 {if $connected}
                     <p>
-                        {t}Your account is connected to {if $resource == 'facebook'}Facebook{else}Twitter{/if}.{/t}
+                        {t 1=$resource_name}Your account is connected to %1.{/t}
                         <a href="{url name=admin_acl_user_social_disconnect id=$user->id resource=$resource}" title="{t}Disconnect from Facebook{/t}" class="disconnect">{t}Disconnect{/t}</a>
                     </p>
                     <ul class="social-connection">
@@ -45,7 +45,7 @@
                             </div>
                         </li>
                     </ul>
-                    <p>Allows you to login into Opennemas with {if $resource == 'facebook'}Facebook{else}Twitter{/if}.</p>
+                    <p>{t 1=$resource_name}Allows you to login into Opennemas with %1{/t}.</p>
                 {else}
                     <button class="social-network-connect btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name={$resource}}" type="button">
                         <i class="icon-{$resource}"></i> {t}Connect with {if $resource == 'facebook'}Facebook{else}Twitter{/if}{/t}
