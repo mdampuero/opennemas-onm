@@ -503,6 +503,10 @@ class InstanceManager extends BaseManager
             if (is_array($instance->{$key})) {
                 if ($key == 'domains') {
                     $instance->{$key} = explode(',', $value);
+
+                    foreach ($instance->domains as $k => $v) {
+                        $instance->domains[$k] = trim($v);
+                    }
                 } else {
                     $instance->{$key} = unserialize($value);
                 }
