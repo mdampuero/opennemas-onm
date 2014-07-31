@@ -4490,6 +4490,9 @@ gettext("Ready!");
 gettext("And that's it!");
 
 /* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("You can start to use your newspaper.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
 gettext("Previous");
 
 /* public/themes/admin/tpl/welcome/wizard.tpl */
@@ -4506,6 +4509,9 @@ gettext("Hope you will enjoy opennemas!");
 
 /* public/themes/admin/tpl/welcome/wizard.tpl */
 gettext("Click next to continue");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Next");
 
 /* public/themes/admin/tpl/welcome/wizard.tpl */
 gettext("In order to use Opennemas you must accept the terms of use:");
