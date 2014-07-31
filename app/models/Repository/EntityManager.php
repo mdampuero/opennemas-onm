@@ -187,13 +187,13 @@ class EntityManager extends BaseManager
 
         $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
 
-        if (array_key_exists('join', $criteria) && $criteria['join']) {
+        if (array_key_exists('join', $criteria)) {
+            $join = $criteria['join'];
             unset($criteria['join']);
-            $sql .= $this->getJoinSQL($criteria);
-        } else {
-            unset($criteria['join']);
-            $sql .= " WHERE" . $this->getFilterSQL($criteria);
+            $sql .= $this->getJoinSQL($join);
         }
+
+        $sql .= " WHERE " . $this->getFilterSQL($criteria);
 
         $rs = $this->dbConn->fetchArray($sql);
 
