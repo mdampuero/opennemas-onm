@@ -810,7 +810,7 @@ class ContentManager
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
-        $date = $date->format('Y-M-d H:i:s');
+        $date = $date->format('Y-m-d H:i:s');
 
         $criteria = array(
             'join' => array(
@@ -1046,7 +1046,7 @@ class ContentManager
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
-        $date = $date->format('Y-M-d H:i:s');
+        $date = $date->format('Y-m-d H:i:s');
 
         $criteria = array(
             'join' => array(
