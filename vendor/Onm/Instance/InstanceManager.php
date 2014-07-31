@@ -87,11 +87,12 @@ class InstanceManager extends BaseManager
         $this->conn->selectDatabase('onm-instances');
 
         $internalName = $instance->internal_name;
-        if (empty($instance->internal_name)) {
+        if (empty($internalName)) {
             $domain = explode('.', $instance->domains[0]);
-            var_dump($domain);
             $internalName = $domain[0];
         }
+
+        $internalName = strtolower($internalName);
 
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internal_exists FROM instances "

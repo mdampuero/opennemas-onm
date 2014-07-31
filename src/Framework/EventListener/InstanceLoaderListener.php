@@ -137,7 +137,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
             $domainRoot = getContainerParameter('opennemas.base_domain');
             $supposedDomain = $this->instance->internal_name . $domainRoot;
 
-            if ($host !== $supposedDomain
+            if ($host !== strtolower($supposedDomain)
                 || ($forceSSL && !$request->isSecure())
             ) {
                 $uri = $request->getRequestUri();
