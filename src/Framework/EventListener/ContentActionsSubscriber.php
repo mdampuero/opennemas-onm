@@ -367,7 +367,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     {
         $category = $event->getArgument('category');
 
-        $this->cacheHandler->delete('fronpage_elements_'.$category);
+        $this->cacheHandler->delete('frontpage_elements_map_'.$category);
     }
 
     /**
