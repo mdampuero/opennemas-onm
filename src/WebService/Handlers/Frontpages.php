@@ -78,9 +78,18 @@ class Frontpages
                         ->loadRelatedContents($category);
 
                 //Change uri for href links except widgets
-                if ($content->content_type != 'Widget') {
+                if ($content->content_type_name != 'widget') {
                     $content->uri = "ext".$content->uri;
+
+                    // Overload floating ads with external url's
+                    if ($content->content_type_name == 'advertisement') {
+                        $content->extWsUrl = SITE_URL;
+                        $content->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($content->created))
+                            .sprintf('%06d', $content->pk_advertisement).'.html';
+                        $content->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+                    }
                 }
+
 
                 // Generate uri for related content
                 foreach ($content->related_contents as &$item) {
@@ -101,6 +110,7 @@ class Frontpages
                     }
                 }
             }
+
             // Use htmlspecialchars to avoid utf-8 erros with json_encode
             return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
         }
