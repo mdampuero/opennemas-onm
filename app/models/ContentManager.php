@@ -371,7 +371,7 @@ class ContentManager
 
                 // add all the additional properties related with positions
                 // and params
-                if ($content->in_litter == 0) {
+                if (is_object($content) && $content->in_litter == 0) {
                     $content->load(
                         array(
                             'placeholder' => $element['placeholder'],
