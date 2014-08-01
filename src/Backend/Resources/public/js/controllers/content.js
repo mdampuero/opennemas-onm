@@ -75,7 +75,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
      * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(content, filters, sortBy, sortOrder, route, lang) {
+    $scope.init = function(content, filters, sortBy, sortOrder, route, lang, epp) {
         $translate.use(lang ? lang : 'en');
         $translate(['Next', 'Previous']).then(function (translations) {
             paginationConfig.nextText     = translations.Next;
@@ -85,7 +85,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
         // Initialize the current list.
         sharedVars.set('contentType', content);
         sharedVars.set('page', 1);
+
         sharedVars.set('elements_per_page', 10);
+        if  (epp) {
+            sharedVars.set('elements_per_page', epp);
+        }
 
         // Load filters from URL
         var query = $location.search();
