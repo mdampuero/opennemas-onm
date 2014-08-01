@@ -143,7 +143,7 @@ class EntityManager extends BaseManager
 
         $sql = "SELECT content_type_name, pk_content FROM $fromSQL ";
 
-        if (array_key_exists('join', $criteria)) {
+        if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
             unset($criteria['join']);
             $sql .= $this->getJoinSQL($join);
