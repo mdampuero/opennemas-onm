@@ -23,9 +23,15 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
 
         $reviveZonesInformation = $dfpZonesInformation = array();
         foreach ($advertisements as $advertisement) {
-            if ($advertisement->with_script == 2) {
+            if ($advertisement->with_script == 2
+                && array_key_exists('openx_zone_id', $advertisement->params)
+                && !empty($advertisement->params['openx_zone_id'])
+            ) {
                 $reviveZonesInformation []= " 'zone_{$advertisement->id}' : ".(int) $advertisement->params['openx_zone_id'];
-            } elseif ($advertisement->with_script == 3) {
+            } elseif ($advertisement->with_script == 3
+                && array_key_exists('googledfp_unit_id', $advertisement->params)
+                && !empty($advertisement->params['googledfp_unit_id'])
+            ) {
                 $dfpZonesInformation []= "googletag.defineSlot('{$advertisement->params['googledfp_unit_id']}', [{$advertisement->params['width']}, {$advertisement->params['height']}], 'zone_{$advertisement->id}').addService(googletag.pubads());";
             }
         }
