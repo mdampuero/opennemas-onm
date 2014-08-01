@@ -34,7 +34,7 @@ class OpinionManager extends EntityManager
      * @param  integer      $offset          The offset to start with.
      * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, $group = '')
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -45,9 +45,13 @@ class OpinionManager extends EntityManager
         }
         $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
+        $group_by ='';
+        if (!empty($group)) {
+            $group_by = "GROUP BY {$group} ";
+        }
         // Executing the SQL
         $sql = "SELECT content_type_name, pk_content FROM `contents`, `opinions`
-            WHERE $filterSQL AND pk_content=pk_opinion
+            WHERE $filterSQL AND pk_content=pk_opinion $group_by
             ORDER BY $orderBySQL $limitSQL";
 
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -69,21 +73,21 @@ class OpinionManager extends EntityManager
      * @param  array|string $criteria The criteria used to search.
      * @return integer                The number of matched elements.
      */
-    public function countBy($criteria)
+    public function countBy($criteria, $group = '')
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
-
-        // Executing the SQL
-        $sql = "SELECT COUNT(pk_content) FROM `contents`, `opinions`"
-            ." WHERE $filterSQL AND pk_content=pk_opinion";
-        $rs = $this->dbConn->fetchArray($sql);
-
-        if (!$rs) {
-            return 0;
+        $group_by ='';
+        if (!empty($group)) {
+            $group_by = "GROUP BY {$group} ";
         }
+        // Executing the SQL
+        $sql = "SELECT pk_content FROM `contents`, `opinions`"
+            ." WHERE $filterSQL AND pk_content=pk_opinion $group_by";
+        $rs = $this->dbConn->fetchAll($sql);
 
-        return $rs[0];
+        return count($rs);
+
     }
 
     /**
@@ -117,22 +121,33 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = array();
                 if ($field == 'blog') {
-                    $allAuthors = \User::getAllUsersAuthors();
 
-                    $authorsBlog = array();
-                    foreach ($allAuthors as $authorData) {
-                        if ($authorData->is_blog == 1) {
-                            $authorsBlog[$authorData->id] = $authorData;
+                    $bloggers = getService('user_repository')->findByUserMeta(
+                        array(
+                            'meta_key' => array(
+                                array('value' => 'is_blog')
+                            ),
+                            'meta_value' => array(
+                                array('value' => '1')
+                            )
+                        ),
+                        array('username' => 'asc'),
+                        1,
+                        0
+                    );
+
+                    if (!empty($bloggers)) {
+                        $ids = array();
+                        foreach ($bloggers as $blogger) {
+                            $ids[] =  $blogger->id;
                         }
-                    }
 
-                    if (!empty($authorsBlog)) {
                         if ($filters[0]['value']) {
                             $filterSQL[] = 'opinions.fk_author IN ('
-                                . implode(', ', array_keys($authorsBlog)).") ";
+                                . implode(', ', array_values($ids)).") ";
                         } else {
                             $filterSQL[] = 'opinions.fk_author NOT IN ('
-                                . implode(', ', array_keys($authorsBlog)).") ";
+                                . implode(', ', array_values($ids)).") ";
                         }
                     } else {
                         if ($filters[0]['value']) {

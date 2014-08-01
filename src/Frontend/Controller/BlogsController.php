@@ -59,14 +59,12 @@ class BlogsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $authors = array();
-            foreach (\User::getAllUsersAuthors() as $author) {
-                if ($author->is_blog == 1) {
-                    $authors[$author->id] = $author;
-                }
-            }
+            $itemsPerPage    = s::get('items_in_blog');
+            $opinionSettings = s::get('opinion_settings');
+            $orderBy         = isset($opinionSettings['blog_orderFrontpage']) ? $opinionSettings['blog_orderFrontpage'] : 'created';
 
-            $itemsPerPage = s::get('items_in_blog');
+            $ur              = $this->get('user_repository');
+
 
             $order   = array('starttime' => 'DESC');
             $filters = array(
@@ -76,9 +74,15 @@ class BlogsController extends Controller
                 'blog'              => array(array('value' => 1)),
             );
 
-            $em         = $this->get('opinion_repository');
-            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countItems = $em->countBy($filters);
+
+            $em  = $this->get('opinion_repository');
+            if ($orderBy == 'blogger') {
+                $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page, 0, 'opinions.fk_author');
+                $countItems = $em->countBy($filters, 'opinions.fk_author');
+            } else {
+                $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
+                $countItems = $em->countBy($filters);
+            }
 
             $pagination = \Pager::factory(
                 array(
@@ -97,18 +101,13 @@ class BlogsController extends Controller
             );
 
             foreach ($blogs as &$blog) {
-                if (array_key_exists($blog->fk_author, $authors)) {
-
-                    $blog->author           = $authors[$blog->fk_author];
+                if (!empty($blog->fk_author)) {
+                    $blog->author           = $ur->find($blog->fk_author);
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
-                    // ????
-                    $item = new \Content();
-                    $item->loadAllContentProperties($blog->pk_content);
-                    $blog->summary = $item->summary;
-                    $blog->img1_footer = $item->img1_footer;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
+
+                    if (isset($blog->img1) && ($blog->img1 > 0)) {
+                        $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(
@@ -124,7 +123,6 @@ class BlogsController extends Controller
             $this->view->assign(
                 array(
                     'opinions'   => $blogs,
-                    'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $page
                 )
@@ -268,8 +266,6 @@ class BlogsController extends Controller
         );
 
     }
-
-
 
     /**
      * Displays an blog given its id
