@@ -328,7 +328,7 @@ class Instance
      */
     public function getMainDomain()
     {
-        if (!$this->main_domain) {
+        if ($this->main_domain && $this->main_domain > 0) {
             $domain = $this->domains[$this->main_domain - 1];
         } else {
             $domain = $this->domains[0];
