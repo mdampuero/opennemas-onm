@@ -236,7 +236,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $url   = $this->getContainer()->getParameter('piwik.url');
         $token = $this->getContainer()->getParameter('piwik.token');
 
-        $from = date_create_from_format('Y-m-d H:i:s', $from)->format('Y-m-d');
+        $from = \DateTime::createFromFormat('Y-m-d H:i:s', $from);
+        $from = $from->format('Y-m-d');
         $to   = date('Y-m-d');
 
         $url .= "?module=API&method=API.get"
