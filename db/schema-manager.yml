@@ -16,10 +16,10 @@ instances:
             type: string
             options: {default: null, length: 255 }
         created:
-            type: date
+            type: datetime
             options: {default: null }
         last_login:
-            type: date
+            type: datetime
             options: {default: null, notnull: false }
         settings:
             type: text
