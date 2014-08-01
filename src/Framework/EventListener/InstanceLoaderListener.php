@@ -155,11 +155,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
             $domain = null;
             if (!empty($this->instance->domains)) {
-                $domain = $this->instance->domains[0];
-
-                if ($this->instance->main_domain) {
-                    $domain = $this->instance->domains[$this->instance->main_domain - 1];
-                }
+                $domain = $this->instance->getMainDomain();
             }
 
             if ($domain && $host !== $domain) {

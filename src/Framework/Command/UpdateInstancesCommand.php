@@ -167,7 +167,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         // Check domain's rank in Alexa
         if ($alexa && !empty($i->domains)) {
-            $i->alexa = $this->getAlexa($domains[0]);
+            $i->alexa = $this->getAlexa($i->getMainDomain());
         }
 
         // Count emails
