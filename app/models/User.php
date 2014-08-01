@@ -270,7 +270,11 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
         $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
-        $this->accesscategories = $this->readAccessCategories();
+
+        $database = $GLOBALS['application']->conn->connectionParams['dbname'];
+        if ($database != 'onm-instances') {
+            $this->accesscategories = $this->readAccessCategories();
+        }
 
         // Get user meta information
         $this->meta = $this->getMeta();
