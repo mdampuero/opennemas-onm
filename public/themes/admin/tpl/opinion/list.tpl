@@ -21,7 +21,9 @@
                     <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                     {/acl}
                     <a href="{url name=admin_opinions}" ng-class="{ active: !shvs.search.blog }">{t}Opinion{/t}</a>
+                    {is_module_activated name="BLOG_MANAGER"}
                     <a href="{url name=admin_blogs}" ng-class="{ active: shvs.search.blog }">{t}Blog{/t}</a>
+                    {/is_module_activated}
                 </div>
             </div>
         </div>

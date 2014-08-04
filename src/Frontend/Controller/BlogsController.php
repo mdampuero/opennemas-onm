@@ -17,6 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -53,14 +54,18 @@ class BlogsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $itemsPerPage    = s::get('items_in_blog');
             $opinionSettings = s::get('opinion_settings');
+            $itemsPerPage    = isset($opinionSettings['blog_itemsFrontpage']) ? $opinionSettings['blog_itemsFrontpage'] : '12';
             $orderBy         = isset($opinionSettings['blog_orderFrontpage']) ? $opinionSettings['blog_orderFrontpage'] : 'created';
 
             $ur              = $this->get('user_repository');
@@ -149,6 +154,10 @@ class BlogsController extends Controller
     {
         $page = $this->request->query->getDigits('page', 1);
         $slug       = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
 
         if (empty($slug)) {
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
@@ -276,6 +285,10 @@ class BlogsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $dirtyID   = $request->query->getDigits('blog_id');
         $blogID = \Content::resolveID($dirtyID);
 
