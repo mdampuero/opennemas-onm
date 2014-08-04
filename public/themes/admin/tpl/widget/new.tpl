@@ -108,6 +108,14 @@
                         </div>
                     </div>
                 </div>
+                {acl isAllowed="ONLY_MASTERS"}
+                <div class="control-group">
+                    <label for="parameters" class="control-label">{t}Parameters{/t}</label>
+                    <div class="controls">
+                        <textarea name="parameters" id="parameters" class="input-xxlarge" data-preset="simple">{$widget->parameters|clearslash}</textarea>
+                    </div>
+                </div>
+                {/acl}
             </div>
         </div>
     </div>
