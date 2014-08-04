@@ -45,18 +45,6 @@
 
         <div class="form-horizontal panel">
             <div class="control-group">
-                <label for="blog_orderFrontpage" class="control-label">{t}Order opinions's frontpage by{/t}</label>
-                <div class="controls">
-                    <select name="opinion_settings[blog_orderFrontpage]" id="blog_orderFrontpage" required >
-                        <option value="inhome" {if $configs['opinion_settings']['opinion_orderFrontpage'] eq "inhome"} selected {/if}>{t}Checked in Home{/t}</option>
-                        <option value="author" {if $configs['opinion_settings']['opinion_orderFrontpage'] eq "author"} selected {/if}>{t}Each Author{/t}</option>
-                    </select>
-                    <div class="help-block">
-                        {t}Select if order blogs's frontpages by created date or bloggers name.{/t}
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
                 <label for="opinion_settings[total_director]" class="control-label">{t}Director opinions in Opinion frontpage{/t}</label>
                 <div class="controls">
                     <input type="number" required="required" name="opinion_settings[total_director]"
@@ -91,8 +79,8 @@
                 </div>
             </div>
 
+            {is_module_activated name="BLOG_MANAGER"}
             <hr class="divisor">
-
             <div class="control-group">
                 <label for="blog_orderFrontpage" class="control-label">{t}Order blog's frontpage by{/t}</label>
                 <div class="controls">
@@ -105,6 +93,14 @@
                     </div>
                 </div>
             </div>
+            <hr class="divisor">
+            <div class="control-group">
+                <label for="blog_itemsFrontpage]" class="control-label">{t}Items per blog page{/t}</label>
+                <div class="controls">
+                    <input type="number" id="blog_itemsFrontpage" name="opinion_settings[blog_itemsFrontpage]" value="{$configs['opinion_settings']['blog_itemsFrontpage']|default:12}">
+                </div>
+            </div>
+            {/is_module_activated}
         </div>
     </div>
 </form>
