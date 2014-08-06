@@ -136,7 +136,7 @@ class EntityManager extends BaseManager
     {
         $fromSQL = 'contents';
 
-        if (array_key_exists('tables', $criteria)) {
+        if (is_array($criteria) && array_key_exists('tables', $criteria)) {
             $fromSQL .= ', '.implode(',', $criteria['tables']);
             unset($criteria['tables']);
         }
@@ -181,13 +181,13 @@ class EntityManager extends BaseManager
     public function countBy($criteria)
     {
         $fromSQL = 'contents';
-        if (array_key_exists('tables', $criteria)) {
+        if (is_array($criteria) && array_key_exists('tables', $criteria)) {
             $fromSQL .= implode(',', $criteria['tables']);
         }
 
         $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
 
-        if (array_key_exists('join', $criteria)) {
+        if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
             unset($criteria['join']);
             $sql .= $this->getJoinSQL($join);
