@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,12 +7,12 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Onm\Database;
 
 /**
- * Wrapper for the Doctrine DBAL
- **/
+ * Wrapper for the Doctrine DBAL.
+ */
 class DbalWrapper
 {
     private $connection = null;
@@ -55,8 +56,9 @@ class DbalWrapper
     /**
      * Overwrites the slave database name with the given name.
      *
-     * @param  string      $databaseName Database name to use as slave.
-     * @return DbalWrapper               The current wrapper.
+     * @param string $databaseName Database name to use as slave.
+     *
+     * @return DbalWrapper The current wrapper.
      */
     public function selectDatabase($databaseName)
     {
@@ -79,10 +81,11 @@ class DbalWrapper
     /**
      * Replaces the values in the array by using the given callback.
      *
-     * @param  callable $callback Function used to replace.
-     * @param  array    $array    Array where replace.
-     * @param  string   $value    New value.
-     * @return array              Array with the replaced values.
+     * @param callable $callback Function used to replace.
+     * @param array    $array    Array where replace.
+     * @param string   $value    New value.
+     *
+     * @return array Array with the replaced values.
      */
     private function replaceKeyInArray($callback, $array, $databaseName)
     {
@@ -97,11 +100,12 @@ class DbalWrapper
     }
 
     /**
-     * Redirects all the calls to the AdodbConnection instance
+     * Redirects all the calls to the AdodbConnection instance.
      *
-     * @param  string $method the method to call
-     * @param  array  $params the list of parameters to pass to the method
-     * @return mixed          the result of the method call
+     * @param string $method the method to call.
+     * @param array  $params the list of parameters to pass to the method.
+     *
+     * @return mixed The result of the method call.
      */
     public function __call($method, $params)
     {
@@ -113,9 +117,9 @@ class DbalWrapper
     }
 
     /**
-     * Returns the current connection.
+     * Returns the current database connection.
      *
-     * @return Doctrine\DBAL\Connection
+     * @return Doctrine\DBAL\Connection The current database connection.
      */
     public function getConnection()
     {

@@ -1,12 +1,14 @@
 <?php
-/*
- * This file is part of the Symfony package.
+
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Framework\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -22,7 +24,7 @@ use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\InstanceNotRegisteredException;
 
 /**
- * Initializes the instance from the request object.
+ * Loads and initializes an instance from the request object.
  */
 class InstanceLoaderListener implements EventSubscriberInterface
 {
@@ -48,7 +50,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
     public $instance;
 
     /**
-     * Initializes the instance manager and cache.
+     * Initializes the instance loader.
      *
      * @param InstanceManager $im    The instance manager.
      * @param AbstractCache   $cache The cache service.
@@ -60,7 +62,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
     }
 
     /**
-     * Filters the Response.
+     * Loads an instance basing on the request.
      *
      * @param GetResponseEvent $event A GetResponseEvent object.
      */
@@ -167,6 +169,11 @@ class InstanceLoaderListener implements EventSubscriberInterface
         }
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(

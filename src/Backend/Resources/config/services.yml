@@ -7,11 +7,11 @@ services:
         class:     Backend\EventListener\LoginSuccessHandler
         arguments: [ @security.context, @router, @session ]
     oauth_login_success_handler:
-        class:     Backend\EventListener\OAuthLoginSuccessHandler
+        class:     Backend\EventListener\OAuthLoginSuccessHandl﻿﻿er
         arguments: [ @security.context, @router, @session ]
     onm_oauth_user_provider:
         class:     %onm_oauth_user_provider.class%
-        arguments: [ @session, @service_container]
+        arguments: [ @service_container ]
     onm_password_encoder:
         class:     Backend\Security\OnmPasswordEncoder
     onm_user_provider:

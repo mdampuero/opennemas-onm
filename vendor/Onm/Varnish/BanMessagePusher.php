@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,14 +7,20 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Onm\Varnish;
 
 /**
-* Class that allows to send Varnish ban/purge commands
-*/
+ * Class that allows to send Varnish ban/purge commands
+ */
 class BanMessagePusher
 {
+    /**
+     * Initializes the object with the server configuration.
+     *
+     * @param array $serverConfiguration Varnish configuration.
+     */
     public function __construct($serverConfiguration)
     {
         $this->headerName = $serverConfiguration['header_name'];
@@ -24,11 +31,10 @@ class BanMessagePusher
     }
 
     /**
-     * undocumented function
+     * Sends a ban command.
      *
-     * @return void
-     * @author
-     **/
+     * @param string $banRequest
+     */
     public function ban($banRequest)
     {
         $response = array();
@@ -49,10 +55,16 @@ class BanMessagePusher
     }
 
     /**
-     * Performs a CURL
+     * Performs a CURL.
      *
-     * @return string the CURL response
-     **/
+     * @param string $server  The server name.
+     * @param string $port    The server port.
+     * @param string $method  The method to use.
+     * @param string $headers The headers to include in the request.
+     * @param string $body    The body of the request.
+     *
+     * @return string The CURL response.
+     */
     private function doHttpRequest($server, $port, $method, $headers = '', $body = '')
     {
         $curlHandler = curl_init();

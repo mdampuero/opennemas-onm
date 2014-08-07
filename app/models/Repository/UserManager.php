@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -27,9 +29,11 @@ class UserManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param CacheInterface $cache The cache instance.
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->conn        = $conn;
         $this->cache       = $cache;
@@ -39,8 +43,9 @@ class UserManager extends BaseManager
     /**
      * Counts searched users given a criteria.
      *
-     * @param  array|string $criteria The criteria used to search the comments.
-     * @return integer                The amount of elements.
+     * @param array $criteria The criteria used to search the users.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -63,8 +68,9 @@ class UserManager extends BaseManager
     /**
      * Finds one user from the given a user id.
      *
-     * @param  integer $id User id.
-     * @return User
+     * @param integer $id User id.
+     *
+     * @return User The matched user.
      */
     public function find($id)
     {
@@ -93,11 +99,12 @@ class UserManager extends BaseManager
     /**
      * Searches for users given a criteria.
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -130,11 +137,12 @@ class UserManager extends BaseManager
     /**
      * Searches for users given a criteria.
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findByUserMeta($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -165,12 +173,12 @@ class UserManager extends BaseManager
         return $users;
     }
 
-
     /**
-     * Find multiple users from a given array of content ids.
+     * Find multiple users from a given array of user ids.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed user ids.
+     *
+     * @return array Array of users.
      */
     public function findMulti(array $data)
     {
@@ -215,7 +223,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Deletes a user and its metas.
+     * Deletes a user and its metas from database and cache.
      *
      * @param integer $id User id.
      */

@@ -218,7 +218,7 @@ class UserController extends Controller
         if ($user->id > 0) {
             if ($user->update($data)) {
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $data['id']));
+                $this->dispatchEvent('author.update', array('id' => $data['id']));
 
                 m::add(_('Data updated successfully'), m::SUCCESS);
             } else {

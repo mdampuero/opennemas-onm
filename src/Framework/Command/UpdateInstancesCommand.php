@@ -207,8 +207,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             foreach ($rs as $value) {
                 if ($value['name'] == 'piwik') {
                     $piwik = unserialize($value['value']);
-                } elseif ($value['name'] == 'last_invoice'
-                ) {
+                } elseif ($value['name'] == 'last_invoice') {
                     $lastInvoice = unserialize($value['value']);
                 } else {
                     $i->last_login = unserialize($value['value']);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,7 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Repository;
 
 use Repository\BaseManager;
@@ -14,14 +16,12 @@ use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 
 /**
- * Handles common actions in Menus
- *
- * @package Repository
- **/
+ * Handles common actions in Menus.
+ */
 class SettingManager extends BaseManager
 {
     /*
-     * Initializes the InstanceManager
+     * Initializes the InstanceManager.
      *
      * @param DbalWrapper    $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
@@ -34,10 +34,10 @@ class SettingManager extends BaseManager
     }
 
     /**
-     * Sets a new database name and cache prefix to use in the service
+     * Sets a new database name and cache prefix to use in the service.
      *
      * @return boolean
-     **/
+     */
     public function setConfig($config)
     {
         if (array_key_exists('database', $config)) {
@@ -55,12 +55,12 @@ class SettingManager extends BaseManager
     /**
      * Fetches a setting from its name.
      *
-     * @param string $settingName the name of the setting.
-     * @param array  $default     the default value to return if not available
+     * @param string $settingName The name of the setting.
+     * @param array  $default     The default value to return if not available.
      *
-     * @return string the value of the setting
-     * @return array  if was provided an array of names this function returns an array of name/values
-     * @return false  if the key doesn't exists or is not setted
+     * @return string The value of the setting.
+     * @return array  If was provided an array of names this function returns an array of name/values.
+     * @return false  If the key doesn't exists or is not setted.
      */
     public function get($settingName, $default = null)
     {
@@ -121,10 +121,10 @@ class SettingManager extends BaseManager
     /**
      * Stores a setting in DB and updates cache entry for it.
      *
-     * @param string $settingName  the name of the setting.
-     * @param string $settingValue the value of the setting.
+     * @param string $settingName  The name of the setting.
+     * @param string $settingValue The value of the setting.
      *
-     * @return boolean true if the setting was stored.
+     * @return boolean true If the setting was stored.
      */
     public function set($settingName, $settingValue)
     {
@@ -152,10 +152,10 @@ class SettingManager extends BaseManager
     /**
      * Invalidates the cache for a setting from its name.
      *
-     * @param string $settingName  the name of the setting.
-     * @param string $cachePrefix the name of the instance.
+     * @param string $settingName The name of the setting.
+     * @param string $cachePrefix The name of the instance.
      *
-     * @return boolean true if the setting cache was invalidated.
+     * @return boolean true If the setting cache was invalidated.
      */
     public function invalidate($settingName, $cachePrefix = null)
     {

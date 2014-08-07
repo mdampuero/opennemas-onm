@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,42 +7,44 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Onm\Templating;
 
-/**
-*
-*/
 class Templating
 {
     /**
      * The container that this class will use to fetch services
      *
      * @var string
-     **/
+     */
     public $container;
 
     /**
      * The frontend template engine
      *
      * @var string
-     **/
+     */
     private $frontendTemplateEngine;
 
     /**
      * The backend template engine
      *
      * @var string
-     **/
+     */
     private $backendTemplateEngine;
 
     /**
      * The manage template engine
      *
      * @var string
-     **/
+     */
     private $managerTemplateEngine;
 
+    /**
+     * Initializes the templating.
+     *
+     * @param Container $container The service container.
+     */
     public function __construct($container)
     {
         $this->container = $container;
@@ -50,9 +53,11 @@ class Templating
     /**
      * Bridge method calls to the proper Template engine
      *
-     * @return void
-     * @author
-     **/
+     * @param string $method The method name.
+     * @param array  $args   The array of method arguments.
+     *
+     * @return mixed The template engine response.
+     */
     public function __call($method, $params)
     {
         $bundleName = $this->getBundleName();
@@ -77,8 +82,8 @@ class Templating
     /**
      * Returns the bundle name from the matched controller
      *
-     * @return void
-     **/
+     * @return string The bundle name.
+     */
     public function getBundleName()
     {
         $controller = $this->container->get('request')->get('_controller');
@@ -90,9 +95,10 @@ class Templating
     /**
      * Returns the proper Template object for a given module name
      *
-     * @return void
-     * @author
-     **/
+     * @param string $module The module name.
+     *
+     * @return mixed The template object.
+     */
     public function getTemplateObject($module)
     {
         if ($module == 'Manager') {

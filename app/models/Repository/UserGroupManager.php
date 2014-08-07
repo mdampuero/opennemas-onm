@@ -39,10 +39,11 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Counts searched users given a criteria
+     * Counts searched users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param array $criteria The criteria used to search the comments.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -65,8 +66,9 @@ class UserGroupManager extends BaseManager
     /**
      * Finds one usergroup from the given a user id.
      *
-     * @param  integer   $id User group id.
-     * @return UserGroup
+     * @param integer $id User group id.
+     *
+     * @return UserGroup The matched user group.
      */
     public function find($id)
     {
@@ -91,11 +93,12 @@ class UserGroupManager extends BaseManager
     /**
      * Searches for users given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search the comments.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements to return.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -125,10 +128,11 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Find multiple users from a given array of content ids.
+     * Find multiple users from a given array of user groups ids.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed user groups ids.
+     *
+     * @return array Array of user groups.
      */
     public function findMulti(array $data)
     {
@@ -172,7 +176,7 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Deletes a usergroup
+     * Deletes a usergroup from database and cache.
      *
      * @param integer $id User id.
      */

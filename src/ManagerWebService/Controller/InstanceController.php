@@ -345,7 +345,6 @@ class InstanceController extends Controller
             $criteria['union'] = 'OR';
         }
 
-
         unset($criteria['content_type_name']);
 
         $im = $this->get('instance_manager');
