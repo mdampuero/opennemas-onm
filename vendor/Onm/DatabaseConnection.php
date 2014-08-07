@@ -189,13 +189,13 @@ class DatabaseConnection
      *
      * @return array The modified array.
      */
-    private function replaceKeyInArray($callback, $array, $value)
+    private function replaceKeyInArray($callback, $array, $replacement)
     {
         foreach ($array as $key => $value) {
             if (is_array($array[$key])) {
-                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $value);
+                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $replacement);
             } else {
-                $array[$key] = call_user_func($callback, $key, $array[$key], $value);
+                $array[$key] = call_user_func($callback, $key, $array[$key], $replacement);
             }
         }
         return $array;
