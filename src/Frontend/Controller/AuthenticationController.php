@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the frontend controller for the article content type
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -7,24 +12,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
-
 use Onm\Framework\Controller\Controller;
 
 /**
  * Handles the actions for the user authentication in frontend.
  *
+ * @package Frontend_Controllers
  */
 class AuthenticationController extends Controller
 {
     /**
      * Displays the login form template.
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      */
     public function loginAction(Request $request)
     {
@@ -33,11 +41,9 @@ class AuthenticationController extends Controller
         $referer = $this->generateUrl('frontend_user_show');
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
-            $error = $request->getSession()
-                ->get(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
         if ($error) {

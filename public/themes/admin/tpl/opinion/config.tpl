@@ -61,6 +61,14 @@
                 </div>
             </div>
             <div class="control-group">
+                <label for="opinion_settings[total_opinions]" class="control-label">{t}Opinions in Opinion frontpage{/t}</label>
+                <div class="controls">
+                    <input type="number" required="required" name="opinion_settings[total_opinions]" id="opinion_settings[total_opinions]"
+                        value="{$configs['opinion_settings']['total_opinions']|default:"16"}" />
+                    <div class="help-block">{t}How many opinions opinions will be shown in the opinion frontpage.{/t}</div>
+                </div>
+            </div>
+            <div class="control-group">
                 <label for="opinion_settings[total_opinion_authors]" class="control-label">{t}Author opinions in frontpage opinion widget:{/t}</label>
                 <div class="controls">
                     <input type="number" required="required" name="opinion_settings[total_opinion_authors]" id="opinion_settings[total_opinion_authors]"

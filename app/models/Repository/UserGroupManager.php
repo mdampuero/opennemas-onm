@@ -6,24 +6,31 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * Handles common actions in UserGroups
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
+ *
+ * This class is designed for inheritance and users can subclass this class to
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class UserGroupManager extends BaseManager
 {
     /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
         $this->dbConn      = $dbConn;
@@ -32,10 +39,11 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Counts searched users given a criteria
+     * Counts searched users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param array $criteria The criteria used to search the comments.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -58,14 +66,15 @@ class UserGroupManager extends BaseManager
     /**
      * Finds one usergroup from the given a user id.
      *
-     * @param  integer $id Menu id
-     * @return Menu
+     * @param integer $id User group id.
+     *
+     * @return UserGroup The matched user group.
      */
     public function find($id)
     {
         $entity = null;
 
-        $cacheId = "usergroup_" . $id;
+        $cacheId = "usergroup" . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -84,11 +93,12 @@ class UserGroupManager extends BaseManager
     /**
      * Searches for users given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search the comments.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements to return.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -112,47 +122,61 @@ class UserGroupManager extends BaseManager
             $ids[] = $resultElement['pk_user_group'];
         }
 
-        $users = $this->findMulti($ids);
+        $groups = $this->findMulti($ids);
 
-        return $users;
+        return $groups;
     }
 
     /**
-     * Find multiple users from a given array of content ids.
+     * Find multiple users from a given array of user groups ids.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed user groups ids.
+     *
+     * @return array Array of user groups.
      */
     public function findMulti(array $data)
     {
-        $ordered = array_flip($data);
-
         $ids = array();
+        $keys = array();
         foreach ($data as $value) {
-            $ids[] = 'user_' . $value;
+            $ids[] = 'usergroup' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
-        $users = array_values($this->cache->fetch($ids));
+        $groups = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
-        foreach ($users as $user) {
-            $ordered[$user->id] = $user;
-            $cachedIds[] = 'usergroup_' . $user->id;
+
+        foreach ($groups as $group) {
+            $cachedIds[] = 'usergroup' . $this->cacheSeparator . $group->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $content) {
-            list($contentType, $contentId) = explode('_', $content);
-            $user = $this->find($contentId);
-            $ordered[$user->id] = $user;
+            list($contentType, $contentId) = explode($this->cacheSeparator, $content);
+            $group = $this->find($contentId);
+            $groups[] = $group;
+
+        }
+
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($groups) && $groups[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($groups)) {
+                $ordered[] = $groups[$i];
+            }
         }
 
         return array_values($ordered);
     }
 
     /**
-     * Deletes a usergroup
+     * Deletes a usergroup from database and cache.
      *
      * @param integer $id User id.
      */
@@ -162,6 +186,6 @@ class UserGroupManager extends BaseManager
             $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
         });
 
-        $this->cache->delete('usergroup_' . $id);
+        $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }
 }

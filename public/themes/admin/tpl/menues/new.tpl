@@ -226,12 +226,14 @@
                                             {elseif $page eq 'kiosko'}"Portadas Papel"
                                             {elseif $page eq 'letter'}"Cartas Al Director"
                                             {elseif $page eq 'boletin'}"Bolet&iacute;n"
+                                            {elseif $page eq 'hemeroteca'}"Hemeroteca"
                                             {else}{$page}{/if}
                                     data-link={if $page eq 'frontpage'}"/"
                                             {elseif $page eq 'poll'}"encuesta/"
                                             {elseif $page eq 'kiosko'}"portadas-papel/"
                                             {elseif $page eq 'letter'}"cartas-al-director/"
                                             {elseif $page eq 'boletin'}"newsletter/"
+                                            {elseif $page eq 'hemeroteca'}"archive/content/"
                                             {else}"{$page}/"{/if}
                                     data-type="internal"
                                     class="drag-category"
@@ -249,6 +251,8 @@
                                                 Portadas Papel
                                             {elseif $page eq 'boletin'}
                                                 Bolet&iacute;n
+                                            {elseif $page eq 'hemeroteca'}
+                                                Hemeroteca
                                             {else}
                                                 {$page}
                                             {/if}

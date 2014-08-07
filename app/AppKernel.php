@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new Manager\ManagerBundle(),
             new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

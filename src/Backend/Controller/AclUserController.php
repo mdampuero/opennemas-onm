@@ -71,6 +71,12 @@ class AclUserController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $session = $request->getSession();
+        $session->set(
+            '_security.backend.target_path',
+            $this->generateUrl('admin_login_callback')
+        );
+
         // User can modify his data
         $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         if ($idRAW === 'me') {
@@ -81,7 +87,7 @@ class AclUserController extends Controller
 
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editing other user information.
-        if ($id != $_SESSION['userid']) {
+        if (array_key_exists('userid', $_SESSION) && $id != $_SESSION['userid']) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
@@ -211,11 +217,8 @@ class AclUserController extends Controller
                     $_SESSION['user_language'] = $meta['user_language'];
                 }
 
-                // Check if is an author and delete caches
-                if (in_array('3', $data['id_user_group'])) {
-                    // Clear caches
-                    $this->dispatchEvent('author.update', array('authorId' => $userId));
-                }
+                // Clear caches
+                $this->dispatchEvent('author.update', array('id' => $userId));
 
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {
@@ -524,7 +527,7 @@ class AclUserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -600,7 +603,7 @@ class AclUserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
-                    $url = $this->generateUrl('admin_login_form', array(), true);
+                    $url = $this->generateUrl('admin_login', array(), true);
 
                     $this->view->assign(
                         array(
@@ -611,7 +614,7 @@ class AclUserController extends Controller
                     );
                 } catch (\Exception $e) {
                     // Log this error
-                    $this->get('logger')->notice(
+                    $this->get('application.log')->notice(
                         "Unable to send the recover password email for the "
                         ."user {$user->id}: ".$e->getMessage()
                     );
@@ -661,13 +664,10 @@ class AclUserController extends Controller
                 );
 
                 $this->view->assign('userNotValid', true);
-            } else {
-                $this->view->assign(
-                    array(
-                        'user' => $user
-                    )
-                );
+                return $this->redirect($this->generateUrl('admin_login'));
             }
+
+            $this->view->assign('user', $user);
         } else {
             $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
             $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
@@ -678,7 +678,7 @@ class AclUserController extends Controller
 
                 $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
-                return $this->redirect($this->generateUrl('admin_login_form'));
+                return $this->redirect($this->generateUrl('admin_login'));
 
             } elseif ($password != $passwordVerify) {
                 $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
@@ -687,10 +687,87 @@ class AclUserController extends Controller
                     'error',
                     _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
+
+                return $this->redirect($this->generateUrl('admin_login'));
             }
 
         }
 
         return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+    }
+
+    /**
+     * Displays the facebook iframe to connect accounts.
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The user's id.
+     * @return Response          The response object.
+     */
+    public function socialAction(Request $request, $id, $resource)
+    {
+        $user = $this->get('user_repository')->find($id);
+
+        $session = $request->getSession();
+        $session->set(
+            '_security.backend.target_path',
+            $this->generateUrl('admin_login_callback')
+        );
+
+        if (!$user) {
+            return new Response();
+        }
+
+        $resourceId = $user->getMeta($resource . '_id');
+
+        $connected = false;
+        if ($resourceId) {
+            $connected = true;
+        }
+
+        if ($resource == 'facebook') {
+            $resourceName = 'Facebook';
+        } else {
+            $resourceName = 'Twitter';
+        }
+
+        return $this->render(
+            'acl/user/social.tpl',
+            array(
+                'current_user_id' => $this->getUser()->id,
+                'connected'       => $connected,
+                'resource_id'     => $resourceId,
+                'resource'        => $resource,
+                'resource_name'   => $resourceName,
+                'user'            => $user,
+            )
+        );
+    }
+
+    /**
+     * Disconnects the accounts.
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The user's id.
+     * @return Response          The response object.
+     */
+    public function disconnectAction(Request $request, $id, $resource)
+    {
+        $user = $this->get('user_repository')->find($id);
+
+        if (!$user) {
+            return new Response();
+        }
+
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_id');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_email');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
+        $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_acl_user_social',
+                array('id' => $id, 'resource' => $resource)
+            )
+        );
     }
 }

@@ -47,7 +47,6 @@ class ContentController extends Controller
             );
         }
 
-
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
@@ -506,7 +505,7 @@ class ContentController extends Controller
 
         return new JsonResponse(
             array(
-                'message'  => array_merge($success, $errors)
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -904,7 +903,6 @@ class ContentController extends Controller
         $success   = array();
         $updated   = array();
 
-        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0

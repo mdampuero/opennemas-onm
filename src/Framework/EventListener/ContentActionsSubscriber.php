@@ -1,9 +1,5 @@
 <?php
-/**
- * Handles all the events after content updates
- *
- * @package Backend_EventListeners
- **/
+
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,16 +16,15 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Handles all the events after content updates
- *
- * @package Backend_EventListeners
- **/
+ */
 class ContentActionsSubscriber implements EventSubscriberInterface
 {
     /**
      * Initializes the object
      *
-     * @return void
-     **/
+     * @param AbstractCache   $cache  The cache service.
+     * @param LoggerInterface $logger The logger service.
+     */
     public function __construct($cache, $logger)
     {
         $this->cacheHandler = $cache;
@@ -36,10 +32,10 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Register the content event handler
+     * Returns an array of event names this subscriber wants to listen to.
      *
-     * @return void
-     **/
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -56,7 +52,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             ),
             'author.update' => array(
                 array('deleteAllAuthorsCaches', 5),
-                array('deleteEntityRepositoryUserCache', 10),
+                array('deleteUsersCache', 10),
             ),
             'opinion.update' => array(
                 array('deleteOpinionUpdateCaches', 5),
@@ -72,17 +68,18 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             'category.update' => array(
                 array('deleteCustomCss', 5),
                 array('deleteCategoryCache', 5)
-            )
+            ),
+            'user.update' => array(
+                array('deleteUserCache', 10),
+            ),
         );
     }
 
     /**
-     * Perform the actions after update a content
+     * Deletes a content from cache after it is updated.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function deleteEntityRepositoryCache(Event $event)
     {
         $content = $event->getArgument('content');
@@ -90,35 +87,16 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $id = $content->id;
         $contentType = \underscore(get_class($content));
 
-        $this->cacheHandler->delete($contentType . "_" . $id);
+        $this->cacheHandler->delete($contentType . "-" . $id);
 
         $this->cleanOpcode();
-
-        return false;
-    }
-    /**
-     * Perform the actions after update a user/author
-     *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
-    public function deleteEntityRepositoryUserCache(Event $event)
-    {
-        $id = $event->getArgument('authorId');
-
-        $this->cacheHandler->delete('user_' . $id);
-
-        return false;
     }
 
     /**
-     * Perform the actions after update a content
+     * Deletes the Smarty cache when the updated content is an article.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function deleteSmartyCache(Event $event)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -145,16 +123,17 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             );
 
             $this->cleanOpcode();
+        } elseif (property_exists($content, 'pk_opinion')) {
+            $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+            $tplManager->delete('blog', 'blog_frontpage.tpl');
         }
-
-        return false;
     }
 
     /**
-     * Queues a varnish ban request
+     * Queues a varnish ban request.
      *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function sendVarnishRequestCleaner(Event $event)
     {
         global $kernel;
@@ -165,14 +144,23 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $content = $event->getArgument('content');
 
-        $banRequest = 'obj.http.x-tags ~ '.$content->id;
+        $instanceName = getService('instance_manager')->current_instance->internal_name;
+
+        $baseRequest = "obj.http.x-instance ~ \"{$instanceName}\" && ";
+
+        $banRequest = $baseRequest." obj.http.x-tags ~ \"{$content->id}\"";
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
-        $banRequest = 'obj.http.x-tags ~ sitemap ';
+        $banRequest = $baseRequest.' obj.http.x-tags ~ "sitemap" ';
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
-        $banRequest = 'obj.http.x-tags ~ rss ';
+        $banRequest = $baseRequest.' obj.http.x-tags ~ "rss" ';
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
     }
 
+    /**
+     * Deletes the category frontpage when content positions are updated.
+     *
+     * @param Event $event The event to handle.
+     */
     public function refreshFrontpage(Event $event)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -194,12 +182,10 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Cleans the category frontpage given its id
+     * Cleans the category frontpage given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * @param Event $event The event to handle.
+     */
     public function cleanFrontpage(Event $event)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -225,7 +211,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             $tplManager->delete('last|RSS');
 
             $tplManager->delete('frontpage|'.$categoryName);
-            $this->cacheHandler->delete('frontpage_elements_' . $category);
+            $this->cacheHandler->delete('frontpage_elements_map_' . $category);
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
@@ -234,15 +220,13 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Perform the actions after update an author
+     * Deletes the Smarty cache when an author is updated.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function deleteAllAuthorsCaches(Event $event)
     {
-        $authorId = $event->getArgument('authorId');
+        $authorId = $event->getArgument('id');
 
         // Delete caches for all author opinions and frontpages
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -266,15 +250,13 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
 
         $this->cleanOpcode();
-
     }
+
     /**
-     * Perform the actions after update an author
+     * Deletes Smarty caches when an opinion is updated.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function deleteOpinionUpdateCaches(Event $event)
     {
         $authorId = $event->getArgument('authorId');
@@ -294,13 +276,12 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $this->cleanOpcode();
     }
+
     /**
-     * Perform the actions after update an author
+     * Deletes Smarty caches when an opinion is created.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function deleteOpinionCreateCaches(Event $event)
     {
         $authorId = $event->getArgument('authorId');
@@ -316,8 +297,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
     /**
      * Resets the PHP 5.5 Opcode if supported
-     *
-     **/
+     */
     public function cleanOpcode()
     {
         if (extension_loaded('Zend Opcache')) {
@@ -326,9 +306,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Deletes custom css from cache.
+     * Deletes custom CSS from cache when a category is updated.
      *
-     * @param Event $event
+     * @param Event $event The event to handle.
      */
     public function deleteCustomCss(Event $event)
     {
@@ -355,22 +335,22 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Deletes the list of objects in cache for a frontpage.
+     * Deletes the list of objects in cache for a frontpage when content
+     * positions are updated.
      *
-     * @return void
-     * @author
-     **/
+     * @param Event $event The event to handle.
+     */
     public function cleanFrontpageObjectCache(Event $event)
     {
         $category = $event->getArgument('category');
 
-        $this->cacheHandler->delete('fronpage_elements_'.$category);
+        $this->cacheHandler->delete('frontpage_elements_map_'.$category);
     }
 
     /**
-     * Deletes a category from cache.
+     * Deletes a category from cache when it is updated.
      *
-     * @param Event $event
+     * @param Event $event The event to handle.
      */
     public function deleteCategoryCache(Event $event)
     {
@@ -379,5 +359,17 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $name = $event->getArgument('category')->name;
         $this->cacheHandler->delete('category_' . $name);
+    }
+
+    /**
+     * Deletes the user from cache when he is updated.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function deleteUserCache(Event $event)
+    {
+        $id = $event->getArgument('id');
+
+        $this->cacheHandler->delete('user-' . $id);
     }
 }

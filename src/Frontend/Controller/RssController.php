@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class RssController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Shows a page that shows a list of available RSS sources
      *
      * @param Request $request the request object
@@ -46,6 +36,7 @@ class RssController extends Controller
      **/
     public function indexAction()
     {
+        $this->view = new \Template(TEMPLATE_USER);
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
@@ -59,8 +50,12 @@ class RssController extends Controller
             $categoriesTree = $ccm->getCategoriesTreeMenu();
             $opinionAuthors = \User::getAllUsersAuthors();
 
-            $this->view->assign('categoriesTree', $categoriesTree);
-            $this->view->assign('opinionAuthors', $opinionAuthors);
+            $this->view->assign(
+                array(
+                    'categoriesTree' => $categoriesTree,
+                    'opinionAuthors' => $opinionAuthors,
+                )
+            );
         }
 
         return $this->render('rss/index.tpl', array('cache_id' => $cacheID));
@@ -75,149 +70,121 @@ class RssController extends Controller
      **/
     public function generalRssAction(Request $request)
     {
-        $categoryName    = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $subcategoryName = $request->query->filter('subcategory_name', null, FILTER_SANITIZE_STRING);
-        $author          = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_name', 'last', FILTER_SANITIZE_STRING);
+        $author       = $request->query->filter('author', '', FILTER_SANITIZE_STRING);
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
-        $title_rss = "";
-        $rss_url   = SITE_URL;
+        // Generate cache Id
+        $cacheID = $this->view->generateCacheId($categoryName, '', 'RSS'.$author);
 
-        if (strtolower($categoryName) == "opinion" && isset($author)) {
-            $cache_id = $this->view->generateCacheId($categoryName, $subcategoryName, "RSS".$author);
-        } else {
-            $cache_id = $this->view->generateCacheId($categoryName, $subcategoryName, "RSS");
-        }
+        if (($this->view->caching == 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            // Get entity repository service
+            $er = getService('entity_repository');
 
-        if (!$this->view->isCached('rss/rss.tpl', $cache_id)) {
-            $ccm = \ContentCategoryManager::get_instance();
-            $cm = new \ContentManager();
-            // Setting up some variables to print out in the final rss
+            // Set total number of contents and order for sql's
+            $totalContents = 50;
+            $order = array('created' => 'DESC');
+            $rssTitle = '';
+            if ($categoryName == 'opinion') {
+                // Get opinion repository service
+                $or = getService('opinion_repository');
 
-            if (isset($categoryName)
-                && !empty($categoryName)
-            ) {
-                $category = $ccm->get_id($categoryName);
-                $rss_url .= $categoryName.SS;
-                $category_title = $ccm->get_title($categoryName);
-                $title_rss .= !empty($category_title)?$category_title:$categoryName;
-
-                if (isset($subcategoryName)
-                    && !empty($subcategoryName)
-                ) {
-                    $subcategory = $ccm->get_id($subcategoryName);
-                    $rss_url .= $subcategoryName.SS;
-                    $subcategory_title = $ccm->get_title($subcategoryName);
-                    $title_rss .= " > ". !empty($subcategory_title)?$subcategory_title:$subcategoryName;
-                }
-            } else {
-                $rss_url .= "home".SS;
-                $title_rss .= "PORTADA";
-            }
-
-            $photos = array();
-
-            // If is home retrive all the articles available in there
-            if ($categoryName == 'home') {
-                $contentsInHomepage = $cm->getContentsForHomepageOfCategory($category);
-
-                // Filter articles if some of them has time scheduling and sort them by position
-                $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-                $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
-
-                // Keep only articles
-                foreach ($contentsInHomepage as $value) {
-                    if ($value->content_type_name == 'article') {
-                        $articles_home[] = $value;
-                    }
-                }
-            } elseif ($categoryName == 'opinion') {
-                $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
-
-                // get all the authors of opinions
-                if (!isset($author) || empty($author)) {
-                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
-                        'contents.content_status=1',
-                        'ORDER BY created DESC LIMIT 50'
+                if (empty($author)) {
+                    // Set sql filter
+                    $filters = array(
+                        'content_status' => array(array('value' => 1)),
+                        'in_litter'      => array(array('value' => 1, 'operator' => '!='))
                     );
-                    $title_rss = 'Últimas Opiniones';
+
+                    // Fetch last 50 opinions
+                    $contents = $or->findBy($filters, $order, $totalContents, 1);
+
+                    // Set RSS title
+                    $rssTitle = 'Últimas Opiniones';
                 } else {
-                    // get articles for the author in opinion
-                    $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
-                        'opinions.fk_author='.((int) $author)
-                        .' AND  contents.content_status=1',
-                        'ORDER BY created DESC  LIMIT 50'
+                    // Set sql filter
+                    $filters = array(
+                        'content_status' => array(array('value' => 1)),
+                        'author'         => array(array('value' => (int)$author)),
+                        'in_litter'      => array(array('value' => 1, 'operator' => '!='))
                     );
 
-                    if (count($articles_home)) {
-                        $title_rss = 'Opiniones de «'.$articles_home[0]['name'].'»';
+                    // Fetch last 50 opinions of author
+                    $contents = $or->findBy($filters, $order, $totalContents, 1);
+
+                    // Set RSS title
+                    if ($contents) {
+                        $rssTitle = 'Opiniones de «'.$contents[0]->author.'»';
                     } else {
-                        $title_rss = 'Este autor no tiene opiniones todavía.';
+                        $rssTitle = 'Este autor no tiene opiniones todavía.';
                     }
-                }
-                //Generate author-name-slug for generate_uri
-                foreach ($articles_home as &$art) {
-                    $art['author_name_slug'] = \Onm\StringUtils::get_title($art['name']);
-                    if (isset($art['avatar_img_id']) && !empty($art['avatar_img_id'])) {
-                        $art['photo'] = new \Photo($art['avatar_img_id']);
-                    }
-
-                    $art['uri'] = \Uri::generate(
-                        'opinion',
-                        array(
-                            'id'       => sprintf('%06d', $art['id']),
-                            'date'     => date('YmdHis', strtotime($art['created'])),
-                            'category' => $art['author_name_slug'],
-                            'slug'     => $art['slug'],
-                        )
-                    );
                 }
             } elseif ($categoryName == 'last') {
-                $articles_home = $cm->find(
-                    'Article',
-                    'content_status=1 AND fk_content_type=1',
-                    'ORDER BY created DESC, changed DESC LIMIT 50'
+                // Set sql filter
+                $filters = array(
+                    'content_type_name' => array(array('value' => 'article')),
+                    'content_status'    => array(array('value' => 1)),
+                    'in_litter'         => array(array('value' => 1, 'operator' => '!='))
                 );
 
-                $title_rss = 'Últimas Noticias';
+                // Fetch last 50 articles
+                $contents = $er->findBy($filters, $order, $totalContents, 1);
+
+                // Set RSS title
+                $rssTitle = 'Últimas Noticias';
             } else {
-                // Get the RSS for the rest of categories
-
-                // If frontpage contains a SUBCATEGORY the SQL request will be diferent
-
-                $articles_home = $cm->find_by_category_name(
-                    'Article',
-                    $categoryName,
-                    'contents.content_status=1 AND contents.fk_content_type=1',
-                    'ORDER BY created DESC LIMIT 50'
+                // Set sql filter
+                $filters = array(
+                    'content_type_name' => array(array('value' => 'article')),
+                    'category_name'     => array(array('value' => $categoryName)),
+                    'content_status'    => array(array('value' => 1)),
+                    'in_litter'         => array(array('value' => 1, 'operator' => '!='))
                 );
+
+                // Fetch articles for category
+                $contents = $er->findBy($filters, $order, $totalContents, 1);
+
+                // Fetch category title
+                $category = getService('category_repository')->findBy(
+                    array('name' => array(array('value' => $categoryName))),
+                    'name ASC'
+                );
+
+                // Set RSS title
+                $rssTitle = $category[0]->title;
             }
 
             // Filter by scheduled
-            $articles_home = $cm->getInTime($articles_home);
+            $cm = new \ContentManager();
+            $contents = $cm->getInTime($contents);
 
-            // Fetch the photo and category name for this element
-            foreach ($articles_home as $i => $article) {
-                if (isset($article->img1) && $article->img1 != 0) {
-                    $photos[$article->id] = new \Photo($article->img1);
+            // Fetch photo for each article
+            foreach ($contents as $key => $content) {
+                // Fetch photo for each content
+                if (isset($content->img1) && !empty($content->img1)) {
+                    $contents[$key]->photo = $er->find('Photo', $content->img1);
+                } elseif (isset($content->img2) && !empty($content->img2)) {
+                    $contents[$key]->photo = $er->find('Photo', $content->img2);
                 }
 
                 // Exclude articles with external link from RSS
-                if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
-                    unset($articles_home[$i]);
+                if (isset($content->params['bodyLink'])
+                    && !empty($content->params['bodyLink'])) {
+                    unset($contents[$key]);
                 }
             }
 
             $this->view->assign(
                 array(
-                    'title_rss'     => $title_rss,
-                    'rss'           => $articles_home,
-                    'photos'        => $photos,
-                    'RSS_URL'       => $rss_url,
-                    'category_name' => $categoryName,
+                    'rss_title' => $rssTitle,
+                    'contents'  => $contents,
+                    'type'      => $categoryName,
                 )
             );
-        } // IS CACHED
+        }
 
         $response = new Response(
             '',
@@ -230,7 +197,7 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            array('cache_id' => $cache_id),
+            array('cache_id' => $cacheID),
             $response
         );
     }
@@ -248,6 +215,7 @@ class RssController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 50;
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
 
         $cacheID = $this->view->generateCacheId('authorRSS-'.$slug, '', $page);
@@ -257,29 +225,33 @@ class RssController extends Controller
         ) {
             // Get user by slug
             $ur = $this->get('user_repository');
-            $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
+            $filters['username'] = array(array('value' => $slug));
+            $user = $ur->findBy($filters, '');
+            $user = $user[0];
             if (!empty($user)) {
-                $title_rss   = 'RSS de «'.$user->name.'»';
-                $user->photo = new \Photo($user->avatar_img_id);
+                $rssTitle   = 'RSS de «'.$user->name.'»';
+                // Get entity repository
+                $er = $this->get('entity_repository');
+                $user->photo = $er->find('Photo', $user->avatar_img_id);
                 $user->getMeta();
 
-                $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7) "
-                    ."AND content_status=1 AND in_litter=0";
-
-                $er = $this->get('entity_repository');
+                // Fetch author contents
+                $searchCriteria =  array(
+                    'fk_author'       => array(array('value' => $user->id)),
+                    'fk_content_type' => array(array('value' => array(1, 4, 7), 'operator' => 'IN')),
+                    'content_status'  => array(array('value' => 1)),
+                    'in_litter'       => array(array('value' => 0)),
+                );
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
-                $photos = array();
 
-                foreach ($contents as &$item) {
-                    $item = $item->get($item->id);
+                foreach ($contents as $key => &$item) {
                     $item->author = $user;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $photos[$item->id] = new \Photo($item->img1);
-
+                        $contents[$key]->photo = $er->find('Photo', $item->img1);
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $photos[$item->id] = new \Photo($item->cover_id);
+                        $contents[$key]->photo = $er->find('Photo', $item->cover_id);
                     }
 
                     if (empty($item->summary)) {
@@ -289,9 +261,8 @@ class RssController extends Controller
 
                 $this->view->assign(
                     array(
-                        'rss'       => $contents,
-                        'author'    => $user,
-                        'title_rss' => $title_rss,
+                        'contents'  => $contents,
+                        'rss_title' => $rssTitle,
                     )
                 );
             }

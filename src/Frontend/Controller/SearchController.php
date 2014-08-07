@@ -27,15 +27,6 @@ use Onm\Settings as s;
  **/
 class SearchController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
 
     /**
      * Displays the search results with the google algorithm
@@ -48,9 +39,13 @@ class SearchController extends Controller
     {
         $ads = \Frontend\Controller\ArticlesController::getAds();
 
-        $this->view->assign('advertisements', $ads);
-
-        return $this->render('search/search.tpl');
+        $this->view = new \Template(TEMPLATE_USER);
+        return $this->render(
+            'search/search.tpl',
+            array(
+                'advertisements' => $ads
+            )
+        );
     }
 
     /**

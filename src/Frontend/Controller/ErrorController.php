@@ -1,6 +1,6 @@
 <?php
 /**
- * Handlers errors in frontend
+ * Defines the frontend error handler
  *
  * @package Frontend_Controllers
  **/
@@ -27,16 +27,6 @@ use Onm\Settings as s;
 class ErrorController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Shows the error page
      *
      * @param Request $request the request object
@@ -45,35 +35,29 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        // $errorCode     = $request->query->filter('errordoc', 404, FILTER_SANITIZE_STRING);
-        // $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        // $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
-
-        $error = $request->attributes->get('exception');
-
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
         }
 
+        // Fetch error information
+        $error = $request->attributes->get('exception');
         $name = join('', array_slice(explode('\\', $error->getClass()), -1));
-
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
+        $this->view = new \Template(TEMPLATE_USER);
         switch ($name) {
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':
-                // $trace = $error->getTrace();
-
                 $path = $request->getRequestUri();
 
                 $page = new \stdClass();
 
                 // Dummy content while testing this feature
-                $page->title   = 'No hemos podido encontrar la página que buscas.';
+                $page->title   = _('No hemos podido encontrar la página que buscas.');
                 $page->content = 'Whoups!';
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
-                error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
+                // error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMessage;
                 } else {
@@ -98,9 +82,8 @@ class ErrorController extends Controller
 
                 error_log('Unknown error. ERROR_ID: '.$errorID.' - '.$error->getMessage());
 
-                $page = new \stdClass();
-
                 // Dummy content while testing this feature
+                $page = new \stdClass();
                 $page->title   = $errorMessage;
                 $page->content = 'Whoups!';
 

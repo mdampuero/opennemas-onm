@@ -44,7 +44,6 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = APPLICATION_PATH;
-        $phpBinPath = exec('which php');
 
         chdir($basePath);
 
@@ -73,9 +72,7 @@ EOF
         $request = Request::createFromGlobals();
         $request->setTrustedProxies(array('127.0.0.1'));
 
-        $sc = include __DIR__.'/../app/container.php';
-
-        $framework = $sc->get('framework');
+        $framework = getService('framework');
         $response = $framework->handle($request);
         $response->send();
         $framework->terminate($request, $response);
@@ -98,8 +95,8 @@ EOF
         $menu->getMenu('archive');
 
         if (count(($menu->items)) <= 0) {
-            echo "There are no frontpages. You must define archive menu. \n";
-            die();
+            $output->writeln("There are no frontpages. You must define archive menu.");
+            return false;
         }
 
         foreach ($menu->items as $item) {
@@ -156,7 +153,7 @@ EOF
         }
           // all done
         curl_multi_close($mh);
-        $output->writeln("generate ok \n");
+        $output->writeln("Generation done");
         return true;
     }
 }

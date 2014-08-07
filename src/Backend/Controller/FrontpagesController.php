@@ -169,9 +169,13 @@ class FrontpagesController extends Controller
 
             $categoryID = ($category == 'home') ? 0 : $category;
 
+            // Fetch old contents
+            $cm = new \ContentManager();
+            $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
+
             // Check if data send by user is valid
             $validReceivedData = is_array($contentsPositions)
-                                 && !empty($contentsPositions)
+                                 && count($contentsPositions) > 0
                                  && !is_null($categoryID)
                                  && !is_null($lastVersion)
                                  && count($contentsPositions) === (int) $numberOfContents;
@@ -191,7 +195,8 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $logger = $this->get('logger');
+            // Get application logger
+            $logger = $this->get('application.log');
 
             if ($validReceivedData) {
                 $contents = array();
@@ -210,7 +215,7 @@ class FrontpagesController extends Controller
                 $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
 
                 /* Notice log of this action */
-                $logger->notice(
+                $logger->info(
                     'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
                     .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
                 );
@@ -219,7 +224,7 @@ class FrontpagesController extends Controller
                 if ($dataPositionsNotValid) {
                     $message = '[data positions not valid]';
                 }
-                $logger->notice(
+                $logger->info(
                     'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
                     .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
                 );
@@ -242,6 +247,21 @@ class FrontpagesController extends Controller
             );
             $response = new Response(json_encode($responseData));
         } else {
+            // Iterate over each element and fetch its parameters to save.
+            $oldItems = array();
+            foreach ($oldContents as $item) {
+                $oldItems[] = array(
+                    'id'           => $item->id,
+                    'category'     => $categoryID,
+                    'placeholder'  => $item->placeholder,
+                    'position'     => $item->position,
+                    'content_type' => ucfirst($item->content_type_name),
+                );
+            }
+
+            // Restore old frontpage
+            $restore = \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
             } else {
@@ -349,19 +369,28 @@ class FrontpagesController extends Controller
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
-        $this->view->assign(array( 'category_name' => $categoryName, 'actual_category' => $categoryName,));
+        $this->view->assign(
+            array(
+                'category_name'   => $categoryName,
+                'actual_category' => $categoryName
+            )
+        );
 
-        // Get frontpage ads
-        \Frontend\Controller\FrontpagesController::getAds($categoryName);
+        // Get the ID of the actual category from the categoryName
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId = $ccm->get_id($categoryName);
 
         $cm = new \ContentManager;
         $contentsRAW = $request->request->get('contents');
         $contents = json_decode($contentsRAW, true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);
-
         // Filter articles if some of them has time scheduling and sort them by position
         $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+
+        // Fetch ads
+        $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
+        $this->view->assign('advertisements', $ads);
 
         /***** GET ALL FRONTPAGE'S IMAGES *******/
         $imageIdsList = array();

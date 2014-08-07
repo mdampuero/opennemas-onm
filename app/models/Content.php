@@ -131,13 +131,6 @@ class Content
     public $category_name       = null;
 
     /**
-     * View counter for this content
-     *
-     * @var int
-     **/
-    public $views               = null;
-
-    /**
      * Not documented
      *
      * @var
@@ -404,7 +397,6 @@ class Content
             $data['slug'] = StringUtils::get_title($data['slug']);
         }
 
-        $data['views']   = 1;
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
@@ -428,18 +420,17 @@ class Content
         $sql = "INSERT INTO contents
             (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
             `metadata`, `starttime`, `endtime`,
-            `created`, `changed`, `content_status`,
-            `views`, `position`,`frontpage`,
+            `created`, `changed`, `content_status`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
             `in_home`, `home_pos`,`available`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], $data['content_status'],
-            $data['views'], $data['position'],$data['frontpage'],
+            $data['position'],$data['frontpage'],
             $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
             $data['home_pos'], $data['available'],
@@ -455,6 +446,14 @@ class Content
         $sql = "INSERT INTO contents_categories (`pk_fk_content` ,"
              . "`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
         $values = array($this->id, $data['category'],$catName);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return false;
+        }
+
+        $sql = "INSERT INTO content_views (`pk_fk_content` ,`views`) "
+             . "VALUES (?,?)";
+        $values = array($this->id, 0);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -988,14 +987,16 @@ class Content
         }
 
         if ($this->id !== null) {
+            $views = getService('content_views_repository')->getViews($this->id);
+
             return array(
                 'title'           => $this->title,
                 'category'        => $ccm->get_name($this->category),
+                'views'           => $views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
                 'scheduled_state' => $this->getSchedulingState(),
                 'state'           => $this->getStatus(),
-                'views'           => $this->views,
                 'last_author'     => $author->name,
             );
         }
@@ -1274,7 +1275,7 @@ class Content
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($propertyName)) {
-                    $this->{$propertyName} = iconv(
+                    $this->{$propertyName} = @iconv(
                         mb_detect_encoding($propertyValue),
                         'utf-8',
                         $propertyValue
@@ -1285,7 +1286,7 @@ class Content
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
                 if (!is_numeric($k)) {
-                    $this->{$k} = iconv(
+                    $this->{$k} = @iconv(
                         mb_detect_encoding($v),
                         'utf-8',
                         $v
@@ -1642,94 +1643,6 @@ class Content
         $id = $this->content_type;
 
         return \ContentManager::getContentTypeNameFromId($id);
-    }
-
-    /**
-     * Increments the num views for a content given its id
-     *
-     * @param int $id the content id
-     *
-     * @return boolean true if the update was done
-     **/
-    public static function setNumViews($id = null)
-    {
-        if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
-            && empty($_SERVER['HTTP_USER_AGENT'])
-        ) {
-            return false;
-        }
-
-        $botStrings = array(
-            "google",
-            "bot",
-            "msnbot",
-            "facebookexternal",
-            "yahoo",
-            "spider",
-            "archiver",
-            "curl",
-            "python",
-            "nambu",
-            "twitt",
-            "perl",
-            "sphere",
-            "PEAR",
-            "java",
-            "wordpress",
-            "radian",
-            "crawl",
-            "yandex",
-            "eventbox",
-            "monitor",
-            "mechanize",
-        );
-
-        $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
-
-        foreach ($botStrings as $bot) {
-            if (stristr($httpUserAgent, $bot) != false) {
-                return false;
-            }
-        }
-
-        if (is_null($id) || empty($id)) {
-            return false;
-        }
-
-        // Multiple exec SQL
-        $sqlValues = array();
-        if (is_array($id)) {
-            $ads = array();
-
-            if (count($id) > 0) {
-                foreach ($id as $item) {
-                    if (is_object($item)
-                       && isset($item->pk_advertisement)
-                       && !empty($item->pk_advertisement)
-                    ) {
-                        $ads[] = $item->pk_advertisement;
-                    }
-                }
-            }
-            if (empty($ads)) {
-                return false;
-            }
-
-            $sql =  'UPDATE `contents` SET `views`=`views`+1'
-                    .' WHERE  `pk_content` IN ('.implode(',', $ads).')';
-
-        } else {
-            $sql =  'UPDATE `contents` SET `views`=`views`+1 '
-                    .'WHERE `pk_content`=?';
-            $sqlValues = array($id);
-        }
-        $rs = $GLOBALS['application']->conn->Execute($sql, $sqlValues);
-
-        if ($rs === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

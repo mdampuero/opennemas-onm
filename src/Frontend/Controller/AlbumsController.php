@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for frontend albums
+ * Defines the frontend controller for the album content type
  *
  * @package Frontend_Controllers
  **/
@@ -13,7 +13,6 @@
  * file that was distributed with this source code.
  **/
 namespace Frontend\Controller;
-
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,6 +36,11 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         // Setting up available categories for menu.
@@ -85,72 +89,62 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Renders the album frontpage
+     * Renders the album frontpage.
      *
-     * @param Request $request the request object
+     * @param  Request  $request The request object.
      *
-     * @return Response the response object
-     **/
+     * @return Response          The response object.
+     */
     public function frontpageAction(Request $request)
     {
-
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
-        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
+        $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('gallery/gallery-frontpage.tpl', $cacheID))
+           || (!$this->view->isCached('album/album_frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
-            $itemsPerPage = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
-            $days  = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
-            $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
+            $itemsPerPage  = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
+            $days          = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
+            $orderBy       = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
 
-            if ($order == 'favorite') {
+            $order = array();
+            $filters = array(
+                'content_type_name' => array(array('value' => 'album')),
+                'content_status'    => array(array('value' => 1)),
+                'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            );
 
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1',
-                    'ORDER BY favorite DESC, created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
-
-            } elseif ($order == 'views') {
-
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1 '
-                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)',
-                    'ORDER BY views DESC, created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
-            } else {
-                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
-                    'Album',
-                    (int) $this->category,
-                    'in_litter != 1 AND contents.content_status=1',
-                    'ORDER BY created DESC',
-                    $this->page,
-                    $itemsPerPage
-                );
+            if ($this->category != 0) {
+                $category = $this->get('category_repository')->find($this->category);
+                $filters['category_name'] = array(array('value' => $category->name));
             }
 
+            if ($orderBy == 'favorite') {
+                $order = array('favorite' => 'DESC', 'created' => 'DESC');
+            } elseif ($orderBy == 'views') {
+                $order = array('views' => 'DESC', 'created' => 'DESC');
 
-            $total = count($albums)+1;
+                $date = strtotime("-$days day");
+                $filters['created'] = array(array('value' => date('Y-m-d H:i:s', $date), 'operator' => '>=' ));
+            } else {
+                $order = array('created' => 'DESC');
+            }
+
+            $em          = $this->get('entity_repository');
+            $albums      = $em->findBy($filters, $order, $itemsPerPage, $this->page);
+            $countAlbums = $em->countBy($filters);
 
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $this->page,
                     'items' => $itemsPerPage,
-                    'total' => $total,
+                    'total' => $countAlbums,
                     'url'   => $this->generateUrl(
                         'frontend_album_frontpage_category',
                         array(
@@ -159,11 +153,12 @@ class AlbumsController extends Controller
                     )
                 )
             );
-
-            foreach ($albums as &$album) {
-                $album->cover_image = new \Photo($album->cover_id);
-                $album->cover       = $album->cover_image->path_file.$album->cover_image->name;
-            }
+            $this->view->assign(
+                array(
+                    'albums'     => $albums,
+                    'pagination' => $pagination,
+                )
+            );
         }
 
         // Send the response to the user
@@ -171,8 +166,6 @@ class AlbumsController extends Controller
             'album/album_frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
-                'albums'              => $albums,
-                'pagination'            => $pagination,
             )
         );
     }
@@ -204,13 +197,14 @@ class AlbumsController extends Controller
         $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
-
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
-            || (!$this->view->isCached('gallery/gallery.tpl', $cacheID))
+            || (!$this->view->isCached('album/album.tpl', $cacheID))
         ) {
-            // Get the album from the id and increment the numviews for it
-            $album = new \Album($albumID);
+            // Get the album from the id
+            $album = $this->get('entity_repository')->find('Album', $albumID);
+
+            // Show the album only if it is properly published
             if (($album->content_status == 1) && ($album->in_litter == 0)) {
                 $this->view->assign('album', $album);
                 $album->with_comment = 1;
@@ -223,21 +217,19 @@ class AlbumsController extends Controller
                 $otherAlbums = $this->cm->find(
                     'Album',
                     'content_status=1 AND pk_content !='.$albumID
-                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
-                    . $days . ' DAY) ',
+                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
                 );
 
                 foreach ($otherAlbums as &$content) {
-                    $content->cover_image    = new \Photo($content->cover_id);
+                    $content->cover_image    = $this->get('entity_repository')->find('Photo', $content->cover_id);
                     $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
                     $content->category_name  = $content->loadCategoryName($content->id);
                     $content->category_title = $content->loadCategoryTitle($content->id);
                 }
 
                 // Fetch album author
-                $ur = getService('user_repository');
-                $album->author = $ur->find($album->fk_author);
+                $album->author = $this->get('user_repository')->find($album->fk_author);
 
                 // Load category and photos
                 $album->category_name  = $album->loadCategoryName($album->id);
@@ -294,12 +286,12 @@ class AlbumsController extends Controller
         }
 
         // Get the album from the id and increment the numviews for it
-        $album = new \Album($albumID);
+        $album = $this->get('entity_repository')->find('Album', $albumID);
 
         $album->category_name  = $album->loadCategoryName($album->id);
         $album->category_title = $album->loadCategoryTitle($album->id);
-        $_albumArray           = $album->_getAttachedPhotos($album->id);
-        $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
+        $albumPhotos           = $album->_getAttachedPhotos($album->id);
+        $albumPhotosPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
 
         if (count($_albumArrayPaged) > $itemsPage) {
             array_pop($_albumArrayPaged);
@@ -308,8 +300,8 @@ class AlbumsController extends Controller
         return $this->render(
             'album/partials/_gallery_thumbs.tpl',
             array(
-                'album_photos'       => $_albumArray,
-                'album_photos_paged' => $_albumArrayPaged,
+                'album_photos'       => $albumPhotos,
+                'album_photos_paged' => $albumPhotosPaged,
                 'page'               => $page,
                 'items_page'         => $itemsPage,
                 'album'              => $album,
@@ -317,7 +309,6 @@ class AlbumsController extends Controller
         );
 
     }
-
 
     /**
      * Returns via ajax the albums of the category in a page
@@ -336,24 +327,23 @@ class AlbumsController extends Controller
             $this->category = $this->request->query->getDigits('category', 0);
         }
 
-        // Fetch Albums paginated
-        list($countAlbums, $othersAlbums)= $this->cm->getCountAndSlice(
-            'Album',
-            (int) $this->category,
-            'in_litter != 1 AND contents.content_status=1',
-            'ORDER BY created DESC',
-            $this->page,
-            $totalAlbumMoreFrontpage
+        $order = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(array('value' => 'album')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
         );
 
-        if ($countAlbums > 0) {
-            foreach ($othersAlbums as &$album) {
-                $album->category_name  = $album->loadCategoryName($album->id);
-                $album->category_title = $album->loadCategoryTitle($album->id);
-                $album->cover_image    = new \Photo($album->cover_id);
-                $album->cover          = $album->cover_image->path_file.$album->cover_image->name;
-            }
-        } else {
+        if ($this->category != 0) {
+            $category = $this->get('category_repository')->find($this->category);
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $em           = $this->get('entity_repository');
+        $othersAlbums = $em->findBy($filters, $order, $totalAlbumMoreFrontpage, $this->page);
+        $countAlbums  = $em->countBy($filters);
+
+        if ($countAlbums == 0) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_album_ajax_paginated')
             );
@@ -381,7 +371,6 @@ class AlbumsController extends Controller
                 'pagination'         => $pagination,
             )
         );
-
     }
 
     /**

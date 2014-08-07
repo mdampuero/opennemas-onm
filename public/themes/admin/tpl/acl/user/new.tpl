@@ -7,6 +7,7 @@
 {script_tag src="/jquery/localization/messages_es.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
+{script_tag src="/admin.js" common=1}
 <script>
     jQuery(document).ready(function($){
         // Password strength checker
@@ -179,6 +180,9 @@ label {
         <div id="user-editing-form" class="wrapper-content tabs">
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
+                {if isset($user->id)}
+                <li><a href="#social" title="{t}Social Networks{/t}">{t}Social Networks{/t}</a></li>
+                {/if}
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
                 {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
                 <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
@@ -239,16 +243,6 @@ label {
                         </div>
 
                         <div class="control-group">
-                            <label for="meta[twitter]" class="control-label">{t}Twitter user{/t}</label>
-                            <div class="controls">
-                                <div class="input-prepend">
-                                    <span class="add-on">@</span>
-                                    <input class="span2" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[twitter]" name="meta[twitter]" value="{$user->meta['twitter']|default:""}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label for="url" class="control-label">{t}Blog Url{/t}</label>
                             <div class="controls">
                                 <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
@@ -295,17 +289,26 @@ label {
                     </fieldset>
                 </div>
             </div><!-- /personal -->
-
-            <div id="settings">
-                <div class="form-horizontal">
-                        <div class="control-group">
-                        <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
+            {if isset($user->id)}
+            <div id="social">
+                <div class="form-horizontal social-connections">
+                    <div class="control-group">
+                        <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
                         <div class="controls">
-                            <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
-                            <span>{t}minutes{/t}</span>
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                         </div>
                     </div>
-
+                    <div class="control-group">
+                        <label class="control-label">{t}Twitter{/t}</label>
+                        <div class="controls">
+                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/if}
+            <div id="settings">
+                <div class="form-horizontal">
                     {is_module_activated name="PAYWALL"}
                     <div class="control-group">
                         <label for="user_language" class="control-label">{t}User type{/t}</label>

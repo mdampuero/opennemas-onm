@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,98 +7,115 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Onm;
 
 use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
+use Repository\EntityManager;
 
 /**
 * Perform searches in Database related with one content
 */
 class MachineSearcher
 {
-
-    public function __construct(CacheInterface $cacheHandler)
-    {
-        $this->cache = $cacheHandler;
+    /**
+     * Initializes the MachineSearcher.
+     *
+     * @param DbalWrapper    $databaseConnection The database connection.
+     * @param EntityManager  $entityManager      The entity manager.
+     * @param CacheInterface $cacheHandler       The cache service.
+     * @param string         $cachePrefix        The cache prefix.
+     */
+    public function __construct(
+        DbalWrapper $databaseConnection,
+        EntityManager $entityManager,
+        CacheInterface $cacheHandler,
+        $cachePrefix
+    ) {
+        $this->cache       = $cacheHandler;
+        $this->dbConn      = $databaseConnection;
+        $this->cachePrefix = $cachePrefix;
+        $this->er          = $entityManager;
     }
 
-
     /**
-     * Busca en la base de datos todos las noticias sugeridas que cumplan un
-     * $where con Available a 1 (Publicados) que sean del tipo indicado en
-     * szContentsType y los tag tengan alguna coincidencia con los
-     * proporcionados en szSource.
+     * Returns a list of contents related with a content type and category.
      *
-     * @param string $szSourceTags        Cadena con las tags a parsear
-     * @param string $szContentsTypeTitle Titulos de los tipos de
-     *                                    contenidos en donde buscar.
-     * @param string $filter condicion que han de cumplir
-     * @param int    $iLimit max number of elements to return
+     * @param string $contentTypeName  Content types required.
+     * @param string $filter           Advanced SQL filter for contents.
+     * @param int    $numberOfElements Number of results.
      *
-     * Example
-     * SELECT pk_content, title, metadata, created, permalink, MATCH ( metadata)
-     *  AGAINST ( 'primer, ministro, tailandés, envía, ejército, multitud, mundo ')
-     *  AS rel FROM contents, contents_categories WHERE MATCH ( metadata)
-     *  AGAINST ( 'primer, ministro, tailandés, envía, ejército, multitud,
-     *  mundo IN BOOLEAN MODE') AND ( ( FALSE OR fk_content_type LIKE '1' ))
-     *  AND pk_fk_content_category= 12 AND contents.available=1 AND pk_content
-     *  = pk_fk_content AND available = 1 AND in_litter = 0 AND pk_content = pk_fk_content
-     *  ORDER BY rel DESC, created DESC LIMIT 0, 6
-     *
-     * @return pk_content de todos los contendios ordenado por el número de coincidencias.
+     * @return array Array with the content properties of each content.
      */
-    public function searchSuggestedContents($szSourceTags, $szContentsTypeTitle, $filter, $iLimit)
+    public function searchSuggestedContents($contentTypeName, $filter = '', $numberOfElements = 4)
     {
-        if (empty($szSourceTags)) {
-            return array();
-        }
-
-        $cacheKey = CACHE_PREFIX.'_suggested_contents_'.md5(implode(',', func_get_args()));
+        $cacheKey = $this->cachePrefix.'_suggested_contents_'.md5(implode(',', func_get_args()));
         $result = $this->cache->fetch($cacheKey);
 
         if (!is_array($result)) {
-
             $filter = (empty($filter) ? "" : " AND ".$filter);
 
-            // Transform the input string to an array
-            $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
-
             // Generate content type table name
-            $contentTable = tableize($szContentsTypeTitle);
+            $contentTable = tableize($contentTypeName);
 
             // Generate where clause for filtering fk_content_type
-            $selectedContentTypesSQL = $this->parseTypes($szContentsTypeTitle);
+            $selectedContentTypesSQL = $this->parseTypes($contentTypeName);
 
-            // Generate WHERE with REGEXP using the provided tags
-            $szSourceTags = rtrim(implode('|', $szSourceTags), '|');
-            $whereSQL = "contents.metadata REGEXP '".$szSourceTags."'";
+            $numberOfElements = (int) $numberOfElements;
+            if ($numberOfElements < 1) {
+                $numberOfElements = 4;
+            }
 
-            $szSqlSentence = "SELECT `contents`.*, `contents_categories`.`catName`, $contentTable.*"
-                        ."  FROM contents, $contentTable, contents_categories "
-                        ." WHERE contents.pk_content=$contentTable.pk_$szContentsTypeTitle"
-                        ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
-                        ." AND `contents`.`content_status` = 1 "
-                        ." AND `contents`.`in_litter` = 0 "
-                        .$selectedContentTypesSQL
-                        .$filter
-                        ." AND ". $whereSQL
-                        ." GROUP BY `contents`.`title` ORDER BY created DESC LIMIT ". $iLimit;
+            $sql = "SELECT content_type_name, pk_content FROM contents"
+                    ." WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
+                    .$selectedContentTypesSQL
+                    .$filter
+                    ." ORDER BY created DESC LIMIT ". $numberOfElements;
 
-            $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
-            $result = null;
-            if (!empty($resultSet)) {
-                $result= $resultSet->GetArray();
+            try {
+                $rs = $this->dbConn->fetchAll($sql);
+
+                foreach ($rs as $content) {
+                    $contentProps []= array($content['content_type_name'], $content['pk_content']);
+                }
+
+                if (count($contentProps) < 1) {
+                    return array();
+                }
+
+                $contents = $this->er->findMulti($contentProps);
+
+                // TODO: nasty hack to convert content objects to the old array way
+                $result = array();
+                foreach ($contents as $content) {
+                    $result []= get_object_vars($content);
+                }
+            } catch (Exception $e) {
+                return array();
             }
 
             $cm = new \ContentManager();
             $result = $cm->getInTime($result);
 
+            $er = getService('entity_repository');
             foreach ($result as &$content) {
-
-                if (array_key_exists('img2', $content)) {
-                    $content['image'] = new \Photo($content['img2']);
+                if (array_key_exists('img2', $content) && $content['img2'] != '0') {
+                    $content['image'] = $er->find('Photo', $content['img2']);
+                } elseif (array_key_exists('img1', $content) && $content['img1'] != '0') {
+                    $content['image'] = $er->find('Photo', $content['img1']);
                 }
+
+                $content['uri'] = \Uri::generate(
+                    'article',
+                    array(
+                        'id'       => $content['pk_content'],
+                        'date'     => date('YmdHis', strtotime($content['created'])),
+                        'category' => $content['catName'],
+                        'slug'     => StringUtils::get_title($content['title']),
+                    )
+                );
             }
 
             $this->cache->save($cacheKey, $result, 300);
@@ -107,12 +125,11 @@ class MachineSearcher
     }
 
     /**
-     * Parsea la cadena fuente comprobando posibles operaciones lógicas.
+     * Parses a string of content types and returns it as SQL statement.
      *
-     * @param string $szSource Cadena a parsear.
+     * @param string $szSource String to parse.
      *
-     * @return array list of types to search
-     *
+     * @return array List of types to search.
      */
     private function parseTypes($szSource)
     {
@@ -121,22 +138,13 @@ class MachineSearcher
             return 'TRUE';
         }
 
-        //Obtener los id de los tipos a traves de su titulo.
-        $szContentsType    = trim($szSource);
+        $contentTypeNames = explode(',', $szSource);
 
-        $contentTypeNames = explode(',', $szContentsType);
-
+        $contentTypesSQL = array();
         foreach ($contentTypeNames as $contentTypeName) {
-            $contentTypeIds []= \ContentManager::getContentTypeIdFromName($contentTypeName);
+            $contentTypesSQL []= "`content_type_name` = '".trim($contentTypeName)."'";
         }
-
-        $contentTypesSQL = '';
-        if (!empty($contentTypeIds)) {
-            foreach ($contentTypeIds as $szId) {
-                $contentTypesSQL []= "`fk_content_type` = {$szId}";
-            }
-            $contentTypesSQL = " AND ( ". implode(' OR ', $contentTypesSQL)." ) ";
-        }
+        $contentTypesSQL = " AND (". implode(' OR ', $contentTypesSQL).") ";
 
         return $contentTypesSQL;
     }

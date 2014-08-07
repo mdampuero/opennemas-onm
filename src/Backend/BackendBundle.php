@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the backend bundle
+ *
+ * @package Backend
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -11,6 +16,11 @@ namespace Backend;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Initializes the BackendBundle
+ *
+ * @package Backend
+ **/
 class BackendBundle extends Bundle
 {
 }

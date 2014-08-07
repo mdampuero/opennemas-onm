@@ -29,10 +29,8 @@ use Onm\Settings as s;
 class LettersController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
+     * Common code for all the actions.
+     */
     public function init()
     {
         // Check MODULE
@@ -40,28 +38,26 @@ class LettersController extends Controller
     }
 
     /**
-     * Lists all the letters
+     * Lists all the letters.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('LETTER_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
         return $this->render('letter/list.tpl');
     }
 
     /**
-     * Handles the form for create new letters
+     * Handles the form for create new letters.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('LETTER_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -96,14 +92,13 @@ class LettersController extends Controller
     }
 
     /**
-     * Shows the letter information form
+     * Shows the letter information form.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('LETTER_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -128,14 +123,13 @@ class LettersController extends Controller
     }
 
     /**
-     * Updates the letter information
+     * Updates the letter information.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('LETTER_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         // Check empty data
@@ -176,48 +170,32 @@ class LettersController extends Controller
                 array('id' => $letter->id)
             )
         );
-
     }
 
     /**
-     * Lists the available Letters for the frontpage manager
+     * Lists the available Letters for the frontpage manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('LETTER_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
-        $page = $request->query->getDigits('page', 1);
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $cm = new \ContentManager();
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching Letters
-        $sqlExcludedLetters = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $lettersExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedLetters = ' AND `pk_letter` NOT IN ('.$lettersExcluded.')';
-        }
-
-        list($countLetters, $letters) = $cm->getCountAndSlice(
-            'Letter',
-            null,
-            'contents.content_status=1 AND in_litter != 1'. $sqlExcludedLetters,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'letter')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
+
+        $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countLetters = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -230,7 +208,8 @@ class LettersController extends Controller
                 'urlVar'      => 'page',
                 'totalItems'  => $countLetters,
                 'fileName'    => $this->generateUrl(
-                    'admin_letters_content_provider'
+                    'admin_letters_content_provider',
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -244,28 +223,33 @@ class LettersController extends Controller
             )
         );
     }
-    /**
-     * Implementes the content list provider for letters
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('LETTER_ADMIN')")
-     **/
-    public function contentListProviderAction(Request $request)
-    {
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-        $page = $request->query->getDigits('page', 1);
-        $cm = new \ContentManager();
 
-        list($countLetters, $letters)= $cm->getCountAndSlice(
-            'Letter',
-            "content_status=1 AND contents.in_litter !=1",
-            "ORDER BY starttime DESC",
-            $page,
-            $itemsPerPage
+    /**
+     * Lists all the letters within a category for the related manager.
+     *
+     * @param  Request $request The request object.
+     * @return Response         The response object.
+     */
+    public function contentProviderRelatedAction(Request $request)
+    {
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
+
+        $filters = array(
+            'content_type_name' => array(array('value' => 'letter')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        if ($categoryId != 0) {
+            $filters['category_name'] = array(array('value' => $category->name));
+        }
+
+        $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countLetters = $em->countBy($filters);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -278,7 +262,7 @@ class LettersController extends Controller
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => $countLetters,
-                'fileName'    => $this->generateUrl('admin_letters_content_list_provider').'?page=%d',
+                'fileName'    => $this->generateUrl('admin_letters_content_provider_related').'?page=%d',
             )
         );
 

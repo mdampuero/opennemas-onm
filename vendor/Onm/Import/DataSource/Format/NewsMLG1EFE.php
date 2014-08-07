@@ -43,7 +43,7 @@ class NewsMLG1EFE extends NewsMLG1
      **/
     public static function checkFormat($data = null, $xmlFile = null)
     {
-        preg_match('@/([0-9]+).xml@', $xmlFile, $id);
+        preg_match('@/([0-9a-zA-Z]+).xml@', $xmlFile, $id);
         $contents = $data->xpath(
             "//NewsItem/NewsComponent"
             ."[@Duid=\"text_".$id[1].".text\"]"

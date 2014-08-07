@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,33 +7,37 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class OpinionManager extends EntityManager
 {
-     /**
-     * Searches for content given a criteria
+    /**
+     * Searches for opinions given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The current page.
+     * @param integer $offset          The offset to start with.
+     *
+     * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -41,7 +46,7 @@ class OpinionManager extends EntityManager
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
         $sql = "SELECT content_type_name, pk_content FROM `contents`, `opinions`
@@ -61,6 +66,13 @@ class OpinionManager extends EntityManager
         return $contents;
     }
 
+    /**
+     * Counts opinions given a criteria.
+     *
+     * @param array   $criteria The criteria used to search.
+     *
+     * @return integer The number of matched elements.
+     */
     public function countBy($criteria)
     {
         // Building the SQL filter
@@ -79,22 +91,36 @@ class OpinionManager extends EntityManager
     }
 
     /**
-     * Builds the SQL WHERE filter given an array or string with the desired filter
+     * Builds the SQL WHERE filter given an array or string with the desired
+     * filter.
      *
-     * @param string|array $filter the filter params
+     * @param string $criteria The filter params.
      *
-     * @return string the SQL WHERE filter
+     * @return string  The SQL WHERE filter.
      */
-    protected function getFilterSQL($filters)
+    protected function getFilterSQL($criteria)
     {
-        if (empty($filters)) {
+        if (empty($criteria)) {
             $filterSQL = ' 1=1 ';
-        } elseif (is_array($filters)) {
+        } elseif (!is_array($criteria)) {
+            $filterSQL = $criteria;
+        } elseif (is_array($criteria)) {
             $filterSQL = array();
 
-            foreach ($filters as $field => $values) {
-                $fieldFilters = array();
+            $fieldUnion = ' AND ';
+            if (array_key_exists('union', $criteria)) {
+                $fieldUnion = ' ' . trim($criteria['union']) . ' ';
+                unset($criteria['union']);
+            }
 
+            foreach ($criteria as $field => $filters) {
+                $valueUnion = ' AND ';
+                if (array_key_exists('union', $filters)) {
+                    $valueUnion = ' ' . trim($filters['union']) . ' ';
+                    unset($filters['union']);
+                }
+
+                $fieldFilters = array();
                 if ($field == 'blog') {
                     $allAuthors = \User::getAllUsersAuthors();
 
@@ -106,58 +132,68 @@ class OpinionManager extends EntityManager
                     }
 
                     if (!empty($authorsBlog)) {
-                        if ($values[0]['value']) {
-                            $filterSQL [] = ' opinions.fk_author IN ('
+                        if ($filters[0]['value']) {
+                            $filterSQL[] = 'opinions.fk_author IN ('
                                 . implode(', ', array_keys($authorsBlog)).") ";
                         } else {
-                            $filterSQL [] = ' opinions.fk_author NOT IN ('
+                            $filterSQL[] = 'opinions.fk_author NOT IN ('
                                 . implode(', ', array_keys($authorsBlog)).") ";
                         }
                     } else {
-                        if ($values[0]['value']) {
-                            $filterSQL [] = ' opinions.fk_author=-1';
+                        if ($filters[0]['value']) {
+                            $filterSQL[] = 'opinions.fk_author=-1';
                         }
                     }
                 } elseif ($field == 'author') {
-                    if ($values[0]['value'] > 0) {
-                        $filterSQL []= 'opinions.fk_author=' . $values[0]['value'];
-                    } elseif ($values[0]['value'] == -2) {
-                        $filterSQL []= 'opinions.type_opinion=2';
-                    } elseif ($values[0]['value'] == -3) {
-                        $filterSQL []= 'opinions.type_opinion=1';
+                    if ($filters[0]['value'] > 0) {
+                        $filterSQL[] = 'opinions.fk_author=' . $filters[0]['value'];
+                    } elseif ($filters[0]['value'] == -2) {
+                        $filterSQL[] = 'opinions.type_opinion=2';
+                    } elseif ($filters[0]['value'] == -3) {
+                        $filterSQL[] = 'opinions.type_opinion=1';
                     }
                 } else {
-                    foreach ($values as $filter) {
+                    $valueUnion = ' AND ';
+                    if (array_key_exists('union', $filters)) {
+                        $valueUnion = ' ' . trim($filters['union']) . ' ';
+                        unset($filters['union']);
+                    }
+
+                    $fieldFilters = array();
+                    foreach ($filters as $filter) {
                         $operator = "=";
-                        $value    = "";
-                        if ($filter['value'][0] == '%'
-                            && $filter['value'][strlen($filter['value']) - 1] == '%'
-                        ) {
-                            $operator = "LIKE";
-                        }
-
-                        // Check operator
                         if (array_key_exists('operator', $filter)) {
-                            $operator = $filter['operator'];
+                            $operator = trim($filter['operator']);
                         }
 
-                        // Check value
+                        $value = '';
                         if (array_key_exists('value', $filter)) {
                             $value = $filter['value'];
                         }
 
-                        $fieldFilters[] = "`$field` $operator '$value'";
+                        if (is_array($value) && !empty($value)) {
+                            if (strtoupper($operator) == 'IN'
+                                || strtoupper($operator) == 'NOT IN'
+                            ) {
+                                $fieldFilters[] = "`$field` $operator (" .
+                                    implode(', ', $value) . ")";
+                            } else {
+                                $value = $this->parseValues($value, $operator);
+                                $fieldFilters[] = "`$field` $operator " .
+                                    implode(' ', $value);
+                            }
+                        } else {
+                            $fieldFilters[] = "`$field` $operator '$value'";
+                        }
                     }
 
                     // Add filters for the current $field
-                    $filterSQL[] = implode(' OR ', $fieldFilters);
+                    $filterSQL[] = '(' . implode($valueUnion, $fieldFilters) . ')';
                 }
             }
 
             // Build filters
-            $filterSQL = implode(' AND ', $filterSQL);
-        } else {
-            $filterSQL = $filter;
+            $filterSQL = implode($fieldUnion, $filterSQL);
         }
 
         return $filterSQL;

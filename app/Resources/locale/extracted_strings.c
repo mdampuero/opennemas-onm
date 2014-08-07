@@ -863,6 +863,9 @@ gettext("Email subject");
 gettext("Preview");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
+gettext("Before using newsletter you have to fill the <a href=\"%1#external\"  target=\"_blank\">reCaptcha keys on system settings</a>");
+
+/* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Newsletters");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
@@ -888,6 +891,9 @@ gettext("Go back to list");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Newsletter subject");
+
+/* public/themes/admin/tpl/newsletter/config.tpl */
+gettext("Your newsletter subject");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("The subject of the emails in this newsletter");
@@ -918,6 +924,9 @@ gettext("External Send");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Internal Send");
+
+/* public/themes/admin/tpl/newsletter/config.tpl */
+gettext("You can choose if receive new subscriptions with a checking email or using the <a href=\"%1\" target=\"_blank\"> table of subscribers from the application</a>.");
 
 /* public/themes/admin/tpl/newsletter/config.tpl */
 gettext("Mailing list address");
@@ -2156,10 +2165,19 @@ gettext("Sync with server");
 gettext("Reload list");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
-gettext("Config Europapress module");
+gettext("Reload list");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
-gettext("Config Europapress module");
+gettext("Reload list");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("Config");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("Config");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("Config");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
 gettext("Config");
@@ -2189,9 +2207,6 @@ gettext("Priority");
 gettext("Title");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
-gettext("Attachments");
-
-/* public/themes/admin/tpl/news_agency/list.tpl */
 gettext("Origin");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
@@ -2216,16 +2231,22 @@ gettext("Normal");
 gettext("Basic");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
-gettext("With image");
-
-/* public/themes/admin/tpl/news_agency/list.tpl */
-gettext("This new has attached images");
+gettext("Attachments");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
 gettext("With image");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
 gettext("This new has attached images");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("With image");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("This new has attached images");
+
+/* public/themes/admin/tpl/news_agency/list.tpl */
+gettext("View");
 
 /* public/themes/admin/tpl/news_agency/list.tpl */
 gettext("Import");
@@ -2411,13 +2432,13 @@ gettext("Category");
 gettext("Created on");
 
 /* public/themes/admin/tpl/files/list.tpl */
+gettext("Published");
+
+/* public/themes/admin/tpl/files/list.tpl */
 gettext("Favorite");
 
 /* public/themes/admin/tpl/files/list.tpl */
 gettext("Home");
-
-/* public/themes/admin/tpl/files/list.tpl */
-gettext("Published");
 
 /* public/themes/admin/tpl/files/list.tpl */
 gettext("Actions");
@@ -2926,6 +2947,48 @@ gettext("Unknown");
 /* public/themes/admin/tpl/common/selector_categories.tpl */
 gettext("Unknown");
 
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("OpenNeMaS administration");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Go to admin main page");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("FAQ");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Contact support");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Photo");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("First steps in OpenNeMaS");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("About");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl/gstarted/getting_started.tpl */
+gettext("Legal");
+
 /* public/themes/admin/tpl/acl/user_group/modal/_modalDelete.tpl */
 gettext("Delete user");
 
@@ -3059,6 +3122,12 @@ gettext("Basic information");
 gettext("User info");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
+gettext("Social Networks");
+
+/* public/themes/admin/tpl/acl/user/new.tpl */
+gettext("Social Networks");
+
+/* public/themes/admin/tpl/acl/user/new.tpl */
 gettext("Settings");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
@@ -3101,12 +3170,6 @@ gettext("User name");
 gettext("Email");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
-gettext("Twitter user");
-
-/* public/themes/admin/tpl/acl/user/new.tpl */
-gettext("Username");
-
-/* public/themes/admin/tpl/acl/user/new.tpl */
 gettext("Blog Url");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
@@ -3122,10 +3185,10 @@ gettext("Password");
 gettext("Confirm password");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
-gettext("Session expire time:");
+gettext("Facebook");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
-gettext("minutes");
+gettext("Twitter");
 
 /* public/themes/admin/tpl/acl/user/new.tpl */
 gettext("User type");
@@ -3243,6 +3306,21 @@ gettext("Showing");
 
 /* public/themes/admin/tpl/acl/user/list.tpl */
 gettext("of");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Your account is connected to %1.");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Disconnect from Facebook");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Disconnect");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Photo");
+
+/* public/themes/admin/tpl/acl/user/social.tpl */
+gettext("Allows you to login into Opennemas with %1");
 
 /* public/themes/admin/tpl/search_advanced/content-provider.tpl */
 gettext("Write here the text for search...");
@@ -3923,7 +4001,7 @@ gettext("Recaptcha");
 gettext("Public key");
 
 /* public/themes/admin/tpl/system_settings/system_settings.tpl */
-gettext("Get your reCaptcha key from <a href=\"http://www.google.com/recaptcha/whyrecaptcha\" target=\"_blank\">this page</a>.");
+gettext("Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/admin#whyrecaptcha\" target=\"_blank\">this page</a>.");
 
 /* public/themes/admin/tpl/system_settings/system_settings.tpl */
 gettext("Used when we want to test if the user is an human and not a robot.");
@@ -4399,6 +4477,99 @@ gettext("Yes, accept");
 /* public/themes/admin/tpl/welcome/modals/_modal_users.tpl */
 gettext("Logged in users");
 
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Welcome");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Terms of use");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Getting help");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Social network");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Ready!");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("And that's it!");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("You can start to use your newspaper.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Previous");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Finish");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Welcome to your new newspaper. Now you will be able to publish your own news, articles and\n                    take part of the information around everyone.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Before starting to work on it you have to perform some tasks, sush as setup your social networks\n                    and get some information about how to use Opennemas");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Hope you will enjoy opennemas!");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Click next to continue");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Next");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("In order to use Opennemas you must accept the terms of use:");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Accept the terms of use");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Previous");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Next");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("You can read and learn how to use your Opennemas by using our online documentation and videos.\n                    Take a look around and you will find it.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge base</a> has manuals and howtos about how to create contents and improve your newspaper.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target=\"_blank\">video tutorials</a> for getting step-by-step guidance.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("If you need further information you can always contact us by using the  <span class=\"icon-large icon-question-sign\"></span> Help button in the upper right corner.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Previous");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Skip tour");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Next");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Do you have a Facebook or a Twitter account?");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Then you can associate those accounts to access your opennemas. It will make easier to get into your  administration panel.");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Facebook");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Twitter");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Previous");
+
+/* public/themes/admin/tpl/welcome/wizard.tpl */
+gettext("Next");
+
 /* public/themes/admin/tpl/welcome/index.tpl */
 gettext("Welcome to Opennemas");
 
@@ -4785,12 +4956,6 @@ gettext("Ad server base url");
 
 /* public/themes/admin/tpl/advertisement/config.tpl */
 gettext("The ad server URL (i.e. http://ad.serverexample.net/).");
-
-/* public/themes/admin/tpl/advertisement/config.tpl */
-gettext("Ad server site id");
-
-/* public/themes/admin/tpl/advertisement/config.tpl */
-gettext("The site id in the ad server. (i.e., 75)");
 
 /* public/themes/admin/tpl/advertisement/list.tpl */
 gettext("Advertisements");
@@ -6389,19 +6554,25 @@ gettext("Internal name");
 gettext("Articles");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
 gettext("Available");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("Show in rss");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
+gettext("No available categories for listing");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Internal name");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Articles");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Available");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("No available categories for listing");
@@ -6416,16 +6587,22 @@ gettext("Internal name");
 gettext("Articles");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
+gettext("Available");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("No available categories for listing");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl/category/list.tpl */
+gettext("Internal name");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("Advertisements");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("No available categories for listing");
@@ -6440,16 +6617,7 @@ gettext("Internal name");
 gettext("Articles");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
 gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("No available categories for listing");
@@ -6464,16 +6632,7 @@ gettext("Internal name");
 gettext("Articles");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
 gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("No available categories for listing");
@@ -6488,64 +6647,7 @@ gettext("Internal name");
 gettext("Articles");
 
 /* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
 gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("No available categories for listing");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Internal name");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Articles");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("No available categories for listing");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Internal name");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Articles");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Advertisements");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Available");
-
-/* public/themes/admin/tpl/category/list.tpl */
-gettext("Actions");
 
 /* public/themes/admin/tpl/category/list.tpl */
 gettext("No available categories for listing");
@@ -6708,6 +6810,9 @@ gettext("Config disqus module");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
 gettext("Config");
+
+/* public/themes/admin/tpl/comment/disqus/list.tpl */
+gettext("To moderate your Disqus comments, click here");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
 gettext("Disqus not configured");
@@ -6885,6 +6990,12 @@ gettext("Create new author");
 
 /* public/themes/admin/tpl/opinion/author_list.tpl */
 gettext("New author");
+
+/* public/themes/admin/tpl/opinion/author_list.tpl */
+gettext("FILTER:");
+
+/* public/themes/admin/tpl/opinion/author_list.tpl */
+gettext("Filter by name or email");
 
 /* public/themes/admin/tpl/opinion/author_list.tpl */
 gettext("Loading");
@@ -7106,6 +7217,9 @@ gettext("Username");
 gettext("View as Blog");
 
 /* public/themes/admin/tpl/opinion/author_new.tpl */
+gettext("If this option is activated page author will be showed as blog");
+
+/* public/themes/admin/tpl/opinion/author_new.tpl */
 gettext("Other Blog Url");
 
 /* public/themes/admin/tpl/opinion/author_new.tpl */
@@ -7265,6 +7379,12 @@ gettext("Editorial opinions in Opinion frontpage");
 gettext("How many editorial opinions will be shown in the opinion frontpage.");
 
 /* public/themes/admin/tpl/opinion/config.tpl */
+gettext("Opinions in Opinion frontpage");
+
+/* public/themes/admin/tpl/opinion/config.tpl */
+gettext("How many opinions opinions will be shown in the opinion frontpage.");
+
+/* public/themes/admin/tpl/opinion/config.tpl */
 gettext("Author opinions in frontpage opinion widget:");
 
 /* public/themes/admin/tpl/opinion/config.tpl */
@@ -7283,7 +7403,10 @@ gettext("Listing");
 gettext("Opinion frontpage");
 
 /* public/themes/admin/tpl/opinion/list.tpl */
-gettext("Listing");
+gettext("Opinion");
+
+/* public/themes/admin/tpl/opinion/list.tpl */
+gettext("Blog");
 
 /* public/themes/admin/tpl/opinion/list.tpl */
 gettext("Config opinion module");
@@ -7653,6 +7776,12 @@ gettext("Total in album frontpage");
 
 /* public/themes/admin/tpl/album/config.tpl */
 gettext(" Use this to define how many albums can see in the album frontpage. ");
+
+/* public/themes/admin/tpl/album/config.tpl */
+gettext("Total in album frontpage/widget more albums");
+
+/* public/themes/admin/tpl/album/config.tpl */
+gettext("Total number of album on more albums section in album home frontpage");
 
 /* public/themes/admin/tpl/album/list.tpl */
 gettext("Albums");
@@ -8573,31 +8702,25 @@ gettext("Lastest purchases");
 gettext("Show all…");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("The journalism CMS");
+gettext("Go to admin main page");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("Check Your E-Mail");
+gettext("The CMS for journalism");
+
+/* public/themes/admin/tpl/login/recover_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/login/recover_pass.tpl */
+gettext("FAQ");
+
+/* public/themes/admin/tpl/login/recover_pass.tpl */
+gettext("Contact support");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
 gettext("We've sent an e-mail to");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("Please check your e-mail now for a message with the subject line \"Password reminder\" from");
-
-/* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("Click the link in the e-mail to set a password for your account.");
-
-/* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("To protect your privacy, we only send this information to the e-mail address associated with this account.");
-
-/* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("PLEASE NOTE");
-
-/* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("If this is not the e-mail address associated with your account, click the link to resubmit the \"Reset Your Password\" request with the correct e-mail address");
-
-/* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("Recover password");
+gettext("Please check your e-mail now for a message with the subject line \"Password reminder\".");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
 gettext("If you use e-mail filtering or anti-spam software,please make sure our e-mail is not filtered or blocked.");
@@ -8606,10 +8729,13 @@ gettext("If you use e-mail filtering or anti-spam software,please make sure our 
 gettext("Enter your e-mail address and click Submit to recover your password.");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
-gettext("E-mail");
+gettext("Email");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
 gettext("Submit");
+
+/* public/themes/admin/tpl/login/recover_pass.tpl */
+gettext("Cancel");
 
 /* public/themes/admin/tpl/login/recover_pass.tpl */
 gettext("About");
@@ -8633,7 +8759,25 @@ gettext("Legal");
 gettext("Legal");
 
 /* public/themes/admin/tpl/login/login.tpl */
-gettext("The journalism CMS");
+gettext("Go to admin main page");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("The CMS for journalism");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("FAQ");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("Contact support");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("Log in");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("Username or email");
 
 /* public/themes/admin/tpl/login/login.tpl */
 gettext("User name");
@@ -8642,10 +8786,16 @@ gettext("User name");
 gettext("Password");
 
 /* public/themes/admin/tpl/login/login.tpl */
-gettext("Enter");
+gettext("Password");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("Log in");
 
 /* public/themes/admin/tpl/login/login.tpl */
 gettext("Forgot Password?");
+
+/* public/themes/admin/tpl/login/login.tpl */
+gettext("or use");
 
 /* public/themes/admin/tpl/login/login.tpl */
 gettext("About");
@@ -8669,7 +8819,22 @@ gettext("Legal");
 gettext("Legal");
 
 /* public/themes/admin/tpl/login/regenerate_pass.tpl */
-gettext("The journalism CMS");
+gettext("Go to admin main page");
+
+/* public/themes/admin/tpl/login/regenerate_pass.tpl */
+gettext("The CMS for journalism");
+
+/* public/themes/admin/tpl/login/regenerate_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl/login/regenerate_pass.tpl */
+gettext("FAQ");
+
+/* public/themes/admin/tpl/login/regenerate_pass.tpl */
+gettext("Contact support");
+
+/* public/themes/admin/tpl/login/regenerate_pass.tpl */
+gettext("Recover password");
 
 /* public/themes/admin/tpl/login/regenerate_pass.tpl */
 gettext("User name");
@@ -8690,7 +8855,7 @@ gettext("Please enter your new password in both fields below, and then click Sub
 gettext("Password");
 
 /* public/themes/admin/tpl/login/regenerate_pass.tpl */
-gettext("Re-Enter Password");
+gettext("Password confirmation");
 
 /* public/themes/admin/tpl/login/regenerate_pass.tpl */
 gettext("Submit");
@@ -9221,12 +9386,6 @@ gettext("User name");
 gettext("Email");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
-gettext("Twitter user");
-
-/* public/themes/manager/tpl/acl/user/new.tpl */
-gettext("Username");
-
-/* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("Blog Url");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
@@ -9389,7 +9548,7 @@ gettext("Accept");
 gettext("Delete instance");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
-gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+gettext("Are you sure that do you want delete the instance \"[% title %]\"?");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
 gettext("Yes, delete");
@@ -9398,10 +9557,10 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/manager/tpl/instances/modals/_modalBatchDelete.tpl */
-gettext("Delete instances");
+gettext("Delete selected items");
 
 /* public/themes/manager/tpl/instances/modals/_modalBatchDelete.tpl */
-gettext("Are you sure you want to delete <span>%num%</span> instances?");
+gettext("Are you sure you want to delete [% selected %] instances(s)?");
 
 /* public/themes/manager/tpl/instances/modals/_modalBatchDelete.tpl */
 gettext("Yes, delete all");
@@ -9409,11 +9568,8 @@ gettext("Yes, delete all");
 /* public/themes/manager/tpl/instances/modals/_modalBatchDelete.tpl */
 gettext("No");
 
-/* public/themes/manager/tpl/instances/modals/_modalBatchDelete.tpl */
-gettext("You must select some instances");
-
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Instance Manager");
+gettext("Instances");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Batch actions");
@@ -9423,12 +9579,6 @@ gettext("Batch actions");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Batch actions");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Delete");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Batch delete");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Batch activate");
@@ -9437,28 +9587,91 @@ gettext("Batch activate");
 gettext("Batch desactivate");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("New Instance");
+gettext("Delete");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("New Instance");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("New Instance");
+gettext("Create");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("New");
+gettext("FILTER:");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Filter by instance name");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Filter by e-mail");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Filter by name");
+gettext("Name");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Per page");
+gettext("Domains");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Search");
+gettext("Contact");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Last access");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Created");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Contents");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Articles");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Opinions");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Advertisements");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Albums");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Photos");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Videos");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Widgets");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Static pages");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Attachments");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Polls");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Letters");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Media size");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Alexa");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Page views");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Users");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Emails");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Loading");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("#");
@@ -9479,7 +9692,55 @@ gettext("Last access");
 gettext("Created");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("Contents");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Articles");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Opinions");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Advertisements");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Albums");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Photos");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Videos");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Widgets");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Static pages");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Attachments");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Polls");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Letters");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Media size");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Alexa");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Page views");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Users");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Emails");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Activated");
@@ -9488,37 +9749,52 @@ gettext("Activated");
 gettext("Actions");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("There is no available instances yet");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Edit");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Published");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Published");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Unpublished");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Unpublished");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Images");
+gettext("Articles");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Ads");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("Files");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Opinions");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Albums");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Images");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Videos");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Polls");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Widgets");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Static pages");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Letters");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Edit");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Delete");
+gettext("Showing");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("There is no available instances yet");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Number of contents");
+gettext("of");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
 gettext("Welcome to OpenNemas");
@@ -9527,13 +9803,7 @@ gettext("Welcome to OpenNemas");
 gettext("Your Opennemas' Newspaper is now available");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
-gettext("Your data are");
-
-/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
-gettext("User");
-
-/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
-gettext("Password");
+gettext("To enable your account go to:");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
 gettext("You can access to newspaper with this link");
@@ -9578,7 +9848,7 @@ gettext("Sincerely");
 gettext("Creating new intance");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Editing instance \"%1\"");
+gettext("Editing instance ");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Save");
@@ -9599,115 +9869,52 @@ gettext("Cancel");
 gettext("Go back");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("General");
+gettext("General information");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Information");
+gettext("Domains");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Internals");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Newsletter");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("External Services");
+gettext("Domains");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Modules");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Instance name");
+gettext("Internal information");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("External Services");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Site name");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("(Human readable name)");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Activated");
+gettext("Template");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Yes");
+gettext("Last invoice date");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("No");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Domains:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("List of domains separated by commas. You can use wildcards, i.e. *.example.com");
+gettext("Main domain");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Domain expire date:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("User contact IP:");
+gettext("Internal name");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Created:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("User name:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("User password:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("(The password must have between 8 and 16 characters)");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("User contact mail:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Site title:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Site description:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Site keywords:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Site agency:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Time Zone:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Language");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Internal name:");
+gettext("Alphanumeric, without spaces");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Used for cache prefixes and internal ONM operations");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Template:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("External media url:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Enable advertisements:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Default: true");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Items per page:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Default: 20 elements");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Refresh page every (secs):");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Default: 900 secs");
+gettext("Database name");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Minimum password level");
@@ -9725,88 +9932,13 @@ gettext("Good");
 gettext("Strong");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database Type:");
+gettext("Time Zone");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Mysql/Percona");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Mysql/Percona old driver");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Postgres");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Oracle");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Please doble check your database settings, those will be used as the default Database data access for this instance.");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database server:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database name:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database user:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Database password:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Newsletter");
+gettext("Language");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Num Max emails sent by month");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Last invoice date:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Google Services");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Google Maps API key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Get API keys");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("You can get your Google Maps API Key from <a href=\"http://code.google.com/intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>.");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Google Search API key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Facebook");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("APP key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Get API keys");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("You can get your Facebook App Keys from <a href=\"https://developers.facebook.com/apps\">Facebook Developers website</a>.");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Secret key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Google Analytics Statistics");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("API key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Get API keys");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("You can get your Google Analytics Site ID from <a href=\"https://www.google.com/analytics/\">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Base domain:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Piwik Statistics");
@@ -9815,37 +9947,37 @@ gettext("Piwik Statistics");
 gettext("Page ID:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Get API keys");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
 gettext("You can get your Piwik Site information from <a href=\"https://piwik.openhost.es/admin\">our Piwik server</a>.");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Private key:");
+gettext("Piwik Statistics");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Recaptcha");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Public Key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Get API keys");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("You can get your recaptcha API Keys from <a href=\"https://www.google.com/recaptcha/admin/create\">reCATPCHA website</a>.");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Private key:");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Activated modules");
+gettext("Server url");
 
 /* public/themes/manager/tpl/error/404.tpl */
 gettext("We already have being informed of this error: %1");
 
 /* public/themes/manager/tpl/login/login.tpl */
-gettext("The journalism CMS");
+gettext("Go to admin main page");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("The CMS for journalism");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("Help");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("FAQ");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("Contact support");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("Log in");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("Username or email");
 
 /* public/themes/manager/tpl/login/login.tpl */
 gettext("User name");
@@ -9854,7 +9986,10 @@ gettext("User name");
 gettext("Password");
 
 /* public/themes/manager/tpl/login/login.tpl */
-gettext("Enter");
+gettext("Password");
+
+/* public/themes/manager/tpl/login/login.tpl */
+gettext("Log in");
 
 /* public/themes/manager/tpl/login/login.tpl */
 gettext("About");

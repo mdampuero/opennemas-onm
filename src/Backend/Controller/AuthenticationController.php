@@ -11,9 +11,11 @@
 namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Onm\Framework\Controller\Controller;
 
@@ -25,15 +27,54 @@ class AuthenticationController extends Controller
 {
     /**
      * Displays the login form template.
+     *
+     * @return Response The response object.
      */
     public function loginAction(Request $request)
     {
         $error   = null;
         $route   = $request->get('_route');
         $referer = $this->generateUrl('admin_welcome');
+        $session = $request->getSession();
+        $token   = $request->get('token');
 
-        if ($this->session->get('_security.backend.target_path')) {
-            $referer = $this->session->get('_security.backend.target_path');
+        $session->set('login_callback', $referer);
+
+        if ($token) {
+            $user = $this->get('user_repository')->findBy(
+                array(
+                    'token' => array(array('value' => $token))
+                ),
+                array('token' => 'asc'),
+                1,
+                1
+            );
+
+            if (!$user) {
+                $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
+                return $this->redirect($this->generateUrl('admin_login_form'));
+            }
+
+            $user = array_pop($user);
+            $user->updateUserToken($user->id, null);
+            $token = new UsernamePasswordToken($user, null, 'backend', $user->getRoles());
+
+            $securityContext = $this->get('security.context');
+            $securityContext->setToken($token);
+
+            $request = $this->getRequest();
+            $session->set('_security_backend', serialize($token));
+
+            if ($session->get('_security.backend.target_path')) {
+                $referer = $session->get('_security.backend.target_path');
+            }
+
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+
+
+        if ($session->get('_security.backend.target_path')) {
+            $referer = $session->get('_security.backend.target_path');
         }
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -54,7 +95,7 @@ class AuthenticationController extends Controller
                 $msg = $error->getMessage();
             }
 
-            $this->session->getFlashBag()->add('error', $msg);
+            $session->getFlashBag()->add('error', $msg);
 
             $_SESSION['failed_login_attempts'] =
                 isset($_SESSION['failed_login_attempts']) ?
@@ -79,8 +120,25 @@ class AuthenticationController extends Controller
                 'failed_login_attempts' => $failedLoginAttempts,
                 'current_language'      => $currentLanguage,
                 'token'                 => $token,
-                'referer'               => $referer
+                'referer'               => $referer,
+                'languages'             => $this->container->getParameter('available_languages')
             )
         );
+    }
+
+    /**
+     * Displays a popup after login/connect with social accounts.
+     *
+     * @return Response The response object.
+     */
+    public function loginCallbackAction(Request $request)
+    {
+        $redirect = $request->getSession()->get('_security.backend.target_path');
+
+        if ($redirect == '/admin/login/callback') {
+            return $this->render('common/close_popup.tpl');
+        } else {
+            return $this->redirect($redirect);
+        }
     }
 }

@@ -46,7 +46,23 @@ EOF
 
         // Loads one ONM instance from database
         $im = $this->getContainer()->get('instance_manager');
-        $instance = $im->loadFromInternalName($internalName);
+
+        $instance = $im->findOneBy(
+            array('internal_name' => array(array('value' => $internalName)))
+        );
+
+        //If found matching instance initialize its contants and return it
+        if (is_object($instance)) {
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+        }
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
@@ -55,7 +71,6 @@ EOF
         $cache->setNamespace($instance->internal_name);
 
         // Initialize the instance database connection
-        $databaseName               = $instance->getDatabaseName();
         $databaseInstanceConnection = $this->getContainer()->get('db_conn');
 
         // CRAP: take this out, Workaround
@@ -134,7 +149,7 @@ EOF
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
             $newFile = $basePath.$category_name.".html";
-            $result  = file_put_contents($newFile, $htmlOut);
+            file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);
         }

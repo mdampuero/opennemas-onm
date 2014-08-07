@@ -42,8 +42,6 @@ class OpinionsController extends Controller
 
         $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
         $this->view->assign('actual_category', 'opinion'); // Used in renderMenu
-
-        $this->cm = new \ContentManager();
     }
 
     /**
@@ -55,19 +53,25 @@ class OpinionsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
+        $filters = array('content_status' => array(array('value' => 1)));
+        $em      = $this->get('opinion_repository');
+
         if ($this->page == 1) {
-            $where = '';
-            $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
+            $order['in_home']  = 'DESC';
+            $order['position'] = 'ASC';
+            $order['starttime'] = 'DESC';
+            $filters['in_home'] = array(array('value' => 1));
         } else {
-            $where = 'AND contents.in_home=0 ';
-            $orderBy='ORDER BY starttime DESC ';
+            $order['in_home']  = 'DESC';
+            $order['starttime'] = 'DESC';
         }
+
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
             // Fetch last opinions from editorial
             $configurations = s::get('opinion_settings');
@@ -83,13 +87,12 @@ class OpinionsController extends Controller
 
             $editorial = array();
             if (!empty($totalEditorial)) {
-                $editorial = $this->cm->find(
-                    'Opinion',
-                    'opinions.type_opinion=1 '.
-                    'AND contents.content_status=1 '.$where,
-                    $orderBy.
-                    'LIMIT '.$totalEditorial
+                $ef = array_merge(
+                    $filters,
+                    array('type_opinion' => array(array('value' => 1)))
                 );
+
+                $editorial = $em->findBy($ef, $order, $totalEditorial, $this->page);
             }
 
             foreach ($editorial as &$op) {
@@ -99,42 +102,45 @@ class OpinionsController extends Controller
                 $op->summary = $item->summary;
                 $op->img1_footer = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $op->img1 = new \Photo($item->img1);
+                    $op->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
             }
 
             // Fetch last opinions from director
             $director = array();
             if (!empty($totalDirector)) {
-                $director = $this->cm->find(
-                    'Opinion',
-                    'opinions.type_opinion=2 '.
-                    'AND contents.content_status=1 '.$where,
-                    $orderBy.
-                    ' LIMIT '.$totalDirector
+                $ef = array_merge(
+                    $filters,
+                    array('type_opinion' => array(array('value' => 2)))
                 );
+
+                $director = $em->findBy($ef, $order, $totalDirector, $this->page);
             }
 
             if (isset($director) && !empty($director)) {
                 // Fetch the photo image of the director
-                $aut = new \User($director[0]->fk_author);
-                if (isset($aut->photo->path_file)) {
-                    $dir['photo'] = $aut->photo->path_file;
+                $aut = $this->get('user_repository')->find($director[0]->fk_author);
+                if (!empty($aut)) {
+                    if (isset($aut->photo->path_file)) {
+                        $dir['photo'] = $aut->photo->path_file;
+                    }
+                    $dir['name'] = $aut->name;
                 }
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
-                $dir['summary'] = $item->summary;
+                $dir['summary']     = $item->summary;
                 $dir['img1_footer'] = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $dir['img1'] = new \Photo($item->img1);
+                    $dir['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
-                $dir['name'] = $aut->name;
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
                 $director[0]->summary = $item->summary;
                 $director[0]->img1_footer = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $director[0]->img1 = new \Photo($item->img1);
+                    $director[0]->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
 
                 $this->view->assign(
@@ -146,7 +152,10 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $numOpinions  = s::get('items_per_page');
+            if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+                $numOpinions = $configurations['total_opinions'];
+            }
              // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -156,24 +165,35 @@ class OpinionsController extends Controller
                     $authorsBlog[$authorData->id] = $authorData;
                 }
             }
+
             if (!empty($authorsBlog)) {
-                $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+                // Must drop the blogs
+                $filters = array_merge(
+                    $filters,
+                    array('opinions`.`fk_author'  => array(array('value' => array_keys($authorsBlog), 'operator' => 'NOT IN')))
+                );
             }
 
-            list($countOpinions, $opinions)= $this->cm->getCountAndSlice(
-                'Opinion',
-                null,
-                'opinions.type_opinion=0 '.
-                $where.
-                'AND contents.content_status=1 ',
-                $orderBy,
-                $this->page,
-                $itemsPerPage
+            $of = array_merge(
+                $filters,
+                array('type_opinion' => array(array('value' => 0)))
             );
+
+            $opinions  = $em->findBy($of, $order, $numOpinions, $this->page);
+
+            if ($this->page == 1) {
+                // Make pagination using all opinions. Overwriting filter
+                $of = array_merge(
+                    $of,
+                    array('in_home' => array(array('value' => array(0,1), 'operator' => 'IN' )))
+                );
+
+            }
+            $countOpinions = $em->countBy($of);
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
+                    'perPage'     => $numOpinions,
                     'append'      => false,
                     'path'        => '',
                     'delta'       => 3,
@@ -190,12 +210,21 @@ class OpinionsController extends Controller
             $opinionsResult = array();
             foreach ($opinions as $opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
-                    $author = new \User($opinion->fk_author);
+                    $author = $this->get('user_repository')->find($opinion->fk_author);
+
+                    if (!is_object($author)) {
+                        $author = new \User();
+                    }
+
                     $authors[$opinion->fk_author] = $author;
                 } else {
                     $author = $authors[$opinion->fk_author];
                 }
-                if (!array_key_exists('is_blog', $author->meta) || $author->meta['is_blog'] != 1) {
+
+                if (empty($author->meta)
+                    || !array_key_exists('is_blog', $author->meta)
+                    || $author->meta['is_blog'] == 0
+                ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
                     $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
@@ -204,7 +233,7 @@ class OpinionsController extends Controller
                     $opinion->summary = $item->summary;
                     $opinion->img1_footer = $item->img1_footer;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $opinion->img1 = new \Photo($item->img1);
+                        $opinion->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
 
                     $opinion->author->uri = \Uri::generate(
@@ -216,6 +245,7 @@ class OpinionsController extends Controller
                     );
                     $opinionsResult[] = $opinion;
                 }
+
             }
 
             $this->view->assign(
@@ -262,7 +292,7 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
 
             // Getting Synchronize setting params
@@ -275,6 +305,8 @@ class OpinionsController extends Controller
                     }
                 }
             }
+
+            $this->cm = new \ContentManager();
 
             // Fetch last external opinions from editorial
             $editorial = $this->cm->getUrlContent($wsUrl.'/ws/opinions/editorialinhome/', true);
@@ -307,7 +339,7 @@ class OpinionsController extends Controller
             }
 
             // Sum of total opinions in home + not in home for the pager
-            $totalOpinions =  ITEMS_PAGE + (int)$this->cm->getUrlContent(
+            $totalOpinions =  ITEMS_PAGE + (int) $this->cm->getUrlContent(
                 $wsUrl.'/ws/opinions/countauthorsnotinhome/',
                 true
             );
@@ -395,10 +427,13 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
+            || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
             // Get author info
-            $author = new \User($authorID);
+            $author = $this->get('user_repository')->find($authorID);
+            if (is_null($author)) {
+                 return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
+            }
             $author->params = $author->getMeta();
             $author->slug   = strtolower(
                 $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
@@ -429,6 +464,8 @@ class OpinionsController extends Controller
             $itemsPerPage = s::get('items_per_page');
             $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
 
+            $this->cm = new \ContentManager();
+
             // Get the number of total opinions for this author for pagination purpouses
             $countOpinions = $this->cm->cache->count(
                 'Opinion',
@@ -454,7 +491,7 @@ class OpinionsController extends Controller
                     $opinion['author_name_slug']  = $author->slug;
                     $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $opinion['img1'] = new \Photo($item->img1);
+                        $opinion['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                     }
 
                     // Generate opinion uri
@@ -545,7 +582,8 @@ class OpinionsController extends Controller
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
+        ) {
 
             // Getting Synchronize setting params
             $wsUrl = '';
@@ -557,6 +595,8 @@ class OpinionsController extends Controller
                     }
                 }
             }
+
+            $this->cm = new \ContentManager();
 
             // Get author info
             $author = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$authorID, true);
@@ -621,6 +661,8 @@ class OpinionsController extends Controller
                 }
             }
 
+            $this->cm = new \ContentManager();
+
             $itemsPerPage = s::get('items_per_page');
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
@@ -678,14 +720,18 @@ class OpinionsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID   = $request->query->getDigits('opinion_id');
-        $opinionID = \Content::resolveID($dirtyID);
+
+        // Resolve article ID
+        $er = $this->get('entity_repository');
+        $opinionID = $er->resolveID($dirtyID);
+
 
         // Redirect to opinion frontpage if opinion_id wasn't provided
         if (empty($opinionID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
 
-        $opinion = new \Opinion($opinionID);
+        $opinion = $er->find('Opinion', $opinionID);
 
         // TODO: Think that this comments related code can be deleted.
         if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
@@ -701,13 +747,16 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
-
             $this->view->assign('contentId', $opinionID);
 
-            $author = new \User($opinion->fk_author);
+            $author = $this->get('user_repository')->find($opinion->fk_author);
             $opinion->author = $author;
 
-            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+            if (is_object($author)
+                && is_array($author->meta)
+                && array_key_exists('is_blog', $author->meta)
+                && $author->meta['is_blog'] == 1
+            ) {
                 return new RedirectResponse(
                     $this->generateUrl(
                         'frontend_blog_show',
@@ -725,15 +774,14 @@ class OpinionsController extends Controller
 
             // Machine suggested contents code -----------------------------
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-                $opinion->metadata,
                 'opinion',
-                " contents.content_status=1 AND pk_content = pk_fk_content",
+                " pk_content <>".$opinion->id,
                 4
             );
 
             // Get author slug for suggested opinions
             foreach ($machineSuggestedContents as &$suggest) {
-                $element = new \Opinion($suggest['pk_content']);
+                $element = $er->find('Opinion', $suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
                     $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
@@ -747,7 +795,7 @@ class OpinionsController extends Controller
 
             // Associated media code --------------------------------------
             if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                $photo = new \Photo($opinion->img2);
+                $photo = $er->find('Photo', $opinion->img2);
                 $this->view->assign('photo', $photo);
             }
 
@@ -755,13 +803,17 @@ class OpinionsController extends Controller
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
+                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
+                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }
+
+            $this->cm = new \ContentManager();
 
             $otherOpinions = $this->cm->find(
                 'Opinion',
@@ -793,6 +845,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'opinion,'.$opinionID,
             )
         );
     }
@@ -827,7 +880,10 @@ class OpinionsController extends Controller
 
         $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $dirtyID);
 
-        if (($this->view->caching == 0) || !$this->view->isCached('opinion.tpl', $cacheID)) {
+        if (($this->view->caching == 0)
+            || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
+        ) {
+            $this->cm = new \ContentManager();
 
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);

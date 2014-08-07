@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,36 +7,45 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * Handles common operations with users
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
+ *
+ * This class is designed for inheritance and users can subclass this class to
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
  */
 class UserManager extends BaseManager
 {
     /**
-     * Initializes the entity manager
+     * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance
-     **/
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
+     */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn      = $dbConn;
+        $this->conn        = $conn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
     }
 
     /**
-     * Counts searched users given a criteria
+     * Counts searched users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param array $criteria The criteria used to search the users.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -45,8 +55,8 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchArray($sql);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -58,14 +68,15 @@ class UserManager extends BaseManager
     /**
      * Finds one user from the given a user id.
      *
-     * @param  integer $id Menu id
-     * @return Menu
+     * @param integer $id User id.
+     *
+     * @return User The matched user.
      */
     public function find($id)
     {
         $entity = null;
 
-        $cacheId = "user_" . $id;
+        $cacheId = "user" . $this->cacheSeparator . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -86,13 +97,14 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Searches for users given a criteria
+     * Searches for users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -108,8 +120,9 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT id FROM `users` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+
+        $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -122,39 +135,87 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Find multiple users from a given array of content ids.
+     * Searches for users given a criteria.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
+     */
+    public function findByUserMeta($criteria, $order, $elementsPerPage = null, $page = null)
+    {
+        // Building the SQL filter
+        $whereSQL = $this->getFilterSQL($criteria);
+
+        $orderSQL = '`id` DESC';
+        if (!empty($order)) {
+            $orderSQL = $this->getOrderBySQL($order);
+        }
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
+
+        // Executing the SQL
+        $sql = "SELECT id FROM `users`,`usermeta` "
+            . "WHERE `users`.`id`=`usermeta`.`user_id` AND $whereSQL "
+            . "ORDER BY $orderSQL $limitSQL";
+
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['id'];
+        }
+
+        $users = $this->findMulti($ids);
+
+        return $users;
+    }
+
+    /**
+     * Find multiple users from a given array of user ids.
+     *
+     * @param array $data Array of preprocessed user ids.
+     *
+     * @return array Array of users.
      */
     public function findMulti(array $data)
     {
-        $keys = array();
-        $ordered = array();
-
         $ids = array();
-        $i = 0;
+        $keys = array();
         foreach ($data as $value) {
-            $ids[] = 'user_'.$value;
-            $keys[$value] = $i++;
+            $ids[] = 'user' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
-        $users = $this->cache->fetch($ids);
+        $users = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($users as $user) {
-            $ordered[$keys[$user->id]] = $user;
-            $cachedIds[] = 'user_'.$user->id;
+            $cachedIds[] = 'user' . $this->cacheSeparator . $user->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
         foreach ($missedIds as $user) {
-            list($contentType, $contentId) = explode('_', $user);
+            list($contentType, $contentId) = explode($this->cacheSeparator, $user);
 
             $user = $this->find($contentId);
             if ($user && $user->id) {
-                $ordered[$keys[$user->id]] = $user;
+                $users[] = $user;
+            }
+        }
+
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($users) && $users[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($users)) {
+                $ordered[] = $users[$i];
             }
         }
 
@@ -162,17 +223,17 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Deletes a user and its metas.
+     * Deletes a user and its metas from database and cache.
      *
      * @param integer $id User id.
      */
     public function delete($id)
     {
-        $this->dbConn->transactional(function ($em) use ($id) {
+        $this->conn->transactional(function ($em) use ($id) {
             $em->executeQuery('DELETE FROM `users` WHERE `id`= ' . $id);
             $em->executeQuery('DELETE FROM `usermeta` WHERE `user_id`= ' . $id);
         });
 
-        $this->cache->delete('user_' . $id);
+        $this->cache->delete('user' . $this->cacheSeparator . $id);
     }
 }

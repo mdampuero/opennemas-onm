@@ -134,10 +134,9 @@ class ContentManager
         }
 
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` '
-             . 'WHERE '.$_where
-             . ' AND `contents`.`pk_content`= `'.$this->table
-             . '`.`pk_'.$this->content_type.'` '
-             . $orderBy;
+             . 'WHERE `contents`.`pk_content`= `'.$this->table. '`.`pk_'.$this->content_type.'`'
+             .' AND '.$_where
+             .' '.$orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->loadObject($rs, $contentType);
@@ -155,6 +154,8 @@ class ContentManager
      *
      * @deprecated deprecated since version 1.0
      * @see ContentManager::findAll()
+     *
+     * TODO: drop it
      **/
     public function find_all(
         $contentType,
@@ -308,24 +309,23 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
-        $cache = getService('cache');
-        $contentsFromCache = $cache->fetch('frontpage_elements_'.$categoryID);
-        if (is_array($contentsFromCache)) {
-            return $contentsFromCache;
+        $cache      = getService('cache');
+        $contentIds = $cache->fetch('frontpage_elements_map_'.$categoryID);
+
+        if (!is_array($contentIds) || count($contentIds) <= 0) {
+            // Fetch the list of contents for the current frontpage and its metadata
+            // We need to get articles in frontpage too in order to mark them as in_frontpage
+            $contentIds = $this->getContentIdsInHomePageWithIDs(
+                array((int) $categoryID, 0)
+            );
+
+            $cache->save('frontpage_elements_map_'.$categoryID, $contentIds);
         }
 
-        // Fetch the id, placeholder, position, and content_type
-        // in this category's frontpage
-        // The second parameter is the id for the homepage category
-        $contentIds = $this->getContentIdsInHomePageWithIDs(
-            array((int) $categoryID, 0)
-        );
-
+        // Build an array with contents that exist in the main frontapge
         $contentsInFrontpage = array_unique(
             array_map(
-                function (
-                    $content
-                ) {
+                function ($content) {
                     if ($content['frontpage_id'] == 0) {
                         return $content['content_id'];
                     } else {
@@ -336,21 +336,42 @@ class ContentManager
             )
         );
 
+        // Clear out home frontpage authors
+        $contentIds = array_filter(
+            $contentIds,
+            function ($content) use ($categoryID) {
+                return ($content['frontpage_id'] == $categoryID);
+            }
+        );
 
         if (is_array($contentIds) && count($contentIds) > 0) {
 
-            // iterate over all found contents and initialize them
+            $er = getService('entity_repository');
+
+            // Retrieve contents from cache
+            $contentsMap = array_map(function ($content) {
+                return array($content['content_type'], $content['content_id']);
+            }, $contentIds);
+
+            $contentsRaw = $er->findMulti($contentsMap);
+
+            // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
+
                 // Only add elements for the requested category id
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
                 }
-
-                $content = new $element['content_type']($element['content_id']);
+                foreach ($contentsRaw as $contentRaw) {
+                    if ($element['content_id'] == $contentRaw->id) {
+                        $content = $contentRaw;
+                        break;
+                    }
+                }
 
                 // add all the additional properties related with positions
                 // and params
-                if ($content->in_litter == 0) {
+                if (is_object($content) && $content->in_litter == 0) {
                     $content->load(
                         array(
                             'placeholder' => $element['placeholder'],
@@ -365,20 +386,17 @@ class ContentManager
                     } else {
                         $content->params = $element['params'];
                     }
-                    if (in_array($element['content_id'], $contentsInFrontpage)) {
-                        $content->in_frontpage = true;
-                    } else {
-                        $content->in_frontpage = false;
-                    }
+
+                    $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
+
                     if (\Onm\Module\ModuleManager::isActivated('AVANCED_FRONTPAGE_MANAGER')) {
                         $content->loadAllContentProperties();
                     }
+
                     $contents[] = $content;
                 }
             }
         }
-
-        $cache->save('frontpage_elements_'.$categoryID, $contents);
 
         // Return all the objects of contents initialized
         return $contents;
@@ -531,22 +549,23 @@ class ContentManager
         $categoryID,
         $elements = array()
     ) {
-
         // Starting the Transaction
         $GLOBALS['application']->conn->StartTrans();
 
-        // Clean all the contents for this category after insert the new ones
-        $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
-            $categoryID
-        );
-
-        if (!$clean) {
-            return false;
-        }
         $positions = array();
         $contentIds = array();
-
+        $returnValue = false;
         if (count($elements) > 0) {
+            // Clean all the contents for this category after insert the new ones
+            $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
+                $categoryID
+            );
+
+            if (!$clean) {
+                $GLOBALS['application']->conn->RollbackTrans();
+                return false;
+            }
+
             // Foreach element setup the sql values statement part
             foreach ($elements as $element) {
                 $positions[] = array(
@@ -567,7 +586,6 @@ class ContentManager
             $sqlPrep = $GLOBALS['application']->conn->Prepare($stmt);
 
             $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
-
 
             // Handling if there were some errors into the execution
             if (!$rs) {
@@ -791,55 +809,67 @@ class ContentManager
         $num = 9,
         $all = false
     ) {
-        $this->init($contentType);
+        $em = getService('entity_repository');
 
-        $items   = array();
-        $_tables = '`contents`, `'.$this->table.'` ';
-        $_where  = '`contents`.`in_litter`=0 ';
-        if (!$all) {
-            //  $_where .= 'AND `contents`.`content_status`=1
-            //  AND `contents`.`available`=1 ';
-            $_where .= '  AND `contents`.`available`=1 ';
-        }
-        $_days     = 'AND  `contents`.`created`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT '.$num;
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P' . $days . 'D'));
+        $date = $date->format('Y-m-d H:i:s');
 
-        if (intval($category) > 0) {
-            $_category = 'AND pk_fk_content_category='.$category
-            .'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
-            $_tables   .= ', `contents_categories` ';
-        } else {
-            $_category = '';
-        }
+        $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
+            'content_type_name' => array(array('value' => $contentType)),
+            'in_litter'         => array(array('value' => 0)),
+            'created'           => array(array('value' => $date, 'operator' => '>=')),
+            'starttime'         => array(array('value' => $date, 'operator' => '>=')),
+            'endtime'           => array(
+                'union' => 'OR',
+                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
+                array('value' => $date, 'operator' => '>')
+            ),
+        );
 
-        if (intval($author) > 0) {
-            if ($contentType=='Opinion') {
-                $_author = 'AND `opinions`.`fk_author`='.$author.' ';
-            } else {
-                $_author = 'AND `opinions`.`fk_author`='.$author.' ';
+        $order = array('content_views.views' => 'desc');
+
+        if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
             }
-        } else {
-            $_author = '';
+
+            $criteria['category_name'] = array(array('value' => $category));
         }
 
-        $sql = 'SELECT * FROM '.$_tables
-             . 'WHERE '.$_where.$_category.$_author.$_days
-             . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
-             . $_order_by;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs->_numOfRows<$num && $notEmpty) {
-            $sql = 'SELECT * FROM '.$_tables
-                 . 'WHERE '.$_where.$_category.$_author
-                 . ' AND `contents`.`pk_content`=`pk_'.$this->content_type.'` '
-                 . $_order_by;
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($author) {
+            $criteria['fk_author'] = array(array('value' => $author));
         }
 
-        $items = $this->loadObject($rs, $contentType);
+        if (!$all) {
+            $criteria['content_status'] = array(array('value' => 1));
+        }
 
-        return $this->getInTime($items);
+        $contents = $em->findBy($criteria, $order, $num, 1);
+
+        // Repeat without 'created' filter
+        if (count($contents) == 0) {
+            unset($criteria['created']);
+            unset($criteria['starttime']);
+            unset($criteria['endtime']);
+            $contents = $em->findBy($criteria, $order, $num, 1);
+        }
+
+        return $contents;
     }
 
     /**
@@ -875,7 +905,7 @@ class ContentManager
                 FROM contents, comments, articles
                 WHERE contents.pk_content = comments.content_id
                 AND contents.pk_content = articles.pk_article
-                AND contents.available=1
+                AND contents.content_status=1
                 AND created >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
                 GROUP BY contents.pk_content
                 ORDER BY num_comments DESC, contents.created DESC
@@ -948,7 +978,7 @@ class ContentManager
         $_fields = ' * ';
         $_where = '`contents`.in_litter=0 ';
         if (!$all) {
-            $_where .= ' AND `contents`.`available`=1 ';
+            $_where .= ' AND `contents`.`content_status`=1 ';
         }
 
         $_days = 'AND  `contents`.created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
@@ -1012,43 +1042,66 @@ class ContentManager
         $num = 6,
         $all = false
     ) {
-        $items = array();
-        $_tables = '`contents`  ';
-        $_where = '`contents`.`in_litter`=0 AND `fk_content_type` IN (1,3,4,7,9,11) ';
-        if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
-        }
-        $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
+        $em = getService('entity_repository');
 
-        if (intval($category) > 0) {
-            $_category = 'AND pk_fk_content_category='.$category
-                .'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
-            $_tables .= ', `contents_categories` ';
-        } else {
-            $_category = '';
-        }
+        $now = new \DateTime();
+        $now = $now->format('Y-M-d H:i:s');
 
-        $sql = 'SELECT * FROM '.$_tables .
-                'WHERE '.$_where.$_category.$_days.
-                $_order_by;
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P' . $days . 'D'));
+        $date = $date->format('Y-m-d H:i:s');
 
-        if ($rs->_numOfRows<$num && $notEmpty) {
-            while ($rs->_numOfRows<$num && $days<30) {
-                $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $criteria = array(
+            'join' => array(
+                array(
+                    'table'               => 'content_views',
+                    'type'                => 'left',
+                    'contents.pk_content' => array(
+                        array(
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        )
+                    )
+                )
+            ),
+            'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
+            'in_litter'       => array(array('value' => 0)),
+            'created'         => array(array('value' => $date, 'operator' => '>=')),
+            'starttime'       => array(array('value' => $date, 'operator' => '>=')),
+            'endtime'         => array(
+                'union' => 'OR',
+                array('value' => '0000-00-00 00:00:00', 'operator' => '='),
+                array('value' => $now, 'operator' => '>')
+            ),
+        );
 
-                $sql = 'SELECT * FROM '.$_tables .
-                        'WHERE '.$_where.$_category. $_days.
-                        ' '.$_order_by;
-                $rs = $GLOBALS['application']->conn->Execute($sql);
-                $days+=1;
+        $order = array('content_views.views' => 'desc');
+
+        if ($category) {
+            $category = getService('category_repository')->find($category);
+
+            if ($category) {
+                $category = $category->name;
             }
+
+            $criteria['category_name'] = array(array('value' => $category));
         }
 
-        $items = $this->loadObject($rs, 'content');
+        if (!$all) {
+            $criteria['content_status'] = array(array('value' => 1));
+        }
 
-        return $this->getInTime($items);
+        $contents = $em->findBy($criteria, $order, $num, 1);
+
+        // Repeat without 'created' filter
+        if (count($contents) == 0) {
+            unset($criteria['created']);
+            unset($criteria['starttime']);
+            unset($criteria['endtime']);
+            $contents = $em->findBy($criteria, $order, $num, 1);
+        }
+
+        return $contents;
     }
 
      /**
@@ -1084,7 +1137,7 @@ class ContentManager
         $_fields = '*';
         $_where = '`contents`.in_litter=0 ';
         if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
+            $_where .= 'AND `contents`.`content_status`=1 ';
         }
         $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
@@ -1146,7 +1199,7 @@ class ContentManager
         $_where_slave = '';
         $_days = 'starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         if (!$all) {
-            $_where_slave = ' content_status=1 AND available=1 ';
+            $_where_slave = ' content_status=1 ';
             $_days = 'AND starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         }
 
@@ -1195,7 +1248,7 @@ class ContentManager
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         $sql = 'SELECT fk_content, count(pk_comment) AS num '
              . 'FROM   contents, comments '
-             . 'WHERE available=1 AND fk_content IN ('.$pk_list.') '
+             . 'WHERE content_status=1 AND fk_content IN ('.$pk_list.') '
              . 'GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1213,7 +1266,7 @@ class ContentManager
         $sql = 'SELECT `contents`.`pk_content`, '
              . '`contents`.`title`, `contents`.`slug` '
              . 'FROM contents, comments '
-             . 'WHERE available=1 AND pk_content IN ('.$pk_list.')';
+             . 'WHERE content_status=1 AND pk_content IN ('.$pk_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->loadObject($rs, 'content');
         if (empty($items)) {
@@ -1260,7 +1313,7 @@ class ContentManager
         $cm       = new ContentManager();
         $contents = $cm->findAll(
             'Article',
-            'content_status=1 AND available=1 AND frontpage=1'.
+            'content_status=1 AND content_status=1 AND frontpage=1'.
             ' AND in_home=2',
             'ORDER BY  created DESC,  title ASC '
         );
@@ -1316,11 +1369,11 @@ class ContentManager
         if (is_array($items)) {
             foreach ($items as $item) {
                 if (is_object($item)) {
-                    if (($item->available==1) && ($item->in_litter==0)) {
+                    if (($item->content_status==1) && ($item->in_litter==0)) {
                         $filtered[] = $item;
                     }
                 } else {
-                    if (($item['available']==1) && ($item['in_litter']==0)) {
+                    if (($item['content_status']==1) && ($item['in_litter']==0)) {
                         $filtered[] = $item;
                     }
                 }
@@ -1363,8 +1416,7 @@ class ContentManager
         if (intval($pk_fk_content_category) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
                  . 'FROM `contents_categories`, `contents`, ' . $this->table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`='
-                 . $pk_fk_content_category
+                 . ' WHERE `contents_categories`.`pk_fk_content_category`='. $pk_fk_content_category
                  . '  AND pk_content=`'.$this->table. '`.`pk_'.$this->content_type
                  . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                  . $_where;
@@ -1379,94 +1431,6 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return $rs;
-    }
-
-    /**
-     * Used for generate the backend listings
-     *
-     * Genera las consultas de find o find_by_category y la paginacion
-     * Devuelve el array con el segmento de contents que se visualizan en la
-     * pagina dada.
-     *
-     * <code>
-     * ContentManager::find_pages($contentType, $filter=null,
-     *     $_order_by='ORDER BY 1', $page=1, $items_page=10,
-     *     $pk_fk_content_category=null);
-     * </code>
-     *
-     * @param int         $contentType            Tipo contenido.
-     * @param string|null $filter                 Clausula where.
-     * @param string      $_order_by              Orden de visualizacion
-     * @param int         $page                   Página a visualizar.
-     * @param int         $items_page             Elementos por pagina.
-     * @param int|null    $pk_fk_content_category Id de categoria (para
-     *                                             find_by_category y si null
-     *                                             es find).
-     * @param string      $url the base path used by the pager
-     *
-     * @return array Array ($items, $pager)
-     */
-    public function find_pages(
-        $contentType,
-        $filter = null,
-        $_order_by = 'ORDER BY 1',
-        $page = 1,
-        $items_page = 10,
-        $pk_fk_content_category = null,
-        $url = null
-    ) {
-        $this->init($contentType);
-        $items = array();
-        $_where = '`contents`.`in_litter`=0';
-
-        if (!is_null($filter)) {
-            if ($filter == ' `contents`.`in_litter`=1'
-               || $filter == 'in_litter=1'
-            ) {
-                //se busca desde la litter.php
-                $_where = $filter;
-            } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
-            }
-        }
-        $countContents=$this->count($contentType, $filter, $pk_fk_content_category);
-        if (empty($page)) {
-            $page = 1;
-        }
-        $_limit=' LIMIT '.($page-1)*$items_page.', '.($items_page);
-
-        if (intval($pk_fk_content_category) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.'  ' .
-                ' WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category.
-                '  AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type
-                .'` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '.
-                 $_order_by.$_limit;
-        } else {
-            $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
-                . ' WHERE '.$_where
-                . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
-                . $_order_by.' '.$_limit;
-        }
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $items = $this->loadObject($rs, $contentType);
-
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $items_page,
-            'delta'       => 3,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $countContents,
-        );
-
-        if ($url != null) {
-            $pager_options['path'] = $url;
-        }
-        $pager = Pager::factory($pager_options);
-
-        return array($items, $pager);
     }
 
     /**
@@ -1657,7 +1621,6 @@ class ContentManager
             ON (`contents`.`pk_content`=`contents_categories`.`pk_fk_content`)
         WHERE `contents`.`content_status` =1
             AND `contents`.`frontpage` =1
-            AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
         ORDER BY `starttime` DESC ';
@@ -1707,7 +1670,6 @@ class ContentManager
         WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
             AND `contents`.`pk_content`=`articles`.`pk_article`
             AND `contents`.`content_status` =1
-            AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
         ORDER BY `created` DESC LIMIT 400 ';
@@ -2159,7 +2121,7 @@ class ContentManager
             $content = new Content($contentID);
             // Filter by scheduled {{{
             if ($content->isInTime()
-                && $content->available == 1
+                && $content->content_status == 1
                 && $content->in_litter == 0
             ) {
                 $content->category_name = $ccm->get_name($content->category);
@@ -2199,7 +2161,7 @@ class ContentManager
         $sql = 'SELECT * FROM contents, contents_categories '
               .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
               .'AND DATE(starttime) = "'.$date.'" '
-              .'AND available=1 AND in_litter=0 '
+              .'AND content_status=1 AND in_litter=0 '
               .'AND pk_fk_content = pk_content '.$where
               .' ORDER BY  fk_content_type ASC, starttime DESC ';
 
@@ -2282,8 +2244,8 @@ class ContentManager
                        contents.*,
                        comments.body as comment_body, comments.author as comment_author, comments.id as comment_id
                 FROM  contents, comments
-                WHERE contents.fk_content_type=1
-                  AND contents.in_litter !=1
+                WHERE contents.fk_content_type = 1
+                  AND contents.in_litter <> 1
                   AND comments.status = ?
                   AND contents.pk_content = comments.content_id
                 GROUP BY contents.pk_content

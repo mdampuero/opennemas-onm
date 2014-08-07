@@ -24,7 +24,7 @@ class ExportContentsCommand extends ContainerAwareCommand
             ->setDefinition(
                 array(
                     new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to get contents from', '*'),
-                    new InputOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of contents to export', 100),
+                    new InputOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of contents to export', '*'),
                     new InputOption('target-dir', 't', InputOption::VALUE_REQUIRED, 'The folder where store backups', './backups'),
                 )
             )
@@ -57,6 +57,9 @@ EOF
         $limit = $input->getOption('limit');
         $instance = $input->getOption('instance');
         $targetDir = $input->getOption('target-dir');
+
+        $this->input = $input;
+        $this->output = $output;
 
         // Initialize application
         $basePath = APPLICATION_PATH;
@@ -129,87 +132,322 @@ EOF
 
         $this->tpl = new \TemplateAdmin('admin');
 
-        $cm = new \ContentManager();
-        list($countArticles, $articles) = $cm->getCountAndSlice(
-            'Article',
-            null,
-            null,
-            'ORDER BY created DESC',
-            1,
-            $limit
-        );
+        $conn = $this->getContainer()->get('dbal_connection');
+        $conn->selectDatabase($instances[$instance]['BD_DATABASE']);
 
-        $imageIds = array();
-        foreach ($articles as $article) {
-            $imageIds []= $article->img1;
+        $this->mediaPath = APPLICATION_PATH.DS.'public'.DS.'media'.DS.$instance;
 
-            // Load category related information
-            $article->category_name  = $article->loadCategoryName($article->id);
-            $article->category_title = $article->loadCategoryTitle($article->id);
-
-            $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
-            $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
-        }
-
-        if (count($imageIds) > 0) {
-            $images = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIds) .')');
-        } else {
-            $images = array();
-        }
-
-        foreach ($articles as $article) {
-            // Load attached and related contents from array
-            $article->loadFrontpageImageFromHydratedArray($images);
-
-            $newsMLString = $this->convertToNewsML($article);
-            $this->storeContentFile($article, $newsMLString, $targetDir);
-        }
-
-        $this->copyImages($images);
-
-        $output->writeln("\tSaved ".count($articles)." articles into '$targetDir' <info>DONE</info> ");
+        $this->exportContents($targetDir, $limit);
     }
 
     /**
-     * Converts an Article to NewsML.
+     * Converts an Article, Opinion and album to NewsML.
      *
-     * @param  Article $article Article to convert.
-     * @return string           Article in NewsML format.
+     * @param  Content $content Content to convert.
+     * @return string           Content in NewsML format.
      */
-    public function convertToNewsML($article)
+    public function convertToNewsML($content)
     {
         $content = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
-            array('article' => $article)
+            array(
+                'article'    => $content,
+                'photo'      => $content->img1,
+                'photoInner' => $content->img2
+            )
         );
 
         return $content;
     }
 
     /**
-     * Copies images.
+     * Converts a Video to NewsML.
      *
-     * @note Not implemented
+     * @param  Video $content Video to convert.
+     * @return string         Video in NewsML format.
      */
-    public function copyImages($images)
+    public function convertVideoToNewsML($content)
     {
-        return true;
+        $content = $this->tpl->fetch(
+            'news_agency/newsml_templates/video.tpl',
+            array(
+                'video'    => $content,
+            )
+        );
+
+        return $content;
+    }
+
+    /**
+     * Copy an image to another location.
+     *
+     * @param  string $source path to original image
+     * @param  string $dest path of destination
+     * @param  string $file file name of image
+     *
+     */
+    public function copyImage($source, $dest, $file)
+    {
+        if (!is_dir($dest)) {
+            mkdir($dest, 0777, true);
+        }
+
+        $isCopied = @copy($source, $dest.$file);
+
+        return $isCopied;
     }
 
     /**
      * Writes an article in NewsML format to a file.
      *
-     * @param Article $article      Article to export.
+     * @param Article $content      Article to export.
      * @param string  $newsMLString Article in NewsMML format.
      * @param string  $folder       Path where file will be created.
      */
-    public function storeContentFile($article, $newsMLString, $folder)
+    public function storeContentFile($content, $newsMLString, $folder)
     {
         if (!is_dir($folder)) {
             mkdir($folder, 0777);
         }
 
-        $filename = $folder . DIRECTORY_SEPARATOR . $article->id . '.xml';
+        $filename = $folder.DIRECTORY_SEPARATOR.$content->content_type_name.$content->id.'.xml';
         file_put_contents($filename, $newsMLString);
+    }
+
+    /**
+     * Export all articles from an instance in xml files
+     *
+     * @param string $targetDir  Path to export.
+     * @param string $limit      Limit number of articles.
+     */
+    public function exportContents($targetDir, $limit)
+    {
+        // Sql order, limit and filters
+        $order   = array('created' => 'DESC');
+        $filters = array(
+            'content_type_name' => array(
+                'union' => 'OR',
+                array('value' => 'article'),
+                array('value' => 'opinion'),
+                array('value' => 'album'),
+                array('value' => 'video'),
+            ),
+        );
+
+        // Get entity repository
+        $er = getService('entity_repository');
+        // Count contents
+        $countContents = $er->countBy($filters);
+
+        // Get total iterations to fetch contents
+        $perPage = 100;
+        $iterations = (int)($countContents/$perPage)+1;
+
+        // Fetch contents
+        if ($limit != '*') {
+            $contents = $er->findBy($filters, $order, $limit, 1);
+        } else {
+            // Fetch contents paginated
+            $i = 1;
+            $totalContents = array();
+            while ($i <= $iterations) {
+                $contents = $er->findBy($filters, $order, $perPage, $i);
+                $totalContents = array_merge($contents, $totalContents);
+                $i++;
+                $this->output->write(".");
+            }
+        }
+
+        $imagesCounter = 0;
+        $articlesCounter = 0;
+        $opinionsCounter = 0;
+        $albumsCounter = 0;
+        $videosCounter = 0;
+        foreach ($totalContents as $content) {
+            $this->output->write(".");
+            // Load category related information
+            $content->category_name  = $content->loadCategoryName($content->id);
+            $content->category_title = $content->loadCategoryTitle($content->id);
+
+            $content->created_datetime =
+                \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $content->created
+                );
+            $content->updated_datetime =
+                \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $content->changed
+                );
+
+            // Check for album contents and get all photos
+            if ($content->content_type_name == 'album') {
+                $albumsCounter++;
+                $photos = array();
+                $photos = $content->_getAttachedPhotos($content->id);
+
+                $content->all_photos = array();
+                foreach ($photos as $key => $value) {
+                // Add DateTime with format Y-m-d H:i:s
+                    $value['photo']->created_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $value['photo']->created
+                        );
+                    $value['photo']->updated_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $value['photo']->changed
+                        );
+
+                    $value['photo']->img_source =
+                        $this->mediaPath.DS.'images'.
+                        $value['photo']->path_file.
+                        $value['photo']->name;
+
+
+                    $content->all_photos[] = $value['photo'];
+
+                    $isCopied = $this->copyImage(
+                        $value['photo']->img_source,
+                        $targetDir.DS.'images'.$value['photo']->path_file,
+                        $value['photo']->name
+                    );
+
+                    $imagesCounter++;
+
+                    if (!$isCopied) {
+                        $imagesCounter--;
+                        $this->output->writeln(
+                            "\tImage <info>".$content->img1->id.
+                            "</info> from article <info>".$content->id.
+                            "</info> not copied'"
+                        );
+                    }
+                }
+            } elseif ($content->content_type_name == 'article' ||
+                      $content->content_type_name == 'opinion'
+            ) {
+                if ($content->content_type_name == 'article') {
+                    $articlesCounter++;
+                } else {
+                    $opinionsCounter++;
+                }
+                $imageId = $content->img1;
+                $imageInnerId = $content->img2;
+
+                if (!empty($imageId)) {
+                    $image[] = $er->find('Photo', $imageId);
+                    // Load attached and related contents from array
+                    $content->loadFrontpageImageFromHydratedArray($image);
+                    // Add DateTime with format Y-m-d H:i:s
+                    $content->img1->created_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $content->img1->created
+                        );
+                    $content->img1->updated_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $content->img1->changed
+                        );
+                    if (!mb_check_encoding($content->img1->description)) {
+                        $content->img1->description = utf8_encode($content->img1->description);
+                    }
+                    $content->img1_source = $this->mediaPath.DS.'images'.$content->img1_path;
+
+                    $isCopied = $this->copyImage(
+                        $content->img1_source,
+                        $targetDir.DS.'images'.$content->img1->path_file,
+                        $content->img1->name
+                    );
+
+                    $imagesCounter++;
+
+                    if (!$isCopied) {
+                        $imagesCounter--;
+                        $this->output->writeln(
+                            "\tImage <info>".$content->img1->id.
+                            "</info> from article <info>".$content->id.
+                            "</info> not copied'"
+                        );
+                    }
+                }
+
+                if (!empty($imageInnerId)) {
+                    $image[] = $er->find('Photo', $imageInnerId);
+                    // Load attached and related contents from array
+                    $content->loadInnerImageFromHydratedArray($image);
+                    // Add DateTime with format Y-m-d H:i:s
+                    $content->img2->created_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $content->img2->created
+                        );
+                    $content->img2->updated_datetime =
+                        \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $content->img2->changed
+                        );
+                    if (!mb_check_encoding($content->img2->description)) {
+                        $content->img2->description = utf8_encode($content->img2->description);
+                    }
+                    $content->img2_source = $this->mediaPath.DS.'images'.$content->img2_path;
+
+                    $isCopied = $this->copyImage(
+                        $content->img2_source,
+                        $targetDir.DS.'images'.$content->img2->path_file,
+                        $content->img2->name
+                    );
+
+                    $imagesCounter++;
+
+                    if (!$isCopied) {
+                        $imagesCounter--;
+                        $this->output->writeln(
+                            "\tImage <info>".$content->img2->id.
+                            "</info> from article <info>".$content->id.
+                            "</info> not copied'"
+                        );
+                    }
+                }
+            }
+
+            // Get author obj
+            $ur = getService('user_repository');
+            $content->author = $ur->find($content->fk_author);
+
+            $authorPhoto = '';
+            if (isset($content->author->avatar_img_id) &&
+                !empty($content->author->avatar_img_id)
+            ) {
+                // Get author photo
+                $authorPhoto = $er->find('Photo', $content->author->avatar_img_id);
+                if (is_object($authorPhoto) && !empty($authorPhoto)) {
+                    $content->author->photo = $authorPhoto;
+                }
+            }
+
+            // Encode author in json format
+            $content->author = json_encode($content->author);
+
+            if ($content->content_type_name == 'video') {
+                $videosCounter++;
+                $newsMLString = $this->convertVideoToNewsML($content);
+            } else {
+                $newsMLString = $this->convertToNewsML($content);
+            }
+            $this->storeContentFile($content, $newsMLString, $targetDir);
+        }
+
+        $this->output->writeln(
+            "\n\nSaved <info>".count($totalContents)."</info>".
+            " contents with <info>$imagesCounter</info> images".
+            " into '$targetDir'".
+            "\nArticles -> <info>$articlesCounter</info>".
+            "\nOpinions -> <info>$opinionsCounter</info>".
+            "\nAlbums -> <info>$albumsCounter</info>".
+            "\nVideos -> <info>$videosCounter</info>"
+        );
     }
 }

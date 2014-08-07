@@ -559,7 +559,7 @@ class Photo extends Content
             return false;
         }
 
-        return (string) $rs->fields['path_file'].DS.$rs->fields['name'];
+        return (string) $rs->fields['path_file'].$rs->fields['name'];
     }
 
     /**

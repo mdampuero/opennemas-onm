@@ -63,7 +63,7 @@ $menuXml = '<?xml version="1.0"?>
             />
             <node
                 module_name="OPINION_MANAGER"
-                privilege="OPINION_ADMIN"
+                privilege="AUTHOR_ADMIN"
                 title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
                 id="authors"
                 link="'.url('admin_opinion_authors').'"

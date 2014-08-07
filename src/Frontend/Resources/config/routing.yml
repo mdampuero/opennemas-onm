@@ -199,6 +199,18 @@ frontend_sitemapweb:
     requirements:
         _format: "xml|xml.gz"
 
+frontend_sitemapimage:
+    path: /sitemapimage.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:image, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapvideo:
+    path: /sitemapvideo.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:video, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
 frontend_sitemapindex:
     path: /sitemap.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:index, _format:xml }
@@ -305,7 +317,7 @@ frontend_album_show_with_date_slug:
         slug         : "[a-z0-9\-]+"
         album_id     : "([0-9]+)"
 
-frontend_album_show_with_date_slug:
+frontend_album_show:
     path: /album/{category_name}/{slug}/{album_id}.{_format}
     defaults: { _controller: FrontendBundle:Albums:show, _format: html, page: 1 }
     requirements:

@@ -91,7 +91,7 @@ class PollsController extends Controller
         // Don't execute action logic if was cached before
         $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
-            || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))
+            || (!$this->view->isCached('poll/poll_frontpage.tpl', $cacheID))
         ) {
 
             if (isset($this->category) && !empty($this->category)) {
@@ -167,7 +167,7 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $poll = new \Poll($pollId);
+        $poll = $this->get('entity_repository')->find('Poll', $pollId);
 
         if (empty($poll->id)) {
             throw new ResourceNotFoundException();
@@ -260,7 +260,7 @@ class PollsController extends Controller
         if (is_null($pollId)) {
             throw new ResourceNotFoundException();
         }
-        $poll = new \Poll($pollId);
+        $poll = $this->get('entity_repository')->find('Poll', $pollId);
 
         if (empty($poll->id)) {
             throw new ResourceNotFoundException();

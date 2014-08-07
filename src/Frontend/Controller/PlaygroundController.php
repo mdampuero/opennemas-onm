@@ -28,23 +28,13 @@ use Onm\Settings as s;
 class PlaygroundController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-    }
-
-    /**
      * Dispatches the actions through the rest of methods in this class
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function defaultAction($request)
+    public function defaultAction(Request $request)
     {
         $action = $request->query->get('action', null);
 
@@ -71,7 +61,7 @@ class PlaygroundController extends Controller
             'Your changes were saved!'
         );
 
-        foreach ($session->getFlashBag()->get('notice', array()) as $message) {
+        foreach ($this->get('session')->getFlashBag()->get('notice', array()) as $message) {
             echo "<div class='flash-notice'>$message</div>";
         }
     }

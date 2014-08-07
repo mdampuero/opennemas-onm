@@ -36,6 +36,12 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
+        if (!$this->getUser()->getMeta('terms_accepted')
+            && !$this->getUser()->isMaster()
+        ) {
+            return $this->redirect($this->generateUrl('admin_getting_started'));
+        }
+
         $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
         $availableModules = array_values($availableModules);
         shuffle($availableModules);
@@ -85,17 +91,5 @@ class WelcomeController extends Controller
         $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
 
         return $videosYoutubeIds;
-    }
-
-    /**
-     * Stores the accept terms setting to the instance.
-     *
-     * @return void
-     **/
-    public function acceptTermsAction(Request $request)
-    {
-        s::set('terms_accepted', 1);
-
-        return new Response('ok');
     }
 }

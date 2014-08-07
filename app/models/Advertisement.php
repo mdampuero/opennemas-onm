@@ -154,11 +154,12 @@ class Advertisement extends Content
         parent::__construct($id);
 
         // Check if it contains a flash element
-        $img = getService('entity_repository')->find('Photo', $this->path);
-        if ($img->type_img == "swf") {
-            $this->is_flash = 1;
-        } else {
-            $this->is_flash = 0;
+        $this->is_flash = 0;
+        if ($this->with_script == 0) {
+            $img = getService('entity_repository')->find('Photo', $this->path);
+            if (!empty($img) && $img->type_img == "swf") {
+                $this->is_flash = 1;
+            }
         }
     }
 
@@ -253,9 +254,21 @@ class Advertisement extends Content
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
 
-        $this->script = base64_decode($this->script);
+        // Decode base64 if isn't decoded yet
+        $isBase64 = base64_decode($this->script);
+        if ($isBase64) {
+            $this->script = $isBase64;
+        }
+
         // FIXME: revisar que non se utilice ->img
         $this->img = $this->path;
+
+        // Initialize the categories array of this advertisement
+        if (!is_array($this->fk_content_categories)) {
+            $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        }
+
+        return $this;
     }
 
     /**
@@ -419,6 +432,7 @@ class Advertisement extends Content
         $banners = array();
         $finalBanners = array();
 
+        // If not advertisement types are passed return earlier
         if (!is_array($types) || count($types) <= 0) {
             return $banners;
         }
@@ -444,32 +458,44 @@ class Advertisement extends Content
             $catsSQL = 'AND advertisements.fk_content_categories=0 ';
         }
 
-        $sql = "SELECT * FROM contents, advertisements "
-              ."WHERE contents.pk_content = advertisements.pk_advertisement "
-              ."AND contents.in_litter!=1 "
-              .'AND contents.content_status=1 AND advertisements.type_advertisement IN ('.$types.') '
-              .$catsSQL
-              ."ORDER BY contents.created";
+        $sql = "SELECT pk_advertisement as id FROM advertisements "
+              ."WHERE advertisements.type_advertisement IN (".$types.") "
+              .$catsSQL.' ORDER BY id';
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $conn = getService('dbal_connection');
+        $result = $conn->fetchAll($sql);
 
-        if (!$rs) {
+        if (count($result) <= 0) {
             return $banners;
         }
 
-        $adsData = $rs->GetArray();
-        foreach ($adsData as $data) {
-            $advertisement = new \Advertisement();
-            $advertisement->load($data);
+        $result = array_map(function ($element) {
+            return array('Advertisement', $element['id']);
+        }, $result);
 
+        $adManager = getService('advertisement_repository');
+        $advertisements = $adManager->findMulti($result);
+
+        foreach ($advertisements as $advertisement) {
             // Dont use this ad if is not in time
-            if (!$advertisement->isInTime()) {
+            if (!$advertisement->isInTime()
+                || $advertisement->content_status != 1
+                || $advertisement->in_litter != 0) {
                 continue;
             }
 
-            // Initialize the categories array of this advertisement
-            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+            // TODO: Introduced in May 20th, 2014. This code avoids to restart memcached for
+            // already stored ad objects. This should be removed after caches will be regenerated
+            if (!is_array($advertisement->fk_content_categories)) {
+                $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+            }
+
+            if (is_string($advertisement->params)) {
+                $advertisement->params = unserialize($advertisement->params);
+                if (!is_array($advertisement->params)) {
+                    $advertisement->params = array();
+                }
+            }
 
             // If the ad doesn't belong to the given category or home, skip it
             if (!in_array($category, $advertisement->fk_content_categories)
@@ -545,16 +571,14 @@ class Advertisement extends Content
             $params['afterHTML']  = "</div>";
         }
 
-        $width   = $this->params['width'];
-        $height  = $this->params['height'];
         $overlap = (isset($this->params['overlap']))? $this->params['overlap']: false;
 
         // Extract width and height properties from CSS
         $width  = $params['width'];
         $height = $params['height'];
 
-        if (!is_null($this->params['width'])
-            && !is_null($this->params['height'])
+        if (array_key_exists('width', $this->params) && !is_null($this->params['width'])
+            && array_key_exists('height', $this->params) && !is_null($this->params['height'])
         ) {
             $width = $this->params['width'];
             $height = $this->params['height'];
@@ -576,9 +600,16 @@ class Advertisement extends Content
             }
 
         } elseif ($this->with_script == 2) {
-            $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
-OA_show('zone_{$this->id}');
-// ]]> --></script>";
+
+            if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
+                $url = url('frontend_ad_get', array('id' => $this->pk_content));
+                $content = '<iframe src="'.$url.'" stye="width:800px; height:600px; overflow: hidden;" '.
+                ' scrolling="no"></iframe>';
+            } else {
+                $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
+                OA_show('zone_{$this->id}');
+                // ]]> --></script>";
+            }
         } elseif ($this->with_script == 3) {
             $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'><script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
 googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });

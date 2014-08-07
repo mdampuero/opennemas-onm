@@ -1,5 +1,6 @@
 parameters:
-    secret: test
+    framework.trusted_proxies: ~
+    framework.secret: test
     locale: en
     # environment:       production
     environment:       development
@@ -33,10 +34,13 @@ parameters:
     mailer_port:       ~
     mailer_no_reply_address: no-reply@postman.opennemas.com
 
+    session.name:          __onm_sess
+    session.gc_maxlifetime: 86400
+
     session_memcache_host:   127.0.0.1
     session_memcache_port:   11211
     session_memcache_prefix: sess
-    session_memcache_expire: 84600
+    session_memcache_expire: %session.gc_maxlifetime%
     session_handler_id:      session.handler.drak.memcached
     #session_handler_id:     session.handler.drak.redis
 
@@ -49,10 +53,7 @@ parameters:
     # Savepath for Redis (tcp://ip:port?<options>)
     # session_handler_savepath: tcp://localhost:6379?timeout=2
 
-    locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
-
-    cache_handler:     Onm\Cache\Apc
+    cache_handler:     Onm\Cache\Memcache
     cache_handler_params:
         server: 127.0.0.1
         port: 11211
@@ -60,10 +61,6 @@ parameters:
         options:
             server: localhost
             prefix: onm
-
-    session_params:
-        name:          __onm_sess
-        gc_maxlifetime: 86400
 
     logger_file_path: tmp/log/application.log
     dev_token: 1234
@@ -88,3 +85,15 @@ parameters:
             server1:
                 host: localhost
                 port: 80
+
+    opennemas.backend_force_ssl: false
+    opennemas.base_domain: .opennemas.com
+    opennemas.redirect_frontend: false
+
+    api.facebook.client_id: 330535510437103
+    api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
+    api.twitter.client_id: 2uP5o5b7ruolJLjEqZhDQPfO4
+    api.twitter.client_secret: Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
+
+    piwik.url:   http://piwik.openhost.es
+    piwik.token: b4956f6e687b28851fa8a545b6ccd85b

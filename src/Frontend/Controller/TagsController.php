@@ -56,9 +56,10 @@ class TagsController extends Controller
                     array('value' => 1),
                     array('value' => 4),
                     array('value' => 7),
-                    array('value' => 9)
+                    array('value' => 9),
+                    'union' => 'OR'
                 ),
-                'metadata' => array(array('value' => '%' . $tag . '%'))
+                'metadata' => array(array('value' => '%' . $tag . '%', 'operator' => 'LIKE'))
             );
 
             $er = $this->get('entity_repository');
@@ -140,7 +141,6 @@ class TagsController extends Controller
             )
         );
     }
-
 
     /**
      * Fetches advertisements for article inner

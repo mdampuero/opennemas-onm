@@ -6,33 +6,35 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
 use Onm\Database\DbalWrapper;
 
 /**
- * An EntityRepository serves as a repository for entities with generic as well as
- * business specific methods for retrieving entities.
+ * An EntityRepository serves as a repository for entities with generic as well
+ * as business specific methods for retrieving entities.
  *
  * This class is designed for inheritance and users can subclass this class to
- * write their own repositories with business-specific methods to locate entities.
+ * write their own repositories with business-specific methods to locate
+ * entities.
  *
  * @package Repository
- **/
+ */
 class WidgetManager extends EntityManager
 {
-     /**
-     * Searches for content given a criteria
+    /**
+     * Searches for widgets given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param  array|string $criteria        The criteria used to search.
+     * @param  array        $order           The order applied in the search.
+     * @param  integer      $elementsPerPage The max number of elements.
+     * @param  integer      $page            The current page.
+     * @param  integer      $offset          The offset to start with.
+     * @return array                         The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -41,7 +43,7 @@ class WidgetManager extends EntityManager
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
         // Executing the SQL
         $sql = "SELECT content_type_name, pk_content FROM `contents`, `widgets`
@@ -61,6 +63,12 @@ class WidgetManager extends EntityManager
         return $contents;
     }
 
+    /**
+     * Counts widgets given a criteria.
+     *
+     * @param  array|string $criteria The criteria used to search.
+     * @return array                  The number of elements.
+     */
     public function countBy($criteria)
     {
         // Building the SQL filter

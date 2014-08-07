@@ -52,7 +52,6 @@ class OpinionsController extends Controller
                 'timezone'     => $timezone->getName()
             )
         );
-
     }
 
     /**
@@ -79,7 +78,7 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Manages the frontpage of opinion
+     * Manages the frontpage of opinion.
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
@@ -93,14 +92,28 @@ class OpinionsController extends Controller
 
         $numEditorial = $configurations['total_editorial'];
         $numDirector  = $configurations['total_director'];
+        $numOpinions  = s::get('items_per_page');
+        if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+            $numOpinions = $configurations['total_opinions'];
+        }
 
         $cm = new \ContentManager();
-        $rating = new \Rating();
-        //$commentManager = new \Repository\CommentManager();
+        $allAuthors = \User::getAllUsersAuthors();
+
+        $authorsBlog = array();
+        foreach ($allAuthors as $authorData) {
+            if ($authorData->is_blog == 1) {
+                $authorsBlog[$authorData->id] = $authorData;
+            }
+        }
+        $where ='';
+        if (!empty($authorsBlog)) {
+            $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+        }
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=1 and content_status=1 and type_opinion=0',
+            'in_home=1 and content_status=1 and type_opinion=0 '.$where,
             'ORDER BY position ASC , created DESC'
         );
 
@@ -121,11 +134,15 @@ class OpinionsController extends Controller
             );
         }
 
+        if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
+            m::add(sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions'));
+        }
+
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
-            m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, 'editorial'));
+            m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numEditorial, 'editorial'));
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
-             m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, 'opinion del director'));
+             m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numDirector, 'opinion del director'));
         }
 
         if (isset($opinions) && is_array($opinions)) {
@@ -154,14 +171,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Shows the information form for a opinion given its id
+     * Shows the information form for a opinion given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id', null);
@@ -216,14 +232,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Handles the form for creating a new opinion
+     * Handles the form for creating a new opinion.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -283,14 +298,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Updates the opinion information sent by POST
+     * Updates the opinion information sent by POST.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -374,14 +388,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Change in_home status for one opinion given its id
+     * Change in_home status for one opinion given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_HOME')")
-     **/
+     */
     public function toggleInHomeAction(Request $request)
     {
         $id     = $request->query->getDigits('id', 0);
@@ -414,14 +427,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Saves the widget opinions content positions
+     * Saves the widget opinions content positions.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function savePositionsAction(Request $request)
     {
         $containers = json_decode($request->get('positions'));
@@ -463,47 +475,29 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Lists the available opinions for the frontpage manager
+     * Lists the available opinions for the frontpage manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('OPINION_ADMIN')")
-     **/
+     * @param  Request $request The request object.
+     * @return Response         The response object.
+     */
     public function contentProviderAction(Request $request)
     {
-        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $page = $request->query->getDigits('page', 1);
-        if ($category == 'home') {
-            $category = 0;
-        }
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $cm = new \ContentManager();
+        $em  = $this->get('entity_repository');
+        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
 
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if (count($contentElementsInFrontpage) > 0) {
-            $opinionsExcluded    = implode(', ', $contentElementsInFrontpage);
-            $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
-        }
-
-        list($countOpinions, $opinions) = $cm->getCountAndSlice(
-            'Opinion',
-            null,
-            'contents.content_status=1 AND in_litter != 1'. $sqlExcludedOpinions,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'opinion')),
+            'content_status'    => array(array('value' => 1)),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
+            'pk_content'        => array(array('value' => $ids, 'operator' => 'NOT IN'))
         );
 
-        foreach ($opinions as &$opinion) {
-            $opinion->author = new \User($opinion->fk_author);
-        }
+        $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countOpinions = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -517,7 +511,7 @@ class OpinionsController extends Controller
                 'totalItems'  => $countOpinions,
                 'fileName'    => $this->generateUrl(
                     'admin_opinions_content_provider',
-                    array('category' => $category)
+                    array('category' => $categoryId)
                 ).'&page=%d',
             )
         );
@@ -532,29 +526,27 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Lists the latest opinions for the related manager
+     * Lists the latest opinions for the related manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('OPINION_ADMIN')")
-     **/
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
+     */
     public function contentProviderRelatedAction(Request $request)
     {
-        $page     = $request->query->getDigits('page', 1);
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $cm = new  \ContentManager();
+        $em       = $this->get('entity_repository');
+        $category = $this->get('category_repository')->find($categoryId);
 
-        list($countOpinions, $opinions) = $cm->getCountAndSlice(
-            'Opinion',
-            null,
-            '',
-            ' ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+        $filters = array(
+            'content_type_name' => array(array('value' => 'opinion')),
+            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
+
+        $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $countOpinions = $em->countBy($filters);
 
         $pagination = \Pager::factory(
             array(
@@ -582,14 +574,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Handles the configuration for the opinion manager
+     * Handles the configuration for the opinion manager.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_SETTINGS')")
-     **/
+     */
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -600,6 +591,7 @@ class OpinionsController extends Controller
                 'opinion_settings' => array(
                     'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
                     'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
+                    'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                 )
             );
@@ -624,10 +616,10 @@ class OpinionsController extends Controller
     /**
      * Show a list of opinion authors.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_ADMIN')")
      */
     public function listAuthorAction(Request $request)
     {
@@ -637,10 +629,10 @@ class OpinionsController extends Controller
     /**
      * Shows the author information given its id.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('AUTHOR_UPDATE')")
      */
     public function showAuthorAction(Request $request)
     {
@@ -669,14 +661,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Creates an author give some information
+     * Creates an author give some information.
      *
-     * @param Request $request the request object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_ADMIN')")
-     **/
+     * @Security("has_role('AUTHOR_CREATE')")
+     */
     public function createAuthorAction(Request $request)
     {
         $user = new \User();
@@ -740,14 +731,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Handles the update action for an author given its id
+     * Handles the update action for an author given its id.
      *
-     * @param Request $request the request object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_ADMIN')")
-     **/
+     * @Security("has_role('AUTHOR_UPDATE')")
+     */
     public function updateAuthorAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
@@ -808,7 +798,7 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('author.update', array('authorId' => $userId));
+                dispatchEventWithParams('author.update', array('id' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {
@@ -824,14 +814,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Previews an opinion in frontend by sending the opinion info by POST
+     * Previews an opinion in frontend by sending the opinion info by POST.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function previewAction(Request $request)
     {
         $opinion = new \Opinion();
@@ -864,9 +853,8 @@ class OpinionsController extends Controller
 
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
-            $opinion->metadata,
             'opinion',
-            " contents.content_status=1 AND pk_content = pk_fk_content",
+            " pk_content <>".$opinion->id,
             4
         );
 
@@ -936,14 +924,13 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Description of this action
+     * Description of this action.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request  $request The request object.
+     * @return Response          The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function getPreviewAction(Request $request)
     {
         $session = $this->get('session');

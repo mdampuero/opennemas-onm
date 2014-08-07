@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class RatingsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Registers a vote for a content given its id
      *
      * @param Request $request the request object
@@ -52,6 +42,8 @@ class RatingsController extends Controller
         $voteValue = $request->query->filter('v', null, FILTER_VALIDATE_INT);
         $page      = $request->query->filter('p', null, FILTER_SANITIZE_STRING);
         $contentId = $request->query->filter('a', null, FILTER_SANITIZE_STRING);
+
+        $this->view = new \Template(TEMPLATE_USER);
 
         // WEIRD SECUTIRY CHECK: Check if the remote address matches the passed in.
         if ($ip != $ipFrom) {
