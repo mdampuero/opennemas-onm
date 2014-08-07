@@ -29,11 +29,11 @@ class UserManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param DbalWrapper    $conn      The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
     {
         $this->conn        = $conn;
         $this->cache       = $cache;
