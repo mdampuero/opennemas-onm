@@ -36,6 +36,11 @@ sensio_framework_extra:
     cache:    { annotations: false }
     security: { annotations: true }
 
+onm_framework:
+    assetic:
+        asset_url: asset_url
+        site_url: false
+
 assetic:
     filters:
         uglifyjs:

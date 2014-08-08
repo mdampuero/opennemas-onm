@@ -30,11 +30,58 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('opennemas')->end();
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode = $treeBuilder->root('opennemas');
+        $rootNode
+            ->children()
+                ->arrayNode('assetic')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('asset_url')
+                            ->defaultValue('asset_url')
+                        ->end()
+                        ->scalarNode('build_path')
+                            ->defaultValue(SITE_PATH . 'compile')
+                        ->end()
+                        ->scalarNode('site_url')
+                            ->defaultValue(false)
+                        ->end()
+                        ->scalarNode('output')
+                            ->defaultValue('/compile/assetic')
+                        ->end()
+                        ->scalarNode('root')
+                            ->defaultValue(SITE_PATH)
+                        ->end()
+                        ->arrayNode('filters')
+                            ->children()
+                                ->arrayNode('uglifyjs')
+                                    ->children()
+                                        ->scalarNode('bin')->end()
+                                        ->scalarNode('node')->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('uglifycss')
+                                    ->children()
+                                        ->scalarNode('bin')->end()
+                                        ->scalarNode('node')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('folders')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('common')
+                                    ->defaultValue('assets')
+                                ->end()
+                                ->scalarNode('themes')
+                                    ->defaultValue('themes')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
