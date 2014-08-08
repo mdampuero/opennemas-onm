@@ -40,7 +40,8 @@ class BanMessagePusher
         $response = array();
         foreach ($this->servers as $serverName => $serverConf) {
             $banHeader = $this->headerName . ': '.$banRequest;
-            $this->doHttpRequest(
+
+            $return = $this->doHttpRequest(
                 $serverConf['host'],
                 $serverConf['port'],
                 'BAN',
@@ -48,7 +49,7 @@ class BanMessagePusher
                 ''
             );
 
-            $response []= "BAN queued - {$serverName}({$serverConf['host']}:{$serverConf['port']}) - {$banHeader}";
+            $response []= "BAN queued - {$serverName}({$serverConf['host']}:{$serverConf['port']}) - {$banHeader} || Return:".$return;
         }
 
         return $response;
