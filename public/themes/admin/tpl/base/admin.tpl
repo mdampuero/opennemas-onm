@@ -16,42 +16,38 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {assetic
-            assets="assets/css/bootstrap/bootstrap.css,
-                    assets/css/fontawesome/font-awesome.min.css,
-                    assets/css/style.css,
-                    assets/css/jquery/jquery-ui.css,
-                    assets/css/bootstrap/bootstrap.css,
-                    themes/admin/css/jquery/select2/select2-bootstrap.css,
-                    themes/admin/css/jquery/select2/select2.css,
-                    themes/admin/css/jquery/messenger/messenger.css,
-                    themes/admin/css/jquery/messenger/messenger-spinner.css,
-                    themes/amdin/js/jquery/bootstrap-checkbox/bootstrap-checkbox.cs
-                    themes/admin/js/jquery/bootstrap-nav-wizard.css"
-            output="css"
-            filters='cssrewrite'
-            asset_url=asset_url}
+        {stylesheets
+            src="@Common/css/bootstrap/bootstrap.css,
+                    @Common/css/fontawesome/font-awesome.min.css,
+                    @Common/css/style.css,
+                    @Common/css/jquery/jquery-ui.css,
+                    @Common/css/bootstrap/bootstrap.css,
+                    @Common/css/jquery/select2/select2-bootstrap.css,
+                    @Common/css/jquery/select2/select2.css,
+                    @Common/css/jquery/messenger/messenger.css,
+                    @Common/css/jquery/messenger/messenger-spinner.css,
+                    @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
+                    @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
+            filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/assetic}
+        {/stylesheets}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
 	{/block}
 
     {block name="js-library"}
-        {assetic
-            assets="assets/js/jquery/jquery.min.js,
-                assets/js/jquery/select2/select2.min.js,
-                assets/js/jquery-onm/jquery.onmvalidate.js,
-                assets/js/libs/bootstrap.js,
-                assets/js/libs/jquery.tools.min.js,
-                assets/js/libs/tinycon.min.js,
-                assets/js/libs/modernizr.min.js,
-                assets/js/onm/scripts.js,
-                assets/js/onm/footer-functions.js"
-            output="js"
-            filters="uglifyjs"
-            asset_url=asset_url}
+        {javascripts
+            src="@Common/js/jquery/jquery.min.js,
+                @Common/js/jquery/select2/select2.min.js,
+                @Common/js/jquery-onm/jquery.onmvalidate.js,
+                @Common/js/libs/bootstrap.js,
+                @Common/js/libs/jquery.tools.min.js,
+                @Common/js/libs/tinycon.min.js,
+                @Common/js/libs/modernizr.min.js,
+                @Common/js/onm/scripts.js,
+                @Common/js/onm/footer-functions.js"
+            filters="uglifyjs" }
             <script type="text/javascript" src="{$asset_url}"></script>
-        {/assetic}
+        {/javascripts}
     {/block}
 
     {block name="header-js"}
