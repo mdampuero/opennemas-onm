@@ -33,7 +33,8 @@ class JavascriptManager extends AssetManager
      */
     public function initFilters($filters)
     {
-        $this->fm = new FilterManager();
+        $this->filters = $filters;
+        $this->fm      = new FilterManager();
 
         foreach ($filters as $filter) {
             switch ($filter) {

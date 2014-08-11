@@ -13,8 +13,8 @@ namespace Framework\Assetic;
 
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
-use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\UglifyCssFilter;
+use Assetic\Filter\CssRewriteFilter;
 
 /**
  * Asset manager to handle stylesheets assets.
@@ -27,12 +27,14 @@ class StylesheetManager extends AssetManager
      * @var string
      */
     protected $extension = 'css';
+
     /**
      * {@inheritDoc}
      */
     public function initFilters($filters)
     {
-        $this->fm = new FilterManager();
+        $this->filters = $filters;
+        $this->fm      = new FilterManager();
 
         foreach ($filters as $filter) {
             switch ($filter) {
