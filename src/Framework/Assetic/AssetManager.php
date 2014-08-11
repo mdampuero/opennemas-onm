@@ -122,7 +122,16 @@ abstract class AssetManager
     {
         $this->assets = array();
         foreach ($assets as $asset) {
-            $this->assets[] = $this->parseAssetSrc($asset);
+            $asset = $this->parseAssetSrc($asset);
+
+            $pos = strrpos($asset, '*');
+            if ($pos == strlen($asset) - 1) {
+                foreach (glob(SITE_PATH . $asset) as $asset) {
+                    $this->assets[] = str_replace(SITE_PATH, '', $asset);
+                }
+            } else {
+                $this->assets[] = $asset;
+            }
         }
     }
 
@@ -171,13 +180,13 @@ abstract class AssetManager
 
         // Create all-in-one asset
         $assets = $this->af->createAsset($this->assets, $this->filters);
-        // if ($this->debug()) {
-        //     foreach ($this->assets as &$asset) {
-        //         $asset = $this->parseAssetSrc($asset);
-        //     }
+        if ($this->debug()) {
+            foreach ($this->assets as &$asset) {
+                $asset = $this->createAssetSrc($this->parseAssetSrc($asset));
+            }
 
-        //     $srcs = $this->assets;
-        // } else {
+            $srcs = $this->assets;
+        } else {
             if ($this->config['output']) {
                 $name = substr($this->config['output'], 0, strpos($this->config['output'], '.'));
 
@@ -200,7 +209,7 @@ abstract class AssetManager
 
             // Save all-in-one source path
             $srcs[] = $this->createAssetSrc($assets->getTargetPath());
-        // }
+        }
 
         return $srcs;
     }
@@ -235,6 +244,7 @@ abstract class AssetManager
                         $src   = $this->config['folders']['bundles']
                             . DS . $theme . $asset;
                     }
+
             }
 
             if (!$this->debug()) {
