@@ -83,22 +83,18 @@
     </div>
 
 </div>
-{assetic
-    assets="themes/admin/js/swfobject.js,
-            themes/admin/js/jquery/load-image.min.js,
-            themes/admin/js/jquery/bootstrap-image-gallery.min.js,
-            themes/admin/js/jquery/jquery.iframe-transport.js,
-            assets/js/libs/handlebars.js,
-            assets/js/jquery/tmpl.min.js,
-            assets/js/jquery/jquery.fileupload.js,
-            assets/js/jquery/jquery.fileupload-ui.js,
-            themes/admin/js/onm/media-uploader.js"
-    output="js"
-    build_path="style/build"
-    filters="uglifyjs"
-    asset_url=asset_url}
+{javascripts
+    src="@AdminTheme/js/swfobject.js,
+        @AdminTheme/js/jquery/load-image.min.js,
+        @AdminTheme/js/jquery/bootstrap-image-gallery.min.js,
+        @AdminTheme/js/jquery/jquery.iframe-transport.js,
+        @Common/js/libs/handlebars.js,
+        @Common/js/jquery/tmpl.min.js,
+        @Common/js/jquery/jquery.fileupload.js,
+        @Common/js/jquery/jquery.fileupload-ui.js,
+        @AdminTheme/js/onm/media-uploader.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
-{/assetic}
+{/javascripts}
 
 <script>
 var fileUploadErrors = {
