@@ -154,10 +154,9 @@ abstract class AssetManager
         $this->af->setAssetManager($this->am);
         $this->af->setFilterManager($this->fm);
         $this->af->setDefaultOutput(
-            $this->config['output'] . '/*.' . $this->extension
+            $this->config['output_path'] . '/*.' . $this->extension
         );
         $this->af->setDebug($this->debug);
-        // $factory->addWorker(new CacheBustingWorker(CacheBustingWorker::STRATEGY_MODIFICATION));
     }
 
     /**
@@ -171,24 +170,24 @@ abstract class AssetManager
         $this->writer = new AssetWriter($this->config['root']);
 
         // Create all-in-one asset
-        $assets = $this->af->createAsset($this->assets);
-        if ($this->debug()) {
-            foreach ($this->assets as &$asset) {
-                $asset = $this->parseAssetSrc($asset);
-            }
+        $assets = $this->af->createAsset($this->assets, $this->filters);
+        // if ($this->debug()) {
+        //     foreach ($this->assets as &$asset) {
+        //         $asset = $this->parseAssetSrc($asset);
+        //     }
 
-            $srcs = $this->assets;
-        } else {
+        //     $srcs = $this->assets;
+        // } else {
             $cached = new AssetCache(
                 $assets,
                 new FileSystemCache($this->config['build_path'])
             );
 
-            $this->writer->writeAsset($cached);
+            $this->writer->writeAsset($cached, $this->filters);
 
             // Save all-in-one source path
             $srcs[] = $this->createAssetSrc($assets->getTargetPath());
-        }
+        // }
 
         return $srcs;
     }
@@ -207,20 +206,20 @@ abstract class AssetManager
 
             switch ($theme) {
                 case 'Common':
-                    $src = DS . $this->config['folders']['common'] . $asset;
+                    $src = $this->config['folders']['common'] . $asset;
                     break;
                 case 'Theme':
-                    $src = DS . $this->config['folders']['themes']
+                    $src = $this->config['folders']['themes']
                         . $this->themePath . $asset;
                     break;
                 default:
                     $theme = $this->parseThemeName($theme);
-                    $src   = DS . $this->config['folders']['themes']
+                    $src   = $this->config['folders']['themes']
                         . DS . $theme . $asset;
             }
 
             if (!$this->debug()) {
-                $src = SITE_PATH . ltrim($src, DS);
+                $src = SITE_PATH . $src;
             }
         }
 
