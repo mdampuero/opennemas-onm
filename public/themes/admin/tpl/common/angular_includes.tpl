@@ -1,23 +1,23 @@
 {javascripts
-    src="assets/js/libs/moment-with-langs.min.js,
-        assets/js/libs/moment-timezone.min.js,
-        assets/js/libs/moment-data.js,
-        assets/js/libs/messenger.min.js,
-        bundles/fosjsrouting/js/router.js,
-        assets/js/routes.js,
-        bundles/backend/lib/angular.min.js,
-        bundles/backend/lib/angular-translate.min.js,
-        bundles/backend/lib/ui-sortable.js,
-        bundles/backend/lib/ui-bootstrap-tpls-0.10.0.min.js,
-        bundles/backend/js/app.js,
-        bundles/backend/js/controllers.js,
-        bundles/backend/js/services.js,
-        bundles/backend/js/filters.js,
-        bundles/backend/js/directives.js,
-        bundles/backend/js/controllers/*,
-        bundles/backend/js/services/*,
-        bundles/backend/js/filters/*,
-        bundles/backend/js/directives/*"
-    filters="uglifyjs"}
+    src="@Common/js/libs/moment-with-langs.min.js,
+        @Common/js/libs/moment-timezone.min.js,
+        @Common/js/libs/moment-data.js,
+        @Common/js/libs/messenger.min.js,
+        @FosJsRoutingBundle/js/router.js,
+        @Common/js/routes.js,
+        @BackendBundle/lib/angular.min.js,
+        @BackendBundle/lib/angular-translate.min.js,
+        @BackendBundle/lib/ui-sortable.js,
+        @BackendBundle/lib/ui-bootstrap-tpls-0.10.0.min.js,
+        @BackendBundle/js/app.js,
+        @BackendBundle/js/controllers.js,
+        @BackendBundle/js/services.js,
+        @BackendBundle/js/filters.js,
+        @BackendBundle/js/directives.js,
+        @BackendBundle/js/controllers/*,
+        @BackendBundle/js/services/*,
+        @BackendBundle/js/filters/*,
+        @BackendBundle/js/directives/*"
+    }
     <script type="text/javascript" src="{$asset_url}"></script>
 {/javascripts}

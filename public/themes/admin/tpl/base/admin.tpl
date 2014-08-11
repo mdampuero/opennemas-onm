@@ -36,14 +36,15 @@
     {block name="js-library"}
         {javascripts
             src="@Common/js/jquery/jquery.min.js,
+                @Common/js/libs/bootstrap.js,
                 @Common/js/jquery/select2/select2.min.js,
                 @Common/js/jquery-onm/jquery.onmvalidate.js,
-                @Common/js/libs/bootstrap.js,
                 @Common/js/libs/jquery.tools.min.js,
                 @Common/js/libs/tinycon.min.js,
                 @Common/js/libs/modernizr.min.js,
                 @Common/js/onm/scripts.js,
                 @Common/js/onm/footer-functions.js,
+                @Common/js/onm/jquery.onm-editor.js,
                 @AdminTheme/js/jquery/bootstrap-nav-wizard.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
@@ -185,7 +186,6 @@
         var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
         </script>
         {script_tag src="/ckeditor/ckeditor.js" common=1}
-        {script_tag src="/onm/jquery.onm-editor.js" common=1}
         <script type="text/javascript">
         $(function() {
             $.onmEditor({
