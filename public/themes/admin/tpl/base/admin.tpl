@@ -45,7 +45,7 @@
                 @Common/js/libs/modernizr.min.js,
                 @Common/js/onm/scripts.js,
                 @Common/js/onm/footer-functions.js"
-            filters="uglifyjs" }
+            filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
     {/block}
