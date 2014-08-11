@@ -126,7 +126,7 @@ abstract class AssetManager
 
             $pos = strrpos($asset, '*');
             if ($pos == strlen($asset) - 1) {
-                foreach (glob(SITE_PATH . $asset) as $asset) {
+                foreach (glob($asset) as $asset) {
                     $this->assets[] = str_replace(SITE_PATH, '', $asset);
                 }
             } else {
