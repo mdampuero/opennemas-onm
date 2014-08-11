@@ -21,7 +21,6 @@
                     @Common/css/fontawesome/font-awesome.min.css,
                     @Common/css/style.css,
                     @Common/css/jquery/jquery-ui.css,
-                    @Common/css/bootstrap/bootstrap.css,
                     @Common/css/jquery/select2/select2-bootstrap.css,
                     @Common/css/jquery/select2/select2.css,
                     @Common/css/jquery/messenger/messenger.css,
