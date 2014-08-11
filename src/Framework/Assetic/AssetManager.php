@@ -173,17 +173,11 @@ abstract class AssetManager
         // Create all-in-one asset
         $assets = $this->af->createAsset($this->assets);
         if ($this->debug()) {
-            foreach ($assets as $asset) {
-                $cached = new AssetCache(
-                    $asset,
-                    new FilesystemCache($this->config['build_path'])
-                );
-
-                $this->writer->writeAsset($cached);
-
-                // Save all asset source paths
-                $srcs[] = $this->createAssetSrc($asset->getTargetPath());
+            foreach ($this->assets as &$asset) {
+                $asset = $this->parseAssetSrc($asset);
             }
+
+            $srcs = $this->assets;
         } else {
             $cached = new AssetCache(
                 $assets,
@@ -213,16 +207,20 @@ abstract class AssetManager
 
             switch ($theme) {
                 case 'Common':
-                    $src = SITE_PATH . $this->config['folders']['common'] . $asset;
+                    $src = DS . $this->config['folders']['common'] . $asset;
                     break;
                 case 'Theme':
-                    $src = SITE_PATH . $this->config['folders']['themes']
+                    $src = DS . $this->config['folders']['themes']
                         . $this->themePath . $asset;
                     break;
                 default:
                     $theme = $this->parseThemeName($theme);
-                    $src   = SITE_PATH . $this->config['folders']['themes']
-                        . DS .$theme . $asset;
+                    $src   = DS . $this->config['folders']['themes']
+                        . DS . $theme . $asset;
+            }
+
+            if (!$this->debug()) {
+                $src = SITE_PATH . ltrim($src, DS);
             }
         }
 
