@@ -18,10 +18,14 @@
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
 
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
-        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css" media="screen" common=1}
-        {css_tag href="/loginadmin.css" media="screen" common=1}
+        {stylesheets
+            src="@Common/css/bootstrap/bootstrap.css,
+                @Common/css/fontawesome/font-awesome.min.css,
+                @Common/css/style.css,
+                @Common/css/loginadmin.css" media="screen" common=1}
+            filters="cssrewrite"}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
         <style type="text/css">
             #recaptcha_area {
                 float: left;
@@ -151,11 +155,14 @@
     </footer>
 
     {block name="footer-js"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/modernizr.min.js" common=1}
-        {script_tag src="/onm/md5.min.js" common=1}
-        {script_tag src="/admin.js" common=1}
+        {javascripts
+            src="@Common/js/jquery/jquery.min.js,
+                @Common/js/libs/bootstrap.js,
+                @Common/js/libs/modernizr.min.js,
+                @Common/js/onm/md5.min.js,
+                @Common/js/admin.js"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
         <script type="text/javascript">
         jQuery(document).ready(function($) {
             BackendAuthentication.init()

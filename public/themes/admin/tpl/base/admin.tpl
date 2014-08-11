@@ -18,15 +18,15 @@
     {block name="header-css"}
         {stylesheets
             src="@Common/css/bootstrap/bootstrap.css,
-                    @Common/css/fontawesome/font-awesome.min.css,
-                    @Common/css/style.css,
-                    @Common/css/jquery/jquery-ui.css,
-                    @Common/css/jquery/select2/select2-bootstrap.css,
-                    @Common/css/jquery/select2/select2.css,
-                    @Common/css/jquery/messenger/messenger.css,
-                    @Common/css/jquery/messenger/messenger-spinner.css,
-                    @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
-                    @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
+                @Common/css/fontawesome/font-awesome.min.css,
+                @Common/css/style.css,
+                @Common/css/jquery/jquery-ui.css,
+                @Common/css/jquery/select2/select2-bootstrap.css,
+                @Common/css/jquery/select2/select2.css,
+                @Common/css/jquery/messenger/messenger.css,
+                @Common/css/jquery/messenger/messenger-spinner.css,
+                @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
+                @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
             filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
