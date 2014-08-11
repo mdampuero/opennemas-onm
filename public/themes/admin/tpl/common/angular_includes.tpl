@@ -1,9 +1,8 @@
-{assetic
-    assets="assets/js/libs/moment-with-langs.min.js,
+{javascripts
+    src="assets/js/libs/moment-with-langs.min.js,
         assets/js/libs/moment-timezone.min.js,
         assets/js/libs/moment-data.js,
-        assets/js/libs/messenger.min.js,
-        bundles/fosjsrouting/js/router.js,
+        assets/js/libs/messenger.min.js, bundles/fosjsrouting/js/router.js,
         assets/js/routes.js,
         bundles/backend/lib/angular.min.js,
         bundles/backend/lib/angular-translate.min.js,
@@ -22,4 +21,4 @@
     filters="uglifyjs"
     asset_url=asset_url}
     <script type="text/javascript" src="{$asset_url}"></script>
-{/assetic}
+{/javascripts}
