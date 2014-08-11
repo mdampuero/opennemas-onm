@@ -22,7 +22,7 @@
             src="@Common/css/bootstrap/bootstrap.css,
                 @Common/css/fontawesome/font-awesome.min.css,
                 @Common/css/style.css,
-                @Common/css/loginadmin.css" media="screen" common=1}
+                @Common/css/loginadmin.css"
             filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
