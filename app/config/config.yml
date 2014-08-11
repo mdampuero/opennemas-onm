@@ -38,8 +38,8 @@ sensio_framework_extra:
 
 opennemas:
     assetic:
-        build_path: compile/assetic/build
-        output_path: compile/assetic/build
+        build_path:  "%kernel.root_dir%/cache"
+        output_path: build/assets
         asset_url: asset_url
         site_url: false
         filters:
