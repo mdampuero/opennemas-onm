@@ -10,13 +10,14 @@
  */
 
 /**
- * [smarty_block_assetic description]
+ * Process the CSS files in the src attribute with Assetic.
  *
  * @param  array                    $params   Array of parameters.
  * @param  string                   $content  Current HTML to return.
  * @param  Smarty_Internal_Template $template Current template
  * @param  boolean                  $repeat   Current extension call number.
- * @return string                             Result HTML.
+ *
+ * @return string Result HTML.
  */
 function smarty_block_stylesheets($params, $content, $template, &$repeat)
 {
