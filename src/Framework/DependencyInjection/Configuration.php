@@ -45,7 +45,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('site_url')
                             ->defaultValue(false)
                         ->end()
-                        ->scalarNode('output')
+                        ->scalarNode('output_path')
                             ->defaultValue('/compile/assetic')
                         ->end()
                         ->scalarNode('root')

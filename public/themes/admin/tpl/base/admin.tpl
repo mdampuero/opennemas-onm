@@ -43,8 +43,7 @@
                 @Common/js/libs/tinycon.min.js,
                 @Common/js/libs/modernizr.min.js,
                 @Common/js/onm/scripts.js,
-                @Common/js/onm/footer-functions.js"
-            filters="uglifyjs"}
+                @Common/js/onm/footer-functions.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
     {/block}

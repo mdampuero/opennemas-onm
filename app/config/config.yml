@@ -38,6 +38,8 @@ sensio_framework_extra:
 
 opennemas:
     assetic:
+        build_path: compile/assetic/build
+        output_path: compile/assetic/build
         asset_url: asset_url
         site_url: false
         filters:
