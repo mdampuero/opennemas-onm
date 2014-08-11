@@ -32,8 +32,10 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
 
     if ($repeat) { // Opening tag (first call only)
         $filters = array();
-        foreach (explode(',', $params['filters']) as $filter) {
-            $filters[] = trim($filter);
+        if (array_key_exists('filters', $params)) {
+            foreach (explode(',', $params['filters']) as $filter) {
+                $filters[] = trim($filter);
+            }
         }
 
         $srcs = array();
