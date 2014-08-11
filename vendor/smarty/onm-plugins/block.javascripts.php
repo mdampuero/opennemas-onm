@@ -24,7 +24,9 @@ function smarty_block_javascripts($params, $content, $template, &$repeat)
     static $count;
     static $assetsUrls;
 
-    $am     = getService('javascript_manager');
+    $am = getService('javascript_manager');
+    $am->initConfiguration($params);
+
     $config = $am->getConfiguration();
 
     if ($repeat) { // Opening tag (first call only)

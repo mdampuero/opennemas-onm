@@ -127,6 +127,24 @@ abstract class AssetManager
     }
 
     /**
+     * Merge the current configuration with parameters from template.
+     *
+     * @param array $config The configuration parameters from template.
+     */
+    public function initConfiguration($config)
+    {
+        if (array_key_exists('src', $config)) {
+            unset($config['src']);
+        }
+
+        if (array_key_exists('filters', $config)) {
+            unset($config['filters']);
+        }
+
+        $this->config = array_merge($this->config, $config);
+    }
+
+    /**
      * Initializes the AssetFactory.
      */
     public function initFactory()

@@ -24,7 +24,9 @@ function smarty_block_stylesheets($params, $content, $template, &$repeat)
     static $count;
     static $assetsUrls;
 
-    $am     = getService('stylesheet_manager');
+    $am = getService('stylesheet_manager');
+    $am->initConfiguration($params);
+
     $config = $am->getConfiguration();
 
     if ($repeat) { // Opening tag (first call only)
