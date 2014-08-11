@@ -226,9 +226,15 @@ abstract class AssetManager
                         . $this->themePath . $asset;
                     break;
                 default:
-                    $theme = $this->parseThemeName($theme);
-                    $src   = $this->config['folders']['themes']
-                        . DS . $theme . $asset;
+                    if (strpos($theme, 'Theme') !== false) {
+                        $theme = $this->parseThemeName($theme);
+                        $src   = $this->config['folders']['themes']
+                            . DS . $theme . $asset;
+                    } elseif (strpos($theme, 'Bundle') !== false) {
+                        $theme = $this->parseBundleName($theme);
+                        $src   = $this->config['folders']['bundles']
+                            . DS . $theme . $asset;
+                    }
             }
 
             if (!$this->debug()) {
@@ -257,6 +263,24 @@ abstract class AssetManager
         }
 
         return $src;
+    }
+
+    /**
+     * Parses the bundle name and returns the bundle folder name.
+     *
+     * @param string $bundle The bundle name.
+     *
+     * @return string The bundle folder name.
+     */
+    private function parseBundleName($bundle)
+    {
+        if (strpos($bundle, 'Bundle') !== false) {
+            $bundle = substr($bundle, 0, strpos($bundle, 'Bundle'));
+        }
+
+        $bundle = strtolower($bundle);
+
+        return $bundle;
     }
 
     /**
