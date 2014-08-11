@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class OnmFrameworkExtension extends Extension implements PrependExtensionInterface
+class OpennemasExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -62,7 +62,7 @@ class OnmFrameworkExtension extends Extension implements PrependExtensionInterfa
 
                 // use the Configuration class to generate a config array with the settings "assetic"
                 $config = $this->processConfiguration(new Configuration(), $configs);
-                $container->prependExtensionConfig('onm_framework', $config);
+                $container->prependExtensionConfig('opennemas', $config);
             }
         }
     }
