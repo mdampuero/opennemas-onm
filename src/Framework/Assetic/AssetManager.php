@@ -178,6 +178,19 @@ abstract class AssetManager
 
         //     $srcs = $this->assets;
         // } else {
+            if ($this->config['output']) {
+                $name = substr($this->config['output'], 0, strpos($this->config['output'], '.'));
+
+                // Get target path (without file)
+                $target = $assets->getTargetPath();
+                $target = substr($target, 0, strrpos($target, '/') + 1);
+
+                // Add deploy number and extension
+                $target .= $name . '.' . $this->extension;
+
+                $assets->setTargetPath($target);
+            }
+
             $cached = new AssetCache(
                 $assets,
                 new FileSystemCache($this->config['build_path'])
