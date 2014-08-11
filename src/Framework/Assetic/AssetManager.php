@@ -248,7 +248,7 @@ abstract class AssetManager
      */
     private function createAssetSrc($src)
     {
-        $src = substr($src, 0, strrpos($src, '.') + 1) . DEPLOYED_AT . '.'
+        $src = DS . substr($src, 0, strrpos($src, '.') + 1) . DEPLOYED_AT . '.'
             . $this->extension;
         if (array_key_exists('site_url', $this->config)
             && $this->config['site_url'] !== false
