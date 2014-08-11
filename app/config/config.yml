@@ -36,19 +36,17 @@ sensio_framework_extra:
     cache:    { annotations: false }
     security: { annotations: true }
 
-onm_framework:
+opennemas:
     assetic:
         asset_url: asset_url
         site_url: false
-
-assetic:
-    filters:
-        uglifyjs:
-            bin:  /usr/local/bin/uglifyjs
-            node: /usr/bin/nodejs
-        uglifycss:
-            bin:  /usr/local/bin/uglifycss
-            node: /usr/bin/nodejs
+        filters:
+            uglifyjs:
+                bin:  /usr/local/bin/uglifyjs
+                node: /usr/bin/nodejs
+            uglifycss:
+                bin:  /usr/local/bin/uglifycss
+                node: /usr/bin/nodejs
 
 # Twig Configuration
 twig:
