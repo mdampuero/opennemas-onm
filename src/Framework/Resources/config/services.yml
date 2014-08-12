@@ -153,3 +153,11 @@ services:
         arguments: [ @service_container ]
     view:
         alias: onm_templating
+
+    stylesheet_manager:
+        class: Framework\Assetic\StylesheetManager
+        arguments: [ @service_container, %assetic% ]
+
+    javascript_manager:
+        class: Framework\Assetic\JavascriptManager
+        arguments: [ @service_container, %assetic% ]

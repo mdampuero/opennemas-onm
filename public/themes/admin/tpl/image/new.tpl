@@ -29,11 +29,12 @@
 {/block}
 
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/onm/jquery.datepicker.js"}
-
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
-    {script_tag src="/libs/gmaps.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @AdminTheme/js/onm/jquery.datepicker.js,
+        @AdminTheme/js/libs/gmaps.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="content"}

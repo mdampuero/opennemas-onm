@@ -23,8 +23,9 @@
         });
     });
     </script>
-    {script_tag src="/onm/video.js" language="javascript"}
-
+    {javascripts src="@AdminTheme/js/onm/video.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="content"}

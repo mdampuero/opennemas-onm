@@ -16,31 +16,42 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" common=1}
-        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css" common=1}
+        {stylesheets
+            src="@Common/css/bootstrap/bootstrap.css,
+                @Common/css/fontawesome/font-awesome.min.css,
+                @Common/css/style.css,
+                @Common/css/jquery/jquery-ui.css,
+                @Common/css/jquery/select2/select2-bootstrap.css,
+                @Common/css/jquery/select2/select2.css,
+                @Common/css/jquery/messenger/messenger.css,
+                @Common/css/jquery/messenger/messenger-spinner.css,
+                @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
+                @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
+            filters="cssrewrite"}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
-        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css"}
-        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
 	{/block}
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/jquery/select2/select2.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/jquery.tools.min.js" common=1}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
+        {javascripts
+            src="@Common/js/jquery/jquery.min.js,
+                @Common/js/libs/bootstrap.js,
+                @Common/js/jquery/select2/select2.min.js,
+                @Common/js/jquery-onm/jquery.onmvalidate.js,
+                @Common/js/libs/jquery.tools.min.js,
+                @Common/js/libs/tinycon.min.js,
+                @Common/js/libs/modernizr.min.js,
+                @Common/js/onm/scripts.js,
+                @Common/js/onm/footer-functions.js,
+                @Common/js/onm/jquery.onm-editor.js,
+                @AdminTheme/js/jquery/bootstrap-nav-wizard.js"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js" common=1}
     {/block}
 </head>
 <body>
@@ -167,9 +178,6 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js" common=1}
-        {script_tag src="/libs/tinycon.min.js"}
-        {script_tag src="/jquery/bootstrap-nav-wizard.js"}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
         </script>
@@ -178,7 +186,6 @@
         var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
         </script>
         {script_tag src="/ckeditor/ckeditor.js" common=1}
-        {script_tag src="/onm/jquery.onm-editor.js" common=1}
         <script type="text/javascript">
         $(function() {
             $.onmEditor({
