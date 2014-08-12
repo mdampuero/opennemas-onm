@@ -9,14 +9,9 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
+        arguments: [ @instance_manager, @cache ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
-
-    # kernel.listener.admin_auth:
-    #     class: Framework\EventListener\AdminAuthenticationListener
-    #     arguments: [ @security.context ]
-    #     tags:
-    #         - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
@@ -39,9 +34,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-    kernel.listener.general_error_handler:
+    kernel.listener.general_exceptions:
         class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ %kernel.environment%, @logger ]
+        arguments: [ %kernel.environment% ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
 
@@ -49,7 +44,12 @@ services:
         class: Framework\EventListener\ContentActionsSubscriber
         arguments: [ @cache, @logger ]
         tags:
-            - {name: kernel.event_subscriber}
+            - { name: kernel.event_subscriber }
+    kernel.listener.user_listener:
+        class: Framework\EventListener\UserListener
+        arguments: [ @security.context, @onm_user_provider ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     kernel.listener.news_agency:
         class: Framework\EventListener\NewsAgencyCronActionSubscriber
@@ -78,6 +78,10 @@ services:
 
     comment_repository:
         class: Repository\CommentManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
+    content_views_repository:
+        class: Repository\ContentViewsManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     entity_repository:
@@ -114,7 +118,7 @@ services:
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
@@ -129,7 +133,7 @@ services:
 
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
-        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @logger ]
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
         tags:
             - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
 
@@ -142,7 +146,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @db_conn_manager, @cache ]
+        arguments: [ @dbal_connection, @cache, @setting_repository ]
 
     onm_templating:
         class: Onm\Templating\Templating

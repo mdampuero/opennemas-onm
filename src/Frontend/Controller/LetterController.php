@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for letters
+ * Defines the frontend controller for the letter content type
  *
  * @package Frontend_Controllers
  **/
@@ -30,16 +30,6 @@ use Onm\Settings as s;
 class LetterController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Renders letters frontpage.
      *
      * @param  Request  $request The request object.
@@ -47,8 +37,13 @@ class LetterController extends Controller
      */
     public function frontpageAction(Request $request)
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
         $page = $request->query->getDigits('page', 1);
 
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-frontpage');
 
         $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
@@ -114,6 +109,7 @@ class LetterController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('letter-inner');
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
@@ -127,7 +123,7 @@ class LetterController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
-            $letter = new \Letter($letterId);
+            $letter = $this->get('entity_repository')->find('Letter', $letterId);
             $letter->with_comment = 1;
 
             if (empty($letter)
@@ -174,11 +170,14 @@ class LetterController extends Controller
      **/
     public function showFormAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
+
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         return $this->render('letter/letter_form.tpl');
-
     }
 
     /**
@@ -190,6 +189,7 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
 
         require_once 'recaptchalib.php';
 
@@ -323,7 +323,6 @@ class LetterController extends Controller
         $info          = array();
 
         if ($upload) {
-
             $data = array(
                 'local_file'        => $upload['tmp_name'],
                 'original_filename' => $upload['name'] ,
@@ -362,7 +361,7 @@ class LetterController extends Controller
 
         // Get letter positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

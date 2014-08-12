@@ -75,7 +75,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
      * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(content, filters, sortBy, sortOrder, route, lang) {
+    $scope.init = function(content, filters, sortBy, sortOrder, route, lang, epp) {
         $translate.use(lang ? lang : 'en');
         $translate(['Next', 'Previous']).then(function (translations) {
             paginationConfig.nextText     = translations.Next;
@@ -85,7 +85,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
         // Initialize the current list.
         sharedVars.set('contentType', content);
         sharedVars.set('page', 1);
+
         sharedVars.set('elements_per_page', 10);
+        if  (epp) {
+            sharedVars.set('elements_per_page', epp);
+        }
 
         // Load filters from URL
         var query = $location.search();
@@ -237,6 +241,21 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
             $scope.list(route);
         }
     };
+
+    $scope.sort = function(field) {
+        if ($scope.shvs.sort_by == field) {
+            if ($scope.shvs.sort_order == 'asc') {
+                $scope.shvs.sort_order = 'desc';
+            } else {
+                $scope.shvs.sort_order = 'asc';
+            }
+        } else {
+            $scope.shvs.sort_by = field;
+            $scope.shvs.sort_order == 'asc';
+        }
+
+        $scope.list($scope.route);
+    }
 
     /**
      * Updates an item.
@@ -419,6 +438,29 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fos
                     }
                 }
             };
+
+            $scope.shvs.page = 1;
+            $location.search('page', null);
+
+            searchTimeout = $timeout(function() {
+                $scope.list($scope.route);
+            }, 500);
+        }
+    }, true);
+
+    /**
+     * Load the value of elements per page variable in scope when it changes.
+     *
+     * @param  Event  event Event object.
+     * @param  Object vars  Shared variables object.
+     */
+    $scope.$watch('shvs.elements_per_page', function(newValues, oldValues) {
+        if (searchTimeout) {
+            $timeout.cancel(searchTimeout);
+        }
+
+        if (newValues !== oldValues) {
+            $location.search('elements_per_page', newValues);
 
             $scope.shvs.page = 1;
             $location.search('page', null);

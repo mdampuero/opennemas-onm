@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -25,14 +27,15 @@ use Onm\Database\DbalWrapper;
 class OpinionManager extends EntityManager
 {
     /**
-     * Searches for content given a criteria.
+     * Searches for opinions given a criteria.
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The current page.
-     * @param  integer      $offset          The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The current page.
+     * @param integer $offset          The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
@@ -64,10 +67,11 @@ class OpinionManager extends EntityManager
     }
 
     /**
-     * Searches for content given a criteria.
+     * Counts opinions given a criteria.
      *
-     * @param  array|string $criteria The criteria used to search.
-     * @return integer                The number of matched elements.
+     * @param array   $criteria The criteria used to search.
+     *
+     * @return integer The number of matched elements.
      */
     public function countBy($criteria)
     {
@@ -90,8 +94,9 @@ class OpinionManager extends EntityManager
      * Builds the SQL WHERE filter given an array or string with the desired
      * filter.
      *
-     * @param  string|array $criteria The filter params.
-     * @return string                 The SQL WHERE filter.
+     * @param string $criteria The filter params.
+     *
+     * @return string  The SQL WHERE filter.
      */
     protected function getFilterSQL($criteria)
     {

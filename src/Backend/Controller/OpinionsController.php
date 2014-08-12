@@ -92,14 +92,28 @@ class OpinionsController extends Controller
 
         $numEditorial = $configurations['total_editorial'];
         $numDirector  = $configurations['total_director'];
+        $numOpinions  = s::get('items_per_page');
+        if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+            $numOpinions = $configurations['total_opinions'];
+        }
 
         $cm = new \ContentManager();
-        $rating = new \Rating();
-        //$commentManager = new \Repository\CommentManager();
+        $allAuthors = \User::getAllUsersAuthors();
+
+        $authorsBlog = array();
+        foreach ($allAuthors as $authorData) {
+            if ($authorData->is_blog == 1) {
+                $authorsBlog[$authorData->id] = $authorData;
+            }
+        }
+        $where ='';
+        if (!empty($authorsBlog)) {
+            $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+        }
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=1 and content_status=1 and type_opinion=0',
+            'in_home=1 and content_status=1 and type_opinion=0 '.$where,
             'ORDER BY position ASC , created DESC'
         );
 
@@ -120,11 +134,15 @@ class OpinionsController extends Controller
             );
         }
 
+        if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
+            m::add(sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions'));
+        }
+
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
-            m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, 'editorial'));
+            m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numEditorial, 'editorial'));
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
-             m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, 'opinion del director'));
+             m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numDirector, 'opinion del director'));
         }
 
         if (isset($opinions) && is_array($opinions)) {
@@ -573,6 +591,7 @@ class OpinionsController extends Controller
                 'opinion_settings' => array(
                     'total_director'        => filter_var($configsRAW['total_director'], FILTER_VALIDATE_INT),
                     'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
+                    'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
                 )
             );
@@ -779,7 +798,7 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('author.update', array('authorId' => $userId));
+                dispatchEventWithParams('author.update', array('id' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {

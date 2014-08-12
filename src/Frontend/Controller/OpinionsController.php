@@ -42,8 +42,6 @@ class OpinionsController extends Controller
 
         $this->category_name = $this->request->query->filter('category_name', 'opinion', FILTER_SANITIZE_STRING);
         $this->view->assign('actual_category', 'opinion'); // Used in renderMenu
-
-        $this->cm = new \ContentManager();
     }
 
     /**
@@ -56,14 +54,15 @@ class OpinionsController extends Controller
     public function frontpageAction(Request $request)
     {
         $filters = array('content_status' => array(array('value' => 1)));
-        $order   = array('starttime' => 'DESC');
         $em      = $this->get('opinion_repository');
 
         if ($this->page == 1) {
             $order['in_home']  = 'DESC';
             $order['position'] = 'ASC';
+            $order['starttime'] = 'DESC';
             $filters['in_home'] = array(array('value' => 1));
         } else {
+            $order['in_home']  = 'DESC';
             $order['starttime'] = 'DESC';
         }
 
@@ -121,17 +120,21 @@ class OpinionsController extends Controller
             if (isset($director) && !empty($director)) {
                 // Fetch the photo image of the director
                 $aut = $this->get('user_repository')->find($director[0]->fk_author);
-                if (isset($aut->photo->path_file)) {
-                    $dir['photo'] = $aut->photo->path_file;
+                if (!empty($aut)) {
+                    if (isset($aut->photo->path_file)) {
+                        $dir['photo'] = $aut->photo->path_file;
+                    }
+                    $dir['name'] = $aut->name;
                 }
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
-                $dir['summary'] = $item->summary;
+                $dir['summary']     = $item->summary;
                 $dir['img1_footer'] = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
                     $dir['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
                 }
-                $dir['name'] = $aut->name;
+
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
                 $director[0]->summary = $item->summary;
@@ -149,7 +152,10 @@ class OpinionsController extends Controller
                 );
             }
 
-            $itemsPerPage = s::get('items_per_page');
+            $numOpinions  = s::get('items_per_page');
+            if (!empty($configurations) && array_key_exists('total_opinions', $configurations)) {
+                $numOpinions = $configurations['total_opinions'];
+            }
              // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
@@ -159,9 +165,13 @@ class OpinionsController extends Controller
                     $authorsBlog[$authorData->id] = $authorData;
                 }
             }
-            $where ='';
+
             if (!empty($authorsBlog)) {
-                $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+                // Must drop the blogs
+                $filters = array_merge(
+                    $filters,
+                    array('opinions`.`fk_author'  => array(array('value' => array_keys($authorsBlog), 'operator' => 'NOT IN')))
+                );
             }
 
             $of = array_merge(
@@ -169,13 +179,21 @@ class OpinionsController extends Controller
                 array('type_opinion' => array(array('value' => 0)))
             );
 
-            $opinions      = $em->findBy($of, $order, $itemsPerPage, $this->page);
-            $countOpinions = $em->countBy($of);
+            $opinions  = $em->findBy($of, $order, $numOpinions, $this->page);
 
+            if ($this->page == 1) {
+                // Make pagination using all opinions. Overwriting filter
+                $of = array_merge(
+                    $of,
+                    array('in_home' => array(array('value' => array(0,1), 'operator' => 'IN' )))
+                );
+
+            }
+            $countOpinions = $em->countBy($of);
             $pagination = \Pager::factory(
                 array(
                     'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
+                    'perPage'     => $numOpinions,
                     'append'      => false,
                     'path'        => '',
                     'delta'       => 3,
@@ -288,6 +306,8 @@ class OpinionsController extends Controller
                 }
             }
 
+            $this->cm = new \ContentManager();
+
             // Fetch last external opinions from editorial
             $editorial = $this->cm->getUrlContent($wsUrl.'/ws/opinions/editorialinhome/', true);
 
@@ -319,7 +339,7 @@ class OpinionsController extends Controller
             }
 
             // Sum of total opinions in home + not in home for the pager
-            $totalOpinions =  ITEMS_PAGE + (int)$this->cm->getUrlContent(
+            $totalOpinions =  ITEMS_PAGE + (int) $this->cm->getUrlContent(
                 $wsUrl.'/ws/opinions/countauthorsnotinhome/',
                 true
             );
@@ -443,6 +463,8 @@ class OpinionsController extends Controller
             // generate pagination params
             $itemsPerPage = s::get('items_per_page');
             $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
+
+            $this->cm = new \ContentManager();
 
             // Get the number of total opinions for this author for pagination purpouses
             $countOpinions = $this->cm->cache->count(
@@ -574,6 +596,8 @@ class OpinionsController extends Controller
                 }
             }
 
+            $this->cm = new \ContentManager();
+
             // Get author info
             $author = $this->cm->getUrlContent($wsUrl.'/ws/authors/id/'.$authorID, true);
             $author->slug = strtolower($authorSlug);
@@ -636,6 +660,8 @@ class OpinionsController extends Controller
                     $opinion = (array)$opinion; // template dependency
                 }
             }
+
+            $this->cm = new \ContentManager();
 
             $itemsPerPage = s::get('items_per_page');
             // Get external media url for author images
@@ -787,6 +813,8 @@ class OpinionsController extends Controller
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }
 
+            $this->cm = new \ContentManager();
+
             $otherOpinions = $this->cm->find(
                 'Opinion',
                 $where.' AND `pk_opinion` <>' .$opinionID
@@ -817,6 +845,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
+                'x-tags'          => 'opinion,'.$opinionID,
             )
         );
     }
@@ -854,6 +883,7 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
+            $this->cm = new \ContentManager();
 
             $opinion = $this->cm->getUrlContent($wsUrl.'/ws/opinions/complete/'.$dirtyID, true);
             $opinion = unserialize($opinion);

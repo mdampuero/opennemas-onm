@@ -55,12 +55,12 @@ class ErrorController extends Controller
         $this->view->assign('preview', $preview);
 
         switch ($exceptionName) {
-            case 'Onm\Instance\NotFoundException':
+            case 'Onm\Exception\InstanceNotRegisteredException':
                 $trace = $error->getTrace();
 
                 $errorMessage = _('Instance not found');
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'error/instance_not_found.tpl',
@@ -83,7 +83,7 @@ class ErrorController extends Controller
 
                 $errorMessage = _('Instance not activated');
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'error/instance_not_activated.tpl',

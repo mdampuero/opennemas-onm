@@ -48,7 +48,23 @@ EOF
         $instanceManager = $this->getContainer()->get('instance_manager');
 
         $instanceName = $input->getArgument('instance_internal_name');
-        $instance     = $instanceManager->loadFromInternalName($instanceName);
+
+        $instance = $instanceManager->findOneBy(
+            array('internal_name' => array(array('value' => $instanceName)))
+        );
+
+        //If found matching instance initialize its contants and return it
+        if (is_object($instance)) {
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Exception\InstanceNotFoundException(_('Instance not found'));
+        }
 
         $instanceManager->current_instance = $instance;
         $instanceManager->cache_prefix     = $instance->internal_name;

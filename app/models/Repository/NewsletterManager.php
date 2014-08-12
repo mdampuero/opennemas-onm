@@ -1,37 +1,34 @@
 <?php
+
 /**
- * Defines the NewsletterManager class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Core
  */
+
 namespace Repository;
 
 use Onm\Settings as s;
 use Onm\Message  as m;
 
 /**
- * Handles the operations of Newsletters
- *
- * @package  Core
+ * Handles the operations of Newsletters.
  */
 class NewsletterManager extends BaseManager
 {
     /**
      * Performs searches in newsletters
      *
-     * @param string $whereClause  the where clause to insert into the search
-     * @param string $order        the order clause for the search
-     * @param int    $page         the page where start the paginated results
-     * @param int    $itemsPerPage the number of items per page in paginated results
+     * @param string  $whereClause  The where clause to insert into the search.
+     * @param string  $order        The order clause for the search.
+     * @param integer $page         The page where start the paginated results.
+     * @param integer $itemsPerPage The number of items per page.
      *
-     * @return Array the newsletters that matches the search criterias
-     **/
+     * @return array The newsletters that matches the search criterias.
+     */
     public function find(
         $whereClause = '1 = 1',
         $order = 'created DESC',
@@ -48,13 +45,13 @@ class NewsletterManager extends BaseManager
             $limit = '';
         }
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
 
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-        $rs  = $this->dbConn->Execute($sql);
+        $rs  = $this->conn->Execute($sql);
 
         $sql2    = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
-        $countNm = $this->dbConn->GetOne($sql2);
+        $countNm = $this->conn->GetOne($sql2);
 
         if (!$rs) {
             return;
@@ -73,12 +70,12 @@ class NewsletterManager extends BaseManager
     }
 
     /**
-     * Renders the newsletter from a list of contents
+     * Renders the newsletter from a list of contents.
      *
-     * @param array $contents the list of the contents
+     * @param array $contents The list of the contents.
      *
-     * @return string the generated html for the newsletter
-     **/
+     * @return string The generated html for the newsletter.
+     */
     public function render($contents)
     {
         $tpl = new \Template(TEMPLATE_USER);

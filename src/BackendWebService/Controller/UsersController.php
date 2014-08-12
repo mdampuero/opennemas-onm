@@ -207,20 +207,20 @@ class UsersController extends ContentController
             try {
                 $user->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => _('Item deleted successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
-                $errors[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => sprintf(_('Unable to delete the item with the id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
-            $errors[] = array(
+            $messages[] = array(
                 'id'      => $id,
                 'message' => sprintf(_('Unable to find the item with the id "%d"'), $id),
                 'type'    => 'error'

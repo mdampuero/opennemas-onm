@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * Validates and merges the bundle configuration
+ *
+ * @package Framework_DependencyInjection
+ **/
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 namespace Framework\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -18,7 +30,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('onm_framework');
+        $rootNode = $treeBuilder->root('opennemas')->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

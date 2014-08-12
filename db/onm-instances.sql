@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `instances` (
   `internal_name` varchar(100) NOT NULL,
   `name` varchar(255) NOT NULL,
   `domains` text NOT NULL,
+  `main_domain` varchar(255) not null,
   `settings` text,
   `activated` tinyint(1) NOT NULL,
   `contact_mail` varchar(255) NOT NULL,
@@ -47,7 +48,7 @@ INSERT INTO `instances` (`id`, `internal_name`, `name`, `domains`, `settings`, `
 
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(128) NOT NULL DEFAULT '',
-  `value` longtext NOT NULL,
+  `value` text NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -71,7 +72,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 CREATE TABLE IF NOT EXISTS `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) NOT NULL DEFAULT '',
-  `meta_value` longtext,
+  `meta_value` text,
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)

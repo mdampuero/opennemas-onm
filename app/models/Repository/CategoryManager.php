@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -27,7 +29,9 @@ class CategoryManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param CacheInterface $cache the cache instance.
+     * @param DbalWrapper    $dbConn      The database connection.
+     * @param CacheInterface $cache       The cache service.
+     * @param string         $cachePrefix The cache prefix.
      */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
@@ -39,8 +43,9 @@ class CategoryManager extends BaseManager
     /**
      * Finds one category from the given category id.
      *
-     * @param  integer         $id Content id
-     * @return ContentCategory
+     * @param integer $id Content id
+     *
+     * @return ContentCategory The matched category.
      */
     public function find($id)
     {
@@ -65,27 +70,23 @@ class CategoryManager extends BaseManager
     /**
      * Find multiple categories from a given array of category ids.
      *
-     * @param  array $data Array of preprocessed category ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed category ids.
+     *
+     * @return array Array of contents.
      */
     public function findMulti(array $data)
     {
-        $keys    = array();
-        $ordered = array();
-
-        $ids = array();
-        $i = 0;
-
+        $ids  = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'category' . $this->cacheSeparator . $value;
-            $keys[$value] = $i++;
+            $keys[] = $value;
         }
 
-        $categories = $this->cache->fetch($ids);
+        $categories = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($categories as $category) {
-            $ordered[$keys[$category->pk_content_category]] = $category;
             $cachedIds[] = 'category'. $this->cacheSeparator
                 . $category->pk_content_category;
         }
@@ -96,22 +97,36 @@ class CategoryManager extends BaseManager
             list($contentType, $categoryId) = explode($this->cacheSeparator, $id);
             $category = $this->find($categoryId);
             if ($category->pk_content_category) {
-                $ordered[$keys[$category->pk_content_category]] = $category;
+                $categories[] = $category;
             }
         }
 
-        ksort($ordered);
-        return array_values($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($categories)
+                && $categories[$i]->pk_content_category != $id
+            ) {
+                $i++;
+            }
+
+            if ($i < count($categories)) {
+                $ordered[] = $categories[$i];
+            }
+        }
+
+        return $ordered;
     }
 
     /**
      * Searches for content categories given a criteria.
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  int          $elementsPerPage The max number of elements.
-     * @param  int          $page            The offset to start with.
-     * @return array                         The matched elements.
+     * @param array $criteria        The criteria used to search.
+     * @param array $order           The order applied in the search.
+     * @param int   $elementsPerPage The max number of elements.
+     * @param int   $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -144,8 +159,9 @@ class CategoryManager extends BaseManager
     /**
      * Counts content categories given a criteria.
      *
-     * @param  array|string $criteria The criteria used to search.
-     * @return array                  The number of content categories.
+     * @param array $criteria The criteria used to search.
+     *
+     * @return array The number of content categories.
      */
     public function countBy($criteria)
     {

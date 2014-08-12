@@ -33,23 +33,40 @@ abstract class BaseManager
      * @param CacheInterface     $cache       The cache instance.
      * @param string             $cachePrefix The cache prefix.
      */
-    public function __construct(DatabaseConnection $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DatabaseConnection $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn = $dbConn;
+        $this->conn = $conn;
         $this->cache = $cache;
         $this->cachePrefix = $cachePrefix;
     }
 
     /**
+     * Redirects all the calls to the DbalConnection instance
+     *
+     * @param  string $method the method to call
+     * @param  array  $params the list of parameters to pass to the method
+     * @return mixed          the result of the method call
+     */
+    public function __call($method, $params)
+    {
+        $rs = call_user_func_array(array($this->conn, $method), $params);
+
+        return $rs;
+    }
+
+    /**
      * Searches one entity given a criteria and an order.
      *
-     * @param  array|string $criteria The criteria to search for an entity.
-     * @param  array        $order    The order used in clause.
-     * @return Object                 The object searched.
+     * @param  array   $criteria        The criteria used to search.
+     * @param  array   $order           The order applied in the search.
+     * @param  integer $elementsPerPage The max number of elements.
+     * @param  integer $page            The current page.
+     * @param  integer $offset          The offset to start with.
+     * @return Object                   The object searched.
      */
-    public function findOneBy($criteria, $order)
+    public function findOneBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $elements = $this->findBy($criteria, $order, 1);
+        $elements = $this->findBy($criteria, $order, $elementsPerPage, $page, $offset);
         $element  = null;
         if (!empty($elements)) {
             $element = $elements[0];
@@ -99,31 +116,10 @@ abstract class BaseManager
 
                 $fieldFilters = array();
                 foreach ($filters as $filter) {
-                    $operator = "=";
-                    if (array_key_exists('operator', $filter)) {
-                        $operator = trim($filter['operator']);
-                    }
+                    $sql = $this->parseFilter($field, $filter);
 
-                    $value = '';
-                    if (array_key_exists('value', $filter)) {
-                        $value = $filter['value'];
-                    }
-
-                    if (is_array($value) && !empty($value)) {
-                        if (strtoupper($operator) == 'IN'
-                            || strtoupper($operator) == 'NOT IN'
-                        ) {
-                            $fieldFilters[] = "`$field` $operator (" .
-                                implode(', ', $value) . ")";
-                        } else {
-                            $value = $this->parseValues($value, $operator);
-                            $fieldFilters[] = "`$field` $operator " .
-                                implode(' ', $value);
-                        }
-                    } elseif (!is_array($value) && !is_null($value)) {
-                        $fieldFilters[] = "`$field` $operator '$value'";
-                    } elseif (is_null($value)) {
-                        $fieldFilters[] = "`$field` $operator NULL";
+                    if (!empty($sql)) {
+                        $fieldFilters[] = $sql;
                     }
                 }
 
@@ -141,6 +137,33 @@ abstract class BaseManager
     }
 
     /**
+     * Returns the join conditions for the given criteria.
+     *
+     * @param  array  $criteria The criteria.
+     * @return string           The join conditions.
+     */
+    protected function getJoinSQL($criteria)
+    {
+        $sql = '';
+        foreach ($criteria as $join) {
+            $type = 'LEFT';
+
+            $table = $join['table'];
+            unset($join['table']);
+
+            // Add left/right join clause
+            if (array_key_exists('type', $join)) {
+                $type = strtoupper($join['type']);
+                unset($join['type']);
+            }
+
+            $sql = "$type JOIN $table ON " . $this->getFilterSQL($join);
+        }
+
+        return $sql;
+    }
+
+    /**
      * Builds the LIMIT SQL clause.
      *
      * @param  integer $elements Number of elements.
@@ -154,7 +177,8 @@ abstract class BaseManager
         if ($page == 1) {
             $limitSQL = ' LIMIT '. ($offset + $elements);
         } elseif ($page > 1) {
-            $limitSQL = ' LIMIT ' . ($offset + ($page - 1) * $elements) . ', ' . $elements;
+            $limitSQL = ' LIMIT ' . ($offset + ($page - 1) * $elements)
+                . ', ' . $elements;
         }
 
         return $limitSQL;
@@ -192,6 +216,66 @@ abstract class BaseManager
     protected function hasCache()
     {
         return $this->cache != null;
+    }
+
+    /**
+     * Returns the conditions given a filter.
+     *
+     * Example: array('value' => 'x', 'operator' => '<', field => true).
+     *
+     *     value:               The value to compare to.
+     *     operator (Optional): Operator used in condition.
+     *     field (Optional):    Whether value is a database field or a literal
+     *                          value.
+     *
+     * @param  string $field  The field name.
+     * @param  array  $filter The filter to apply.
+     * @return string         The SQL string.
+     */
+    protected function parseFilter($field, $filter)
+    {
+        $isField  = false;
+        $operator = "=";
+        $sql      = null;
+        $value    = '';
+
+        if (array_key_exists('operator', $filter)) {
+            $operator = trim($filter['operator']);
+        }
+
+        if (array_key_exists('value', $filter)) {
+            $value = $filter['value'];
+        }
+
+        if (array_key_exists('field', $filter)) {
+            $isField = $filter['field'];
+        }
+
+        if (is_array($value) && !empty($value)) {
+            if (strtoupper($operator) == 'IN'
+                || strtoupper($operator) == 'NOT IN'
+            ) {
+                // Value (not) in array
+                $sql = "$field $operator (" . implode(', ', $value) . ")";
+            } else {
+                // Array of values
+                $value = $this->parseValues($value, $operator);
+                $sql   = "$field $operator " . implode(' ', $value);
+            }
+        } elseif (!is_array($value) && !is_null($value)) {
+            if ($isField) {
+                // Database column
+                $sql = "$field $operator $value";
+            } else {
+                // Literal value
+                $sql = "$field $operator '$value'";
+            }
+        } elseif (is_null($value)) {
+            // NULL value
+            $sql = "$field $operator NULL";
+        }
+
+        return $sql;
     }
 
     /**

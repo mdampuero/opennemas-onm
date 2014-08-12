@@ -28,16 +28,6 @@ use Onm\Settings as s;
 class PaypalNotificationsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        // Init code here
-    }
-
-    /**
      * Handles IPN notifications for paywall recurring payments
      *
      * @param Request $request the request object
@@ -65,7 +55,6 @@ class PaypalNotificationsController extends Controller
             $ipnData = $ipnMessage->getRawData();
 
             $this->dispatchEvent('paywall.recurring', array('ipnData' => $ipnData));
-
         } else {
             // Write in log
             $logger = getService('logger');

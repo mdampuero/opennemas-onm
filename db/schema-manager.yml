@@ -10,17 +10,80 @@ instances:
             type: string
             options: { default: null, length: 255 }
         domains:
-            type: text
-            options: { default: null }
+            type: string
+            options: { default: null, length: 500 }
+        main_domain:
+            type: string
+            options: {default: null, length: 255 }
+        created:
+            type: datetime
+            options: {default: null }
+        last_login:
+            type: datetime
+            options: {default: null, notnull: false }
         settings:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         activated:
             type: boolean
             options: { default: null }
         contact_mail:
             type: string
             options: { default: null, length: 255 }
+        contents:
+            type: integer
+            options: { default: 0, unsigned: true }
+        attachments:
+            type: integer
+            options: { default: 0, unsigned: true }
+        articles:
+            type: integer
+            options: { default: 0, unsigned: true }
+        opinions:
+            type: integer
+            options: { default: 0, unsigned: true }
+        advertisements:
+            type: integer
+            options: { default: 0, unsigned: true }
+        albums:
+            type: integer
+            options: { default: 0, unsigned: true }
+        letters:
+            type: integer
+            options: { default: 0, unsigned: true }
+        polls:
+            type: integer
+            options: { default: 0, unsigned: true }
+        photos:
+            type: integer
+            options: { default: 0, unsigned: true }
+        videos:
+            type: integer
+            options: { default: 0, unsigned: true }
+        widgets:
+            type: integer
+            options: { default: 0, unsigned: true }
+        static_pages:
+            type: integer
+            options: { default: 0, unsigned: true }
+        media_size:
+            type: float
+            options: { default: 0 }
+        alexa:
+            type: integer
+            options: { default: null, unsigned: true }
+        page_views:
+            type: bigint
+            options: { default: 0, unsigned: true }
+        emails:
+            type: integer
+            options: { default: 0, unsigned: true }
+        users:
+            type: integer
+            options: { default: 0, unsigned: true }
+        deltas:
+            type: text
+            options: { default: null, length: 65532 }
     index:
         -
             name: PRIMARY
@@ -41,7 +104,7 @@ settings:
             options: { default: '', length: 128 }
         value:
             type: text
-            options: { default: null }
+            options: { default: null, length: 65532 }
     index:
         -
             name: PRIMARY
@@ -89,7 +152,7 @@ usermeta:
             options: { default: '', length: 255 }
         meta_value:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -128,7 +191,7 @@ users:
             options: { default: '', notnull: false, length: 255 }
         bio:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         avatar_img_id:
             type: bigint
             options: { default: '0', unsigned: true }

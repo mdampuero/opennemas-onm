@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -25,9 +27,11 @@ use Onm\Database\DbalWrapper;
 class MenuManager extends BaseManager
 {
     /**
-     * Initializes the entity manager.
+     * Initializes the menu manager.
      *
-     * @param CacheInterface $cache the cache instance.
+     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param CacheInterface $cache       The cache instance.
+     * @param string         $cachePrefix The cache prefix.
      */
     public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
@@ -39,8 +43,9 @@ class MenuManager extends BaseManager
     /**
      * Counts searched menus given a criteria.
      *
-     * @param  array|string $criteria The criteria used to search.
-     * @return integer                The amount of elements.
+     * @param array $criteria The criteria used to search.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -63,8 +68,9 @@ class MenuManager extends BaseManager
     /**
      * Finds one menu from the given a menu id.
      *
-     * @param  integer $id Menu id.
-     * @return Menu
+     * @param integer $id Menu id.
+     *
+     * @return Menu The matched menu.
      */
     public function find($id)
     {
@@ -88,11 +94,12 @@ class MenuManager extends BaseManager
     /**
      * Searches for menus given a criteria
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -124,16 +131,17 @@ class MenuManager extends BaseManager
     /**
      * Find multiple menus from a given array of menu ids.
      *
-     * @param  array $data Array of preprocessed menu ids.
-     * @return array       Array of menus.
+     * @param array $data Array of preprocessed menu ids.
+     *
+     * @return array Array of menus.
      */
     public function findMulti(array $data)
     {
-        $ordered = array_flip($data);
-
         $ids = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'menu' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
         $menus = array_values($this->cache->fetch($ids));
@@ -149,16 +157,26 @@ class MenuManager extends BaseManager
         foreach ($missedIds as $id) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $id);
             $menu = $this->find($contentId);
-
-            $ordered[$menu->pk_menu] = $menu;
+            $menus[] = $menu;
         }
 
-        ksort($ordered);
-        return array_values($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($menus) && $menus[$i]->pk_menu != $id) {
+                $i++;
+            }
+
+            if ($i < count($menus)) {
+                $ordered[] = $menus[$i];
+            }
+        }
+
+        return $ordered;
     }
 
     /**
-     * Deletes a menu and its items.
+     * Deletes a menu from cache.
      *
      * @param integer $id Menu id.
      */

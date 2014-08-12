@@ -61,7 +61,7 @@ class Controller extends SymfonyController
             $this->view->assign($parameters);
         }
 
-        // $this->template = $templateSystem->createTemplate($view, $cacheID);
+        // $this->template = $this->view->createTemplate($view, $cacheID);
 
         return $this->view->fetch($view, $cacheID);
     }
@@ -76,21 +76,22 @@ class Controller extends SymfonyController
         $data = null;
 
         // If the template is cached, fetch the dates from it
-        if ($this->view->caching && $this->template->cached->timestamp) {
-            $expires = $this->template->cached->timestamp + $this->template->cache_lifetime;
+        if ($this->view->caching && $this->view->cache_lifetime) {
+            $templateObject = array_shift($this->view->template_objects);
 
             $creationDate = new \DateTime();
-            $creationDate->setTimeStamp($this->template->cached->timestamp);
-            $creationDate->setTimeZone(new \DateTimeZone('Europe/Madrid'));
+            $creationDate->setTimeStamp($templateObject->cached->timestamp);
+            $creationDate->setTimeZone(new \DateTimeZone('UTC'));
 
+            $expires    = $templateObject->cached->timestamp + $this->view->cache_lifetime;
             $expireDate = new \DateTime();
             $expireDate->setTimeStamp($expires);
-            $expireDate->setTimeZone(new \DateTimeZone('Europe/Madrid'));
+            $expireDate->setTimeZone(new \DateTimeZone('UTC'));
 
             $data = array(
                 'creation_date' => $creationDate,
-                'expire_date' => $expireDate,
-                'max_age'     => $expires - time(),
+                'expire_date'   => $expireDate,
+                'max_age'       => $expires - time(),
             );
         }
 
@@ -116,14 +117,21 @@ class Controller extends SymfonyController
             $response->setContent($contents);
         }
 
-        // if (array_key_exists('cache_id', $parameters)) {
-        //     $expires = $this->getExpireDate();
-        //     if (!is_null($expires)) {
-        //         $response->setDate($expires['creation_date']);
-        //         $response->setExpires($expires['expire_date']);
-        //         $response->setSharedMaxAge($expires['max_age']);
-        //     }
-        // }
+        if (array_key_exists('x-tags', $parameters)) {
+            $instanceName = getService('instance_manager')->current_instance->internal_name;
+
+            $response->headers->set('x-tags', $parameters['x-tags']);
+            $response->headers->set('x-instance', $instanceName);
+
+            if (array_key_exists('cache_id', $parameters)) {
+                $expires = $this->getExpireDate();
+                if (!is_null($expires)) {
+                    $response->setDate($expires['creation_date']);
+                    $response->setExpires($expires['expire_date']);
+                    $response->setSharedMaxAge($expires['max_age']);
+                }
+            }
+        }
 
         return $response;
     }

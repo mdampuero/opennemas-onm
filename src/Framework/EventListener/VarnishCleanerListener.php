@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,7 +7,7 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 
 namespace Framework\EventListener;
 
@@ -15,19 +16,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * VarnishCleanerListener fixes the Response headers based on the Request.
- *
- * @author Fran Diéguez
  */
 class VarnishCleanerListener implements EventSubscriberInterface
 {
     private $enabled = false;
 
     /**
-     * Initializes the VarnishCleanerListener
+     * Initializes the VarnishCleanerListener.
      *
-     * @return void
-     * @author
-     **/
+     * @param array            $varnishConf      The Varnish server configuration.
+     * @param VernishCleaner   $varnishCleaner   The Varnish Cleaner service.
+     * @param MessageExchanger $messageExchanger The Varnish MessageExchanger service.
+     * @param LoggerInterface  $logger           The logger service
+     */
     public function __construct($varnishConf, $varnishCleaner, $messageExchanger, $logger)
     {
         if (is_array($varnishConf) && count($varnishConf) > 0) {
@@ -42,7 +43,7 @@ class VarnishCleanerListener implements EventSubscriberInterface
     /**
      * Filters the Response.
      *
-     * @param FilterResponseEvent $event A FilterResponseEvent instance
+     * @param FilterResponseEvent $event A FilterResponseEvent instance.
      */
     public function onKernelTerminate()
     {
@@ -53,17 +54,23 @@ class VarnishCleanerListener implements EventSubscriberInterface
         ) {
             $banRequests = $this->messageExchanger->getMessages();
 
-            $varnishCleaner = $this->varnishCleaner;
+
             foreach ($banRequests as $banRequest) {
-                $response = $varnishCleaner->ban($banRequest);
+                $response = $this->varnishCleaner->ban($banRequest);
 
                 foreach ($response as $message) {
-                    $this->logger->notice($message);
+                    $this->logger->info($message);
+                    // $responses []= $message;
                 }
             }
         }
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(

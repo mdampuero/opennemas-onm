@@ -327,7 +327,7 @@ a.btn-inverse {
 .left { text-align:left !important; }
 .right { text-align:right !important; }
 .center { text-align:center !important; }
-
+.pointer { cursor: pointer; }
 table {border-spacing:0;}
 
 table.adminform {
@@ -1188,6 +1188,22 @@ img[src="non"] { display:none !important; }
 .table-info .center { text-align:center; }
 .table-info form {margin:0;}
 
+.table-info .dropdown-menu.container {
+  height: auto;
+  padding: 5px;
+  width: 390px;
+}
+
+.table-info .dropdown-menu.container .span2 div {
+  cursor: pointer;
+  padding: 4px 10px;
+  width: 100%;
+}
+
+.table-info .dropdown-menu.container .span2 div:hover {
+  background: #eee;
+}
+
 /* -------------------------------------------------------------
   Article edit form: image assignment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1767,6 +1783,15 @@ div.clearfix div.menu-other-categories {
   box-shadow:none;
 }
 
+.btn-social{text-shadow:none;background-image:none;position:relative;padding-left:44px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.btn-social :first-child{position:absolute;left:0;top:0;bottom:0;width:32px;line-height:34px;font-size:1.6em;text-align:center;border-right:1px solid rgba(0,0,0,0.2)}
+.btn-facebook{color:#fff;background-color:#3b5998;border-color:rgba(0,0,0,0.2)}.btn-facebook:hover,.btn-facebook:focus,.btn-facebook:active,.btn-facebook.active,.open .dropdown-toggle.btn-facebook{color:#fff;background-color:#30487b;border-color:rgba(0,0,0,0.2)}
+.btn-facebook:active,.btn-facebook.active,.open .dropdown-toggle.btn-facebook{background-image:none}
+.btn-facebook.disabled,.btn-facebook[disabled],fieldset[disabled] .btn-facebook,.btn-facebook.disabled:hover,.btn-facebook[disabled]:hover,fieldset[disabled] .btn-facebook:hover,.btn-facebook.disabled:focus,.btn-facebook[disabled]:focus,fieldset[disabled] .btn-facebook:focus,.btn-facebook.disabled:active,.btn-facebook[disabled]:active,fieldset[disabled] .btn-facebook:active,.btn-facebook.disabled.active,.btn-facebook[disabled].active,fieldset[disabled] .btn-facebook.active{background-color:#3b5998;border-color:rgba(0,0,0,0.2)}
+.btn-facebook .badge{color:#3b5998;background-color:#fff}
+.btn-twitter{color:#fff;background-color:#55acee;border-color:rgba(0,0,0,0.2)}.btn-twitter:hover,.btn-twitter:focus,.btn-twitter:active,.btn-twitter.active,.open .dropdown-toggle.btn-twitter{color:#fff;background-color:#309aea;border-color:rgba(0,0,0,0.2)}
+.btn-twitter:active,.btn-twitter.active,.open .dropdown-toggle.btn-twitter{background-image:none}
+.btn-twitter.disabled,.btn-twitter[disabled],fieldset[disabled] .btn-twitter,.btn-twitter.disabled:hover,.btn-twitter[disabled]:hover,fieldset[disabled] .btn-twitter:hover,.btn-twitter.disabled:focus,.btn-twitter[disabled]:focus,fieldset[disabled] .btn-twitter:focus,.btn-twitter.disabled:active,.btn-twitter[disabled]:active,fieldset[disabled] .btn-twitter:active,.btn-twitter.disabled.active,.btn-twitter[disabled].active,fieldset[disabled] .btn-twitter.active{background-color:#55acee;border-color:rgba(0,0,0,0.2)}
+.btn-twitter .badge{color:#55acee;background-color:#fff}
 
 /* -------------------------------------------------------------
   Content from dashboard.css
@@ -3538,3 +3563,99 @@ border-bottom-left-radius: 2px;
   border: 1px solid #CCCCCC;
   width:200px;
 }
+
+
+/* =============================================================================
+   Wizard
+   ========================================================================== */
+.wizard-content {
+  font-size:1.1em;
+}
+.wizard-content .terms-of-use {
+  height: 400px;
+  width: 100%;
+  border:1px solid #ccc;
+}
+.wizard-content .terms {
+  width:80%;
+  margin:0 auto;
+}
+.wizard-content .accept-terms {
+  margin: 20px auto;
+}
+.wizard-content .accept-terms label {
+  font-weight:bold;
+}
+
+.wizard-content .accept-terms input[type=checkbox] {
+  margin-top: 4px;
+}
+.wizard-content .screenshot {
+  text-align:right;
+}
+.wizard-content .opennemas-screenshot {
+  text-align:right;
+}
+.wizard-content .presentation {
+}
+.presentation .icon-question-sign {
+  color: #729fcf
+}
+.presentation .click-next {
+  margin-top:30px;
+  font-size:.96em !important;
+  float:right;
+  margin-right:30px;
+  color:#c20101;
+}
+.presentation .click-next .icon {
+}
+.presentation .click-next .icon img {
+  transform:rotate(20deg);
+  -ms-transform:rotate(20deg); /* IE 9 */
+  -webkit-transform:rotate(20deg); /* Opera, Chrome, and Safari */
+  width:70px;
+  height:40px;
+  margin-left:10px;
+}
+.wizard-buttons .btn {
+  background: #47a447 !important;
+  border: 0;
+  color: #fff;
+  margin-top: 30px;
+  padding: 15px;
+  text-transform: uppercase;
+}
+.wizard-buttons .btn:active {
+  background: #3a3a3a !important;
+
+}
+.icon-huuge {
+  font-size:11em;
+}
+.color-green {
+  color:#47a447;
+}
+
+/* =============================================================================
+   Social connection
+   ========================================================================== */
+    .social-connections p {
+      padding-top: 5px;
+    }
+
+    .social-connections .disconnect {
+        background: #fff;
+        color: Red;
+    }
+    .social-connection {
+        margin: 10px 0;
+    }
+    .social-connection li {
+        display:inline-block;
+    }
+    .social-connection li.arrow {
+        font-weight: bolder;
+        font-size:1.4em;
+        margin:0 10px;
+    }

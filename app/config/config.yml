@@ -9,7 +9,7 @@ parameters:
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
-    secret:          %secret%
+    secret:          %framework.secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -20,11 +20,11 @@ framework:
         engines: ['twig']
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
-    trusted_proxies: ~
+    trusted_proxies: %framework.trusted_proxies%
     trusted_hosts:   ~
     session:
         name:            __onm_sess
-        gc_maxlifetime:  %session_memcache_expire%
+        gc_maxlifetime:  %session.gc_maxlifetime%
         handler_id:      %session_handler_id%
     fragments:       ~
     http_method_override: true
@@ -91,3 +91,15 @@ services:
     application.log:
         alias: monolog.logger.applog
 
+hwi_oauth:
+    firewall_name: backend
+    resource_owners:
+        facebook:
+            type:          facebook
+            client_id:     %api.facebook.client_id%
+            client_secret: %api.facebook.client_secret%
+            scope:         email
+        twitter:
+            type:          twitter
+            client_id:     %api.twitter.client_id%
+            client_secret: %api.twitter.client_secret%

@@ -1,6 +1,18 @@
 <?php
-
-namespace Onm\TestBundle\DependencyInjection;
+/**
+ * Validates and merges the bundle configuration
+ *
+ * @package WebService_DependencyInjection
+ **/
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

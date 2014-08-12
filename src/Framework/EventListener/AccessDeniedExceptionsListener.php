@@ -1,9 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,21 +22,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * ExceptionListener.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Handles exceptions thrown when user has no privileges to run an action.
  */
 class AccessDeniedExceptionsListener implements EventSubscriberInterface
 {
-    protected $controller;
-    protected $logger;
-
-    // public function __construct(/*$controller,*/ LoggerInterface $logger = null)
-    // {
-    //     // $this->controller = $controller;
-    //     $this->logger = $logger;
-    // }
-
+    /**
+     * Checks and handles an exception when user tries to run an action without
+     * the right privileges.
+     *
+     * @param GetResponseForExceptionEvent $event The event object.
+     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         static $handling;
@@ -50,19 +45,13 @@ class AccessDeniedExceptionsListener implements EventSubscriberInterface
         $exception = $event->getException();
         $request = $event->getRequest();
 
-        // var_dump($exception);die();
-
-
         // only handle not valid instance exceptions
         if ($exception instanceof \Onm\Security\Exception\AccessDeniedExceptions
             || $exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException
         ) {
-            // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
-            // $exception->
             $attributes = array(
                 '_controller' => 'BackendBundle:Error:default', //$this->controller,
                 'exception'   => FlattenException::create($exception),
-                // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
                 // keep for BC -- as $format can be an argument of the controller callable
                 // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
                 // @deprecated in 2.4, to be removed in 3.0
@@ -74,51 +63,24 @@ class AccessDeniedExceptionsListener implements EventSubscriberInterface
 
             try {
                 $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+                $response->setStatusCode(Response::HTTP_FORBIDDEN);
+                $event->setResponse($response);
             } catch (\Exception $e) {
-                // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
-
-                // set handling to false otherwise it wont be able to handle further more
-                $handling = false;
-
-                // re-throw the exception from within HttpKernel as this is a catch-all
-                return;
             }
-
-            $response->setStatusCode(Response::HTTP_FORBIDDEN);
-
-
-            $event->setResponse($response);
         }
 
         $handling = false;
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(
             KernelEvents::EXCEPTION => array('onKernelException', 100),
         );
-    }
-
-    /**
-     * Logs an exception.
-     *
-     * @param \Exception $exception The original \Exception instance
-     * @param string     $message   The error message to log
-     * @param Boolean    $original  False when the handling of the exception thrown another exception
-     */
-    protected function logException(\Exception $exception, $message, $original = true)
-    {
-        $isCritical = !$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500;
-        $context = array('exception' => $exception);
-        if (null !== $this->logger) {
-            if ($isCritical) {
-                $this->logger->critical($message, $context);
-            } else {
-                $this->logger->error($message, $context);
-            }
-        } elseif (!$original || $isCritical) {
-            error_log($message);
-        }
     }
 }

@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,11 @@ class VideosController extends Controller
      **/
     public function init()
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
@@ -226,7 +232,7 @@ class VideosController extends Controller
         ) {
 
             // Load Video and categories
-            $video = new \Video($videoID);
+            $video = $this->get('entity_repository')->find('Video', $videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the framework bundle
+ *
+ * @package Framework
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -11,6 +16,11 @@ namespace Framework;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Initializes the OnmFrameworkBundle
+ *
+ * @package Framework
+ **/
 class OnmFrameworkBundle extends Bundle
 {
 }

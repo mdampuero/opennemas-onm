@@ -39,10 +39,11 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Counts searched users given a criteria
+     * Counts searched users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param array $criteria The criteria used to search the comments.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -65,8 +66,9 @@ class UserGroupManager extends BaseManager
     /**
      * Finds one usergroup from the given a user id.
      *
-     * @param  integer   $id User group id.
-     * @return UserGroup
+     * @param integer $id User group id.
+     *
+     * @return UserGroup The matched user group.
      */
     public function find($id)
     {
@@ -91,11 +93,12 @@ class UserGroupManager extends BaseManager
     /**
      * Searches for users given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search the comments.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements to return.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
@@ -125,18 +128,19 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Find multiple users from a given array of content ids.
+     * Find multiple users from a given array of user groups ids.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed user groups ids.
+     *
+     * @return array Array of user groups.
      */
     public function findMulti(array $data)
     {
-        $ordered = array_flip($data);
-
         $ids = array();
+        $keys = array();
         foreach ($data as $value) {
             $ids[] = 'usergroup' . $this->cacheSeparator . $value;
+            $keys[] = $value;
         }
 
         $groups = array_values($this->cache->fetch($ids));
@@ -144,7 +148,6 @@ class UserGroupManager extends BaseManager
         $cachedIds = array();
 
         foreach ($groups as $group) {
-            $ordered[$group->id] = $group;
             $cachedIds[] = 'usergroup' . $this->cacheSeparator . $group->id;
         }
 
@@ -153,16 +156,27 @@ class UserGroupManager extends BaseManager
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
             $group = $this->find($contentId);
-            $ordered[$group->id] = $group;
+            $groups[] = $group;
 
         }
 
-        ksort($ordered);
+        $ordered = array();
+        foreach ($keys as $id) {
+            $i = 0;
+            while ($i < count($groups) && $groups[$i]->id != $id) {
+                $i++;
+            }
+
+            if ($i < count($groups)) {
+                $ordered[] = $groups[$i];
+            }
+        }
+
         return array_values($ordered);
     }
 
     /**
-     * Deletes a usergroup
+     * Deletes a usergroup from database and cache.
      *
      * @param integer $id User id.
      */

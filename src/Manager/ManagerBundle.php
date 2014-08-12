@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines the manager bundle
+ *
+ * @package Manager
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -11,6 +16,11 @@ namespace Manager;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Initializes the BackendBundle
+ *
+ * @package Manager
+ **/
 class ManagerBundle extends Bundle
 {
 }

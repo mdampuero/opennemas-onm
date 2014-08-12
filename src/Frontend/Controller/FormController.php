@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +30,6 @@ use Onm\Settings as s;
 class FormController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-
-        require_once 'recaptchalib.php';
-
-        \Frontend\Controller\StaticPagesController::getAds();
-    }
-
-    /**
      * Description of the action
      *
      * @param Request $request the request object
@@ -51,10 +38,18 @@ class FormController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
+        if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
 
-        return $this->render('static_pages/form.tpl');
+        $this->view = new \Template(TEMPLATE_USER);
+
+        return $this->render(
+            'static_pages/form.tpl',
+            array(
+                'advertisements' => $this->getAds()
+            )
+        );
     }
 
     /**
@@ -69,6 +64,10 @@ class FormController extends Controller
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
+
+        $this->view = new \Template(TEMPLATE_USER);
+
+        require_once 'recaptchalib.php';
 
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
@@ -94,10 +93,8 @@ class FormController extends Controller
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
-
                 // Correct CAPTCHA, bad mail and name empty
                 $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
-
 
                 if (empty($email)) {
                     $message = _(
@@ -137,16 +134,16 @@ class FormController extends Controller
                         ->setSender(array($mailSender => s::get('site_name')));
 
                     if (isset($_FILES['image1']) && !empty($_FILES['image1']["name"])) {
-                        $file = $_FILES["image1"]["tmp_name"];
+                        $file     = $_FILES["image1"]["tmp_name"];
                         $filename = $_FILES["image1"]["name"];
-                        $type =$_FILES["image1"]["type"];
+                        $type     = $_FILES["image1"]["type"];
                         $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
 
                     }
                     if (isset($_FILES['image2']) && !empty($_FILES['image2']["name"])) {
-                        $file = $_FILES["image2"]["tmp_name"];
+                        $file     = $_FILES["image2"]["tmp_name"];
                         $filename = $_FILES["image2"]["name"];
-                        $type =$_FILES["image2"]["type"];
+                        $type     = $_FILES["image2"]["type"];
                         $text->attach(\Swift_Attachment::fromPath($file, $type)->setFilename($filename));
                     }
 
@@ -155,12 +152,13 @@ class FormController extends Controller
                         $mailer->send($text);
 
                         $action = new \Action();
-                        $action->set(array('action_name'=>'form_1','counter'=>1));
+                        $action->set(array(
+                            'action_name' => 'form_1',
+                            'counter'     => 1
+                        ));
 
                         $message = _("The information has been sent");
-
                         $class   = 'success';
-
                     } catch (\Swift_SwiftException $e) {
                         $message = _(
                             "Sorry, we were unable to complete your request.\n"
@@ -168,8 +166,6 @@ class FormController extends Controller
                         );
                         $class = 'error';
                     }
-
-
                 }
             }
         }
