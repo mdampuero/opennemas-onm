@@ -1,14 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="/bp/screen.css"}
+    {stylesheets src="@AdminTheme/css/bp/screen.css,
+        @AdminTheme/css/frontpagemanager.css,
+        @AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
-    {css_tag href="/frontpagemanager.css"}
-    {css_tag href="/jquery/colorbox.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.colorbox-min.js"}
     <script>
         var frontpage_messages = {
             remember_save_positions: "{t}Please, remember save positions after finish.{/t}",
@@ -37,7 +38,11 @@
             changed: false
         }
     </script>
-    {script_tag src="/onm/frontpagemanager.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery.colorbox-min.js,
+        @AdminTheme/js/onm/frontpagemanager.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+
 {/block}
 
 {block name="content"}

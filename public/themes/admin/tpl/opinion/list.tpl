@@ -1,7 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+    {javascripts src="@AdminTheme/js/onm/jquery-functions.js"}
+        <script text="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     {include file="common/angular_includes.tpl"}
 {/block}
 
