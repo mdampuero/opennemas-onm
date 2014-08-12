@@ -45,7 +45,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('build_path')
                             ->defaultValue(SITE_PATH . 'compile')
                         ->end()
-                        ->scalarNode('site_url')
+                        ->scalarNode('asset_domain')
                             ->defaultValue(false)
                         ->end()
                         ->scalarNode('asset_servers')

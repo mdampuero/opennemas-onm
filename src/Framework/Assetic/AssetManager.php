@@ -272,7 +272,7 @@ abstract class AssetManager
             . $this->extension;
 
         if ($this->config['use_asset_servers']) {
-            if (strpos($this->config['site_url'], '%d') !== false) {
+            if (strpos($this->config['asset_domain'], '%d') !== false) {
                 // Site URL with pattern
                 $sum = 0;
                 $max = strlen($src);
@@ -281,10 +281,10 @@ abstract class AssetManager
                 }
 
                 $server = $sum % $this->config['asset_servers'];
-                $src = sprintf($this->config['site_url'], $server) . $src;
+                $src = sprintf($this->config['asset_domain'], $server) . $src;
             } else {
                 // Static site URL
-                $src = $this->config['site_url'] . $src;
+                $src = $this->config['asset_domain'] . $src;
             }
         }
 
