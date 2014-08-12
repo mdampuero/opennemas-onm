@@ -268,6 +268,20 @@ abstract class AssetManager
      */
     private function createAssetSrc($src)
     {
+        $request = $this->container->get('request');
+
+        $port = $request->getPort();
+        if ($request->headers->get('X-Forwarded-port')) {
+            $port = $request->headers->get('X-Forwarded-port');
+        }
+
+        if ($port != 80 && $port != 443) {
+            $port = ':' . $port;
+        } else {
+            $port = '';
+        }
+
+
         $src = DS . substr($src, 0, strrpos($src, '.') + 1) . DEPLOYED_AT . '.'
             . $this->extension;
 
@@ -281,10 +295,11 @@ abstract class AssetManager
                 }
 
                 $server = $sum % $this->config['asset_servers'];
-                $src = sprintf($this->config['asset_domain'], $server) . $src;
+                $src = sprintf($this->config['asset_domain'], $server) . $port
+                    . $src;
             } else {
                 // Static site URL
-                $src = $this->config['asset_domain'] . $src;
+                $src = $this->config['asset_domain'] . $port . $src;
             }
         }
 
