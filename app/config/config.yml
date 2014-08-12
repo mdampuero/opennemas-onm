@@ -38,10 +38,22 @@ sensio_framework_extra:
 
 opennemas:
     assetic:
+        # Force compilation
+        asset_compilation_in_dev: false
+
+        # Assetic folders
         build_path:  "%kernel.root_dir%/cache"
         output_path: build/assets
+
+        # Template parameter
         asset_url: asset_url
-        site_url: false
+
+        # Asset servers
+        use_asset_servers: true
+        asset_servers:     3
+        site_url:          //media%d.opennemas.net
+
+        # Filters configuration
         filters:
             uglifyjs:
                 bin:  /usr/local/bin/uglifyjs
