@@ -100,6 +100,10 @@ abstract class AssetManager
      */
     public function debug()
     {
+        if ($this->config['asset_compilation_in_dev']) {
+            return false;
+        }
+
         return $this->env == 'dev';
     }
 
@@ -266,10 +270,22 @@ abstract class AssetManager
     {
         $src = DS . substr($src, 0, strrpos($src, '.') + 1) . DEPLOYED_AT . '.'
             . $this->extension;
-        if (array_key_exists('site_url', $this->config)
-            && $this->config['site_url'] !== false
-        ) {
-            $src = $this->config['site_url'] . $src;
+
+        if ($this->config['use_asset_servers']) {
+            if (strpos($this->config['site_url'], '%d') !== false) {
+                // Site URL with pattern
+                $sum = 0;
+                $max = strlen($src);
+                for ($i = 0; $i < $max; $i++) {
+                    $sum += ord($src[$i]);
+                }
+
+                $server = $sum % $this->config['asset_servers'];
+                $src = sprintf($this->config['site_url'], $server) . $src;
+            } else {
+                // Static site URL
+                $src = $this->config['site_url'] . $src;
+            }
         }
 
         return $src;
