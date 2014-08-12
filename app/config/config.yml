@@ -39,19 +39,19 @@ sensio_framework_extra:
 opennemas:
     assetic:
         # Force compilation
-        asset_compilation_in_dev: false
+        asset_compilation_in_dev: %opennemas.assetic.asset_compilation_in_dev%
 
         # Assetic folders
-        build_path:  "%kernel.root_dir%/cache"
+        build_path:  "%kernel.root_dir%/cache/assetic"
         output_path: build/assets
 
         # Template parameter
         asset_url: asset_url
 
         # Asset servers
-        use_asset_servers: false
-        asset_servers:     3
-        site_url:          //media%d.opennemas.net
+        use_asset_servers: %opennemas.assetic.use_asset_servers%
+        asset_servers:     %opennemas.assetic.asset_servers%
+        asset_domain:      %opennemas.assetic.asset_domain%
 
         # Filters configuration
         filters:
