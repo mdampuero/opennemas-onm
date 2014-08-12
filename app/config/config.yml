@@ -49,7 +49,7 @@ opennemas:
         asset_url: asset_url
 
         # Asset servers
-        use_asset_servers: true
+        use_asset_servers: false
         asset_servers:     3
         site_url:          //media%d.opennemas.net
 
