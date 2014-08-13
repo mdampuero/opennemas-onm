@@ -24,7 +24,8 @@
         {/stylesheets}
         {stylesheets src="@Common/plugins/webarch/css/style.css,
                           @Common/plugins/webarch/css/responsive.css,
-                          @Common/plugins/webarch/css/custom-icon-set.css"
+                          @Common/plugins/webarch/css/custom-icon-set.css,
+                          @Common/css/opennemas/style.css"
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
@@ -43,25 +44,8 @@
                           @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
 
                           @Common/plugins/webarch/js/core.js,
-                          @Common/plugins/pace/pace.min.js"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-    {/block}
-
-    {block name="footer-js"}
-        {javascripts src="@Common/plugins/jquery/jquery.min.js,
-                          @Common/plugins/jquery-ui/jquery-ui.min.js,
-                          @Common/plugins/bootstrap/js/bootstrap.min.js,
-                          @Common/plugins/breakpoints.js,
-                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
-                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
-                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
-
-                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
-                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
-
-                          @Common/plugins/webarch/js/core.js,
-                          @Common/plugins/pace/pace.min.js"}
+                          @Common/plugins/pace/pace.min.js,
+                          @Common/js/onm/scripts.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
     {/block}
@@ -80,14 +64,13 @@
                     </li>
                 </ul>
                 <!-- BEGIN LOGO -->
-                <a href="index.html" class="logoonm brand">
-                    OpenNemas
-                    <!-- <img src="assets/plugins/webarch/img/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="106" height="21"/> -->
+                <a href="{url name=manager_welcome}">
+                    {image_tag src="/assets/images/logo-opennemas-small.png" class="logo" alt=""  data-src="/assets/images/logo-opennemas-small.png" data-src-retina="/assets/images/logo-opennemas-small.png" width="132" height="27"}
                 </a>
                 <!-- END LOGO -->
                 <ul class="nav pull-right notifcation-center">
                     <li class="dropdown" id="header_task_bar">
-                        <a href="index.html" class="dropdown-toggle active" data-toggle="">
+                        <a href="{url name=manager_welcome}" class="dropdown-toggle active" data-toggle="">
                             <div class="iconset top-home"></div>
                         </a>
                     </li>
@@ -175,9 +158,9 @@
                             <div class="iconset top-settings-dark "></div>
                             </a>
                             <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
-                                <li><a title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}"> My Account</a> </li>
+                                <li><a title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}"> My Account</a> </li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}</a></li>
+                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -195,10 +178,10 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
                     <li class="start active">
-                        <a href="index.html"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
+                        <a href="{url name=manager_welcome}"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
+                        <a href="{url name=manager_instances}"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li>
                         <a href="#">
@@ -206,13 +189,13 @@
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="#"><i class="fa fa-code"></i> {t}Commands{/t}</a>
+                                <a href="{url name=manager_framework_commands}"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-eye"></i> {t}Status{/t}</a>
+                                <a href="{url name=manager_framework_check_dependencies}"><i class="fa fa-eye"></i> {t}Status{/t}</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
+                                <a href="{url name=manager_framework_opcache_status}"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
                     </li>
@@ -222,12 +205,12 @@
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="#">
+                                <a href="{url name=manager_acl_user}">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="{url name=manager_acl_usergroups}">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>
                             </li>
