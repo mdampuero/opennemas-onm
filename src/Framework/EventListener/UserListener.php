@@ -1,9 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,13 +17,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * ResponseListener fixes the Response headers based on the Request.
- *
- * @author Fabien Potencier <fabien@symfony.com>
  */
 class UserListener implements EventSubscriberInterface
 {
     /**
-     * @var Symfony\Component\Security\Core\SecurityContextInterface
+     * @var SecurityContextInterface
      */
     private $context;
 
@@ -34,7 +32,12 @@ class UserListener implements EventSubscriberInterface
      */
     private $provider;
 
-
+    /**
+     * Initializes the listener.
+     *
+     * @param SecurityContextInterface $context  The security context service.
+     * @param OnmUserProvider          $provider The user provider.
+     */
     public function __construct($context, $provider)
     {
         $this->context  = $context;
@@ -42,7 +45,7 @@ class UserListener implements EventSubscriberInterface
     }
 
     /**
-     * Filters the Response.
+     * Refresh the user roles for an authenticated user.
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
@@ -62,6 +65,11 @@ class UserListener implements EventSubscriberInterface
         }
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(

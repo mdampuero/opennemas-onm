@@ -340,6 +340,11 @@ class InstanceController extends Controller
         $sortOrder = $request->request->filter('sort_order');
         $order     = array($sortBy => $sortOrder);
 
+        if (array_key_exists('name', $criteria)) {
+            $criteria['domains'] = $criteria['name'];
+            $criteria['union'] = 'OR';
+        }
+
         unset($criteria['content_type_name']);
 
         $im = $this->get('instance_manager');

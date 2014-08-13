@@ -99,9 +99,10 @@ class InstancesController extends Controller
         // Create internalName from domains
         if (!$internalName) {
             $internalName = explode('.', array_pop($domains));
+            $internalName = array_pop($internalName);
         }
 
-        $internalName = strtolower(array_pop($internalName));
+        $internalName = strtolower($internalName);
 
         $instance = new Instance();
         foreach (array_keys($request->request->all()) as $key) {

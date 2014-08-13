@@ -29,3 +29,4 @@ vendor/*
 !vendor/Onm
 !vendor/core
 public/assets/js/routes.js
+.development

@@ -116,7 +116,11 @@ abstract class BaseManager
 
                 $fieldFilters = array();
                 foreach ($filters as $filter) {
-                    $fieldFilters[] = $this->parseFilter($field, $filter);
+                    $sql = $this->parseFilter($field, $filter);
+
+                    if (!empty($sql)) {
+                        $fieldFilters[] = $sql;
+                    }
                 }
 
                 if (!empty($fieldFilters)) {
@@ -232,6 +236,7 @@ abstract class BaseManager
     {
         $isField  = false;
         $operator = "=";
+        $sql      = null;
         $value    = '';
 
         if (array_key_exists('operator', $filter)) {

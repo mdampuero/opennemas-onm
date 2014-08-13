@@ -8,30 +8,26 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  Onm
- **/
+ */
 namespace Onm;
 
 /**
-* Wrapper for the AdoDB library for making it container compatible
-*
-* @package  Onm
-*/
+ * Wrapper for the AdoDB library for making it container compatible
+ */
 class DatabaseConnection
 {
     /**
      * The database connection with write-actions support
      *
      * @var AdodbConnection
-     **/
+     */
     public $masterConnection = null;
 
     /**
      * The read-only database connection
      *
      * @var AdodbConnection
-     **/
+     */
     public $slaveConnections = array();
 
     /**
@@ -40,32 +36,28 @@ class DatabaseConnection
      * connection params (if there are slave servers then this will be true)
      *
      * @var boolean
-     **/
+     */
     private $useReplication = false;
 
     /**
      * The database server connection params
      *
      * @var array
-     **/
+     */
     public $connectionParams = null;
 
     /**
      * Stores the query error
      *
      * @var string
-     **/
+     */
     public $error = null;
 
-
-
     /**
-     * Starts the database connection
+     * Initializes the database connection.
      *
-     * @param array $params an array containing the database server connection params
-     *
-     * @return DatabaseConnection the object
-     **/
+     * @param array $params The database server connection parameters.
+     */
     public function __construct($params)
     {
         // Check if the connection params are valid
@@ -86,14 +78,17 @@ class DatabaseConnection
     }
 
     /**
-     * Checks if the given database configuration params are valid
+     * Checks if the given database configuration parameters are valid.
+     *
+     * @param array $params The configuration parameters.
      *  - Params is an array
      *  - Params has a dbal key
      *  - params[dbal] has a connections key hat is an array
-     *  - params has a default_connection key that is a key inside the connections array
+     *  - params has a default_connection key that is a key inside the
+     *    connections array
      *
-     * @return boolean true if the given params are valid
-     **/
+     * @return boolean True if the given params are valid.
+     */
     public function isConfigurationValid($params)
     {
         return (
@@ -106,33 +101,33 @@ class DatabaseConnection
     }
 
     /**
-     * Returns true if the configuration has slave connection params
+     * Returns true if the configuration has slave connection parameters.
      *
-     * @return boolean true if the configuration has slave connection params
-     **/
+     * @return boolean True if the configuration has slave connection.
+     */
     public function configHasSlaves()
     {
         return array_key_exists('slaves', $this->connectionParams);
     }
 
     /**
-     * Returns the current configuration parameters
+     * Returns the current configuration parameters.
      *
-     * @return array the database configuration parameters
-     **/
+     * @return array The database configuration parameters.
+     */
     public function getCurrentDatabaseParams()
     {
         return $this->connectionParams;
     }
 
     /**
-     * Redirects all the calls to the AdodbConnection instance
+     * Redirects all the calls to the AdodbConnection instance.
      *
-     * @param string $method the method to call
-     * @param array $params the list of parameters to pass to the method
+     * @param string $method The method to call.
+     * @param array  $params The list of parameters to pass to the method.
      *
-     * @return mixed the result of the method call
-     **/
+     * @return mixed The result of the method call.
+     */
     public function __call($method, $params)
     {
         $connection = $this->getConnection($method, $params);
@@ -146,6 +141,13 @@ class DatabaseConnection
         return $rs;
     }
 
+    /**
+     * Updates the database configuration and restarts the connection.
+     *
+     * @param string $databaseName The new database name.
+     *
+     * @return DatabaseConnection The current wrapper.
+     */
     public function selectDatabase($databaseName)
     {
         $this->connectionParams = $this->replaceKeyInArray(
@@ -165,9 +167,10 @@ class DatabaseConnection
     }
 
     /**
-     * Deletes stablished connections
+     * Deletes established connections.
      *
-     **/
+     * @return DatabaseConnection The current wrapper.
+     */
     public function resetConnections()
     {
         $this->masterConnection = null;
@@ -176,18 +179,35 @@ class DatabaseConnection
         return $this;
     }
 
-    private function replaceKeyInArray($callback, $array, $databaseName)
+    /**
+     * Replaces the current database with the given database in connection
+     * parameters.
+     *
+     * @param function $callback The function to replace.
+     * @param array    $array    The array where replace.
+     * @param string   $value    The replacement value.
+     *
+     * @return array The modified array.
+     */
+    private function replaceKeyInArray($callback, $array, $replacement)
     {
         foreach ($array as $key => $value) {
             if (is_array($array[$key])) {
-                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $databaseName);
+                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $replacement);
             } else {
-                $array[$key] = call_user_func($callback, $key, $array[$key], $databaseName);
+                $array[$key] = call_user_func($callback, $key, $array[$key], $replacement);
             }
         }
         return $array;
     }
 
+    /**
+     * Create a new database connection using the given parameters.
+     *
+     * @param array $params The configuration parameters.
+     *
+     * @return AdoDbConnection The new database connection.
+     */
     public function initConnection($params)
     {
         if ($params['charset'] == 'UTF-8') {
@@ -226,11 +246,11 @@ class DatabaseConnection
      * Returns the proper connection whether is a read or a write query
      * given the SQL method to execute
      *
-     * @param string $method The method to execute
-     * @param array  $params The parameters of the call
+     * @param string $method The method to execute.
+     * @param array  $params The parameters of the call.
      *
-     * @return the database connection
-     **/
+     * @return AdoDbConnection The database connection.
+     */
     public function getConnection($method, $params)
     {
         if ($this->useReplication
@@ -245,11 +265,10 @@ class DatabaseConnection
     }
 
     /**
-     * Returns true if the action will perform read only actoin
+     * Checks if the given action is a read only action.
      *
-     * @return void
-     * @author
-     **/
+     * @return boolean True if the action will perform read only action.
+     */
     public function isReadOnlyAction($method, $params = array())
     {
         // Alternative algorithm
@@ -270,10 +289,10 @@ class DatabaseConnection
     }
 
     /**
-     * Returns one slave database connection from the list of slave connections
+     * Returns one slave database connection from the list of slave connections.
      *
-     * @return AdoDBConnection the master database connection
-     **/
+     * @return AdoDBConnection One slave database connection.
+     */
     public function getSlaveConnection()
     {
         // Initialize the slaves list is not defined
@@ -325,10 +344,10 @@ class DatabaseConnection
     }
 
     /**
-     * Returns the master database connection
+     * Returns the master database connection.
      *
-     * @return AdoDBConnection the master database connection
-     **/
+     * @return AdoDBConnection The master database connection.
+     */
     public function getMasterConnection()
     {
         // It the master collection is not initialized create it

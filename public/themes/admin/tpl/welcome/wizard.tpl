@@ -13,7 +13,7 @@
                 <div class="span12 text-center">
                     <span class="icon-ok-sign icon-huuge color-green"></span>
                     <h3 class="final-message">{t}And that's it!{/t}</h3>
-                    <h4>You can start to use your newspaper.</h4>
+                    <h4>{t}You can start to use your newspaper.{/t}</h4>
                 </div>
             </div>
             <div class="row-fluid wizard-buttons">
@@ -49,7 +49,7 @@
             <div class="row-fluid wizard-buttons">
                 <div class="span12">
                     <div class="pull-right">
-                        <button data-target="#step2" class="btn btn-primary btn-large activate">Next</button>
+                        <button data-target="#step2" class="btn btn-primary btn-large activate">{t}Next{/t}</button>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,14 @@
 <?php
-/*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Onm\Instance;
 
 use Repository\BaseManager;
@@ -64,7 +67,7 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Initializes the InstanceManager
+     * Initializes the InstanceManager.
      *
      * @param DbalWrapper    $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
@@ -76,9 +79,8 @@ class InstanceManager extends BaseManager
         $this->sm    = $sm;
     }
 
-
     /**
-     * Check for repeated internal name and returns it, corrected if necessary.
+     * Checks for repeated internal name and returns it, corrected if necessary.
      *
      * @param string $instance The instance to check.
      */
@@ -87,11 +89,12 @@ class InstanceManager extends BaseManager
         $this->conn->selectDatabase('onm-instances');
 
         $internalName = $instance->internal_name;
-        if (empty($instance->internal_name)) {
+        if (empty($internalName)) {
             $domain = explode('.', $instance->domains[0]);
-            var_dump($domain);
             $internalName = $domain[0];
         }
+
+        $internalName = strtolower($internalName);
 
         // Check if the generated InternalShortName already exists
         $sql = "SELECT count(*) as internal_exists FROM instances "
@@ -107,11 +110,12 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Check if a contact email is already in use.
+     * Checks if a contact email is already in use.
      *
-     * @param  string  $mail The email to check.
-     * @return boolean       True if the email is already in use. Otherwise,
-     *                       returns false.
+     * @param string $mail The email to check.
+     *
+     * @return boolean True if the email is already in use. Otherwise, returns
+     *                 false.
      */
     public function emailExists($email)
     {
@@ -129,8 +133,9 @@ class InstanceManager extends BaseManager
     /**
      * Counts the instances for content given a criteria
      *
-     * @param  array   $criteria The criteria used to search.
-     * @return integer           The number of found instances.
+     * @param array $criteria The criteria used to search.
+     *
+     * @return integer The number of found instances.
      */
     public function countBy($criteria)
     {
@@ -156,8 +161,9 @@ class InstanceManager extends BaseManager
     /**
      * Finds one instance from the given a instance id.
      *
-     * @param  integer  $id Instance id.
-     * @return Instance
+     * @param integer $id Instance id.
+     *
+     * @return Instance The matched instance.
      */
     public function find($id)
     {
@@ -189,12 +195,13 @@ class InstanceManager extends BaseManager
     /**
      * Searches for content given a criteria
      *
-     * @param  array   $criteria        The criteria used to search.
-     * @param  array   $order           The order applied in the search.
-     * @param  integer $elementsPerPage The max number of elements.
-     * @param  integer $page            The current page.
-     * @param  integer $offset          The offset to start with.
-     * @return array                    The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The current page.
+     * @param integer $offset          The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
@@ -227,8 +234,9 @@ class InstanceManager extends BaseManager
     /**
      * Find multiple contents from a given array of instance ids.
      *
-     * @param  array $data Array of instance ids.
-     * @return array       Array of contents.
+     * @param array $data Array of instance ids.
+     *
+     * @return array Array of contents.
      */
     public function findMulti($data)
     {
@@ -286,9 +294,8 @@ class InstanceManager extends BaseManager
         return $this->conn;
     }
 
-
     /**
-     * Count total contents in for an instance.
+     * Counts total contents in for an instance.
      *
      * @param array $settings The instance settings.
      */
@@ -321,8 +328,9 @@ class InstanceManager extends BaseManager
     /**
      * Check if an instance already exists.
      *
-     * @param  string  $name The instance internal name.
-     * @return boolean       True if instance exists. Otherwise, returns false.
+     * @param string $name The instance internal name.
+     *
+     * @return boolean True, if instance exists. Otherwise, returns false.
      */
     public function instanceExists($name)
     {
@@ -361,9 +369,10 @@ class InstanceManager extends BaseManager
     /**
      * Updates the instance data.
      *
-     * @param  array   $data The instance data.
-     * @return boolean       True, if instance was restored successfully.
-     *                       Otherwise, returns false.
+     * @param array $data The instance data.
+     *
+     * @return boolean True, if instance was restored successfully. Otherwise,
+     *                 returns false.
      */
     public function update($data)
     {
@@ -475,7 +484,7 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Reload the instance properties from database.
+     * Reloads the instance properties from database.
      *
      * @param Instance $instance The instance object.
      */
@@ -503,6 +512,10 @@ class InstanceManager extends BaseManager
             if (is_array($instance->{$key})) {
                 if ($key == 'domains') {
                     $instance->{$key} = explode(',', $value);
+
+                    foreach ($instance->domains as $k => $v) {
+                        $instance->domains[$k] = trim($v);
+                    }
                 } else {
                     $instance->{$key} = unserialize($value);
                 }

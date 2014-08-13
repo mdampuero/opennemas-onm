@@ -1,9 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
-    {script_tag language="javascript" src="/onm/jquery.datepicker.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @AdminTheme/js/jquery/jquery-ui-sliderAccess.js,
+        @AdminTheme/js/onm/jquery.datepicker.js "}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="content"}

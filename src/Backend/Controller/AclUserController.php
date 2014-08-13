@@ -218,7 +218,7 @@ class AclUserController extends Controller
                 }
 
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $userId));
+                $this->dispatchEvent('author.update', array('id' => $userId));
 
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {
@@ -724,6 +724,12 @@ class AclUserController extends Controller
             $connected = true;
         }
 
+        if ($resource == 'facebook') {
+            $resourceName = 'Facebook';
+        } else {
+            $resourceName = 'Twitter';
+        }
+
         return $this->render(
             'acl/user/social.tpl',
             array(
@@ -731,6 +737,7 @@ class AclUserController extends Controller
                 'connected'       => $connected,
                 'resource_id'     => $resourceId,
                 'resource'        => $resource,
+                'resource_name'   => $resourceName,
                 'user'            => $user,
             )
         );

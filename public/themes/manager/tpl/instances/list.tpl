@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'id', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}'); name = 1; domains = 1; contact_mail = 1; last_login = 1; created = 1; contents = 1; alexa = 1; page_views = 1">
+<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'last_login', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}', 25); name = 1; domains = 1; contact_mail = 1; last_login = 1; created = 1; contents = 1; alexa = 1; page_views = 1">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -325,7 +325,7 @@
                         </div>
                     </td>
                     <td class="center" ng-show="last_login">
-                        [% instance.last_login  | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                        [% instance.last_login  | moment : 'YYYY-MM-DD HH:mm' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td class="nowrap left" ng-show="created">[% instance.created | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>

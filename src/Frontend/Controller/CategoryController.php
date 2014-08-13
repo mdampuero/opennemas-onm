@@ -182,11 +182,11 @@ class CategoryController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+        $cm = new \ContentManager();
         $cacheId = "sync|category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $ccm = \ContentCategoryManager::get_instance();
             // Get category object
-            $cm = new \ContentManager();
             $category = unserialize(
                 $cm->getUrlContent(
                     $wsUrl.'/ws/categories/object/'.$categoryName,

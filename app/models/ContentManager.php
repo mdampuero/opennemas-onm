@@ -309,18 +309,20 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
-        $cache = getService('cache');
+        $cache      = getService('cache');
         $contentIds = $cache->fetch('frontpage_elements_map_'.$categoryID);
 
         if (!is_array($contentIds) || count($contentIds) <= 0) {
-            // Fetch the id, placeholder, position, and content_type
-            // in this category's frontpage
-            // The second parameter is the id for the homepage category
+            // Fetch the list of contents for the current frontpage and its metadata
+            // We need to get articles in frontpage too in order to mark them as in_frontpage
             $contentIds = $this->getContentIdsInHomePageWithIDs(
                 array((int) $categoryID, 0)
             );
+
+            $cache->save('frontpage_elements_map_'.$categoryID, $contentIds);
         }
 
+        // Build an array with contents that exist in the main frontapge
         $contentsInFrontpage = array_unique(
             array_map(
                 function ($content) {
@@ -334,7 +336,13 @@ class ContentManager
             )
         );
 
-        $cache->save('frontpage_elements_map_'.$categoryID, $contentIds);
+        // Clear out home frontpage authors
+        $contentIds = array_filter(
+            $contentIds,
+            function ($content) use ($categoryID) {
+                return ($content['frontpage_id'] == $categoryID);
+            }
+        );
 
         if (is_array($contentIds) && count($contentIds) > 0) {
 
@@ -344,6 +352,7 @@ class ContentManager
             $contentsMap = array_map(function ($content) {
                 return array($content['content_type'], $content['content_id']);
             }, $contentIds);
+
             $contentsRaw = $er->findMulti($contentsMap);
 
             // iterate over all found contents to hydrate them
@@ -353,21 +362,16 @@ class ContentManager
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
                 }
-                $content = array_filter($contentsRaw, function ($content) use ($element) {
-                    if ($element['content_id'] == $content->id) {
-                        return $content;
+                foreach ($contentsRaw as $contentRaw) {
+                    if ($element['content_id'] == $contentRaw->id) {
+                        $content = $contentRaw;
+                        break;
                     }
-                });
-                if (is_array($content) && (count($content) == 1)) {
-
-                    $content = array_shift($content);
-                } else {
-                    continue;
                 }
 
                 // add all the additional properties related with positions
                 // and params
-                if ($content->in_litter == 0) {
+                if (is_object($content) && $content->in_litter == 0) {
                     $content->load(
                         array(
                             'placeholder' => $element['placeholder'],
@@ -382,14 +386,13 @@ class ContentManager
                     } else {
                         $content->params = $element['params'];
                     }
-                    if (in_array($element['content_id'], $contentsInFrontpage)) {
-                        $content->in_frontpage = true;
-                    } else {
-                        $content->in_frontpage = false;
-                    }
+
+                    $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
+
                     if (\Onm\Module\ModuleManager::isActivated('AVANCED_FRONTPAGE_MANAGER')) {
                         $content->loadAllContentProperties();
                     }
+
                     $contents[] = $content;
                 }
             }
@@ -810,7 +813,7 @@ class ContentManager
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
-        $date = $date->format('Y-M-d H:i:s');
+        $date = $date->format('Y-m-d H:i:s');
 
         $criteria = array(
             'join' => array(
@@ -1046,7 +1049,7 @@ class ContentManager
 
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
-        $date = $date->format('Y-M-d H:i:s');
+        $date = $date->format('Y-m-d H:i:s');
 
         $criteria = array(
             'join' => array(
