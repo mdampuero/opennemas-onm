@@ -80,8 +80,9 @@
                     </li>
                 </ul>
                 <!-- BEGIN LOGO -->
-                <a href="index.html">
-                    <img src="assets/plugins/webarch/img/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="106" height="21"/>
+                <a href="index.html" class="logoonm brand">
+                    OpenNemas
+                    <!-- <img src="assets/plugins/webarch/img/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="106" height="21"/> -->
                 </a>
                 <!-- END LOGO -->
                 <ul class="nav pull-right notifcation-center">
@@ -105,14 +106,6 @@
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                             <a href="#" class="" >
-                            <div class="iconset top-reload"></div>
-                            </a>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks">
-                            <a href="#" class="" >
                                 <div class="iconset top-tiles"></div>
                             </a>
                         </li>
@@ -131,7 +124,8 @@
                         <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
                             <div class="user-details">
                                 <div class="username">
-                                    <span class="badge badge-important">3</span> John <span class="bold">Smith</span>
+
+                                    <span class="badge badge-important">3</span> {$smarty.session.realname}
                                 </div>
                             </div>
                             <div class="iconset top-down-arrow"></div>
@@ -168,19 +162,22 @@
                             </div>
                         </div>
                         <div class="profile-pic">
-                            <img src="assets/img/profiles/avatar_small.jpg"  alt="" data-src="assets/img/profiles/avatar_small.jpg" data-src-retina="assets/img/profiles/avatar_small2x.jpg" width="35" height="35" />
+                            {if $smarty.session.avatar_url}
+                                <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="35" >
+                            {else}
+                                {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="35"}
+                            {/if}
+                            <!-- <img src="assets/img/profiles/avatar_small.jpg"  alt="" data-src="assets/img/profiles/avatar_small.jpg" data-src-retina="assets/img/profiles/avatar_small2x.jpg" width="35" height="35" /> -->
                         </div>
                     </div>
                     <ul class="nav quick-section ">
-                        <li class="quicklinks"> <a data-toggle="dropdown" class="dropdown-toggle    pull-right " href="#" id="user-options">
+                        <li class="quicklinks"> <a data-toggle="dropdown" class="dropdown-toggle pull-right " href="#" id="user-options">
                             <div class="iconset top-settings-dark "></div>
                             </a>
                             <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
-                                <li><a href="user-profile.html"> My Account</a> </li>
-                                <li><a href="calender.html">My Calendar</a> </li>
-                                <li><a href="email.html"> My Inbox&nbsp;&nbsp;<span class="badge badge-important animated bounceIn">2</span></a> </li>
+                                <li><a title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}"> My Account</a> </li>
                                 <li class="divider"></li>
-                                <li><a href="login.html"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -195,20 +192,7 @@
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar" id="main-menu">
             <div class="page-sidebar-wrapper" id="main-menu-wrapper">
-                <!-- BEGIN MINI-PROFILE -->
-                <div class="user-info-wrapper">
-                    <div class="profile-wrapper">
-                        <img src="assets/img/profiles/avatar.jpg"    alt="" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" width="69" height="69" />
-                    </div>
-                    <div class="user-info">
-                        <div class="greeting">Welcome</div>
-                        <div class="username">John <span class="semi-bold">Smith</span></div>
-                        <div class="status">Status <a href="#"><div class="status-icon green"></div>Online</a></div>
-                    </div>
-                </div>
-                <!-- END MINI-PROFILE -->
                 <!-- BEGIN SIDEBAR MENU -->
-                <p class="menu-title">BROWSE <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span></p>
                 <ul>
                     <li class="start active">
                         <a href="index.html"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
