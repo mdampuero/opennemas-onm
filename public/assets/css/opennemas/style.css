@@ -1,0 +1,13 @@
+.logoonm {
+    display: block !important;
+    width:121px;
+    height: 21px;
+    background-image: url(../../images/logo-opennemas-small.png);
+    background-position: -9px center;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+}
+
+.page-sidebar ul > li > a > .arrow:before {
+    content: "\f105";
+}
