@@ -335,10 +335,8 @@ class InstanceController extends Controller
     {
         $epp       = $request->request->getDigits('elements_per_page', 10);
         $page      = $request->request->getDigits('page', 1);
-        $criteria  = $request->request->filter('search');
-        $sortBy    = $request->request->filter('sort_by');
-        $sortOrder = $request->request->filter('sort_order');
-        $order     = array($sortBy => $sortOrder);
+        $criteria  = $request->request->filter('search') ? : array();
+        $orderBy    = $request->request->filter('sort_by') ? : array();
 
         if (array_key_exists('name', $criteria)) {
             $criteria['domains'] = $criteria['name'];
@@ -348,7 +346,7 @@ class InstanceController extends Controller
         unset($criteria['content_type_name']);
 
         $im = $this->get('instance_manager');
-        $instances = $im->findBy($criteria, $order, $epp, $page);
+        $instances = $im->findBy($criteria, $orderBy, $epp, $page);
         $total = $im->countBy($criteria);
 
         foreach ($instances as &$instance) {
