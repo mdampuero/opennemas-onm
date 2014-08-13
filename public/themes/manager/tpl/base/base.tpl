@@ -59,8 +59,24 @@
         {/javascripts}
     {/block}
 
+    {block name="footer-js"}
+        {javascripts src="@FosJsRoutingBundle/js/router.js,
+                          @Common/js/routes.js,
+                          @Common/plugins/angular/angular.min.js,
+                          @Common/plugins/angular-route/angular-route.min.js,
+                          @Common/plugins/angular-translate/angular-translate.min.js,
+                          @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+
+                          @Common/plugins/angular-onm/services/*,
+
+                          @ManagerTheme/js/ManagerApp.js
+        "}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
+
 </head>
-<body id="manager">
+<body id="manager" ng-app="ManagerApp">
     <header class="header navbar navbar-inverse ">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -116,7 +132,6 @@
                         <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
                             <div class="user-details">
                                 <div class="username">
-
                                     <span class="badge badge-important">3</span> {$smarty.session.realname}
                                 </div>
                             </div>
@@ -124,12 +139,30 @@
                         </a>
                         <div id="notification-list" style="display:none">
                             <div style="width:300px">
+                                <div class="notification-messages info">
+                                    <div class="user-profile"> <img src="/assets/plugins/webarch/img/profiles/d.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/d.jpg" data-src-retina="/assets/plugins/webarch/img/profiles/d2x.jpg" width="35" height="35"> </div>
+                                    <div class="message-wrapper">
+                                        <div class="heading"> David Nester - Commented on your wall </div>
+                                        <div class="description"> Meeting postponed to tomorrow </div>
+                                        <div class="date pull-left"> A min ago </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
                                 <div class="notification-messages danger">
                                     <div class="iconholder"> <i class="icon-warning-sign"></i> </div>
                                     <div class="message-wrapper">
                                         <div class="heading"> Server load limited </div>
                                         <div class="description"> Database server has reached its daily capicity </div>
                                         <div class="date pull-left"> 2 mins ago </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="notification-messages success">
+                                    <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div>
+                                    <div class="message-wrapper">
+                                        <div class="heading"> You have got 150 messages </div>
+                                        <div class="description"> 150 newly unread messages in your inbox </div>
+                                        <div class="date pull-left"> An hour ago </div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -169,10 +202,10 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
                     <li class="start active">
-                        <a href="{url name=manager_welcome}"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
+                        <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
                     <li>
-                        <a href="{url name=manager_instances}"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
+                        <a href="#/instances"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li>
                         <a href="#">
@@ -180,10 +213,10 @@
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="{url name=manager_framework_commands}"><i class="fa fa-code"></i> {t}Commands{/t}</a>
+                                <a href="#/framework/commands"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
                             <li>
-                                <a href="{url name=manager_framework_opcache_status}"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
+                                <a href="#/framework/opcache"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
                     </li>
@@ -193,12 +226,12 @@
                         </a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="{url name=manager_acl_user}">
+                                <a href="#/users">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
                             <li>
-                                <a href="{url name=manager_acl_usergroups}">
+                                <a href="#/usergroups">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>
                             </li>
@@ -212,7 +245,7 @@
         <!-- END SIDEBAR -->
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
-            {block name="content"}{/block}
+                <div ng-view></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
@@ -221,6 +254,5 @@
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
-    {block name="footer-js"}{/block}
 </body>
 </html>

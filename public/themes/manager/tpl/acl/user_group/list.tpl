@@ -1,6 +1,3 @@
-{extends file="base/base.tpl"}
-
-{block name="content"}
 <form action="{url name=manager_acl_usergroups}" method="post" name="formulario" id="formulario">
 
     <div class="top-action-bar clearfix">
@@ -71,4 +68,3 @@
     </div>
 </form>
 {include file="acl/user_group/modal/_modalDelete.tpl"}
-{/block}

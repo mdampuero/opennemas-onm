@@ -1,6 +1,3 @@
-{extends file="base/base.tpl"}
-
-{block name="content"}
 <div class="content">
     <div class="title">
         <h2>{t}Zend Opcache status{/t}</h2>
@@ -88,9 +85,7 @@
     <div class="well">{$not_supported_message}</div>
     {/if}
 </div>
-{/block}
 
-{block name="footer-js" append}
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
 <script type="text/javascript">
     var hidden = {};
@@ -179,4 +174,3 @@
         $('#opcache-stats-tabs').tabs();
     });
 </script>
-{/block}

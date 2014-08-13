@@ -1,6 +1,3 @@
-{extends file="base/base.tpl"}
-
-{block name="footer-js" append}
 <script>
 jQuery(function($){
 	$('#batch-delete').on('click', function(){
@@ -9,10 +6,6 @@ jQuery(function($){
 	});
 });
 </script>
-{/block}
-
-
-{block name="content"}
 <div class="clearfix"></div>
 <div class="content">
 	<div class="page-title">
@@ -143,5 +136,3 @@ jQuery(function($){
 	{include file="acl/user/modal/_modalDelete.tpl"}
 
 </div>
-
-{/block}

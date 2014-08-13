@@ -1,14 +1,8 @@
-{extends file="base/base.tpl"}
-
-{block name="footer-js" append}
 <script type="text/javascript">
     $(function() {
         $().button('loading')
     });
 </script>
-{/block}
-
-{block name="content"}
 <div class="clearfix"></div>
 <div class="content">
     <div class="page-title">
@@ -93,4 +87,3 @@
     </table>
     </div><!-- .wrapper-table-block -->
 </div>
-{/block}

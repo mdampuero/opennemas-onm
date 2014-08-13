@@ -1,6 +1,3 @@
-{extends file="base/base.tpl"}
-
-{block name="content" append}
 <div class="clearfix"></div>
 <div class="content">
     <ul class="breadcrumb">
@@ -19,4 +16,3 @@
         awesome things that will blow out your imagination.
     </p>
 </div>
-{/block}
