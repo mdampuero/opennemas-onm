@@ -1,6 +1,8 @@
-manager_instances:
+manager_instance_list:
     path: /instances
     defaults: { _controller:  ManagerBundle:Instances:list }
+    options:
+        expose: true
 
 manager_instance_show:
     path: /instance/{id}/show

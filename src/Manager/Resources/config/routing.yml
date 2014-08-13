@@ -1,79 +1,23 @@
+manager_welcome:
+    path:     /manager
+    defaults: { _controller: ManagerBundle:Welcome:default }
+
+manager_auth:
+    prefix:   /
+    resource: @ManagerBundle/Resources/config/routing/auth.yml
+
 manager_instance:
-    prefix: /
-    resource: "@ManagerBundle/Resources/config/routing/instance.yml"
+    prefix:   /
+    resource: @ManagerBundle/Resources/config/routing/instance.yml
 
+manager_framework:
+    prefix:   /framework
+    resource: @ManagerBundle/Resources/config/routing/framework.yml
 
+manager_user:
+    prefix:   /
+    resource: @ManagerBundle/Resources/config/routing/user.yml
 
-manager_framework_commands:
-    path: /commands
-    defaults: { _controller:  ManagerBundle:Commands:list }
-
-manager_framework_command_execute:
-    path: /commands/execute
-    defaults: { _controller:  ManagerBundle:Commands:executeCommand }
-
-manager_framework_opcache_status:
-    path: /framework/opcache
-    defaults: { _controller:  ManagerBundle:FrameworkStatus:opcacheStatus }
-
-manager_login_form:
-    path: /login
-    defaults: { _controller:  ManagerBundle:Authentication:login }
-
-manager_login_processform:
-    path: /login/process
-    defaults: { _controller:  ManagerBundle:Authentication:check }
-
-manager_logout:
-    path: /logout
-    defaults: { _controller:  ManagerBundle:Authentication:logout }
-
-# User management routes
-manager_acl_user:
-    path: /acl/users
-    defaults: { _controller:  ManagerBundle:AclUser:list }
-
-manager_acl_user_create:
-    path: /acl/user/create
-    defaults: { _controller:  ManagerBundle:AclUser:create }
-
-manager_acl_user_show:
-    path: /acl/user/{id}/show
-    defaults: { _controller:  ManagerBundle:AclUser:show }
-
-manager_acl_user_update:
-    path: /acl/user/{id}/update
-    defaults: { _controller:  ManagerBundle:AclUser:update }
-
-manager_acl_user_delete:
-    path: /acl/user/{id}/delete
-    defaults: { _controller:  ManagerBundle:AclUser:delete }
-
-manager_acl_user_batchdelete:
-    path: /acl/user/batchdelete
-    defaults: { _controller:  ManagerBundle:AclUser:batchDelete }
-
-manager_acl_user_toogle_enabled:
-    path: /acl/user/{id}/toogle-enabled
-    defaults: { _controller:  ManagerBundle:AclUser:toogleEnabled }
-
-# User groups managerment routes
-manager_acl_usergroups:
-    path: /acl/usergroups
-    defaults: { _controller:  ManagerBundle:AclUserGroups:list }
-
-manager_acl_usergroups_show:
-    path: /acl/usergroup/{id}/show
-    defaults: { _controller:  ManagerBundle:AclUserGroups:show }
-
-manager_acl_usergroups_create:
-    path: /acl/usergroup/create
-    defaults: { _controller:  ManagerBundle:AclUserGroups:create }
-
-manager_acl_usergroups_update:
-    path: /acl/usergroup/{id}/update
-    defaults: { _controller:  ManagerBundle:AclUserGroups:update }
-
-manager_acl_usergroups_delete:
-    path: /acl/usergroup/{id}/delete
-    defaults: { _controller:  ManagerBundle:AclUserGroups:delete }
+manager_usergroup:
+    prefix:   /
+    resource: @ManagerBundle/Resources/config/routing/usergroup.yml
