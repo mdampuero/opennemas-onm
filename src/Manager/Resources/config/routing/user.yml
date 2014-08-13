@@ -1,0 +1,41 @@
+manager_user_list:
+    path: /users
+    defaults: { _controller:  ManagerBundle:AclUser:list }
+    options:
+        expose: true
+
+manager_user_create:
+    path: /user/create
+    defaults: { _controller:  ManagerBundle:AclUser:create }
+    options:
+        expose: true
+
+manager_user_show:
+    path: /user/{id}/show
+    defaults: { _controller:  ManagerBundle:AclUser:show }
+    options:
+        expose: true
+
+manager_user_update:
+    path: /user/{id}/update
+    defaults: { _controller:  ManagerBundle:AclUser:update }
+    options:
+        expose: true
+
+manager_user_delete:
+    path: /user/{id}/delete
+    defaults: { _controller:  ManagerBundle:AclUser:delete }
+    options:
+        expose: true
+
+manager_user_batchdelete:
+    path: /user/batchdelete
+    defaults: { _controller:  ManagerBundle:AclUser:batchDelete }
+    options:
+        expose: true
+
+manager_user_toogle_enabled:
+    path: /user/{id}/toogle-enabled
+    defaults: { _controller:  ManagerBundle:AclUser:toogleEnabled }
+    options:
+        expose: true

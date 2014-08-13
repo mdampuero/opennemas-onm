@@ -1,0 +1,29 @@
+manager_usergroup_list:
+    path: /usergroups
+    defaults: { _controller:  ManagerBundle:AclUserGroups:list }
+    options:
+        expose: true
+
+manager_usergroup_show:
+    path: /usergroup/{id}/show
+    defaults: { _controller:  ManagerBundle:AclUserGroups:show }
+    options:
+        expose: true
+
+manager_usergroup_create:
+    path: /usergroup/create
+    defaults: { _controller:  ManagerBundle:AclUserGroups:create }
+    options:
+        expose: true
+
+manager_usergroup_update:
+    path: /usergroup/{id}/update
+    defaults: { _controller:  ManagerBundle:AclUserGroups:update }
+    options:
+        expose: true
+
+manager_usergroup_delete:
+    path: /usergroup/{id}/delete
+    defaults: { _controller:  ManagerBundle:AclUserGroups:delete }
+    options:
+        expose: true
