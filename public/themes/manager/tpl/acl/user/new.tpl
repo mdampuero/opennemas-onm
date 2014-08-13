@@ -173,7 +173,7 @@ label {
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="basic">
-                    <div class="avatar">
+                    <div class="avatar-picker col-sm-3">
                         <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
                             {if $user->photo->name}
                             <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
@@ -196,62 +196,62 @@ label {
                         </div>
                     </div>
 
-                    <div class="user-info form-vertical">
+                    <div class="user-info form-vertical col-sm-9">
                         <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="name" class="control-label">{t}Display name{/t}</label>
-                                <div class="controls">
-                                    <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
+                                <div>
+                                    <input type="text" id="name" name="name" value="{$user->name|default:""}" class="required" maxlength="50"/>
                                 </div>
                             </div>
                         </fieldset>
 
                         <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="login" class="control-label">{t}User name{/t}</label>
                                 <div class="controls">
-                                    <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required=required maxlength="20"/>
+                                    <input type="text" id="login" name="login" value="{$user->username|default:""}" class="form-control" required=required maxlength="20"/>
                                 </div>
                             </div>
 
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="email" class="control-label">{t}Email{/t}</label>
                                 <div class="controls">
-                                    <input class="input-xlarge" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
+                                    <input class="form-control" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
                                 </div>
                             </div>
 
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="url" class="control-label">{t}Blog Url{/t}</label>
                                 <div class="controls">
-                                    <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
+                                    <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="form-control">
                                 </div>
                             </div>
 
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="bio" class="control-label">{t}Biography{/t}</label>
                                 <div class="controls">
-                                    <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{$user->bio|default:""}</textarea>
+                                    <textarea id="bio" name="bio" rows="3" class="form-control">{$user->bio|default:""}</textarea>
                                 </div>
                             </div>
                         </fieldset>
 
                         <fieldset>
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="password" class="control-label">{t}Password{/t}</label>
                                 <div class="controls">
-                                    <div class="input-prepend">
-                                        <span class="add-on"><i class="icon-key"></i></span>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
                                         <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="control-group">
+                            <div class="form-group">
                                 <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
                                 <div class="controls">
-                                    <div class="input-prepend">
-                                        <span class="add-on"><i class="icon-key"></i></span>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
                                         <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
                                     </div>
                                 </div>
@@ -261,19 +261,19 @@ label {
                 </div><!-- .basic -->
 
                 <div class="tab-pane" id="settings">
-                    <div class="form-horizontal">
-                        <div class="control-group">
-                            <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
-                            <div class="controls">
+                    <div class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="sessionexpire" class="col-sm-5 control-label">{t}Session expire time:{/t}</label>
+                            <div class="col-sm-7">
                                 <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
                                 <span>{t}minutes{/t}</span>
                             </div>
                         </div>
 
                         {is_module_activated name="PAYWALL"}
-                        <div class="control-group">
-                            <label for="user_language" class="control-label">{t}User type{/t}</label>
-                            <div class="controls">
+                        <div class="form-group">
+                            <label for="user_language" class="col-sm-5 control-label">{t}User type{/t}</label>
+                            <div class="col-sm-7 controls">
                                 <select id="usertype" name="type">
                                     <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
                                     <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
@@ -282,9 +282,9 @@ label {
                         </div>
                         {/is_module_activated}
 
-                        <div class="control-group">
-                            <label for="meta[user_language]" class="control-label">{t}User language{/t}</label>
-                            <div class="controls">
+                        <div class="form-group">
+                            <label for="meta[user_language]" class="col-sm-5 control-label">{t}User language{/t}</label>
+                            <div class="col-sm-7">
                                 {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
                                 <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                             </div>
@@ -315,9 +315,9 @@ label {
                 {is_module_activated name="PAYWALL"}
                 <div class="tab-pane" id="paywall">
                     <div class="form-horizontal">
-                            <div class="control-group">
-                            <label for="paywall_time_limit" class="control-label">{t}Paywall time limit:{/t}</label>
-                            <div class="controls">
+                            <div class="form-group">
+                            <label for="paywall_time_limit" class="col-sm-5 control-label">{t}Paywall time limit:{/t}</label>
+                            <div class="col-sm-7 controls">
                                 <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
                             </div>
                         </div>
