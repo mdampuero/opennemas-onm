@@ -13,28 +13,31 @@ jQuery(function($){
 
 
 {block name="content"}
-<form action="{url name=manager_acl_user}" method="get" id="userform">
-	<div class="top-action-bar clearfix">
-		<div class="wrapper-content">
-			<div class="title"><h2>{t}Users{/t}</h2></div>
-			<ul class="old-button">
-				<li>
-					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
-						<img src="{$params.COMMON_ASSET_DIR}images/trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-					</button>
-				</li>
-				<li class="separator"></li>
-				<li>
-					<a href="{url name=manager_acl_user_create}" title="{t}Create new user{/t}">
-						<img src="{$params.COMMON_ASSET_DIR}images/user_add.png" alt="Nuevo"><br />{t}New user{/t}
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<div class="wrapper-content">
+<div class="clearfix"></div>
+<div class="content">
+	<div class="page-title">
+        <h2>{t}Users{/t}</h2>
+    </div>
 
-		{render_messages}
+    <ul class="top-actions">
+		<li>
+			<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
+				<img src="{$params.COMMON_ASSET_DIR}images/trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+			</button>
+		</li>
+		<li class="separator"></li>
+		<li>
+			<a href="{url name=manager_acl_user_create}" title="{t}Create new user{/t}">
+				<img src="{$params.COMMON_ASSET_DIR}images/user_add.png" alt="Nuevo"><br />{t}New user{/t}
+			</a>
+		</li>
+	</ul>
+
+
+	{render_messages}
+
+
+	<form action="{url name=manager_acl_user}" method="get" id="userform">
 
 		<div class="table-info clearfix">
 			<div class="pull-right form-inline">
@@ -136,7 +139,9 @@ jQuery(function($){
 				</tr>
 			</tfoot>
 		</table>
-	</div>
-</form>
-{include file="acl/user/modal/_modalDelete.tpl"}
+	</form>
+	{include file="acl/user/modal/_modalDelete.tpl"}
+
+</div>
+
 {/block}

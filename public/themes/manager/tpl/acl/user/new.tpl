@@ -201,7 +201,7 @@ label {
                             <div class="form-group">
                                 <label for="name" class="control-label">{t}Display name{/t}</label>
                                 <div>
-                                    <input type="text" id="name" name="name" value="{$user->name|default:""}" class="required" maxlength="50"/>
+                                    <input class="form-control" type="text" id="name" name="name" value="{$user->name|default:""}" class="required" maxlength="50"/>
                                 </div>
                             </div>
                         </fieldset>

@@ -1,24 +1,21 @@
 {extends file="base/base.tpl"}
 
 {block name="content"}
-<div class="top-action-bar">
-    <div class="wrapper-content">
-        <div class="title">
-            <h2>{t}Zend Opcache status{/t}</h2>
-        </div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=manager_framework_opcache_status action='reset'}" class="btn btn-large">
-                    <img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" />
-                    <br />
-                    Reset cache
-                </a>
-            </li>
-        </ul>
+<div class="content">
+    <div class="title">
+        <h2>{t}Zend Opcache status{/t}</h2>
     </div>
-</div>
+    <div class="top-buttons">
+        <li>
+            <a href="{url name=manager_framework_opcache_status action='reset'}" class="btn btn-large">
+                <img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" />
+                <br />
+                Reset cache
+            </a>
+        </li>
+    </div>
 
-<div class="wrapper-content opcache-stats">
+<div class="opcache-stats">
     {if empty($not_supported_message)}
     <div id="opcache-stats-tabs" class="tabs">
         <ul>

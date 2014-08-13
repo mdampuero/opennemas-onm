@@ -70,6 +70,9 @@ class FrameworkStatusController extends Controller
         // var_dump($status);die();
 
         $statusKeyValues = array();
+        if (!is_array($status)) {
+            $status = array();
+        }
         foreach ($status as $key => $value) {
             if ($key === 'scripts') {
                 continue;
