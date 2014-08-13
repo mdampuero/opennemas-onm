@@ -1,3 +1,6 @@
+a:hover {
+    cursor:pointer;
+}
 .logoonm {
     display: block !important;
     width:121px;
@@ -10,4 +13,8 @@
 
 .page-sidebar ul > li > a > .arrow:before {
     content: "\f105";
+}
+
+.top-buttons {
+    float:right;
 }
