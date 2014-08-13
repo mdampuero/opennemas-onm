@@ -162,12 +162,12 @@ label {
 
         <div id="user-editing-form" class="tabbable tabs-left">
             <ul class="nav nav-tabs" id="tab-2">
-                <li class="active"><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
-                <li class=""><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
-                <li class=""><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                <li class="active"><a href="#basic" title="{t}Basic information{/t}" data-toggle="tab">{t}User info{/t}</a></li>
+                <li class=""><a href="#settings" title="{t}Settings{/t}" data-toggle="tab">{t}Settings{/t}</a></li>
+                <li class=""><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}" data-toggle="tab">{t}Privileges{/t}</a></li>
                 {acl isAllowed="USER_ADMIN"}
                 {is_module_activated name="PAYWALL"}
-                <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
+                <li><a href="#paywall" title="{t}Paywall{/t}" data-toggle="tab">{t}Paywall{/t}</a></li>
                 {/is_module_activated}
                 {/acl}
             </ul>
