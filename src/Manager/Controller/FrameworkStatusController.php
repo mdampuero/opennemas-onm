@@ -36,25 +36,6 @@ class FrameworkStatusController extends Controller
     }
 
     /**
-     * Checks and shows the fullfilment framework dependencies
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function checkDependenciesAction(Request $request)
-    {
-        chdir(APPLICATION_PATH);
-        $command = APPLICATION_PATH.'/bin/console framework:check-dependencies';
-        $status = shell_exec($command);
-
-        return $this->render(
-            'framework/status.tpl',
-            array('status' => $status)
-        );
-    }
-
-    /**
      * Shows the APC information iframe
      *
      * @param Request $request the request object

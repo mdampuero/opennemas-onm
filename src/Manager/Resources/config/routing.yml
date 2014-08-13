@@ -12,10 +12,6 @@ manager_framework_command_execute:
     path: /commands/execute
     defaults: { _controller:  ManagerBundle:Commands:executeCommand }
 
-manager_framework_check_dependencies:
-    path: /framework/check-dependencies
-    defaults: { _controller:  ManagerBundle:FrameworkStatus:checkDependencies }
-
 manager_framework_opcache_status:
     path: /framework/opcache
     defaults: { _controller:  ManagerBundle:FrameworkStatus:opcacheStatus }

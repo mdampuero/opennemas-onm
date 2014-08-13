@@ -192,9 +192,6 @@
                                 <a href="{url name=manager_framework_commands}"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
                             <li>
-                                <a href="{url name=manager_framework_check_dependencies}"><i class="fa fa-eye"></i> {t}Status{/t}</a>
-                            </li>
-                            <li>
                                 <a href="{url name=manager_framework_opcache_status}"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
