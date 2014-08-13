@@ -5,7 +5,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -16,126 +15,254 @@
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
     {block name="header-css"}
-        {stylesheets
-            src="@Common/css/bootstrap/bootstrap.css,
-                @Common/css/fontawesome/font-awesome.min.css,
-                @Common/css/style.css,
-                @Common/css/jquery/jquery-ui.css,
-                @Common/css/jquery/select2/select2-bootstrap.css,
-                @Common/css/jquery/select2/select2.css,
-                @Common/css/jquery/messenger/messenger.css,
-                @Common/css/jquery/messenger/messenger-spinner.css,
-                @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
-                @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
-            filters="cssrewrite"}
+        {stylesheets src="@Common/plugins/pace/pace-theme-flash.css,
+
+                          @Common/plugins/bootstrap/css/bootstrap.min.css,
+                          @Common/plugins/font-awesome/css/font-awesome.min.css"
+                     filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
-        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
+        {stylesheets src="@Common/plugins/webarch/css/style.css,
+                          @Common/plugins/webarch/css/responsive.css,
+                          @Common/plugins/webarch/css/custom-icon-set.css"
+                     filters="cssrewrite"}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
     {/block}
 
     {block name="header-js"}
-        {javascripts
-            src="@Common/js/jquery/jquery.min.js,
-                @Common/js/libs/bootstrap.js,
-                @Common/js/jquery/select2/select2.min.js,
-                @Common/js/jquery-onm/jquery.onmvalidate.js,
-                @Common/js/libs/jquery.tools.min.js,
-                @Common/js/libs/tinycon.min.js,
-                @Common/js/libs/modernizr.min.js,
-                @Common/js/onm/scripts.js,
-                @Common/js/onm/footer-functions.js,
-                @Common/js/onm/jquery.onm-editor.js,
-                @AdminTheme/js/jquery/bootstrap-nav-wizard.js"}
+        {javascripts src="@Common/plugins/jquery/jquery.min.js,
+                          @Common/plugins/jquery-ui/jquery-ui.min.js,
+                          @Common/plugins/bootstrap/js/bootstrap.min.js,
+                          @Common/plugins/breakpoints.js,
+                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
+                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
+                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
+
+                          @Common/plugins/webarch/js/core.js,
+                          @Common/plugins/pace/pace.min.js"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
+
+    {block name="footer-js"}
+        {javascripts src="@Common/plugins/jquery/jquery.min.js,
+                          @Common/plugins/jquery-ui/jquery-ui.min.js,
+                          @Common/plugins/bootstrap/js/bootstrap.min.js,
+                          @Common/plugins/breakpoints.js,
+                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
+                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
+                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
+
+                          @Common/plugins/webarch/js/core.js,
+                          @Common/plugins/pace/pace.min.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
     {/block}
 
 </head>
 <body class="manager">
-
-    <header class="clearfix">
-        <div class="navbar navbar-inverse global-nav manager" style="position:fixed">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+    <header class="header navbar navbar-inverse ">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="navbar-inner">
+            <div class="header-seperation">
+                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                    <li class="dropdown">
+                        <a id="main-menu-toggle" href="#main-menu">
+                            <div class="iconset top-menu-toggle-white"></div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- BEGIN LOGO -->
+                <a href="index.html">
+                    <img src="assets/plugins/webarch/img/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="106" height="21"/>
                 </a>
-
-                <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
-                <div class="nav pull-left" accesskey="m">
-                    {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
-                </div>
-                <div class="nav-collapse collapse navbar-inverse-collapse">
-                    <ul class="nav pull-right">
-                        <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {if $smarty.session.email}
-                                    {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="24"}
-                                {else}
-                                    <span class="usericon"></span>
-                                {/if}
-                                <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b>
+                <!-- END LOGO -->
+                <ul class="nav pull-right notifcation-center">
+                    <li class="dropdown" id="header_task_bar">
+                        <a href="index.html" class="dropdown-toggle active" data-toggle="">
+                            <div class="iconset top-home"></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="header-quick-nav">
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="pull-left">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" id="layout-condensed-toggle">
+                                <div class="iconset top-menu-toggle-dark"></div>
                             </a>
-                            <div class="dropdown-menu">
-                                <div class="avatar">
-                                    {if $smarty.session.email}
-                                        {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
-                                    {else}
-                                        <span class="usericon"></span>
-                                    {/if}
-                                </div><!-- /.avatar -->
-                                <div class="user-info">
-                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                                    <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                                        <li><a href="javascript:salir('{t}Do you really want to exit from manager?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from manager{/t}">{t}Log out{/t}</a></li>
-                                    </ul><!-- /.links -->
-                                </div><!-- /.user-info -->
-                            </div>
                         </li>
                     </ul>
-
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" class="" >
+                            <div class="iconset top-reload"></div>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <a href="#" class="" >
+                                <div class="iconset top-tiles"></div>
+                            </a>
+                        </li>
+                        <li class="m-r-10 input-prepend inside search-form no-boarder">
+                            <span class="add-on">
+                                <span class="iconset top-search"></span>
+                            </span>
+                            <input name="" type="text"  class="no-boarder " placeholder="Search Dashboard" style="width:250px;">
+                        </li>
+                    </ul>
                 </div>
+                <!-- END TOP NAVIGATION MENU -->
+                <!-- BEGIN CHAT TOGGLER -->
+                <div class="pull-right">
+                    <div class="chat-toggler">
+                        <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
+                            <div class="user-details">
+                                <div class="username">
+                                    <span class="badge badge-important">3</span> John <span class="bold">Smith</span>
+                                </div>
+                            </div>
+                            <div class="iconset top-down-arrow"></div>
+                        </a>
+                        <div id="notification-list" style="display:none">
+                            <div style="width:300px">
+                                <div class="notification-messages info">
+                                    <div class="user-profile"> <img src="assets/img/profiles/d.jpg"    alt="" data-src="assets/img/profiles/d.jpg" data-src-retina="assets/img/profiles/d2x.jpg" width="35" height="35"> </div>
+                                    <div class="message-wrapper">
+                                        <div class="heading"> David Nester - Commented on your wall </div>
+                                        <div class="description"> Meeting postponed to tomorrow </div>
+                                        <div class="date pull-left"> A min ago </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="notification-messages danger">
+                                    <div class="iconholder"> <i class="icon-warning-sign"></i> </div>
+                                    <div class="message-wrapper">
+                                        <div class="heading"> Server load limited </div>
+                                        <div class="description"> Database server has reached its daily capicity </div>
+                                        <div class="date pull-left"> 2 mins ago </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="notification-messages success">
+                                    <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="assets/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div>
+                                    <div class="message-wrapper">
+                                        <div class="heading"> You haveve got 150 messages </div>
+                                        <div class="description"> 150 newly unread messages in your inbox </div>
+                                        <div class="date pull-left"> An hour ago </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-pic">
+                            <img src="assets/img/profiles/avatar_small.jpg"  alt="" data-src="assets/img/profiles/avatar_small.jpg" data-src-retina="assets/img/profiles/avatar_small2x.jpg" width="35" height="35" />
+                        </div>
+                    </div>
+                    <ul class="nav quick-section ">
+                        <li class="quicklinks"> <a data-toggle="dropdown" class="dropdown-toggle    pull-right " href="#" id="user-options">
+                            <div class="iconset top-settings-dark "></div>
+                            </a>
+                            <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
+                                <li><a href="user-profile.html"> My Account</a> </li>
+                                <li><a href="calender.html">My Calendar</a> </li>
+                                <li><a href="email.html"> My Inbox&nbsp;&nbsp;<span class="badge badge-important animated bounceIn">2</span></a> </li>
+                                <li class="divider"></li>
+                                <li><a href="login.html"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END CHAT TOGGLER -->
+            </div>
+        <!-- END TOP NAVIGATION MENU -->
+        </div>
+      <!-- END TOP NAVIGATION BAR -->
+    </header>
+    <div class="page-container row-fluid">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar" id="main-menu">
+            <div class="page-sidebar-wrapper" id="main-menu-wrapper">
+                <!-- BEGIN MINI-PROFILE -->
+                <div class="user-info-wrapper">
+                    <div class="profile-wrapper">
+                        <img src="assets/img/profiles/avatar.jpg"    alt="" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" width="69" height="69" />
+                    </div>
+                    <div class="user-info">
+                        <div class="greeting">Welcome</div>
+                        <div class="username">John <span class="semi-bold">Smith</span></div>
+                        <div class="status">Status <a href="#"><div class="status-icon green"></div>Online</a></div>
+                    </div>
+                </div>
+                <!-- END MINI-PROFILE -->
+                <!-- BEGIN SIDEBAR MENU -->
+                <p class="menu-title">BROWSE <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span></p>
+                <ul>
+                    <li class="start active">
+                        <a href="index.html"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-flask"></i> <span class="title"> {t}Framework{/t}</span><span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="#"><i class="fa fa-code"></i> {t}Commands{/t}</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-eye"></i> {t}Status{/t}</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-gears"></i> <span class="title">{t}Settings{/t}</span><span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-user"></i> {t}Users{/t}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-users"></i> {t}User groups{/t}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <!-- END SIDEBAR MENU -->
             </div>
         </div>
-    </header>
-
-    <div id="content" role="main">
-    {block name="content"}{/block}
+        <!-- END SIDEBAR -->
+        <!-- BEGIN PAGE CONTAINER-->
+            <div class="page-content">
+            </div>
     </div>
-
-    {block name="copyright"}
-    <footer class="wrapper-content">
-        <div class="clearfix">
-            <nav class="left">
-                <ul>
-                    <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
-                </ul><!-- / -->
-            </nav>
-            <nav class="right">
-                <ul>
-                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                </ul>
-            </nav>
-        </div><!-- / -->
-    </footer>
-    {/block}
-
-    {block name="footer-js"}
-        {browser_update}
-    {/block}
 
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
-
 </body>
 </html>
