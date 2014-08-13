@@ -1,0 +1,5 @@
+manager_ws_template_render:
+    path:     /{template}
+    defaults: { _controller: ManagerWebServiceBundle:Template:render }
+    options:
+        expose: true

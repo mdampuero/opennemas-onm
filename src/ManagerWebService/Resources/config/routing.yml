@@ -15,3 +15,7 @@ managerwebservice_instance_create:
 
 manager_ws_instance:
     resource: @ManagerWebServiceBundle/Resources/config/routing/instance.yml
+
+manager_ws_template:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/template.yml
+    prefix: /template
