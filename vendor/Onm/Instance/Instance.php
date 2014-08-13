@@ -320,4 +320,20 @@ class Instance
     {
         return $this->settings['BD_DATABASE'];
     }
+
+    /**
+     * Returns the instance main domain.
+     *
+     * @return string The instance main domain.
+     */
+    public function getMainDomain()
+    {
+        if ($this->main_domain && $this->main_domain > 0) {
+            $domain = $this->domains[$this->main_domain - 1];
+        } else {
+            $domain = $this->domains[0];
+        }
+
+        return $domain;
+    }
 }

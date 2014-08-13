@@ -31,8 +31,9 @@ class FrontpageManager extends EntityManager
      * This is used for HomePages, fetches all the contents assigned for it
      * and allows to render an entire homepage.
      *
-     * @param  int   $categoryId The category id.
-     * @return mixed             Array of contents.
+     * @param int $categoryId The category id.
+     *
+     * @return array Array of contents.
      */
     public function getContentIdsForHomepageOfCategory($categoryId = null)
     {
@@ -58,15 +59,15 @@ class FrontpageManager extends EntityManager
         return $contents;
     }
 
-
     /**
      * Searches for content given a criteria
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
@@ -105,8 +106,9 @@ class FrontpageManager extends EntityManager
     /**
      * Counts contents given a criteria.
      *
-     * @param  array   $criteria The criteria used to search the contents.
-     * @return integer           The number of found contents.
+     * @param array $criteria The criteria used to search the contents.
+     *
+     * @return integer The number of found contents.
      */
     public function countBy($criteria)
     {

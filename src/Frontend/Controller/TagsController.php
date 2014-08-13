@@ -38,6 +38,7 @@ class TagsController extends Controller
         $tagName = \StringUtils::normalize($tagName);
 
         // Load config
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
         $cacheId = "tag|$tagName|$page";

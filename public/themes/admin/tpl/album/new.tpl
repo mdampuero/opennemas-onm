@@ -1,7 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {include file="media_uploader/media_uploader.tpl"}
 <script>
     var mediapicker = $('#media-uploader').mediaPicker({

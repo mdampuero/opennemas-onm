@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function ($){
         var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});

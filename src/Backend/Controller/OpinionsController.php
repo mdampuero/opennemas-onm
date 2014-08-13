@@ -805,7 +805,7 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('author.update', array('authorId' => $userId));
+                dispatchEventWithParams('author.update', array('id' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {

@@ -1,9 +1,5 @@
 <?php
-/**
- * Handles all the events after content updates
- *
- * @package Backend_EventListener
- **/
+
 /**
  * This file is part of the Onm package.
  *
@@ -11,7 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Framework\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,17 +16,15 @@ use Symfony\Component\EventDispatcher\Event;
 use Onm\Settings as s;
 
 /**
- * Handles all the events after content updates
- *
- * @package Backend_EventListener
- **/
+ * Handles all the events after content updates.
+ */
 class NewsAgencyCronActionSubscriber implements EventSubscriberInterface
 {
     /**
-     * Register the content event handler
+     * Returns an array of event names this subscriber wants to listen to.
      *
-     * @return void
-     **/
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -40,12 +35,10 @@ class NewsAgencyCronActionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Perform the actions after update a content
+     * Synchronizes all instances basing on news agencies configuration.
      *
-     * @param Event $event The event to handle
-     *
-     * @return void
-     **/
+     * @param Event $event The event to handle.
+     */
     public function updateNewsAgency(Event $event)
     {
         $output = $event->output;

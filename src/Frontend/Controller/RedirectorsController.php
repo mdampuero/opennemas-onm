@@ -59,7 +59,10 @@ class RedirectorsController extends Controller
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = $this->get('entity_repository')->find('Article', $newContentID);
-            $content->category_name = $content->catName;
+
+            if (!is_null($content)) {
+                $content->category_name = $content->catName;
+            }
         } elseif ($type == 'opinion') {
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
         } else {

@@ -10,16 +10,16 @@ instances:
             type: string
             options: { default: null, length: 255 }
         domains:
-            type: text
-            options: { default: null, length: 65532 }
+            type: string
+            options: { default: null, length: 500 }
         main_domain:
             type: string
             options: {default: null, length: 255 }
         created:
-            type: date
+            type: datetime
             options: {default: null }
         last_login:
-            type: date
+            type: datetime
             options: {default: null, notnull: false }
         settings:
             type: text

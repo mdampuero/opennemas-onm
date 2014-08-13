@@ -1,11 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/swfobject.js"}
+    {javascripts src="@AdminTheme/js/swfobject.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="header-css" append}
-{css_tag href="/jquery/colorbox.css" media="screen"}
+    {stylesheets src="@AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen">
+    {/stylesheets}
 <style type="text/css">
     div#content-provider .content-provider-block .content-provider-element {
         margin: 5px;
@@ -22,13 +26,15 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery.colorbox-min.js"}
-    {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/onm/article.js"}
-    {script_tag src="/onm/content-provider.js"}
-    {script_tag src="/jquery-onm/jquery.inputlength.js"}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
+        @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @AdminTheme/js/jquery/jquery.colorbox-min.js,
+        @AdminTheme/js/onm/article.js,
+        @AdminTheme/js/onm/content-provider.js,
+        @AdminTheme/js/jquery-onm/jquery.inputlength.js,
+        @Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script>
         var article_urls = {
             preview : '{url name=admin_article_preview}',

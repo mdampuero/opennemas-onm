@@ -218,7 +218,7 @@ class UserController extends Controller
         if ($user->id > 0) {
             if ($user->update($data)) {
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $data['id']));
+                $this->dispatchEvent('author.update', array('id' => $data['id']));
 
                 m::add(_('Data updated successfully'), m::SUCCESS);
             } else {
@@ -606,12 +606,16 @@ class UserController extends Controller
                 $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
                 $user->getMeta();
 
-                $searchCriteria = "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                    ."AND content_status=1 AND in_litter=0";
+                $criteria = array(
+                    'fk_author'       => array(array('value' => $user->id)),
+                    'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
+                    'content_status'  => array(array('value' => 1)),
+                    'in_litter'       => array(array('value' => 0)),
+                );
 
                 $er = $this->get('entity_repository');
-                $contentsCount  = $er->countBy($searchCriteria);
-                $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+                $contentsCount  = $er->countBy($criteria);
+                $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
                 foreach ($contents as &$item) {
                     $item = $item->get($item->id);

@@ -1,12 +1,16 @@
 {extends file="base/base.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/manager.css" common=1}
+    {stylesheets src="@Common/css/manager.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
 {/block}
 
 {block name="footer-js"}
-{script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
-{script_tag src="/jquery/jquery.multiselect.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
+        @Common/js/jquery/jquery.multiselect.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 <script>
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({

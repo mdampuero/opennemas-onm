@@ -90,7 +90,15 @@ parameters:
     opennemas.base_domain: .opennemas.com
     opennemas.redirect_frontend: false
 
+    opennemas.assetic.asset_compilation_in_dev: false
+    opennemas.assetic.use_asset_servers:        false
+    opennemas.assetic.asset_servers:            3
+    opennemas.assetic.asset_domain:             //media%d.opennemas.net
+
     api.facebook.client_id: 330535510437103
     api.facebook.client_secret: 292ccd17e59fd413f245c86c5e19e83b
     api.twitter.client_id: 2uP5o5b7ruolJLjEqZhDQPfO4
     api.twitter.client_secret: Lv1fVSQ84p936jDfxjcbhmORD6Mwav2DY3JB2NEJJlFfE7CGgB
+
+    piwik.url:   http://piwik.openhost.es
+    piwik.token: b4956f6e687b28851fa8a545b6ccd85b

@@ -1,9 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,21 +23,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * ExceptionListener.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Handles exceptions and returns a custom response.
  */
 class GeneralExceptionsListener implements EventSubscriberInterface
 {
-    protected $controller;
-    protected $logger;
 
-    public function __construct($environment, LoggerInterface $logger = null)
+    public function __construct($environment)
     {
         $this->environment = $environment;
-        $this->logger = $logger;
     }
 
+    /**
+     * Checks and handles exceptions that are not handled by any other listener.
+     *
+     * @param GetResponseForExceptionEvent $event The event object.
+     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         static $handling;
@@ -49,7 +49,6 @@ class GeneralExceptionsListener implements EventSubscriberInterface
         if ($this->environment !== 'prod') {
             return false;
         }
-
 
         $handling = true;
 
@@ -69,7 +68,6 @@ class GeneralExceptionsListener implements EventSubscriberInterface
         $attributes = array(
             '_controller' => $controller, //$this->controller,
             'exception'   => FlattenException::create($exception),
-            // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
             // keep for BC -- as $format can be an argument of the controller callable
             // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
             // @deprecated in 2.4, to be removed in 3.0
@@ -81,47 +79,22 @@ class GeneralExceptionsListener implements EventSubscriberInterface
 
         try {
             $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+            $event->setResponse($response);
         } catch (\Exception $e) {
-            // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
-
-            // set handling to false otherwise it wont be able to handle further more
-            $handling = false;
-
-            // re-throw the exception from within HttpKernel as this is a catch-all
-            return;
         }
-
-        $event->setResponse($response);
 
         $handling = false;
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(
             KernelEvents::EXCEPTION => array('onKernelException', 0),
         );
-    }
-
-    /**
-     * Logs an exception.
-     *
-     * @param \Exception $exception The original \Exception instance
-     * @param string     $message   The error message to log
-     * @param Boolean    $original  False when the handling of the exception thrown another exception
-     */
-    protected function logException(\Exception $exception, $message, $original = true)
-    {
-        $isCritical = !$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500;
-        $context = array('exception' => $exception);
-        if (null !== $this->logger) {
-            if ($isCritical) {
-                $this->logger->critical($message, $context);
-            } else {
-                $this->logger->error($message, $context);
-            }
-        } elseif (!$original || $isCritical) {
-            error_log($message);
-        }
     }
 }
