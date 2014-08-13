@@ -185,7 +185,7 @@
     <div class="spinner-text">{t}Loading{/t}...</div>
 </div>
 
-<table id="manager" class="table table-hover table-condensed no-more-tables" ng-if="!loading">
+<table id="manager" class="table table-hovertable-condensed listing no-more-tables" ng-if="!loading">
 
     <thead ng-if="shvs.contents.length >= 0">
         <tr>
@@ -194,95 +194,95 @@
             </th>
             <th class="pointer" width="25px" ng-click="sort('id')">
                 {t}#{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'id', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'id' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'id', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'id' }"></i>
             </th>
             <th class="pointer" width="" ng-click="sort('name')" ng-show="name">
                 {t}Name{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'name', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'name' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'name', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'name' }"></i>
             </th>
             <th class="left pointer" ng-click="sort('domains')" ng-show="domains">
                 {t}Domains{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'domains', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'domains' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'domains', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'domains' }"></i>
             </th>
             <th class="left pointer" ng-click="sort('contact_email')" ng-show="contact_mail">
                 {t}Contact{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contact_mail', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contact_mail' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contact_mail', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contact_mail' }"></i>
             </th>
             <th class="left pointer" ng-click="sort('last_login')" ng-show="last_login">
                 {t}Last access{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'last_login', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'last_login' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'last_login', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'last_login' }"></i>
             </th>
             <th class="left pointer" ng-click="sort('created')" ng-show="created">
                 {t}Created{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'created', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'created' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'created', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'created' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('contents')" ng-show="contents">
                 {t}Contents{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contents', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contents' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contents', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contents' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('articles')" ng-show="articles">
                 {t}Articles{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'articles', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'articles' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'articles', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'articles' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('opinions')" ng-show="opinions">
                 {t}Opinions{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'opinions', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'opinions' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'opinions', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'opinions' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('advertisements')" ng-show="advertisements">
                 {t}Advertisements{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'advertisements', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'advertisements' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'advertisements', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'advertisements' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('albums')" ng-show="albums">
                 {t}Albums{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'albums', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'albums' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'albums', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'albums' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('photos')" ng-show="photos">
                 {t}Photos{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'photos', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'photos' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'photos', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'photos' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('videos')" ng-show="videos">
                 {t}Videos{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'videos', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'videos' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'videos', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'videos' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('widgets')" ng-show="widgets">
                 {t}Widgets{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'widgets', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'widgets' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'widgets', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'widgets' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('static_pages')" ng-show="static_pages">
                 {t}Static pages{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'static_pages', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'static_pages' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'static_pages', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'static_pages' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('attachments')" ng-show="attachments">
                 {t}Attachments{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'attachments', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'attachments' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'attachments', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'attachments' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('polls')" ng-show="polls">
                 {t}Polls{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'polls', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'polls' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'polls', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'polls' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('letters')" ng-show="letters">
                 {t}Letters{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'letters', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'letters' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'letters', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'letters' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('media_size')" ng-show="media_size">
                 {t}Media size{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'media_size', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'media_size' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'media_size', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'media_size' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('alexa')" ng-show="alexa">
                 {t}Alexa{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'alexa', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'alexa' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'alexa', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'alexa' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('page_views')" ng-show="page_views">
                 {t}Page views{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'page_views', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'page_views' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'page_views', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'page_views' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('users')" ng-show="users">
                 {t}Users{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'users', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'users' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'users', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'users' }"></i>
             </th>
             <th class="center pointer" ng-click="sort('emails')" ng-show="emails">
                 {t}Emails{/t}
-                <i ng-class="{ 'fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'emails', 'fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'emails' }"></i>
+                <i ng-class="{ 'fa fa-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'emails', 'fa fa-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'emails' }"></i>
             </th>
             <th class="center" width="70px">{t}Activated{/t}
             </th>
