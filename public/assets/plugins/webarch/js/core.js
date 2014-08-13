@@ -350,7 +350,8 @@ $(document).ready(function() {
 //***********************************END Function calls *****************************
 
 //***********************************BEGIN Main Menu Toggle *****************************
-	$('#layout-condensed-toggle').click(function(){
+	$('#layout-condensed-toggle').click(function(e){
+        e.preventDefault();
         $.sidr('close', 'sidr');
         if($('#main-menu').attr('data-inner-menu')=='1'){
             //Do nothing
