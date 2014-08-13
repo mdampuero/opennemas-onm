@@ -159,7 +159,7 @@ class AlbumsController extends Controller
 
             return $this->render(
                 'album/new.tpl',
-                array ( 'authors' => $authors, )
+                array ( 'authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
             );
         }
     }
@@ -239,10 +239,11 @@ class AlbumsController extends Controller
         return $this->render(
             'album/new.tpl',
             array(
-                'category' => $album->category,
-                'photos'   => $photos,
-                'album'    => $album,
-                'authors'  => $authors,
+                'category'       => $album->category,
+                'photos'         => $photos,
+                'album'          => $album,
+                'authors'        => $authors,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }
