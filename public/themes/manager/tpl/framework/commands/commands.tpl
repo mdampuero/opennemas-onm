@@ -1,12 +1,5 @@
 {extends file="base/base.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    .deploy {
-        border-radius:20px;
-    }
-</style>
-{/block}
 {block name="footer-js" append}
 <script type="text/javascript">
     $(function() {
@@ -16,15 +9,13 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar">
-    <div class="wrapper-content">
-        <div class="title">
-            <h2>{t}Application commands{/t}</h2>
-        </div>
+<div class="clearfix"></div>
+<div class="content">
+    <div class="page-title">
+        <h2>{t}Application commands{/t}</h2>
     </div>
-</div>
-<div class="wrapper-content">
-    <table class="table table-hover table-stripped ">
+    <div class="wrapper-table-block">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>{t}Command name{/t}</th>
@@ -100,5 +91,6 @@
             {/foreach}
         </tbody>
     </table>
+    </div><!-- .wrapper-table-block -->
 </div>
 {/block}

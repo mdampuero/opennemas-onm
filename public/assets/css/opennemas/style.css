@@ -18,3 +18,8 @@ a:hover {
 .top-buttons {
     float:right;
 }
+
+.wrapper-table-block {
+    background:White;
+    padding:1% 2%;
+}

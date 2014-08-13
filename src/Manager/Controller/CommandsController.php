@@ -104,6 +104,7 @@ class CommandsController extends Controller
         return $this->render(
             'framework/commands/execute.tpl',
             array(
+                'name'   => $commandName,
                 'output' => $output,
             )
         );
