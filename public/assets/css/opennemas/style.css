@@ -278,3 +278,11 @@ a:hover {
     padding: 9px;
     text-align: left;
 }
+
+.grid.simple .grid-title {
+    padding: 15px;
+}
+
+.pagination-info {
+    padding: 7px;
+}

@@ -69,7 +69,11 @@
 
                           @Common/plugins/angular-onm/services/*,
 
-                          @ManagerTheme/js/ManagerApp.js
+                          @ManagerTheme/js/ManagerApp.js,
+                          @ManagerTheme/js/Controllers.js,
+
+                          @ManagerTheme/js/controllers/*
+
         "}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
