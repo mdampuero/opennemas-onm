@@ -100,7 +100,6 @@ $(document).ready(function() {
 
 //**********************************BEGIN MAIN MENU********************************
 	jQuery('.page-sidebar li > a').on('click', function (e) {
-        console.log('asdf');
             if ($(this).next().hasClass('sub-menu') == false) {
                 return;
 	}
