@@ -224,6 +224,8 @@
         <!-- END SIDEBAR -->
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
+            {block name="content"}
+            {/block}
             </div>
     </div>
 
