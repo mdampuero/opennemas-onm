@@ -56,6 +56,12 @@ class UpdateInstancesCommand extends ContainerAwareCommand
                 'If set, the command will get the page views from Piwik.'
             )
             ->addOption(
+                'created',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, the command will get the created date from instance.'
+            )
+            ->addOption(
                 'debug',
                 false,
                 InputOption::VALUE_NONE,
@@ -73,13 +79,14 @@ class UpdateInstancesCommand extends ContainerAwareCommand
     {
         $alexa = $input->getOption('alexa');
         $views = $input->getOption('views');
+        $created = $input->getOption('created');
 
         $this->im = $this->getContainer()->get('instance_manager');
 
         $instances = $this->im->findBy(null, array('id', 'asc'));
 
         foreach ($instances as $instance) {
-            $counters = $this->getInstanceInfo($instance, $alexa, $views);
+            $counters = $this->getInstanceInfo($instance, $alexa, $views, $created);
             $this->im->persist($instance);
         }
     }
@@ -118,8 +125,9 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      * @param  Instance $i     The instance.
      * @param  boolean  $alexa Whether to get the Alexa's rank.
      * @param  boolean  $views Whether to get the page views.
+     * @param  boolean  $views Whether to get the created date.
      */
-    private function getInstanceInfo(&$i, $alexa = false, $views = false)
+    private function getInstanceInfo(&$i, $alexa = false, $views = false, $created = false)
     {
         $this->im->getConnection()->selectDatabase($i->getDatabaseName());
 
@@ -179,12 +187,12 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Update created data
-        if (!$i->created) {
+        if ($created) {
             $sql = 'SELECT * FROM settings WHERE name=\'site_created\'';
             $rs  = $this->im->getConnection()->fetchAssoc($sql);
 
             if ($rs) {
-                $i->created = $rs['value'];
+                $i->created = unserialize($rs['value']);
             }
         }
 
@@ -199,8 +207,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             foreach ($rs as $value) {
                 if ($value['name'] == 'piwik') {
                     $piwik = unserialize($value['value']);
-                } elseif ($value['name'] == 'last_invoice'
-                ) {
+                } elseif ($value['name'] == 'last_invoice') {
                     $lastInvoice = unserialize($value['value']);
                 } else {
                     $i->last_login = unserialize($value['value']);

@@ -34,9 +34,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-    kernel.listener.general_error_handler:
+    kernel.listener.general_exceptions:
         class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ %kernel.environment%, @logger ]
+        arguments: [ %kernel.environment% ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
 
@@ -44,7 +44,7 @@ services:
         class: Framework\EventListener\ContentActionsSubscriber
         arguments: [ @cache, @logger ]
         tags:
-            - {name: kernel.event_subscriber}
+            - { name: kernel.event_subscriber }
     kernel.listener.user_listener:
         class: Framework\EventListener\UserListener
         arguments: [ @security.context, @onm_user_provider ]
@@ -153,3 +153,11 @@ services:
         arguments: [ @service_container ]
     view:
         alias: onm_templating
+
+    stylesheet_manager:
+        class: Framework\Assetic\StylesheetManager
+        arguments: [ @service_container, %assetic% ]
+
+    javascript_manager:
+        class: Framework\Assetic\JavascriptManager
+        arguments: [ @service_container, %assetic% ]

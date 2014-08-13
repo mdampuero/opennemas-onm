@@ -1,11 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
+    {stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({

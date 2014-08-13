@@ -1,8 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @AdminTheme/js/onm/jquery.datepicker.js "}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="footer-js" append}
@@ -10,7 +12,11 @@
 {assign var="lang" value=$language|truncate:2:""}
 {if !empty($lang)}
     {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
-    {script_tag language="javascript" src=$js}
+
+    {javascripts src="@AdminTheme/js/$js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+
     <script>
     jQuery(document).ready(function() {
         jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );

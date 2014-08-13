@@ -1,34 +1,52 @@
 <?php
 
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Backend\Security;
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider as BaseOAuthUserProvider;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
+/**
+ * Loads an user basing on the response received from server after logging in
+ * a service that supports OAuth.
+ */
 class OnmOAuthUserProvider extends BaseOAuthUserProvider
 {
-    protected $cache;
+    /**
+     * The service container.
+     *
+     * @var Container
+     */
     protected $container;
-    protected $session;
 
     /**
-     * Creates a new OAuthUserProvider
+     * Creates a new OAuthUserProvider.
      *
-     * @param $session
-     * @param $service_container
+     * @param $service_container The service container.
      */
-    public function __construct($session, $service_container)
+    public function __construct($service_container)
     {
-        $this->session   = $session;
         $this->container = $service_container;
     }
 
     /**
-     * Returns an user by the given username.
+     * Returns an user for the given username.
      *
-     * @param  string $username User's email.
-     * @return User
+     * @param string $username User's email.
+     *
+     * @return User The user.
+     *
+     * @throw UsernameNotFoundException If the user for the given username
+     *                                  doesn't exist.
      */
     public function loadUserByUsername($username)
     {
@@ -56,8 +74,12 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
     /**
      * Returns an user basing on the oauth response.
      *
-     * @param  UserResponseInterface $response Response from the server.
-     * @return User
+     * @param UserResponseInterface $response The response from the server.
+     *
+     * @return User The user.
+     *
+     * @throw UsernameNotFoundException If the user for the received response
+     *                                  doesn't exist.
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -110,10 +132,11 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
     }
 
     /**
-     * Whether this provider supports the given user class
+     * Whether this provider supports the given user class.
      *
-     * @param  string  $class
-     * @return boolean
+     * @param string  $class The class name.
+     *
+     * @return boolean True if the given class is supported.
      */
     public function supportsClass($class)
     {

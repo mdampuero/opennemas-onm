@@ -1,8 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.nestedSortable.js"}
-    {script_tag src="/onm/menues.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery.nestedSortable.js,
+        @AdminTheme/js/onm/menues.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script type="text/javascript">
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -15,7 +17,9 @@
 {/block}
 
 {block name="header-css" append}
-    {css_tag href="/managerMenu.css" media="screen,projection"}
+    {stylesheets src="@AdminTheme/css/managerMenu.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen, projection">
+    {/stylesheets}
 {/block}
 
 {block name="content"}

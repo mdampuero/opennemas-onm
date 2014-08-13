@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
@@ -41,9 +43,10 @@ class EntityManager extends BaseManager
     /**
      * Finds one content from the given content type and content id.
      *
-     * @param  string  $contentType Content type name.
-     * @param  integer $id          Content id
-     * @return Content
+     * @param string  $contentType Content type name.
+     * @param integer $id          Content id.
+     *
+     * @return Content The found content.
      */
     public function find($contentType, $id)
     {
@@ -77,8 +80,9 @@ class EntityManager extends BaseManager
     /**
      * Find multiple contents from a given array of content ids.
      *
-     * @param  array $contentsData Array of preprocessed content ids.
-     * @return array               Array of contents.
+     * @param array $data Array of preprocessed content ids.
+     *
+     * @return array Array of contents.
      */
     public function findMulti(array $data)
     {
@@ -123,20 +127,21 @@ class EntityManager extends BaseManager
     }
 
     /**
-     * Searches for content given a criteria
+     * Searches for content given a criteria.
      *
-     * @param  array|string $criteria        The criteria used to search.
-     * @param  array        $order           The order applied in the search.
-     * @param  integer      $elementsPerPage The max number of elements.
-     * @param  integer      $page            The current page.
-     * @param  integer      $offset          The offset to start with.
-     * @return array                         The matched elements.
+     * @param array   $criteria        The criteria used to search.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements.
+     * @param integer $page            The current page.
+     * @param integer $offset          The offset to start with.
+     *
+     * @return array The matched elements.
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
         $fromSQL = 'contents';
 
-        if (array_key_exists('tables', $criteria)) {
+        if (is_array($criteria) && array_key_exists('tables', $criteria)) {
             $fromSQL .= ', '.implode(',', $criteria['tables']);
             unset($criteria['tables']);
         }
@@ -175,19 +180,20 @@ class EntityManager extends BaseManager
     /**
      * Counts contents given a criteria.
      *
-     * @param  array|string $criteria The criteria used to search.
-     * @return integer                The number of found contents.
+     * @param array $criteria The criteria used to search.
+     *
+     * @return integer The number of found contents.
      */
     public function countBy($criteria)
     {
         $fromSQL = 'contents';
-        if (array_key_exists('tables', $criteria)) {
+        if (is_array($criteria) && array_key_exists('tables', $criteria)) {
             $fromSQL .= implode(',', $criteria['tables']);
         }
 
         $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
 
-        if (array_key_exists('join', $criteria)) {
+        if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
             unset($criteria['join']);
             $sql .= $this->getJoinSQL($join);
@@ -205,12 +211,12 @@ class EntityManager extends BaseManager
     }
 
     /**
-     * Clean id and search if exist in content table.
-     * If not found search in refactor_id table. (used for translate old format ids)
+     * Clean id and search if exist in content table. If not found search in
+     * refactor_id table. (used for translate old format ids).
      *
-     * @param string $dirtyID Vble with date in first 14 digits
+     * @param string $dirtyID Variable with date in first 14 digits.
      *
-     * @return int id in table content or forward to 404
+     * @return int Id in table content or forward to 404.
      */
     public function resolveId($id)
     {

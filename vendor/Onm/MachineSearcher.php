@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,7 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Onm;
 
 use Onm\Cache\CacheInterface;
@@ -18,8 +20,20 @@ use Repository\EntityManager;
 */
 class MachineSearcher
 {
-    public function __construct(DbalWrapper $databaseConnection, EntityManager $entityManager, CacheInterface $cacheHandler, $cachePrefix)
-    {
+    /**
+     * Initializes the MachineSearcher.
+     *
+     * @param DbalWrapper    $databaseConnection The database connection.
+     * @param EntityManager  $entityManager      The entity manager.
+     * @param CacheInterface $cacheHandler       The cache service.
+     * @param string         $cachePrefix        The cache prefix.
+     */
+    public function __construct(
+        DbalWrapper $databaseConnection,
+        EntityManager $entityManager,
+        CacheInterface $cacheHandler,
+        $cachePrefix
+    ) {
         $this->cache       = $cacheHandler;
         $this->dbConn      = $databaseConnection;
         $this->cachePrefix = $cachePrefix;
@@ -27,13 +41,13 @@ class MachineSearcher
     }
 
     /**
-     * Returns a list of contents related with a content type and category
+     * Returns a list of contents related with a content type and category.
      *
-     * @param string $contentTypeName  content types required
-     * @param string $filter           advanced SQL filter for contents
-     * @param int    $numberOfElements number of results
+     * @param string $contentTypeName  Content types required.
+     * @param string $filter           Advanced SQL filter for contents.
+     * @param int    $numberOfElements Number of results.
      *
-     * @return  array two dimensional array with the content properties of each content
+     * @return array Array with the content properties of each content.
      */
     public function searchSuggestedContents($contentTypeName, $filter = '', $numberOfElements = 4)
     {
@@ -111,12 +125,11 @@ class MachineSearcher
     }
 
     /**
-     * Parsea la cadena fuente comprobando posibles operaciones lógicas.
+     * Parses a string of content types and returns it as SQL statement.
      *
-     * @param string $szSource Cadena a parsear.
+     * @param string $szSource String to parse.
      *
-     * @return array list of types to search
-     *
+     * @return array List of types to search.
      */
     private function parseTypes($szSource)
     {

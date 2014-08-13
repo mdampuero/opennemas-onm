@@ -137,8 +137,10 @@ class AuthenticationController extends Controller
 
         if ($redirect == '/admin/login/callback') {
             return $this->render('common/close_popup.tpl');
-        } else {
+        } elseif (!empty($redirect)) {
             return $this->redirect($redirect);
+        } else {
+            return $this->redirect($this->generateUrl('admin_welcome'));
         }
     }
 }

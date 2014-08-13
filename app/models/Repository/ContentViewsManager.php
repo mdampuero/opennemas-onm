@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -11,15 +12,16 @@
 namespace Repository;
 
 /**
- *
+ * This repository handles the content views operations for contents.
  */
 class ContentViewsManager extends EntityManager
 {
     /**
      * Gets the amount of views for a given content id.
      *
-     * @param  integer $id The content id(s).
-     * @return mixed       The amount of views.
+     * @param integer $id The content id(s).
+     *
+     * @return mixed The amount of views.
      */
     public function getViews($id)
     {

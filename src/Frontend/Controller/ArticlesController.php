@@ -286,7 +286,6 @@ class ArticlesController extends Controller
         $paywallActivated = ModuleManager::isActivated('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
-        $this->view = new \Template(TEMPLATE_USER);
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $newContent = $this->renderView(
                 'paywall/partials/content_only_for_subscribers.tpl',

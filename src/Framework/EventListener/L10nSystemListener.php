@@ -1,12 +1,14 @@
 <?php
-/*
- * This file is part of the Symfony package.
+
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Framework\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -18,24 +20,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
 
 /**
- * InstanceLoaderListener initializes the instance from the request object
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Initializes the instance language basing on the request.
  */
 class L10nSystemListener implements EventSubscriberInterface
 {
     /**
-     * undocumented function
+     * Initializes the l10system.
      *
-     * @return void
-     * @author
-     **/
-    public function __construct($settingRepository)
+     * @param SettingManager $sr The settings manager.
+     */
+    public function __construct($sr)
     {
-        $this->settingRepository = $settingRepository;
+        $this->sr = $sr;
     }
+
     /**
-     * Filters the Response.
+     * Detects the language and the timezone for the current instance basing on
+     * the request.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
      */
@@ -49,7 +50,7 @@ class L10nSystemListener implements EventSubscriberInterface
         $container = $kernel->getContainer();
         $request = $event->getRequest();
 
-        $settings = $this->settingRepository->get(array('time_zone', 'site_language'));
+        $settings = $this->sr->get(array('time_zone', 'site_language'));
         $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 335;
         $language = array_key_exists('site_language', $settings) ? $settings['site_language'] : 'en';
 
@@ -109,6 +110,11 @@ class L10nSystemListener implements EventSubscriberInterface
         textdomain($domain);
     }
 
+    /**
+    * Returns an array of event names this subscriber wants to listen to.
+    *
+    * @return array The event names to listen to.
+    */
     public static function getSubscribedEvents()
     {
         return array(

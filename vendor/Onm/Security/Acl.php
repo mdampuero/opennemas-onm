@@ -1,34 +1,31 @@
 <?php
+
 /**
- * Defines the Acl class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Onm_Acl
  */
+
 namespace Onm\Security;
 
 use Onm\Message as m;
 
 /**
  * Class for handling user access to modules, actions and categories in backend
- *
- * @package    Onm_Acl
  */
 class Acl
 {
     /**
-     * Shortcut to check privilege
+     * Shortcut to check privilege.
      *
-     * @param string $rule
-     * @param string $module
+     * @param string $rule   The rule to execute.
+     * @param string $module The module name.
      *
-     * @return boolean
-     **/
+     * @return boolean True, if user has access.
+     */
     public static function check($rule, $module = null)
     {
         if (!is_null($module)) {
@@ -41,10 +38,10 @@ class Acl
     /**
      * Checks if the current user has access to category given its id.
      *
-     * @param  string  $categoryId the category id to check
+     * @param string $categoryId the category id to check.
      *
-     * @return boolean
-     **/
+     * @return boolean True, if user has access.
+     */
     public static function checkCategoryAccess($categoryID)
     {
         try {
@@ -78,13 +75,13 @@ class Acl
     }
 
     /**
-     * Checks if the current user has an acl
+     * Checks if the current user has an acl.
      *
-     * @param  string  $rule
-     * @param  string  $module
+     * @param string $rule   The rule to execute.
+     * @param string $module The module name.
      *
-     * @return boolean
-     **/
+     * @return boolean True, if user has an acl.
+     */
     public static function checkOrForward($rule, $module = null)
     {
         if (!is_null($module)) {
@@ -102,11 +99,11 @@ class Acl
     /**
      * Checks if the current user has access to one privilege and category.
      *
-     * @param string $privilege  the privelege token.
-     * @param string $categoryID the category id
+     * @param string $privilege  The privilege token.
+     * @param string $categoryID The category id.
      *
-     * @return boolean true if the user has access
-     **/
+     * @return boolean True, if the user has access.
+     */
     public static function checkPrivileges($privilege, $categoryID = null)
     {
         try {
@@ -148,12 +145,10 @@ class Acl
     }
 
     /**
-     * Performs the actions of denying a user actino
+     * Performs the actions of denying a user action.
      *
-     * @param string $message the message to show to the user
-     *
-     * @return void
-     **/
+     * @param string $message the message to show to the user.
+     */
     public static function deny($message = 'Acceso no permitido')
     {
         if (strlen($message) > 0) {
@@ -161,14 +156,14 @@ class Acl
             $message->push();
         }
 
-        m::add(_("Sorry, you don't have enought privileges"));
+        m::add(_("Sorry, you don't have enough privileges"));
         forward('/admin/');
     }
 
     /**
-     * Check if the user is an Administrator
+     * Check if the user is an Administrator.
      *
-     * @return boolean true if the user is in the Administrator group
+     * @return boolean True, if the user is in the Administrator group.
      */
     public static function isAdmin()
     {
@@ -184,15 +179,13 @@ class Acl
     }
 
     /**
-     * Checks a privilege
+     * Checks a privilege.
      *
-     * @param string $rule the acl to check
-     * @param string $module the module to check
+     * @param string $rule   The acl to check.
+     * @param string $module The module to check.
      *
-     * @throws Onm\Exception\AclNotAllowed If the user has no access to the given ACL
-     *
-     * @return void
-     **/
+     * @throws AclNotAllowed If the user has no access to the given ACL.
+     */
     public static function isGranted($rule, $module = null)
     {
 
@@ -206,9 +199,9 @@ class Acl
     }
 
     /**
-     * Checks if the user is a Master
+     * Checks if the user is a Master.
      *
-     * @return boolean true if the user is in the Master group
+     * @return boolean True, if the user is in the Master group.
      */
     public static function isMaster()
     {

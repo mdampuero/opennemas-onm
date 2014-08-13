@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Backend\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -12,29 +21,32 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Onm\Settings as s;
 use \Privileges;
 
+/**
+ * Handler to load user data when an user logs in the system successfully.
+ */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * @var Symfony\Component\Security\Core\SecurityContext
+     * @var SecurityContext
      */
     private $context;
 
     /**
-     * @var Symfony\Component\Routing\Router
+     * @var Router
      */
     protected $router;
 
     /**
-     * @var Symfony\Component\Security\Core\SecurityContext
+     * @var Session
      */
     private $session;
 
     /**
      * Constructs a new handler.
      *
-     * @param Symfony\Component\Security\Core\SecurityContext $context
-     * @param Symfony\Component\Routing\Router                $router
-     * @param Symfony\Component\HttpFoundation\Session        $session
+     * @param SecurityContext $context The security context.
+     * @param Router          $router  The router service.
+     * @param Session         $session The session.
      */
     public function __construct($context, $router, $session)
     {
@@ -49,9 +61,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     /**
      * This is called when an interactive authentication attempt succeeds.
      *
-     * @param  Request        $request
-     * @param  TokenInterface $token
-     * @return Response                The response to return.
+     * @param Request        $request The request object.
+     * @param TokenInterface $token   The security token.
+     *
+     * @return Response The response to return.
      */
     public function onAuthenticationSuccess(
         Request $request,

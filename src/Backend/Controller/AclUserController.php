@@ -218,7 +218,7 @@ class AclUserController extends Controller
                 }
 
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $userId));
+                $this->dispatchEvent('author.update', array('id' => $userId));
 
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {

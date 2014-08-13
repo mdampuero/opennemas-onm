@@ -164,8 +164,13 @@
       </div>
 </div>
 
-{css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
-{script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+{stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}">
+{/stylesheets}
+
+{javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+    <script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 
 <script>
 

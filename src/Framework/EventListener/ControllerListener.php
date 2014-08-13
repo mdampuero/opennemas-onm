@@ -1,9 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,14 +17,13 @@ use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * ResponseListener fixes the Response headers based on the Request.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Initializes the controller before it handles the request.
  */
 class ControllerListener implements EventSubscriberInterface
 {
     /**
-     * Filters the Response.
+     * Finds the controller that will handle the current request and executes
+     * its init method.
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
@@ -46,6 +45,11 @@ class ControllerListener implements EventSubscriberInterface
         }
     }
 
+    /**
+    * Returns an array of event names this subscriber wants to listen to.
+    *
+    * @return array The event names to listen to.
+    */
     public static function getSubscribedEvents()
     {
         return array(
