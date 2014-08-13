@@ -3,7 +3,7 @@ manager_welcome:
     defaults: { _controller: ManagerBundle:Welcome:default }
 
 manager_auth:
-    prefix:   /
+    prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/auth.yml
 
 manager_instance:
