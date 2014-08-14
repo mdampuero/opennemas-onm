@@ -1,7 +1,7 @@
 
 
-angular.module('ManagerApp.controllers').controller('ListCtrl',
-    function ListCtrl($scope, itemService, list) {
+angular.module('ManagerApp.controllers').controller('InstanceCtrl',
+    function ($scope, itemService, list) {
 
         $scope.page = 1;
         $scope.total = 0;

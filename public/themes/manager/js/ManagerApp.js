@@ -68,7 +68,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             })
             .when(fosJsRoutingProvider.generate('manager_instance_list'), {
                 templateUrl: '/managerws/template/instances:list.tpl',
-                controller: 'ListCtrl',
+                controller:  'InstanceCtrl',
                 resolve: {
                     list: function(itemService) {
                         return itemService.list('manager_ws_instances_list', {}).then(
@@ -80,7 +80,17 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 }
             })
             .when(fosJsRoutingProvider.generate('manager_framework_commands'), {
-                templateUrl: '/managerws/template/framework:commands:commands.tpl'
+                templateUrl: '/managerws/template/framework:commands:commands.tpl',
+                controller:  'CommandCtrl',
+                resolve: {
+                    list: function(itemService) {
+                        return itemService.list('manager_ws_commands_list', {}).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
             })
             .when(fosJsRoutingProvider.generate('manager_framework_opcache_status'), {
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
