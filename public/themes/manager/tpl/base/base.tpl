@@ -85,7 +85,7 @@
     {/block}
 
 </head>
-<body id="manager" ng-app="ManagerApp">
+<body id="manager" ng-app="ManagerApp" ng-controller="MasterCtrl">
     <header class="header navbar navbar-inverse ">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -206,36 +206,39 @@
             <div class="page-sidebar-wrapper" id="main-menu-wrapper">
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
-                    <li class="start active">
+                    <li class="start" ng-class="{ 'active': false }">
                         <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
-                    <li>
+                    <li ng-class="{ 'active': isActive('manager_instance_list') }">
                         <a href="#/instances"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
-                    <li>
+                    <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
                         <a href="#">
-                            <i class="fa fa-flask"></i> <span class="title"> {t}Framework{/t}</span><span class="arrow "></span>
+                            <i class="fa fa-flask"></i> <span class="title"> {t}Framework{/t}</span>
+                            <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li>
+                            <li ng-class="{ 'active': isActive('manager_framework_commands') }">
                                 <a href="#/framework/commands"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }">
                                 <a href="#/framework/opcache"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li ng-class="{ 'active': isActive('manager_user_list') || isActive('manager_usergroup_list') }">
                         <a href="#">
-                            <i class="fa fa-gears"></i> <span class="title">{t}Settings{/t}</span><span class="arrow"></span>
+                            <i class="fa fa-gears"></i>
+                            <span class="title">{t}Settings{/t}
+                            </span><span class="arrow" ng-class="{ 'open': isActive('manager_user_list') || isActive('manager_usergroup_list') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li>
+                            <li ng-class="{ 'active': isActive('manager_user_list') }">
                                 <a href="#/users">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
-                            <li>
+                            <li ng-class="{ 'active': isActive('manager_usergroup_list') }">
                                 <a href="#/usergroups">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>
