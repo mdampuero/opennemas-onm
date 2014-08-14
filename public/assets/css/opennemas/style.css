@@ -32,108 +32,108 @@ a:hover {
   Botonera old definitions: This should be deleted
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  .top-buttons {
+.top-buttons {
     display:inline-block;
     float:right;
     margin: 0 0 0 5px;
     padding: 0px;
     list-style: none;
     vertical-align: middle;
-  }
+}
 
-    .top-buttons > li {
-        position:relative;
-        display:inline-block;
-        float: right;
-        padding-right: 0px;
-        padding-left: 0px;
-        vertical-align:bottom;
-        text-align: center;
-        white-space: nowrap;
-    }
+.top-buttons > li {
+    position:relative;
+    display:inline-block;
+    float: right;
+    padding-right: 0px;
+    padding-left: 0px;
+    vertical-align:bottom;
+    text-align: center;
+    white-space: nowrap;
+}
 
-      .top-buttons > li a ,
-      .top-buttons > li button {
-        display: block;
-        padding: 2px 4px;
-        padding:5px;
-        width: auto;
-        border:1px solid transparent;
-        background: transparent;
-        color:#464646;
-        text-decoration: none;
-        font-weight: bold;
-        font-size:11px;
-        font-family:Arial;
-      }
+.top-buttons > li a ,
+.top-buttons > li button {
+    display: block;
+    padding: 2px 4px;
+    padding:5px;
+    width: auto;
+    border:1px solid transparent;
+    background: transparent;
+    color:#464646;
+    text-decoration: none;
+    font-weight: bold;
+    font-size:11px;
+    font-family:Arial;
+}
 
-        .top-buttons > li a img,
-        .top-buttons > li a button {
-          height:35px !important;
-        }
-        .top-buttons ul {
-          position:absolute;
-          top:99%;
-          right:0%;
-          display:none;
-        }
+.top-buttons > li a img,
+.top-buttons > li a button {
+    height:35px !important;
+}
+.top-buttons ul {
+    position:absolute;
+    top:99%;
+    right:0%;
+    display:none;
+}
 
-        .top-buttons > li:hover ul {
-          display:block;
-        }
+.top-buttons > li:hover ul {
+    display:block;
+}
 
-        .top-buttons > li a:hover,
-        .top-buttons > button:hover,
-        .top-buttons > li:hover > a {
-            position: relative;
-            outline: medium none;
-            border: 1px solid #D9D9D9;
-            border-radius:0px;
-            background:#e4e4e4;
-            color:Black;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
+.top-buttons > li a:hover,
+.top-buttons > button:hover,
+.top-buttons > li:hover > a {
+    position: relative;
+    outline: medium none;
+    border: 1px solid #D9D9D9;
+    border-radius:0px;
+    background:#e4e4e4;
+    color:Black;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-        .top-buttons > li.separator{
-            margin:0 2px;
-            width:4px;
-            height:57px;
-            border:0 none;
-            background:url(../images/separator.png) center center no-repeat;
-            vertical-align:middle;
-        }
-        .top-buttons img{
-            height:35px !important;
-        }
-        .top-buttons li ul {
-            z-index:88;
-        }
-        .top-buttons li ul li {
-            list-style:none;
-        }
+.top-buttons > li.separator{
+    margin:0 2px;
+    width:4px;
+    height:57px;
+    border:0 none;
+    background:url(../images/separator.png) center center no-repeat;
+    vertical-align:middle;
+}
+.top-buttons img{
+    height:35px !important;
+}
+.top-buttons li ul {
+    z-index:88;
+}
+.top-buttons li ul li {
+    list-style:none;
+}
 
-        .top-buttons .batch-actions {
-            display:none;
-        }
-        .top-buttons .batch-actions:hover > a {
-            z-index:89;
-            border-color: rgba(0, 0, 0, 0.2);
-            border-bottom:0 none;
-            border-radius:5px 5px 0 0;
-            background:White;
-        }
-        .top-buttons .dropdown-menu {
-            right:0px !important;
-            left:auto;
-        }
-        .top-buttons .dropdown-menu li > a {
-            padding: 5px 20px;
-            text-align: left !important;
-            font-weight: normal !important;
-            font-size: 13px !important;
-        }
+.top-buttons .batch-actions {
+    display:none;
+}
+.top-buttons .batch-actions:hover > a {
+    z-index:89;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-bottom:0 none;
+    border-radius:5px 5px 0 0;
+    background:White;
+}
+.top-buttons .dropdown-menu {
+    right:0px !important;
+    left:auto;
+}
+.top-buttons .dropdown-menu li > a {
+    padding: 5px 20px;
+    text-align: left !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+}
 
 
 
@@ -162,19 +162,19 @@ a:hover {
 .table-info form {margin:0;}
 
 .table-info .dropdown-menu.container {
-  height: auto;
-  padding: 5px;
-  width: 390px;
+    height: auto;
+    padding: 5px;
+    width: 390px;
 }
 
 .table-info .dropdown-menu.container .span2 div {
-  cursor: pointer;
-  padding: 4px 10px;
-  width: 100%;
+    cursor: pointer;
+    padding: 4px 10px;
+    width: 100%;
 }
 
 .table-info .dropdown-menu.container .span2 div:hover {
-  background: #eee;
+    background: #eee;
 }
 
 
@@ -199,7 +199,7 @@ a:hover {
 }
 
 .opcache-stats .tabs > div {
-  dis
+    dis
 }
 .opcache-stats #graph {
     float: right;
@@ -221,6 +221,7 @@ a:hover {
     text-align:center;
     min-width:150px;
 }
+
 .opcache-stats #graph > svg {
 
 }
@@ -236,8 +237,8 @@ a:hover {
     padding: 0 13px;
 }
 #stats-opcode td {
-  color:#333 !important;
-  padding: 0 13px;
+color:#333 !important;
+padding: 0 13px;
 }
 
 
@@ -246,22 +247,22 @@ a:hover {
   Spinner for Angular listings
    ========================================================================== */
 .spinner-wrapper {
-  margin: 50px 0;
+    margin: 50px 0;
 }
 
 .spinner-wrapper .spinner {
-  border-radius: 100%;
-  height: 50px;
-  width: 50px;
-  margin: 0 auto;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
 }
 
 .spinner-wrapper .spinner-text {
-  color: #29d;
-  font-weight: bold;
-  text-align: center;
-  margin-top:.2em;
-  font-size:1.2em;
+    color: #29d;
+    font-weight: bold;
+    text-align: center;
+    margin-top:.2em;
+    font-size:1.2em;
 }
 
 
@@ -300,6 +301,48 @@ a:hover {
     width: auto;
 }
 
-.page-title .breadcumb {
-    margin-top: 7px;
+.page-title .breadcrumb {
+    margin-top: 14px;
+}
+
+
+
+/* =============================================================================
+   Make .a class act like a elements
+   ========================================================================== */
+.header .nav > li.quicklinks > .a {
+    padding: 4px 2px !important;
+}
+
+.nav > li > .a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.a {
+    text-shadow: none !important;
+    color: #0d638f;
+    transition: color 0.1s linear 0s,background-color 0.1s linear 0s !important;
+}
+
+.a {
+    cursor: pointer;
+    color: #428bca;
+    text-decoration: none;
+}
+
+.a {
+    background: 0 0;
+}
+
+.header .nav > li.quicklinks i {
+    font-size: 1.33333333em;
+}
+
+.header .chat-toggler .a {
+    color: #1b1e24;
+    font-size: 15px;
+    display: inline-block;
+    float: left;
 }

@@ -16,6 +16,8 @@
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
     {block name="header-css"}
         {stylesheets src="@Common/plugins/pace/pace-theme-flash.css,
+                          @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+                          @Common/plugins/webarch/css/animate.min.css,
 
                           @Common/plugins/bootstrap/css/bootstrap.min.css,
                           @Common/plugins/font-awesome/css/font-awesome.min.css"
@@ -25,6 +27,9 @@
         {stylesheets src="@Common/plugins/webarch/css/style.css,
                           @Common/plugins/webarch/css/responsive.css,
                           @Common/plugins/webarch/css/custom-icon-set.css,
+                          @Common/plugins/webarch/css/magic_space.css,
+                          @Common/plugins/webarch/css/tiles_responsive.css,
+
                           @Common/css/opennemas/style.css"
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
@@ -110,17 +115,12 @@
                 <div class="pull-left">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
-                            <a href="#" id="layout-condensed-toggle">
+                            <span class="a" id="layout-condensed-toggle">
                                 <div class="iconset top-menu-toggle-dark"></div>
-                            </a>
+                            </span>
                         </li>
                     </ul>
                     <ul class="nav quick-section">
-                        <li class="quicklinks">
-                            <a href="#" class="" >
-                                <div class="iconset top-tiles"></div>
-                            </a>
-                        </li>
                         <li class="m-r-10 input-prepend inside search-form no-boarder">
                             <span class="add-on">
                                 <span class="iconset top-search"></span>
@@ -133,14 +133,14 @@
                 <!-- BEGIN CHAT TOGGLER -->
                 <div class="pull-right">
                     <div class="chat-toggler">
-                        <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
+                        <span class="a" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
                             <div class="user-details">
                                 <div class="username">
                                     <span class="badge badge-important">3</span> {$smarty.session.realname}
                                 </div>
                             </div>
                             <div class="iconset top-down-arrow"></div>
-                        </a>
+                        </span>
                         <div id="notification-list" style="display:none">
                             <div style="width:300px">
                                 <div class="notification-messages info">
@@ -182,9 +182,10 @@
                         </div>
                     </div>
                     <ul class="nav quick-section ">
-                        <li class="quicklinks"> <a data-toggle="dropdown" class="dropdown-toggle pull-right " href="#" id="user-options">
-                            <div class="iconset top-settings-dark "></div>
-                            </a>
+                        <li class="quicklinks">
+                            <span data-toggle="dropdown" class="a dropdown-toggle pull-right " href="#" id="user-options">
+                                <i class="fa fa-gear fa-lg"></i>
+                            </span>
                             <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
                                 <li><a title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}"> My Account</a> </li>
                                 <li class="divider"></li>
