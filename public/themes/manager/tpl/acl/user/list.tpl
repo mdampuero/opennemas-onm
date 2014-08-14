@@ -1,20 +1,20 @@
 <div class="content">
-	<ul class="breadcrumb">
-        <li>
-            <p>{t}YOU ARE HERE{/t}</p>
-        </li>
-        <li>
-            <a href="#">{t}Dashboard{/t}</a>
-        </li>
-        <li>
-            <a href="#/users" class="active">{t}Users{/t}</a>
-        </li>
-    </ul>
 	<div class="page-title">
-        <h3>
+        <h3 class="pull-left">
         	<i class="fa fa-user"></i>
         	{t}Users{/t}
         </h3>
+		<ul class="breadcrumb pull-right">
+	        <li>
+	            <p>{t}YOU ARE HERE{/t}</p>
+	        </li>
+	        <li>
+	            <a href="#">{t}Dashboard{/t}</a>
+	        </li>
+	        <li>
+	            <a href="#/users" class="active">{t}Users{/t}</a>
+	        </li>
+	    </ul>
     </div>
 	<div ng-init="">
 
@@ -139,7 +139,7 @@
 				</table>
 			</div>
 		</div>
-	</form>
+	</div>
 	{include file="acl/user/modal/_modalDelete.tpl"}
 
 </div>

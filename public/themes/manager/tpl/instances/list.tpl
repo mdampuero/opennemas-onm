@@ -1,21 +1,21 @@
 <div class="content">
-    <ul class="breadcrumb">
-        <li>
-            <p>{t}YOU ARE HERE{/t}</p>
-        </li>
-        <li>
-            <a href="#">{t}Dashboard{/t}</a>
-        </li>
-        <li>
-            <a href="#/instances" class="active">{t}Instances{/t}</a>
-        </li>
-    </ul>
     <div class="page-title">
-        <h3>
+        <h3 class="pull-left">
             <i class="fa fa-cubes"></i> {t}Instances{/t}
         </h3>
+        <ul class="breadcrumb pull-right">
+            <li>
+                <p>{t}YOU ARE HERE{/t}</p>
+            </li>
+            <li>
+                <a href="#">{t}Dashboard{/t}</a>
+            </li>
+            <li>
+                <a href="#/instances" class="active">{t}Instances{/t}</a>
+            </li>
+        </ul>
     </div>
-    <div ng-init="criteria = { contact_mail_like: '', name_like: '' }; orderBy = 'last_login'; orderDirection = 'asc'; route = 'manager_ws_instances_list'; epp = 25; language = '{{$smarty.const.CURRENT_LANGUAGE}}'; columns = { name: 1, domains: 1, contact_mail: 1, last_login: 1, created: 1, contents: 1, alexa: 1, page_views: 1}">
+    <div ng-init="criteria = { contact_mail_like: '', name_like: '' }; orderBy = 'last_login'; orderDirection = 'asc'; route = 'manager_ws_instances_list'; epp = 25; language = '{{$smarty.const.CURRENT_LANGUAGE}}'; columns = { name: 1, domains: 1, contact_mail: 1, last_login: 1, created: 1, contents: 1, alexa: 0, page_views: 0}">
 
         {render_messages}
 
@@ -200,7 +200,7 @@
                                 <i ng-class="{ 'fa fa-caret-up': orderDirection == 'asc' && orderBy == 'created', 'fa fa-caret-down': orderDirection == 'desc' && orderBy == 'created' }"></i>
                             </th>
                             <th class="center pointer" ng-click="sort('contents')" ng-show="columns.contents">
-                                {t}Contents{/t}
+                                <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
                                 <i ng-class="{ 'fa fa-caret-up': orderDirection == 'asc' && orderBy == 'contents', 'fa fa-caret-down': orderDirection == 'desc' && orderBy == 'contents' }"></i>
                             </th>
                             <th class="center pointer" ng-click="sort('articles')" ng-show="columns.articles">
@@ -267,9 +267,8 @@
                                 {t}Emails{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderDirection == 'asc' && orderBy == 'emails', 'fa fa-caret-down': orderDirection == 'desc' && orderBy == 'emails' }"></i>
                             </th>
-                            <th class="center" width="70px">{t}Activated{/t}
-                            </th>
-                            <th class="center" width="10px">{t}Actions{/t}
+                            <th class="center" style="width: 130px;">
+                                {t}Actions{/t}
                             </th>
                         </tr>
                     </thead>
@@ -292,9 +291,9 @@
                             <td class="left" ng-show="columns.domains">
                                 <div class="domains">
                                     <small>
-                                        <ul ng-if="item.domains.length > 1">
+                                        <ul class="domain-list no-style" ng-if="item.domains.length > 1">
                                             <li ng-repeat="domain in item.domains">
-                                                <a href="http://[% domain %]" target="_blank" title="[% item.name %]">[% domain %]</a>
+                                                <a href="http://[% domain %]" ng-class="{ 'active': $index == item.main_domain - 1 }" target="_blank">[% domain %]</a>
                                             </li>
                                         </ul>
                                         <span ng-if="item.domains.length <= 1">
@@ -386,15 +385,15 @@
                                 [% item.emails %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['emails'] > 0, 'fa fa-angle-down text-danger': item.deltas['emails'] < 0 }" tooltip-html-unsafe="[% item.deltas['emails'] %]"></i>
                             </td>
-                            <td class="center">
-                                <button class="btn-link" ng-class="{ loading: item.loading == 1, published: item.activated == '1', unpublished: item.activated == '0' }" ng-click="updateItem($index, item.id, 'manager_ws_instance_set_activated', 'activated', item.activated != 1 ? 1 : 0, 'loading')" type="button"></button>
-                            </td>
                             <td class="right nowrap">
-                                <div class="btn-group">
-                                    <a class="btn" href="[% item.show_url%]" title="{t}Edit{/t}">
+                                <div class="btn-group btn-group-xs">
+                                    <button class="btn btn-primary btn-sm" type="button">
+                                        <i class="fa" ng-class="{ 'fa-refresh fa-spin': item.loading == 1, 'fa-check' : item.activated == '1', 'fa-times': item.activated == '0' }"></i>
+                                    </button>
+                                    <a class="btn btn-white" href="[% item.show_url%]" title="{t}Edit{/t}">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <button class="del btn btn-danger"
+                                    <button class="btn btn-danger"
                                         ng-click="open('modal-delete', 'manager_ws_instance_delete', $index)" type="button">
                                         <i class="fa fa-trash-o fa-white"></i>
                                     </button>
