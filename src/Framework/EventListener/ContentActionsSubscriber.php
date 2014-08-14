@@ -44,6 +44,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             ),
             'content.update' => array(
                 array('deleteEntityRepositoryCache', 10),
+                array('deleteContentMetaCache', 10),
                 array('deleteSmartyCache', 5),
                 array('sendVarnishRequestCleaner', 5),
             ),
@@ -88,8 +89,18 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $contentType = \underscore(get_class($content));
 
         $this->cacheHandler->delete($contentType . "-" . $id);
+    }
 
-        $this->cleanOpcode();
+    /**
+     * Deletes the content metadata from cache after it is updated.
+     *
+     * @param Event $event The event to handle.
+     **/
+    public function deleteContentMetaCache(Event $event)
+    {
+        $content = $event->getArgument('content');
+
+        $this->cacheHandler->delete("content-meta-" . $content->id);
     }
 
     /**
