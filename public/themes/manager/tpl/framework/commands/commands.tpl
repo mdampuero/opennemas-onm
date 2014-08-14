@@ -1,13 +1,22 @@
-<script type="text/javascript">
-    $(function() {
-        $().button('loading')
-    });
-</script>
-<div class="clearfix"></div>
 <div class="content">
-    <div class="page-title">
-        <h2>{t}Application commands{/t}</h2>
+
+    <div class="page-title clearfix">
+        <h3 class="pull-left">
+            <i class="fa fa-code"></i> {t}Commands{/t}
+        </h3>
+        <ul class="breadcrumb pull-right">
+            <li>
+                <p>{t}YOU ARE HERE{/t}</p>
+            </li>
+            <li>
+                <a href="#">{t}Dashboard{/t}</a>
+            </li>
+            <li>
+                <a href="#/instances" class="active">{t}Commands{/t}</a>
+            </li>
+        </ul>
     </div>
+
     <div class="wrapper-table-block">
     <table class="table table-hover">
         <thead>
@@ -50,39 +59,34 @@
                     </div>
                 </td>
                 <td>
-                        <div class="control-group">
-                            <div class="control">
-                                <select name="params[instance]">
-                                    <option value="">All</option>
-                                    {foreach $instances as $instance}
-                                    <option value="{$instance}">{$instance}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
+                    <div class="control-group">
+                        <div class="control">
+                            <select name="params[instance]">
+                                <option value="">All</option>
+                                <option value="{$instance}" ng-repeat="instance in instances">[% instance %]</option>
+                            </select>
                         </div>
-                        <input type="hidden" name="command" value="clean:smarty-cache">
-
+                    </div>
+                    <input type="hidden" name="command" value="clean:smarty-cache">
                 </td>
                 <td class="right">
                     <button type="submit" class="btn btn-danger"><i class="icon-trash"></i> {t}Execute{/t}</button>
                 </td>
             </tr>
             </form>
-            {foreach $commands as $command}
-            <tr>
-                <td>{$command->getName()}</td>
-                <td>{$command->getDescription()}</td>
+            <tr ng-repeat="command in commands">
+                <td>[% command.name %]</td>
+                <td>[% command.description %]</td>
                 <td></td>
                 <td class="right">
                     <div class="btn-group">
-                        <a class="btn btn-danger" href="{url name=manager_framework_command_execute command=$command->getName()}">
+                        <a class="btn btn-danger" href="">
                             <i class="icon icon-cog"></i>
                             {t}Execute{/t}
                         </a>
                     </div>
                 </td>
             </tr>
-            {/foreach}
         </tbody>
     </table>
     </div><!-- .wrapper-table-block -->
