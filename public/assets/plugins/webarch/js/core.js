@@ -100,43 +100,54 @@ $(document).ready(function() {
 
 //**********************************BEGIN MAIN MENU********************************
 	jQuery('.page-sidebar li > a').on('click', function (e) {
-            if ($(this).next().hasClass('sub-menu') == false) {
-                return;
-	}
-     var parent = $(this).parent().parent();
-
-
-            parent.children('li.open').children('a').children('.arrow').removeClass('open');
-            parent.children('li.open').children('a').children('.arrow').removeClass('active');
-            parent.children('li.open').children('.sub-menu').slideUp(200);
-            parent.children('li').removeClass('open');
-          //  parent.children('li').removeClass('active');
-
-            var sub = jQuery(this).next();
-            if (sub.is(":visible")) {
-                jQuery('.arrow', jQuery(this)).removeClass("open");
-                jQuery(this).parent().removeClass("active");
-                sub.slideUp(200, function () {
-                    handleSidenarAndContentHeight();
-                });
-            } else {
-                jQuery('.arrow', jQuery(this)).addClass("open");
-                jQuery(this).parent().addClass("open");
-                sub.slideDown(200, function () {
-                    handleSidenarAndContentHeight();
-                });
+        if ($('.page-sidebar').width() == 50) {
+            if ($(this).next().hasClass('sub-menu')) {
+                e.preventDefault();
             }
 
-            e.preventDefault();
-        });
+            return
+        }
+
+
+        if ($(this).next().hasClass('sub-menu') == false) {
+            return;
+        }
+
+        var parent = $(this).parent().parent();
+
+
+        parent.children('li.open').children('a').children('.arrow').removeClass('open');
+        parent.children('li.open').children('a').children('.arrow').removeClass('active');
+        parent.children('li.open').children('.sub-menu').slideUp(200);
+        parent.children('li').removeClass('open');
+        //  parent.children('li').removeClass('active');
+
+        var sub = jQuery(this).next();
+        if (sub.is(":visible")) {
+            jQuery('.arrow', jQuery(this)).removeClass("open");
+            jQuery(this).parent().removeClass("active");
+            sub.slideUp(200, function () {
+                handleSidenarAndContentHeight();
+            });
+        } else {
+            jQuery('.arrow', jQuery(this)).addClass("open");
+            jQuery(this).parent().addClass("open");
+            sub.slideDown(200, function () {
+                handleSidenarAndContentHeight();
+            });
+        }
+
+        e.preventDefault();
+    });
+
 	//Auto close open menus in Condensed menu
-		if( $('.page-sidebar').hasClass('mini'))  {
-			var elem = jQuery('.page-sidebar ul');
-		    elem.children('li.open').children('a').children('.arrow').removeClass('open');
-            elem.children('li.open').children('a').children('.arrow').removeClass('active');
-            elem.children('li.open').children('.sub-menu').slideUp(200);
-            elem.children('li').removeClass('open');
-		}
+	if( $('.page-sidebar').hasClass('mini'))  {
+		var elem = jQuery('.page-sidebar ul');
+	    elem.children('li.open').children('a').children('.arrow').removeClass('open');
+        elem.children('li.open').children('a').children('.arrow').removeClass('active');
+        elem.children('li.open').children('.sub-menu').slideUp(200);
+        elem.children('li').removeClass('open');
+	}
 //**********************************END MAIN MENU********************************
 //**** Element Background and height ********************************************
 

@@ -15,18 +15,16 @@ a:hover {
     content: "\f105";
 }
 
-.wrapper-table-block {
-    background:White;
-    padding:1% 2%;
-}
-.content {
-    position:relative;
+.no-style {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.content .title {
-    padding-bottom:10px;
+.no-style li {
+    margin: 0;
+    padding: 0;
 }
-
 
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
@@ -305,10 +303,13 @@ padding: 0 13px;
     margin-top: 14px;
 }
 
+.domain-list li a.active {
+    font-weight: bold;
+}
 
 
 /* =============================================================================
-   Make .a class act like a elements
+   Pseudo <a>: Make .a class act like a elements
    ========================================================================== */
 .header .nav > li.quicklinks > .a {
     padding: 4px 2px !important;
@@ -345,4 +346,70 @@ padding: 0 13px;
     font-size: 15px;
     display: inline-block;
     float: left;
+}
+
+/* =============================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+    border: 1px solid #d1dade;
+}
+
+.btn-info {
+    border-color: #152639;
+}
+
+.btn-danger {
+    border-color: #f35958;
+}
+
+.btn-primary {
+    border-color: #0aa699;
+}
+
+.btn-success {
+    border-color: #1285d1;
+}
+
+.btn-warning {
+    border-color: #fbb05e;
+}
+
+/* =============================================================================
+   Sidebar: fix submenus when sidebar is collapsed
+   ========================================================================== */
+.page-sidebar.mini .page-sidebar-wrapper > ul > li > ul.sub-menu {
+    display: none !important;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li:hover > ul.sub-menu {
+    display: block !important;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.open > a,
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.active > a {
+    background: #0b9c8f;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li:hover > a {
+    background: #22262E;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu {
+        display: none !important;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > ul.sub-menu {
+        display: block !important;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li.open > a,
+    .page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+        background: #0b9c8f;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > a {
+        background: #22262E;
+    }
 }

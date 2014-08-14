@@ -10,9 +10,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
 
         $scope.isActive = function(route) {
             var url = fosJsRouting.generate(route);
-
-            console.log(url, $location.path());
-
             return $location.path() == url;
         }
     }
