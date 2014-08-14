@@ -286,3 +286,20 @@ a:hover {
 .pagination-info {
     padding: 7px;
 }
+
+.grid-title .input-group-addon .fa-user {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.page-title .fa {
+  top: 0;
+}
+
+.page-title h3 {
+    width: auto;
+}
+
+.page-title .breadcumb {
+    margin-top: 7px;
+}
