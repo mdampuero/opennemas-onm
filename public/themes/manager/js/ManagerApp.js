@@ -71,7 +71,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 controller:  'InstanceListCtrl',
                 resolve: {
                     data: function(itemService) {
-                        return itemService.list('manager_ws_instances_list', {}).then(
+                        return itemService.list('manager_ws_instances_list', { epp: 25 }).then(
                             function (response) {
                                 return response.data;
                             }
