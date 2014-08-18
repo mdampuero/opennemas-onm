@@ -10,6 +10,12 @@ manager_ws_instance_set_activated:
     options:
         expose: true
 
+manager_ws_instance_show:
+    path:     /instance/{id}/show
+    defaults: { _controller: ManagerWebServiceBundle:Instance:show }
+    options:
+        expose: true
+
 manager_ws_instances_delete:
     path:     /instances/delete
     defaults: { _controller: ManagerWebServiceBundle:Instance:batchDelete }

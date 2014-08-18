@@ -1,5 +1,5 @@
 manager_ws_commands_list:
-    pattern:  /commands/list
+    path:     /commands/list
     defaults: { _controller: ManagerWebServiceBundle:Command:list }
     options:
         expose: true
