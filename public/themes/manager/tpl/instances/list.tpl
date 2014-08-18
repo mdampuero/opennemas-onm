@@ -399,7 +399,7 @@
                                     {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
                                 </div>
                                 <div class="pull-right" ng-if="instances.length > 0">
-                                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="$parent.page" total-items="1000" num-pages="pages"></pagination>
+                                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="$parent.$parent.page"total-items="1000" num-pages="pages"></pagination>
                                 </div>
                             </td>
                         </tr>
