@@ -7,10 +7,22 @@
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl',
     function ($location, $scope, fosJsRouting) {
+        /**
+         * The fosJsRouting service.
+         *
+         * @type Object
+         */
+        $scope.fosJsRouting = fosJsRouting;
 
         $scope.isActive = function(route) {
             var url = fosJsRouting.generate(route);
             return $location.path() == url;
+        }
+
+        $scope.mini = 0;
+
+        $scope.toggle = function(status) {
+            $scope.mini = status;
         }
     }
 );

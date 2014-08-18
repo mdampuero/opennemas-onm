@@ -66,7 +66,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             .when('/', {
                 templateUrl: '/managerws/template/index:index.tpl'
             })
-            .when(fosJsRoutingProvider.generate('manager_instance_list'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_list'), {
                 templateUrl: '/managerws/template/instances:list.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
@@ -79,7 +79,25 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                     }
                 }
             })
-            .when(fosJsRoutingProvider.generate('manager_framework_commands'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_create'), {
+                templateUrl: '/managerws/template/instances:edit.tpl',
+                controller:  'InstanceCtrl',
+                resolve: {
+                    list: function(itemService) {
+                        return {};
+                    }
+                }
+            })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_show', { id: '\:id' }), {
+                templateUrl: '/managerws/template/instances:edit.tpl',
+                controller:  'InstanceCtrl',
+                resolve: {
+                    list: function(itemService) {
+                        return {};
+                    }
+                }
+            })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_commands'), {
                 templateUrl: '/managerws/template/framework:commands:commands.tpl',
                 controller:  'CommandCtrl',
                 resolve: {
@@ -92,13 +110,13 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                     }
                 }
             })
-            .when(fosJsRoutingProvider.generate('manager_framework_opcache_status'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_opcache_status'), {
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
             })
-            .when(fosJsRoutingProvider.generate('manager_user_list'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_list'), {
                 templateUrl: '/managerws/template/acl:user:list.tpl'
             })
-            .when(fosJsRoutingProvider.generate('manager_usergroup_list'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_usergroup_list'), {
                 templateUrl: '/managerws/template/acl:user_group:list.tpl'
             })
             .otherwise({
