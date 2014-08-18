@@ -238,8 +238,9 @@ class CommentsController extends Controller
 
                     // Check moderation option
                     $commentsOpt = s::get('comments_config');
-                    if (isset($commentsOpt['moderation'])
-                        && !$commentsOpt['moderation']
+                    if (is_array($commentsOpt)
+                        && array_key_exists('moderation', $commentsOpt)
+                        && $commentsOpt['moderation'] == 0
                     ) {
                         $data['status'] = \Comment::STATUS_ACCEPTED;
                         $message = _('Your comment was accepted. Refresh the page to see it.');
