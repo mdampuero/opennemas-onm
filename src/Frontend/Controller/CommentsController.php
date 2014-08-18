@@ -236,9 +236,16 @@ class CommentsController extends Controller
                     );
                     $data = array_map('strip_tags', $data);
 
+                    // Check moderation option
+                    if (!s::get('comments_config')['moderation']) {
+                        $data['status'] = \Comment::STATUS_ACCEPTED;
+                        $message = _('Your comment was accepted. Refresh the page to see it.');
+                    } else {
+                        $message = _('Your comment was accepted and now we have to moderate it.');
+                    }
+
                     $comment->create($data);
                     $httpCode = 200;
-                    $message = _('Your comment was accepted and now we have to moderate it.');
                 } catch (\Exception $e) {
                     $message = $e->getMessage();
                 }
