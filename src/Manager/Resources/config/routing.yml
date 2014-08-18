@@ -1,5 +1,5 @@
 manager_welcome:
-    path:     /manager
+    pattern:  /manager
     defaults: { _controller: ManagerBundle:Welcome:default }
 
 manager_auth:
@@ -7,17 +7,17 @@ manager_auth:
     resource: @ManagerBundle/Resources/config/routing/auth.yml
 
 manager_instance:
-    prefix:   /
+    prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/instance.yml
 
 manager_framework:
-    prefix:   /framework
+    prefix:   /manager/framework
     resource: @ManagerBundle/Resources/config/routing/framework.yml
 
 manager_user:
-    prefix:   /
+    prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/user.yml
 
 manager_usergroup:
-    prefix:   /
+    prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/usergroup.yml

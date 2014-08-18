@@ -9,17 +9,26 @@ manager_instance_show:
     defaults: { _controller:  ManagerBundle:Instances:show }
     requirements:
         id: \d+
+    options:
+        expose: true
+
 
 manager_instance_create:
     path: /instance/create
     defaults: { _controller:  ManagerBundle:Instances:show, id: null }
+    options:
+        expose: true
 
 manager_instance_save:
     path: /instance/save
     defaults: { _controller:  ManagerBundle:Instances:create }
+    options:
+        expose: true
 
 manager_instance_update:
     path: /instance/{id}/update
     defaults: { _controller:  ManagerBundle:Instances:update }
     requirements:
         id: \d+
+    options:
+        expose: true
