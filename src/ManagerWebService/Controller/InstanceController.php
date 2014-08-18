@@ -358,10 +358,10 @@ class InstanceController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp       = $request->request->getDigits('elements_per_page', 10);
-        $page      = $request->request->getDigits('page', 1);
-        $criteria  = $request->request->filter('criteria') ? : array();
-        $orderBy    = $request->request->filter('sort_by') ? : array();
+        $epp      = $request->request->getDigits('epp', 10);
+        $page     = $request->request->getDigits('page', 1);
+        $criteria = $request->request->filter('criteria') ? : array();
+        $orderBy  = $request->request->filter('sort_by') ? : array();
 
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $orderBy, $epp, $page);
@@ -375,11 +375,11 @@ class InstanceController extends Controller
         }
 
         return new JsonResponse(array(
-            'elements_per_page' => $epp,
-            'extra'             => array(),
-            'page'              => $page,
-            'results'           => $instances,
-            'total'             => $total,
+            'epp'     => $epp,
+            'extra'   => array(),
+            'page'    => $page,
+            'results' => $instances,
+            'total'   => $total,
         ));
     }
 
