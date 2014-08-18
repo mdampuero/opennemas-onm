@@ -101,12 +101,12 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     /**
      * Returns an item given its id.
      *
-     * @param string  The route name.
-     * @param integer The item id.
+     * @param string  route The route name.
+     * @param integer id The item id.
      *
      * @return Object The response object.
      */
-    itemService.read = function (type, id) {
+    itemService.show = function (route, id) {
         var url = fosJsRouting.generate(route, { id: id });
 
         return $http.post(url).success(function (response) {

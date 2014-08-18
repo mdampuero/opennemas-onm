@@ -1,6 +1,6 @@
 
 angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translate',
-        'onm.routing', 'onm.item', 'ManagerApp.controllers'
+        'ngQuickDate', 'onm.routing', 'onm.item', 'ManagerApp.controllers'
 
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
@@ -68,9 +68,9 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_list'), {
                 templateUrl: '/managerws/template/instances:list.tpl',
-                controller:  'InstanceCtrl',
+                controller:  'InstanceListCtrl',
                 resolve: {
-                    list: function(itemService) {
+                    data: function(itemService) {
                         return itemService.list('manager_ws_instances_list', {}).then(
                             function (response) {
                                 return response.data;
@@ -83,7 +83,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 templateUrl: '/managerws/template/instances:edit.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
-                    list: function(itemService) {
+                    data: function() {
                         return {};
                     }
                 }
@@ -92,8 +92,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 templateUrl: '/managerws/template/instances:edit.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
-                    list: function(itemService) {
-                        return {};
+                    data: function($route, itemService) {
+                        return itemService.show('manager_ws_instance_show', $route.current.params.id).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
                     }
                 }
             })
@@ -101,7 +105,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 templateUrl: '/managerws/template/framework:commands:commands.tpl',
                 controller:  'CommandCtrl',
                 resolve: {
-                    list: function(itemService) {
+                    data: function(itemService) {
                         return itemService.list('manager_ws_commands_list', {}).then(
                             function (response) {
                                 return response.data;
