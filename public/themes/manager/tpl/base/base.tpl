@@ -89,7 +89,7 @@
     <header class="header navbar navbar-inverse ">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
-            <div class="header-seperation">
+            <div class="header-seperation" ng-hide="mini">
                 <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
                     <li class="dropdown">
                         <a id="main-menu-toggle" href="#main-menu">
@@ -115,7 +115,7 @@
                 <div class="pull-left">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
-                            <span class="a" id="layout-condensed-toggle">
+                            <span class="a" id="layout-condensed-toggle" ng-click="toggle(!mini);">
                                 <div class="iconset top-menu-toggle-dark"></div>
                             </span>
                         </li>
@@ -187,9 +187,13 @@
                                 <i class="fa fa-gear fa-lg"></i>
                             </span>
                             <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
-                                <li><a title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}"> My Account</a> </li>
+                                <li>
+                                    <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> My Account</a>
+                                </li>
                                 <li class="divider"></li>
-                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}</a></li>
+                                <li>
+                                    <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
+                                </a></li>
                             </ul>
                         </li>
                     </ul>
@@ -202,7 +206,7 @@
     </header>
     <div class="page-container row-fluid">
         <!-- BEGIN SIDEBAR -->
-        <div class="page-sidebar" id="main-menu">
+        <div class="page-sidebar" id="main-menu" ng-class="{ 'mini': mini }">
             <div class="page-sidebar-wrapper" id="main-menu-wrapper">
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
@@ -210,7 +214,7 @@
                         <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_instance_list') }">
-                        <a href="#/instances"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
                         <a href="#">
@@ -219,10 +223,10 @@
                         </a>
                         <ul class="sub-menu">
                             <li ng-class="{ 'active': isActive('manager_framework_commands') }">
-                                <a href="#/framework/commands"><i class="fa fa-code"></i> {t}Commands{/t}</a>
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
                             <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }">
-                                <a href="#/framework/opcache"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
                     </li>
@@ -234,12 +238,12 @@
                         </a>
                         <ul class="sub-menu">
                             <li ng-class="{ 'active': isActive('manager_user_list') }">
-                                <a href="#/users">
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_list') %]">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
                             <li ng-class="{ 'active': isActive('manager_usergroup_list') }">
-                                <a href="#/usergroups">
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_usergroup_list') %]">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>
                             </li>
@@ -252,7 +256,7 @@
         </div>
         <!-- END SIDEBAR -->
         <!-- BEGIN PAGE CONTAINER-->
-            <div class="page-content">
+            <div class="page-content" ng-class="{ 'condensed': mini }">
                 <div ng-view></div>
             </div>
         <!-- END PAGE CONTAINER -->

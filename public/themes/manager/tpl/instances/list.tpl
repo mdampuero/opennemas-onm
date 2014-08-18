@@ -56,9 +56,9 @@
                     </div>
                     <div class="pull-right">
                         <div class="form-group">
-                            <button class="btn btn-primary">
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
                                 <i class="fa fa-plus"></i> {t}Create{/t}
-                            </button>
+                            </a>
                             <div class="form-group dropdown">
                                 <div class="btn btn-white dropdown-toggle">
                                     <i class="fa fa-angle-down fa-lg"></i>
@@ -390,7 +390,7 @@
                                     <button class="btn btn-primary btn-sm" type="button">
                                         <i class="fa" ng-class="{ 'fa-refresh fa-spin': item.loading == 1, 'fa-check' : item.activated == '1', 'fa-times': item.activated == '0' }"></i>
                                     </button>
-                                    <a class="btn btn-white" href="[% item.show_url%]" title="{t}Edit{/t}">
+                                    <a class="btn btn-white" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: item.id }) %]" title="{t}Edit{/t}" ng-click="toggle(1);">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     <button class="btn btn-danger"
