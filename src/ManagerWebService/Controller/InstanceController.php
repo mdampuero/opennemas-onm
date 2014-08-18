@@ -11,14 +11,17 @@ use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Instance\InstanceCreator;
+use Onm\Instance\InstanceManager as im;
+use Onm\Module\ModuleManager as mm;
 
 class InstanceController extends Controller
 {
     /**
      * Deletes the selected instances.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function batchDeleteAction(Request $request)
     {
@@ -121,8 +124,9 @@ class InstanceController extends Controller
     /**
      * Set the activated flag for instances in batch.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function batchSetActivatedAction(Request $request)
     {
@@ -179,8 +183,9 @@ class InstanceController extends Controller
     /**
      * Deletes an instance.
      *
-     * @param  integer      $id The instance id.
-     * @return JsonResponse     The response object.
+     * @param integer $id The instance id.
+     *
+     * @return JsonResponse The response object.
      */
     public function deleteAction($id)
     {
@@ -268,8 +273,9 @@ class InstanceController extends Controller
     /**
      * Returns a CSV file with all the instances information.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
     public function exportAction(Request $request)
     {
@@ -326,24 +332,36 @@ class InstanceController extends Controller
     }
 
     /**
+     * Returns the data to create a new instance.
+     *
+     * @param  Request $request The request object
+     *
+     * @return JsonResponse The response object.
+     */
+    public function newAction(Request $request)
+    {
+        return new JsonResponse(
+            array(
+                'data'     => null,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+
+    /**
      * Returns the list of instances as JSON.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function listAction(Request $request)
     {
         $epp       = $request->request->getDigits('elements_per_page', 10);
         $page      = $request->request->getDigits('page', 1);
-        $criteria  = $request->request->filter('search') ? : array();
+        $criteria  = $request->request->filter('criteria') ? : array();
         $orderBy    = $request->request->filter('sort_by') ? : array();
-
-        if (array_key_exists('name', $criteria)) {
-            $criteria['domains'] = $criteria['name'];
-            $criteria['union'] = 'OR';
-        }
-
-        unset($criteria['content_type_name']);
 
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $orderBy, $epp, $page);
@@ -368,8 +386,9 @@ class InstanceController extends Controller
     /**
      * Toggle the availability of an instance given its id.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function setActivatedAction(Request $request, $id)
     {
@@ -409,6 +428,47 @@ class InstanceController extends Controller
                 'activated' => $activated,
                 'messages'  => $messages
             )
+        );
+    }
+
+    /**
+     * Returns an instance as JSON.
+     *
+     * @param integer  $id The instance id.
+     *
+     * @return Response The response object.
+     */
+    public function showAction($id)
+    {
+        $im = $this->get('instance_manager');
+
+        $instance = $im->find($id);
+        $im->getExternalInformation($instance);
+
+        return new JsonResponse(
+            array(
+                'data'     => $instance,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function templateParams()
+    {
+        return array(
+            'available_modules' => mm::getAvailableModules(),
+            'timezones'         => \DateTimeZone::listIdentifiers(),
+            'languages'         => array(
+                'en_US' => _("English"),
+                'es_ES' => _("Spanish"),
+                'gl_ES' => _("Galician")
+            ),
+            'templates'         => im::getAvailableTemplates()
         );
     }
 }
