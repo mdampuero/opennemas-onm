@@ -30,6 +30,10 @@
                           @Common/plugins/webarch/css/magic_space.css,
                           @Common/plugins/webarch/css/tiles_responsive.css,
 
+                          @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+                          @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+                          @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+
                           @Common/css/opennemas/style.css"
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
@@ -70,6 +74,7 @@
                           @Common/plugins/angular/angular.min.js,
                           @Common/plugins/angular-route/angular-route.min.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
+                          @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
                           @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
 
                           @Common/plugins/angular-onm/services/*,

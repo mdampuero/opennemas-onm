@@ -15,7 +15,7 @@
             </li>
         </ul>
     </div>
-    <div ng-init="criteria = { contact_mail_like: '', name_like: '' }; orderBy = 'last_login'; orderDirection = 'asc'; route = 'manager_ws_instances_list'; epp = 25; language = '{{$smarty.const.CURRENT_LANGUAGE}}'; columns = { name: 1, domains: 1, contact_mail: 1, last_login: 1, created: 1, contents: 1, alexa: 0, page_views: 0}">
+    <div ng-init="route = 'manager_ws_instances_list';  language = '{{$smarty.const.CURRENT_LANGUAGE}}';">
 
         {render_messages}
 
@@ -28,16 +28,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-cube"></i>
                             </span>
-                            <input type="text" placeholder="{t}Filter by instance name{/t}" name="name" ng-model="shvs.search.name_like"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon primary">
-                                <span class="arrow"></span>
-                                <i class="fa fa-envelope"></i>
-                            </span>
-                            <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="contact_mail" ng-model="shvs.search.contact_mail_like"/>
+                            <input type="text" placeholder="{t}Filter by name, domain or contact{/t}" name="name" ng-model="criteria.name[0].value"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -170,7 +161,7 @@
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
                 <table class="table no-more-tables no-margin no-padding" ng-if="!loading">
-                    <thead ng-if="items.length >= 0">
+                    <thead ng-if="instances.length >= 0">
                         <tr>
                             <th style="width:15px;">
                                 <checkbox select-all="true"></checkbox>
@@ -273,32 +264,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-if="items.length == 0">
+                        <tr ng-if="instances.length == 0">
                             <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
                         </tr>
-                        <tr ng-if="items.length >= 0" ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+                        <tr ng-if="instances.length >= 0" ng-repeat="instance in instances" ng-class="{ row_selected: isSelected(instance.id) }">
                             <td>
-                                <checkbox index="[% item.id %]">
+                                <checkbox index="[% instance.id %]">
                             </td>
                             <td>
-                                [% item.id %]
+                                [% instance.id %]
                             </td>
                             <td ng-show="columns.name">
-                                <a ng-href="[% item.show_url %]" title="{t}Edit{/t}">
-                                    [% item.name %]
+                                <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
+                                    [% instance.name %]
                                 </a>
                             </td>
                             <td class="left" ng-show="columns.domains">
                                 <div class="domains">
                                     <small>
-                                        <ul class="domain-list no-style" ng-if="item.domains.length > 1">
-                                            <li ng-repeat="domain in item.domains">
-                                                <a href="http://[% domain %]" ng-class="{ 'active': $index == item.main_domain - 1 }" target="_blank">[% domain %]</a>
+                                        <ul class="domain-list no-style" ng-if="instance.domains.length > 1">
+                                            <li ng-repeat="domain in instance.domains">
+                                                <a href="http://[% domain %]" ng-class="{ 'active': $index == instance.main_domain - 1 }" target="_blank">[% domain %]</a>
                                             </li>
                                         </ul>
-                                        <span ng-if="item.domains.length <= 1">
-                                            <span ng-repeat="domain in item.domains">
-                                                <a href="http://[% domain %]" target="_blank" title="[% item.name %]">[% domain %]</a>
+                                        <span ng-if="instance.domains.length <= 1">
+                                            <span ng-repeat="domain in instance.domains">
+                                                <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
                                             </span>
                                         </span>
                                     </small>
@@ -306,91 +297,91 @@
                             </td>
                             <td class="left" ng-show="columns.contact_mail">
                                 <div class="creator">
-                                    <a ng-href="mailto:[% item.contact_mail %]" title="Send an email to the instance manager"> [% item.contact_mail %]</a>
+                                    <a ng-href="mailto:[% instance.contact_mail %]" title="Send an email to the instance manager"> [% instance.contact_mail %]</a>
                                 </div>
                             </td>
                             <td class="center" ng-show="columns.last_login">
-                                [% item.last_login %]
+                                [% instance.last_login %]
                             </td>
                             <td class="nowrap left" ng-show="columns.created">
-                                [% item.created %]
+                                [% instance.created %]
                             </td>
                             <td class="center" ng-show="columns.contents">
-                                <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + item.articles + '<br>{t}Ads{/t}: ' + item.advertisements + '<br>{t}Files{/t}: ' + item.attachments + '<br>{t}Opinions{/t}: ' + item.opinions + '<br>{t}Albums{/t}: ' + item.albums + '<br>{t}Images{/t}: ' + item.photos + '<br>{t}Videos{/t}: ' + item.videos + '<br>{t}Polls{/t}: ' + item.polls + '<br>{t}Widgets{/t}: ' + item.widgets + '<br>{t}Static pages{/t}: ' + item.static_pages + '<br>{t}Letters{/t}: ' + item.letters %]">
-                                    [% item.contents %]
+                                <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + instance.articles + '<br>{t}Ads{/t}: ' + instance.advertisements + '<br>{t}Files{/t}: ' + instance.attachments + '<br>{t}Opinions{/t}: ' + instance.opinions + '<br>{t}Albums{/t}: ' + instance.albums + '<br>{t}Images{/t}: ' + instance.photos + '<br>{t}Videos{/t}: ' + instance.videos + '<br>{t}Polls{/t}: ' + instance.polls + '<br>{t}Widgets{/t}: ' + instance.widgets + '<br>{t}Static pages{/t}: ' + instance.static_pages + '<br>{t}Letters{/t}: ' + instance.letters %]">
+                                    [% instance.contents %]
                                 </span>
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['contents'] > 0, 'fa fa-angle-down text-danger': item.deltas['contents'] < 0 }" tooltip-html-unsafe="[% item.deltas['contents'] %]"></i>
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['contents'] > 0, 'fa fa-angle-down text-danger': instance.deltas['contents'] < 0 }" tooltip-html-unsafe="[% instance.deltas['contents'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.articles">
-                                [% item.articles %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['articles'] > 0, 'fa fa-angle-down text-danger': item.deltas['articles'] < 0 }" tooltip-html-unsafe="[% item.deltas['articles'] %]"></i>
+                                [% instance.articles %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['articles'] > 0, 'fa fa-angle-down text-danger': instance.deltas['articles'] < 0 }" tooltip-html-unsafe="[% instance.deltas['articles'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.opinions">
-                                [% item.opinions %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['opinions'] > 0, 'fa fa-angle-down text-danger': item.deltas['opinions'] < 0 }" tooltip-html-unsafe="[% item.deltas['opinions'] %]"></i>
+                                [% instance.opinions %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['opinions'] > 0, 'fa fa-angle-down text-danger': instance.deltas['opinions'] < 0 }" tooltip-html-unsafe="[% instance.deltas['opinions'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.advertisements">
-                                [% item.advertisements %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['advertisements'] > 0, 'fa fa-angle-down text-danger': item.deltas['advertisements'] < 0 }" tooltip-html-unsafe="[% item.deltas['advertisements'] %]"></i>
+                                [% instance.advertisements %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['advertisements'] > 0, 'fa fa-angle-down text-danger': instance.deltas['advertisements'] < 0 }" tooltip-html-unsafe="[% instance.deltas['advertisements'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.albums">
-                                [% item.albums %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['albums'] > 0, 'fa fa-angle-down text-danger': item.deltas['albums'] < 0 }" tooltip-html-unsafe="[% item.deltas['albums'] %]"></i>
+                                [% instance.albums %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['albums'] > 0, 'fa fa-angle-down text-danger': instance.deltas['albums'] < 0 }" tooltip-html-unsafe="[% instance.deltas['albums'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.photos">
-                                [% item.photos %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['photos'] > 0, 'fa fa-angle-down text-danger': item.deltas['photos'] < 0 }" tooltip-html-unsafe="[% item.deltas['photos'] %]"></i>
+                                [% instance.photos %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['photos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['photos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['photos'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.videos">
-                                [% item.videos %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['videos'] > 0, 'fa fa-angle-down text-danger': item.deltas['videos'] < 0 }" tooltip-html-unsafe="[% item.deltas['videos'] %]"></i>
+                                [% instance.videos %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['videos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['videos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['videos'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.widgets">
-                                [% item.widgets %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['widgets'] > 0, 'fa fa-angle-down text-danger': item.deltas['widgets'] < 0 }" tooltip-html-unsafe="[% item.deltas['widgets'] %]"></i>
+                                [% instance.widgets %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['widgets'] > 0, 'fa fa-angle-down text-danger': instance.deltas['widgets'] < 0 }" tooltip-html-unsafe="[% instance.deltas['widgets'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.static_pages">
-                                [% item.static_pages %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['static_pages'] > 0, 'fa fa-angle-down text-danger': item.deltas['static_pages'] < 0 }" tooltip-html-unsafe="[% item.deltas['static_pages'] %]"></i>
+                                [% instance.static_pages %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['static_pages'] > 0, 'fa fa-angle-down text-danger': instance.deltas['static_pages'] < 0 }" tooltip-html-unsafe="[% instance.deltas['static_pages'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.attachments">
-                                [% item.attachments %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['attachments'] > 0, 'fa fa-angle-down text-danger': item.deltas['attachments'] < 0 }" tooltip-html-unsafe="[% item.deltas['attachments'] %]"></i>
+                                [% instance.attachments %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['attachments'] > 0, 'fa fa-angle-down text-danger': instance.deltas['attachments'] < 0 }" tooltip-html-unsafe="[% instance.deltas['attachments'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.polls">
-                                [% item.polls %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['polls'] > 0, 'fa fa-angle-down text-danger': item.deltas['polls'] < 0 }" tooltip-html-unsafe="[% item.deltas['polls'] %]"></i>
+                                [% instance.polls %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['polls'] > 0, 'fa fa-angle-down text-danger': instance.deltas['polls'] < 0 }" tooltip-html-unsafe="[% instance.deltas['polls'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.letters">
-                                [% item.letters %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['letters'] > 0, 'fa fa-angle-down text-danger': item.deltas['letters'] < 0 }" tooltip-html-unsafe="[% item.deltas['letters'] %]"></i>
+                                [% instance.letters %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['letters'] > 0, 'fa fa-angle-down text-danger': instance.deltas['letters'] < 0 }" tooltip-html-unsafe="[% instance.deltas['letters'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.media_size">
-                                [% item.media_size | number : 2 %] Mb
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['media_size'] > 0, 'fa fa-angle-down text-danger': item.deltas['media_size'] < 0 }" tooltip-html-unsafe="[% item.deltas['media_size'] | number : 2 %] Mb"></i>
+                                [% instance.media_size | number : 2 %] Mb
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['media_size'] > 0, 'fa fa-angle-down text-danger': instance.deltas['media_size'] < 0 }" tooltip-html-unsafe="[% instance.deltas['media_size'] | number : 2 %] Mb"></i>
                             </td>
                             <td class="center" ng-show="columns.alexa">
-                                [% item.alexa %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['alexa'] > 0, 'fa fa-angle-down text-danger': item.deltas['alexa'] < 0 }" tooltip-html-unsafe="[% item.deltas['alexa'] %]"></i>
+                                [% instance.alexa %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['alexa'] > 0, 'fa fa-angle-down text-danger': instance.deltas['alexa'] < 0 }" tooltip-html-unsafe="[% instance.deltas['alexa'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.page_views">
-                                [% item.page_views %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['page_views'] > 0, 'fa fa-angle-down text-danger': item.deltas['page_views'] < 0 }" tooltip-html-unsafe="[% item.deltas['page_views'] %]"></i>
+                                [% instance.page_views %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['page_views'] > 0, 'fa fa-angle-down text-danger': instance.deltas['page_views'] < 0 }" tooltip-html-unsafe="[% instance.deltas['page_views'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.users">
-                                [% item.users %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['users'] > 0, 'fa fa-angle-down text-danger': item.deltas['users'] < 0 }" tooltip-html-unsafe="[% item.deltas['users'] %]"></i>
+                                [% instance.users %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['users'] > 0, 'fa fa-angle-down text-danger': instance.deltas['users'] < 0 }" tooltip-html-unsafe="[% instance.deltas['users'] %]"></i>
                             </td>
                             <td class="center" ng-show="columns.emails">
-                                [% item.emails %]
-                                <i ng-class="{ 'fa fa-angle-up text-success': item.deltas['emails'] > 0, 'fa fa-angle-down text-danger': item.deltas['emails'] < 0 }" tooltip-html-unsafe="[% item.deltas['emails'] %]"></i>
+                                [% instance.emails %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['emails'] > 0, 'fa fa-angle-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
                             </td>
                             <td class="right nowrap">
                                 <div class="btn-group btn-group-xs">
                                     <button class="btn btn-primary btn-sm" type="button">
-                                        <i class="fa" ng-class="{ 'fa-refresh fa-spin': item.loading == 1, 'fa-check' : item.activated == '1', 'fa-times': item.activated == '0' }"></i>
+                                        <i class="fa" ng-class="{ 'fa-refresh fa-spin': instance.loading == 1, 'fa-check' : instance.activated == '1', 'fa-times': instance.activated == '0' }"></i>
                                     </button>
-                                    <a class="btn btn-white" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: item.id }) %]" title="{t}Edit{/t}" ng-click="toggle(1);">
+                                    <a class="btn btn-white" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                     <button class="btn btn-danger"
@@ -404,13 +395,13 @@
                     <tfoot>
                         <tr>
                             <td colspan="[% 4 + columns.name + columns.domains + columns.contact_mail + columns.last_login + columns.created + columns.contents + columns.articles + columns.opinions + columns.advertisements + columns.albums + columns.photos + columns.videos + columns.widgets + columns.static_pages + columns.attachments + columns.polls + columns.letters + columns.media_size + columns.alexa + columns.page_views + columns.users + columns.emails %]" class="center">
-                                <div class="pagination-info pull-left" ng-if="items.length > 0">
+                                <div class="pagination-info pull-left" ng-if="instances.length > 0">
                                     {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
                                 </div>
-                                <div class="pull-right" ng-if="items.length > 0">
-                                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="page" total-items="total" num-pages="pages"></pagination>
+                                <div class="pull-right" ng-if="instances.length > 0">
+                                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="page" total-instances="total" num-pages="pages"></pagination>
                                 </div>
-                                <span ng-if="items.length == 0">&nbsp;</span>
+                                <span ng-if="instances.length == 0">&nbsp;</span>
                             </td>
                         </tr>
                     </tfoot>
