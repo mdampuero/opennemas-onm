@@ -145,7 +145,7 @@ class Photo extends Content
         $originalFileName = $data['original_filename'];
 
         if (empty($filePath)) {
-            throw new \Exception(_('Not valid photo data'));
+            throw new \Exception(_('Image data not valid'));
         }
 
         // Check upload directory
@@ -163,7 +163,7 @@ class Photo extends Content
         if (is_dir($uploadDir) && !is_writable($uploadDir)) {
             throw new Exception(
                 sprintf(
-                    _('Upload directory doesn\'t exists or you don\'t have enough privileges to write files there'),
+                    _('Unable to save your image file in the Opennemas storage target'),
                     $uploadDir.$finalPhotoFileName
                 )
             );
@@ -250,7 +250,7 @@ class Photo extends Content
                         $uploadDir.$finalPhotoFileName
                     )
                 );
-                throw new Exception(_('Unable to copy the photo file'));
+                throw new Exception(_('Unable to copy your image file'));
             }
         } else {
             $fileCopied = copy(
@@ -267,7 +267,7 @@ class Photo extends Content
                         $uploadDir.$finalPhotoFileName
                     )
                 );
-                throw new Exception(_('Unable to copy the photo file'));
+                throw new Exception(_('Unable to copy your image file'));
             }
         }
 
@@ -278,12 +278,12 @@ class Photo extends Content
             $logger = getService('logger');
             $logger->notice(
                 sprintf(
-                    _('Unable to register the photo object %s (destination: %s).'),
+                    'Unable to save the image object %s (destination: %s).',
                     $data['local_file'],
                     $uploadDir.$finalPhotoFileName
                 )
             );
-            throw new Exception(_('Unable to save the photo information.'));
+            throw new Exception(_('Unable to save your image information.'));
         }
 
         return $photoID;
@@ -413,15 +413,15 @@ class Photo extends Content
 
             switch ($size['mime']) {
                 case "image/gif":
-                    $this->infor = _("The image type is GIF </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'GIF');
 
                     break;
                 case "image/png":
-                    $this->infor = _("The image type is PNG </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'PNG');
 
                     break;
                 case "image/bmp":
-                    $this->infor = _("The image type is BMP </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'BMP');
 
                     break;
                 case 'image/jpeg':
@@ -443,7 +443,7 @@ class Photo extends Content
                     }
 
                     if (empty($exif)) {
-                        $this->infor .= _("No available EXIF data</br>");
+                        $this->infor .= _("No available EXIF data");
 
                     } else {
                         if (empty($this->color)) {
@@ -528,7 +528,7 @@ class Photo extends Content
                             ini_set($errorReporting);
 
                         } else {
-                            $this->infor .=  _("No availabel IPTC data</br>");
+                            $this->infor .=  _("No available IPTC data");
                         }
                     }
                     break;

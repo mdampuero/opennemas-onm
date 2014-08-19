@@ -354,6 +354,7 @@ class ContentManager
             }, $contentIds);
 
             $contentsRaw = $er->findMulti($contentsMap);
+            $er->populateContentMetasInContents($contentsRaw);
 
             // iterate over all found contents to hydrate them
             foreach ($contentIds as $element) {
@@ -362,6 +363,7 @@ class ContentManager
                 if ($element['frontpage_id'] != $categoryID) {
                     continue;
                 }
+
                 foreach ($contentsRaw as $contentRaw) {
                     if ($element['content_id'] == $contentRaw->id) {
                         $content = $contentRaw;
@@ -369,8 +371,7 @@ class ContentManager
                     }
                 }
 
-                // add all the additional properties related with positions
-                // and params
+                // add all the additional properties related with positions and params
                 if (is_object($content) && $content->in_litter == 0) {
                     $content->load(
                         array(
@@ -388,10 +389,6 @@ class ContentManager
                     }
 
                     $content->in_frontpage = in_array($element['content_id'], $contentsInFrontpage);
-
-                    if (\Onm\Module\ModuleManager::isActivated('AVANCED_FRONTPAGE_MANAGER')) {
-                        $content->loadAllContentProperties();
-                    }
 
                     $contents[] = $content;
                 }

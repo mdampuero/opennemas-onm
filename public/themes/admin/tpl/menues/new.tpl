@@ -317,7 +317,7 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        <span class="type">{t}Sync category{/t}:</span>
+                                        <span class="type">{t}Synched category{/t}:</span>
                                         <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
@@ -386,7 +386,7 @@
                                         <span class="type">{t}Sync blog category{/t}:</span>
                                         <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                             alt="{t}Sync category blog{/t}" >
+                                             alt="{t}Synched blog category{/t}" >
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>

@@ -62,7 +62,7 @@ class NewsAgencyController extends Controller
         if (is_null(s::get('news_agency_config'))
             && $action != 'config'
         ) {
-            m::add(_('Please provide your EFE auth credentials to start to use your EFE Importer module'));
+            m::add(_('Please provide your source server configuration to start to use your Importer module'));
             $this->redirect($this->generateUrl('admin_importer_efe_config'));
         }
     }

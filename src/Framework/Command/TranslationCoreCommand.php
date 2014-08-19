@@ -82,7 +82,7 @@ EOF
         $output->writeln("\t- From PHP files");
 
         $phpFiles = array(
-            SRC_PATH.'*/Controller/*.php',
+            SRC_PATH.'*/*/*.php',
             SRC_PATH.'*/Resources/Menu.php',
             SITE_VENDOR_PATH.'core/*.php',
             SITE_VENDOR_PATH.'Onm/**/**/*.php',

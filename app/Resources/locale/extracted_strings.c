@@ -1,5 +1,5 @@
 /* public/themes/admin/tpl/agency_importer/xml-file/show.tpl */
-gettext("EuropaPress importer");
+gettext("News agency importer");
 
 /* public/themes/admin/tpl/agency_importer/xml-file/show.tpl */
 gettext("Article information");
@@ -74,7 +74,7 @@ gettext("Level:");
 gettext("Redactors:");
 
 /* public/themes/admin/tpl/agency_importer/xml-file/config.tpl */
-gettext("EFE importer");
+gettext("XML file importer");
 
 /* public/themes/admin/tpl/agency_importer/xml-file/config.tpl */
 gettext("Module configuration");
@@ -1319,13 +1319,13 @@ gettext("Sections");
 gettext("Dates");
 
 /* public/themes/admin/tpl/covers/config.tpl */
-gettext("Dates grouped");
+gettext("Grouped by date");
 
 /* public/themes/admin/tpl/covers/config.tpl */
 gettext("Select if order newsstand's frontpage by dates or by section.");
 
 /* public/themes/admin/tpl/covers/config.tpl */
-gettext("Dates grouped is recommended for weekly newspapers.");
+gettext("Grouped by date is recommended for weekly newspapers.");
 
 /* public/themes/admin/tpl/covers/list.tpl */
 gettext("ePapers");
@@ -1871,7 +1871,7 @@ gettext("No available letters.");
 gettext("Media");
 
 /* public/themes/admin/tpl/letter/list.tpl */
-gettext("Media element (jpg, image, gif)");
+gettext("Media element (jpg, png, gif)");
 
 /* public/themes/admin/tpl/letter/list.tpl */
 gettext("Publish/Unpublish");
@@ -3044,7 +3044,7 @@ gettext("New Privilege");
 gettext("New User Group");
 
 /* public/themes/admin/tpl/acl/user_group/list.tpl */
-gettext("New User group");
+gettext("New user group");
 
 /* public/themes/admin/tpl/acl/user_group/list.tpl */
 gettext("FILTER:");
@@ -3500,7 +3500,7 @@ gettext("Static page");
 gettext("Sync Categories");
 
 /* public/themes/admin/tpl/menues/new.tpl */
-gettext("Sync category");
+gettext("Synched category");
 
 /* public/themes/admin/tpl/menues/new.tpl */
 gettext("Sync");
@@ -3518,7 +3518,7 @@ gettext("Sync Blog Categories");
 gettext("Sync blog category");
 
 /* public/themes/admin/tpl/menues/new.tpl */
-gettext("Sync category blog");
+gettext("Synched blog category");
 
 /* public/themes/admin/tpl/menues/partials/_menu_item.tpl */
 gettext("Synchronized from %1");
@@ -3548,10 +3548,10 @@ gettext("Video Category");
 gettext("Static Page");
 
 /* public/themes/admin/tpl/menues/partials/_menu_item.tpl */
-gettext("Sync category");
+gettext("Synched category");
 
 /* public/themes/admin/tpl/menues/partials/_menu_item.tpl */
-gettext("Sync blog category");
+gettext("Synched blog category");
 
 /* public/themes/admin/tpl/menues/partials/_menu_item.tpl */
 gettext("Sync");
@@ -4211,7 +4211,7 @@ gettext("Service");
 gettext("Duration");
 
 /* public/themes/admin/tpl/video/partials/_video_information.tpl */
-gettext("Url Thumbnail");
+gettext("Thumbnail URL");
 
 /* public/themes/admin/tpl/video/partials/_video_information.tpl */
 gettext("Embed Url");
@@ -5057,7 +5057,7 @@ gettext("Media flash element (swf)");
 gettext("Media");
 
 /* public/themes/admin/tpl/advertisement/list.tpl */
-gettext("Media element (jpg, image, gif)");
+gettext("Media element (jpg, png, gif)");
 
 /* public/themes/admin/tpl/advertisement/list.tpl */
 gettext("Undefined");
@@ -6801,12 +6801,6 @@ gettext("Comments");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
 gettext("Disqus module configuration");
-
-/* public/themes/admin/tpl/comment/disqus/list.tpl */
-gettext("Config disqus module");
-
-/* public/themes/admin/tpl/comment/disqus/list.tpl */
-gettext("Config disqus module");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
 gettext("Config");
@@ -9275,7 +9269,7 @@ gettext("New Privilege");
 gettext("New User Group");
 
 /* public/themes/manager/tpl/acl/user_group/list.tpl */
-gettext("New User group");
+gettext("New user group");
 
 /* public/themes/manager/tpl/acl/user_group/list.tpl */
 gettext("Group name");

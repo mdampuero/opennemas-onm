@@ -82,7 +82,7 @@ class Imagick extends Common implements ImageInterface
         if (is_object($this->_image)) {
             return (int) $this->_image->getImageWidth();
         }
-        throw new \Exception(_('Please initialize the image before get its width.'));
+        throw new \Exception('Please initialize the image before get its width.');
     }
 
     /**
@@ -95,7 +95,7 @@ class Imagick extends Common implements ImageInterface
         if (is_object($this->_image)) {
             return (int) $this->_image->getImageHeight();
         }
-        throw new \Exception(_('Please initialize the image before get its height.'));
+        throw new \Exception('Please initialize the image before get its height.');
     }
 
     /**

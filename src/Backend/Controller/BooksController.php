@@ -170,7 +170,7 @@ class BooksController extends Controller
                 return $this->render('book/new.tpl', array( 'book' => $book, ));
 
             } else {
-                m::add(sprintf(_("Sorry, file can't created book.")));
+                m::add(sprintf(_("Unable to create the new book.")));
             }
 
             return $this->render('book/new.tpl');

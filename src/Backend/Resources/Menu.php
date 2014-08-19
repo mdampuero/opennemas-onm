@@ -228,13 +228,6 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
         />
-        <node
-            module_name="SCHEDULE_MANAGER"
-            title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
-            id="cronicas_schedule_manager"
-            link="http://www.cronicasdelaemigracion.com//agenda/"
-            privilege="SCHEDULE_ADMIN"
-        />
 
     </submenu>
 

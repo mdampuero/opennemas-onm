@@ -90,13 +90,8 @@ class Uri
         }
 
         if (!isset($contentType)) {
-            $GLOBALS['application']->logger->debug(
-                _('Error: Uri::generate should get $contentType and parameters')
-            );
-            $GLOBALS['application']->errors[] = _(
-                'Error: Uri::generate should get '
-                .'$contentType and parameters'
-            );
+            $GLOBALS['application']->logger->debug('Error: Uri::generate should get $contentType and parameters');
+            $GLOBALS['application']->errors[] = 'Error: Uri::generate should get $contentType and parameters';
 
             return;
         }
