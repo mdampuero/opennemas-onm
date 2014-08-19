@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-19 02:01+0200\n"
+"POT-Creation-Date: 2014-08-20 01:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -927,8 +927,8 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsAgencyController.php:65
 msgid ""
-"Please provide your EFE auth credentials to start to use your EFE Importer "
-"module"
+"Please provide your source server configuration to start to use your "
+"Importer module"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsAgencyController.php:103
@@ -2015,11 +2015,15 @@ msgstr ""
 msgid "Your comment was rejected due insults usage."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:241
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:246
+msgid "Your comment was accepted. Refresh the page to see it."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:248
 msgid "Your comment was accepted and now we have to moderate it."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:247
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:258
 msgid "Ensure you have completed all the form fields."
 msgstr ""
 
@@ -2201,7 +2205,7 @@ msgid "Data updated successfully"
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:225
-msgid "There was an error while updating the user data."
+msgid "Unable to update the user."
 msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:228
@@ -2986,19 +2990,19 @@ msgstr ""
 #, php-format
 msgid ""
 "The server limits file uploads up to %s Mb. Try to upload files smaller than "
-"that size or contact with your administrator"
+"that size."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:379
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:378
 msgid "There was a problem while converting your video. "
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:388
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:387
 #, php-format
 msgid "Video format \"%s\" not supported"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:529
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:528
 msgid "Video not available"
 msgstr ""
 
