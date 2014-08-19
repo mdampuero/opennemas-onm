@@ -186,11 +186,7 @@ class CoversController extends Controller
             if (!$uploadStatus) {
                 throw new \Exception(
                     sprintf(
-                        _(
-                            'There was an error while uploading the file. '
-                            .'Try to upload a file smaller than %d MB or contact with '
-                            .'your administrator'
-                        ),
+                        _('Unable to upload the file. Try to upload a file smaller than %d MB'),
                         (int) ini_get('upload_max_filesize')
                     )
                 );
@@ -199,7 +195,7 @@ class CoversController extends Controller
             $kiosko = new \Kiosko();
             // TODO: clean the post var
             if (!$kiosko->create($coverData)) {
-                throw new \Exception(_('There was a problem with the cover data. Try again'));
+                throw new \Exception(_('Unable to create the file. Try again'));
             }
 
             return $this->redirect(
@@ -295,7 +291,7 @@ class CoversController extends Controller
             $cover->delete($id, $_SESSION['userid']);
             $this->get('session')->getFlashBag()->add('successs', sprintf(_("Cover %s deleted successfully."), $cover->title));
         } else {
-            $this->get('session')->getFlashBag()->add('error', _('You must give an id for delete the cover.'));
+            $this->get('session')->getFlashBag()->add('error', _('You must give an id to delete the cover.'));
         }
 
         return $this->redirect(

@@ -9,7 +9,7 @@
             <ul class="old-button">
                 <li>
                     <a href="{url name="manager_acl_usergroups_create"}">
-                        <img src="{$params.COMMON_ASSET_DIR}images/usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
+                        <img src="{$params.COMMON_ASSET_DIR}images/usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New user group{/t}
                     </a>
                 </li>
             </ul>

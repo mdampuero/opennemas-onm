@@ -182,7 +182,7 @@ class CommentsController extends Controller
         // Create the vote
         $vote = new \Vote($commentId);
         if (is_null($vote)) {
-            return new Response(_("Error no vote value!", 400));
+            return new Response(_("Error: no vote value!", 400));
         }
         $update = $vote->update($voteValue, $ip);
 

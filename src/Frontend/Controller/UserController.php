@@ -331,12 +331,12 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                m::add(_('Unable to send your welcome email. Please try it later.'), m::ERROR);
+                m::add(_('Unable to send your welcome email.'), m::ERROR);
             }
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
-            m::add(_('There was an error while creating your user account. Please try again'), m::ERROR);
+            m::add(_('There was an error while creating your user account.'), m::ERROR);
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
