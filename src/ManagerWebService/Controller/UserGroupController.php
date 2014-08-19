@@ -15,7 +15,7 @@ use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserController extends Controller
+class UserGroupController extends Controller
 {
     /**
      * Returns the list of users as JSON.
@@ -31,26 +31,16 @@ class UserController extends Controller
         $criteria = $request->request->filter('criteria') ? : array();
         $orderBy  = $request->request->filter('sort_by') ? : array();
 
-        $um    = $this->get('user_repository');
-        $users = $um->findBy($criteria, $orderBy, $epp, $page);
-        $total = $um->countBy($criteria);
-
-        $userGroups = $this->get('usergroup_repository')->findBy();
-
-        $groups = array();
-        foreach ($userGroups as $group) {
-            $groups[$group->id] = $group;
-        }
+        $um     = $this->get('usergroup_repository');
+        $groups = $um->findBy($criteria, $orderBy, $epp, $page);
+        $total  = $um->countBy($criteria);
 
         return new JsonResponse(
             array(
-                'epp'      => $epp,
-                'template' => array(
-                    'groups' => $groups
-                ),
-                'page'     => $page,
-                'results'  => $users,
-                'total'    => $total,
+                'epp'     => $epp,
+                'page'    => $page,
+                'results' => $groups,
+                'total'   => $total,
             )
         );
     }
@@ -64,10 +54,10 @@ class UserController extends Controller
      */
     public function showAction($id)
     {
-        $user = $this->get('user_repository')->find($id);
+        $group = $this->get('usergroup_repository')->find($id);
 
         return new JsonResponse(
-            array('data' => $user)
+            array('data' => $group)
         );
     }
 }
