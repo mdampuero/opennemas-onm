@@ -14,6 +14,6 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          *
          * @type Object
          */
-        $scope.user = data.user;
+        $scope.user = data.data;
     }
 );

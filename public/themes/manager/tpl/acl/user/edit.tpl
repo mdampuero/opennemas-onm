@@ -21,38 +21,21 @@
             </li>
         </ul>
     </div>
-
-
-    <form action="{if isset($user->id)}{url name=manager_acl_user_update id=$user->id}{else}{url name=manager_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
-		<ul class="top-buttons">
-            <li>
-                <button action="submit"  name="action" value="validate">
-                    <img src="{$params.COMMON_ASSET_DIR}images/save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+    <div class="grid simple">
+        <div class="grid-title clearfix">
+            <h3 class="pull-left">
+                [% user.name %]
+            </h3>
+            <div class="pull-right">
+                <button class="btn btn-primary">
+                    <i class="fa fa-save"></i> {t}Save{/t}
                 </button>
-            </li>
-            <li class="separator"></li>
-            <li>
-                <a href="{url name=manager_acl_user type=$user->type}">
-                    <img src="{$params.COMMON_ASSET_DIR}images/previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                </a>
-            </li>
-		</ul>
-
-
-        <div id="user-editing-form" class="tabbable tabs-left">
-            <ul class="nav nav-tabs" id="tab-2">
-                <li class="active"><a href="#basic" title="{t}Basic information{/t}" data-toggle="tab">{t}User info{/t}</a></li>
-                <li class=""><a href="#settings" title="{t}Settings{/t}" data-toggle="tab">{t}Settings{/t}</a></li>
-                <li class=""><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}" data-toggle="tab">{t}Privileges{/t}</a></li>
-                {acl isAllowed="USER_ADMIN"}
-                {is_module_activated name="PAYWALL"}
-                <li><a href="#paywall" title="{t}Paywall{/t}" data-toggle="tab">{t}Paywall{/t}</a></li>
-                {/is_module_activated}
-                {/acl}
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="basic">
-                    <div class="avatar-picker col-sm-3">
+            </div>
+        </div>
+        <div class="grid-body no-padding">
+            <tabset>
+                <tab heading="{t}User info{/t}">
+                    <div class="col-md-3">
                         <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
                             {if $user->photo->name}
                             <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
@@ -74,103 +57,81 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="user-info form-vertical col-sm-9">
-                        <fieldset>
-                            <div class="form-group">
-                                <label for="name" class="control-label">{t}Display name{/t}</label>
-                                <div>
-                                    <input class="form-control" type="text" id="name" name="name" value="{$user->name|default:""}" class="required" maxlength="50"/>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <fieldset>
-                            <div class="form-group">
-                                <label for="login" class="control-label">{t}User name{/t}</label>
-                                <div class="controls">
-                                    <input type="text" id="login" name="login" value="{$user->username|default:""}" class="form-control" required=required maxlength="20"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email" class="control-label">{t}Email{/t}</label>
-                                <div class="controls">
-                                    <input class="form-control" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="url" class="control-label">{t}Blog Url{/t}</label>
-                                <div class="controls">
-                                    <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="bio" class="control-label">{t}Biography{/t}</label>
-                                <div class="controls">
-                                    <textarea id="bio" name="bio" rows="3" class="form-control">{$user->bio|default:""}</textarea>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <fieldset>
-                            <div class="form-group">
-                                <label for="password" class="control-label">{t}Password{/t}</label>
-                                <div class="controls">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                        <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
-                                <div class="controls">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                        <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
-                                    </div>
-                                </div>
-                            </div>
-                        <fieldset>
-                    </div>
-                </div><!-- .basic -->
-
-                <div class="tab-pane" id="settings">
-                    <div class="form-horizontal" role="form">
+                    <div class="col-md-9">
                         <div class="form-group">
-                            <label for="sessionexpire" class="col-sm-5 control-label">{t}Session expire time:{/t}</label>
-                            <div class="col-sm-7">
-                                <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
-                                <span>{t}minutes{/t}</span>
+                            <label for="name">{t}Display name{/t}</label>
+                            <div>
+                                <input class="form-control" id="name" ng-model="user.name" ng-required="required" ng-maxlength="50" type="text"/>
                             </div>
                         </div>
-
-                        {is_module_activated name="PAYWALL"}
                         <div class="form-group">
-                            <label for="user_language" class="col-sm-5 control-label">{t}User type{/t}</label>
-                            <div class="col-sm-7 controls">
-                                <select id="usertype" name="type">
-                                    <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                                    <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-                                </select>
+                            <label for="login">{t}User name{/t}</label>
+                            <div class="controls">
+                                <input class="form-control" id="login" ng-model="user.username"  ng-required="required" ng-maxlength="20" type="text"/>
                             </div>
                         </div>
-                        {/is_module_activated}
-
                         <div class="form-group">
-                            <label for="meta[user_language]" class="col-sm-5 control-label">{t}User language{/t}</label>
-                            <div class="col-sm-7">
-                                {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                                <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                            <label for="email">{t}Email{/t}</label>
+                            <div class="controls">
+                                <input class="form-control" id="email" placeholder="test@example.com"  ng-model="user.email" ng-required="required" type="email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="url">{t}Blog Url{/t}</label>
+                            <div class="controls">
+                                <input class="form-control" id="url" placeholder="http://" ng-model="user.url" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bio">{t}Biography{/t}</label>
+                            <div class="controls">
+                                <textarea class="form-control" id="bio" rows="3">[% user.bio %]</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">{t}Password{/t}</label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                    <input class="form-control" id="password" ng-model="user.password" maxlength="20" type="password"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordconfirm">{t}Confirm password{/t}</label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                    <input class="form-control" id="rpassword" ng-model="user.password" maxlength="20" type="password"/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane" id="privileges">
+                </tab>
+                <tab heading="{t}Settings{/t}">
+                    <div role="form-horizontal">
+                        <div class="form-group">
+                            <label for="session-expire">{t}Session expire time:{/t}</label>
+                            <input class="form-control" id="session-expire" ng-model="user.sessionexpire" type="number"/>
+                            <span>{t}minutes{/t}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-type">{t}User type{/t}</label>
+                            <select id="user-type" ng-model="user.type">
+                                <option value="0">{t}Backend{/t}</option>
+                                <option value="1">{t}Frontend{/t}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-language">{t}User language{/t}</label>
+                            <select id="user-language" ng-model="user.meta.user_language" ng-options="">
+
+                            </select>
+                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="{t}Privileges{/t}">
                     {acl isAllowed="GROUP_CHANGE"}
                         <div class="groups">
                             <label for="id_user_group">{t}User group:{/t}</label>
@@ -188,24 +149,16 @@
                             </select>
                         </div>
                     {/acl}
-                </div><!-- /privileges -->
-
-                {acl isAllowed="USER_ADMIN"}
+                </tab>
                 {is_module_activated name="PAYWALL"}
-                <div class="tab-pane" id="paywall">
-                    <div class="form-horizontal">
-                            <div class="form-group">
-                            <label for="paywall_time_limit" class="col-sm-5 control-label">{t}Paywall time limit:{/t}</label>
-                            <div class="col-sm-7 controls">
-                                <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
-                            </div>
+                    <tab heading="{t}Paywall{/t}">
+                        <div class="form-group">
+                            <label for="time-limit">{t}Paywall time limit:{/t}</label>
+                            <input type="datetime" id="time-limit" ng-model="user.meta.paywall_time_limit"/>
                         </div>
-                    </div>
-                </div>
-                <!-- paywall -->
+                    </tab>
                 {/is_module_activated}
-                {/acl}
-            </div>
+            </tabset>
+         </div>
     </div>
-</form>
 </div><!-- .content -->
