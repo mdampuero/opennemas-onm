@@ -1,4 +1,4 @@
-manager_instance_list:
+manager_instances_list:
     path: /instances
     defaults: { _controller:  ManagerBundle:Instances:list }
     options:
@@ -11,7 +11,6 @@ manager_instance_show:
         id: \d+
     options:
         expose: true
-
 
 manager_instance_create:
     path: /instance/create

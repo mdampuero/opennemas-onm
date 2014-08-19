@@ -1,4 +1,4 @@
-manager_user_list:
+manager_users_list:
     path: /users
     defaults: { _controller:  ManagerBundle:AclUser:list }
     options:
@@ -28,7 +28,7 @@ manager_user_delete:
     options:
         expose: true
 
-manager_user_batchdelete:
+manager_users_delete:
     path: /user/batchdelete
     defaults: { _controller:  ManagerBundle:AclUser:batchDelete }
     options:

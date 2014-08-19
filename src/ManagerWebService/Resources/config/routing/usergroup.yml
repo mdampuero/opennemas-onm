@@ -1,0 +1,39 @@
+manager_ws_user_group_delete:
+    path:     /usergroup/{id}/delete
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:delete }
+    options:
+        expose: true
+
+manager_ws_user_group_set_activated:
+    path:     /usergroup/{id}/set-activated
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:setActivated }
+    options:
+        expose: true
+
+manager_ws_user_group_show:
+    path:     /usergroup/{id}/show
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:show }
+    options:
+        expose: true
+
+manager_ws_user_groups_delete:
+    path:     /usergroups/delete
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:batchDelete }
+    options:
+        expose: true
+
+manager_ws_user_groups_list:
+    path:     /usergroups/list
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:list }
+    options:
+        expose: true
+
+manager_ws_user_groups_list_export:
+    path: /usergroup/list-export.csv
+    defaults: { _controller:  ManagerWebServiceBundle:UserGroup:export }
+
+manager_ws_user_groups_set_activated:
+    path:     /usergroups/set-activated
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:batchSetActivated }
+    options:
+        expose: true
