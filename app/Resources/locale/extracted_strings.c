@@ -6803,12 +6803,6 @@ gettext("Comments");
 gettext("Disqus module configuration");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
-gettext("Config disqus module");
-
-/* public/themes/admin/tpl/comment/disqus/list.tpl */
-gettext("Config disqus module");
-
-/* public/themes/admin/tpl/comment/disqus/list.tpl */
 gettext("Config");
 
 /* public/themes/admin/tpl/comment/disqus/list.tpl */
