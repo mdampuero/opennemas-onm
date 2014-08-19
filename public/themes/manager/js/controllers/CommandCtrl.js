@@ -14,13 +14,13 @@ angular.module('ManagerApp.controllers').controller('CommandCtrl',
          *
          * @type Object
          */
-        $scope.commands = data.commands;
+        $scope.commands = data.results;
 
         /**
          * List of instances (to clear smarty-cache)
          *
          * @type Object
          */
-        $scope.instances = data.instances;
+        $scope.template = data.template;
     }
 );

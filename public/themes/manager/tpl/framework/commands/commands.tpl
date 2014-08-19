@@ -64,7 +64,7 @@
                                 <div class="control">
                                     <select name="params[instance]">
                                         <option value="">All</option>
-                                        <option value="{$instance}" ng-repeat="instance in instances">[% instance %]</option>
+                                        <option value="{$instance}" ng-repeat="instance in template.instances">[% instance %]</option>
                                     </select>
                                 </div>
                             </div>

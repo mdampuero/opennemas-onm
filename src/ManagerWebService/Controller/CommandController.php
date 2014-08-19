@@ -45,12 +45,13 @@ class CommandController extends Controller
 
         return new JsonResponse(
             array(
-                'commands'  => $commands,
-                'instances' => $instances,
+                'results'  => $commands,
+                'template' => array(
+                    'instances' => $instances
+                ),
             )
         );
     }
-
 
     /**
      * Returns the command executer.
