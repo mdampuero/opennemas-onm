@@ -14,13 +14,6 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          *
          * @type Object
          */
-        $scope.users = data.results;
-
-        /**
-         * List of template parameters
-         *
-         * @type Object
-         */
-        $scope.template = data.template;
+        $scope.user = data.user;
     }
 );

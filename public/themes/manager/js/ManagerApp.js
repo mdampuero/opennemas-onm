@@ -66,7 +66,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             .when('/', {
                 templateUrl: '/managerws/template/index:index.tpl'
             })
-            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_list'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instances_list'), {
                 templateUrl: '/managerws/template/instances:list.tpl',
                 controller:  'InstanceListCtrl',
                 resolve: {
@@ -103,7 +103,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_commands'), {
                 templateUrl: '/managerws/template/framework:commands:commands.tpl',
-                controller:  'CommandCtrl',
+                controller:  'CommandListCtrl',
                 resolve: {
                     data: function(itemService) {
                         return itemService.list('manager_ws_commands_list', {}).then(
@@ -117,9 +117,9 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_opcache_status'), {
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
             })
-            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_list'), {
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_users_list'), {
                 templateUrl: '/managerws/template/acl:user:list.tpl',
-                controller:  'UserCtrl',
+                controller:  'UserListCtrl',
                 resolve: {
                     data: function(itemService) {
                         return itemService.list('manager_ws_users_list', {}).then(
@@ -130,8 +130,44 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                     }
                 }
             })
-            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_usergroup_list'), {
-                templateUrl: '/managerws/template/acl:user_group:list.tpl'
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_show', { id: '\:id' }), {
+                templateUrl: '/managerws/template/acl:user:edit.tpl',
+                controller:  'UserCtrl',
+                resolve: {
+                    data: function($route, itemService) {
+                        return itemService.show('manager_ws_user_show', $route.current.params.id).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
+            })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_groups_list'), {
+                templateUrl: '/managerws/template/acl:user_group:list.tpl',
+                controller:  'UserGroupListCtrl',
+                resolve: {
+                    data: function(itemService) {
+                        return itemService.list('manager_ws_user_groups_list', {}).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
+            })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_show', { id: '\:id'}), {
+                templateUrl: '/managerws/template/acl:user_group:edit.tpl',
+                controller:  'UserGroupCtrl',
+                resolve: {
+                    data: function(itemService) {
+                        return itemService.list('manager_ws_user_groups_list', {}).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
             })
             .otherwise({
                 redirectTo: '/',
