@@ -1,148 +1,27 @@
-{extends file="base/base.tpl"}
-
-{block name="footer-js" append}
-    {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
-        @Common/js/jquery/jquery.multiselect.js,
-        @Common/js/onm/jquery.password-strength.js,
-        @Common/js/onm/bootstrap-fileupload.min.js "}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-<script>
-    jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
-
-        // $('#formulario').onmValidate({
-        //     'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        // });
-
-        // Show/hide privilege tab depending on userType backend/frontend
-        if($('select#usertype').val() == '1') {
-            $('#id_user_group').removeAttr('required');
-            $('#privileges').hide();
-            $('.privileges-tab').hide();
-        }
-        $('select#usertype').change(function() {
-            if($(this).val() == '1'){
-                $('#id_user_group').removeAttr('required');
-                $('#privileges').hide();
-                $('.privileges-tab').hide();
-            } else {
-                $('#privileges').show();
-                $('.privileges-tab').show();
-                $('#id_user_group').attr('required', 'required');
-            }
-        });
-
-        $('.tabs').tabs();
-
-        // Password strength checker
-        var strength = $('#password').passStrength({
-            userid: '#login'
-        });
-
-        // Avatar image uploader
-        $('.fileupload').fileupload({
-            name: 'avatar',
-            uploadtype:'image'
-        });
-
-        $('.delete').on('click', function(){
-            $('.file-input').val('0');
-        })
-
-        // Use multiselect on user groups and categories
-        // $('select#id_user_group').twosidedmultiselect();
-        // $('select#ids_category').twosidedmultiselect();
-
-        // Paywall datepicker only if available
-        {acl isAllowed='USER_ADMIN'}
-            {is_module_activated name='PAYWALL'}
-            jQuery('#paywall_time_limit').datetimepicker({
-                hourGrid: 4,
-                showAnim: 'fadeIn',
-                dateFormat: 'yy-mm-dd',
-                timeFormat: 'hh:mm:ss',
-                minuteGrid: 10
-            });
-            {/is_module_activated}
-        {/acl}
-    });
-</script>
-{/block}
-
-
-{block name="header-css" append}
-{stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}">
-{/stylesheets}
-<style type="text/css">
-label {
-    font-weight:normal;
-}
-.avatar, .user-info {
-    vertical-align: top;
-    display:inline-block;
-}
-.avatar {
-    margin-right:20px;
-}
-.avatar img {
-    width:150px;
-    height:150px;
-}
-
-.tooltip {
-    max-width:160px;
-}
-/* Styles for password strenght */
-.alert-pass {
-    background: #F8D47A url("/assets/images/alert-ok-small.png") no-repeat 16px;
-    display: inline-block;
-    margin: 0;
-    padding: 5px 15px 5px 50px;
-    margin-left: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    color: white;
-}
-.alert-pass.alert-success { background: #468847 url("/assets/images/alert-ok-small.png") no-repeat 16px; }
-.alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
-/* Recommended styles tsms */
-.tsmsselect {
-        float: left;
-}
-
-.tsmsselect select {
-}
-
-.tsmsoptions {
-        width: 10%;
-        float: left;
-}
-
-.tsmsoptions p {
-        margin: 2px;
-        text-align: center;
-        font-size: larger;
-        cursor: pointer;
-}
-
-.tsmsoptions p:hover {
-        color: White;
-        background-color: Silver;
-}
-.groups, .categorys {
-    display: inline-block;
-    width: 100%;
-}
-</style>
-{/block}
-
-{block name="content"}
 <div class="content">
-    <div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
+    <div class="page-title clearfix">
+        <h3 class="pull-left">
+            <i class="fa fa-user"></i>
+            <span ng-if="!user.id">{t}New user{/t}</span>
+            <span ng-if="user.id">{t}Edit user{/t}</span>
+        </h3>
+        <ul class="breadcrumb pull-right">
+            <li>
+                <p>{t}YOU ARE HERE{/t}</p>
+            </li>
+            <li>
+                <a href="#">{t}Dashboard{/t}</a>
+            </li>
+            <li>
+                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">{t}Users{/t}</a>
+            </li>
+            <li>
+                <span class="active" ng-if="!user.id">{t}New user{/t}</span>
+                <span class="active" ng-if="user.id">{t}Edit user{/t}</span>
+            </li>
+        </ul>
+    </div>
 
-    {render_messages}
 
     <form action="{if isset($user->id)}{url name=manager_acl_user_update id=$user->id}{else}{url name=manager_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
 		<ul class="top-buttons">
@@ -330,4 +209,3 @@ label {
     </div>
 </form>
 </div><!-- .content -->
-{/block}

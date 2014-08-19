@@ -99,7 +99,7 @@
 						<tr ng-repeat-end>
 							<td class="text-right" colspan="5" style="border-top: 0;">
 								<div class="buttons">
-									<a class="btn btn-link" href="#">
+									<a class="btn btn-link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
 										<i class="fa fa-edit"></i> {t}Edit{/t}
 									</a>
 									<button class="btn btn-link" type="button">

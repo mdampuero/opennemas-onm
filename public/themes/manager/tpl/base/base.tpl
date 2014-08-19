@@ -218,8 +218,8 @@
                     <li class="start" ng-class="{ 'active': false }">
                         <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_instance_list') }">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
+                    <li ng-class="{ 'active': isActive('manager_instances_list') }">
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
                         <a href="#">
@@ -235,20 +235,20 @@
                             </li>
                         </ul>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_user_list') || isActive('manager_usergroup_list') }">
+                    <li ng-class="{ 'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
                         <a href="#">
                             <i class="fa fa-gears"></i>
                             <span class="title">{t}Settings{/t}
-                            </span><span class="arrow" ng-class="{ 'open': isActive('manager_user_list') || isActive('manager_usergroup_list') }"></span>
+                            </span><span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_user_list') }">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_list') %]">
+                            <li ng-class="{ 'active': isActive('manager_users_list') }">
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
-                            <li ng-class="{ 'active': isActive('manager_usergroup_list') }">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_usergroup_list') %]">
+                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }">
+                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>
                             </li>
