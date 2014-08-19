@@ -348,7 +348,6 @@ class InstanceController extends Controller
         );
     }
 
-
     /**
      * Returns the list of instances as JSON.
      *
@@ -367,20 +366,15 @@ class InstanceController extends Controller
         $instances = $im->findBy($criteria, $orderBy, $epp, $page);
         $total = $im->countBy($criteria);
 
-        foreach ($instances as &$instance) {
-            $instance->show_url = $this->generateUrl(
-                'manager_instance_show',
-                array('id' => $instance->id)
-            );
-        }
-
-        return new JsonResponse(array(
-            'epp'     => $epp,
-            'extra'   => array(),
-            'page'    => $page,
-            'results' => $instances,
-            'total'   => $total,
-        ));
+        return new JsonResponse(
+            array(
+                'epp'     => $epp,
+                'extra'   => array(),
+                'page'    => $page,
+                'results' => $instances,
+                'total'   => $total,
+            )
+        );
     }
 
     /**
