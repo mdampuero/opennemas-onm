@@ -27,13 +27,13 @@ class UserGroupManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param DbalWrapper    $conn        The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn      = $dbConn;
+        $this->conn        = $conn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
     }
@@ -53,8 +53,8 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(pk_user_group) FROM `user_groups` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchArray($sql);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -100,7 +100,7 @@ class UserGroupManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria = array(), $order = array(), $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
         $whereSQL = $this->getFilterSQL($criteria);
@@ -114,8 +114,8 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT pk_user_group FROM `user_groups` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -182,7 +182,7 @@ class UserGroupManager extends BaseManager
      */
     public function delete($id)
     {
-        $this->dbConn->transactional(function ($em) use ($id) {
+        $this->conn->transactional(function ($em) use ($id) {
             $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
         });
 
