@@ -13,11 +13,11 @@
                 <a href="#">{t}Dashboard{/t}</a>
             </li>
             <li>
-                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_list') %]">{t}Instances{/t}</a>
+                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">{t}Instances{/t}</a>
             </li>
             <li>
-                <a class="active" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_list') %]" ng-if="!instance.id">{t}New instance{/t}</a>
-                <a class="active" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_list') %]" ng-if="instance.id">{t}Edit instance{/t}</a>
+                <span class="active" ng-if="!instance.id">{t}New instance{/t}</span>
+                <span class="active" ng-if="instance.id">{t}Edit instance{/t}</span>
             </li>
         </ul>
     </div>
@@ -49,12 +49,12 @@
         </div>
         <div class="grid-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-sm-12">
                     <h4>General information</h4>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <div class="form-group">
                         <label class="form-label">{t}Site name{/t}</label>
                         <span class="help">{t}(Human readable name){/t}</span>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-label">{t}Internal name{/t}</label>
                         <span class="help">{t}Alphanumeric, without spaces{/t}</span>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Database{/t}</label>
                         <div class="controls">
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-label">{t}Last invoice date{/t}</label>
                         <div class="controls">
@@ -92,20 +92,22 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-sm-12">
                     <h4>Domains</h4>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <div class="form-group">
                         <label for="domains" class="form-label">{t}Domains{/t}</label>
                         <div class="controls">
-                            <textarea name="" id="" cols="30" rows="10"></textarea>
+                            <tags-input ng-model="domains" placeholder="{t}Add a domain{/t}" add-on-enter="true" add-on-space="true" add-on-comma="true" min-tags="1" on-tag-added="cleanDomains();" on-tag-removed="cleanDomains();">
+                            </tags-input>
                         </div>
+
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="domains" class="form-label">{t}Main domain{/t}</label>
                         <div class="controls">
@@ -124,14 +126,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-sm-12">
                             <h4>{t}Internals{/t}</h4>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label" for="template">{t}Language{/t}</label>
                                 <div class="controls">
@@ -145,7 +147,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="form-label" for="template">{t}Minimum password level{/t}</label>
                                 <div class="controls">
@@ -166,31 +168,41 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-sm-12">
                             <h4>External services</h4>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="form-label" for="piwik_page_id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
+                                <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
                                 <div class="controls">
-                                    <input type="text" id="piwik_page_id" name="external[piwik][page_id]" value="{$instance->external['piwik']['page_id']|default:""}">
+                                    <input class="form-control" id="piwik-page-id" ng-model="instance.external.piwik.page_id" type="text">
                                     <div class="help-block">
                                         {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="piwik_server_url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
+                                <label class="form-label" for="piwik-server-url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
                                 <div class="controls">
-                                    <input id="piwik_server_url" ng-model="instance.external.piwik.page_id" type="text">
+                                    <input class="form-control" id="piwik-server-url" ng-model="instance.external.piwik.server_url" type="text">
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary btn-large" ng-click="save();" ng-disabled="true" ng-if="!instance.id">
+                        <i class="fa fa-save"></i> {t}Save{/t}
+                    </button>
+                    <button class="btn btn-primary btn-large" ng-click="update();" ng-disabled="true" ng-if="instance.id">
+                        <i class="fa fa-save"></i> {t}Save{/t}
+                    </button>
                 </div>
             </div>
         </div>

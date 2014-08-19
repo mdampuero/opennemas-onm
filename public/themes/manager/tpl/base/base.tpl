@@ -33,6 +33,8 @@
                           @Common/plugins/angular-quickdate/css/ng-quick-date.css,
                           @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
                           @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+                          @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+
 
                           @Common/css/opennemas/style.css"
                      filters="cssrewrite"}
@@ -75,6 +77,7 @@
                           @Common/plugins/angular-route/angular-route.min.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
                           @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+                          @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
                           @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
 
                           @Common/plugins/angular-onm/services/*,
@@ -263,6 +266,10 @@
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content" ng-class="{ 'condensed': mini }">
                 <div ng-view></div>
+                <!-- <div class="toolbar" style="position: fixed; top: 60px; background: #1b1e24 !important; width: 50px; right: 0; height: 100%; text-align: center;">
+                    <a class="btn btn-link"><i class="fa fa-save"></i></a>
+                    <a class="btn btn-link"><i class="fa fa-edit"></i></a>
+                </div> -->
             </div>
         <!-- END PAGE CONTAINER -->
     </div>

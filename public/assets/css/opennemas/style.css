@@ -427,3 +427,79 @@ tr:hover + tr .buttons,
 tr:hover .buttons {
     opacity: 1;
 }
+
+
+/* =============================================================================
+   ngTagsInput
+   ========================================================================== */
+
+tags-input .tags {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border: 1px solid #e5e9ec;
+    box-shadow: none;
+    overflow: hidden;
+    cursor: text;
+    padding: 2px;
+    word-wrap: break-word;
+}
+
+tags-input .tags.focused {
+    outline: none;
+    box-shadow: none;
+}
+
+tags-input .tags {
+    transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused {
+    border-color: #e5e9ec;
+    background-color: #f4f5f7;
+}
+
+tags-input .tags .tag-item {
+    background: 0;
+    background-color: #0090d9;
+    border: 0;
+    border-radius: .25em;
+    color: #fff;
+    display: inline-block;
+    font-family: 'Open Sans';
+    font-weight: 600;
+    margin-right: 4px;
+    text-shadow: none;
+    vertical-align: middle;
+}
+
+tags-input .tags .input {
+    border: 0;
+    outline: 0;
+    margin: 2px;
+    padding: 0;
+    padding-left: 5px;
+    float: left;
+    height: 26px;
+    transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused .input {
+    background-color: #f4f5f7;
+}
+
+tags-input .tags .tag-item.selected {
+    background: 0;
+    background-color: #e94847;
+}
+
+tags-input .tags .tag-item .remove-button {
+    margin: 0 0 0 5px;
+    padding: 0;
+    border: none;
+    background: 0 0;
+    cursor: pointer;
+    vertical-align: middle;
+    font: 700 16px Arial,sans-serif;
+    color: #fff;
+}
