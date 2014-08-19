@@ -8,7 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2014-08-18 16:47+0200\n"
+=======
+"POT-Creation-Date: 2014-08-19 01:15+0200\n"
+>>>>>>> Updated Spanish translations
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,9 +34,15 @@ msgstr ""
 msgid "Default system language"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:165
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/OpinionsController.php:746
 msgid "User data sent not valid."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AclUserController.php:165
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/OpinionsController.php:746
+msgid "The data send by the user is not valid."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:223
@@ -40,9 +50,14 @@ msgstr ""
 msgid "User data updated successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:227
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controller/AclUserController.php:174
 msgid "Unable to update the user with that information"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AclUserController.php:227
+msgid "Unable to update the user with the submitted information."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:299
@@ -97,8 +112,13 @@ msgstr ""
 msgid "Username reminder for %s"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:624
 msgid "Unable to send your recover username email. Please try it later."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AclUserController.php:624
+msgid "Unable to send the email to recover your username. Please try it later."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AclUserController.php:663
@@ -268,12 +288,21 @@ msgstr ""
 msgid "Unable to update the advertisement data."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AdsController.php:404
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AlbumsController.php:495
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:382
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/OpinionsController.php:603
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/PollsController.php:618
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/SpecialsController.php:359
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AdsController.php:404
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AlbumsController.php:495
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:378
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/OpinionsController.php:603
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/PollsController.php:618
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/SpecialsController.php:359
+>>>>>>> Updated Spanish translations
 msgid "Settings saved successfully."
 msgstr ""
 
@@ -318,6 +347,7 @@ msgstr ""
 msgid "Album updated successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AlbumsController.php:347
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/BooksController.php:339
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:340
@@ -325,6 +355,15 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/OpinionsController.php:461
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/SpecialsController.php:328
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:544
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/AlbumsController.php:347
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/BooksController.php:339
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:336
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:365
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/OpinionsController.php:461
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/SpecialsController.php:328
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/VideosController.php:544
+>>>>>>> Updated Spanish translations
 msgid "Positions saved successfully."
 msgstr ""
 
@@ -332,8 +371,13 @@ msgstr ""
 msgid "Unable to save the new positions."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ArticlesController.php:78
 msgid "You don't have enought privileges to see this category."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/ArticlesController.php:78
+msgid "You don't have enough privileges to see this category."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ArticlesController.php:194
@@ -370,8 +414,13 @@ msgstr ""
 msgid "Article deleted successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ArticlesController.php:555
 msgid "You must give an id for delete an article."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/ArticlesController.php:555
+msgid "You must give an id to delete an article."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/AuthenticationController.php:54
@@ -398,7 +447,7 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/BooksController.php:173
 #, php-format
-msgid "Sorry, file can't created book."
+msgid "Unable to create the new book."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/BooksController.php:196
@@ -412,10 +461,17 @@ msgstr ""
 msgid "Book data sent not valid."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/BooksController.php:343
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:342
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/FilesController.php:370
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:548
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/BooksController.php:343
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:338
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:369
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/VideosController.php:548
+>>>>>>> Updated Spanish translations
 msgid ""
 "Unable to save the new positions. Please contact with your system "
 "administrator."
@@ -565,12 +621,21 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CommentsController.php:101
 msgid "Congratulations! You are now using Opennemas comment system."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CommentsController.php:111
 msgid "Congratulations! You are now using Facebook comment system."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CommentsController.php:101
+msgid "Now you are using the Opennemas comment system."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CommentsController.php:111
+msgid "Now you are using the Facebook comment system."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CommentsController.php:120
@@ -641,13 +706,16 @@ msgstr ""
 msgid "Unable to find the cover with the id \"%d\""
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:190
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:189
+>>>>>>> Updated Spanish translations
 #, php-format
-msgid ""
-"There was an error while uploading the file. Try to upload a file smaller "
-"than %d MB or contact with your administrator"
+msgid "Unable to upload the file. Try to upload a file smaller than %d MB"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:202
 msgid "There was a problem with the cover data. Try again"
 msgstr ""
@@ -665,23 +733,61 @@ msgid "Cover updated successfully."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:296
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:198
+msgid "Unable to create the file. Try again"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:234
+msgid "Cover id not valid."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:253
+msgid "You can't modify this cover because you don't have enough privileges."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:259
+msgid "Cover updated successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:292
+>>>>>>> Updated Spanish translations
 #, php-format
 msgid "Cover %s deleted successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/CoversController.php:298
 msgid "You must give an id for delete the cover."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/CoversController.php:294
+msgid "You must give an id to delete the cover."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/DatabaseErrorsController.php:116
 msgid "SQL errors registered in database cleaned sucessfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ErrorController.php:61
 msgid "Instance not found"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ErrorController.php:84
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/ErrorController.php:61
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/Command/GenerateLibraryCommand.php:64
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/Command/SyncNewsAgencyCommand.php:66
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/EventListener/InstanceLoaderListener.php:101
+msgid "Instance not found"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/ErrorController.php:84
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/Command/GenerateLibraryCommand.php:60
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/Command/SyncNewsAgencyCommand.php:62
+#: /home/fran/Projects/OpenHost/opennemas/src/Framework/EventListener/InstanceLoaderListener.php:106
+>>>>>>> Updated Spanish translations
 msgid "Instance not activated"
 msgstr ""
 
@@ -704,6 +810,7 @@ msgstr ""
 msgid "Unable to upload the file: A file with the same name already exists."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/FilesController.php:251
 msgid ""
 "There was an error while uploading the file. <br />Please, contact your "
@@ -715,16 +822,35 @@ msgid "Please select a file before send the form"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/FilesController.php:286
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:251
+msgid "There was an error while uploading the file."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:262
+msgid "You must pick a file before submitting the form"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:285
+>>>>>>> Updated Spanish translations
 #, php-format
 msgid "Unable to find the file with the id \"%s\""
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/FilesController.php:326
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:325
+>>>>>>> Updated Spanish translations
 #, php-format
-msgid "File information updated successfully."
+msgid "File successfully updated."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/FilesController.php:328
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/FilesController.php:327
+>>>>>>> Updated Spanish translations
 #, php-format
 msgid "There was a problem while saving the file information."
 msgstr ""
@@ -773,8 +899,13 @@ msgstr ""
 msgid "Unable to find the photo with the id \"%d\""
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ImagesController.php:329
 msgid "Not valid file or the file exceeds the max allowed file size."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/ImagesController.php:329
+msgid "Not valid file format or the file exceeds the max allowed file size."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/ImagesController.php:510
@@ -805,12 +936,21 @@ msgstr ""
 msgid "There was an error while saving importer XML configuration"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/InstanceSyncController.php:114
 msgid "Instance sync module configuration saved successfully"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/InstanceSyncController.php:116
 msgid "There was an error while saving the Instance sync module configuration"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/InstanceSyncController.php:114
+msgid "Configuration saved successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/InstanceSyncController.php:116
+msgid "There was an error while saving the configuration"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/InstanceSyncController.php:271
@@ -1000,8 +1140,13 @@ msgstr ""
 msgid "Please assign the category where import this article"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:93
 msgid "d-m-Y"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:93
+msgid "Y-m-d"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:360
@@ -1011,10 +1156,11 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:376
 msgid ""
-"Your newsletter configuration is not complete. Please contact with Opennemas "
-"administrator. newsletter_sender fault"
+"Your newsletter configuration is not complete. You must complete the sender "
+"email addres."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:427
 msgid "Unable to deliver your email"
 msgstr ""
@@ -1048,13 +1194,49 @@ msgid ""
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:575
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:426
+msgid "Unable to deliver your email"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:433
+msgid "Max sents reached."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:479
+msgid "Newsletter deleted successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:481
+msgid "You must give an id for delete a newsletter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:512
+msgid "Newsletter module settings saved successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:558
+msgid "Please fill the sender email address in the module configuration."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:564
+msgid "Please fill the mail list email address in the module configuration."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:574
+>>>>>>> Updated Spanish translations
 msgid ""
-"Your newsletter configuration is not complete. Please go to settings and "
+"Your newsletter configuration is not completed. Please go to settings and "
 "complete the form."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterController.php:626
 msgid "You have send max mailing allowed"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/NewsletterController.php:625
+msgid "You have reached the maximum of emails allowed to send"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/NewsletterSubscriptorsController.php:108
@@ -1181,8 +1363,13 @@ msgstr ""
 msgid "Unable to create the author with that information"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/OpinionsController.php:803
 msgid "Author data updated successfully."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/OpinionsController.php:803
+msgid "Author updated successfully."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/OpinionsController.php:805
@@ -1213,6 +1400,7 @@ msgstr ""
 msgid "Please configure your Paywall module before using it."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/PaywallController.php:514
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1223
 msgid "Paypal API authentication is incorrect. Please try again."
@@ -1225,6 +1413,18 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/PaywallController.php:518
 msgid ""
 "Paypal IPN configuration is incorrect. Please validate it and try again."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/PaywallController.php:514
+msgid "Paypal API authentication is incorrect."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/PaywallController.php:516
+msgid "We are checking your IPN url. Please wait a minute."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/PaywallController.php:518
+msgid "Paypal IPN configuration is incorrect. Please validate it."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/PaywallController.php:520
@@ -1400,8 +1600,13 @@ msgstr ""
 msgid "Video updated successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:351
 msgid "You must give an id for delete the video."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controller/VideosController.php:351
+msgid "You must give an id to delete the video."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:384
@@ -1419,7 +1624,7 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:500
 #, php-format
-msgid "<br>The video has some relations"
+msgid "The video has some relations"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controller/VideosController.php:506
@@ -1453,6 +1658,7 @@ msgstr ""
 msgid "Widget updated successfully."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/BackendWebService/Controller/CommentsController.php:46
 #: /home/others/www/idealgallego/onm-instance/src/BackendWebService/Controller/CommentsController.php:159
 #: /home/others/www/idealgallego/onm-instance/src/BackendWebService/Controller/ContentController.php:126
@@ -1827,10 +2033,495 @@ msgid "The user name is already in use."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controller/UserController.php:129
-#, php-format
-msgid "New user account in %s"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:10
+msgid "Web site"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:14
+msgid "Frontpage Manager"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:21
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4961
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5612
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6602
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9632
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9704
+msgid "Advertisements"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:28
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:126
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1541
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2909
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5639
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8297
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9644
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9716
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9782
+msgid "Widgets"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:35
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:108
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3575
+msgid "Menus"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:41
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4736
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9623
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9695
+msgid "Contents"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:48
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:90
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:944
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2891
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5603
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5990
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6077
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6554
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6572
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6587
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6617
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6632
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6647
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9626
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9698
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9758
+msgid "Articles"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:54
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:947
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2894
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2912
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5606
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6080
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7349
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7394
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8300
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9629
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9701
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9767
+msgid "Opinions"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:60
+msgid "Article opinions"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:67
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6980
+msgid "Authors"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:75
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:96
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6800
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6821
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6854
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6878
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6917
+msgid "Comments"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:82
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:113
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:953
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2594
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2648
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2900
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4877
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4880
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5630
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6089
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8312
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9653
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9725
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9779
+msgid "Polls"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:89
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3494
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5636
+msgid "Static Pages"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:96
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:116
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5633
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6092
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6218
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6248
+msgid "Specials"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:103
+msgid "Letter to the editor"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:110
+msgid "Category manager"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:116
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1871
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5057
+msgid "Media"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:121
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:102
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5417
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5519
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5621
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9773
+msgid "Images"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:128
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:98
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:956
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2327
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2348
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2906
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5627
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6095
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9764
+msgid "Files"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:135
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:124
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2081
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2903
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2915
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4100
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4301
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4355
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5624
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6083
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8303
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9641
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9713
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9776
+msgid "Videos"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:142
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:89
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:950
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2897
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2918
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5618
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6086
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6422
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7724
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7787
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8306
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9635
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9707
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9770
+msgid "Albums"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:148
+msgid "News Stand"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:155
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:93
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9083
+msgid "Books"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:161
+msgid "Utilities"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:167
+msgid "Global Search"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:173
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:120
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5642
+msgid "Trash"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:179
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:110
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:479
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:548
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:695
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:761
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:812
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1007
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4844
+msgid "Newsletter"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:185
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:103
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1154
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1280
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4178
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4703
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5483
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7535
+msgid "Keywords"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:189
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:127
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3143
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3146
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5795
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8318
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8384
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8426
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8678
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9359
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9362
+msgid "Paywall"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:193
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2330
+msgid "Statistics"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:199
+msgid "Paywall users"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:205
+msgid "Paywall purchases"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:212
+msgid "Sync Instances"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:220
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2051
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2141
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2264
+msgid "News Agency"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:227
+msgid "XML Importer"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:234
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:33
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:209
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:392
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:971
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1349
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2597
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2669
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3131
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3134
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4304
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4373
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4967
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6221
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6266
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6482
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6524
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6767
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6824
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6881
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6935
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6938
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7352
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7418
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7808
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8333
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8393
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8429
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8684
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9347
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9350
+msgid "Settings"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:238
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3758
+msgid "General"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:243
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:34
+msgid "Users & Groups"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:248
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:36
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:122
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3230
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9434
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9668
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9740
+msgid "Users"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:255
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:41
+msgid "User Groups"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:262
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:94
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9533
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9536
+msgid "Cache manager"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:268
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5162
+msgid "SQL error log"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Security/OnmOAuthUserProvider.php:126
+msgid ""
+"Unable to find an associated user to that social account. Notice that first "
+"you have to associated it from your Opennemas user account."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Security/OnmUserProvider.php:49
+msgid "Could not find user. Sorry!"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:46
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:159
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:126
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:194
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:48
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:103
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:70
+#, php-format
+msgid "Unable to delete the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:53
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:111
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:166
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:252
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:133
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:201
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:278
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:346
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:491
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:564
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:640
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:775
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:849
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:55
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:109
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:77
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:148
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:338
+#, php-format
+msgid "Unable to find the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:63
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:211
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:65
+#, php-format
+msgid "%d item(s) deleted successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:104
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:245
+#, php-format
+msgid "Unable to update item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:121
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:650
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:859
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:157
+#, php-format
+msgid "%d item(s) updated successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:153
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:120
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/MenusController.php:98
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:93
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:212
+msgid "Item deleted successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/CommentsController.php:239
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:558
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:706
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:769
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:332
+msgid "Item updated successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:43
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:102
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:169
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:247
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:314
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:392
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:459
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:537
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:603
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:686
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:749
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:812
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:894
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:45
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:122
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:194
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:312
+#, php-format
+msgid "Access denied (%s)"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:265
+msgid "Item restored successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:271
+#, php-format
+msgid "Unable to restore the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:339
+#, php-format
+msgid "Unable to restore from trash the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:356
+#, php-format
+msgid "%d item(s) restored successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:410
+msgid "Item removed permanently successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:416
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:484
+>>>>>>> Updated Spanish translations
+#, php-format
+msgid "Unable to remove permanently the item with id \"%d\""
+msgstr ""
+
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controller/UserController.php:148
 msgid "An error has occurred. Try to complete the form with valid data."
 msgstr ""
@@ -1856,10 +2547,47 @@ msgid "Log in succesful."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controller/UserController.php:304
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:423
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:712
 #, php-format
-msgid "Welcome to %s"
+msgid "Unable to find the item with id \"%s\""
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:501
+#, php-format
+msgid "%d item(s) removed successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:633
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:842
+#, php-format
+msgid "Unable to update the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:919
+#, php-format
+msgid "Unable to save the position for the item with id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/ContentController.php:931
+msgid "Positions saved successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:99
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:145
+#, php-format
+msgid "Unable to delete the item with the id \"%s\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:106
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:152
+>>>>>>> Updated Spanish translations
+#, php-format
+msgid "Unable to find the item with the id \"%s\""
+msgstr ""
+
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controller/UserController.php:334
 msgid "Unable to send your welcome email. Please try it later."
 msgstr ""
@@ -1925,10 +2653,65 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/ManagerWebService/Controller/InstanceController.php:149
 #: /home/others/www/idealgallego/onm-instance/src/ManagerWebService/Controller/InstanceController.php:397
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UserGroupsController.php:162
 #, php-format
-msgid "Error while updating instance with id \"%s\""
+msgid "%s item(s) deleted successfully"
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:87
+msgid "Selected items deleted successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:218
+#, php-format
+msgid "Unable to delete the item with the id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/BackendWebService/Controller/UsersController.php:225
+#, php-format
+msgid "Unable to find the item with the id \"%d\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:162
+msgid "Already voted."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:167
+msgid "Not valid request method"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:172
+msgid "Not valid vote value"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:185
+msgid "Error: no vote value!"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:195
+msgid "You have voted this comment previously."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:227
+msgid "Your comment was rejected due insults usage."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:241
+msgid "Your comment was accepted and now we have to moderate it."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/CommentsController.php:247
+msgid "Ensure you have completed all the form fields."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:167
+>>>>>>> Updated Spanish translations
+#, php-format
+msgid "%s has shared with you a content from %s."
+msgstr ""
+
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/src/ManagerWebService/Controller/InstanceController.php:167
 #, php-format
 msgid "%s instances updated successfully."
@@ -2311,6 +3094,248 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Resources/Menu.php:275
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:5678
 msgid "SQL error log"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:175
+msgid "Fill your Email address"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:178
+msgid "Complete your name"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:187
+msgid "Provide a list of valid emails separated by commas."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:225
+msgid "Article sent successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ContentsController.php:232
+msgid "Unable to send the email. Please try to send it later."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/ErrorController.php:56
+msgid "Unable to find the page you are looking for."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/FormController.php:93
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:92
+msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/FormController.php:101
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/FormController.php:164
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:102
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:108
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:179
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:202
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:222
+msgid ""
+"Sorry, we were unable to complete your request.\n"
+"Check the form and try again"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/FormController.php:104
+msgid "Email is required but it will not be published"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/FormController.php:160
+msgid "The information has been sent"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/LetterController.php:232
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:515
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:596
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1595
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3437
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7526
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8357
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8510
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9608
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9680
+msgid "Name"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/LetterController.php:232
+#: /home/fran/Projects/OpenHost/opennemas/app/models/PClave.php:277
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:512
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:599
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1757
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3170
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:6695
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:7208
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8732
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9386
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9836
+msgid "Email"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/LetterController.php:298
+msgid "Unable to save the letter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PaywallController.php:61
+#, php-format
+msgid "You already have an active Subscription until %s"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PaywallController.php:359
+msgid "Your payment was already registered"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PaywallController.php:531
+msgid "Your subscription could not been created. Please try again."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PollsController.php:217
+msgid "Thanks for participating."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PollsController.php:219
+msgid "Please select a valid poll answer."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PollsController.php:223
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/PollsController.php:226
+msgid "You have voted this poll previously."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/RatingsController.php:50
+msgid "Problem with IP verification!"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/RatingsController.php:65
+msgid "You have voted this new previously."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:147
+msgid "You have been subscribed to the newsletter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:153
+msgid "You have been unsusbscribed from the newsletter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:163
+msgid "Subscription form"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:171
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:198
+msgid "You have been subscribed to our newsletter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:173
+msgid "You have been unsubscribed from our newsletter."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:189
+msgid "Sorry, that email is already subscribed to our newsletter"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:218
+msgid "You have been unsubscribed from our newsletter"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/SubscriptionsController.php:228
+msgid "Sorry, that email is not in our database"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:114
+msgid "The email address is already in use."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:119
+msgid "The user name is already in use."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:129
+#, php-format
+msgid "New user account in %s"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:148
+msgid "An error has occurred. Try to complete the form with valid data."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:167
+msgid "Unable to send your registration email. Please try it later."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:223
+msgid "Data updated successfully"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:225
+msgid "There was an error while updating the user data."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:228
+msgid "The user does not exists."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:297
+msgid "Log in succesful."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:304
+#, php-format
+msgid "Welcome to %s"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:334
+msgid "Unable to send your welcome email."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:339
+msgid "There was an error while creating your user account."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:516
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:535
+msgid ""
+"Unable to find the password reset request. Please check the url we sent you "
+"in the email."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:562
+msgid "Logout"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:565
+msgid "My account"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:572
+msgid "Register"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controller/UserController.php:575
+msgid "Login"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/EventListeners/PaypalNotifications.php:110
+#, php-format
+msgid "%s - Premium subscription activated"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controller/AclUserController.php:57
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3260
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3272
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8372
+msgid "--All--"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controller/AclUserController.php:174
+msgid "Unable to update the user with that information"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controller/InstancesController.php:72
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controller/InstancesController.php:193
+#, php-format
+msgid "Unable to find an instance with the id \"%d\""
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Resources/Menu.php:9
@@ -2357,6 +3382,7 @@ msgstr ""
 msgid "Opcache status"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/vendor/core/ImporterXml.php:81
 msgid "Can't read file. Please check xml file..."
 msgstr ""
@@ -2367,16 +3393,67 @@ msgid "Error: Uri::generate should get $contentType and parameters"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/File/Image/Common.php:67
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:61
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:156
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:219
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:404
 #, php-format
-msgid "No valid operation (%s) for image transform. All operation string is %s"
+msgid "Unable to find the instance with id \"%s\""
 msgstr ""
 
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:98
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:256
+#, php-format
+msgid "Error while deleting instance with id \"%s\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:109
+#, php-format
+msgid "%s instances deleted successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:149
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:397
+#, php-format
+msgid "Error while updating instance with id \"%s\""
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:167
+>>>>>>> Updated Spanish translations
+#, php-format
+msgid "%s instances updated successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:213
+msgid "Instance deleted successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/InstanceController.php:391
+msgid "Instance updated successfully."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/WebServiceController.php:203
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Rest/Manager/Instances.php:154
+msgid "A new opennemas instance has been created"
+msgstr ""
+
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/File/Image/Imagick.php:85
 msgid "Please initialize the image before get its width."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/File/Image/Imagick.php:98
 msgid "Please initialize the image before get its height."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/src/ManagerWebService/Controller/WebServiceController.php:229
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Rest/Manager/Instances.php:128
+msgid "is now on-line"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/vendor/core/ImporterXml.php:81
+msgid "Can't read file. Please check xml file..."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Import/Synchronizer/Synchronizer.php:283
@@ -2440,8 +3517,13 @@ msgstr ""
 msgid "Field '%s' not valid"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Comment.php:329
 msgid "DB error."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Comment.php:329
+msgid "Database error."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Content.php:1692
@@ -2526,7 +3608,15 @@ msgstr ""
 msgid "Kiosko"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/ContentManager.php:1850
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/ContentManager.php:1845
+msgid "Agenda"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/ContentManager.php:1850
+>>>>>>> Updated Spanish translations
 msgid "Letter to editor"
 msgstr ""
 
@@ -2534,8 +3624,13 @@ msgstr ""
 msgid "Cover"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Kiosko.php:149
 msgid "Unable to save the cover data into the database."
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Kiosko.php:149
+msgid "Unable to save the cover data."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Letter.php:43
@@ -2543,11 +3638,15 @@ msgstr ""
 msgid "Letter"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Letter.php:268
 msgid "Letter not available"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Menu.php:115
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Menu.php:115
+>>>>>>> Updated Spanish translations
 msgid "Menu"
 msgstr ""
 
@@ -2561,17 +3660,21 @@ msgstr ""
 msgid "Internal search"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:148
 msgid "Not valid photo data"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:148
+msgid "Image data not valid"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:166
 #, php-format
-msgid ""
-"Upload directory doesn't exists or you don't have enough privileges to write "
-"files there"
+msgid "Unable to save your image file in the Opennemas storage target"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:253
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:270
 msgid "Unable to copy the photo file"
@@ -2604,6 +3707,30 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:531
 msgid "No availabel IPTC data</br>"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:253
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:270
+msgid "Unable to copy your image file"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:286
+msgid "Unable to save your image information."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:416
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:420
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:424
+#, php-format
+msgid "Image type: %s"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:446
+msgid "No available EXIF data"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Photo.php:531
+msgid "No available IPTC data"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Photo.php:540
@@ -2998,8 +4125,13 @@ msgstr ""
 msgid "Static Page"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/User.php:187
 #: /home/others/www/idealgallego/onm-instance/app/models/User.php:295
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/User.php:187
+#: /home/fran/Projects/OpenHost/opennemas/app/models/User.php:295
+>>>>>>> Updated Spanish translations
 msgid "Already exists one user with that information"
 msgstr ""
 
@@ -3010,10 +4142,11 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:305
 #, php-format
 msgid ""
-"Seems that the server limits file uploads up to %s Mb. Try to upload files "
-"smaller than that size or contact with your administrator"
+"The server limits file uploads up to %s Mb. Try to upload files smaller than "
+"that size or contact with your administrator"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:381
 msgid ""
 "There was a problem while converting your video. Please contact with your "
@@ -3021,11 +4154,22 @@ msgid ""
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:393
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:379
+msgid "There was a problem while converting your video. "
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:388
+>>>>>>> Updated Spanish translations
 #, php-format
 msgid "Video format \"%s\" not supported"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:534
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Video.php:529
+>>>>>>> Updated Spanish translations
 msgid "Video not available"
 msgstr ""
 
@@ -3200,8 +4344,13 @@ msgstr ""
 msgid "Videos (local)"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Module/ModuleManager.php:214
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Security/Acl.php:92
+=======
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:214
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Security/Acl.php:92
+>>>>>>> Updated Spanish translations
 msgid "Sorry, you don't have enought privileges"
 msgstr ""
 
@@ -3223,11 +4372,19 @@ msgstr ""
 msgid "« Previous"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Security/Acl.php:159
 msgid "Sorry, you don't have enough privileges"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/UI/SimpleMenu.php:132
+=======
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Security/Acl.php:159
+msgid "Sorry, you don't have enough privileges"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/UI/SimpleMenu.php:132
+>>>>>>> Updated Spanish translations
 #, php-format
 msgid "Go to %s"
 msgstr ""
@@ -3303,8 +4460,13 @@ msgstr ""
 msgid "%d months ago"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:2
 msgid "Creating static page"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:2
+msgid "News agency importer"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:5
@@ -3718,8 +4880,13 @@ msgstr ""
 msgid "Unpublish"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:74
 msgid "Create new page"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:77
+msgid "XML file importer"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:77
@@ -5534,10 +6701,15 @@ msgstr ""
 msgid "Sync with server"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1604
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1607
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1610
 msgid "Reload list"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1322
+msgid "Grouped by date"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1613
@@ -5550,8 +6722,13 @@ msgstr ""
 msgid "Config"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1628
 msgid "Filter by title or content"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1328
+msgid "Grouped by date is recommended for weekly newspapers."
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:1631
@@ -5957,8 +7134,14 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:2213
 msgid "Add selected"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:1874
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:5060
+msgid "Media element (jpg, png, gif)"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:2216
@@ -6654,8 +7837,14 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:3392
 msgid "Delete video"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3047
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:9278
+msgid "New user group"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:3407
@@ -6977,8 +8166,14 @@ msgstr ""
 msgid "-- All categories --"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:3980
 msgid "No available contents"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3503
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3551
+msgid "Synched category"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:3983
@@ -7000,6 +8195,7 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4010
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4160
 msgid "Delete category"
@@ -7007,6 +8203,15 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4022
 msgid "Delete all the contents in category"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3518
+msgid "Sync blog category"
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3521
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:3554
+msgid "Synched blog category"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4025
@@ -7539,8 +8744,13 @@ msgstr ""
 msgid "Suggest to home"
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4916
 msgid "Unsuggest this element to home"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:4214
+msgid "Thumbnail URL"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:4919
@@ -9991,8 +11201,18 @@ msgstr ""
 msgid "Used for searches and automated suggestions."
 msgstr ""
 
+<<<<<<< HEAD
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:8795
 msgid "Copyright"
+=======
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8582
+msgid "Paypal API authentication is incorrect. Please try again."
+msgstr ""
+
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8591
+#: /home/fran/Projects/OpenHost/opennemas/app/Resources/locale/extracted_strings.c:8642
+msgid "Order id"
+>>>>>>> Updated Spanish translations
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app/Resources/locale/extracted_strings.c:8801
