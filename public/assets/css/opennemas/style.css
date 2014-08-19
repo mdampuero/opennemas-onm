@@ -351,7 +351,7 @@ padding: 0 13px;
 /* =============================================================================
    Buttons
    ========================================================================== */
-.btn {
+.btn-white {
     border: 1px solid #d1dade;
 }
 
@@ -412,4 +412,18 @@ padding: 0 13px;
     .page-sidebar .page-sidebar-wrapper > ul > li:hover > a {
         background: #22262E;
     }
+}
+
+
+tr .buttons {
+    opacity: 0;
+
+    -webkit-transition: opacity ease 0.175s ;
+    -o-transition: opacity ease 0.175s ;
+    transition: opacity ease 0.175s ;
+}
+
+tr:hover + tr .buttons,
+tr:hover .buttons {
+    opacity: 1;
 }

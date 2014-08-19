@@ -29,18 +29,16 @@
 								<span class="arrow"></span>
 								<i class="fa fa-user"></i>
 							</span>
-							<input class="form-control" type="text" placeholder="Filter by name or username">
+							<input class="form-control" placeholder="Filter by name or username" type="text">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
 							<span class="input-group-addon primary">
-								<span class="arrow"></span>
 								<i class="fa fa-users"></i>
 							</span>
-							<select>
-								<option value="1">1</option>
-								<option value="2">2</option>
+							<select ng-model="group" ng-options="group.id as group.name for group in template.groups">
+								<option value="">{t}All{/t}</option>
 							</select>
 						</div>
 					</div>
@@ -57,8 +55,10 @@
                     <div class="spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-				<table class="table table-hover table-condensed">
-					{if count($users) gt 0}
+                <div class="text-center" ng-if="users.length == 0">
+                	{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
+                </div>
+				<table class="table table-condensed" ng-if="users.length > 0">
 					<thead>
 						<tr>
 							<th style="width:15px;">
@@ -67,75 +67,48 @@
 							<th class="left">{t}Full name{/t}</th>
 							<th class="left" style="width:110px">{t}Username{/t}</th>
 							<th class="left" >{t}Group{/t}</th>
-							<th class="center" >{t}Activated{/t}</th>
-							<th class="center" style="width:10px">{t}Actions{/t}</th>
+							<th class="text-center" style="width: 180px;">{t}Activated{/t}</th>
 						</tr>
 					</thead>
-					{/if}
 					<tbody>
-						{foreach from=$users item=user name=user_listing}
-						<tr>
-							<td>
+						<tr ng-repeat-start="user in users">
+						 	<td>
 								<input type="checkbox" name="selected[]" value="{$user->id}">
 							</td>
 							<td class="left">
 								<a href="{url name=manager_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-									{$user->name}
+									[% user.name %]
 								</a>
 							</td>
 							<td class="left">
-								{$user->username}
+								[% user.username %]
 							</td>
 							<td class="left">
-								{section name=u loop=$user_groups}
-									{if $user_groups[u]->id == $user->fk_user_group}
-										{$user_groups[u]->name}
-									{/if}
-								{/section}
+								<ul class="no-style">
+									<li ng-repeat="id in user.id_user_group">
+										[% template.groups[id].name %]
+									</li>
+								</ul>
 							</td>
-							<td class="center">
-								<div class="btn-group">
-									<a class="btn" href="{url name=manager_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
-										{if $user->activated eq 1}
-											<i class="icon16 icon-ok"></i>
-										{else}
-											<i class="icon16 icon-remove"></i>
-										{/if}
-									</a>
-								</div>
+							<td class="text-center">
+								<button class="btn btn-white">
+									<i class="fa" ng-class="{ 'fa-check': user.activated, 'fa-times': !user.activated }"></i>
+								</button>
 							</td>
-							<td class="right nowrap">
-								<div class="btn-group">
-									<a class="btn" href="{url name=manager_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-										<i class="icon-pencil"></i> {t}Edit{/t}
+						</tr>
+						<tr ng-repeat-end>
+							<td class="text-right" colspan="5" style="border-top: 0;">
+								<div class="buttons">
+									<a class="btn btn-link" href="#">
+										<i class="fa fa-edit"></i> {t}Edit{/t}
 									</a>
-
-									<a class="del btn btn-danger"
-										href="{url name=manager_acl_user_delete id=$user->id}"
-										data-url="{url name=manager_acl_user_delete id=$user->id}"
-										data-title="{$user->name}"
-										title="{t}Delete this user{/t}">
-										<i class="icon-trash icon-white"></i>
-									</a>
+									<button class="btn btn-link" type="button">
+										<i class="fa fa-times"></i> {t}Delete{/t}
+									</button>
 								</div>
 							</td>
 						</tr>
-
-						{foreachelse}
-						<tr>
-							<td colspan="5" class="empty">
-								{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
-							</td>
-						</tr>
-						{/foreach}
 					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="6">
-								&nbsp;
-							</td>
-						</tr>
-					</tfoot>
 				</table>
 			</div>
 		</div>

@@ -24,3 +24,7 @@ manager_ws_instance:
 manager_ws_template:
     resource: @ManagerWebServiceBundle/Resources/config/routing/template.yml
     prefix:   /template
+
+manager_ws_user:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/user.yml
+    prefix:   /

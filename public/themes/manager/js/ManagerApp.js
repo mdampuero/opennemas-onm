@@ -118,7 +118,17 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_list'), {
-                templateUrl: '/managerws/template/acl:user:list.tpl'
+                templateUrl: '/managerws/template/acl:user:list.tpl',
+                controller:  'UserCtrl',
+                resolve: {
+                    data: function(itemService) {
+                        return itemService.list('manager_ws_users_list', {}).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_usergroup_list'), {
                 templateUrl: '/managerws/template/acl:user_group:list.tpl'
