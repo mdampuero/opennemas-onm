@@ -303,8 +303,7 @@ class Video extends Content
                 sprintf(
                     _(
                         'The server limits file uploads up to %s Mb. '
-                        .'Try to upload files smaller than that size or '
-                        .'contact with your administrator'
+                        .'Try to upload files smaller than that size.'
                     ),
                     (int) ini_get('upload_max_filesize')
                 )

@@ -222,7 +222,7 @@ class UserController extends Controller
 
                 m::add(_('Data updated successfully'), m::SUCCESS);
             } else {
-                m::add(_('There was an error while updating the user data.'), m::ERROR);
+                m::add(_('Unable to update the user.'), m::ERROR);
             }
         } else {
             m::add(_('The user does not exists.'), m::ERROR);
