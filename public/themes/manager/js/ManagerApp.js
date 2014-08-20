@@ -83,8 +83,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translat
                 templateUrl: '/managerws/template/instances:edit.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
-                    data: function() {
-                        return {};
+                    data: function($route, itemService) {
+                        return itemService.new('manager_ws_instance_new').then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
                     }
                 }
             })

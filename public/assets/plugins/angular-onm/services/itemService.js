@@ -99,6 +99,21 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     };
 
     /**
+     * Returns the template parameters to create a new item.
+     *
+     * @param string  route The route name.
+     *
+     * @return Object The response object.
+     */
+    itemService.new = function (route) {
+        var url = fosJsRouting.generate(route);
+
+        return $http.post(url).success(function (response) {
+            return response;
+        });
+    };
+
+    /**
      * Returns an item given its id.
      *
      * @param string  route The route name.
