@@ -2,7 +2,7 @@
     <div class="page-title clearfix">
         <h3 class="pull-left">
             <i class="fa fa-cubes"></i>
-            <span ng-if="!instance">{t}New instance{/t}</span>
+            <span ng-if="!instance.id">{t}New instance{/t}</span>
             <span ng-if="instance.id">{t}Edit instance{/t}</span>
         </h3>
         <ul class="breadcrumb pull-right">
@@ -16,7 +16,7 @@
                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">{t}Instances{/t}</a>
             </li>
             <li>
-                <span class="active" ng-if="!instance">{t}New instance{/t}</span>
+                <span class="active" ng-if="!instance.id">{t}New instance{/t}</span>
                 <span class="active" ng-if="instance.id">{t}Edit instance{/t}</span>
             </li>
         </ul>
@@ -41,10 +41,10 @@
                 </span>
             </h3>
             <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="true" ng-if="!instance.id">
+                <button class="btn btn-primary" ng-click="save();" ng-if="!instance.id">
                     <i class="fa fa-save"></i> {t}Save{/t}
                 </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="true" ng-if="instance.id">
+                <button class="btn btn-primary" ng-click="update();" ng-if="instance.id">
                     <i class="fa fa-save"></i> {t}Save{/t}
                 </button>
             </div>
