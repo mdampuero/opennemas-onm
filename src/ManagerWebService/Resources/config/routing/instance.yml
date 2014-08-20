@@ -1,6 +1,18 @@
+manager_ws_instance_create:
+    path:     /instance/create
+    defaults: { _controller: ManagerWebServiceBundle:Instance:create }
+    options:
+        expose: true
+
 manager_ws_instance_delete:
     path:     /instance/{id}/delete
     defaults: { _controller: ManagerWebServiceBundle:Instance:delete }
+    options:
+        expose: true
+
+manager_ws_instance_new:
+    path:     /instance/new
+    defaults: { _controller: ManagerWebServiceBundle:Instance:new }
     options:
         expose: true
 
