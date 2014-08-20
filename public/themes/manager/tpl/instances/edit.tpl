@@ -27,30 +27,28 @@
         <p> There are some instance elements that are not in the form yet. </p>
         <ul>
             <li>Module management</li>
-            <li>Template selection</li>
         </ul>
     </div>
     <div class="grid simple">
         <div class="grid-title clearfix">
             <h3 class="pull-left">
-                <span ng-if="instance.id">
+                <span class="semi-bold" ng-if="instance.id">
                     [% instance.name %]
                 </span>
-                <span ng-if="!instance.id">
+                <span class="semi-bold" ng-if="!instance.id">
                     {t}New instance{/t}
                 </span>
             </h3>
             <div class="pull-right">
                 <button class="btn btn-primary" ng-click="save();" ng-if="!instance.id">
-                    <i class="fa fa-save"></i> {t}Save{/t}
+                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
                 <button class="btn btn-primary" ng-click="update();" ng-if="instance.id">
-                    <i class="fa fa-save"></i> {t}Save{/t}
+                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
             </div>
         </div>
         <div class="grid-body">
-
             <div class="row">
                 <h3 ng-class="{ true:'col-sm-3', false:'col-sm-12' }[instance.id]">
                     <small ng-if="instance.id">
@@ -81,14 +79,18 @@
                             <input class="form-control" ng-model="instance.name" type="text">
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label for="template" class="form-label">{t}Template{/t}</label>
+                        <div class="controls">
+                            <select id="template" ng-model="instance.settings.template" ng-options="key as value.name for (key,value) in template.templates"></select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">{t}Last invoice date{/t}</label>
                         <div class="controls">
                             <quick-datepicker icon-class="fa fa-clock-o" ng-model="instace.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                         </div>
                     </div>
-
                     <h4>Domains</h4>
                     <div class="row form-group" ng-repeat="domain in instance.domains">
                         <div class="col-sm-8">
@@ -117,24 +119,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="domains" class="form-label">{t}Main domain{/t}</label>
-                        <div class="controls">
-                            <select name="main-domain" id="main-domain" ng-model="instance.main_domain">
-                                <option value="0">{t}None{/t}</option>
-                                <option value="[% $index + 1 %]" ng-repeat="domain in instance.domains" ng-selected="instance.main_domain == ($index + 1)">[% domain %]</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="form-label">{t}Domain expire date:{/t}</label>
                         <div class="controls">
                             <quick-datepicker icon-class="fa fa-clock-o" ng-model="instace.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                         </div>
                     </div>
 
+                    <h4>Modules</h4>
+                    <div class="form-group">
+                        <label for="modules" class="form-label">{t}Modules{/t}</label>
+                        <div class="controls">
+                            <select id="modules" multiple ui-select2 ng-model="instance.external.modules" ng-options="key as value for (key,value) in template.available_modules"></select>
+                        </div>
+                    </div>
 
                     <h4>{t}Internals{/t}</h4>
-
                     <div class="form-group">
                         <label class="form-label">{t}Internal name{/t}</label>
                         <span class="help">{t}Alphanumeric, without spaces{/t}</span>
