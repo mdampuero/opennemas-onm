@@ -236,12 +236,9 @@ EOF
 
         // Get entity repository
         $this->er = getService('entity_repository');
-        // Count contents
-        $countContents = $this->er->countBy($filters);
 
-        // Get total iterations to fetch contents
+        // Get total per page contents
         $perPage = 100;
-        $iterations = (int)($countContents/$perPage)+1;
 
         // Initialize counters
         $this->imagesCounter = 0;
@@ -267,6 +264,9 @@ EOF
                 $contents = $this->er->findBy($filters, $order, $this->limit, 1);
                 $this->processContents($contents);
             } else {
+                // Count contents
+                $countContents = $this->er->countBy($filters);
+                $iterations = (int)($countContents/$perPage)+1;
                 // Fetch contents paginated
                 $i = 1;
                 while ($i <= $iterations) {
@@ -275,14 +275,13 @@ EOF
                     $this->processContents($contents);
                     unset($contents);
                     gc_collect_cycles();
-                    $this->output->write("\n");
+                    $this->output->write("$i - $iterations\n");
                 }
             }
         }
 
         $this->output->writeln(
-            "\n\nSaved <info>".$countContents."</info>".
-            " contents with <info>$this->imagesCounter</info> images".
+            "\n\nSaved contents with <info>$this->imagesCounter</info> images".
             " into '$this->targetDir'".
             "\nArticles -> <info>$this->articlesCounter</info>".
             "\nOpinions -> <info>$this->opinionsCounter</info>".
