@@ -21,14 +21,6 @@
             </li>
         </ul>
     </div>
-    <div class="alert alert-block alert-error fade in">
-        <button type="button" class="close" data-dismiss="alert"></button>
-        <h4 class="alert-heading"><i class="icon-warning-sign"></i> Error!</h4>
-        <p> There are some instance elements that are not in the form yet. </p>
-        <ul>
-            <li>Module management</li>
-        </ul>
-    </div>
     <div class="grid simple">
         <div class="grid-title clearfix">
             <h3 class="pull-left">
