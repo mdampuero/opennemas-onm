@@ -101,10 +101,22 @@
                     <div class="form-group">
                         <label for="domains" class="form-label">{t}Domains{/t}</label>
                         <div class="controls">
-                            <tags-input ng-model="domains" placeholder="{t}Add a domain{/t}" add-on-enter="true" add-on-space="true" add-on-comma="true" min-tags="1" on-tag-added="cleanDomains();" on-tag-removed="cleanDomains();">
-                            </tags-input>
+                            <div class="input-group">
+                                <input class="form-control" ng-model="new_domain" type="text">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                                </div>
+                            </div>
                         </div>
-
+                        <ul class="no-style">
+                            <li ng-repeat="domain in domains">
+                                <input ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
+                                [% domain %]
+                                <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-sm-4">

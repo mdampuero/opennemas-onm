@@ -422,24 +422,28 @@ padding: 0 13px;
     border: 1px solid #d1dade;
 }
 
+.btn-default {
+    border: 1px solid #d1dade;
+}
+
 .btn-info {
-    border-color: #152639;
+    border: 1px solid #152639;
 }
 
 .btn-danger {
-    border-color: #f35958;
+    border: 1px solid #f35958;
 }
 
 .btn-primary {
-    border-color: #0aa699;
+    border: 1px solid #0aa699;
 }
 
 .btn-success {
-    border-color: #1285d1;
+    border: 1px solid #1285d1;
 }
 
 .btn-warning {
-    border-color: #fbb05e;
+    border: 1px solid #fbb05e;
 }
 
 /* =============================================================================
