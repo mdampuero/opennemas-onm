@@ -77,9 +77,7 @@
                     {if $article->author neq 'null'}
                     <rights>
                       <rights.owner>{$article->author|htmlspecialchars}</rights.owner>
-                      {if $smarty.const.SITE eq 'console'}
-                      <rights.owner.photo>{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
-                      {else}
+                      {if $smarty.const.SITE neq 'console'}
                       <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
                       {/if}
                     </rights>
@@ -251,6 +249,7 @@
       <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
         <Role FormalName="Content list" />
         {foreach $article->all_photos as $photo}
+        {if $photo->id}
         <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
           <NewsLines>
             <HeadLine><![CDATA[{$article->title}]]></HeadLine>
@@ -318,6 +317,7 @@
             </ContentItem>
           </NewsComponent>
         </NewsComponent>
+        {/if}
         {/foreach}
       </NewsComponent>
       {/if}
