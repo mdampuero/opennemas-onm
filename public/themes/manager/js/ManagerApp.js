@@ -1,7 +1,7 @@
 
-angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'pascalprecht.translate',
-        'ngQuickDate', 'ngTagsInput', 'onm.routing', 'onm.item',
-        'ManagerApp.controllers'
+angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
+        'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'onm.routing',
+        'onm.item', 'onm.messenger', 'ManagerApp.controllers'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
