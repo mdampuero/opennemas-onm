@@ -77,8 +77,8 @@ function smarty_function_render_video($params, &$smarty)
         } else {
 
             if ($params['width'] || $params['height']) {
-                $videoInfo['embedHTML'] = preg_replace("@width='\d*'@", "width='{$params['width']}'", $videoInfo['embedHTML']);
-                $videoInfo['embedHTML'] = preg_replace("@height='\d*'@", "height='{$params['height']}'", $videoInfo['embedHTML']);
+                $videoInfo['embedHTML'] = preg_replace("@width=['|\"]\d*['|\"]@", "width=\"{$params['width']}\"", $videoInfo['embedHTML']);
+                $videoInfo['embedHTML'] = preg_replace("@height=['|\"]\d*['|\"]@", "height=\"{$params['height']}\"", $videoInfo['embedHTML']);
             }
             $output = $videoInfo['embedHTML'];
         }
