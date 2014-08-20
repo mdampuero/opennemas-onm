@@ -590,3 +590,72 @@ tags-input .tags .tag-item .remove-button {
     font: 700 16px Arial,sans-serif;
     color: #fff;
 }
+.quickdate-popup {
+    font-size: 11px;
+}
+
+table.quickdate-calendar {
+    font-size:12px;
+    margin-top:0;
+}
+
+table.quickdate-calendar,
+table.quickdate-calendar th,
+table.quickdate-calendar td {
+    border:0 none;
+    padding: 5.5px !important;
+}
+
+
+
+table.quickdate-calendar th {
+    color: #0090d9;
+    text-transform: uppercase;
+}
+
+table.quickdate-calendar .other-month {
+    background: White !important;
+    color: #d0d3d8;
+}
+
+table.quickdate-calendar .other-month:hover {
+    background: #eeeeee;
+    opacity: 0.65;
+}
+
+.quickdate .quickdate-month {
+    color: #6f7b8a;
+    font-size: 13px;
+    font-weight:bold !important;
+}
+.quickdate-calendar-header {
+    margin-bottom:0;
+    margin-top:5px;
+}
+.quickdate-calendar-header .quickdate-action-link {
+    color: #0090d9;
+    font-weight: bold;
+}
+
+.quickdate-calendar-header .quickdate-action-link,
+.quickdate .quickdate-month {
+    padding:5px !important;
+    border-radius:4px;
+}
+
+.quickdate-calendar-header .quickdate-action-link:hover,
+.quickdate .quickdate-month:hover {
+    background: #eeeeee;
+}
+.quickdate-popup label {
+    font-size:13px;
+}
+.quickdate-popup {
+    box-shadow:none !important;
+    padding:15px;
+}
+.quickdate-popup input {
+    padding:5px !important;
+    min-height:20px;
+}
+

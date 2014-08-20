@@ -52,7 +52,7 @@
         <div class="grid-body">
 
             <div class="row">
-                <h3 class="col-sm-3">
+                <h3 ng-class="{ true:'col-sm-3', false:'col-sm-12' }[instance.id]">
                     <small ng-if="instance.id">
                         <p>
                             <i class="fa fa-user"></i>
@@ -72,7 +72,7 @@
                         </p>
                     </small>
                 </h3>
-                <div class="col-sm-9">
+                <div ng-class="{ true:'col-sm-9', false:'col-sm-12' }[instance.id]">
                     <h4>General information</h4>
                     <div class="form-group">
                         <label class="form-label">{t}Site name{/t}</label>
