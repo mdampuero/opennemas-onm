@@ -1,6 +1,6 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceCtrl',
-    function ($scope, itemService, fosJsRouting, data) {
+    function ($location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * The instance object.
          *
@@ -23,8 +23,6 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          * Adds a new domain to the instance.
          */
         $scope.addDomain = function() {
-            console.log($scope.instance.domains.indexOf($scope.new_domain));
-
             if ($scope.instance.domains.indexOf($scope.new_domain) == -1) {
                 $scope.instance.domains.push($scope.new_domain);
             }
@@ -59,9 +57,23 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          * Creates a new instance.
          */
         $scope.save = function() {
+            $scope.saving = 1;
+
             itemService.save('manager_ws_instance_create', $scope.instance)
                 .then(function (response) {
-                    console.log(response);
+                    if (response.data.success) {
+                        $location.path(fosJsRouting.ngGenerateShort('/manager',
+                            'manager_instance_show',
+                            { id: response.data.message.id }));
+                    } else {
+                        messenger.post({
+                            id:      new Date().getTime(),
+                            message: response.data.message.text,
+                            type:    response.data.message.type
+                        });
+                    }
+
+                    $scope.saving = 0;
                 });
         };
 

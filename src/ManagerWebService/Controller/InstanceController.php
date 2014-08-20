@@ -11,6 +11,7 @@ use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
 use Onm\Instance\InstanceCreator;
+use Onm\Instance\Instance;
 use Onm\Instance\InstanceManager as im;
 use Onm\Module\ModuleManager as mm;
 
@@ -177,6 +178,101 @@ class InstanceController extends Controller
             array(
                 'messages' => array_merge($success, $error)
             )
+        );
+    }
+
+    /**
+     * Creates a new instance from the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function createAction(Request $request)
+    {
+        $success = false;
+        $message = array();
+
+        $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
+        $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);
+
+        if (!$domains) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => 'Instance domains cannot be empty'
+                    )
+                )
+            );
+        }
+
+        // Create internalName from domains
+        if (!$internalName) {
+            $internalName = explode('.', array_pop($domains));
+            $internalName = array_pop($internalName);
+        }
+
+        $internalName = strtolower($internalName);
+
+        $instance = new Instance();
+        foreach (array_keys($request->request->all()) as $key) {
+            $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+
+            if ($value) {
+                $instance->{$key} = $value;
+            }
+        }
+
+        $instance->created = date('Y-m-d H:i:s');
+        $instance->external['activated_modules'] = $request->request
+            ->filter('activated_modules', null, FILTER_SANITIZE_STRING);
+
+        $im      = $this->get('instance_manager');
+        $creator = new InstanceCreator($im->getConnection());
+
+        $im->checkInternalName($instance);
+
+        try {
+            $im->persist($instance);
+            $creator->createDatabase($instance->id);
+            $creator->copyDefaultAssets($instance->internal_name);
+
+            $success = true;
+            $message = array(
+                'id'   => $instance->id,
+                'type' => 'success',
+                'text' => 'Instance saved successfully'
+            );
+
+        } catch (DatabaseNotRestoredException $e) {
+            $errors[] = $e->getMessage();
+
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+
+            $message = array(
+                'type' => 'error',
+                'text' => 'Cannot create the database for the instance'
+            );
+
+        } catch (AssetsNotCopiedException $e) {
+            $errors[] = $e->getMessage();
+
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+
+            $message = array(
+                'type' => 'error',
+                'text' => 'Cannot copy default assets for the instance'
+            );
+        }
+
+
+        return new JsonResponse(
+            array('success' => true, 'message' => $message)
         );
     }
 
@@ -441,7 +537,7 @@ class InstanceController extends Controller
 
         return new JsonResponse(
             array(
-                'data'     => $instance,
+                'instance' => $instance,
                 'template' => $this->templateParams()
             )
         );
