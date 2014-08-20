@@ -6,7 +6,11 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          *
          * @type Object
          */
-        $scope.instance = data.data;
+        $scope.instance = {
+            domains: [],
+            settings: [],
+            external: []
+        };
 
         /**
          * The template parameters.
@@ -16,11 +20,15 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.template = data.template;
 
         /**
-         * Variable to handle domains from tags input.
-         *
-         * @type Object
+         * Adds a new domain to the instance.
          */
-        $scope.domains = angular.copy($scope.instance.domains);
+        $scope.addDomain = function() {
+            console.log($scope.instance.domains.indexOf($scope.new_domain));
+
+            if ($scope.instance.domains.indexOf($scope.new_domain) == -1) {
+                $scope.instance.domains.push($scope.new_domain);
+            }
+        };
 
         /**
          * Cleans domains from tags input and update instance.
@@ -36,6 +44,15 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
             }
 
             $scope.instance.domains = domains;
+        };
+
+        /**
+         * Removes an instance domain.
+         *
+         * @param integer index The index of the domain to remove.
+         */
+        $scope.removeDomain = function(index) {
+            $scope.instance.domains.splice(index, 1);
         };
 
         /**
@@ -57,6 +74,11 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 .then(function (response) {
                     console.log(response);
                 });
+        };
+
+        // Initialize instance
+        if (data.instance) {
+            $scope.instance = data.instance;
         }
     }
 );

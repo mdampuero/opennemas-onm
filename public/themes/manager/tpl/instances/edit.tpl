@@ -2,7 +2,7 @@
     <div class="page-title clearfix">
         <h3 class="pull-left">
             <i class="fa fa-cubes"></i>
-            <span ng-if="!instance.id">{t}New instance{/t}</span>
+            <span ng-if="!instance">{t}New instance{/t}</span>
             <span ng-if="instance.id">{t}Edit instance{/t}</span>
         </h3>
         <ul class="breadcrumb pull-right">
@@ -16,7 +16,7 @@
                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">{t}Instances{/t}</a>
             </li>
             <li>
-                <span class="active" ng-if="!instance.id">{t}New instance{/t}</span>
+                <span class="active" ng-if="!instance">{t}New instance{/t}</span>
                 <span class="active" ng-if="instance.id">{t}Edit instance{/t}</span>
             </li>
         </ul>
@@ -90,25 +90,32 @@
                     </div>
 
                     <h4>Domains</h4>
-                    <label for="domains" class="form-label">{t}Domains{/t}</label>
-                    <div class="controls">
-                        <div class="input-group">
-                            <input class="form-control" ng-model="new_domain" type="text">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                    <div class="row form-group" ng-repeat="domain in instance.domains">
+                        <div class="col-sm-8">
+                            <div class="radio">
+                                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
+                                <label for="domain[% $index + 1 %]">
+                                    [% domain %]
+                                </label>
                             </div>
                         </div>
-                    </div>
-                    <ul class="no-style">
-                        <li ng-repeat="domain in domains">
-                            <input ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
-                            [% domain %]
+                        <div class="col-sm-2">
                             <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
                                 <i class="fa fa-trash-o"></i>
                             </button>
-                        </li>
-                    </ul>
-
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="domains" class="form-label">{t}Domains{/t}</label>
+                        <div class="controls">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="new_domain" type="text">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="domains" class="form-label">{t}Main domain{/t}</label>
                         <div class="controls">
