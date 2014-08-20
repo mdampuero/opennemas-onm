@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="grid-body no-padding">
-            <tabset>
+            <tabset class="tab-form">
                 <tab heading="{t}User info{/t}">
                     <div class="col-md-3">
                         <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
@@ -110,11 +110,6 @@
                 </tab>
                 <tab heading="{t}Settings{/t}">
                     <div role="form-horizontal">
-                        <div class="form-group">
-                            <label for="session-expire">{t}Session expire time:{/t}</label>
-                            <input class="form-control" id="session-expire" ng-model="user.sessionexpire" type="number"/>
-                            <span>{t}minutes{/t}</span>
-                        </div>
                         <div class="form-group">
                             <label for="user-type">{t}User type{/t}</label>
                             <select id="user-type" ng-model="user.type">

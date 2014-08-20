@@ -32,7 +32,7 @@ a:hover {
 }
 .btn-primary {
     background-color:#376092 !important;
-
+    border: 1px solid #376092 !important;
 }
 
 .page-sidebar ul > li > a > .arrow:before {
@@ -49,7 +49,14 @@ a:hover {
     margin: 0;
     padding: 0;
 }
-@media (min-width: 1023px) {
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .page-sidebar {
+        background-color:#376092 !important;
+    }
+}
+
+@media (min-width: 1025px) {
 
     .logo {
         margin-left:7px;
@@ -91,6 +98,15 @@ a:hover {
         padding-left: 40px !important;
     }
 
+}
+
+.tab-form .nav-tabs > .active > a,
+.tab-form .nav-tabs > .active > a:hover,
+.tab-form .nav-tabs > .active > a:focus {
+    border-radius:0;
+}
+.tab-form .nav-tabs {
+    background:#eee;
 }
 
 /* -------------------------------------------------------------
@@ -302,8 +318,8 @@ a:hover {
     padding: 0 13px;
 }
 #stats-opcode td {
-color:#333 !important;
-padding: 0 13px;
+    color:#333 !important;
+    padding: 0 13px;
 }
 
 

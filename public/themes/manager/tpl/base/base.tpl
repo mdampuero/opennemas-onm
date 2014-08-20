@@ -20,7 +20,8 @@
                           @Common/plugins/webarch/css/animate.min.css,
 
                           @Common/plugins/bootstrap/css/bootstrap.min.css,
-                          @Common/plugins/font-awesome/css/font-awesome.min.css"
+                          @Common/plugins/font-awesome/css/font-awesome.min.css,
+                          @Common/css/bootstrap/bootstrap-fileupload.min.css"
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
@@ -133,7 +134,7 @@
                             <span class="add-on">
                                 <span class="iconset top-search"></span>
                             </span>
-                            <input name="" type="text"  class="no-boarder " placeholder="Search Dashboard" style="width:250px;">
+                            <input name="" type="text"  class="no-boarder " placeholder="{t}Search Dashboard{/t}" style="width:250px;">
                         </li>
                     </ul>
                 </div>
