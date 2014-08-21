@@ -18,170 +18,6 @@ use Onm\Module\ModuleManager as mm;
 class InstanceController extends Controller
 {
     /**
-     * Deletes the selected instances.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function batchDeleteAction(Request $request)
-    {
-        $errors  = array();
-        $success = array();
-        $updated = array();
-
-        $selected  = $request->request->get('ids', null);
-        $activated = $request->request->getDigits('value', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $im      = $this->get('instance_manager');
-            $creator = new InstanceCreator($im->getConnection());
-
-            foreach ($selected as $id) {
-                try {
-                    $instance = $im->find($id);
-
-                    $assetFolder = realpath(
-                        SITE_PATH . DS . 'media' . DS . $instance->internal_name
-                    );
-
-                    $backupPath = BACKUP_PATH . DS . $instance->id . "-"
-                        . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
-
-                    $database = $instance->getDatabaseName();
-
-                    $creator->backupAssets($assetFolder, $backupPath);
-                    $creator->backupDatabase($database, $backupPath);
-                    $creator->backupInstance($database, $instance->id, $backupPath);
-
-                    $creator->deleteAssets($instance->internal_name);
-                    $creator->deleteDatabase($database);
-                    $im->remove($instance);
-
-                    $updated[] = $id;
-                } catch (InstanceNotFoundException $e) {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                        'type'    => 'error'
-                    );
-                } catch (BackupException $e) {
-                    $message = $e->getMessage();
-
-                    $creator->deleteBackup($backupPath);
-
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_($message), $id),
-                        'type'    => 'error'
-                    );
-                } catch (AssetsNotDeletedException $e) {
-                    $message = $e->getMessage();
-
-                    $creator->restoreAssets($backupPath);
-
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_($message), $id),
-                        'type'    => 'error'
-                    );
-                } catch (DatabaseNotDeletedException $e) {
-                    $message = $e->getMessage();
-
-                    $creator->restoreAssets($backupPath);
-                    $creator->restoreDatabase($backupPath . DS . 'database.sql');
-
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_($message), $id),
-                        'type'    => 'error'
-                    );
-                } catch (\Exception $e) {
-                    $errors[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                        'type'    => 'error'
-                    );
-                }
-            }
-        }
-
-        if (count($updated) > 0) {
-            $success[] = array(
-                'id'        => $updated,
-                'activated' => $activated,
-                'message'   => sprintf(_('%s instances deleted successfully.'), count($updated)),
-                'type'      => 'success'
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $errors)
-            )
-        );
-    }
-
-    /**
-     * Set the activated flag for instances in batch.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function batchSetActivatedAction(Request $request)
-    {
-        $error   = array();
-        $success = array();
-        $updated = 0;
-
-        $selected  = $request->request->get('ids', null);
-        $activated = $request->request->getDigits('value', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $im = $this->get('instance_manager');
-
-            foreach ($selected as $id) {
-                $instance = $im->find($id);
-                if ($instance) {
-                    try {
-                        $instance->activated = $activated;
-                        $im->persist($instance);
-                        $updated++;
-                    } catch (Exception $e) {
-                        $error[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $error[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                        'type'    => 'error'
-                    );
-                }
-            }
-        }
-
-        if ($updated > 0) {
-            $success[] = array(
-                'id'        => $updated,
-                'activated' => $activated,
-                'message'   => sprintf(_('%s instances updated successfully.'), $updated),
-                'type'      => 'success'
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $error)
-            )
-        );
-    }
-
-    /**
      * Creates a new instance from the request.
      *
      * @param Request $request The request object.
@@ -270,7 +106,6 @@ class InstanceController extends Controller
             );
         }
 
-
         return new JsonResponse(
             array('success' => true, 'message' => $message)
         );
@@ -285,9 +120,10 @@ class InstanceController extends Controller
      */
     public function deleteAction($id)
     {
-        $im       = $this->get('instance_manager');
-        $creator  = new InstanceCreator($im->getConnection());
-        $messages = array();
+        $im      = $this->get('instance_manager');
+        $creator = new InstanceCreator($im->getConnection());
+        $message = array();
+        $success = false;
 
         try {
             $instance = $im->find($id);
@@ -309,36 +145,33 @@ class InstanceController extends Controller
             $creator->deleteDatabase($database);
             $im->remove($instance);
 
-            $messages[] = array(
-                'id'        => $id,
-                'message'   => _('Instance deleted successfully.'),
-                'type'      => 'success'
+            $success = true;
+            $message = array(
+                'text' => _('Instance deleted successfully.'),
+                'type' => 'success'
             );
         } catch (InstanceNotFoundException $e) {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type'    => 'error'
+            $message = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
             );
         } catch (BackupException $e) {
             $message = $e->getMessage();
 
             $creator->deleteBackup($backupPath);
 
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_($message), $id),
-                'type'    => 'error'
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
             );
         } catch (AssetsNotDeletedException $e) {
             $message = $e->getMessage();
 
             $creator->restoreAssets($backupPath);
 
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_($message), $id),
-                'type'    => 'error'
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
             );
         } catch (DatabaseNotDeletedException $e) {
             $message = $e->getMessage();
@@ -346,22 +179,125 @@ class InstanceController extends Controller
             $creator->restoreAssets($backupPath);
             $creator->restoreDatabase($backupPath . DS . 'database.sql');
 
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_($message), $id),
-                'type'    => 'error'
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
             );
         } catch (\Exception $e) {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                'type'    => 'error'
+            $message = array(
+                'id'   => $id,
+                'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                'type' => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'messages'  => $messages
+                'success' => $success,
+                'message' => $message
+            )
+        );
+    }
+
+    /**
+     * Deletes the selected instances.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $im      = $this->get('instance_manager');
+            $creator = new InstanceCreator($im->getConnection());
+
+            foreach ($selected as $id) {
+                try {
+                    $instance = $im->find($id);
+
+                    $assetFolder = realpath(
+                        SITE_PATH . DS . 'media' . DS . $instance->internal_name
+                    );
+
+                    $backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                        . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+                    $database = $instance->getDatabaseName();
+
+                    $creator->backupAssets($assetFolder, $backupPath);
+                    $creator->backupDatabase($database, $backupPath);
+                    $creator->backupInstance($database, $instance->id, $backupPath);
+
+                    $creator->deleteAssets($instance->internal_name);
+                    $creator->deleteDatabase($database);
+                    $im->remove($instance);
+
+                    $updated++;
+                } catch (InstanceNotFoundException $e) {
+                    $errors[] = array(
+                        'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                } catch (BackupException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->deleteBackup($backupPath);
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (AssetsNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (DatabaseNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+                    $creator->restoreDatabase($backupPath . DS . 'database.sql');
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (\Exception $e) {
+                    $errors[] = array(
+                        'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if (count($updated) > 0) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s instances deleted successfully.'), count($updated)),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
             )
         );
     }
@@ -480,11 +416,12 @@ class InstanceController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function setActivatedAction(Request $request, $id)
+    public function setEnabledAction(Request $request, $id)
     {
-        $activated = $request->request->getDigits('value');
+        $success  = false;
+        $activated = $request->request->getDigits('enabled');
         $im        = $this->get('instance_manager');
-        $messages  = array();
+        $message   = array();
 
         $instance = $im->find($id);
         if ($instance) {
@@ -492,31 +429,90 @@ class InstanceController extends Controller
                 $instance->activated = $activated;
                 $im->persist($instance);
 
-                $messages[] = array(
-                    'id'        => $id,
-                    'activated' => $activated,
-                    'message'   => _('Instance updated successfully.'),
+                $success = true;
+                $message = array(
+                    'text'      => _('Instance updated successfully.'),
                     'type'      => 'success'
                 );
             } catch (Exception $e) {
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                    'type'    => 'error'
+                $message = array(
+                    'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
+                    'type' => 'error'
                 );
             }
         } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type'    => 'error'
+            $messages = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
             );
         }
 
         return new JsonResponse(
             array(
+                'success'   => $success,
                 'activated' => $activated,
-                'messages'  => $messages
+                'message'   => $message
+            )
+        );
+    }
+
+    /**
+     * Set the activated flag for instances in batch.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function setEnabledSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+        $activated = $request->request->getDigits('enabled', 0);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $im = $this->get('instance_manager');
+
+            foreach ($selected as $id) {
+                $instance = $im->find($id);
+                if ($instance) {
+                    try {
+                        $instance->activated = $activated;
+                        $im->persist($instance);
+                        $updated++;
+                    } catch (Exception $e) {
+                        $messages[] = array(
+                            'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
+                            'type' => 'error'
+                        );
+                    }
+                } else {
+                    $messages[] = array(
+                        'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s instances updated successfully.'), $updated),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
             )
         );
     }
@@ -540,6 +536,86 @@ class InstanceController extends Controller
                 'instance' => $instance,
                 'template' => $this->templateParams()
             )
+        );
+    }
+
+    /**
+     * Updates the instance information gives its id
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The instance id.
+     * @return Response          The response object.
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $success = false;
+        $message = array();
+
+        $im = $this->get('instance_manager');
+        $sm = $this->get('setting_repository');
+
+        $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
+        $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);
+
+        if (!$domains) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => 'Instance domains cannot be empty'
+                    )
+                )
+            );
+        }
+
+        // Create internalName from domains
+        if (!$internalName) {
+            $internalName = explode('.', array_pop($domains));
+            $internalName = array_pop($internalName);
+        }
+
+        $internalName = strtolower($internalName);
+
+        try {
+            $instance = $im->find($id);
+
+            $im->checkInternalName($instance);
+
+            foreach (array_keys($request->request->all()) as $key) {
+                $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+
+                if ($value) {
+                    $instance->{$key} = $value;
+                }
+            }
+
+            $instance->created = date('Y-m-d H:i:s');
+            $instance->external['activated_modules'] = $request->request
+                ->filter('activated_modules', null, FILTER_SANITIZE_STRING);
+
+            $im->persist($instance);
+
+            $success = true;
+            $message = array(
+                'type' => 'success',
+                'text' => 'Instance saved successfully'
+            );
+
+        } catch (InstanceNotFoundException $e) {
+            $message = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
+            );
+        } catch (\Exception $e) {
+            $message = array(
+                'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                'type' => 'error'
+            );
+        }
+
+        return new JsonResponse(
+            array('success' => $success, 'message' => $message)
         );
     }
 

@@ -1,6 +1,6 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
-    function ($scope, $timeout, itemService, fosJsRouting, data) {
+    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -41,6 +41,16 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         $scope.instances = data.results;
 
         /**
+         * The list of selected elements.
+         *
+         * @type array
+         */
+        $scope.selected = {
+            all: false,
+            instances: []
+        };
+
+        /**
          * The number of total items.
          *
          * @type integer
@@ -76,6 +86,108 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         var init = true;
 
         /**
+         * Confirm delete action.
+         */
+        $scope.delete = function(instance) {
+            var modal =  $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
+                controller:  'InstanceModalCtrl',
+                resolve: {
+                    selected: function() {
+                        return instance;
+                    }
+                }
+            });
+
+            modal.result.then(function(data) {
+                if (data) {
+                    list();
+                }
+            });
+        };
+
+        /**
+         * Confirm delete action.
+         */
+        $scope.deleteSelected = function() {
+            var modal =  $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
+                controller:  'InstanceModalCtrl',
+                resolve: {
+                    selected: function() {
+                        return $scope.selected.instances;
+                    }
+                }
+            });
+
+            modal.result.then(function(data) {
+                if (data) {
+                    list();
+                }
+            });
+        };
+
+        /**
+         * Enables/disables the selected instances.
+         *
+         * @param integer enabled The activated value.
+         */
+        $scope.setEnabledSelected = function(enabled) {
+            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
+                $scope.selected.instances, enabled).then(function (response) {
+                    if (response.data.success) {
+                        for (var i = 0; i < $scope.instances.length; i++) {
+                            var id = $scope.instances[i].id;
+                            if ($scope.selected.instances.indexOf(id) != -1) {
+                                $scope.instances[i].activated = enabled;
+                            }
+                        };
+                    }
+
+                    for (var i = 0; i < response.data.messages.length; i++) {
+                        var params = {
+                            message: response.data.messages[i].text,
+                            type:    response.data.messages[i].type
+                        };
+
+                        messenger.post(params);
+                    };
+                });
+        }
+
+        /**
+         * Selects/unselects all instances.
+         */
+        $scope.selectAll = function() {
+            if ($scope.selected.all) {
+                $scope.selected.instances = $scope.instances.map(function(instance) {
+                    return instance.id;
+                });
+            } else {
+                $scope.selected.instances = [];
+            }
+        };
+
+        /**
+         * Enables/disables an instance.
+         *
+         * @param boolean enabled Instance activated value.
+         */
+        $scope.setActivated = function(instance, enabled) {
+            itemService.setEnabled('manager_ws_instance_set_enabled',
+                instance.id, enabled).then(function (response) {
+                    if (response.data.success) {
+                        instance.activated = enabled;
+                    }
+
+                    messenger.post({
+                        message: response.data.message.text,
+                        type:    response.data.message.type
+                    });
+                });
+        }
+
+        /**
          * Refresh the list of elements when some parameter changes.
          *
          * @param array newValues The new values
@@ -88,27 +200,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                 }
 
                 search = $timeout(function() {
-                    var cleaned = cleanFilters($scope.criteria);
-
-                    // Search by name, domains and contact mail
-                    if (cleaned.name) {
-                        cleaned.domains = cleaned.contact_mail = cleaned.name;
-
-                        // OR operator
-                        cleaned.union = 'OR';
-                    }
-
-                    var data = {
-                        criteria: cleaned,
-                        orderBy: $scope.orderBy,
-                        epp: $scope.epp,
-                        page: $scope.page
-                    };
-
-                    itemService.list('manager_ws_instances_list', data).then(function (response) {
-                        $scope.instances = response.data.results;
-                        $scope.total = response.data.total;
-                    });
+                    list();
                 }, 500);
             }
         }, true);
@@ -153,6 +245,33 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
             };
 
             return cleaned;
+        }
+
+        /**
+         * Searches instances given a criteria.
+         */
+        function list() {
+            var cleaned = cleanFilters($scope.criteria);
+
+            // Search by name, domains and contact mail
+            if (cleaned.name) {
+                cleaned.domains = cleaned.contact_mail = cleaned.name;
+
+                // OR operator
+                cleaned.union = 'OR';
+            }
+
+            var data = {
+                criteria: cleaned,
+                orderBy: $scope.orderBy,
+                epp: $scope.epp,
+                page: $scope.page
+            };
+
+            itemService.list('manager_ws_instances_list', data).then(function (response) {
+                $scope.instances = response.data.results;
+                $scope.total = response.data.total;
+            });
         }
     }
 );

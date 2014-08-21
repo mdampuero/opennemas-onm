@@ -8,8 +8,15 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          */
         $scope.instance = {
             domains: [],
-            settings: [],
-            external: []
+            settings: {
+                template: 'base'
+            },
+            external: {
+                site_language: 'es_ES',
+                pass_level:    -1,
+                max_mailing:   0,
+                time_zone:     '335'
+            }
         };
 
         /**
@@ -26,22 +33,6 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
             if ($scope.instance.domains.indexOf($scope.new_domain) == -1) {
                 $scope.instance.domains.push($scope.new_domain);
             }
-        };
-
-        /**
-         * Cleans domains from tags input and update instance.
-         */
-        $scope.cleanDomains = function () {
-            var domains = [];
-            angular.forEach($scope.domains, function(domain){
-                domains.push(domain.text);
-            });
-
-            if (domains.length < $scope.instance.main_domain) {
-                $scope.instance.main_domain = 0;
-            }
-
-            $scope.instance.domains = domains;
         };
 
         /**
@@ -65,13 +56,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                         $location.path(fosJsRouting.ngGenerateShort('/manager',
                             'manager_instance_show',
                             { id: response.data.message.id }));
-                    } else {
-                        messenger.post({
-                            id:      new Date().getTime(),
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
                     }
+
+                    messenger.post({
+                        message: response.data.message.text,
+                        type:    response.data.message.type
+                    });
 
                     $scope.saving = 0;
                 });
@@ -81,10 +71,16 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          * Updates an instance.
          */
         $scope.update = function() {
-            itemService.update('manager_ws_instance_update',
-                { id: $scope.instance.id }, $scope.instance)
-                .then(function (response) {
-                    console.log(response);
+            $scope.saving = 1;
+
+            itemService.update('manager_ws_instance_update', $scope.instance.id,
+                $scope.instance).then(function (response) {
+                    messenger.post({
+                        message: response.data.message.text,
+                        type:    response.data.message.type
+                    });
+
+                    $scope.saving = 0;
                 });
         };
 

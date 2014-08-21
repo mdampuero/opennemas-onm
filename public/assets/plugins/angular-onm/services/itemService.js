@@ -27,29 +27,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     }
 
     /**
-     * Opens a moda to confirm action.
-     *
-     * @param string type The item type.
-     * @param Object item The item.
-     *
-     * @return Object The modal.
-     */
-    itemService.confirm = function (type, item) {
-        return $modal.open({
-            templateUrl: '/ws/template/ClientBundle:Modal:plugin.html.twig',
-            controller:  'ItemModalCtrl',
-            resolve: {
-                item: function() {
-                    return item;
-                },
-                type: function() {
-                    return type;
-                }
-            }
-        });
-    }
-
-    /**
      * Deletes a plugin given its id.
      *
      * @param string  route The route name.
@@ -61,6 +38,23 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var url = fosJsRouting.generate(route, { id: id });
 
         return $http.post(url).success(function (response) {
+            return response;
+        });
+    };
+
+    /**
+     * Deletes a plugin given its id.
+     *
+     * @param string route    The route name.
+     * @param array  selected The selected items.
+     *
+     * @return Object The response object.
+     */
+    itemService.deleteSelected = function (route, selected) {
+        var url  = fosJsRouting.generate(route);
+        var data = { selected: selected };
+
+        return $http.post(url, data).success(function (response) {
             return response;
         });
     };
@@ -114,22 +108,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     };
 
     /**
-     * Returns an item given its id.
-     *
-     * @param string  route The route name.
-     * @param integer id The item id.
-     *
-     * @return Object The response object.
-     */
-    itemService.show = function (route, id) {
-        var url = fosJsRouting.generate(route, { id: id });
-
-        return $http.post(url).success(function (response) {
-            return response;
-        });
-    };
-
-    /**
      * Saves an item.
      *
      * @param  string id   The route name.
@@ -141,6 +119,58 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var url = fosJsRouting.generate(route);
 
         return $http.post(url, data).success(function (response) {
+            return response;
+        });
+    };
+
+    /**
+     * Enables/disables an item.
+     *
+     * @param string  route The route name.
+     * @param integer id The item id.
+     * @param integer id The enabled value.
+     *
+     * @return Object The response object.
+     */
+    itemService.setEnabled = function (route, id, enabled) {
+        var url = fosJsRouting.generate(route, { id: id });
+        var data = { enabled: enabled };
+
+        return $http.post(url, data).success(function (response) {
+            return response;
+        });
+    };
+
+    /**
+     * Enables/disables a list of elements.
+     *
+     * @param string  route    The route name.
+     * @param Object  selected The selected elements.
+     * @param integer enabled  The enabled value.
+     *
+     * @return Object The response object.
+     */
+    itemService.setEnabledSelected = function (route, selected, enabled) {
+        var url = fosJsRouting.generate(route);
+        var data = { enabled: enabled, selected: selected };
+
+        return $http.post(url, data).success(function (response) {
+            return response;
+        });
+    };
+
+    /**
+     * Returns an item given its id.
+     *
+     * @param string  route The route name.
+     * @param integer id The item id.
+     *
+     * @return Object The response object.
+     */
+    itemService.show = function (route, id) {
+        var url = fosJsRouting.generate(route, { id: id });
+
+        return $http.post(url).success(function (response) {
             return response;
         });
     };
