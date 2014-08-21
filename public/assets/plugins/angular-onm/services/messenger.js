@@ -22,6 +22,10 @@ angular.module('onm.messenger', []).factory('messenger',  function () {
 
         params.hideAfter = 5;
 
+        if (!params.id) {
+            params.id = new Date().getTime();
+        }
+
         Messenger().post(params);
     };
 
