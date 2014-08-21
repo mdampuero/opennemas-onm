@@ -845,7 +845,7 @@ class OpinionsController extends Controller
             array(
                 'cache_id'        => $cacheID,
                 'actual_category' => 'opinion',
-                'x-tags'          => 'opinion,'.$opinionID,
+                //'x-tags'          => 'opinion,'.$opinionID,
             )
         );
     }

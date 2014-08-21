@@ -532,6 +532,9 @@ class InstanceManager extends BaseManager
      */
     public function remove($instance)
     {
+        $previousNamespace = $this->cache->getNamespace();
+        $this->cache->setNamespace('instance');
+
         $this->conn->selectDatabase('onm-instances');
 
         $sql = "DELETE FROM instances WHERE id=?";
@@ -550,6 +553,8 @@ class InstanceManager extends BaseManager
 
         // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
+
+        $this->cache->setNamespace($previousNamespace);
     }
 
     /**
