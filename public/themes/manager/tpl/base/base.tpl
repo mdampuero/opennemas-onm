@@ -79,6 +79,7 @@
         {javascripts src="@FosJsRoutingBundle/js/router.js,
                           @Common/js/routes.js,
                           @Common/plugins/angular/angular.min.js,
+                          @Common/plugins/angular-checklist-model/checklist-model.js,
                           @Common/plugins/angular-route/angular-route.min.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
                           @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
@@ -271,7 +272,7 @@
         <!-- END SIDEBAR -->
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content" ng-class="{ 'condensed': mini }">
-                <div ng-view></div>
+                <div ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
