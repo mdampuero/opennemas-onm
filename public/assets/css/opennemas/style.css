@@ -350,17 +350,6 @@ a:hover {
 /* =============================================================================
     Listing tables
    ========================================================================== */
-.listing tbody, .listing thead {
-    background:White;
-}
-
-.listing thead th,
-.listing thead td {
-    background: #ecf0f2;
-    padding: 9px;
-    text-align: left;
-}
-
 .grid.simple .grid-title {
     padding: 15px;
 }
@@ -391,19 +380,28 @@ a:hover {
 }
 
 
+th .dropdown .container {
+    font-weight: normal;
+    width: 300px;
+    text-transform: none;
+}
+
+th .dropdown .container ul > li i {
+    margin-right: 2px;
+}
+
+th .dropdown .container ul > li .a {
+    color: #333;
+}
+
+.fa-blank {
+    width: 12px;
+}
+
+
 /* =============================================================================
    Pseudo <a>: Make .a class act like a elements
    ========================================================================== */
-.header .nav > li.quicklinks > .a {
-    padding: 4px 2px !important;
-}
-
-.nav > li > .a {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-}
-
 .a {
     text-shadow: none !important;
     color: #0d638f;
@@ -420,6 +418,17 @@ a:hover {
     background: 0 0;
 }
 
+.header .nav > li.quicklinks > .a {
+    padding: 4px 2px !important;
+}
+
+.nav > li > .a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+
 .header .nav > li.quicklinks i {
     font-size: 1.33333333em;
 }
@@ -431,8 +440,40 @@ a:hover {
     float: left;
 }
 
+.dropdown-menu li .a,
+.dropdown-menu > li > .a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.dropdown-menu li .a,
+.dropdown-menu > li > .a {
+    line-height: 25px;
+    color: #2a2e36;
+    margin: 4px;
+    border-radius: 3px;
+    text-align: left;
+}
+
+.dropdown-menu li .a:hover,
+.dropdown-menu li .a:focus,
+.dropdown-menu > li > .a:hover,
+.dropdown-menu > li > .a:focus,
+.dropdown-submenu:hover > .a,
+.dropdown-submenu:focus > .a {
+    color: #1b1e24;
+    text-decoration: none;
+    background-color: #eff2f3;
+    background-image: none;
+}
+
 /* =============================================================================
-   Buttons
+   Form elements
    ========================================================================== */
 .btn-white {
     border: 1px solid #d1dade;
@@ -461,6 +502,19 @@ a:hover {
 .btn-warning {
     border: 1px solid #fbb05e;
 }
+
+.radio-input label:after {
+    top: 12px;
+}
+
+.radio-input label:before {
+    bottom: 8.5px;
+}
+
+.select2-container {
+    width: 100%;
+}
+
 
 /* =============================================================================
    Sidebar: fix submenus when sidebar is collapsed
@@ -519,7 +573,6 @@ tr:hover .buttons {
 /* =============================================================================
    ngTagsInput
    ========================================================================== */
-
 tags-input .tags {
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -590,6 +643,11 @@ tags-input .tags .tag-item .remove-button {
     font: 700 16px Arial,sans-serif;
     color: #fff;
 }
+
+
+/* =============================================================================
+   ngQuickdate
+   ========================================================================== */
 .quickdate-popup {
     font-size: 11px;
 }
@@ -658,4 +716,3 @@ table.quickdate-calendar .other-month:hover {
     padding:5px !important;
     min-height:20px;
 }
-
