@@ -75,6 +75,8 @@ class InstanceController extends Controller
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
+            $im->configureInstance($instance);
+
             $success = true;
             $message = array(
                 'id'   => $instance->id,
@@ -595,6 +597,7 @@ class InstanceController extends Controller
                 ->filter('activated_modules', null, FILTER_SANITIZE_STRING);
 
             $im->persist($instance);
+            $im->configureInstance($instance);
 
             $success = true;
             $message = array(
