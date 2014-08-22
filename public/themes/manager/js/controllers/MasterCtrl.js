@@ -14,6 +14,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
          */
         $scope.fosJsRouting = fosJsRouting;
 
+        /**
+         * The sidebar toggle status.
+         *
+         * @type integer
+         */
         $scope.mini = 0;
 
         /**
@@ -28,9 +33,23 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
             return $location.path() == url;
         }
 
-
+        /**
+         * Toggles the sidebar.
+         *
+         * @param integer status The toggle status.
+         */
         $scope.toggle = function(status) {
             $scope.mini = status;
+        }
+
+        /**
+         * Closes the sidebar on click in small devices.
+         */
+        $scope.go = function() {
+            if (angular.element('body').hasClass('breakpoint-480')) {
+                $.sidr('close', 'main-menu');
+                $.sidr('close', 'sidr');
+            }
         }
     }
 );

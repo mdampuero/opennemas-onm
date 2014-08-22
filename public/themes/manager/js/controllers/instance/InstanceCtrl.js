@@ -9,7 +9,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.instance = {
             domains: [],
             settings: {
-                template: 'base'
+                TEMPLATE_USER: 'base'
             },
             external: {
                 site_language: 'es_ES',
@@ -50,6 +50,9 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.save = function() {
             $scope.saving = 1;
 
+            $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            $scope.instance.external.last_invoice  = $scope.instance.external.last_invoice.toString();
+
             itemService.save('manager_ws_instance_create', $scope.instance)
                 .then(function (response) {
                     if (response.data.success) {
@@ -72,6 +75,9 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          */
         $scope.update = function() {
             $scope.saving = 1;
+
+            $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            $scope.instance.external.last_invoice  = $scope.instance.external.last_invoice.toString();
 
             itemService.update('manager_ws_instance_update', $scope.instance.id,
                 $scope.instance).then(function (response) {
