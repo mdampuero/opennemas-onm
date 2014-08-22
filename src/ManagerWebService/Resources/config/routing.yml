@@ -29,7 +29,6 @@ manager_ws_user:
     resource: @ManagerWebServiceBundle/Resources/config/routing/user.yml
     prefix:   /
 
-
 manager_ws_usergroup:
     resource: @ManagerWebServiceBundle/Resources/config/routing/usergroup.yml
     prefix:   /

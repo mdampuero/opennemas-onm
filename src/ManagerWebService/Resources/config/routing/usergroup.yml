@@ -1,6 +1,18 @@
+manager_ws_usergroup_create:
+    path:     /usergroup/create
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:create }
+    options:
+        expose: true
+
 manager_ws_user_group_delete:
     path:     /usergroup/{id}/delete
     defaults: { _controller: ManagerWebServiceBundle:UserGroup:delete }
+    options:
+        expose: true
+
+manager_ws_user_group_new:
+    path:     /usergroup/new
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:new }
     options:
         expose: true
 
@@ -27,10 +39,6 @@ manager_ws_user_groups_list:
     defaults: { _controller: ManagerWebServiceBundle:UserGroup:list }
     options:
         expose: true
-
-manager_ws_user_groups_list_export:
-    path: /usergroup/list-export.csv
-    defaults: { _controller:  ManagerWebServiceBundle:UserGroup:export }
 
 manager_ws_user_groups_set_activated:
     path:     /usergroups/set-activated

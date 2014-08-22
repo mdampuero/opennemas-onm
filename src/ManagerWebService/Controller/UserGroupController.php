@@ -46,9 +46,26 @@ class UserGroupController extends Controller
     }
 
     /**
-     * Returns an user as JSON.
+     * Returns the data to create a new group.
      *
-     * @param integer $id The user id.
+     * @return JsonResponse The response object.
+     */
+    public function newAction()
+    {
+        $privilege = new \Privilege();
+
+        return new JsonResponse(
+            array(
+                'group'     => null,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
+     * Returns a group as JSON.
+     *
+     * @param integer $id The group id.
      *
      * @return JsonResponse The response object.
      */
@@ -57,7 +74,22 @@ class UserGroupController extends Controller
         $group = $this->get('usergroup_repository')->find($id);
 
         return new JsonResponse(
-            array('data' => $group)
+            array(
+                'group'    => $group,
+                'template' => $this->templateParams()
+            )
         );
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function templateParams()
+    {
+        $privilege = new \Privilege();
+
+        return array('modules' => $privilege->getPrivilegesByModules());
     }
 }

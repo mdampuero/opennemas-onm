@@ -368,11 +368,9 @@ class InstanceController extends Controller
     /**
      * Returns the data to create a new instance.
      *
-     * @param  Request $request The request object
-     *
      * @return JsonResponse The response object.
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
         return new JsonResponse(
             array(
