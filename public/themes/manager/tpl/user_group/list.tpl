@@ -25,7 +25,7 @@
                             <span class="arrow"></span>
                             <i class="fa fa-users"></i>
                         </span>
-                        <input class="form-control" type="text" placeholder="Filter by name">
+                        <input class="form-control" ng-model="criteria.name[0].value" placeholder="Filter by name" type="text">
                     </div>
                 </div>
                 <div class="form-group">
@@ -53,9 +53,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary">
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_create') %]" class="btn btn-primary">
                             <i class="fa fa-plus"></i> {t}Create{/t}
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

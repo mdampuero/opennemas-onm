@@ -113,6 +113,4 @@
 			</div>
 		</div>
 	</div>
-	{include file="acl/user/modal/_modalDelete.tpl"}
-
 </div>

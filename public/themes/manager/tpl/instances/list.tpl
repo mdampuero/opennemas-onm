@@ -25,7 +25,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-cube"></i>
                             </span>
-                            <input type="text" placeholder="{t}Filter by name, domain or contact{/t}" name="name" ng-model="criteria.name[0].value"/>
+                            <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
                         </div>
                     </div>
                     <div class="form-group">
