@@ -1,14 +1,18 @@
 /**
  * Handles all actions in user groups listing.
  *
- * @param  Object $scope      The current scope.
- * @param  Object itemService The item service.
- * @param  Object data        The input data.
+ * @param  Object $modal       The modal service.
+ * @param  Object $scope       The current scope.
+ * @param  Object $timeout     The timeout service.
+ * @param  Object itemService  The item service.
+ * @param  Object fosJsRouting The fosJsRouting service.
+ * @param  Object messenger    The messenger service.
+ * @param  Object data         The input data
  *
- * @return Object The command controller.
+ * @return Object The controller for user groups.
  */
 angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
-    function ($scope, itemService, data) {
+    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -89,5 +93,41 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
                 $scope.selected.groups = [];
             }
         };
+
+        /**
+         * Refresh the list of elements when some parameter changes.
+         *
+         * @param array newValues The new values
+         * @param array oldValues The old values
+         */
+        $scope.$watch('[criteria, orderBy, epp, page]', function(newValues, oldValues) {
+            if (newValues !== oldValues) {
+                if (search) {
+                    $timeout.cancel(search);
+                }
+
+                search = $timeout(function() {
+                    list();
+                }, 500);
+            }
+        }, true);
+
+        /**
+         * Searches groups given a criteria.
+         */
+        function list() {
+            var cleaned = $scope.cleanFilters($scope.criteria);
+            var data = {
+                criteria: cleaned,
+                orderBy:  $scope.orderBy,
+                epp:      $scope.epp,
+                page:     $scope.page
+            };
+
+            itemService.list('manager_ws_user_groups_list', data).then(function (response) {
+                $scope.groups = response.data.results;
+                $scope.total  = response.data.total;
+            });
+        }
     }
 );

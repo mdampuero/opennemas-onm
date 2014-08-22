@@ -1,4 +1,16 @@
-
+/**
+ * Handles all actions in instances listing.
+ *
+ * @param  Object $modal       The modal service.
+ * @param  Object $scope       The current scope.
+ * @param  Object $timeout     The timeout service.
+ * @param  Object itemService  The item service.
+ * @param  Object fosJsRouting The fosJsRouting service.
+ * @param  Object messenger    The messenger service.
+ * @param  Object data         The input data.
+ *
+ * @return Object The command controller.
+ */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
     function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
@@ -206,52 +218,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         }, true);
 
         /**
-         * Cleans the criteria for the current listing.
-         *
-         * @param Object criteria The search criteria.
-         *
-         * @return Object The cleaned criteria.
-         */
-        function cleanFilters(criteria) {
-            var cleaned = {};
-
-            for (var name in criteria) {
-                for (var i = 0; i < criteria[name].length; i++) {
-                    if (criteria[name][i]['value'] != -1
-                        && criteria[name][i]['value'] !== ''
-                    ){
-                        if (criteria[name][i]['operator']) {
-                            var values = criteria[name][i]['value'].split(' ');
-
-                            cleaned[name] = [];
-                            for (var i = 0; i < values.length; i++) {
-
-                                cleaned[name][i] = {
-                                    value: '%' + values[i] + '%',
-                                    operator: 'LIKE'
-                                };
-                            };
-                        } else {
-                            if (!cleaned[name]) {
-                                cleaned[name] = [];
-                            }
-
-                            cleaned[name][i] = {
-                                value: criteria[name][i]['value']
-                            };
-                        }
-                    }
-                }
-            };
-
-            return cleaned;
-        }
-
-        /**
          * Searches instances given a criteria.
          */
         function list() {
-            var cleaned = cleanFilters($scope.criteria);
+            var cleaned = $scope.cleanFilters($scope.criteria);
 
             // Search by name, domains and contact mail
             if (cleaned.name) {

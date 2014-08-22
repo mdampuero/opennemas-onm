@@ -51,5 +51,47 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                 $.sidr('close', 'sidr');
             }
         }
+
+        /**
+         * Cleans the criteria for the current listing.
+         *
+         * @param Object criteria The search criteria.
+         *
+         * @return Object The cleaned criteria.
+         */
+        $scope.cleanFilters = function (criteria) {
+            var cleaned = {};
+
+            for (var name in criteria) {
+                for (var i = 0; i < criteria[name].length; i++) {
+                    if (criteria[name][i]['value'] != -1
+                        && criteria[name][i]['value'] !== ''
+                    ){
+                        if (criteria[name][i]['operator']) {
+                            var values = criteria[name][i]['value'].split(' ');
+
+                            cleaned[name] = [];
+                            for (var i = 0; i < values.length; i++) {
+
+                                cleaned[name][i] = {
+                                    value: '%' + values[i] + '%',
+                                    operator: 'LIKE'
+                                };
+                            };
+                        } else {
+                            if (!cleaned[name]) {
+                                cleaned[name] = [];
+                            }
+
+                            cleaned[name][i] = {
+                                value: criteria[name][i]['value']
+                            };
+                        }
+                    }
+                }
+            };
+
+            return cleaned;
+        }
     }
 );

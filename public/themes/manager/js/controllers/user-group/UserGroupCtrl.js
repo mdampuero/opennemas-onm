@@ -14,6 +14,20 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
          *
          * @type Object
          */
-        $scope.group = data.group;
+        $scope.group = {
+            privileges: []
+        };
+
+        /**
+         * The template parameters.
+         *
+         * @type Object
+         */
+        $scope.template = data.template;
+
+        // Initialize group
+        if (data.group) {
+            $scope.group = data.group;
+        }
     }
 );

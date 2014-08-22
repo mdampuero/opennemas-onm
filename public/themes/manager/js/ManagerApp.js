@@ -81,10 +81,10 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_create'), {
-                templateUrl: '/managerws/template/instances:edit.tpl',
+                templateUrl: '/managerws/template/instances:item.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
-                    data: function($route, itemService) {
+                    data: function(itemService) {
                         return itemService.new('manager_ws_instance_new').then(
                             function (response) {
                                 return response.data;
@@ -94,7 +94,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_show', { id: '\:id' }), {
-                templateUrl: '/managerws/template/instances:edit.tpl',
+                templateUrl: '/managerws/template/instances:item.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -123,7 +123,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_users_list'), {
-                templateUrl: '/managerws/template/acl:user:list.tpl',
+                templateUrl: '/managerws/template/user:list.tpl',
                 controller:  'UserListCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -136,7 +136,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_show', { id: '\:id' }), {
-                templateUrl: '/managerws/template/acl:user:edit.tpl',
+                templateUrl: '/managerws/template/user:item.tpl',
                 controller:  'UserCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -149,7 +149,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_groups_list'), {
-                templateUrl: '/managerws/template/acl:user_group:list.tpl',
+                templateUrl: '/managerws/template/user_group:list.tpl',
                 controller:  'UserGroupListCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -161,12 +161,25 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     }
                 }
             })
-            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_show', { id: '\:id'}), {
-                templateUrl: '/managerws/template/acl:user_group:edit.tpl',
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_create'), {
+                templateUrl: '/managerws/template/user_group:item.tpl',
                 controller:  'UserGroupCtrl',
                 resolve: {
                     data: function(itemService) {
-                        return itemService.list('manager_ws_user_groups_list', {}).then(
+                        return itemService.new('manager_ws_user_group_new').then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
+            })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_show', { id: '\:id'}), {
+                templateUrl: '/managerws/template/user_group:item.tpl',
+                controller:  'UserGroupCtrl',
+                resolve: {
+                    data: function($route, itemService) {
+                        return itemService.show('manager_ws_user_group_show', $route.current.params.id).then(
                             function (response) {
                                 return response.data;
                             }
