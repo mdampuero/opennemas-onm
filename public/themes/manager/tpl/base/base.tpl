@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     {block name="meta"}
     <title>OpenNeMaS - Manager</title>

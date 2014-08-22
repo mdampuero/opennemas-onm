@@ -185,11 +185,8 @@
                                 {t}Emails{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
                             </th>
-                            <th class="center" style="width: 80px;">
-                                {t}Actions{/t}
-                            </th>
-                            <th class="center" style="width: 10px">
-                                <div class="dropdown">
+                            <th class="text-center" style="width: 100px">
+                                <div class="dropdown" tooltip-html-unsafe="[% {t}Columns{/t} %]">
                                     <div class="dropdown-toggle">
                                         <i class="fa fa-columns"></i>
                                     </div>
@@ -455,7 +452,7 @@
                                 [% instance.emails %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['emails'] > 0, 'fa fa-angle-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
                             </td>
-                            <td class="right nowrap" colspan="2">
+                            <td class="right nowrap">
                                 <div class="btn-group btn-group-xs">
                                     <button class="btn btn-primary btn-sm" type="button" ng-click="setActivated(instance, instance.activated == '1' ? '0' : '1')">
                                         <i class="fa" ng-class="{ 'fa-refresh fa-spin': instance.loading == 1, 'fa-check' : instance.activated == '1', 'fa-times': instance.activated == '0' }"></i>
