@@ -607,72 +607,27 @@ class InstanceManager extends BaseManager
     /**
      * Configures the instance with the given data.
      *
-     * @param array  $data     The instance settings.
-     * @param string $database The database name.
+     * @param Instance $instance The instance to configure.
      */
-    public function configureInstance($data, $database)
+    public function configureInstance($instance)
     {
         $namespace = $this->cache->getNamespace();
 
-        $this->cache->setNamespace($data['internal_name']);
-        $this->sm->setConfig(array('database' => $database));
+        $this->cache->setNamespace($instance->internal_name);
+        $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
 
-        if (!$this->sm->set('contact_IP', $data['contact_IP'])) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
+        // Build external parameters
+        $instance->external['site_name']        = $instance->name;
+        $instance->external['site_created']     = $instance->created;
+        $instance->external['site_title']       = $instance->name . ' - ' . $this->sm->get('site_title');
+        $instance->external['site_description'] = $instance->name . ' - ' . $this->sm->get('site_description');
+        $instance->external['site_keywords']    = $instance->name . ' - ' . $this->sm->get('site_keywords');
+        $instance->external['site_agency']      = $instance->internal_name . '.opennemas.com';
 
-        if (!$this->sm->set('contact_mail', $data['contact_mail'])) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
+        foreach ($instance->external as $key => $value) {
+            $this->sm->invalidate($key);
 
-        if (!$this->sm->set('site_name', $data['name'])) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        if (!$this->sm->set('site_created', $data['site_created'])) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        $this->sm->invalidate('site_title');
-        $title = $data['name'] . ' - ' . $this->sm->get('site_title');
-        if (!$this->sm->set('site_title', $title)) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        $this->sm->invalidate('site_description');
-        $description = $data['name'].' - '.$this->sm->get('site_description');
-        if (!$this->sm->set('site_description', $description)) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        $this->sm->invalidate('site_keywords');
-        $keywords = $data['name'].' - '.$this->sm->get('site_keywords');
-        if (!$this->sm->set('site_keywords', $keywords)) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        if (!$this->sm->set('site_agency', $data['internal_name'].'.opennemas.com')) {
-            throw new InstanceNotConfiguredException(
-                'The instance could not be configured'
-            );
-        }
-
-        if (isset ($data['time_zone'])) {
-            if (!$this->sm->set('time_zone', $data['time_zone'])) {
+            if (!$this->sm->set($key, $instance->external[$key])) {
                 throw new InstanceNotConfiguredException(
                     'The instance could not be configured'
                 );
