@@ -16,9 +16,6 @@
         </ul>
     </div>
     <div ng-init="route = 'manager_ws_instances_list';  language = '{{$smarty.const.CURRENT_LANGUAGE}}';">
-
-        {render_messages}
-
         <div class="grid simple">
             <div class="grid-title">
                 <div class="form-inline">
@@ -48,7 +45,7 @@
                     <div class="pull-right">
                         <div class="form-group" ng-if="selected.instances.length > 0">
                             <div class="btn-group">
-                                <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
                                 </button>
                                 <ul class="dropdown-menu pull-right">
@@ -84,7 +81,7 @@
                     <div class="spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <table class="table no-more-tables no-margin no-padding" ng-if="!loading">
+                <table class="table no-margin" ng-if="!loading">
                     <thead ng-if="instances.length >= 0">
                         <tr>
                             <th style="width:15px;">
@@ -186,9 +183,9 @@
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
                             </th>
                             <th class="text-center" style="width: 100px">
-                                <div class="dropdown" tooltip-html-unsafe="[% {t}Columns{/t} %]">
+                                <div class="dropdown">
                                     <div class="dropdown-toggle">
-                                        <i class="fa fa-columns"></i>
+                                        <i class="fa fa-columns" tooltip-html-unsafe="{t}Columns{/t}"></i>
                                     </div>
                                     <div class="dropdown-menu container pull-right" role="menu">
                                         <div class="pull-left">
@@ -484,9 +481,3 @@
         </div>
     </div>
 </div>
-<script type="text/ng-template" id="modal-delete">
-    {include file="instances/modals/_modalDelete.tpl"}
-</script>
-<script type="text/ng-template" id="modal-delete-selected">
-    {include file="instances/modals/_modalBatchDelete.tpl"}
-</script>

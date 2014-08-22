@@ -81,23 +81,33 @@
                         <div class="form-group">
                             <label class="form-label">{t}Last invoice date{/t}</label>
                             <div class="controls">
-                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instace.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                             </div>
                         </div>
                         <h4>Domains</h4>
+                        <div class="row form-group" ng-if="instance.domains.length > 0">
+                            <div class="col-sm-12">
+                                <div class="radio">
+                                    <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
+                                    <label for="domain0">{t}No main domain{/t}</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group" ng-repeat="domain in instance.domains">
-                            <div class="col-sm-11">
+                            <div class="col-sm-12">
                                 <div class="radio radio-input">
                                     <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
                                     <label for="domain[% $index + 1 %]">
-                                        <input class="form-control" ng-model="instance.domains[$index]" type="text">
+                                        <div class="input-group">
+                                            <input class="form-control" ng-model="instance.domains[$index]" type="text">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </span>
+                                        </div>
                                     </label>
                                 </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
                             </div>
                         </div>
                         <div class="form-group">
@@ -114,7 +124,7 @@
                         <div class="form-group">
                             <label class="form-label">{t}Domain expire date:{/t}</label>
                             <div class="controls">
-                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instace.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                             </div>
                         </div>
 
@@ -138,7 +148,7 @@
                         <div class="form-group">
                             <label class="form-label" for="template">{t}Database{/t}</label>
                             <div class="controls">
-                                <input class="form-control" ng-model="instance.settings.BD_DATABASE" required type="text">
+                                <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
                             </div>
                         </div>
 

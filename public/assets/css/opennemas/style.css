@@ -57,16 +57,15 @@ a:hover {
 }
 
 @media (min-width: 1025px) {
-
     .logo {
         margin-left:7px;
     }
 
     .page-sidebar {
-        padding-top:10px;
+        padding-top: 10px;
     }
     .page-sidebar.mini {
-        padding-top:0;
+        padding-top: 0;
     }
 
     .header .header-seperation,
@@ -81,23 +80,21 @@ a:hover {
 
     .page-sidebar .page-sidebar-wrapper > ul > li > a,
     .page-sidebar .page-sidebar-wrapper > ul > li.open > a,
-    .page-sidebar .page-sidebar-wrapper > ul > li >a:hover,
-    .page-sidebar .page-sidebar-wrapper > ul > li:hover >a {
-        padding:10px 21px;
-    }
-    .page-sidebar .page-sidebar-wrapper > ul li a {
-        font-size:12px !important;
+    .page-sidebar .page-sidebar-wrapper > ul > li > a:hover,
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > a {
+        padding: 15px;
     }
 
-    .page-sidebar.mini .page-sidebar-wrapper > ul > li >a:hover,
+
+    .page-sidebar.mini .page-sidebar-wrapper > ul > li > a,
+    .page-sidebar.mini .page-sidebar-wrapper > ul > li > a:hover,
     .page-sidebar.mini .page-sidebar-wrapper > ul > li:hover >a {
-        padding:13px;
+        padding: 13px;
     }
 
     .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
-        padding-left: 40px !important;
+        padding-left: 30px !important;
     }
-
 }
 
 .tab-form .nav-tabs > .active > a,
@@ -475,31 +472,38 @@ th .dropdown .container ul > li .a {
 /* =============================================================================
    Form elements
    ========================================================================== */
-.btn-white {
+.btn-white,
+.btn-white:hover {
     border: 1px solid #d1dade;
 }
 
-.btn-default {
+.btn-default,
+.btn-default:hover {
     border: 1px solid #d1dade;
 }
 
-.btn-info {
+.btn-info,
+.btn-info:hover {
     border: 1px solid #152639;
 }
 
-.btn-danger {
+.btn-danger,
+.btn-danger:hover {
     border: 1px solid #f35958;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-primary:hover {
     border: 1px solid #0aa699;
 }
 
-.btn-success {
+.btn-success,
+.btn-success:hover {
     border: 1px solid #1285d1;
 }
 
-.btn-warning {
+.btn-warning,
+.btn-warning:hover {
     border: 1px solid #fbb05e;
 }
 
@@ -515,6 +519,19 @@ th .dropdown .container ul > li .a {
     width: 100%;
 }
 
+.input-group .btn {
+    padding-top: 6px;
+}
+
+.input-group-btn > .btn:hover,
+.input-group-btn > .btn:focus,
+.input-group-btn > .btn:active {
+    z-index: 0;
+}
+
+.input-group-addon.primary .arrow {
+    z-index: 0;
+}
 
 /* =============================================================================
    Sidebar: fix submenus when sidebar is collapsed

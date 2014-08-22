@@ -93,7 +93,6 @@
                           @ManagerTheme/js/Controllers.js,
 
                           @ManagerTheme/js/controllers/*
-
         "}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
@@ -228,7 +227,7 @@
                     <li class="start" ng-class="{ 'active': false }">
                         <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_instances_list') }">
+                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="go();">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
@@ -245,7 +244,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
+                    <li ng-class="{ 'active': isActive('manager_users_list') || isActive('manager_user_groups_list'),  'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
                         <a href="#">
                             <i class="fa fa-gears"></i>
                             <span class="title">{t}Settings{/t}
