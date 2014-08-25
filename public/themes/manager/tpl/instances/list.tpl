@@ -38,6 +38,7 @@
                             <option value="500">500</option>
                         </select>
                     </div>
+                    <i class="fa fa-circle-o-notch fa-lg fa-spin" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
                     <div class="form-group">
@@ -48,7 +49,7 @@
                             <ul class="dropdown-menu pull-right">
                                 <li>
                                     <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
-                                        <i class="fa fa-file-excel-o"></i> Export
+                                        <i class="fa fa-download"></i> Export
                                     </a>
                                 </li>
                                 <li class="divider" ng-if="selected.instances.length > 0"></li>
@@ -80,11 +81,8 @@
             </div>
         </div>
         <div class="grid-body no-padding">
-                <div class="spinner-wrapper" ng-if="loading">
-                    <div class="spinner"></div>
-                    <div class="spinner-text">{t}Loading{/t}...</div>
-                </div>
-                <table class="table no-margin" ng-if="!loading">
+                <div class="grid-overlay" ng-if="loading"></div>
+                <table class="table no-margin">
                     <thead ng-if="instances.length >= 0">
                         <tr>
                             <th style="width:15px;">
@@ -101,87 +99,87 @@
                                 {t}Name{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
                             </th>
-                            <th class="left pointer" ng-click="sort('domains')" ng-show="columns.domains">
+                            <th class="pointer" ng-click="sort('domains')" ng-show="columns.domains">
                                 {t}Domains{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
                             </th>
-                            <th class="left pointer" ng-click="sort('contact_email')" ng-show="columns.contact_mail">
+                            <th class="pointer" ng-click="sort('contact_email')" ng-show="columns.contact_mail">
                                 {t}Contact{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.contact_mail == 'asc', 'fa fa-caret-down': orderBy.contact_mail == 'desc'}"></i>
                             </th>
-                            <th class="left pointer" ng-click="sort('last_login')" ng-show="columns.last_login">
+                            <th class="text-center pointer" ng-click="sort('last_login')" ng-show="columns.last_login">
                                 {t}Last access{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.last_login == 'asc', 'fa fa-caret-down': orderBy.last_login == 'desc'}"></i>
                             </th>
-                            <th class="left pointer" ng-click="sort('created')" ng-show="columns.created">
+                            <th class="text-center pointer" ng-click="sort('created')" ng-show="columns.created">
                                 {t}Created{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.created == 'asc', 'fa fa-caret-down': orderBy.created == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('contents')" ng-show="columns.contents">
+                            <th class="text-center pointer" ng-click="sort('contents')" ng-show="columns.contents">
                                 <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.contents == 'asc', 'fa fa-caret-down': orderBy.contents == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('articles')" ng-show="columns.articles">
+                            <th class="text-center pointer" ng-click="sort('articles')" ng-show="columns.articles">
                                 {t}Articles{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.articles == 'asc', 'fa fa-caret-down': orderBy.articles == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('opinions')" ng-show="columns.opinions">
+                            <th class="text-center pointer" ng-click="sort('opinions')" ng-show="columns.opinions">
                                 {t}Opinions{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.opinions == 'asc', 'fa fa-caret-down': orderBy.opinions == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('advertisements')" ng-show="columns.advertisements">
+                            <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="columns.advertisements">
                                 {t}Advertisements{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.advertisements == 'asc', 'fa fa-caret-down': orderBy.advertisements == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('albums')" ng-show="columns.albums">
+                            <th class="text-center pointer" ng-click="sort('albums')" ng-show="columns.albums">
                                 {t}Albums{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.albums == 'asc', 'fa fa-caret-down': orderBy.albums == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('photos')" ng-show="columns.photos">
+                            <th class="text-center pointer" ng-click="sort('photos')" ng-show="columns.photos">
                                 {t}Photos{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.photos == 'asc', 'fa fa-caret-down': orderBy.photos == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('videos')" ng-show="columns.videos">
+                            <th class="text-center pointer" ng-click="sort('videos')" ng-show="columns.videos">
                                 {t}Videos{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.videos == 'asc', 'fa fa-caret-down': orderBy.videos == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('widgets')" ng-show="columns.widgets">
+                            <th class="text-center pointer" ng-click="sort('widgets')" ng-show="columns.widgets">
                                 {t}Widgets{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.widgets == 'asc', 'fa fa-caret-down': orderBy.widgets == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('static_pages')" ng-show="columns.static_pages">
+                            <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="columns.static_pages">
                                 {t}Static pages{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.static_pages == 'asc', 'fa fa-caret-down': orderBy.static_pages == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('attachments')" ng-show="columns.attachments">
+                            <th class="text-center pointer" ng-click="sort('attachments')" ng-show="columns.attachments">
                                 {t}Attachments{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.attachments == 'asc', 'fa fa-caret-down': orderBy.attachments == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('polls')" ng-show="columns.polls">
+                            <th class="text-center pointer" ng-click="sort('polls')" ng-show="columns.polls">
                                 {t}Polls{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.polls == 'asc', 'fa fa-caret-down': orderBy.polls == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('letters')" ng-show="columns.letters">
+                            <th class="text-center pointer" ng-click="sort('letters')" ng-show="columns.letters">
                                 {t}Letters{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.letters == 'asc', 'fa fa-caret-down': orderBy.letters == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('media_size')" ng-show="columns.media_size">
+                            <th class="text-center pointer" ng-click="sort('media_size')" ng-show="columns.media_size">
                                 {t}Media size{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.media_size == 'asc', 'fa fa-caret-down': orderBy.media_size == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('alexa')" ng-show="columns.alexa">
+                            <th class="text-center pointer" ng-click="sort('alexa')" ng-show="columns.alexa">
                                 {t}Alexa{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.alexa == 'asc', 'fa fa-caret-down': orderBy.alexa == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('page_views')" ng-show="columns.page_views">
+                            <th class="text-center pointer" ng-click="sort('page_views')" ng-show="columns.page_views">
                                 {t}Page views{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.page_views == 'asc', 'fa fa-caret-down': orderBy.page_views == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('users')" ng-show="columns.users">
+                            <th class="text-center pointer" ng-click="sort('users')" ng-show="columns.users">
                                 {t}Users{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.users == 'asc', 'fa fa-caret-down': orderBy.users == 'desc'}"></i>
                             </th>
-                            <th class="center pointer" ng-click="sort('emails')" ng-show="columns.emails">
+                            <th class="text-center pointer" ng-click="sort('emails')" ng-show="columns.emails">
                                 {t}Emails{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
                             </th>
@@ -363,7 +361,7 @@
                                     </button>
                                 </div>
                             </td>
-                            <td class="left" ng-show="columns.domains">
+                            <td ng-show="columns.domains">
                                 <div class="domains">
                                     <small>
                                         <ul class="domain-list no-style" ng-if="instance.domains.length > 1">
@@ -379,98 +377,95 @@
                                     </small>
                                 </div>
                             </td>
-                            <td class="left" ng-show="columns.contact_mail">
+                            <td ng-show="columns.contact_mail">
                                 <div class="creator">
                                     <a ng-href="mailto:[% instance.contact_mail %]" title="Send an email to the instance manager"> [% instance.contact_mail %]</a>
                                 </div>
                             </td>
-                            <td class="center" ng-show="columns.last_login">
+                            <td class="text-center" ng-show="columns.last_login">
                                 [% instance.last_login %]
                             </td>
-                            <td class="nowrap left" ng-show="columns.created">
+                            <td class="nowrap" ng-show="columns.created">
                                 [% instance.created %]
                             </td>
-                            <td class="center" ng-show="columns.contents">
+                            <td class="text-center" ng-show="columns.contents">
                                 <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + instance.articles + '<br>{t}Ads{/t}: ' + instance.advertisements + '<br>{t}Files{/t}: ' + instance.attachments + '<br>{t}Opinions{/t}: ' + instance.opinions + '<br>{t}Albums{/t}: ' + instance.albums + '<br>{t}Images{/t}: ' + instance.photos + '<br>{t}Videos{/t}: ' + instance.videos + '<br>{t}Polls{/t}: ' + instance.polls + '<br>{t}Widgets{/t}: ' + instance.widgets + '<br>{t}Static pages{/t}: ' + instance.static_pages + '<br>{t}Letters{/t}: ' + instance.letters %]">
                                     [% instance.contents %]
                                 </span>
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['contents'] > 0, 'fa fa-angle-down text-danger': instance.deltas['contents'] < 0 }" tooltip-html-unsafe="[% instance.deltas['contents'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.articles">
+                            <td class="text-center" ng-show="columns.articles">
                                 [% instance.articles %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['articles'] > 0, 'fa fa-angle-down text-danger': instance.deltas['articles'] < 0 }" tooltip-html-unsafe="[% instance.deltas['articles'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.opinions">
+                            <td class="text-center" ng-show="columns.opinions">
                                 [% instance.opinions %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['opinions'] > 0, 'fa fa-angle-down text-danger': instance.deltas['opinions'] < 0 }" tooltip-html-unsafe="[% instance.deltas['opinions'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.advertisements">
+                            <td class="text-center" ng-show="columns.advertisements">
                                 [% instance.advertisements %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['advertisements'] > 0, 'fa fa-angle-down text-danger': instance.deltas['advertisements'] < 0 }" tooltip-html-unsafe="[% instance.deltas['advertisements'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.albums">
+                            <td class="text-center" ng-show="columns.albums">
                                 [% instance.albums %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['albums'] > 0, 'fa fa-angle-down text-danger': instance.deltas['albums'] < 0 }" tooltip-html-unsafe="[% instance.deltas['albums'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.photos">
+                            <td class="text-center" ng-show="columns.photos">
                                 [% instance.photos %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['photos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['photos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['photos'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.videos">
+                            <td class="text-center" ng-show="columns.videos">
                                 [% instance.videos %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['videos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['videos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['videos'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.widgets">
+                            <td class="text-center" ng-show="columns.widgets">
                                 [% instance.widgets %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['widgets'] > 0, 'fa fa-angle-down text-danger': instance.deltas['widgets'] < 0 }" tooltip-html-unsafe="[% instance.deltas['widgets'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.static_pages">
+                            <td class="text-center" ng-show="columns.static_pages">
                                 [% instance.static_pages %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['static_pages'] > 0, 'fa fa-angle-down text-danger': instance.deltas['static_pages'] < 0 }" tooltip-html-unsafe="[% instance.deltas['static_pages'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.attachments">
+                            <td class="text-center" ng-show="columns.attachments">
                                 [% instance.attachments %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['attachments'] > 0, 'fa fa-angle-down text-danger': instance.deltas['attachments'] < 0 }" tooltip-html-unsafe="[% instance.deltas['attachments'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.polls">
+                            <td class="text-center" ng-show="columns.polls">
                                 [% instance.polls %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['polls'] > 0, 'fa fa-angle-down text-danger': instance.deltas['polls'] < 0 }" tooltip-html-unsafe="[% instance.deltas['polls'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.letters">
+                            <td class="text-center" ng-show="columns.letters">
                                 [% instance.letters %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['letters'] > 0, 'fa fa-angle-down text-danger': instance.deltas['letters'] < 0 }" tooltip-html-unsafe="[% instance.deltas['letters'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.media_size">
+                            <td class="text-center" ng-show="columns.media_size">
                                 [% instance.media_size | number : 2 %] Mb
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['media_size'] > 0, 'fa fa-angle-down text-danger': instance.deltas['media_size'] < 0 }" tooltip-html-unsafe="[% instance.deltas['media_size'] | number : 2 %] Mb"></i>
                             </td>
-                            <td class="center" ng-show="columns.alexa">
+                            <td class="text-center" ng-show="columns.alexa">
                                 [% instance.alexa %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['alexa'] > 0, 'fa fa-angle-down text-danger': instance.deltas['alexa'] < 0 }" tooltip-html-unsafe="[% instance.deltas['alexa'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.page_views">
+                            <td class="text-center" ng-show="columns.page_views">
                                 [% instance.page_views %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['page_views'] > 0, 'fa fa-angle-down text-danger': instance.deltas['page_views'] < 0 }" tooltip-html-unsafe="[% instance.deltas['page_views'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.users">
+                            <td class="text-center" ng-show="columns.users">
                                 [% instance.users %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['users'] > 0, 'fa fa-angle-down text-danger': instance.deltas['users'] < 0 }" tooltip-html-unsafe="[% instance.deltas['users'] %]"></i>
                             </td>
-                            <td class="center" ng-show="columns.emails">
+                            <td class="text-center" ng-show="columns.emails">
                                 [% instance.emails %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['emails'] > 0, 'fa fa-angle-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
                             </td>
-                            <td class="right nowrap">
-                                <div class="btn-group btn-group-xs">
-                                    <button class="btn btn-primary btn-sm" type="button" ng-click="setActivated(instance, instance.activated == '1' ? '0' : '1')">
-                                        <i class="fa" ng-class="{ 'fa-refresh fa-spin': instance.loading == 1, 'fa-check' : instance.activated == '1', 'fa-times': instance.activated == '0' }"></i>
-                                    </button>
-
-                                </div>
+                            <td>
+                                <button class="btn btn-white" type="button" ng-click="setEnabled(instance, instance.activated == '1' ? '0' : '1')">
+                                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': instance.loading, 'fa-check text-success' : !instance.loading &&instance.activated == '1', 'fa-times text-error': !instance.loading && instance.activated == '0' }"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot ng-if="instances.length > 0">
                         <tr>
                             <td colspan="[% 4 + columns.name + columns.domains + columns.contact_mail + columns.last_login + columns.created + columns.contents + columns.articles + columns.opinions + columns.advertisements + columns.albums + columns.photos + columns.videos + columns.widgets + columns.static_pages + columns.attachments + columns.polls + columns.letters + columns.media_size + columns.alexa + columns.page_views + columns.users + columns.emails %]" class="center">
                                 <div class="pagination-info pull-left" ng-if="instances.length > 0">

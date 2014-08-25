@@ -145,6 +145,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
          * @param integer enabled The activated value.
          */
         $scope.setEnabledSelected = function(enabled) {
+            for (var i = 0; i < $scope.instances.length; i++) {
+                var id = $scope.instances[i].id;
+                if ($scope.selected.instances.indexOf(id) != -1) {
+                    $scope.instances[i].loading = 1;
+                }
+            };
+
             itemService.setEnabledSelected('manager_ws_instances_set_enabled',
                 $scope.selected.instances, enabled).then(function (response) {
                     if (response.data.success) {
@@ -152,6 +159,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                             var id = $scope.instances[i].id;
                             if ($scope.selected.instances.indexOf(id) != -1) {
                                 $scope.instances[i].activated = enabled;
+                                delete $scope.instances[i].loading;
                             }
                         };
                     }
@@ -185,9 +193,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
          *
          * @param boolean enabled Instance activated value.
          */
-        $scope.setActivated = function(instance, enabled) {
+        $scope.setEnabled = function(instance, enabled) {
+            instance.loading = 1;
+
             itemService.setEnabled('manager_ws_instance_set_enabled',
                 instance.id, enabled).then(function (response) {
+                    instance.loading = 0;
+
                     if (response.data.success) {
                         instance.activated = enabled;
                     }
@@ -221,6 +233,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
          * Searches instances given a criteria.
          */
         function list() {
+            $scope.loading = 1;
+
             var cleaned = $scope.cleanFilters($scope.criteria);
 
             // Search by name, domains and contact mail
@@ -241,6 +255,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
             itemService.list('manager_ws_instances_list', data).then(function (response) {
                 $scope.instances = response.data.results;
                 $scope.total = response.data.total;
+
+                $scope.loading = 0;
             });
         }
     }
