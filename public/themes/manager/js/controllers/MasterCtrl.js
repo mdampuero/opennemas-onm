@@ -72,11 +72,27 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
 
                             cleaned[name] = [];
                             for (var i = 0; i < values.length; i++) {
-
-                                cleaned[name][i] = {
-                                    value: '%' + values[i] + '%',
-                                    operator: 'LIKE'
-                                };
+                                switch(criteria[name][i]['operator']) {
+                                    case 'like':
+                                        cleaned[name][i] = {
+                                            value:    '%' + values[i] + '%',
+                                            operator: 'LIKE'
+                                        };
+                                        break;
+                                    case 'regexp':
+                                        cleaned[name][i] = {
+                                            value:    '(^' + values[i] + ',)|('
+                                                + ',' + values[i] + ',)|('
+                                                + values[i] + '$)',
+                                            operator: 'REGEXP'
+                                        };
+                                        break;
+                                    default:
+                                        cleaned[name][i] = {
+                                            value:    values[i],
+                                            operator: criteria[name][i]['operator']
+                                        };
+                                }
                             };
                         } else {
                             if (!cleaned[name]) {
