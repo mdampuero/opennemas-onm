@@ -158,6 +158,8 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
          * Searches groups given a criteria.
          */
         function list() {
+            $scope.loading = 1;
+
             var cleaned = $scope.cleanFilters($scope.criteria);
             var data = {
                 criteria: cleaned,
@@ -167,8 +169,9 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
             };
 
             itemService.list('manager_ws_user_groups_list', data).then(function (response) {
-                $scope.groups = response.data.results;
-                $scope.total  = response.data.total;
+                $scope.groups  = response.data.results;
+                $scope.total   = response.data.total;
+                $scope.loading = 0;
             });
         }
     }

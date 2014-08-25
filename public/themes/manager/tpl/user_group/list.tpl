@@ -39,6 +39,7 @@
                             <option value="500">500</option>
                         </select>
                     </div>
+                    <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
                     <div class="form-group" ng-if="selected.groups.length > 0">
@@ -64,6 +65,7 @@
             </div>
         </div>
         <div class="grid-body no-padding">
+            <div class="grid-overlay" ng-if="loading"></div>
             <table class="table no-margin">
                 <thead>
                     <tr>
@@ -77,6 +79,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr ng-if="groups.length == 0">
+                        <td class="text-center" colspan="10">{t}There is no available groups yet{/t}</td>
+                    </tr>
                     <tr ng-repeat="group in groups">
                         <td>
                             <div class="checkbox check-default">
@@ -97,7 +102,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
+                <tfoot ng-if="groups.length > 0">
                     <tr>
                         <td colspan="3">
                             <div class="pagination-info pull-left" ng-if="groups.length > 0">
