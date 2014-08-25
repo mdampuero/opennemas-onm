@@ -41,9 +41,10 @@
         </tab>
         <tab heading="{t}Configuration{/t}">
             <table>
-                {foreach $directive_key_values as $key => $value}
-                <tr><th>{$key}</th><td>{$value}</td></tr>
-                {/foreach}
+                <tr ng-repeat="(key, value) in serverData.directive_key_values">
+                    <th>[% key %]</th>
+                    <td>[% value %]</td>
+                </tr>
             </table>
         </tab>
         <tab heading="Scripts ([% status.scripts.length %])">
@@ -52,6 +53,11 @@
                     <th width="70%">Path</th>
                     <th width="20%">Memory</th>
                     <th width="10%">Hits</th>
+                </tr>
+                <tr ng-repeat="dir in  serverData.files_key_values">
+                    <th>[% dir.name %] ([% dir.count %])</th>
+                    <th>[% dir.total_memory_consumption %]</th>
+                    <th></th>
                 </tr>
                 {foreach $files_key_values as $dir}
                     <tr onclick="toggleVisible('#head-{$dir@iteration}', '#row-{$dir@iteration}')" id="head-{$dir@iteration}">
@@ -72,8 +78,6 @@
                             <td>{$fileInfo["hits"]}</td>
                         </tr>
                     {/foreach}
-
-
                 {/foreach}
             </table>
         </tab>
