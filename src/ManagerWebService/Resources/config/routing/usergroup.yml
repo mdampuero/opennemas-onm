@@ -1,4 +1,4 @@
-manager_ws_usergroup_create:
+manager_ws_user_group_create:
     path:     /usergroup/create
     defaults: { _controller: ManagerWebServiceBundle:UserGroup:create }
     options:
@@ -16,32 +16,26 @@ manager_ws_user_group_new:
     options:
         expose: true
 
-manager_ws_user_group_set_activated:
-    path:     /usergroup/{id}/set-activated
-    defaults: { _controller: ManagerWebServiceBundle:UserGroup:setActivated }
-    options:
-        expose: true
-
 manager_ws_user_group_show:
     path:     /usergroup/{id}/show
     defaults: { _controller: ManagerWebServiceBundle:UserGroup:show }
     options:
         expose: true
 
+manager_ws_user_group_update:
+    path:     /usergroup/{id}/update
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:update }
+    options:
+        expose: true
+
 manager_ws_user_groups_delete:
     path:     /usergroups/delete
-    defaults: { _controller: ManagerWebServiceBundle:UserGroup:batchDelete }
+    defaults: { _controller: ManagerWebServiceBundle:UserGroup:deleteSelected }
     options:
         expose: true
 
 manager_ws_user_groups_list:
     path:     /usergroups/list
     defaults: { _controller: ManagerWebServiceBundle:UserGroup:list }
-    options:
-        expose: true
-
-manager_ws_user_groups_set_activated:
-    path:     /usergroups/set-activated
-    defaults: { _controller: ManagerWebServiceBundle:UserGroup:batchSetActivated }
     options:
         expose: true
