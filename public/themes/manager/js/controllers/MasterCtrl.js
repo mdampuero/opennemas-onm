@@ -67,7 +67,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                     if (criteria[name][i]['value'] != -1
                         && criteria[name][i]['value'] !== ''
                     ){
-                        if (criteria[name][i]['operator']) {
+                        if (criteria[name][i]['value']) {
                             var values = criteria[name][i]['value'].split(' ');
 
                             cleaned[name] = [];
