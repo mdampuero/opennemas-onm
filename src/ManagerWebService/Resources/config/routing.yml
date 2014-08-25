@@ -13,6 +13,12 @@ managerwebservice_instance_create:
     defaults: { _controller: ManagerWebServiceBundle:WebService:create }
     methods:  [POST]
 
+manager_ws_framework_opcache:
+    path:     /opcache/status
+    defaults: { _controller: ManagerWebServiceBundle:FrameworkStatus:opcacheStatus }
+    options:
+        expose: true
+
 manager_ws_command:
     resource: @ManagerWebServiceBundle/Resources/config/routing/command.yml
     prefix:   /

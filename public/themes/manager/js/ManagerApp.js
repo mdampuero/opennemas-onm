@@ -133,7 +133,17 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_opcache_status'), {
-                templateUrl: '/managerws/template/framework:opcache_status.tpl'
+                templateUrl: '/managerws/template/framework:opcache_status.tpl',
+                controller: 'OpcacheCtrl',
+                resolve: {
+                    data: function(itemService) {
+                        return itemService.fetchOpcacheStatus('manager_ws_framework_opcache').then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_users_list'), {
                 templateUrl: '/managerws/template/user:list.tpl',

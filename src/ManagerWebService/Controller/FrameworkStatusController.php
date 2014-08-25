@@ -12,9 +12,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Manager\Controller;
+namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -26,16 +27,6 @@ use Onm\Settings as s;
 class FrameworkStatusController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-    }
-
-    /**
      * Shows the APC information iframe
      *
      * @param Request $request the request object
@@ -44,6 +35,8 @@ class FrameworkStatusController extends Controller
      **/
     public function opcacheStatusAction(Request $request)
     {
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+
         $config = $status = $mem = $stats =  $freeKeys =  $notSupportedMessage = null;
         $statusKeyValues = $directivesKeyValues = $newDirs = null;
 
@@ -60,6 +53,7 @@ class FrameworkStatusController extends Controller
         // Fetch configuration and status information from OpCache
         $config = opcache_get_configuration();
         $status = opcache_get_status();
+
         if (!$config['directives']['opcache.enable']) {
             $notSupportedMessage = 'Zend OPcache extension loaded but not activated [opcache.enable != true].';
         }
@@ -175,9 +169,7 @@ class FrameworkStatusController extends Controller
             $newDirs []= $newDir;
         }
 
-        return $this->render(
-            'framework/opcache_status.tpl',
-            array(
+        return new JsonResponse(array(
                 'not_supported_message' => $notSupportedMessage,
                 'config'                => $config,
                 'status'                => $status,

@@ -193,11 +193,11 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     };
 
     /**
-     * Updates an item.
+     * Executes a command and returns its name and output.
      *
-     * @param  string id   The route name.
-     * @param  mixed  id   The item id.
-     * @param  object data The item data.
+     * @param  string route         The route name.
+     * @param  mixed  command_name  The name of the command.
+     * @param  object data          Additional data to execute the command.
      *
      * @return Object The response object.
      */
@@ -208,6 +208,24 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         };
 
         var url = fosJsRouting.generate(route, parameters);
+
+        return $http.get(url).success(function (response) {
+            return response;
+        });
+    };
+
+
+    /**
+     * Fetches the Zend Opcache.
+     *
+     * @param  string id   The route name.
+     * @param  mixed  id   The item id.
+     * @param  object data The item data.
+     *
+     * @return Object The response object.
+     */
+    itemService.fetchOpcacheStatus = function(route) {
+        var url = fosJsRouting.generate(route);
 
         return $http.get(url).success(function (response) {
             return response;
