@@ -9,7 +9,7 @@
  * @param  Object messenger    The messenger service.
  * @param  Object data         The input data.
  *
- * @return Object The command controller.
+ * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
     function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
@@ -63,13 +63,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         };
 
         /**
-         * The number of total items.
-         *
-         * @type integer
-         */
-        $scope.total = data.total;
-
-        /**
          * The listing order.
          *
          * @type Object
@@ -84,6 +77,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
          * @type integer
          */
         $scope.page = 1;
+
+        /**
+         * The number of total items.
+         *
+         * @type integer
+         */
+        $scope.total = data.total;
 
         /**
          * Variable to store the current search.
