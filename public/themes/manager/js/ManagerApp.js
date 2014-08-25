@@ -135,6 +135,19 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     }
                 }
             })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_create'), {
+                templateUrl: '/managerws/template/user:item.tpl',
+                controller:  'UserCtrl',
+                resolve: {
+                    data: function($route, itemService) {
+                        return itemService.new('manager_ws_user_new').then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
+            })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_show', { id: '\:id' }), {
                 templateUrl: '/managerws/template/user:item.tpl',
                 controller:  'UserCtrl',
