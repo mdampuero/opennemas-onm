@@ -74,7 +74,6 @@
                             </div>
                         </th>
                         <th>{t}Group name{/t}</th>
-                        <th class="text-center" style="width: 120px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,14 +86,12 @@
                         </td>
                         <td>
                             [% group.name %]
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group">
-                                <a class="btn btn-default" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
-                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                            <div class="listing-inline-actions">
+                                <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
+                                    <i class="fa fa-pencil"></i>{t}Edit{/t}
                                 </a>
-                                <button class="btn btn-danger" ng-click="delete(group)" type="button">
-                                    <i class="fa fa-trash-o"></i>
+                                <button class="link link-danger" ng-click="delete(group)" type="button">
+                                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
                                 </button>
                             </div>
                         </td>

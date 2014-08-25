@@ -49,6 +49,9 @@ a:hover {
     margin: 0;
     padding: 0;
 }
+.nowrap {
+    white-space: nowrap;
+}
 
 @media (min-width: 980px) {
     .page-content {
@@ -768,3 +771,37 @@ table.quickdate-calendar .other-month:hover {
     padding:5px !important;
     min-height:20px;
 }
+
+tr:hover .listing-inline-actions {
+    opacity:1;
+}
+
+.listing-inline-actions {
+    margin-top:5px;
+    font-size:13px;
+    opacity: 0.4;
+    clear:both;
+}
+.listing-inline-actions *:first-child {
+    padding-left:0;
+}
+.listing-inline-actions .link {
+    color:#576475;
+}
+.listing-inline-actions .link:hover {
+    text-decoration: underline;
+}
+.listing-inline-actions .link-danger {
+    color:#d9534f;
+    border:0;
+    background:none;
+    font-size:13px;
+}
+.listing-inline-actions .link i {
+    margin-right:4px;
+}
+
+.listing-inline-actions > *{
+    display:inline-block;
+}
+

@@ -185,7 +185,7 @@
                                 {t}Emails{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
                             </th>
-                            <th class="text-center" style="width: 100px">
+                            <th class="text-center" style="width: 10px">
                                 <div class="dropdown">
                                     <div class="dropdown-toggle">
                                         <i class="fa fa-columns" tooltip-html-unsafe="{t}Columns{/t}"></i>
@@ -354,6 +354,14 @@
                                 <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
                                     [% instance.name %]
                                 </a>
+                                <div class="listing-inline-actions">
+                                    <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
+                                        <i class="fa fa-pencil"></i>Editar
+                                    </a>
+                                    <button class="link link-danger" ng-click="delete(instance)" type="button">
+                                        <i class="fa fa-trash-o"></i>Eliminar
+                                    </button>
+                                </div>
                             </td>
                             <td class="left" ng-show="columns.domains">
                                 <div class="domains">
@@ -457,12 +465,7 @@
                                     <button class="btn btn-primary btn-sm" type="button" ng-click="setActivated(instance, instance.activated == '1' ? '0' : '1')">
                                         <i class="fa" ng-class="{ 'fa-refresh fa-spin': instance.loading == 1, 'fa-check' : instance.activated == '1', 'fa-times': instance.activated == '0' }"></i>
                                     </button>
-                                    <a class="btn btn-white" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <button class="btn btn-danger" ng-click="delete(instance)" type="button">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
+
                                 </div>
                             </td>
                         </tr>

@@ -68,13 +68,13 @@
 		                        <input type="checkbox" class="toggleallcheckbox">
 		                    </th>
 							<th class="left">{t}Full name{/t}</th>
-							<th class="left" style="width:110px">{t}Username{/t}</th>
+							<th class="left">{t}Username{/t}</th>
 							<th class="left" >{t}Group{/t}</th>
-							<th class="text-center" style="width: 180px;">{t}Activated{/t}</th>
+							<th class="text-center" style="width: 10px;">{t}Activated{/t}</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat-start="user in users">
+						<tr ng-repeat="user in users">
 						 	<td>
 								<input type="checkbox" name="selected[]" value="{$user->id}">
 							</td>
@@ -82,6 +82,14 @@
 								<a href="{url name=manager_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 									[% user.name %]
 								</a>
+								<div class="listing-inline-actions">
+									<a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
+										<i class="fa fa-pencil"></i>{t}Edit{/t}
+									</a>
+									<button class="link link-danger" type="button">
+										<i class="fa fa-trash"></i>{t}Delete{/t}
+									</button>
+								</div>
 							</td>
 							<td class="left">
 								[% user.username %]
@@ -94,21 +102,9 @@
 								</ul>
 							</td>
 							<td class="text-center">
-								<button class="btn btn-white">
+								<button class="btn btn-white btn-sm">
 									<i class="fa" ng-class="{ 'fa-check': user.activated, 'fa-times': !user.activated }"></i>
 								</button>
-							</td>
-						</tr>
-						<tr ng-repeat-end>
-							<td class="text-right" colspan="5" style="border-top: 0;">
-								<div class="buttons">
-									<a class="btn btn-link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
-										<i class="fa fa-edit"></i> {t}Edit{/t}
-									</a>
-									<button class="btn btn-link" type="button">
-										<i class="fa fa-times"></i> {t}Delete{/t}
-									</button>
-								</div>
 							</td>
 						</tr>
 					</tbody>
