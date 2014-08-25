@@ -188,4 +188,14 @@ class UserGroupManager extends BaseManager
 
         $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }
+
+    /**
+     * Deletes an user group from cache.
+     *
+     * @param integer $id The user group id.
+     */
+    public function deleteCache($id)
+    {
+        $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
+    }
 }
