@@ -16,7 +16,7 @@ a:hover {
 
 
 .page-sidebar.mini {
-    background-color:#376092 !important;
+    background-color: #1b1e24 !important;
 }
 .page-sidebar.mini .page-sidebar-wrapper > ul > li.open > a,
 .page-sidebar.mini .page-sidebar-wrapper > ul > li.active > a {
@@ -66,7 +66,10 @@ a:hover {
 
 @media (max-width: 1024px) and (min-width: 768px) {
     .page-sidebar {
-        background-color:#376092 !important;
+        background-color: #1b1e24 !important;
+    }
+    .page-sidebar .page-sidebar-wrapper > ul > li.open > a, .page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+        background-color: #376092 !important;
     }
 }
 
