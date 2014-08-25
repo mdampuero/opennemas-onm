@@ -14,7 +14,9 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          *
          * @type Object
          */
-        $scope.user = data.data;
+        $scope.user = {
+            id_user_group: []
+        };
 
         /**
          * The template parameters.
@@ -63,6 +65,8 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
                 });
         };
 
-        if ()
+        if (data.data) {
+            $scope.user = data.data
+        }
     }
 );
