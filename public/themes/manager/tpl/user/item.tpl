@@ -27,8 +27,11 @@
                 [% user.name %]
             </h3>
             <div class="pull-right">
-                <button class="btn btn-primary">
-                    <i class="fa fa-save"></i> {t}Save{/t}
+                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving || userForm.$invalid" ng-if="!user.id">
+                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                </button>
+                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving || userForm.$invalid" ng-if="user.id">
+                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
             </div>
         </div>
@@ -119,9 +122,7 @@
                         </div>
                         <div class="form-group">
                             <label for="user-language">{t}User language{/t}</label>
-                            <select id="user-language" ng-model="user.meta.user_language" ng-options="">
-
-                            </select>
+                            <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </div>
