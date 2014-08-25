@@ -90,9 +90,9 @@
                                 <a class="btn btn-default" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
                                     <i class="icon-pencil"></i> {t}Edit{/t}
                                 </a>
-                                <a class="btn btn-danger" href="#" title="{t}Delete group{/t}">
+                                <button class="btn btn-danger" ng-click="delete(group)" type="button">
                                     <i class="fa fa-trash-o"></i>
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
