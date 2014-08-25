@@ -15,72 +15,71 @@
             </li>
         </ul>
     </div>
-    <div ng-init="route = 'manager_ws_instances_list';  language = '{{$smarty.const.CURRENT_LANGUAGE}}';">
-        <div class="grid simple">
-            <div class="grid-title clearfix">
-                <div class="form-inline">
-                    <div class="form-filter">
-                        <div class="hidden-sm hidden-md hidden-lg filter">{t}Filter:{/t}</div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon primary">
-                                    <span class="arrow"></span>
-                                    <i class="fa fa-cube"></i>
-                                </span>
-                                <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <select class="xsmall" ng-model="epp">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="500">500</option>
-                            </select>
+    <div class="grid simple">
+	   <div class="grid-title clearfix">
+            <div class="form-inline">
+                <div class="form-filter">
+                    <div class="hidden-sm hidden-md hidden-lg filter">{t}Filter:{/t}</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon primary">
+                                <span class="arrow"></span>
+                                <i class="fa fa-cube"></i>
+                            </span>
+                            <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
                         </div>
                     </div>
-                    <div class="action-buttons">
-                        <div class="form-group">
-                            <div class="btn-group">
-
-                                <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
-                                            <i class="fa fa-download"></i> {t}Export to CSV{/t}
-                                        </a>
-                                    </li>
-                                    <li ng-if="selected.instances.length > 0">
-                                        <span class="a" ng-click="setEnabledSelected(1)">
-                                            <i class="fa fa-check"></i> {t}Enable{/t}
-                                        </span>
-                                    </li>
-                                    <li ng-if="selected.instances.length > 0">
-                                        <span class="a" ng-click="setEnabledSelected(0)">
-                                            <i class="fa fa-times"></i> {t}Disable{/t}
-                                        </span>
-                                    </li>
-                                    <li class="divider" ng-if="selected.instances.length > 0"></li>
-                                    <li ng-if="selected.instances.length > 0">
-                                        <span class="a" ng-click="deleteSelected()">
-                                            <i class="fa fa-trash-o"></i> {t}Delete{/t}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div class="form-group">
+                        <select class="xsmall" ng-model="epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                        <i class="fa fa-file-excel-o"></i> Export
+                                    </a>
+                                </li>
+                                <li class="divider" ng-if="selected.instances.length > 0"></li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="setEnabledSelected(1)">
+                                        <i class="fa fa-check"></i> {t}Enable{/t}
+                                    </span>
+                                </li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="setEnabledSelected(0)">
+                                        <i class="fa fa-times"></i> {t}Disable{/t}
+                                    </span>
+                                </li>
+                                <li class="divider" ng-if="selected.instances.length > 0"></li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="deleteSelected()">
+                                        <i class="fa fa-trash-o"></i> {t}Delete{/t}
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="form-group">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
-                                <i class="fa fa-plus"></i> {t}Create{/t}
-                            </a>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> {t}Create{/t}
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="grid-body no-padding">
+        </div>
+        <div class="grid-body no-padding">
                 <div class="spinner-wrapper" ng-if="loading">
                     <div class="spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
