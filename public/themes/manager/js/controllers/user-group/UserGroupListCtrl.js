@@ -82,6 +82,48 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
         var init = true;
 
         /**
+         * Confirm delete action.
+         */
+        $scope.delete = function(group) {
+            var modal =  $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
+                controller:  'UserGroupModalCtrl',
+                resolve: {
+                    selected: function() {
+                        return group;
+                    }
+                }
+            });
+
+            modal.result.then(function(data) {
+                if (data) {
+                    list();
+                }
+            });
+        };
+
+        /**
+         * Confirm delete action.
+         */
+        $scope.deleteSelected = function() {
+            var modal =  $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
+                controller:  'UserGroupModalCtrl',
+                resolve: {
+                    selected: function() {
+                        return $scope.selected.groups;
+                    }
+                }
+            });
+
+            modal.result.then(function(data) {
+                if (data) {
+                    list();
+                }
+            });
+        };
+
+        /**
          * Selects/unselects all groups.
          */
         $scope.selectAll = function() {

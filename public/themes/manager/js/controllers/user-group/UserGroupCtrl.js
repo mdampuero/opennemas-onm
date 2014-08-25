@@ -8,7 +8,7 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
-    function ($scope, itemService, data) {
+    function ($location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * List of available groups.
          *
@@ -24,6 +24,46 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
          * @type Object
          */
         $scope.template = data.template;
+
+        /**
+         * Creates a new user group.
+         */
+        $scope.save = function() {
+            $scope.saving = 1;
+
+            itemService.save('manager_ws_user_group_create', $scope.group)
+                .then(function (response) {
+                    if (response.data.success) {
+                        $location.path(fosJsRouting.ngGenerateShort('/manager',
+                            'manager_user_group_show',
+                            { id: response.data.message.id }));
+                    }
+
+                    messenger.post({
+                        message: response.data.message.text,
+                        type:    response.data.message.type
+                    });
+
+                    $scope.saving = 0;
+                });
+        };
+
+        /**
+         * Updates an user group.
+         */
+        $scope.update = function() {
+            $scope.saving = 1;
+
+            itemService.update('manager_ws_user_group_update', $scope.group.id,
+                $scope.group).then(function (response) {
+                    messenger.post({
+                        message: response.data.message.text,
+                        type:    response.data.message.type
+                    });
+
+                    $scope.saving = 0;
+                });
+        };
 
         // Initialize group
         if (data.group) {
