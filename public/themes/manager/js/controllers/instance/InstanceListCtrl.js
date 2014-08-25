@@ -140,42 +140,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         };
 
         /**
-         * Enables/disables the selected instances.
-         *
-         * @param integer enabled The activated value.
-         */
-        $scope.setEnabledSelected = function(enabled) {
-            for (var i = 0; i < $scope.instances.length; i++) {
-                var id = $scope.instances[i].id;
-                if ($scope.selected.instances.indexOf(id) != -1) {
-                    $scope.instances[i].loading = 1;
-                }
-            };
-
-            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
-                $scope.selected.instances, enabled).then(function (response) {
-                    if (response.data.success) {
-                        for (var i = 0; i < $scope.instances.length; i++) {
-                            var id = $scope.instances[i].id;
-                            if ($scope.selected.instances.indexOf(id) != -1) {
-                                $scope.instances[i].activated = enabled;
-                                delete $scope.instances[i].loading;
-                            }
-                        };
-                    }
-
-                    for (var i = 0; i < response.data.messages.length; i++) {
-                        var params = {
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
-                        };
-
-                        messenger.post(params);
-                    };
-                });
-        }
-
-        /**
          * Selects/unselects all instances.
          */
         $scope.selectAll = function() {
@@ -208,6 +172,42 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                         message: response.data.message.text,
                         type:    response.data.message.type
                     });
+                });
+        }
+
+        /**
+         * Enables/disables the selected instances.
+         *
+         * @param integer enabled The activated value.
+         */
+        $scope.setEnabledSelected = function(enabled) {
+            for (var i = 0; i < $scope.instances.length; i++) {
+                var id = $scope.instances[i].id;
+                if ($scope.selected.instances.indexOf(id) != -1) {
+                    $scope.instances[i].loading = 1;
+                }
+            };
+
+            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
+                $scope.selected.instances, enabled).then(function (response) {
+                    if (response.data.success) {
+                        for (var i = 0; i < $scope.instances.length; i++) {
+                            var id = $scope.instances[i].id;
+                            if ($scope.selected.instances.indexOf(id) != -1) {
+                                $scope.instances[i].activated = enabled;
+                                delete $scope.instances[i].loading;
+                            }
+                        };
+                    }
+
+                    for (var i = 0; i < response.data.messages.length; i++) {
+                        var params = {
+                            message: response.data.messages[i].text,
+                            type:    response.data.messages[i].type
+                        };
+
+                        messenger.post(params);
+                    };
                 });
         }
 
