@@ -4,8 +4,8 @@ namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 
+use Onm\Framework\Controller\Controller;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
@@ -38,7 +38,7 @@ class InstanceController extends Controller
                     'success' => false,
                     'message' => array(
                         'type' => 'error',
-                        'text' => 'Instance domains cannot be empty'
+                        'text' => _('Instance domains cannot be empty')
                     )
                 )
             );
@@ -92,7 +92,7 @@ class InstanceController extends Controller
 
             $message = array(
                 'type' => 'error',
-                'text' => 'Cannot create the database for the instance'
+                'text' => _('Unable to create the database for the instance')
             );
 
         } catch (AssetsNotCopiedException $e) {
@@ -104,7 +104,7 @@ class InstanceController extends Controller
 
             $message = array(
                 'type' => 'error',
-                'text' => 'Cannot copy default assets for the instance'
+                'text' => _('Unable to copy default assets for the instance')
             );
         }
 
