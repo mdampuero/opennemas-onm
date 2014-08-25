@@ -190,11 +190,11 @@ class FrameworkStatusController extends Controller
     public function sizeForHumans($bytes)
     {
         if ($bytes > 1048576) {
-            return sprintf('%.2f&nbsp;MB', $bytes / 1048576);
+            return sprintf('%.2f MB', $bytes / 1048576);
         } else if ($bytes > 1024) {
-            return sprintf('%.2f&nbsp;kB', $bytes / 1024);
+            return sprintf('%.2f kB', $bytes / 1024);
         } else {
-            return sprintf('%d&nbsp;bytes', $bytes);
+            return sprintf('%d bytes', $bytes);
         }
     }
 }

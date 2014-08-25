@@ -58,27 +58,14 @@
                     <th>[% dir.name %] ([% dir.count %])</th>
                     <th>[% dir.total_memory_consumption %]</th>
                     <th></th>
-                </tr>
-                {foreach $files_key_values as $dir}
-                    <tr onclick="toggleVisible('#head-{$dir@iteration}', '#row-{$dir@iteration}')" id="head-{$dir@iteration}">
-                        <th>{$dir['name']} ({$dir['count']})</th>
-                        <th>{$dir['total_memory_consumption']}</th>
-                        <th></th>
+                    <tr ng-repeat="(fileName, fileInfo) in dir.files">
+                        <td>
+                            [% fileInfo.full_path %]
+                        </td>
+                        <td>[% fileInfo.memory_consumption_human_readable %]</td>
+                        <td>[% fileInfo.hits %]</td>
                     </tr>
-                    {foreach $dir['files'] as $fileName => $fileInfo}
-                        <tr id="row-{$dir@iteration}">
-                            <td>
-                                {if $dir['count'] > 1}
-                                    {$fileInfo['full_path']}
-                                {else}
-                                    {$fileInfo['full_path']}
-                                {/if}
-                            </td>
-                            <td>{$fileInfo['memory_consumption_human_readable']}</td>
-                            <td>{$fileInfo["hits"]}</td>
-                        </tr>
-                    {/foreach}
-                {/foreach}
+                </tr>
             </table>
         </tab>
     </tabset>
