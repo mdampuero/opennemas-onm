@@ -1,3 +1,9 @@
+manager_ws_user_create:
+    path:     /user/create
+    defaults: { _controller: ManagerWebServiceBundle:User:create }
+    options:
+        expose: true
+
 manager_ws_user_delete:
     path:     /user/{id}/delete
     defaults: { _controller: ManagerWebServiceBundle:User:delete }
@@ -25,6 +31,12 @@ manager_ws_user_show_me:
 manager_ws_user_show:
     path:     /user/{id}/show
     defaults: { _controller: ManagerWebServiceBundle:User:show }
+    options:
+        expose: true
+
+manager_ws_user_update:
+    path:     /user/{id}/update
+    defaults: { _controller: ManagerWebServiceBundle:User:update }
     options:
         expose: true
 
