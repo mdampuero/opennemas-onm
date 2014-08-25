@@ -53,6 +53,17 @@ a:hover {
     white-space: nowrap;
 }
 
+.modal-footer {
+    background-color: white;
+}
+.modal-body {
+    background-color: white;
+    padding-top: 20px;
+}
+/*.btn {
+    background-color:#eee;
+}
+*/
 @media (min-width: 980px) {
     .page-content {
          min-height: 0 !important;
@@ -76,6 +87,8 @@ a:hover {
     }
 }
 
+
+
 @media (min-width: 1025px) {
     .logo {
         margin-left:7px;
@@ -96,6 +109,7 @@ a:hover {
 
     .page-content {
         margin-left:210px;
+        height:100%;
     }
 
     .page-sidebar .page-sidebar-wrapper > ul > li > a,
@@ -791,6 +805,10 @@ table.quickdate-calendar .other-month:hover {
     min-height:20px;
 }
 
+.instance-form dd {
+    margin-left:20px;
+}
+
 tr:hover .listing-inline-actions {
     opacity:1;
 }
@@ -824,3 +842,9 @@ tr:hover .listing-inline-actions {
     display:inline-block;
 }
 
+.popover {
+    border: 1px solid #ccc;
+}
+.popover.bottom>.arrow {
+    border-bottom-color: rgba(0,0,0,1);
+}
