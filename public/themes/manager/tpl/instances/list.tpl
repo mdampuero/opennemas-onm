@@ -39,31 +39,32 @@
                                 <option value="500">500</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <a class="btn btn-white" href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
-                                <i class="fa fa-file-excel-o"></i> Export
-                            </a>
-                        </div>
                     </div>
                     <div class="action-buttons">
-                        <div class="form-group" ng-if="selected.instances.length > 0">
+                        <div class="form-group">
                             <div class="btn-group">
+
                                 <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
                                 </button>
                                 <ul class="dropdown-menu pull-right">
                                     <li>
+                                        <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                            <i class="fa fa-download"></i> {t}Export to CSV{/t}
+                                        </a>
+                                    </li>
+                                    <li ng-if="selected.instances.length > 0">
                                         <span class="a" ng-click="setEnabledSelected(1)">
                                             <i class="fa fa-check"></i> {t}Enable{/t}
                                         </span>
                                     </li>
-                                    <li>
+                                    <li ng-if="selected.instances.length > 0">
                                         <span class="a" ng-click="setEnabledSelected(0)">
                                             <i class="fa fa-times"></i> {t}Disable{/t}
                                         </span>
                                     </li>
-                                    <li class="divider"></li>
-                                    <li>
+                                    <li class="divider" ng-if="selected.instances.length > 0"></li>
+                                    <li ng-if="selected.instances.length > 0">
                                         <span class="a" ng-click="deleteSelected()">
                                             <i class="fa fa-trash-o"></i> {t}Delete{/t}
                                         </span>
