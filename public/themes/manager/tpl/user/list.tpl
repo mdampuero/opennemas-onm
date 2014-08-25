@@ -40,27 +40,27 @@
 							</select>
 						</div>
 					</div>
+                    <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loading"></i>
                 </div>
 				<div class="action-buttons">
-					<div class="form-group">
-                        <div class="btn-group" ng-if="selected.users.length > 0">
+					<div class="form-group" ng-if="selected.users.length > 0">
+                        <div class="btn-group">
                             <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right">
-                                <li class="divider" ng-if="selected.instances.length > 0"></li>
-                                <li ng-if="selected.instances.length > 0">
+                                <li>
                                     <span class="a" ng-click="setEnabledSelected(1)">
                                         <i class="fa fa-check"></i> {t}Enable{/t}
                                     </span>
                                 </li>
-                                <li ng-if="selected.instances.length > 0">
+                                <li>
                                     <span class="a" ng-click="setEnabledSelected(0)">
                                         <i class="fa fa-times"></i> {t}Disable{/t}
                                     </span>
                                 </li>
-                                <li class="divider" ng-if="selected.instances.length > 0"></li>
-                                <li ng-if="selected.instances.length > 0">
+                                <li class="divider"></li>
+                                <li>
                                     <span class="a" ng-click="deleteSelected()">
                                         <i class="fa fa-trash-o"></i> {t}Delete{/t}
                                     </span>
@@ -68,22 +68,19 @@
                             </ul>
                         </div>
                     </div>
-					<button class="btn btn-primary">
+					<a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_create') %]">
 						<i class="fa fa-plus"></i>
 						{t}Create{/t}
-					</button>
+					</a>
 				</div>
 			</div>
 		</div>
 		<div class="grid-body no-padding">
-			<div class="spinner-wrapper" ng-if="loading">
-                <div class="spinner"></div>
-                <div class="spinner-text">{t}Loading{/t}...</div>
-            </div>
+			<div class="grid-overlay" ng-if="loading"></div>
             <div class="text-center" ng-if="users.length == 0">
             	{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
             </div>
-			<table class="table table-condensed" ng-if="users.length > 0">
+			<table class="table no-margin" ng-if="users.length > 0">
 				<thead>
 					<tr>
 						<th style="width:15px;">
@@ -114,7 +111,7 @@
 								<a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
 									<i class="fa fa-pencil"></i>{t}Edit{/t}
 								</a>
-								<button class="link link-danger" type="button">
+								<button class="link link-danger" ng-click="delete(user)" type="button">
 									<i class="fa fa-trash"></i>{t}Delete{/t}
 								</button>
 							</div>
@@ -130,12 +127,24 @@
 							</ul>
 						</td>
 						<td class="text-center">
-							<button class="btn btn-white btn-sm">
-								<i class="fa" ng-class="{ 'fa-check': user.activated, 'fa-times': !user.activated }"></i>
+							<button class="btn btn-white" ng-click="setEnabled(user, user.activated == '1' ? '0' : '1')">
+                                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': user.loading, 'fa-check text-success' : !user.loading &&user.activated == '1', 'fa-times text-error': !user.loading && user.activated == '0' }"></i>
 							</button>
 						</td>
 					</tr>
 				</tbody>
+                <tfoot ng-if="users.length > 0">
+                    <tr>
+                        <td colspan="5">
+                            <div class="pagination-info pull-left" ng-if="users.length > 0">
+                                {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
+                            </div>
+                            <div class="pull-right" ng-if="users.length > 0">
+                                <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="pages"></pagination>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
 			</table>
 		</div>
 	</div>
