@@ -71,4 +71,20 @@ class UserController extends Controller
             array('data' => $user)
         );
     }
+
+    /**
+     * Returns the current user as JSON.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function showMeAction()
+    {
+        $id = $this->getUser()->id;
+
+        $user = $this->get('user_repository')->find($id);
+
+        return new JsonResponse(
+            array('data' => $user)
+        );
+    }
 }

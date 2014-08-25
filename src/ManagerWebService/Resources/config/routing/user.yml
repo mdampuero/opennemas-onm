@@ -10,6 +10,12 @@ manager_ws_user_set_activated:
     options:
         expose: true
 
+manager_ws_user_show_me:
+    path:     /user/me/show
+    defaults: { _controller: ManagerWebServiceBundle:User:showMe }
+    options:
+        expose: true
+
 manager_ws_user_show:
     path:     /user/{id}/show
     defaults: { _controller: ManagerWebServiceBundle:User:show }
