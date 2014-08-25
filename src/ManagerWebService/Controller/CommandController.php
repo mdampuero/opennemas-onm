@@ -11,9 +11,10 @@
 
 namespace ManagerWebService\Controller;
 
-use Onm\Framework\Controller\Controller;
 use Symfony\Component\Console\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Onm\Framework\Controller\Controller;
 
 class CommandController extends Controller
 {

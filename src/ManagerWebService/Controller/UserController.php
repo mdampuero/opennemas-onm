@@ -11,9 +11,10 @@
 
 namespace ManagerWebService\Controller;
 
-use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
+use Onm\Framework\Controller\Controller;
 
 class UserController extends Controller
 {

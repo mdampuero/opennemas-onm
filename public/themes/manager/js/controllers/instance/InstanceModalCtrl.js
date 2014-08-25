@@ -33,7 +33,7 @@ angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
                     if (response.data.message) {
                         messenger.post({
                             message: response.data.message.text,
-                            type: response.data.message.type
+                            type:    response.data.message.type
                         });
                     };
 
@@ -47,7 +47,7 @@ angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
         }
 
         /**
-         * Deletes
+         * Deletes the selected instances.
          */
         $scope.deleteSelected = function() {
             $scope.deleting = true;
@@ -57,7 +57,7 @@ angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
                     for (var i = 0; i < response.data.messages.length; i++) {
                         messenger.post({
                             message: response.data.messages[i].text,
-                            type: response.data.messages[i].type
+                            type:    response.data.messages[i].type
                         });
                     };
 
