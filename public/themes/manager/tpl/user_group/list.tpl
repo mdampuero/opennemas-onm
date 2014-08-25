@@ -18,26 +18,29 @@
     </div>
     <div class="grid simple">
         <div class="grid-title">
-            <div class="form-inline">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon primary">
-                            <span class="arrow"></span>
-                            <i class="fa fa-users"></i>
-                        </span>
-                        <input class="form-control" ng-model="criteria.name[0].value" placeholder="Filter by name" type="text">
+            <div class="form-inline clearfix">
+                <div class="form-filter">
+                    <div class="hidden-md hidden-lg filter">{t}Filter:{/t}</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon primary">
+                                <span class="arrow"></span>
+                                <i class="fa fa-users"></i>
+                            </span>
+                            <input class="form-control" ng-model="criteria.name[0].value" placeholder="Filter by name" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="xsmall" ng-model="epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <select class="xsmall" ng-model="epp">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                        <option value="500">500</option>
-                    </select>
-                </div>
-                <div class="pull-right">
+                <div class="action-buttons">
                     <div class="form-group" ng-if="selected.groups.length > 0">
                         <div class="btn-group">
                             <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">

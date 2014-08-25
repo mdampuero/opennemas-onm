@@ -22,27 +22,30 @@
 
 		<div class="grid simple">
 			<div class="grid-title">
-				<div class="form-inline">
-					<div class="form-group">
-						<div class="input-group">
-							<span class="input-group-addon primary">
-								<span class="arrow"></span>
-								<i class="fa fa-user"></i>
-							</span>
-							<input class="form-control" placeholder="Filter by name or username" type="text">
+				<div class="form-inline clearfix">
+                    <div class="form-filter">
+                    	<div class="hidden-md hidden-lg filter">{t}Filter:{/t}</div>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon primary">
+									<span class="arrow"></span>
+									<i class="fa fa-user"></i>
+								</span>
+								<input class="form-control" placeholder="Filter by name or username" type="text">
+							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<span class="input-group-addon primary">
-								<i class="fa fa-users"></i>
-							</span>
-							<select ng-model="group" ng-options="group.id as group.name for group in template.groups">
-								<option value="">{t}All{/t}</option>
-							</select>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon primary">
+									<i class="fa fa-users"></i>
+								</span>
+								<select ng-model="group" ng-options="group.id as group.name for group in template.groups">
+									<option value="">{t}All{/t}</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="form-group pull-right">
+                    </div>
+					<div class="action-buttons">
 						<button class="btn btn-primary">
 							<i class="fa fa-plus"></i>
 							{t}Create{/t}

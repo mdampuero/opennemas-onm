@@ -17,32 +17,35 @@
     </div>
     <div ng-init="route = 'manager_ws_instances_list';  language = '{{$smarty.const.CURRENT_LANGUAGE}}';">
         <div class="grid simple">
-            <div class="grid-title">
+            <div class="grid-title clearfix">
                 <div class="form-inline">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon primary">
-                                <span class="arrow"></span>
-                                <i class="fa fa-cube"></i>
-                            </span>
-                            <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                    <div class="form-filter">
+                        <div class="hidden-sm hidden-md hidden-lg filter">{t}Filter:{/t}</div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon primary">
+                                    <span class="arrow"></span>
+                                    <i class="fa fa-cube"></i>
+                                </span>
+                                <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select class="xsmall" ng-model="epp">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="500">500</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-white" href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                <i class="fa fa-file-excel-o"></i> Export
+                            </a>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <select class="xsmall" ng-model="epp">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <a class="btn btn-white" href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
-                            <i class="fa fa-file-excel-o"></i> Export
-                        </a>
-                    </div>
-                    <div class="pull-right">
+                    <div class="action-buttons">
                         <div class="form-group" ng-if="selected.instances.length > 0">
                             <div class="btn-group">
                                 <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">

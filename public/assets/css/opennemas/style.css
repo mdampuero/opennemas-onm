@@ -120,6 +120,16 @@ a:hover {
     background:#eee;
 }
 
+.form-filter {
+    float:left;
+}
+.form-inline .filter {
+    margin-bottom:10px;
+    font-size:1em;
+    text-transform: uppercase;
+    color: rgb(111, 123, 138);
+}
+
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -333,6 +343,14 @@ a:hover {
     padding: 0 13px;
 }
 
+/* =============================================================================
+  Spinner for Angular listings
+   ========================================================================== */
+@media (min-width: 720px) {
+    .action-buttons {
+        float:right;
+    }
+}
 
 
 /* =============================================================================
