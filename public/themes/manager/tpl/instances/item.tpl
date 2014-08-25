@@ -40,31 +40,39 @@
                 </button>
             </div>
         </div>
-        <div class="grid-body">
+        <div class="grid-body instance-form">
             <form name="instanceForm" novalidate>
                 <div class="row">
-                    <h3 ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
-                        <small ng-if="instance.id">
-                            <p>
-                                <i class="fa fa-user"></i>
+                    <div ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
+                        <dl ng-if="instance.id">
+                            <dt>
+                                <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
+                            </dt>
+                            <dd>
                                 [% instance.contact_mail %]
-                            </p>
-                            <p>
-                                <i class="fa fa-clock-o"></i>
+                            </dd>
+                            <dt>
+                                <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
+                            </dt>
+                            <dd>
                                 [% instance.created %]
-                            </p>
-                            <p>
-                                <i class="fa fa-code"></i>
-                                [% instance.external.contact_ip %]
-                            </p>
-                            <p>
-                                <i class="fa fa-database"></i>
+                            </dd>
+                            <dt>
+                                <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
+                            </dt>
+                            <dd>
+                                <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
+                                <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
+                            </dd>
+                            <dt>
+                                <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
+                            </dt>
+                            <dd>
                                 [% instance.media_size | number: 2 %] MB
-                            </p>
-                        </small>
-                    </h3>
+                            </dd>
+                        </dl>
+                    </div>
                     <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
-                        <h4>General information</h4>
                         <div class="form-group">
                             <label class="form-label">{t}Site name{/t}</label>
                             <span class="help">{t}(Human readable name){/t}</span>
@@ -111,7 +119,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="domains" class="form-label">{t}Domains{/t}</label>
                             <div class="controls">
                                 <div class="input-group">
                                     <input class="form-control" ng-model="new_domain" type="text">
@@ -130,7 +137,6 @@
 
                         <h4>Modules</h4>
                         <div class="form-group">
-                            <label for="modules" class="form-label">{t}Modules{/t}</label>
                             <div class="controls">
                                 <select id="modules" multiple ui-select2 ng-model="instance.external.modules" ng-options="key as value for (key,value) in template.available_modules"></select>
                             </div>

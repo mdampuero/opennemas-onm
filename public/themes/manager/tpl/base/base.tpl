@@ -150,7 +150,7 @@
                         <span class="a" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
                             <div class="user-details">
                                 <div class="username">
-                                    <span class="badge badge-important">3</span> {$smarty.session.realname}
+                                    <span class="badge badge-important hidden">3</span> {$smarty.session.realname}
                                 </div>
                             </div>
                             <div class="iconset top-down-arrow"></div>
@@ -158,6 +158,13 @@
                         <div id="notification-list" style="display:none">
                             <div style="width:300px">
                                 <div class="notification-messages info">
+
+                                    <div class="message-wrapper">
+                                        <div class="heading">{t}No notifications{/t}</div>
+                                        <div class="description"></div>
+                                    </div>
+                                </div>
+                                <div class="notification-messages info hidden">
                                     <div class="user-profile"> <img src="/assets/plugins/webarch/img/profiles/d.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/d.jpg" data-src-retina="/assets/plugins/webarch/img/profiles/d2x.jpg" width="35" height="35"> </div>
                                     <div class="message-wrapper">
                                         <div class="heading"> David Nester - Commented on your wall </div>
@@ -166,7 +173,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="notification-messages danger">
+                                <div class="notification-messages danger hidden">
                                     <div class="iconholder"> <i class="icon-warning-sign"></i> </div>
                                     <div class="message-wrapper">
                                         <div class="heading"> Server load limited </div>
@@ -175,7 +182,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="notification-messages success">
+                                <div class="notification-messages success hidden">
                                     <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div>
                                     <div class="message-wrapper">
                                         <div class="heading"> You have got 150 messages </div>

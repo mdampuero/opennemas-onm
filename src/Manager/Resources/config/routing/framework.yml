@@ -4,12 +4,6 @@ manager_framework_commands:
     options:
         expose: true
 
-manager_framework_command_execute:
-    path: /commands/execute
-    defaults: { _controller:  ManagerBundle:Commands:executeCommand }
-    options:
-        expose: true
-
 manager_framework_opcache_status:
     path: /opcache
     defaults: { _controller:  ManagerBundle:FrameworkStatus:opcacheStatus }

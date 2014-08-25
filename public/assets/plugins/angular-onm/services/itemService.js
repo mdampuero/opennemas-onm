@@ -192,5 +192,27 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         });
     };
 
+    /**
+     * Updates an item.
+     *
+     * @param  string id   The route name.
+     * @param  mixed  id   The item id.
+     * @param  object data The item data.
+     *
+     * @return Object The response object.
+     */
+    itemService.executeCommand = function(route, command_name, data) {
+        var parameters = {
+            command_name: command_name,
+            data: data
+        };
+
+        var url = fosJsRouting.generate(route, parameters);
+
+        return $http.get(url).success(function (response) {
+            return response;
+        });
+    };
+
     return itemService;
 })

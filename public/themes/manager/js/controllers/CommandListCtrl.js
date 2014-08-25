@@ -22,5 +22,29 @@ angular.module('ManagerApp.controllers').controller('CommandListCtrl',
          * @type Object
          */
         $scope.template = data.template;
+
+
+        $scope.executeCommand = function(command_name, data) {
+
+            $scope.saving = 1;
+
+            itemService.executeCommand('manager_ws_command_execute', command_name, data)
+                .then(function(response) {
+                    if (response.data.success) {
+                        $scope.command_name = response.data.name;
+                        $scope.command_output = response.data.output;
+
+                        $location.path(fosJsRouting.ngGenerateShort('/manager',
+                            'manager_command_output'));
+                    }
+
+                    $scope.saving = 0;
+                })
+        }
+
+        $scope.commandOutput = function(command_name, data) {
+
+
+        }
     }
 );

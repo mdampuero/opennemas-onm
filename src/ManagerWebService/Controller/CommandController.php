@@ -13,6 +13,7 @@ namespace ManagerWebService\Controller;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 use Onm\Framework\Controller\Controller;
 
@@ -50,6 +51,46 @@ class CommandController extends Controller
                 'template' => array(
                     'instances' => $instances
                 ),
+            )
+        );
+    }
+
+    /**
+     * Executes a particular command given its name
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function executeCommandAction(Request $request)
+    {
+        $commandName = $request->query->filter('command_name', null, FILTER_SANITIZE_STRING);
+        $params      = $request->query->get('data', null, FILTER_SANITIZE_STRING);
+
+        if (is_array($params)) {
+            foreach ($params as &$param) {
+                $param = filter_var($param, FILTER_SANITIZE_STRING);
+            }
+            $params = implode(' ', $params);
+        } else {
+            $params = '';
+        }
+
+        chdir(APPLICATION_PATH);
+
+        $output = shell_exec('app/console '.$commandName.' ' .$params.' 2>&1');
+
+        $application = $this->getApplication();
+        try {
+            $command = $application->find($commandName);
+        } catch (\InvalidArgumentException $e) {
+            $output = $e->getMessage();
+        }
+
+        return new JsonResponse(
+            array(
+                'name'   => $commandName,
+                'output' => $output,
             )
         );
     }

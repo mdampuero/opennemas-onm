@@ -119,6 +119,19 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     }
                 }
             })
+            .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_command_output'), {
+                templateUrl: '/managerws/template/framework:commands:output.tpl',
+                controller:  'CommandCtrl',
+                resolve: {
+                    data: function($route, itemService) {
+                        return itemService.executeCommand('manager_ws_command_execute', $route.current.params.name, $route.current.params.data).then(
+                            function (response) {
+                                return response.data;
+                            }
+                        );
+                    }
+                }
+            })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_opcache_status'), {
                 templateUrl: '/managerws/template/framework:opcache_status.tpl'
             })
