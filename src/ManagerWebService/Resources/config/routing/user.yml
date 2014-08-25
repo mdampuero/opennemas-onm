@@ -4,9 +4,15 @@ manager_ws_user_delete:
     options:
         expose: true
 
-manager_ws_user_set_activated:
-    path:     /user/{id}/set-activated
-    defaults: { _controller: ManagerWebServiceBundle:User:setActivated }
+manager_ws_user_new:
+    path:     /user/new
+    defaults: { _controller: ManagerWebServiceBundle:User:new }
+    options:
+        expose: true
+
+manager_ws_user_set_enabled:
+    path:     /user/{id}/set-enabled
+    defaults: { _controller: ManagerWebServiceBundle:User:setEnabled }
     options:
         expose: true
 
@@ -24,7 +30,7 @@ manager_ws_user_show:
 
 manager_ws_users_delete:
     path:     /users/delete
-    defaults: { _controller: ManagerWebServiceBundle:User:batchDelete }
+    defaults: { _controller: ManagerWebServiceBundle:User:deleteSelected }
     options:
         expose: true
 
@@ -38,8 +44,8 @@ manager_ws_users_list_export:
     path: /user/list-export.csv
     defaults: { _controller:  ManagerWebServiceBundle:User:export }
 
-manager_ws_users_set_activated:
-    path:     /users/set-activated
-    defaults: { _controller: ManagerWebServiceBundle:User:batchSetActivated }
+manager_ws_users_set_enabled:
+    path:     /users/set-enabled
+    defaults: { _controller: ManagerWebServiceBundle:User:setEnabledSelected }
     options:
         expose: true

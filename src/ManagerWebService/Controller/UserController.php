@@ -19,6 +19,185 @@ use Onm\Framework\Controller\Controller;
 class UserController extends Controller
 {
     /**
+     * Creates a new user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function createAction(Request $request)
+    {
+        $success = false;
+        $message = array();
+
+        $user = new \User();
+
+        $data = array(
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'ids_category'    => $request->request->get('ids_category'),
+            'activated'       => 1,
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'deposit'         => 0,
+            'token'           => null,
+        );
+
+        $file = $request->files->get('avatar');
+
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } else {
+                $data['avatar_img_id'] = 0;
+            }
+
+            if ($user->create($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
+
+
+                $success = true;
+                $message = array(
+                    'type' => $success,
+                    'text' => _('User saved successfully')
+                );
+            } else {
+                $message = array(
+                    'type' => $success,
+                    'text' => _('Unable to create the user with that information')
+                );
+            }
+        } catch (\Exception $e) {
+            $message = array(
+                'type' => 'error',
+                'text' => $e->getMessage()
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success' => $success,
+                'message' => $message
+            )
+        );
+    }
+
+    /**
+     * Deletes an user.
+     *
+     * @param integer $id The user id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteAction($id)
+    {
+        $um      = $this->get('user_repository');
+        $message = array();
+        $success = false;
+
+        $user = $um->find($id);
+
+        if ($user) {
+            $user->delete($id);
+            $user->deleteMeta($id);
+
+            $success = true;
+            $message = array(
+                'type' => 'success',
+                'text' => _('User deleted successfully')
+            );
+        } else {
+            $message = array(
+                'type' => 'error',
+                'text' =>  sprintf(_('Unable to delete the user with the id "%d"'), $id),
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success' => $success,
+                'message' => $message
+            )
+        );
+    }
+
+    /**
+     * Deletes the selected instances.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $um = $this->get('user_repository');
+
+            foreach ($selected as $id) {
+                $user = $um->find($id);
+
+                if ($user) {
+                    $user->delete($id);
+                    $user->deleteMeta($id);
+
+                    $updated++;
+                } else {
+                    $messages[] = array(
+                        'type' => 'error',
+                        'text' =>  sprintf(_('Unable to delete the user with the id "%d"'), $id),
+                    );
+                }
+            }
+        }
+
+        if (count($updated) > 0) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s users deleted successfully.'), count($updated)),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
+            )
+        );
+    }
+
+    /**
      * Returns the list of users as JSON.
      *
      * @param Request $request The request object.
@@ -57,6 +236,135 @@ class UserController extends Controller
     }
 
     /**
+     * Returns the data to create a new user.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function newAction()
+    {
+        return new JsonResponse(
+            array(
+                'data'     => null,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
+     * Enables/disables an user given its id.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function setEnabledAction(Request $request, $id)
+    {
+        $success  = false;
+        $activated = $request->request->getDigits('enabled');
+        $message   = array();
+
+        $user = $this->get('user_repository')->find($id);
+        if ($user) {
+            try {
+                if ($user->activated == 1) {
+                    $user->deactivateUser($id);
+                } else {
+                    $user->activateUser($id);
+                }
+
+                $success = true;
+                $message = array(
+                    'text'      => _('User updated successfully.'),
+                    'type'      => 'success'
+                );
+            } catch (Exception $e) {
+                $message = array(
+                    'text' => sprintf(_('Error while updating user with id "%s"'), $id),
+                    'type' => 'error'
+                );
+            }
+        } else {
+            $messages = array(
+                'text' => sprintf(_('Unable to find the user with id "%s"'), $id),
+                'type' => 'error'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'   => $success,
+                'activated' => $activated,
+                'message'   => $message
+            )
+        );
+    }
+
+    /**
+     * Set the activated flag for instances in batch.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function setEnabledSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+        $activated = $request->request->getDigits('enabled', 0);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $um = $this->get('user_repository');
+
+            foreach ($selected as $id) {
+                $user = $um->find($id);
+                if ($user) {
+                    try {
+                        if ($user->activated == 1) {
+                            $user->deactivateUser($id);
+                        } else {
+                            $user->activateUser($id);
+                        }
+
+                        $updated++;
+                    } catch (Exception $e) {
+                        $messages[] = array(
+                            'text' => sprintf(_('Error while updating user with id "%s"'), $id),
+                            'type' => 'error'
+                        );
+                    }
+                } else {
+                    $messages[] = array(
+                        'text' => sprintf(_('Unable to find the user with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s users updated successfully.'), $updated),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
+            )
+        );
+    }
+
+    /**
      * Returns an user as JSON.
      *
      * @param integer $id The user id.
@@ -85,6 +393,26 @@ class UserController extends Controller
 
         return new JsonResponse(
             array('data' => $user)
+        );
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function templateParams()
+    {
+        $groups = $this->get('usergroup_repository')->findBy();
+        $languages = $this->container->getParameter('available_languages');
+        $languages = array_merge(
+            array('default' => _('Default system language')),
+            $languages
+        );
+
+        return array(
+            'groups'    => $groups,
+            'languages' => $languages
         );
     }
 }
