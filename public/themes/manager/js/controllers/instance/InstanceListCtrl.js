@@ -30,12 +30,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         $scope.columns = {
             name:         1,
             domains:      1,
-            contact_mail: 1,
             last_login:   1,
             created:      1,
             contents:     1,
-            alexa:        0,
-            page_views:   0
+            alexa:        1,
         }
 
         /**
