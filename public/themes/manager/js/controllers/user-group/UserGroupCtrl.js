@@ -18,6 +18,11 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
             privileges: []
         };
 
+        $scope.selected = {
+            all: {},
+            privileges: {}
+        }
+
         /**
          * The template parameters.
          *
@@ -47,6 +52,57 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
                     $scope.saving = 0;
                 });
         };
+
+        /**
+         * Selects/unselects all privileges for the module.
+         *
+         * @param string module The module name.
+         */
+        $scope.selectAll = function(module) {
+            if (!$scope.group.privileges) {
+                $scope.group.privileges = [];
+            }
+
+            if ($scope.selected.all[module]) {
+                for (var key in $scope.template.modules[module]) {
+                    var id = $scope.template.modules[module][key].id;
+
+                    if ($scope.group.privileges.indexOf(id) == -1) {
+                        $scope.group.privileges.push(id);
+                    }
+                }
+            } else {
+                for (var key in $scope.template.modules[module]) {
+                    var id = $scope.template.modules[module][key].id;
+
+                    console.log($scope.group.privileges.indexOf(id));
+
+                    if ($scope.group.privileges.indexOf(id) != -1) {
+                        $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
+                    }
+                };
+            }
+        };
+
+        /**
+         * Checks if all module privileges are checked.
+         *
+         * @param string  module Module name.
+         *
+         * @return boolean True, if all module privileges are checked.
+         *                 Otherwise, returns false.
+         */
+        $scope.allSelected = function(module) {
+            for (var key in $scope.template.modules[module]) {
+                    var id = $scope.template.modules[module][key].id;
+
+                if ($scope.group.privileges.indexOf(id) == -1) {
+                    return false
+                }
+            }
+
+            return true;
+        }
 
         /**
          * Updates an user group.

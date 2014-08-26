@@ -788,3 +788,11 @@ tr:hover .listing-inline-actions {
 .tab-content {
     overflow: visible;
 }
+
+.checkbox.check-title  label:before {
+    top: 9.4px;
+}
+
+.checkbox.check-title label:after {
+    top: 8px;
+}

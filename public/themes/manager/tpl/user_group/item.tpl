@@ -40,7 +40,7 @@
                 </button>
             </div>
         </div>
-        <div class="grid-body">
+        <div class="grid-body clearfix">
             <form name="groupForm" novalidate>
                 <h4>General information</h4>
                 <div class="form-group">
@@ -49,24 +49,30 @@
                         <input class="form-control" ng-model="group.name" required type="text">
                     </div>
                 </div>
-
-                <h4>Modules</h4>
-                <div class="form-group">
-                    <label for="modules" class="form-label">{t}Modules{/t}</label>
-                    <!-- <button class="btn btn-default">{t}Basic{/t}</button>
-                    <button class="btn btn-default">{t}Pro{/t}</button>
-                    <button class="btn btn-default">{t}Silver{/t}</button>
-                    <button class="btn btn-default">{t}Gold{/t}</button>
-                    <div class="controls">
+                <h4>{t}Modules{/t}</h4>
+                <div class="col-sm-6">
+                    <select ng-model="set">
+                        <option value="0">Admin</option>
+                        <option value="1">Author</option>
+                        <option value="2">User</option>
+                        <option value="3">Custom</option>
+                    </select>
+                    <div ng-show="set == 3">
                         <div ng-repeat="(name,module) in template.modules">
-                            <h4>[% name %]</h4>
-                            <ul>
-                                <li ng-repeat="privilege in module">
-                                    [% privilege.name %]
-                                </li>
-                            </ul>
+                            <div class="checkbox check-default check-title">
+                                <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
+                                <label for="checkbox-[% name %]">
+                                    <h5>[% name %]</h5>
+                                </label>
+                            </div>
+                            <div class="checkbox check-default" ng-repeat="privilege in module">
+                                <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
+                                <label for="checkbox-[% name + '-' + $index %]">
+                                    [% privilege.description %]
+                                </label>
+                            </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </form>
         </div>
