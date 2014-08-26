@@ -21,6 +21,8 @@
             </li>
         </ul>
     </div>
+
+    <form name="instanceForm" novalidate>
     <div class="grid simple">
         <div class="grid-title clearfix">
             <h3 class="pull-left">
@@ -41,7 +43,6 @@
             </div>
         </div>
         <div class="grid-body instance-form">
-            <form name="instanceForm" novalidate>
                 <div class="row">
                     <div ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
                         <dl ng-if="instance.id">
@@ -86,130 +87,170 @@
                                 <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">{t}Last invoice date{/t}</label>
-                            <div class="controls">
-                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                            </div>
-                        </div>
-                        <h4>Domains</h4>
-                        <div class="row form-group" ng-if="instance.domains.length > 0">
-                            <div class="col-sm-12">
-                                <div class="radio">
-                                    <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
-                                    <label for="domain0">{t}No main domain{/t}</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group" ng-repeat="domain in instance.domains">
-                            <div class="col-sm-12">
-                                <div class="radio radio-input">
-                                    <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
-                                    <label for="domain[% $index + 1 %]">
-                                        <div class="input-group">
-                                            <input class="form-control" ng-model="instance.domains[$index]" type="text">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="controls">
-                                <div class="input-group">
-                                    <input class="form-control" ng-model="new_domain" type="text">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">{t}Domain expire date:{/t}</label>
-                            <div class="controls">
-                                <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                            </div>
-                        </div>
-
-                        <h4>Modules</h4>
-                        <div class="form-group">
-                            <div class="controls">
-                                <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
-                            </div>
-                        </div>
-
-                        <h4>{t}Internals{/t}</h4>
-                        <div class="form-group">
-                            <label class="form-label">{t}Internal name{/t}</label>
-                            <span class="help">{t}Alphanumeric, without spaces{/t}</span>
-                            <div class="controls">
-                                <input class="form-control" ng-model="instance.internal_name" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="template">{t}Database{/t}</label>
-                            <div class="controls">
-                                <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="template">{t}Language{/t}</label>
-                            <div class="controls">
-                                <select ng-model="instance.external.site_language" ng-options="key as value for (key, value) in template.languages"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">{t}Time Zone{/t}</label>
-                            <div class="controls">
-                                <select ng-model="instance.external.time_zone" ng-options="key as value for (key, value) in template.timezones"></select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="template">{t}Minimum password level{/t}</label>
-                            <div class="controls">
-                                <select ng-model="instance.external.pass_level">
-                                    <option value="-1" >{t}Default{/t}</option>
-                                    <option value="0" >{t}Weak{/t}</option>
-                                    <option value="1" >{t}Good{/t}</option>
-                                    <option value="2" >{t}Strong{/t}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="max-mailing" class="form-label">{t}Num Max emails sent by month{/t}</label>
-                            <div class="controls">
-                                <input id="max-mailing" ng-model="instance.external.max_mailing" type="text">
-                            </div>
-                        </div>
-
-                        <h4>External services</h4>
-
-                        <div class="form-group">
-                            <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
-                            <div class="controls">
-                                <input class="form-control" id="piwik-page-id" ng-model="instance.external.piwik.page_id" type="text">
-                                <div class="help-block">
-                                    {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="piwik-server-url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
-                            <div class="controls">
-                                <input class="form-control" id="piwik-server-url" ng-model="instance.external.piwik.server_url" type="text">
-                            </div>
-                        </div>
 
                     </div>
                 </div>
-            </form>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="grid simple">
+                <div class="grid-title no-border">
+                    <h4>{t}Domains{/t}</h4>
+                </div>
+                <div class="grid-body no-border">
+                    <div class="row form-group" ng-if="instance.domains.length > 0">
+                        <div class="col-sm-12">
+                            <div class="radio">
+                                <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
+                                <label for="domain0">{t}No main domain{/t}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" ng-repeat="domain in instance.domains">
+                        <div class="col-sm-12">
+                            <div class="radio radio-input">
+                                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
+                                <label for="domain[% $index + 1 %]">
+                                    <div class="input-group">
+                                        <input class="form-control" ng-model="instance.domains[$index]" type="text">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" ng-click="removeDomain($index)" type="button">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="controls">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="new_domain" type="text">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{t}Domain expire date:{/t}</label>
+                        <div class="controls">
+                            <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="grid simple">
+                <div class="grid-title no-border">
+                    <h4>{t}Modules{/t}</h4>
+                </div>
+                <div class="grid-body no-border">
+                    <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="grid simple">
+        <div class="grid-title no-border">
+            <h4>{t}Billing{/t}</h4>
+        </div>
+        <div class="grid-body no-border">
+            <div class="form-group">
+                <label class="form-label">{t}Last invoice date{/t}</label>
+                <div class="controls">
+                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="grid simple">
+                <div class="grid-title no-border">
+                    <h4>{t}Internal settings{/t}</h4>
+                </div>
+                <div class="grid-body no-border">
+                    <div class="form-group">
+                        <label class="form-label">{t}Internal name{/t}</label>
+                        <span class="help">{t}Alphanumeric, without spaces{/t}</span>
+                        <div class="controls">
+                            <input class="form-control" ng-model="instance.internal_name" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="template">{t}Database{/t}</label>
+                        <div class="controls">
+                            <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="template">{t}Language{/t}</label>
+                        <div class="controls">
+                            <select ng-model="instance.external.site_language" ng-options="key as value for (key, value) in template.languages"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{t}Time Zone{/t}</label>
+                        <div class="controls">
+                            <select ng-model="instance.external.time_zone" ng-options="key as value for (key, value) in template.timezones"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="template">{t}Minimum password level{/t}</label>
+                        <div class="controls">
+                            <select ng-model="instance.external.pass_level">
+                                <option value="-1" >{t}Default{/t}</option>
+                                <option value="0" >{t}Weak{/t}</option>
+                                <option value="1" >{t}Good{/t}</option>
+                                <option value="2" >{t}Strong{/t}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="max-mailing" class="form-label">{t}Num Max emails sent by month{/t}</label>
+                        <div class="controls">
+                            <input id="max-mailing" ng-model="instance.external.max_mailing" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="grid simple">
+                <div class="grid-title no-border">
+                    <h4>External services</h4>
+                </div>
+                <div class="grid-body no-border">
+
+                    <div class="form-group">
+                        <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
+                        <div class="controls">
+                            <input class="form-control" id="piwik-page-id" ng-model="instance.external.piwik.page_id" type="text">
+                            <div class="help-block">
+                                {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="piwik-server-url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
+                        <div class="controls">
+                            <input class="form-control" id="piwik-server-url" ng-model="instance.external.piwik.server_url" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
 </div>
