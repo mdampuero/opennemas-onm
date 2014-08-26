@@ -272,7 +272,7 @@ a:hover {
     background:#ecf0f2; color:#666;
     text-align: left;
     text-shadow:0 1px 0 #FFFFFF;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9');*/
 }
 .table-info > .form-inline {padding-left:10px;}
 .table-info > div { padding: 4px 0 2px 10px;}

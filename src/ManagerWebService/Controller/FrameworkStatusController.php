@@ -35,8 +35,6 @@ class FrameworkStatusController extends Controller
      **/
     public function opcacheStatusAction(Request $request)
     {
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
         $config = $status = $mem = $stats =  $freeKeys =  $notSupportedMessage = null;
         $statusKeyValues = $directivesKeyValues = $newDirs = null;
 

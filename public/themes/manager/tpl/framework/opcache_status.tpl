@@ -21,39 +21,39 @@
 
                 <h4>Detailed statistics</h4>
 
-                <table>
+                <table class="table table-condensed table-stripped">
                     <tr ng-repeat="(key, value) in serverData.status_key_values">
-                        <th>[% key %]</th>
+                        <td>[% key %]</td>
                         <td>[% value %]</td>
                     </tr>
                 </table>
             </tab>
             <tab heading="{t}Configuration{/t}">
-                <table>
+                <table class="table table-condensed table-stripped">
                     <tr ng-repeat="(key, value) in serverData.directive_key_values">
-                        <th>[% key %]</th>
+                        <td>[% key %]</td>
                         <td>[% value %]</td>
                     </tr>
                 </table>
             </tab>
-            <tab heading="Scripts ([% status.scripts.count %])">
-                <table>
-                    <tr>
-                        <th width="70%">Path</th>
-                        <th width="20%">Memory</th>
-                        <th width="10%">Hits</th>
-                    </tr>
-                    <tr ng-repeat="dir in  serverData.files_key_values">
-                        <th>[% dir.name %] ([% dir.count %])</th>
-                        <th>[% dir.total_memory_consumption %]</th>
-                        <th></th>
-                        <tr ng-repeat="(fileName, fileInfo) in dir.files">
-                            <td>
-                                [% fileInfo.full_path %]
-                            </td>
-                            <td>[% fileInfo.memory_consumption_human_readable %]</td>
-                            <td>[% fileInfo.hits %]</td>
+            <tab heading="{t}Scripts{/t}">
+                <table class="table table-condensed table-stripped">
+                    <thead>
+                        <tr>
+                            <th width="70%">Path</th>
+                            <th width="20%">Memory</th>
+                            <th width="10%">Hits</th>
                         </tr>
+                    </thead>
+                    <tr ng-repeat-start="dir in  serverData.files_key_values">
+                        <td>[% dir.name %] ([% dir.count %])</td>
+                        <td>[% dir.total_memory_consumption %]</td>
+                        <td></td>
+                    </tr>
+                    <tr ng-repeat-end="(fileName, fileInfo) in dir.files">
+                        <td>[% fileInfo.full_path %]</td>
+                        <td>[% fileInfo.memory_consumption_human_readable %]</td>
+                        <td>[% fileInfo.hits %]</td>
                     </tr>
                 </table>
             </tab>
