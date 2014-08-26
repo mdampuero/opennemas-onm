@@ -62,8 +62,6 @@ class InstanceController extends Controller
         }
 
         $instance->created = date('Y-m-d H:i:s');
-        $instance->external['activated_modules'] = $request->request
-            ->filter('activated_modules', null, FILTER_SANITIZE_STRING);
 
         $im      = $this->get('instance_manager');
         $creator = new InstanceCreator($im->getConnection());
@@ -591,8 +589,6 @@ class InstanceController extends Controller
             }
 
             $instance->created = date('Y-m-d H:i:s');
-            $instance->external['activated_modules'] = $request->request
-                ->filter('activated_modules', null, FILTER_SANITIZE_STRING);
 
             $im->persist($instance);
             $im->configureInstance($instance);

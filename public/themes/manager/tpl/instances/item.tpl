@@ -21,7 +21,6 @@
             </li>
         </ul>
     </div>
-
     <form name="instanceForm" novalidate>
     <div class="grid simple">
         <div class="grid-title clearfix">
@@ -155,8 +154,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="grid simple">
         <div class="grid-title no-border">
             <h4>{t}Billing{/t}</h4>
@@ -185,14 +182,12 @@
                             <input class="form-control" ng-model="instance.internal_name" type="text">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Database{/t}</label>
                         <div class="controls">
                             <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Language{/t}</label>
                         <div class="controls">
@@ -205,7 +200,6 @@
                             <select ng-model="instance.external.time_zone" ng-options="key as value for (key, value) in template.timezones"></select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Minimum password level{/t}</label>
                         <div class="controls">
