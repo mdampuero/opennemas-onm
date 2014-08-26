@@ -79,6 +79,7 @@
         {javascripts src="@FosJsRoutingBundle/js/router.js,
                           @Common/js/routes.js,
                           @Common/plugins/angular/angular.min.js,
+                          @Common/plugins/angular-google-chart/angular-google-chart.js,
                           @Common/plugins/angular-checklist-model/checklist-model.js,
                           @Common/plugins/angular-route/angular-route.min.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
@@ -113,7 +114,7 @@
                 </ul>
                 <!-- BEGIN LOGO -->
                 <a href="{url name=manager_welcome}">
-                    {image_tag src="/assets/images/logo-opennemas-small.png" class="logo" alt=""  data-src="/assets/images/logo-opennemas-small.png" data-src-retina="/assets/images/logo-opennemas-small.png" width="132" height="27"}
+                    {image_tag src="/logo-opennemas-small.png" class="logo" alt=""  data-src="/assets/images/logo-opennemas-small.png" data-src-retina="/assets/images/logo-opennemas-small.png" width="132" height="27" common=1}
                 </a>
                 <!-- END LOGO -->
                 <ul class="nav pull-right notifcation-center">
@@ -165,7 +166,7 @@
                                     </div>
                                 </div>
                                 <div class="notification-messages info hidden">
-                                    <div class="user-profile"> <img src="/assets/plugins/webarch/img/profiles/d.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/d.jpg" data-src-retina="/assets/plugins/webarch/img/profiles/d2x.jpg" width="35" height="35"> </div>
+                                    <!-- <div class="user-profile"> <img src="/assets/plugins/webarch/img/profiles/d.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/d.jpg" data-src-retina="/assets/plugins/webarch/img/profiles/d2x.jpg" width="35" height="35"> </div> -->
                                     <div class="message-wrapper">
                                         <div class="heading"> David Nester - Commented on your wall </div>
                                         <div class="description"> Meeting postponed to tomorrow </div>
@@ -183,7 +184,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="notification-messages success hidden">
-                                    <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div>
+                                    <!-- <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div> -->
                                     <div class="message-wrapper">
                                         <div class="heading"> You have got 150 messages </div>
                                         <div class="description"> 150 newly unread messages in your inbox </div>

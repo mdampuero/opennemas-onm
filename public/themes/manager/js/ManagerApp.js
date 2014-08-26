@@ -2,7 +2,8 @@
 angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
         'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
 
-        'onm.routing', 'onm.item', 'onm.messenger', 'ManagerApp.controllers'
+        'onm.routing', 'onm.item', 'onm.messenger', 'ManagerApp.controllers',
+        'googlechart'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
@@ -226,4 +227,11 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
             .otherwise({
                 redirectTo: '/',
             });
-    });
+    })
+    .value('googleChartApiConfig', {
+            version: '1',
+            optionalSettings: {
+                packages: ['corechart'],
+                language: 'fr'
+            }
+    });;
