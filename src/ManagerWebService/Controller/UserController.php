@@ -33,15 +33,15 @@ class UserController extends Controller
         $user = new \User();
 
         $data = array(
-            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('rpassword', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'id_user_group'   => $request->request->get('id_user_group') ? : array(),
             'ids_category'    => $request->request->get('ids_category'),
             'activated'       => 1,
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
@@ -76,15 +76,15 @@ class UserController extends Controller
                     $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                 }
 
-
                 $success = true;
                 $message = array(
-                    'type' => $success,
+                    'id'   => $user->id,
+                    'type' => 'success',
                     'text' => _('User saved successfully')
                 );
             } else {
                 $message = array(
-                    'type' => $success,
+                    'type' => 'error',
                     'text' => _('Unable to create the user with that information')
                 );
             }
@@ -106,7 +106,7 @@ class UserController extends Controller
     /**
      * Deletes an user.
      *
-     * @param integer $id The user id.
+     * @param integer $id The user's id.
      *
      * @return JsonResponse The response object.
      */
@@ -266,10 +266,10 @@ class UserController extends Controller
         $user = $this->get('user_repository')->find($id);
         if ($user) {
             try {
-                if ($user->activated == 1) {
-                    $user->deactivateUser($id);
-                } else {
+                if ($activated) {
                     $user->activateUser($id);
+                } else {
+                    $user->deactivateUser($id);
                 }
 
                 $success = true;
@@ -322,10 +322,10 @@ class UserController extends Controller
                 $user = $um->find($id);
                 if ($user) {
                     try {
-                        if ($user->activated == 1) {
-                            $user->deactivateUser($id);
-                        } else {
+                        if ($activated) {
                             $user->activateUser($id);
+                        } else {
+                            $user->deactivateUser($id);
                         }
 
                         $updated++;
@@ -367,7 +367,7 @@ class UserController extends Controller
     /**
      * Returns an user as JSON.
      *
-     * @param integer $id The user id.
+     * @param integer $id The user's id.
      *
      * @return JsonResponse The response object.
      */
@@ -376,7 +376,10 @@ class UserController extends Controller
         $user = $this->get('user_repository')->find($id);
 
         return new JsonResponse(
-            array('data' => $user)
+            array(
+                'data'     => $user,
+                'template' => $this->templateParams()
+            )
         );
     }
 
@@ -392,7 +395,102 @@ class UserController extends Controller
         $user = $this->get('user_repository')->find($id);
 
         return new JsonResponse(
-            array('data' => $user)
+            array(
+                'data'     => $user,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
+     * Updates an user.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The user's id.
+     *
+     * @return Response The response object.
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $success = false;
+        $message = array();
+
+        $data = array(
+            'id'              => $id,
+            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('rpassword', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+            'id_user_group'   => $request->request->get('id_user_group') ? : array(),
+            'ids_category'    => $request->request->get('ids_category'),
+            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
+        );
+
+        $file = $request->files->get('avatar');
+        $user = new \User($id);
+
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
+
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                if ($meta) {
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+                }
+
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
+
+                if ($user->id == $_SESSION['userid']) {
+                    $_SESSION['user_language'] = $meta['user_language'];
+                }
+
+                $this->dispatchEvent('user.update', array('id' => $id));
+
+                $success = true;
+                $message = array(
+                    'type' => 'success',
+                    'text' => _('User saved successfully')
+                );
+            } else {
+                $message = array(
+                    'type' => 'error',
+                    'text' => _('Unable to update the user with that information')
+                );
+            }
+        } catch (FileException $e) {
+            $message = array(
+                'type' => 'error',
+                'text' => $e->getMessage()
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success' => $success,
+                'message' => $message
+            )
         );
     }
 
