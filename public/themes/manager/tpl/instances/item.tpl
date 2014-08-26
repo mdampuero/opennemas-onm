@@ -138,7 +138,7 @@
                         <h4>Modules</h4>
                         <div class="form-group">
                             <div class="controls">
-                                <select id="modules" multiple ui-select2 ng-model="instance.external.modules" ng-options="key as value for (key,value) in template.available_modules"></select>
+                                <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
                             </div>
                         </div>
 
