@@ -15,7 +15,9 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          * @type Object
          */
         $scope.user = {
-            id_user_group: []
+            meta: {
+                language: 'default'
+            }
         };
 
         /**
@@ -30,6 +32,8 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          */
         $scope.save = function() {
             $scope.saving = 1;
+
+            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
 
             itemService.save('manager_ws_user_create', $scope.user)
                 .then(function (response) {
@@ -54,6 +58,8 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
         $scope.update = function() {
             $scope.saving = 1;
 
+            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+
             itemService.update('manager_ws_user_update', $scope.user.id,
                 $scope.user).then(function (response) {
                     messenger.post({
@@ -65,8 +71,9 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
                 });
         };
 
+        //  Initialize user
         if (data.data) {
-            $scope.user = data.data
+            $scope.user = data.data;
         }
     }
 );
