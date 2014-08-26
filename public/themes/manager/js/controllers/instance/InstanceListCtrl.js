@@ -210,6 +210,24 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         }
 
         /**
+         * Changes the sort order.
+         *
+         * @param string name Field name.
+         */
+        $scope.sort = function(name) {
+            if ($scope.orderBy[name]) {
+                if ($scope.orderBy[name] == 'asc') {
+                    $scope.orderBy[name] = 'desc';
+                } else {
+                    $scope.orderBy[name] = 'asc';
+                }
+            } else {
+                $scope.orderBy = {};
+                $scope.orderBy[name] = 'asc';
+            }
+        }
+
+        /**
          * Refresh the list of elements when some parameter changes.
          *
          * @param array newValues The new values
