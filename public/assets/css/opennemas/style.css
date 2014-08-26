@@ -784,3 +784,7 @@ tr:hover .listing-inline-actions {
 .popover.bottom>.arrow {
     border-bottom-color: rgba(0,0,0,1);
 }
+
+.tab-content {
+    overflow: visible;
+}

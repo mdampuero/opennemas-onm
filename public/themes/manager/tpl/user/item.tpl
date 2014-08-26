@@ -37,7 +37,7 @@
         </div>
         <div class="grid-body no-padding">
             <form name="userForm" novalidate>
-                <tabset class="tab-form">
+                <tabset class="tab-form clearfix">
                     <tab heading="{t}User info{/t}">
                         <div class="col-md-3">
                             <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
@@ -68,10 +68,10 @@
                                     <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
                                 </div>
                             </div>
-                            <div class="form-group" ng-class="{ 'has-error': userForm.login.$dirty && userForm.login.$invalid, 'has-success': userForm.login.$dirty && userForm.login.$valid }">
-                                <label class="control-label" for="login">{t}User name{/t}</label>
+                            <div class="form-group" ng-class="{ 'has-error': userForm.username.$dirty && userForm.username.$invalid, 'has-success': userForm.username.$dirty && userForm.username.$valid }">
+                                <label class="control-label" for="username">{t}User name{/t}</label>
                                 <div class="controls">
-                                    <input class="form-control" id="login" name="login" ng-model="user.username"  ng-maxlength="20" required type="text"/>
+                                    <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
                                 </div>
                             </div>
                             <div class="form-group" ng-class="{ 'has-error': userForm.email.$dirty && userForm.email.$invalid, 'has-success': userForm.email.$dirty && userForm.email.$valid }">
@@ -113,26 +113,24 @@
                         </div>
                     </tab>
                     <tab heading="{t}Settings{/t}">
-                        <div role="form-horizontal">
-                            <div class="form-group">
-                                <label for="user-type">{t}User type{/t}</label>
-                                <select id="user-type" ng-model="user.type">
-                                    <option value="0">{t}Backend{/t}</option>
-                                    <option value="1">{t}Frontend{/t}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="user-language">{t}User language{/t}</label>
-                                <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
-                                <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
-                            </div>
+                        <div class="form-group">
+                            <label for="user-type">{t}User type{/t}</label>
+                            <select id="user-type" ng-model="user.type">
+                                <option value="0">{t}Backend{/t}</option>
+                                <option value="1">{t}Frontend{/t}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-language">{t}User language{/t}</label>
+                            <select id="user-language" ng-model="user.meta.language" ng-options="key as value for (key, value) in template.languages"></select>
+                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </tab>
                     <tab heading="{t}Privileges{/t}">
                         {acl isAllowed="GROUP_CHANGE"}
-                            <div class="groups">
-                                <label for="id_user_group">{t}User group:{/t}</label>
-                                <select id="modules" ui-select2 multiple ng-model="user.id_user_groups" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
+                            <div class="form-group">
+                                <label for="id-user-group">{t}User group{/t}</label>
+                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
                             </div>
                         {/acl}
                     </tab>
@@ -140,7 +138,7 @@
                         <tab heading="{t}Paywall{/t}">
                             <div class="form-group">
                                 <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                                <input type="datetime" id="time-limit" ng-model="user.meta.paywall_time_limit"/>
+                                <quick-datepicker icon-class="fa fa-clock-o" id="time-limit" name="time_limit" ng-model="user.meta.paywall_time_limit" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                             </div>
                         </tab>
                     {/is_module_activated}
