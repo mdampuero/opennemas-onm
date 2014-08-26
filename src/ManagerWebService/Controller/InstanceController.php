@@ -392,7 +392,7 @@ class InstanceController extends Controller
         $epp      = $request->request->getDigits('epp', 10);
         $page     = $request->request->getDigits('page', 1);
         $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('sort_by') ? : array();
+        $orderBy  = $request->request->filter('orderBy') ? : array();
 
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $orderBy, $epp, $page);

@@ -1,7 +1,6 @@
 
 angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
         'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
-
         'onm.routing', 'onm.item', 'onm.messenger', 'ManagerApp.controllers',
         'googlechart'
     ]).config(function ($interpolateProvider) {
@@ -73,7 +72,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 controller:  'InstanceListCtrl',
                 resolve: {
                     data: function(itemService) {
-                        return itemService.list('manager_ws_instances_list', { epp: 25 }).then(
+                        var data = {
+                            orderBy: { last_login: 'desc' },
+                            epp: 25
+                        };
+
+                        return itemService.list('manager_ws_instances_list', data).then(
                             function (response) {
                                 return response.data;
                             }
