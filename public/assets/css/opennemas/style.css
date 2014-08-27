@@ -816,3 +816,9 @@ tr:hover .listing-inline-actions {
     vertical-align: middle;
     /*color: #fff;*/
 }
+
+.module-selector .modal-content {
+    width: 720px;
+    left: 50%;
+    margin-left: -360px;
+}

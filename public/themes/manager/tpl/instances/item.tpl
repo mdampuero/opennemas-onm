@@ -149,7 +149,14 @@
                     <h4>{t}Modules{/t}</h4>
                 </div>
                 <div class="grid-body no-border">
-                    <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
+                    <div class="form-group">
+                        <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-white btn-lg" ng-click="selectModules()">
+                            {t}Select modules{/t}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

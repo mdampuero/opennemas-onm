@@ -1,19 +1,51 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
-    function ($modalInstance, $scope, itemService, messenger, selected) {
-        /**
-         * The instance object.
-         *
-         * @type Object
-         */
-        $scope.selected = selected;
-
+    function ($modalInstance, $scope, itemService, messenger, selected, template) {
         /**
          * Flag to indicate if multiple items are selected
          *
          * @type boolean
          */
         $scope.multiple = angular.isArray(selected);
+
+        /**
+         * The instance object.
+         *
+         * @type Object
+         */
+        $scope.selected = {
+            all: true,
+            modules: selected
+        }
+
+        /**
+         * The template parameters.
+         *
+         * @type Object
+         */
+        $scope.template = template;
+
+        /**
+         * Closes the current modal
+         */
+        $scope.accept = function() {
+            $modalInstance.close($scope.selected.modules);
+        };
+
+        /**
+         * Closes the current modal and returns the selected items.
+         */
+        $scope.allSelected = function() {
+            for (var key in $scope.template.available_modules) {
+                if (!$scope.selected.modules
+                        || $scope.selected.modules.indexOf(key) == -1) {
+                    $scope.selected.all = 0;
+                    return false
+                }
+            }
+
+            return true;
+        }
 
         /**
          * Closes the current modal
@@ -67,6 +99,42 @@ angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
 
                     $scope.deleting = false;
                 });
+        }
+
+        /**
+         * Selects/unselects all modules.
+         */
+        $scope.selectAll = function() {
+            if ($scope.selected.all) {
+                for (var key in $scope.template.available_modules) {
+                    if ($scope.selected.modules.indexOf(key) == -1) {
+                        $scope.selected.modules.push(key);
+                    }
+                }
+            } else {
+                $scope.selected.modules = [];
+            }
+        };
+
+
+        // Split modules in columns
+        if ($scope.template.available_modules) {
+            $scope.modules = [];
+            var i = 0;
+            var count = 0;
+            for (var key in $scope.template.available_modules) {
+                if (!$scope.modules[i]) {
+                    $scope.modules[i] = {};
+                }
+
+                $scope.modules[i][key] = $scope.template.available_modules[key];
+                count++;
+
+                if (count > 12) {
+                    count = 0;
+                    i++;
+                }
+            };
         }
     }
 );
