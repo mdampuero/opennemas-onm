@@ -187,8 +187,10 @@ class EntityManager extends BaseManager
     public function countBy($criteria)
     {
         $fromSQL = 'contents';
+
         if (is_array($criteria) && array_key_exists('tables', $criteria)) {
-            $fromSQL .= implode(',', $criteria['tables']);
+            $fromSQL .= ', '.implode(',', $criteria['tables']);
+            unset($criteria['tables']);
         }
 
         $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
