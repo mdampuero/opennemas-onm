@@ -49,28 +49,39 @@
                         <input class="form-control" ng-model="group.name" required type="text">
                     </div>
                 </div>
-                <h4>{t}Modules{/t}</h4>
-                <div class="col-sm-6">
-                    <select ng-model="set">
-                        <option value="0">Admin</option>
-                        <option value="1">Author</option>
-                        <option value="2">User</option>
-                        <option value="3">Custom</option>
-                    </select>
-                    <div ng-show="set == 3">
-                        <div ng-repeat="(name,module) in template.modules">
-                            <div class="checkbox check-default check-title">
-                                <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
-                                <label for="checkbox-[% name %]">
-                                    <h5>[% name %]</h5>
-                                </label>
-                            </div>
-                            <div class="checkbox check-default" ng-repeat="privilege in module">
-                                <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
-                                <label for="checkbox-[% name + '-' + $index %]">
-                                    [% privilege.description %]
-                                </label>
-                            </div>
+                <h4>{t}Privileges{/t}</h4>
+                <div class="form-group">
+                    <label class="form-label">{t}Presets{/t}</label>
+                    <div class="controls">
+                        <button class="btn btn-white" type="button">{t}Admin{/t}</button>
+                        <button class="btn btn-white" type="button">{t}Author{/t}</button>
+                        <button class="btn btn-white" type="button">{t}User{/t}</button>
+                        <button class="btn btn-white" ng-click="custom ? custom = 0 : custom = 1" type="button">{t}Custom{/t}</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">{t}Selected privileges{/t}</label>
+                    <div class="controls selected-items clearfix">
+                        <span ng-repeat="(name,module) in template.modules">
+                            <span class="item" ng-repeat="privilege in module" ng-if="isSelected(privilege.id)">
+                                <strong>[% privilege.module %]:</strong> [% privilege.description %]
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div ng-show="custom">
+                    <div ng-repeat="(name,module) in template.modules" class="pull-left">
+                        <div class="checkbox check-default check-title">
+                            <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
+                            <label for="checkbox-[% name %]">
+                                <h5>[% name %]</h5>
+                            </label>
+                        </div>
+                        <div class="checkbox check-default" ng-repeat="privilege in module">
+                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
+                            <label for="checkbox-[% name + '-' + $index %]">
+                                [% privilege.description %]
+                            </label>
                         </div>
                     </div>
                 </div>

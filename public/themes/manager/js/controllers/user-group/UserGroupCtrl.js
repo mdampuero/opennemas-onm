@@ -31,6 +31,23 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
         $scope.template = data.template;
 
         /**
+         * Checks if a privilege is selected.
+         *
+         * @param  integer id The privilege id.
+         *
+         * @return boolean True if the privilege is selected. Otherwise, returns
+         *                 false.
+         */
+        $scope.isSelected = function(id) {
+            if (!$scope.group.privileges
+                    || $scope.group.privileges.indexOf(id) == -1) {
+                return false
+            }
+
+            return true
+        }
+
+        /**
          * Creates a new user group.
          */
         $scope.save = function() {
@@ -75,8 +92,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
                 for (var key in $scope.template.modules[module]) {
                     var id = $scope.template.modules[module][key].id;
 
-                    console.log($scope.group.privileges.indexOf(id));
-
                     if ($scope.group.privileges.indexOf(id) != -1) {
                         $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
                     }
@@ -96,7 +111,8 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
             for (var key in $scope.template.modules[module]) {
                     var id = $scope.template.modules[module][key].id;
 
-                if ($scope.group.privileges.indexOf(id) == -1) {
+                if (!$scope.group.privileges
+                        || $scope.group.privileges.indexOf(id) == -1) {
                     return false
                 }
             }
