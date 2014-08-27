@@ -28,9 +28,9 @@ class WebServiceController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
-        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
-        require_once SITE_VENDOR_PATH.'/Restler/OnmAuth.php';
+        require_once SITE_LIBS_PATH.'/Restler/restler.php';
+        require_once SITE_LIBS_PATH.'/Restler/xmlformat.php';
+        require_once SITE_LIBS_PATH.'/Restler/OnmAuth.php';
 
         // Change the request uri to trick Restler
         $_SERVER['REQUEST_URI'] = str_replace('/ws', '', $_SERVER['REQUEST_URI']);

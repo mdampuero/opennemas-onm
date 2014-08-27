@@ -84,11 +84,11 @@ EOF
         $phpFiles = array(
             SRC_PATH.'*/*/*.php',
             SRC_PATH.'*/Resources/Menu.php',
-            SITE_VENDOR_PATH.'core/*.php',
-            SITE_VENDOR_PATH.'Onm/**/**/*.php',
+            SITE_LIBS_PATH.'core/*.php',
+            SITE_LIBS_PATH.'Onm/**/**/*.php',
             APP_PATH.'models/*.php',
-            SITE_VENDOR_PATH.'Onm/*/*.php',
-            SITE_VENDOR_PATH.'smarty/onm-plugins/*.php',
+            SITE_LIBS_PATH.'Onm/*/*.php',
+            SITE_LIBS_PATH.'onm-plugins/*.php',
             APP_PATH.$this->localeFolder.'/extracted_strings.c'
         );
 
