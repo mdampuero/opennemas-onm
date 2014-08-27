@@ -70,18 +70,23 @@
                     </div>
                 </div>
                 <div ng-show="custom">
-                    <div ng-repeat="(name,module) in template.modules" class="pull-left">
-                        <div class="checkbox check-default check-title">
-                            <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
-                            <label for="checkbox-[% name %]">
-                                <h5>[% name %]</h5>
-                            </label>
-                        </div>
-                        <div class="checkbox check-default" ng-repeat="privilege in module">
-                            <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
-                            <label for="checkbox-[% name + '-' + $index %]">
-                                [% privilege.description %]
-                            </label>
+                    <div ng-repeat="section in sections">
+                        <h5>{t}[% section.title %]{/t}</h5>
+                        <div class="row" ng-repeat="columns in section.rows">
+                            <div class="col-sm-3" ng-repeat="name in columns">
+                                <div class="checkbox check-default check-title">
+                                    <input id="checkbox-[% name %]" ng-model="selected.all[name]" type="checkbox" ng-change="selectAll(name);" ng-checked="allSelected(name)">
+                                    <label for="checkbox-[% name %]">
+                                        <h5>[% name %]</h5>
+                                    </label>
+                                </div>
+                                <div class="checkbox check-default" ng-repeat="privilege in template.modules[name]">
+                                    <input id="checkbox-[% name + '-' + $index %]" checklist-model="group.privileges" checklist-value="privilege.id" type="checkbox">
+                                    <label for="checkbox-[% name + '-' + $index %]">
+                                        [% privilege.description %]
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

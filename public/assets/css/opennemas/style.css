@@ -800,6 +800,7 @@ tr:hover .listing-inline-actions {
 .selected-items {
     border: 1px solid #ddd;
     padding: 5px;
+    min-height: 114px;
 }
 
 .selected-items .item {

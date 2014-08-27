@@ -18,10 +18,58 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
             privileges: []
         };
 
+        /**
+         * Privileges section
+         *
+         * @type array
+         */
+        $scope.sections = [
+            {
+                title: 'Web',
+                rows: [
+                    ['ADVERTISEMENT', 'WIDGET', 'MENU']
+                ]
+            },
+            {
+                title: 'Contents',
+                rows: [
+                    ['ARTICLE', 'OPINION', 'AUTHOR', 'COMMENT'],
+                    ['POLL', 'STATIC', 'SPECIAL', 'LETTER'],
+                    ['CATEGORY', 'CONTENT']
+                ]
+            },
+            {
+                title: 'Multimedia',
+                rows: [
+                    ['IMAGE', 'FILE', 'VIDEO', 'ALBUM'],
+                    ['KIOSKO', 'BOOK'],
+                ]
+            },
+            {
+                title: 'Utils',
+                rows: [
+                    ['SEARCH', 'NEWSLETTER', 'PCLAVE', 'PAYWALL'],
+                    ['INSTANCE_SYNC', 'SYNC_MANAGER', 'IMPORT', 'SCHEDULE'],
+                ]
+            },
+            {
+                title: 'System',
+                rows: [
+                    ['BACKEND', 'USER', 'GROUP', 'CACHE'],
+                    ['ONM']
+                ]
+            }
+        ];
+
+        /**
+         * Selected privileges and flags
+         *
+         * @type Object
+         */
         $scope.selected = {
             all: {},
             privileges: {}
-        }
+        };
 
         /**
          * The template parameters.
@@ -29,6 +77,28 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
          * @type Object
          */
         $scope.template = data.template;
+
+        /**
+         * Checks if all module privileges are checked.
+         *
+         * @param string  module Module name.
+         *
+         * @return boolean True, if all module privileges are checked.
+         *                 Otherwise, returns false.
+         */
+        $scope.allSelected = function(module) {
+            for (var key in $scope.template.modules[module]) {
+                    var id = $scope.template.modules[module][key].id;
+
+                if (!$scope.group.privileges
+                        || $scope.group.privileges.indexOf(id) == -1) {
+                    $scope.selected.all[module] = 0;
+                    return false
+                }
+            }
+
+            return true;
+        }
 
         /**
          * Checks if a privilege is selected.
@@ -98,27 +168,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
                 };
             }
         };
-
-        /**
-         * Checks if all module privileges are checked.
-         *
-         * @param string  module Module name.
-         *
-         * @return boolean True, if all module privileges are checked.
-         *                 Otherwise, returns false.
-         */
-        $scope.allSelected = function(module) {
-            for (var key in $scope.template.modules[module]) {
-                    var id = $scope.template.modules[module][key].id;
-
-                if (!$scope.group.privileges
-                        || $scope.group.privileges.indexOf(id) == -1) {
-                    return false
-                }
-            }
-
-            return true;
-        }
 
         /**
          * Updates an user group.
