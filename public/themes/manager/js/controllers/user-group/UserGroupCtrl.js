@@ -190,5 +190,16 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
         if (data.group) {
             $scope.group = data.group;
         }
+
+        // Process modules
+        if ($scope.template.modules) {
+            $scope.modules = [];
+
+            for (var module in $scope.template.modules) {
+                for (var i = 0; i < $scope.template.modules[module].length; i++) {
+                    $scope.modules.push($scope.template.modules[module][i]);
+                };
+            };
+        }
     }
 );

@@ -799,22 +799,21 @@ tr:hover .listing-inline-actions {
 
 .selected-items {
     border: 1px solid #ddd;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
     min-height: 114px;
 }
 
 .selected-items .item {
-    border: none;
-    background: 0;
-    background-color: #f4f5f7;
-    /*background-color: #0090d9;*/
-    border-radius: .25em;
+    background-color: #e8edf1;
+    background-image: none;
     float: left;
-    display: inline-block;
-    padding: 5px;
-    margin: 0 5px 5px 0;
-    vertical-align: middle;
-    /*color: #fff;*/
+    border: none;
+    box-shadow: none;
+    color: inherit;
+    border-radius: 8px;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 4px 8px;
 }
 
 .module-selector .modal-content {

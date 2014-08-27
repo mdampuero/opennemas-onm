@@ -61,6 +61,14 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">{t}Selected privileges{/t}</label>
+                    <select id="modules" multiple ui-select2 ng-model="group.privileges">
+                        <option value="[% value.id %]" ng-repeat="value in modules">
+                            <strong>[% value.module %]</strong>: [% value.description %]
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">{t}Selected privileges{/t}</label>
                     <div class="controls selected-items clearfix">
                         <span ng-repeat="(name,module) in template.modules">
                             <span class="item" ng-repeat="privilege in module" ng-if="isSelected(privilege.id)">
