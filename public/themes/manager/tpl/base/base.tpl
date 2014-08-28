@@ -114,7 +114,7 @@
                 </ul>
                 <!-- BEGIN LOGO -->
                 <a href="{url name=manager_welcome}">
-                    {image_tag src="/logo-opennemas-small.png" class="logo" alt=""  data-src="/assets/images/logo-opennemas-small.png" data-src-retina="/assets/images/logo-opennemas-small.png" width="132" height="27" common=1}
+                    {image_tag src="/logos/logo-opennemas-small-white.png" class="logo" alt=""  data-src="/assets/images/logos/logo-opennemas-small-white.png" data-src-retina="/assets/images/logos/logo-opennemas-small-white.png" width="112" height="19" common=1}
                 </a>
                 <!-- END LOGO -->
                 <ul class="nav pull-right notifcation-center">
@@ -128,7 +128,12 @@
             <div class="header-quick-nav">
                 <!-- BEGIN TOP NAVIGATION MENU -->
                 <div class="pull-left">
-                    <ul class="nav quick-section">
+                    <ul class="nav quick-section quick-section-logo">
+                        <li class="mini-logo">
+                            <a href="{url name=manager_welcome}">
+                                {image_tag src="/logos/logo-opennemas-small-black.png" class="logo" alt=""  data-src="/assets/images/logos/logo-opennemas-small-black.png" data-src-retina="/assets/images/logos/logo-opennemas-small-black.png" width="112" height="19" common=1}
+                            </a>
+                        </li>
                         <li class="quicklinks">
                             <span class="a" id="layout-condensed-toggle" ng-click="toggle(!mini);">
                                 <div class="iconset top-menu-toggle-dark"></div>
