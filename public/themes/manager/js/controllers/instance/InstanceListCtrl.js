@@ -242,13 +242,19 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
             }
         }
 
+        $scope.searchByKeypress = function(event) {
+            if (event.keyCode == 13) {
+                list();
+            };
+        }
+
         /**
          * Refresh the list of elements when some parameter changes.
          *
          * @param array newValues The new values
          * @param array oldValues The old values
          */
-        $scope.$watch('[criteria, orderBy, epp, page]', function(newValues, oldValues) {
+        $scope.$watch('[orderBy, epp, page]', function(newValues, oldValues) {
             if (newValues !== oldValues) {
                 if (search) {
                     $timeout.cancel(search);

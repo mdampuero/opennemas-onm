@@ -26,7 +26,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-cube"></i>
                             </span>
-                            <input class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
                         </div>
                     </div>
                     <div class="form-group">
