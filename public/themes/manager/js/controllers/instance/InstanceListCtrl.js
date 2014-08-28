@@ -105,6 +105,9 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                 resolve: {
                     selected: function() {
                         return instance;
+                    },
+                    template: function() {
+                        return {};
                     }
                 }
             });
@@ -126,6 +129,9 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                 resolve: {
                     selected: function() {
                         return $scope.selected.instances;
+                    },
+                    template: function() {
+                        return {};
                     }
                 }
             });
