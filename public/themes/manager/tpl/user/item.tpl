@@ -23,9 +23,9 @@
     </div>
     <div class="grid simple">
         <div class="grid-title clearfix">
-            <h4 class="pull-left" ng-if="user.id">
+            <h3 class="pull-left" ng-if="user.id">
                 [% user.name %]
-            </h4>
+            </h3>
             <div class="pull-right">
                 <button class="btn btn-primary" ng-click="save();" ng-disabled="saving || userForm.$invalid" ng-if="!user.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
