@@ -623,15 +623,22 @@ class InstanceController extends Controller
      */
     private function templateParams()
     {
-        return array(
-            'available_modules' => mm::getAvailableModules(),
-            'timezones'         => \DateTimeZone::listIdentifiers(),
-            'languages'         => array(
+        return [
+            'languages' => [
                 'en_US' => _("English"),
                 'es_ES' => _("Spanish"),
                 'gl_ES' => _("Galician")
-            ),
-            'templates'         => im::getAvailableTemplates()
-        );
+            ],
+            'plans'     => [
+                'Base',
+                'Profesional',
+                'Silver',
+                'Gold',
+                'Other',
+            ],
+            'templates' => im::getAvailableTemplates(),
+            'timezones' => \DateTimeZone::listIdentifiers(),
+            'available_modules' => mm::getAvailableModulesGrouped(),
+        ];
     }
 }

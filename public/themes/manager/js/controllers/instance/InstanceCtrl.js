@@ -26,6 +26,8 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          */
         $scope.template = data.template;
 
+        $scope.planFilter = function(searchField) { return {plan: searchField}; }
+
         /**
          * Adds a new domain to the instance.
          */

@@ -36,6 +36,13 @@ class ModuleManager
     public static $availableModules = null;
 
     /**
+     * Stores modules with all the modules available grouped by plan
+     *
+     * @var array
+     **/
+    public static $availableModulesGrouped = null;
+
+    /**
      * Initilizes the object.
      *
      * @param array $params parameters for initilizing the module manager.
@@ -129,6 +136,185 @@ class ModuleManager
         }
 
         return self::$availableModules;
+    }
+
+    /**
+     * Returns the list of available modules in Onm instance.
+     *
+     * @return array the list of available modules
+     */
+    public static function getAvailableModulesGrouped()
+    {
+        if (!isset(self::$availableModulesGrouped)) {
+            self::$availableModulesGrouped = [
+                'ADS_MANAGER'               => [
+                    'plan' => 'Profesional',
+                    'name' => _('Advertisement')
+                ],
+                'ADVANCED_SEARCH'           => [
+                    'plan' => 'Base',
+                    'name' => _('Advanced search'),
+                ],
+                'ALBUM_MANAGER'             => [
+                    'plan' => 'Profesional',
+                    'name' => _('Albums'),
+                ],
+                'ARTICLE_MANAGER'           => [
+                    'plan' => 'Base',
+                    'name' => _('Articles'),
+                ],
+                'AVANCED_ARTICLE_MANAGER'   => [
+                    'plan' => 'Other',
+                    'name' => _('Advanced article options'),
+                ],
+                'AVANCED_FRONTPAGE_MANAGER' => [
+                    'plan' => 'Other',
+                    'name' => _('Advanced frontpage managers'),
+                ],
+                'BOOK_MANAGER'              => [
+                    'plan' => 'Other',
+                    'name' => _('Books'),
+                ],
+                'CACHE_MANAGER'             => [
+                    'plan' => 'Other',
+                    'name' => _('Cache manager'),
+                ],
+                'CATEGORY_MANAGER'          => [
+                    'plan' => 'Base',
+                    'name' => _('Category'),
+                ],
+                'COMMENT_MANAGER'           => [
+                    'plan' => 'Base',
+                    'name' => _('Comments'),
+                ],
+                'CRONICAS_MODULES'          => [
+                    'plan' => 'Other',
+                    'name' => _('Cronicas customizations'),
+                ],
+                'FILE_MANAGER'              => [
+                    'plan' => 'Base',
+                    'name' => _('Files'),
+                ],
+                'FORM_MANAGER'              => [
+                    'plan' => 'Other',
+                    'name' => _('Forms'),
+                ],
+                'FRONTPAGE_MANAGER'         => [
+                    'plan' => '',
+                    'name' => _('Frontpages'),
+                ],
+                'FRONTPAGES_LAYOUT'         => [
+                    'plan' => 'Silver',
+                    'name' => _('Frontpages layout'),
+                ],
+                'IMAGE_MANAGER'             => [
+                    'plan' => 'Base',
+                    'name' => _('Images'),
+                ],
+                'KEYWORD_MANAGER'           => [
+                    'plan' => 'Other',
+                    'name' => _('Keywords'),
+                ],
+                'KIOSKO_MANAGER'            => [
+                    'plan' => 'Gold',
+                    'name' => _('Kiosko'),
+                ],
+                'LETTER_MANAGER'            => [
+                    'plan' => 'Other',
+                    'name' => _('Letters'),
+                ],
+                'LIBRARY_MANAGER'           => [
+                    'plan' => 'Other',
+                    'name' => _('Library'),
+                ],
+                'LOG_SQL'     => [
+                    'plan' => 'Other',
+                    'name' => _('SQL Log'),
+                ],
+                'MENU_MANAGER'              => [
+                    'plan' => 'Base',
+                    'name' => _('Menus'),
+                ],
+                'NEWS_AGENCY_IMPORTER'      => [
+                    'plan' => 'Gold',
+                    'name' => _('News Agency importer'),
+                ],
+                'NEWSLETTER_MANAGER'        => [
+                    'plan' => 'Silver',
+                    'name' => _('Newsletter'),
+                ],
+                'OPINION_MANAGER'           => [
+                    'plan' => 'Base',
+                    'name' => _('Opinion'),
+                ],
+                'PAPER_IMPORT'              => [
+                    'plan' => 'Other',
+                    'name' => _('Paper import'),
+                ],
+                'POLL_MANAGER'              => [
+                    'plan' => 'Profesional',
+                    'name' => _('Polls'),
+                ],
+                'SCHEDULE_MANAGER'          => [
+                    'plan' => 'Other',
+                    'name' => _('Schedules'),
+                ],
+                'SETTINGS_MANAGER'          => [
+                    'plan' => 'Base',
+                    'name' => _('System wide settings'),
+                ],
+                'SPECIAL_MANAGER'           => [
+                    'plan' => 'Other',
+                    'name' => _('Specials'),
+                ],
+                'STATIC_LIBRARY'            => [
+                    'plan' => 'Other',
+                    'name' => _('Static library'),
+                ],
+                'STATIC_PAGES_MANAGER'      => [
+                    'plan' => '',
+                    'name' => _('Static pages'),
+                ],
+                'SYNC_MANAGER'              => [
+                    'plan' => 'Silver',
+                    'name' => _('Instance synchronization'),
+                ],
+                'TRASH_MANAGER'             => [
+                    'plan' => 'Base',
+                    'name' => _('Trash'),
+                ],
+                'USER_GROUP_MANAGER'        => [
+                    'plan' => 'Silver',
+                    'name' => _('User groups'),
+                ],
+                'USER_MANAGER'              => [
+                    'plan' => 'Silver',
+                    'name' => _('Users'),
+                ],
+                'USERVOICE_SUPPORT'         => [
+                    'plan' => 'Base',
+                    'name' => _('UserVoice integration'),
+                ],
+                'VIDEO_MANAGER'             => [
+                    'plan' => 'Profesional',
+                    'name' => _('Videos'),
+                ],
+                'VIDEO_LOCAL_MANAGER'       => [
+                    'plan' => 'Profesional',
+                    'name' => _('Videos (local)'),
+                ],
+                'WIDGET_MANAGER'            => [
+                    'plan' => 'Base',
+                    'name' => _('Widgets'),
+                ],
+                'PAYWALL'                   => [
+                    'plan' => 'Others',
+                    'name' => _('Paywall'),
+                ]
+            ];
+        }
+
+        return self::$availableModulesGrouped;
     }
 
     /**

@@ -154,16 +154,14 @@
         <div class="col-sm-6">
             <div class="grid simple">
                 <div class="grid-title no-border">
-                    <h4>{t}Modules{/t}</h4>
+                    <h4>{t}Billing{/t}</h4>
                 </div>
                 <div class="grid-body no-border">
                     <div class="form-group">
-                        <select id="modules" multiple ui-select2 ng-model="instance.external.activated_modules" ng-options="key as value for (key,value) in template.available_modules"></select>
-                    </div>
-                    <div class="form-group text-center">
-                        <button class="btn btn-white btn-lg" ng-click="selectModules()">
-                            {t}Select modules{/t}
-                        </button>
+                        <label class="form-label">{t}Last invoice date{/t}</label>
+                        <div class="controls">
+                            <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -171,17 +169,31 @@
     </div>
     <div class="grid simple">
         <div class="grid-title no-border">
-            <h4>{t}Billing{/t}</h4>
+            <h4>{t}Modules{/t}</h4>
         </div>
         <div class="grid-body no-border">
-            <div class="form-group">
-                <label class="form-label">{t}Last invoice date{/t}</label>
-                <div class="controls">
-                    <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.last_invoice" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="checkbox check-default">
+                        <input id="checkbox-modules" ng-model="selected.all" ng-change="selectAll()" ng-checked="allSelected()" type="checkbox">
+                        <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3" ng-repeat="planName in template.plans">
+                    <h4>[% planName %]</h4>
+                    <div class="checkbox check-default col-sm-12" ng-repeat="(key, module) in template.available_modules|filter:planFilter('Base')">
+                        <input id="checkbox-[% key %]" checklist-model="selected.modules" checklist-value="key" type="checkbox">
+                        <label for="checkbox-[% key %]">
+                            [% module.name %]
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="row">
         <div class="col-sm-6">
