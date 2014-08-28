@@ -49,7 +49,12 @@
                             <ul class="dropdown-menu pull-right">
                                 <li>
                                     <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
-                                        <i class="fa fa-download"></i> Export
+                                        <i class="fa fa-download"></i> {t}Export current list{/t}
+                                    </a>
+                                </li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                        <i class="fa fa-download"></i> {t}Export selection{/t}
                                     </a>
                                 </li>
                                 <li class="divider" ng-if="selected.instances.length > 0"></li>
