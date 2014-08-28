@@ -122,7 +122,7 @@
                         </div>
                         <div class="form-group">
                             <label for="user-language">{t}User language{/t}</label>
-                            <select id="user-language" ng-model="user.meta.language" ng-options="key as value for (key, value) in template.languages"></select>
+                            <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </tab>

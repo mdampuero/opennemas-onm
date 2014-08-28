@@ -16,7 +16,7 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
          */
         $scope.user = {
             meta: {
-                language: 'default'
+                user_language: 'default'
             }
         };
 
@@ -33,7 +33,9 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
         $scope.save = function() {
             $scope.saving = 1;
 
-            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+            if ($scope.user.meta.paywall_time_limit) {
+                $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+            }
 
             itemService.save('manager_ws_user_create', $scope.user)
                 .then(function (response) {
@@ -58,7 +60,9 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
         $scope.update = function() {
             $scope.saving = 1;
 
-            $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+            if ($scope.user.meta.paywall_time_limit) {
+                $scope.user.meta.paywall_time_limit = $scope.user.meta.paywall_time_limit.toString();
+            }
 
             itemService.update('manager_ws_user_update', $scope.user.id,
                 $scope.user).then(function (response) {
@@ -74,6 +78,12 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
         //  Initialize user
         if (data.data) {
             $scope.user = data.data;
+
+            if (angular.isArray($scope.user.meta)) {
+                $scope.user.meta = {
+                    user_language: 'default'
+                };
+            }
         }
     }
 );
