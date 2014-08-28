@@ -6,7 +6,7 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl',
-    function ($location, $scope, fosJsRouting) {
+    function ($http, $location, $modal, $scope, vcRecaptchaService, authService, fosJsRouting) {
         /**
          * The fosJsRouting service.
          *
@@ -22,34 +22,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
         $scope.mini = 0;
 
         /**
-         * Checks if the section is active.
+         * Flag to show modal window for login only once.
          *
-         * @param  string route Route name of the section to check.
-         *
-         * @return True if the current section
+         * @type boolean
          */
-        $scope.isActive = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
-            return $location.path() == url;
-        }
-
-        /**
-         * Toggles the sidebar.
-         *
-         * @param integer status The toggle status.
-         */
-        $scope.toggle = function(status) {
-            $scope.mini = status;
-        }
-
-        /**
-         * Closes the sidebar on click in small devices.
-         */
-        $scope.go = function() {
-            if (angular.element('body').hasClass('breakpoint-480')) {
-                $.sidr('close', 'main-menu');
-                $.sidr('close', 'sidr');
-            }
+        $scope.auth = {
+            status: true,
+            modal: false,
+            inprogress: false
         }
 
         /**
@@ -109,5 +89,103 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
 
             return cleaned;
         }
+
+        /**
+         * Checks if the section is active.
+         *
+         * @param  string route Route name of the section to check.
+         *
+         * @return True if the current section
+         */
+        $scope.isActive = function(route) {
+            var url = fosJsRouting.ngGenerateShort('/manager', route);
+            return $location.path() == url;
+        }
+
+        /**
+         * Toggles the sidebar.
+         *
+         * @param integer status The toggle status.
+         */
+        $scope.toggle = function(status) {
+            $scope.mini = status;
+        }
+
+        /**
+         * Closes the sidebar on click in small devices.
+         */
+        $scope.go = function() {
+            if (angular.element('body').hasClass('breakpoint-480')) {
+                $.sidr('close', 'main-menu');
+                $.sidr('close', 'sidr');
+            }
+        }
+
+        /**
+         * Logs in manager.
+         */
+        $scope.login = function() {
+            recaptcha = vcRecaptchaService.data();
+            var password = $scope.password;
+
+            if (password.indexOf('md5:') != 0) {
+                password = 'md5:' + hex_md5(password);
+            }
+
+            var data = {
+                _username: $scope.username,
+                _password: password,
+                _token:    $scope.token,
+            }
+
+            if ($scope.attempts > 3) {
+                data.reponse = recaptcha.response;
+                data.challenge = recaptcha.challenge;
+            }
+
+            var url = fosJsRouting.generate('manager_ws_auth_check');
+
+            $http.post(url, data).then(function (response) {
+                if (response.data.success) {
+                    $scope.auth.status = true;
+                    $scope.auth.inprogress = false;
+                    $scope.auth.modal = true;
+
+                    authService.loginConfirmed();
+                } else {
+                    $scope.token    = response.data.token;
+                    $scope.attempts = response.data.attempts;
+                }
+            });
+        }
+
+        /**
+         * Shows the login form when login is required.
+         *
+         * @param Object event The event object.
+         * @param array  args  The list of arguments.
+         */
+        $scope.$on('event:auth-loginRequired', function (event, args) {
+            $scope.auth.status = false;
+
+            if ($scope.auth.modal && !$scope.auth.inprogress) {
+                $scope.auth.inprogress = true;
+
+                var modal = $modal.open({
+                    templateUrl: 'modal-login',
+                    backdrop: 'static',
+                    controller: 'LoginModalCtrl'
+                });
+            } else {
+                $scope.auth.inprogress = true;
+
+                var url = fosJsRouting.generate('manager_ws_auth_login')
+
+                $http.post(url).then(function (response) {
+                    $scope.token     = response.data.token;
+                    $scope.attempts  = response.data.attempts;
+                });
+            }
+        });
     }
 );
