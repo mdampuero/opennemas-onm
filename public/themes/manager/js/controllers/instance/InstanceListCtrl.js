@@ -216,6 +216,15 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
         }
 
         /**
+         * Checks if an instance is selected
+         *
+         * @param string id The group id.
+         */
+        $scope.isSelected = function(id) {
+            return $scope.selected.instances.indexOf(id) != -1
+        }
+
+        /**
          * Changes the sort order.
          *
          * @param string name Field name.

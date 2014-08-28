@@ -82,7 +82,7 @@
                     <tr ng-if="groups.length == 0">
                         <td class="text-center" colspan="10">{t}There is no available groups yet{/t}</td>
                     </tr>
-                    <tr ng-repeat="group in groups">
+                    <tr ng-repeat="group in groups" ng-class="{ row_selected: isSelected(group.id) }">
                         <td>
                             <div class="checkbox check-default">
                                 <input id="checkbox[%$index%]" checklist-model="selected.groups" checklist-value="group.id" type="checkbox">

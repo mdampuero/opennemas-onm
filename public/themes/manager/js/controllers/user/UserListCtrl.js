@@ -226,6 +226,16 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
         }, true);
 
         /**
+         * Checks if a user is selected
+         *
+         * @param string id The group id.
+         */
+        $scope.isSelected = function(id) {
+            console.log($scope.selected.users, id);
+            return $scope.selected.users.indexOf(id) != -1
+        }
+
+        /**
          * Searches instances given a criteria.
          */
         function list() {

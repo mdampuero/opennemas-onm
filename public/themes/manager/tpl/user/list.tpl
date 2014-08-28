@@ -102,7 +102,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="user in users">
+					<tr ng-repeat="user in users" ng-class="{ row_selected: isSelected(user.id) }">
 					 	<td>
 							<div class="checkbox check-default">
                                 <input id="checkbox[%$index%]" checklist-model="selected.users" checklist-value="user.id" type="checkbox">
@@ -110,7 +110,7 @@
                             </div>
 						</td>
 						<td class="left">
-							<a href="{url name=manager_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
+							<a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
 								[% user.name %]
 							</a>
 							<div class="listing-inline-actions">

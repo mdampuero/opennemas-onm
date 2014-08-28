@@ -87,6 +87,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="template" class="form-label">{t}Activated{/t}</label>
+                            <div class="controls">
+                                <input type="checkbox" id="template" class="ios-switch green bigswitch" ng-model="instance.activated" value="[% instance.activated %]" />
+                                <div><div></div></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
         </div>
@@ -98,7 +106,7 @@
                 <div class="grid-title no-border">
                     <h4>{t}Domains{/t}</h4>
                 </div>
-                <div class="grid-body no-border">
+                <div class="grid-body no-border instance-domain-list">
                     <div class="row form-group" ng-if="instance.domains.length > 0">
                         <div class="col-sm-12">
                             <div class="radio">
@@ -109,8 +117,8 @@
                     </div>
                     <div class="row form-group" ng-repeat="domain in instance.domains">
                         <div class="col-sm-12">
-                            <div class="radio radio-input">
-                                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]">
+                            <div class="radio radio-input radio-primary">
+                                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]" class="blue">
                                 <label for="domain[% $index + 1 %]">
                                     <div class="input-group">
                                         <input class="form-control" ng-model="instance.domains[$index]" type="text">
@@ -126,8 +134,8 @@
                     </div>
                     <div class="form-group">
                         <div class="controls">
-                            <div class="input-group">
-                                <input class="form-control" ng-model="new_domain" type="text">
+                            <div class="input-group new-domain">
+                                <input class="form-control " ng-model="new_domain" type="text">
                                 <div class="input-group-btn">
                                     <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
                                 </div>

@@ -173,6 +173,15 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
         }
 
         /**
+         * Checks if a group is selected
+         *
+         * @param string id The group id.
+         */
+        $scope.isSelected = function(id) {
+            return $scope.selected.groups.indexOf(id) != -1
+        }
+
+        /**
          * Searches groups given a criteria.
          */
         function list() {
