@@ -89,10 +89,16 @@
                                 <label for="select-all"></label>
                             </div>
 	                    </th>
-						<th class="left">{t}Full name{/t}</th>
-						<th class="left">{t}Username{/t}</th>
-						<th class="left" >{t}Group{/t}</th>
-						<th class="text-center" style="width: 10px;">{t}Activated{/t}</th>
+						<th class="left" ng-click="sort('name')">
+                            {t}Full name{/t}
+                            <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
+                        </th>
+						<th class="left" ng-click="sort('username')">
+                            {t}Username{/t}
+                            <i ng-class="{ 'fa fa-caret-up': orderBy.username == 'asc', 'fa fa-caret-down': orderBy.username == 'desc'}"></i>
+                        </th>
+                        <th>{t}Group{/t}</th>
+						<th class="text-center" style="width: 10px;" ng-click="sort('activated')">{t}Activated{/t}</th>
 					</tr>
 				</thead>
 				<tbody>

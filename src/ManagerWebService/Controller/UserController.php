@@ -209,7 +209,7 @@ class UserController extends Controller
         $epp      = $request->request->getDigits('epp', 10);
         $page     = $request->request->getDigits('page', 1);
         $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('sort_by') ? : array();
+        $orderBy  = $request->request->filter('orderBy') ? : array();
 
         $um    = $this->get('user_repository');
         $users = $um->findBy($criteria, $orderBy, $epp, $page);
