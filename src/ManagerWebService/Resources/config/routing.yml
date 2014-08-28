@@ -13,6 +13,10 @@ managerwebservice_instance_create:
     defaults: { _controller: ManagerWebServiceBundle:WebService:create }
     methods:  [POST]
 
+manager_ws_auth:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/auth.yml'
+    prefix: /
+
 manager_ws_framework_opcache:
     path:     /opcache/status
     defaults: { _controller: ManagerWebServiceBundle:FrameworkStatus:opcacheStatus }

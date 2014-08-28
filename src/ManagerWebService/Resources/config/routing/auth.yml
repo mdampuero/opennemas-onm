@@ -1,0 +1,15 @@
+manager_ws_auth_login:
+    path: /login
+    defaults: { _controller: ManagerWebServiceBundle:Authentication:login }
+    options:
+        expose: true
+
+manager_ws_auth_check:
+    path: /check
+    options:
+        expose: true
+
+manager_ws_auth_logout:
+    path: /logout
+    options:
+        expose: true
