@@ -65,10 +65,11 @@
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
 
-
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
         {javascripts
             src="@Common/js/jquery/select2/select2.min.js,
                 @Common/js/libs/modernizr.min.js,
+                @Common/js/onm/md5.min.js,
                 @Common/js/onm/scripts.js,
                 @Common/js/onm/jquery.onm-editor.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
@@ -82,6 +83,9 @@
                           @Common/plugins/angular-google-chart/angular-google-chart.js,
                           @Common/plugins/angular-checklist-model/checklist-model.js,
                           @Common/plugins/angular-route/angular-route.min.js,
+                          @Common/plugins/angular-recaptcha/module.js,
+                          @Common/plugins/angular-recaptcha/directive.js,
+                          @Common/plugins/angular-recaptcha/service.js,
                           @Common/plugins/angular-translate/angular-translate.min.js,
                           @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
                           @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
@@ -100,8 +104,8 @@
     {/block}
 
 </head>
-<body id="manager" ng-app="ManagerApp" ng-controller="MasterCtrl">
-    <header class="header navbar navbar-inverse ">
+<body id="manager" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }">
+    <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation" ng-hide="mini">
@@ -219,7 +223,7 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
+                                    <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_ws_auth_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
                                 </a></li>
                             </ul>
                         </li>
@@ -231,7 +235,7 @@
         </div>
       <!-- END TOP NAVIGATION BAR -->
     </header>
-    <div class="page-container row-fluid">
+    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar" id="main-menu" ng-class="{ 'mini': mini }">
             <div class="page-sidebar-wrapper" id="main-menu-wrapper">
@@ -288,7 +292,72 @@
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
+    <script type="text/ng-template" id="modal-login">
+        {include file="login/modal_login.tpl"}
+    </script>
+    <div class="container" ng-show="!auth.status && !auth.modal">
+        <div class="row login-container column-seperation">
+            <div class="col-md-5 col-md-offset-1">
+                <h2>Sign in Opennemas</h2>
+                <p>Use Facebook, Twitter or your email to sign in.<br>
+                    <a href="#">Sign up Now!</a> for a webarch account,It's free and always will be..</p>
+                <br>
+                <button class="btn btn-block btn-info col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-facebook"></i></span>
+                    <span class="bold">Login with Facebook</span> </button>
+                <button class="btn btn-block btn-success col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-twitter"></i></span>
+                    <span class="bold">Login with Twitter</span>
+                </button>
+            </div>
+            <div class="col-md-5 "><br>
+                <form id="login-form" class="login-form" method="post" novalidate="novalidate">
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Username</label>
+                            <div class="controls">
+                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" type="text" value="{$smarty.cookies.login_username|default:""}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Password</label>
+                            <span class="help"></span>
+                            <div class="controls">
+                                <div class="input-with-icon    right">
+                                    <i class=""></i>
+                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" type="password" value="{$smarty.cookies.login_password|default:""}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="attempts > 3">
+                        <div class="form-group col-md-10">
+                            <label class="form-label"></label>
+                            <div class="controls">
+                                <div class="control-group clearfix">
+                                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                                    <noscript>
+                                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                                    </noscript>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_referer" value="{$referer}">
 
+                    <div class="row">
+                        <div class="col-md-10">
+                            <button class="btn btn-primary btn-cons pull-right" ng-click="login()" type="button">Login</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+    </div>
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
