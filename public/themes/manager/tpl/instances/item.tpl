@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label for="template" class="form-label">{t}Activated{/t}</label>
                             <div class="controls">
-                                <input type="checkbox" id="template" class="ios-switch green bigswitch" ng-model="instance.activated" value="[% instance.activated %]" />
+                                <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" value="[% instance.activated %]" />
                                 <div><div></div></div>
                             </div>
                         </div>
