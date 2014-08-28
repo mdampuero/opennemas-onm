@@ -32,6 +32,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.addDomain = function() {
             if ($scope.instance.domains.indexOf($scope.new_domain) == -1) {
                 $scope.instance.domains.push($scope.new_domain);
+                $scope.new_domain = '';
             }
         };
 
