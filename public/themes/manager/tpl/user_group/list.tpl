@@ -75,7 +75,7 @@
                                 <label for="select-all"></label>
                             </div>
                         </th>
-                        <th>{t}Group name{/t}</th>
+                        <th class="pointer" ng-click="sort('name')">{t}Group name{/t}</th>
                     </tr>
                 </thead>
                 <tbody>

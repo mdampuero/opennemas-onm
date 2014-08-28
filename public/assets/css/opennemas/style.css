@@ -115,7 +115,9 @@ a:hover {
     }
 }
 
-
+.pointer {
+    cursor:pointer !important;
+}
 
 @media (min-width: 1025px) {
     .logo {
