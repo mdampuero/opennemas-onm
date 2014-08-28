@@ -217,6 +217,10 @@ class UserController extends Controller
 
         $userGroups = $this->get('usergroup_repository')->findBy();
 
+        foreach ($users as &$user) {
+            $user->eraseCredentials();
+        }
+
         $groups = array();
         foreach ($userGroups as $group) {
             $groups[$group->id] = $group;
@@ -374,6 +378,7 @@ class UserController extends Controller
     public function showAction($id)
     {
         $user = $this->get('user_repository')->find($id);
+        $user->eraseCredentials();
 
         return new JsonResponse(
             array(
