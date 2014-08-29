@@ -173,7 +173,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                 $scope.auth.inprogress = true;
 
                 var modal = $modal.open({
-                    templateUrl: '/managerws/template/login:modal_login.tpl',
+                    templateUrl: 'modal-login',
                     backdrop: 'static',
                     controller: 'LoginModalCtrl',
                     resolve: {

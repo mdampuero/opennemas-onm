@@ -32,10 +32,6 @@ security:
             pattern:  ^/managerws/login$
             security: false
 
-        manager_ws_template:
-            pattern:  ^/managerws/template
-            security: false
-
         frontend_login:
             pattern:  ^/login$
             security: false
