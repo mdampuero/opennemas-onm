@@ -26,8 +26,42 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          */
         $scope.template = data.template;
 
-        $scope.selectPlan = function(planName) {
-            console.log($scope.instance)
+        /**
+         * The instance object.
+         *
+         * @type Object
+         */
+        $scope.selected_modules = {
+            all: true,
+            modules: $scope.instance.external.activated_modules
+        }
+
+        $scope.togglePlan = function(planName) {
+            for (var module in $scope.template.available_modules) {
+                module = $scope.template.available_modules[module]
+                if (module.plan == planName) {
+                    console.log(planName, $scope.instance.external.activated_modules.indexOf(module.id));
+                    $scope.instance.external.activated_modules.push(module.id);
+                };
+            };
+        }
+
+        $scope.isPlanChecked = function(planName) {
+            // console.log(planName, $scope.template)
+            // var has_all_modules = true;
+            for (var module in $scope.template.modules) {
+                console.log(planName, $scope.instance.external.activated_modules.contains(module.id))
+                if (module.plan == planName) {
+                    if (!$scope.instance.external.activated_modules.contains(module.id)) {
+                        return false;
+                    }
+                    //  else {
+                    //     has_all_modules = has_all_modules && true
+                    // }
+                };
+            }
+
+            return true;
         }
 
         /**

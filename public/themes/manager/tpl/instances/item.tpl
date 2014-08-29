@@ -185,7 +185,7 @@
                 <div class="col-sm-12 instance-plan-block" ng-repeat="planName in template.plans">
 
                     <div class="checkbox check-default check-title col-sm-12">
-                        <input id="checkbox-[% planName%]" ng-change="selectPlan(planName);" ng-checked="selectPlan(planName)" type="checkbox">
+                        <input id="checkbox-[% planName%]" ng-model="selected[planName]" ng-checked="togglePlan(planName)" type="checkbox">
                         <label for="checkbox-[% planName %]">
                             <h5>Plan [% planName %]</h5>
                         </label>
