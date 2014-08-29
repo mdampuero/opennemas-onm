@@ -1,27 +1,45 @@
 
 angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
-    function ($modalInstance, $scope) {
+    function ($http, $modalInstance, $scope, fosJsRouting, data) {
+        /**
+         * Login attempts
+         *
+         * @type integer
+         */
+        $scope.attempts = data.attempts;
+
+        /**
+         * The authentication value.
+         *
+         * @type Object
+         */
+        $scope.user = {
+            token: data.token
+        };
+
         /**
          * Closes the current modal
          */
         $scope.close = function() {
-            $modalInstance.dismiss();
+            $modalInstance.close({ success: false });
         };
 
         /**
          * Logs in manager.
          */
         $scope.login = function() {
-            var password = $scope.password;
+            $scope.loading = 1;
 
-            if (password.indexOf('md5:') != 0) {
+            var password = $scope.user.password;
+
+            if (password.indexOf('md5:') === -1) {
                 password = 'md5:' + hex_md5(password);
             }
 
             var data = {
-                _username: $scope.username,
+                _username: $scope.user.username,
                 _password: password,
-                _token:    $scope.token,
+                _token:    $scope.user.token,
             }
 
             if ($scope.attempts > 3) {
@@ -34,15 +52,16 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
 
             $http.post(url, data).then(function (response) {
                 if (response.data.success) {
-                    $scope.auth.status = true;
-                    $scope.auth.inprogress = false;
-                    $scope.auth.modal = true;
-
-                    authService.loginConfirmed();
+                    $modalInstance.close({
+                        success: true,
+                        user: response.data.user
+                    });
                 } else {
-                    $scope.token    = response.data.token;
-                    $scope.attempts = response.data.attempts;
+                    $scope.user.token = response.data.token;
+                    $scope.attempts   = response.data.attempts;
                 }
+
+                $scope.loading = 0;
             });
         }
     }

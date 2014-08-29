@@ -147,9 +147,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
 
             $http.post(url, data).then(function (response) {
                 if (response.data.success) {
-                    $scope.auth.status = true;
+                    $scope.auth.status     = true;
                     $scope.auth.inprogress = false;
-                    $scope.auth.modal = true;
+                    $scope.auth.modal      = true;
+                    $scope.auth.user       = response.data.user;
 
                     authService.loginConfirmed();
                 } else {
@@ -172,19 +173,40 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                 $scope.auth.inprogress = true;
 
                 var modal = $modal.open({
-                    templateUrl: 'modal-login',
+                    templateUrl: '/managerws/template/login:modal_login.tpl',
                     backdrop: 'static',
-                    controller: 'LoginModalCtrl'
+                    controller: 'LoginModalCtrl',
+                    resolve: {
+                        data: function() {
+                            var url = fosJsRouting.generate('manager_ws_auth_login');
+
+                            return $http.post(url).then(function (response) {
+                                return response.data;
+                            });
+                        }
+                    }
+                });
+
+                modal.result.then(function (data) {
+                    $scope.auth.status = data.success;
+
+                    if (data.success) {
+                        $scope.auth.inprogress = false;
+                        $scope.auth.user       = data.user;
+
+                        authService.loginConfirmed();
+                    }
+
                 });
             } else {
-                $scope.auth.inprogress = true;
-
-                var url = fosJsRouting.generate('manager_ws_auth_login')
+                var url = fosJsRouting.generate('manager_ws_auth_login');
 
                 $http.post(url).then(function (response) {
                     $scope.token     = response.data.token;
                     $scope.attempts  = response.data.attempts;
                 });
+
+                $scope.auth.inprogress = true;
             }
         });
     }
