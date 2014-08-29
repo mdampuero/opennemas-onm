@@ -311,7 +311,7 @@
                 </button>
             </div>
             <div class="col-md-5 "><br>
-                <form class="login-form" name="loginForm" form-autofill-fix novalidate>
+                <form class="login-form" name="loginForm" novalidate>
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">Username</label>
