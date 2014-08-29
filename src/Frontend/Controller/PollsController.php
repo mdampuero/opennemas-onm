@@ -280,7 +280,9 @@ class PollsController extends Controller
 
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
+            // Clear all caches
             $this->cleanCache($poll->category_name, $pollId);
+            dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;
             $voted = 1;

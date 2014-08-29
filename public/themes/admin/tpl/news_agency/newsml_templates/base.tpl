@@ -192,9 +192,9 @@
               <Role FormalName="Main" />
               <!-- The link to download image -->
               {if $smarty.const.SITE eq 'console'}
-              <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+              <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
               {else}
-              <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+              <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
               {/if}
                 <MediaType FormalName="Photo" />
                 {*<MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />*}
