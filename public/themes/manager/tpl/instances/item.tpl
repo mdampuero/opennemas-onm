@@ -171,7 +171,6 @@
         <div class="grid-title no-border">
             <h4>{t}Modules{/t}</h4>
         </div>
-        <button class="btn btn-default" ng-click="log()">Log</button>
         <div class="grid-body no-border">
             <div class="row">
                 <div class="col-md-12">
@@ -180,7 +179,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row"></div>
             <div class="row">
                 <div class="col-sm-12 instance-plan-block" ng-repeat="planName in template.plans">
                     <div class="checkbox check-default check-title col-sm-12">
