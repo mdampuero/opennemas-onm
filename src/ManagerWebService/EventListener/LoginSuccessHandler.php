@@ -131,7 +131,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 );
             }
 
-            return new JsonResponse(
+            return new RedirectResponse(
                 $this->router->generate('manager_ws_auth_login')
             );
         } else {
@@ -144,7 +144,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
             s::set('last_login', $time);
 
-            return new JsonResponse(array('success' => true));
+            return new JsonResponse(
+                array(
+                    'success' => true,
+                    'user'    => $token->getUser()
+                )
+            );
         }
     }
 }
