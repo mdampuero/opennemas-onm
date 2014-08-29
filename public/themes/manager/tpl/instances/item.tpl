@@ -183,7 +183,6 @@
             <div class="row"></div>
             <div class="row">
                 <div class="col-sm-12 instance-plan-block" ng-repeat="planName in template.plans">
-
                     <div class="checkbox check-default check-title col-sm-12">
                         <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
                         <label for="checkbox-[% planName %]">
@@ -200,8 +199,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <div class="col-sm-6">
             <div class="grid simple">

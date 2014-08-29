@@ -46,7 +46,9 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 module = $scope.template.available_modules[module]
                 if (module.plan == plan) {
                     if ($scope.selected.plan[plan]) {
+                        if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
                             $scope.instance.external.activated_modules.push(module.id);
+                        }
                     } else {
                         $scope.instance.external.activated_modules.splice(
                             $scope.instance.external.activated_modules.indexOf(module.id),
@@ -70,7 +72,6 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 module = $scope.template.available_modules[module]
                 if (module.plan == plan) {
                     if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
-                        $scope.selected.plan[plan] = false;
                         return false;
                     }
                 }
@@ -130,9 +131,10 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          * Selects/unselects all modules.
          */
         $scope.selectAll = function() {
-            if ($scope.selected.all) {
+            if (!$scope.selected.all) {
                 $scope.selected.all = true;
                 for (var module in $scope.template.available_modules) {
+                    module = $scope.template.available_modules[module];
                     $scope.instance.external.activated_modules.push(module.id);
                 }
             } else {
