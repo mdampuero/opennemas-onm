@@ -59,6 +59,7 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
                 } else {
                     $scope.user.token = response.data.token;
                     $scope.attempts   = response.data.attempts;
+                    $scope.message    = response.data.message;
                 }
 
                 $scope.loading = 0;

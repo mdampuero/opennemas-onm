@@ -90,6 +90,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
             return cleaned;
         }
 
+        $scope.init = function() {
+            $('body').removeClass('application-loading');
+        }
+
         /**
          * Checks if the section is active.
          *
@@ -125,7 +129,9 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
          * Logs in manager.
          */
         $scope.login = function() {
-            recaptcha = vcRecaptchaService.data();
+            $scope.loading = true;
+
+            var recaptcha = vcRecaptchaService.data();
             var password = $scope.password;
 
             if (password.indexOf('md5:') != 0) {
@@ -150,13 +156,16 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                     $scope.auth.status     = true;
                     $scope.auth.inprogress = false;
                     $scope.auth.modal      = true;
-                    $scope.user       = response.data.user;
+                    $scope.user            = response.data.user;
 
                     authService.loginConfirmed();
                 } else {
                     $scope.token    = response.data.token;
                     $scope.attempts = response.data.attempts;
+                    $scope.message  = response.data.message;
                 }
+
+                $scope.loading = false;
             });
         }
 

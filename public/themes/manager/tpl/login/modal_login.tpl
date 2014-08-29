@@ -5,6 +5,11 @@
 <div class="modal-body">
     <form name="modalLoginForm">
         <div class="form-group">
+            <div class="alert alert-[% message.type %]" ng-show="message">
+                [% message.text %]
+            </div>
+        </div>
+        <div class="form-group">
             <label for="username">{t}Username or email{/t}</label>
             <input class="form-control" id="username" ng-model="user.username" required placeholder="Username or email" type="text">
         </div>

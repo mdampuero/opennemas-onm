@@ -104,7 +104,7 @@
     {/block}
 
 </head>
-<body id="manager" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }">
+<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init()">
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -347,6 +347,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                      <div class="form-group col-md-10">
+                          <div class="alert alert-[% message.type %]" ng-show="message">
+                              [% message.text %]
+                          </div>
+                      </div>
+                    </div>
                     <input type="hidden" name="_referer" value="{$referer}">
 
                     <div class="row">
@@ -365,29 +372,5 @@
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
-    <script type="text/ng-template" id="modal-login">
-      <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
-          <h4 class="modal-title">{t}Log in{/t}</h4>
-      </div>
-      <div class="modal-body">
-          <form name="modalLoginForm">
-              <div class="form-group">
-                  <label for="username">{t}Username or email{/t}</label>
-                  <input class="form-control" id="username" ng-model="user.username" required placeholder="Username or email" type="text">
-              </div>
-              <div class="form-group">
-                  <label for="password">{t}Password{/t}</label>
-                  <input class="form-control" id="password" ng-model="user.password" required type="password">
-              </div>
-          </form>
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="login();" ng-disabled="loading">
-              <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-              Sign in
-          </button>
-      </div>
-    </script>
 </body>
 </html>
