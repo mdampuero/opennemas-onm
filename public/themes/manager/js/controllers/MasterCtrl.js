@@ -150,7 +150,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                     $scope.auth.status     = true;
                     $scope.auth.inprogress = false;
                     $scope.auth.modal      = true;
-                    $scope.auth.user       = response.data.user;
+                    $scope.user       = response.data.user;
 
                     authService.loginConfirmed();
                 } else {
@@ -192,11 +192,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
 
                     if (data.success) {
                         $scope.auth.inprogress = false;
-                        $scope.auth.user       = data.user;
+                        $scope.user            = data.user;
 
                         authService.loginConfirmed();
                     }
-
                 });
             } else {
                 var url = fosJsRouting.generate('manager_ws_auth_login');
