@@ -135,7 +135,10 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 $scope.selected.all = true;
                 for (var module in $scope.template.available_modules) {
                     module = $scope.template.available_modules[module];
-                    $scope.instance.external.activated_modules.push(module.id);
+
+                    if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
+                        $scope.instance.external.activated_modules.push(module.id);
+                    }
                 }
             } else {
                 $scope.selected.all = false;
