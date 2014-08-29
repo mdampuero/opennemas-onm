@@ -177,8 +177,6 @@ EOF
                 gc_collect_cycles();
             }
         }
-
-        $this->output->writeln();
     }
 
 
