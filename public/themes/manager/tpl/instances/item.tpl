@@ -171,11 +171,11 @@
         <div class="grid-title no-border">
             <h4>{t}Modules{/t}</h4>
         </div>
+        <button class="btn btn-default" ng-click="log()">Log</button>
         <div class="grid-body no-border">
             <div class="row">
                 <div class="col-md-12">
                     <div class="checkbox check-default  check-title">
-                        <input id="checkbox-modules" ng-model="selected.all" ng-change="selectAll()" ng-checked="allSelected()" type="checkbox">
                         <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
                     </div>
                 </div>
@@ -185,13 +185,12 @@
                 <div class="col-sm-12 instance-plan-block" ng-repeat="planName in template.plans">
 
                     <div class="checkbox check-default check-title col-sm-12">
-                        <input id="checkbox-[% planName%]" ng-model="selected[planName]" ng-checked="togglePlan(planName)" type="checkbox">
+                        <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
                         <label for="checkbox-[% planName %]">
                             <h5>Plan [% planName %]</h5>
                         </label>
                     </div>
-                    <div class="checkbox check-default col-sm-4"
-                        ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                    <div class="checkbox check-default col-sm-4" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
                         <input id="checkbox-[% module.id %]" checklist-model="instance.external.activated_modules" checklist-value="module.id" type="checkbox">
                         <label for="checkbox-[% module.id %]">
                             [% module.name %]

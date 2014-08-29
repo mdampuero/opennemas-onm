@@ -31,34 +31,49 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          *
          * @type Object
          */
-        $scope.selected_modules = {
-            all: true,
-            modules: $scope.instance.external.activated_modules
-        }
+        $scope.selected = {
+            all: false,
+            plan: {}
+        };
 
-        $scope.togglePlan = function(planName) {
+        /**
+         * Selects/unselects all modules of the plan.
+         *
+         * @param string plan The selected plan.
+         */
+        $scope.togglePlan = function(plan) {
             for (var module in $scope.template.available_modules) {
                 module = $scope.template.available_modules[module]
-                if (module.plan == planName) {
-                    console.log(planName, $scope.instance.external.activated_modules.indexOf(module.id));
-                    $scope.instance.external.activated_modules.push(module.id);
-                };
-            };
-        }
+                if (module.plan == plan) {
+                    if ($scope.selected.plan[plan]) {
+                            $scope.instance.external.activated_modules.push(module.id);
+                    } else {
+                        $scope.instance.external.activated_modules.splice(
+                            $scope.instance.external.activated_modules.indexOf(module.id),
+                            1
+                        );
+                    }
+                }
+            }
+        };
 
-        $scope.isPlanChecked = function(planName) {
-            // console.log(planName, $scope.template)
-            // var has_all_modules = true;
-            for (var module in $scope.template.modules) {
-                console.log(planName, $scope.instance.external.activated_modules.contains(module.id))
-                if (module.plan == planName) {
-                    if (!$scope.instance.external.activated_modules.contains(module.id)) {
+        /**
+         * Checks if all modules of the plan are selected.
+         *
+         * @param string  plan The plan to check.
+         *
+         * @return boolean True if all modules of the plan are selected.
+         *                 Otherwise, return false.
+         */
+        $scope.isPlanSelected = function(plan) {
+            for (var module in $scope.template.available_modules) {
+                module = $scope.template.available_modules[module]
+                if (module.plan == plan) {
+                    if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
+                        $scope.selected.plan[plan] = false;
                         return false;
                     }
-                    //  else {
-                    //     has_all_modules = has_all_modules && true
-                    // }
-                };
+                }
             }
 
             return true;
@@ -112,6 +127,21 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         };
 
         /**
+         * Selects/unselects all modules.
+         */
+        $scope.selectAll = function() {
+            if ($scope.selected.all) {
+                $scope.selected.all = true;
+                for (var module in $scope.template.available_modules) {
+                    $scope.instance.external.activated_modules.push(module.id);
+                }
+            } else {
+                $scope.selected.all = false;
+                $scope.instance.external.activated_modules = [];
+            }
+        };
+
+        /**
          * Updates an instance.
          */
         $scope.update = function() {
@@ -130,6 +160,10 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                     $scope.saving = 0;
                 });
         };
+
+        $scope.log = function() {
+            console.log($scope.instance.external.activated_modules);
+        }
 
         // Initialize instance
         if (data.instance) {
