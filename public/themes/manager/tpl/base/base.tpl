@@ -92,7 +92,7 @@
                           @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
                           @Common/plugins/angular-ui/select2.js,
 
-                          @Common/plugins/angular-onm/services/*,
+                          @Common/plugins/angular-onm/*,
 
                           @ManagerTheme/js/ManagerApp.js,
                           @ManagerTheme/js/Controllers.js,
@@ -311,12 +311,12 @@
                 </button>
             </div>
             <div class="col-md-5 "><br>
-                <form id="login-form" class="login-form" method="post" novalidate="novalidate">
+                <form class="login-form" name="loginForm" form-autofill-fix novalidate>
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">Username</label>
                             <div class="controls">
-                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" type="text" value="{$smarty.cookies.login_username|default:""}">
+                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
                             </div>
                         </div>
                     </div>
@@ -325,9 +325,9 @@
                             <label class="form-label">Password</label>
                             <span class="help"></span>
                             <div class="controls">
-                                <div class="input-with-icon    right">
+                                <div class="input-with-icon right">
                                     <i class=""></i>
-                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" type="password" value="{$smarty.cookies.login_password|default:""}">
+                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
                                 </div>
                             </div>
                         </div>
@@ -351,7 +351,10 @@
 
                     <div class="row">
                         <div class="col-md-10">
-                            <button class="btn btn-primary btn-cons pull-right" ng-click="login()" type="button">Login</button>
+                            <button class="btn btn-primary btn-cons pull-right" ng-click="login()" ng-disabled="loading" type="button">
+                              <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
+                              Login
+                            </button>
                         </div>
                     </div>
                     </form>
