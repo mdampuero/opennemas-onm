@@ -541,6 +541,9 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     margin-left:25px;
     margin-right: 15px;
 }
+.instance-plan-block {
+    margin-bottom:20px;
+}
 th .dropdown .container {
     font-weight: normal;
     width: 300px;

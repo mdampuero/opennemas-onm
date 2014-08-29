@@ -174,18 +174,26 @@
         <div class="grid-body no-border">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="checkbox check-default">
+                    <div class="checkbox check-default  check-title">
                         <input id="checkbox-modules" ng-model="selected.all" ng-change="selectAll()" ng-checked="allSelected()" type="checkbox">
                         <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
                     </div>
                 </div>
             </div>
+            <div class="row"></div>
             <div class="row">
-                <div class="col-sm-3" ng-repeat="planName in template.plans">
-                    <h4>[% planName %]</h4>
-                    <div class="checkbox check-default col-sm-12" ng-repeat="(key, module) in template.available_modules|filter:planFilter('Base')">
-                        <input id="checkbox-[% key %]" checklist-model="selected.modules" checklist-value="key" type="checkbox">
-                        <label for="checkbox-[% key %]">
+                <div class="col-sm-12 instance-plan-block" ng-repeat="planName in template.plans">
+
+                    <div class="checkbox check-default check-title col-sm-12">
+                        <input id="checkbox-[% planName%]" ng-change="selectPlan(planName);" ng-checked="selectPlan(planName)" type="checkbox">
+                        <label for="checkbox-[% planName %]">
+                            <h5>Plan [% planName %]</h5>
+                        </label>
+                    </div>
+                    <div class="checkbox check-default col-sm-4"
+                        ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                        <input id="checkbox-[% module.id %]" checklist-model="instance.external.activated_modules" checklist-value="module.id" type="checkbox">
+                        <label for="checkbox-[% module.id %]">
                             [% module.name %]
                         </label>
                     </div>

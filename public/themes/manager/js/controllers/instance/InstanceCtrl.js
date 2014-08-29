@@ -26,7 +26,9 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
          */
         $scope.template = data.template;
 
-        $scope.planFilter = function(searchField) { return {plan: searchField}; }
+        $scope.selectPlan = function(planName) {
+            console.log($scope.instance)
+        }
 
         /**
          * Adds a new domain to the instance.
@@ -74,29 +76,6 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                     $scope.saving = 0;
                 });
         };
-
-        /**
-         * Opens a modal to select modules.
-         */
-        $scope.selectModules = function () {
-            var modal =  $modal.open({
-                templateUrl: '/managerws/template/instances:modal_modules.tpl',
-                controller: 'InstanceModalCtrl',
-                windowClass: 'module-selector',
-                resolve: {
-                    selected: function() {
-                        return angular.copy($scope.instance.external.activated_modules);
-                    },
-                    template: function() {
-                        return $scope.template;
-                    }
-                }
-            });
-
-            modal.result.then(function(data) {
-                $scope.instance.external.activated_modules = data;
-            });
-        }
 
         /**
          * Updates an instance.

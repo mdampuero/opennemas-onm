@@ -42,7 +42,6 @@
         </div>
         <div class="grid-body clearfix">
             <form name="groupForm" novalidate>
-                <h4>General information</h4>
                 <div class="form-group">
                     <label class="form-label">{t}Group name{/t}</label>
                     <div class="controls">
@@ -66,9 +65,12 @@
                         </option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <button class="btn" ng-click="selectAllPrivileges()">{t}Toggle all privileges{/t}</button>
+                </div>
                 <div>
                     <div ng-repeat="section in sections">
-                        <h5>{t}[% section.title %]{/t}</h5>
+                        <h6>{t}[% section.title %]{/t}</h6>
                         <div class="row" ng-repeat="columns in section.rows">
                             <div class="col-sm-3" ng-repeat="name in columns">
                                 <div class="checkbox check-default check-title">

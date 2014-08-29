@@ -147,167 +147,208 @@ class ModuleManager
     {
         if (!isset(self::$availableModulesGrouped)) {
             self::$availableModulesGrouped = [
-                'ADS_MANAGER'               => [
+                [
+                    'id'   => 'ADS_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Advertisement')
                 ],
-                'ADVANCED_SEARCH'           => [
+                [
+                    'id'   => 'ADVANCED_SEARCH',
                     'plan' => 'Base',
                     'name' => _('Advanced search'),
                 ],
-                'ALBUM_MANAGER'             => [
+                [
+                    'id'   => 'ALBUM_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Albums'),
                 ],
-                'ARTICLE_MANAGER'           => [
+                [
+                    'id'   => 'ARTICLE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Articles'),
                 ],
-                'AVANCED_ARTICLE_MANAGER'   => [
+                [
+                    'id'   => 'AVANCED_ARTICLE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Advanced article options'),
                 ],
-                'AVANCED_FRONTPAGE_MANAGER' => [
+                [
+                    'id'   => 'AVANCED_FRONTPAGE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Advanced frontpage managers'),
                 ],
-                'BOOK_MANAGER'              => [
+                [
+                    'id'   => 'BOOK_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Books'),
                 ],
-                'CACHE_MANAGER'             => [
+                [
+                    'id'   => 'CACHE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Cache manager'),
                 ],
-                'CATEGORY_MANAGER'          => [
+                [
+                    'id'   => 'CATEGORY_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Category'),
                 ],
-                'COMMENT_MANAGER'           => [
+                [
+                    'id'   => 'COMMENT_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Comments'),
                 ],
-                'CRONICAS_MODULES'          => [
+                [
+                    'id'   => 'CRONICAS_MODULES',
                     'plan' => 'Other',
                     'name' => _('Cronicas customizations'),
                 ],
-                'FILE_MANAGER'              => [
+                [
+                    'id'   => 'FILE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Files'),
                 ],
-                'FORM_MANAGER'              => [
+                [
+                    'id'   => 'FORM_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Forms'),
                 ],
-                'FRONTPAGE_MANAGER'         => [
+                [
+                    'id'   => 'FRONTPAGE_MANAGER',
                     'plan' => '',
                     'name' => _('Frontpages'),
                 ],
-                'FRONTPAGES_LAYOUT'         => [
+                [
+                    'id'   => 'FRONTPAGES_LAYOUT',
                     'plan' => 'Silver',
                     'name' => _('Frontpages layout'),
                 ],
-                'IMAGE_MANAGER'             => [
+                [
+                    'id'   => 'IMAGE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Images'),
                 ],
-                'KEYWORD_MANAGER'           => [
+                [
+                    'id'   => 'KEYWORD_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Keywords'),
                 ],
-                'KIOSKO_MANAGER'            => [
+                [
+                    'id'   => 'KIOSKO_MANAGER',
                     'plan' => 'Gold',
                     'name' => _('Kiosko'),
                 ],
-                'LETTER_MANAGER'            => [
+                [
+                    'id'   => 'LETTER_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Letters'),
                 ],
-                'LIBRARY_MANAGER'           => [
+                [
+                    'id'   => 'LIBRARY_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Library'),
                 ],
-                'LOG_SQL'     => [
+                [
+                    'id'   => 'LOG_SQL',
                     'plan' => 'Other',
                     'name' => _('SQL Log'),
                 ],
-                'MENU_MANAGER'              => [
+                [
+                    'id'   => 'MENU_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Menus'),
                 ],
-                'NEWS_AGENCY_IMPORTER'      => [
+                [
+                    'id'   => 'NEWS_AGENCY_IMPORTER',
                     'plan' => 'Gold',
                     'name' => _('News Agency importer'),
                 ],
-                'NEWSLETTER_MANAGER'        => [
+                [
+                    'id'   => 'NEWSLETTER_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Newsletter'),
                 ],
-                'OPINION_MANAGER'           => [
+                [
+                    'id'   => 'OPINION_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Opinion'),
                 ],
-                'PAPER_IMPORT'              => [
+                [
+                    'id'   => 'PAPER_IMPORT',
                     'plan' => 'Other',
                     'name' => _('Paper import'),
                 ],
-                'POLL_MANAGER'              => [
+                [
+                    'id'   => 'POLL_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Polls'),
                 ],
-                'SCHEDULE_MANAGER'          => [
+                [
+                    'id'   => 'SCHEDULE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Schedules'),
                 ],
-                'SETTINGS_MANAGER'          => [
+                [
+                    'id'   => 'SETTINGS_MANAGER',
                     'plan' => 'Base',
                     'name' => _('System wide settings'),
                 ],
-                'SPECIAL_MANAGER'           => [
+                [
+                    'id'   => 'SPECIAL_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Specials'),
                 ],
-                'STATIC_LIBRARY'            => [
+                [
+                    'id'   => 'STATIC_LIBRARY',
                     'plan' => 'Other',
                     'name' => _('Static library'),
                 ],
-                'STATIC_PAGES_MANAGER'      => [
+                [
+                    'id'   => 'STATIC_PAGES_MANAGER',
                     'plan' => '',
                     'name' => _('Static pages'),
                 ],
-                'SYNC_MANAGER'              => [
+                [
+                    'id'   => 'SYNC_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Instance synchronization'),
                 ],
-                'TRASH_MANAGER'             => [
+                [
+                    'id'   => 'TRASH_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Trash'),
                 ],
-                'USER_GROUP_MANAGER'        => [
+                [
+                    'id'   => 'USER_GROUP_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('User groups'),
                 ],
-                'USER_MANAGER'              => [
+                [
+                    'id'   => 'USER_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Users'),
                 ],
-                'USERVOICE_SUPPORT'         => [
+                [
+                    'id'   => 'USERVOICE_SUPPORT',
                     'plan' => 'Base',
                     'name' => _('UserVoice integration'),
                 ],
-                'VIDEO_MANAGER'             => [
+                [
+                    'id'   => 'VIDEO_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Videos'),
                 ],
-                'VIDEO_LOCAL_MANAGER'       => [
+                [
+                    'id'   => 'VIDEO_LOCAL_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Videos (local)'),
                 ],
-                'WIDGET_MANAGER'            => [
+                [
+                    'id'   => 'WIDGET_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Widgets'),
                 ],
-                'PAYWALL'                   => [
+                [
+                    'id'   => 'PAYWALL',
                     'plan' => 'Others',
                     'name' => _('Paywall'),
                 ]

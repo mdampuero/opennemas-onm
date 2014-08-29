@@ -68,7 +68,8 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
          */
         $scope.selected = {
             all: {},
-            privileges: {}
+            privileges: {},
+            allSelected: {}
         };
 
         /**
@@ -168,6 +169,37 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
                 };
             }
         };
+
+        $scope.toggleAllPrivileges = function() {
+            if (!$scope.group.privileges) {
+                $scope.group.privileges = [];
+            }
+            if (!$scope.selected.allSelected) {
+                for (var module in $scope.template.modules) {
+                    if (!$scope.selected.all[module]) {
+                        for (var key in $scope.template.modules[module]) {
+                            var id = $scope.template.modules[module][key].id;
+
+                            if ($scope.group.privileges.indexOf(id) == -1) {
+                                $scope.group.privileges.push(id);
+                            }
+                        }
+                        $scope.selected.allSelected = true;
+                    }
+                }
+            } else {
+                $scope.selected.allSelected = false;
+                $scope.group.privileges = [];
+                for (var key in $scope.template.modules[module]) {
+                    var id = $scope.template.modules[module][key].id;
+
+                    if ($scope.group.privileges.indexOf(id) == -1) {
+                        $scope.group.privileges.splice($scope.group.privileges.indexOf(id), 1);
+                    }
+                }
+            };
+        }
+
 
         /**
          * Updates an user group.
