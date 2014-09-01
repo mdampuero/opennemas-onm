@@ -29,24 +29,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>app:deploy</td>
-                        <td>
-                            Deploys the application to the latest version
-                            <div class="help-block">
-                                This could take a while. Please do not interrupt this execution while running.
-                            </div>
-                        </td>
-                        <td></td>
-                        <td class="right">
-                            <div class="btn-group">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_command_output', { name: 'app:deploy', data: [theme] }) %]" class="btn btn-danger deploy btn-huge" data-loading-text="Loading...">
-                                    <i class="fa fa-download fa-2x" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
-                                    {t}Deploy{/t}
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
                     <form action="{url name=manager_framework_command_execute}" method="GET">
                     <tr>
                         <td>
