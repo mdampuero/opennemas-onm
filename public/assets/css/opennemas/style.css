@@ -85,9 +85,9 @@ a:hover {
 .mini-logo .logo{
     margin:0 !important;
 }
-.error-body {
+/*.error-body {
     height:auto;
-}
+}*/
 @media (min-width: 980px) {
     .page-content {
          min-height: 0 !important;
@@ -101,9 +101,6 @@ a:hover {
         min-height:100%;
         /*height:100%;*/
 
-    }
-    .header-quick-nav .mini-logo {
-        display:none !important;
     }
 }
 
@@ -133,6 +130,13 @@ a:hover {
 @media (min-width: 1025px) {
     .logo {
         margin-left:7px;
+    }
+
+    .grey .header-quick-nav .mini-logo {
+        display:block !important;
+    }
+    .header-quick-nav .mini-logo {
+        display:none !important;
     }
 
     .page-sidebar {
