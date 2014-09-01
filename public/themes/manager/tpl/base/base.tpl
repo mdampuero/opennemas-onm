@@ -15,7 +15,7 @@
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
     {block name="header-css"}
-        {stylesheets src="@Common/plugins/pace/pace-theme-flash.css,
+        {stylesheets src="@Common/plugins/pace/pace-theme-minimal.css,
                           @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
                           @Common/plugins/webarch/css/animate.min.css,
                           @Common/plugins/bootstrap-select2/select2.css,
@@ -77,6 +77,10 @@
     {/block}
 
     {block name="footer-js"}
+        <script>
+            var appVersion = '{$smarty.const.DEPLOYED_AT}';
+        </script>
+
         {javascripts src="@FosJsRoutingBundle/js/router.js,
                           @Common/js/routes.js,
                           @Common/plugins/angular/angular.min.js,
@@ -294,6 +298,9 @@
     </div>
     <script type="text/ng-template" id="modal-login">
         {include file="login/modal_login.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-upgrade">
+        {include file="common/modal_application_upgrade.tpl"}
     </script>
     <div class="container" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
