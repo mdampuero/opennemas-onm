@@ -42,7 +42,7 @@ angular.module('onm.auth', []).factory('authService', function ($http,
      * @return Object The response object.
      */
     authService.login = function (route, data, attempts) {
-        if (data._password.indexOf('md5:') === -1) {
+        if (data._password && data._password.indexOf('md5:') === -1) {
             data._password = 'md5:' + hex_md5(data._password);
         }
 
