@@ -203,6 +203,9 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
                     modal:      false,
                     inprogress: true
                 };
+
+                $scope.token    = response.data.token;
+                $scope.attempts = response.data.attempts;
             }
         });
     }
