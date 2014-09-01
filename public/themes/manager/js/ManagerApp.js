@@ -2,13 +2,14 @@
 angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
         'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
         'http-interceptor', 'googlechart', 'vcRecaptcha',
-        'onm.routing', 'onm.item', 'onm.messenger',
+        'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth',
         'ManagerApp.controllers'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
         // Use x-www-form-urlencoded Content-Type
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+        $httpProvider.defaults.headers.post['X-App-Version'] = appVersion;
 
         /**
         * The workhorse; converts an object to x-www-form-urlencoded serialization.

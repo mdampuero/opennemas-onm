@@ -1,11 +1,17 @@
-manager_ws_auth_login:
-    path: /login
-    defaults: { _controller: ManagerWebServiceBundle:Authentication:login }
+manager_ws_auth_check:
+    path: /check
     options:
         expose: true
 
-manager_ws_auth_check:
-    path: /check
+manager_ws_auth_check_user:
+    path: /check-user
+    defaults: { _controller: ManagerWebServiceBundle:Authentication:checkUser }
+    options:
+        expose: true
+
+manager_ws_auth_login:
+    path: /login
+    defaults: { _controller: ManagerWebServiceBundle:Authentication:login }
     options:
         expose: true
 

@@ -24,6 +24,25 @@ use Onm\Framework\Controller\Controller;
 class AuthenticationController extends Controller
 {
     /**
+     * Checks if the current user is authenticated.
+     *
+     * @return JsonResponse The response object
+     */
+    public function checkUserAction()
+    {
+        if ($this->getUser()) {
+            return new JsonResponse(
+                array(
+                    'success' => true,
+                    'user'    => $this->getUser()
+                )
+            );
+        } else {
+            return new JsonResponse(array('success' => false));
+        }
+    }
+
+    /**
      * Returns the parameters to use in login.
      *
      * @return JsonResponse The response object.
