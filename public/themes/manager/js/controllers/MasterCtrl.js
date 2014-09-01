@@ -144,7 +144,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
     }
 
     /**
-     * Logs in manager.
+     * Logs an user in.
      */
     $scope.login = function() {
         $scope.loading = 1;
@@ -175,6 +175,41 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
         );
     }
 
+    /**
+     * Logs the user out.
+     */
+    $scope.logout = function() {
+        var modal = $modal.open({
+            templateUrl: 'modal-confirm',
+            controller:  'modalCtrl',
+            resolve: {
+                template: function() {
+                    return {
+                        name: 'logout'
+                    };
+                },
+                success: function() {
+                    return function() {
+                        return authService.logout('manager_ws_auth_logout');
+                    }
+                }
+            }
+        });
+
+        modal.result.then(function (response) {
+            if (response) {
+                $scope.auth = {
+                    status:     false,
+                    modal:      false,
+                    inprogress: true
+                };
+            }
+        });
+    }
+
+    /**
+     * Force page reload.
+     */
     $scope.reload = function() {
         $scope.loading = 1;
 
