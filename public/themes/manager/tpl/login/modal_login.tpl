@@ -36,8 +36,10 @@
         </div>
         <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
             <div class="col-sm-12 text-right">
-                <i class="fa fa-circle-o-notch" ng-if="loading"></i>
-                <button type="button" class="btn btn-primary btn-cons" id="login_toggle" ng-click="login()" ng-disabled="loading">Login</button>
+                <button type="button" class="btn btn-primary btn-cons" id="login_toggle" ng-click="login()" ng-disabled="loading">
+                    <i class="fa fa-circle-o-notch" ng-if="loading"></i>
+                    Login
+                </button>
             </div>
         </div>
     </form>
