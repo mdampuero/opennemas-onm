@@ -108,6 +108,10 @@
                                 {t}Domains{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
                             </th>
+                            <th class="pointer" ng-click="sort('domain_expire')" ng-show="columns.domain_expire">
+                                {t}Domain expire{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
+                            </th>
                             <th class="pointer" ng-click="sort('contact_email')" ng-show="columns.contact_mail">
                                 {t}Contact{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.contact_mail == 'asc', 'fa fa-caret-down': orderBy.contact_mail == 'desc'}"></i>
@@ -206,6 +210,12 @@
                                                     <span class="a">
                                                         <i class="fa" ng-class="{ 'fa-eye': columns.domains, 'fa-blank': !columns.domains }"></i>
                                                         {t}Domains{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.domain_expire = !columns.domain_expire;">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.domain_expire, 'fa-blank': !columns.domain_expire }"></i>
+                                                        {t}Doman expire{/t}
                                                     </span>
                                                 </li>
                                                 <li ng-click="columns.contact_mail = !columns.contact_mail">
@@ -381,6 +391,9 @@
                                         </span>
                                     </small>
                                 </div>
+                            </td>
+                            <td ng-show="columns.domain_expire">
+                                [% instance.external.domain_expire %]
                             </td>
                             <td ng-show="columns.contact_mail">
                                 <div class="creator">

@@ -56,6 +56,13 @@ class Instance
     public $main_domain = 0;
 
     /**
+     * The date when main domain expires.
+     *
+     * @var \Datetime
+     */
+    public $domain_expire = null;
+
+    /**
      * Contact email of user that owns the instance.
      *
      * @var string
