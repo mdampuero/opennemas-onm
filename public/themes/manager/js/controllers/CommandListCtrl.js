@@ -42,9 +42,9 @@ angular.module('ManagerApp.controllers').controller('CommandListCtrl',
                 })
         }
 
-        $scope.commandOutput = function(command_name, data) {
-
-
-        }
+        $scope.$on('$destroy', function() {
+            $scope.commands = null;
+            $scope.template = null;
+        })
     }
 );

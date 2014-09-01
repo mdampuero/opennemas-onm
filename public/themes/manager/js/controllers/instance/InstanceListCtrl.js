@@ -296,5 +296,16 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
                 $scope.loading = 0;
             });
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.criteria  = null;
+            $scope.columns   = null;
+            $scope.epp       = null;
+            $scope.instances = null;
+            $scope.selected  = null;
+            $scope.orderBy   = null;
+            $scope.page      = null;
+            $scope.total     = null;
+        });
     }
 );

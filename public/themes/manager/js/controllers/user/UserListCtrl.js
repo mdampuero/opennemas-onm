@@ -263,5 +263,15 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
                 $scope.loading = 0;
             });
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.criteria = null;
+            $scope.epp      = null;
+            $scope.users    = null;
+            $scope.selected = null;
+            $scope.orderBy  = null;
+            $scope.page     = null;
+            $scope.total    = null;
+        })
     }
 );

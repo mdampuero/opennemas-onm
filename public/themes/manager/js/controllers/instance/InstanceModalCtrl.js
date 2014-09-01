@@ -136,5 +136,11 @@ angular.module('ManagerApp.controllers').controller('InstanceModalCtrl',
                 }
             };
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.multiple = null;
+            $scope.selected = null;
+            $scope.template = null;
+        });
     }
 );

@@ -6,7 +6,7 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
-        $http, $location, $modal, $scope, $window, vcRecaptchaService, httpInterceptor,
+        $http, $location, $modal, $rootScope, $scope, $window, vcRecaptchaService, httpInterceptor,
         authService, fosJsRouting) {
 
     /**
@@ -267,6 +267,21 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
             }
         }
     });
+
+    function refreshApp() {
+        var host = document.getElementById('view');
+        if(host) {
+            var mainDiv = $("#view");
+            mainDiv.empty();
+            angular.element(host).empty();
+        }
+    }
+
+    $rootScope.$on('$routeChangeStart',
+        function (event, next, current) {
+            refreshApp();
+        }
+    );
 
     /**
      * Shows a modal to force page reload.

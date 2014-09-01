@@ -85,5 +85,10 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
                 };
             }
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.user     = null;
+            $scope.template = null;
+        })
     }
 );

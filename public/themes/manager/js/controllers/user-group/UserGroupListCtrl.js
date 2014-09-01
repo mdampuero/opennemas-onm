@@ -201,5 +201,15 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
                 $scope.loading = 0;
             });
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.criteria = null;
+            $scope.epp      = null;
+            $scope.groups   = null;
+            $scope.selected = null;
+            $scope.orderBy  = null;
+            $scope.page     = null;
+            $scope.total    = null;
+        })
     }
 );

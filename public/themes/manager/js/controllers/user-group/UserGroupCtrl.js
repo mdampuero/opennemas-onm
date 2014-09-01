@@ -233,5 +233,12 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl',
                 };
             };
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.group    = null;
+            $scope.sections = null;
+            $scope.selected = null;
+            $scope.template = null;
+        });
     }
 );

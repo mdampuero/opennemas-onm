@@ -166,13 +166,15 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 });
         };
 
-        $scope.log = function() {
-            console.log($scope.instance.external.activated_modules);
-        }
-
         // Initialize instance
         if (data.instance) {
             $scope.instance = data.instance;
         }
+
+        $scope.$on('$destroy', function() {
+            $scope.instance = null;
+            $scope.template = null;
+            $scope.selected = null;
+        })
     }
 );

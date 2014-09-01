@@ -98,5 +98,12 @@ angular.module('ManagerApp.controllers').controller('OpcacheCtrl',
             return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
         }
 
+        $scope.$on('$destroy', function() {
+            $scope.serverData      = null;
+            $scope.chartObjectMem  = null;
+            $scope.chartObjectKeys = null;
+            $scope.chartObjectHits = null;
+        });
+
     }
 );
