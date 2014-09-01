@@ -33,7 +33,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     private $context;
 
     /**
-     * @var [type]
+     * @var Router
      */
     private $router;
 
@@ -75,12 +75,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $userGroups = $user->id_user_group;
         $valid      = true;
 
-        foreach ($userGroups as $group) {
-            $groups[] = \UserGroup::getGroupName($group);
+        $attempts = 1;
+        if ($this->session->get('failed_login_attempts')) {
+            $attempts =  $this->session->get('failed_login_attempts') + 1;
         }
 
+        // Validate recaptcha
         if ($request->get('challenge')) {
-            // Get reCaptcha validate response
             $valid = recaptcha_check_answer(
                 '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
                 $request->getClientIp(),
@@ -91,39 +92,25 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $valid = $valid->is_valid;
         }
 
-        // Set session array
-        $_SESSION['userid']           = $user->id;
-        $_SESSION['realname']         = $user->name;
-        $_SESSION['username']         = $user->username;
-        $_SESSION['email']            = $user->email;
-        $_SESSION['deposit']          = $user->deposit;
-        $_SESSION['type']             = $user->type;
-        $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
-        $_SESSION['updated']          = time();
-        $_SESSION['user_language']    = $user->getMeta('user_language');
-        $_SESSION['valid']            = $valid;
-        $_SESSION['meta']             = $user->getMeta();
-
+        // Validate CSRF
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
             $this->session->get('intention'),
             $request->get('_token')
         );
 
-        if (!$isTokenValid || $valid === false) {
-            if (isset($_SESSION['failed_login_attempts'])) {
-                $_SESSION['failed_login_attempts']++;
-            } else {
-                $_SESSION['failed_login_attempts'] = 1;
-            }
+        if (!$isTokenValid || !$valid) {
+            // Log user out
+            $this->context->setToken(null);
+            $request->getSession()->invalidate();
 
             if (!$isTokenValid) {
                 $this->session->getFlashBag()->add(
                     'error',
-                    'Login token is not valid. Try to autenticate again.'
+                    'Login token is not valid. Try to authenticate again.'
                 );
             }
 
-            if ($valid === false) {
+            if (!$valid) {
                 $this->session->getFlashBag()->add(
                     'error',
                     'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
@@ -131,11 +118,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 );
             }
 
+            $this->session->set('failed_login_attempts', $attempts);
+
             return new RedirectResponse(
                 $this->router->generate('manager_ws_auth_login')
             );
         } else {
-            unset($_SESSION['failed_login_attempts']);
+            $this->session->set('failed_login_attempts', 0);
 
             // Set last_login date
             $time = new \DateTime();

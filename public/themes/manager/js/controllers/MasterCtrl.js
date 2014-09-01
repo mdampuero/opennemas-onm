@@ -6,7 +6,7 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl',
-    function ($http, $location, $modal, $scope, vcRecaptchaService, authService, fosJsRouting) {
+    function ($http, $location, $modal, $scope, vcRecaptchaService, httpInterceptor, fosJsRouting) {
         /**
          * The fosJsRouting service.
          *
@@ -144,8 +144,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                 _token:    $scope.token,
             }
 
-            if ($scope.attempts > 3) {
-                data.reponse = recaptcha.response;
+            if ($scope.attempts > 2) {
+                data.response = recaptcha.response;
                 data.challenge = recaptcha.challenge;
             }
 
@@ -158,11 +158,15 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                     $scope.auth.modal      = true;
                     $scope.user            = response.data.user;
 
-                    authService.loginConfirmed();
+                    httpInterceptor.loginConfirmed();
                 } else {
                     $scope.token    = response.data.token;
                     $scope.attempts = response.data.attempts;
                     $scope.message  = response.data.message;
+
+                    if ($scope.attempts > 3) {
+                        vcRecaptchaService.reload();
+                    }
                 }
 
                 $scope.loading = false;
@@ -203,7 +207,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl',
                         $scope.auth.inprogress = false;
                         $scope.user            = data.user;
 
-                        authService.loginConfirmed();
+                        httpInterceptor.loginConfirmed();
                     }
                 });
             } else {

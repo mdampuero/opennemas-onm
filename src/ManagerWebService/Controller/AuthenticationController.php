@@ -61,18 +61,25 @@ class AuthenticationController extends Controller
             } else {
                 $message = array(
                     'type' => 'error',
-                    'text' => _($error->getMessage())
+                    'text' => _($error)
                 );
             }
 
             $attempts = $request->getSession()->get('failed_login_attempts');
             if ($attempts) {
-                $request->getSession()->get('failed_login_attempts', $attempts + 1);
+                $request->getSession()->set('failed_login_attempts', $attempts + 1);
             } else {
-                $request->getSession()->get('failed_login_attempts', 1);
+                $request->getSession()->set('failed_login_attempts', 1);
             }
         }
 
+        $errors = $request->getSession()->getFlashbag()->get('error');
+        if ($errors) {
+            $message = array(
+                'type' => 'error',
+                'text' => $errors[0]
+            );
+        }
 
         $intention = time() . rand();
         $token     = $this->get('form.csrf_provider')->generateCsrfToken($intention);
@@ -81,10 +88,7 @@ class AuthenticationController extends Controller
 
         $currentLanguage = \Application::$language;
 
-        $failedLoginAttempts =  0;
-        if (isset($_SESSION['failed_login_attempts'])) {
-            $failedLoginAttempts =  $request->getSession()->get('failed_login_attempts');
-        }
+        $failedLoginAttempts = $request->getSession()->get('failed_login_attempts') ? : 0;
 
         return new JsonResponse(
             array(

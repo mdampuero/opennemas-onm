@@ -1,27 +1,44 @@
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
-    <h4 class="modal-title">{t}Log in{/t}</h4>
+ <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10">
+    <h2 class="normal">Sign in to webarch</h2>
+    <p>Use Facebook, Twitter or your email to sign in.<br></p>
 </div>
-<div class="modal-body">
-    <form name="modalLoginForm">
-        <div class="form-group">
-            <div class="alert alert-[% message.type %]" ng-show="message">
-                [% message.text %]
+<div class="tiles grey p-t-20 p-b-20 text-black">
+    <form id="frm_login" class="animated fadeIn">
+        <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="alert alert-[% message.type %]" ng-show="message">
+                        [% message.text %]
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="username">{t}Username or email{/t}</label>
-            <input class="form-control" id="username" ng-model="user.username" required placeholder="Username or email" type="text">
+        <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input name="reg_username" id="reg_username" class="form-control" ng-model="user.username" placeholder="Username" type="text">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <input name="reg_pass" id="reg_pass" class="form-control" ng-model="user.password" placeholder="Password" type="password">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="password">{t}Password{/t}</label>
-            <input class="form-control" id="password" ng-model="user.password" required type="password">
+        <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10" ng-if="attempts > 2">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="control-group clearfix">
+                        <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+            <div class="col-sm-12 text-right">
+                <i class="fa fa-circle-o-notch" ng-if="loading"></i>
+                <button type="button" class="btn btn-primary btn-cons" id="login_toggle" ng-click="login()" ng-disabled="loading">Login</button>
+            </div>
         </div>
     </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-primary" ng-click="login();" ng-disabled="loading">
-        <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-        Sign in
-    </button>
 </div>

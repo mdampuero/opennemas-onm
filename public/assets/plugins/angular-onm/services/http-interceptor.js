@@ -10,7 +10,7 @@
 
   angular.module('http-interceptor', ['http-interceptor-buffer'])
 
-  .factory('authService', ['$rootScope','httpBuffer', function($rootScope, httpBuffer) {
+  .factory('httpInterceptor', ['$rootScope','httpBuffer', function($rootScope, httpBuffer) {
     return {
       /**
        * Call this function to indicate that authentication was successfull and trigger a

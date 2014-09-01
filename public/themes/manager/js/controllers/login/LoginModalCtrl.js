@@ -1,6 +1,6 @@
 
 angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
-    function ($http, $modalInstance, $scope, fosJsRouting, data) {
+    function ($http, $modalInstance, $scope, fosJsRouting, vcRecaptchaService, data) {
         /**
          * Login attempts
          *
@@ -18,14 +18,14 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
         };
 
         /**
-         * Closes the current modal
+         * Closes the current modal.
          */
         $scope.close = function() {
             $modalInstance.close({ success: false });
         };
 
         /**
-         * Logs in manager.
+         * Logs user in.
          */
         $scope.login = function() {
             $scope.loading = 1;
@@ -42,9 +42,9 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
                 _token:    $scope.user.token,
             }
 
-            if ($scope.attempts > 3) {
+            if ($scope.attempts > 2) {
                 recaptcha = vcRecaptchaService.data();
-                data.reponse = recaptcha.response;
+                data.response = recaptcha.response;
                 data.challenge = recaptcha.challenge;
             }
 
@@ -60,6 +60,10 @@ angular.module('ManagerApp.controllers').controller('LoginModalCtrl',
                     $scope.user.token = response.data.token;
                     $scope.attempts   = response.data.attempts;
                     $scope.message    = response.data.message;
+
+                    if ($scope.attempts > 2) {
+                        vcRecaptchaService.reload();
+                    }
                 }
 
                 $scope.loading = 0;

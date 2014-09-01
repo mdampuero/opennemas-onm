@@ -332,17 +332,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" ng-if="attempts > 3">
+                    <div class="row" ng-if="attempts > 2">
                         <div class="form-group col-md-10">
                             <label class="form-label"></label>
                             <div class="controls">
                                 <div class="control-group clearfix">
-                                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
-                                    <noscript>
-                                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
-                                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-                                    </noscript>
+                                    <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +350,6 @@
                       </div>
                     </div>
                     <input type="hidden" name="_referer" value="{$referer}">
-
                     <div class="row">
                         <div class="col-md-10">
                             <button class="btn btn-primary btn-cons pull-right" ng-click="login()" ng-disabled="loading" type="button">
@@ -364,9 +358,9 @@
                             </button>
                         </div>
                     </div>
-                    </form>
-                </div>
+                </form>
             </div>
+        </div>
     </div>
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
