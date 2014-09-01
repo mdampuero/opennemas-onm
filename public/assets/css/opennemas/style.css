@@ -120,6 +120,12 @@ a:hover {
     }
 }
 
+@media (max-width: 1024px) {
+    .top-menu-toggle-dark {
+        display: none;
+    }
+}
+
 .pointer {
     cursor:pointer !important;
 }
