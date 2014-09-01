@@ -56,7 +56,7 @@ class InstanceController extends Controller
         foreach (array_keys($request->request->all()) as $key) {
             $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
 
-            if ($value) {
+            if (!is_null($value)) {
                 $instance->{$key} = $value;
             }
         }
@@ -583,7 +583,7 @@ class InstanceController extends Controller
             foreach (array_keys($request->request->all()) as $key) {
                 $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
 
-                if ($value) {
+                if (!is_null($value)) {
                     $instance->{$key} = $value;
                 }
             }

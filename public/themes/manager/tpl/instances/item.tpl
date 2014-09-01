@@ -42,61 +42,61 @@
             </div>
         </div>
         <div class="grid-body instance-form">
-                <div class="row">
-                    <div ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
-                        <dl ng-if="instance.id">
-                            <dt>
-                                <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
-                            </dt>
-                            <dd>
-                                [% instance.contact_mail %]
-                            </dd>
-                            <dt>
-                                <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
-                            </dt>
-                            <dd>
-                                [% instance.created %]
-                            </dd>
-                            <dt>
-                                <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
-                            </dt>
-                            <dd>
-                                <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
-                                <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
-                            </dd>
-                            <dt>
-                                <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
-                            </dt>
-                            <dd>
-                                [% instance.media_size | number: 2 %] MB
-                            </dd>
-                        </dl>
-                    </div>
-                    <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
-                        <div class="form-group">
-                            <label class="form-label">{t}Site name{/t}</label>
-                            <span class="help">{t}(Human readable name){/t}</span>
-                            <div class="controls">
-                                <input class="form-control" ng-model="instance.name" required type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="template" class="form-label">{t}Template{/t}</label>
-                            <div class="controls">
-                                <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="template" class="form-label">{t}Activated{/t}</label>
-                            <div class="controls">
-                                <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" value="[% instance.activated %]" />
-                                <div><div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
+            <div class="row">
+                <div ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
+                    <dl ng-if="instance.id">
+                        <dt>
+                            <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
+                        </dt>
+                        <dd>
+                            [% instance.contact_mail %]
+                        </dd>
+                        <dt>
+                            <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
+                        </dt>
+                        <dd>
+                            [% instance.created %]
+                        </dd>
+                        <dt>
+                            <h5><i class="fa fa-code"></i> {t}Created from{/t}</h5>
+                        </dt>
+                        <dd>
+                            <span ng-if="instance.external.contact_ip">[% instance.external.contact_ip %]</span>
+                            <span ng-if="!instance.external.contact_ip">{t}Not defined{/t}</span>
+                        </dd>
+                        <dt>
+                            <h5><i class="fa fa-database"></i> {t}Media size{/t}</h5>
+                        </dt>
+                        <dd>
+                            [% instance.media_size | number: 2 %] MB
+                        </dd>
+                    </dl>
                 </div>
+                <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
+                    <div class="form-group">
+                        <label class="form-label">{t}Site name{/t}</label>
+                        <span class="help">{t}(Human readable name){/t}</span>
+                        <div class="controls">
+                            <input class="form-control" ng-model="instance.name" required type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="template" class="form-label">{t}Template{/t}</label>
+                        <div class="controls">
+                            <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="template" class="form-label">{t}Activated{/t}</label>
+                        <div class="controls">
+                            <input type="checkbox" id="template" class="ios-switch bigswitch" ng-model="instance.activated" ng-true-value="1" ng-false-value="0" />
+                            <div><div></div></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
