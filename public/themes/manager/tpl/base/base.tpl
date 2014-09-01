@@ -227,8 +227,10 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="manager_ws_auth_logout"  csrf=$smarty.session.csrf}');" title="{t}Logout from control panel{/t}"><i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
-                                </a></li>
+                                    <span class="a" ng-click="logout();">
+                                      <i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
+                                    </span>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -298,6 +300,9 @@
     </div>
     <script type="text/ng-template" id="modal-login">
         {include file="login/modal_login.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-confirm">
+        {include file="common/modal_confirm.tpl"}
     </script>
     <script type="text/ng-template" id="modal-upgrade">
         {include file="common/modal_application_upgrade.tpl"}
