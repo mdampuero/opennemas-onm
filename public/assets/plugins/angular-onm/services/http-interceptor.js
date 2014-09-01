@@ -10,7 +10,7 @@
 
   angular.module('http-interceptor', ['http-interceptor-buffer'])
 
-  .factory('httpInterceptor', ['$rootScope','httpBuffer', function($rootScope, httpBuffer) {
+  .factory('httpInterceptor', ['$modal', '$rootScope','httpBuffer', function($modal, $rootScope, httpBuffer) {
     return {
       /**
        * Call this function to indicate that authentication was successfull and trigger a
@@ -20,7 +20,7 @@
        */
       loginConfirmed: function(data, configUpdater) {
         var updater = configUpdater || function(config) {return config;};
-        $rootScope.$broadcast('event:auth-loginConfirmed', data);
+        $rootScope.$broadcast('auth-login-confirmed', data);
         httpBuffer.retryAll(updater);
       },
 
@@ -32,7 +32,7 @@
        */
       loginCancelled: function(data, reason) {
         httpBuffer.rejectAll(reason);
-        $rootScope.$broadcast('event:auth-loginCancelled', data);
+        $rootScope.$broadcast('auth-login-cancelled', data);
       }
     };
   }])
@@ -40,7 +40,7 @@
   /**
    * $http interceptor.
    * On 401 response (without 'ignoreAuthModule' option) stores the request
-   * and broadcasts 'event:auth-loginRequired'.
+   * and broadcasts 'auth-login-required'.
    */
   .config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push(['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
@@ -49,8 +49,10 @@
           if (rejection.status === 401 && !rejection.config.ignoreAuthModule) {
             var deferred = $q.defer();
             httpBuffer.append(rejection.config, deferred);
-            $rootScope.$broadcast('event:auth-loginRequired', rejection);
+            $rootScope.$broadcast('auth-login-required', rejection);
             return deferred.promise;
+          } else if (rejection.status === 426 && !rejection.config.ignoreAuthModule) {
+            $rootScope.$broadcast('application-need-upgrade', rejection);
           }
           // otherwise, default behaviour
           return $q.reject(rejection);

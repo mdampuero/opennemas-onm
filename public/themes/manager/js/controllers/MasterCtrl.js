@@ -6,7 +6,7 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
-        $http, $location, $modal, $scope, vcRecaptchaService, httpInterceptor,
+        $http, $location, $modal, $scope, $window, vcRecaptchaService, httpInterceptor,
         authService, fosJsRouting) {
 
     /**
@@ -129,6 +129,9 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
         }
     }
 
+    /**
+     * Checks and loads an user if it is authenticated in the system.
+     */
     $scope.isAuthenticated = function() {
         authService.isAuthenticated('manager_ws_auth_check_user')
             .then(function (response) {
@@ -172,13 +175,19 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
         );
     }
 
+    $scope.reload = function() {
+        $scope.loading = 1;
+
+        $window.location.reload();
+    }
+
     /**
      * Shows the login form when login is required.
      *
      * @param Object event The event object.
      * @param array  args  The list of arguments.
      */
-    $scope.$on('event:auth-loginRequired', function (event, args) {
+    $scope.$on('auth-login-required', function (event, args) {
         $scope.auth.status = false;
 
         if (!$scope.auth.inprogress) {
@@ -219,5 +228,19 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', function (
                 });
             }
         }
+    });
+
+    /**
+     * Shows a modal to force page reload.
+     *
+     * @param Object event The event object.
+     * @param array  args  The list of arguments.
+     */
+    $scope.$on('application-need-upgrade', function (event, args) {
+        var modal = $modal.open({
+            templateUrl: 'modal-upgrade',
+            controller: 'MasterCtrl',
+            backdrop: 'static'
+        });
     });
 });
