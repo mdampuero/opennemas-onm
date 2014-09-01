@@ -29,6 +29,7 @@ class CommandController extends Controller
         $application = $this->getApplication();
         $commands    = $application->all();
 
+        unset($commands['app:deploy']);
         unset($commands['help']);
         unset($commands['list']);
         unset($commands['server:run']);
