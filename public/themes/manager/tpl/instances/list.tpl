@@ -87,7 +87,7 @@
         </div>
         <div class="grid-body no-padding">
                 <div class="grid-overlay" ng-if="loading"></div>
-                <table class="table no-margin">
+                <table class="table table-hover no-margin">
                     <thead ng-if="instances.length >= 0">
                         <tr>
                             <th style="width:15px;">
