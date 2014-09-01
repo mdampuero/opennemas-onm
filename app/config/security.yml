@@ -32,10 +32,6 @@ security:
             pattern:  ^/managerws/login$
             security: false
 
-        manager_ws_check_user:
-            pattern:  ^/managerws/check-user$
-            security: false
-
         frontend_login:
             pattern:  ^/login$
             security: false
@@ -91,6 +87,21 @@ security:
         manager_ws:
             entry_point: authentication_entry_point
             pattern:    ^/(manager|managerws)/*
+            form_login:
+                check_path:                     manager_ws_auth_check
+                login_path:                     manager_ws_auth_login
+                always_use_default_target_path: false
+                default_target_path:            manager_ws_welcome
+                target_path_parameter:          _referer
+                use_referer:                    true
+                success_handler:                manager_ws_login_success_handler
+            logout:
+                path:   manager_ws_auth_logout
+                target: manager_ws_auth_login
+
+        manager_ws_check_user:
+            pattern:  ^/managerws/check-user$
+            anonymous: ~
             form_login:
                 check_path:                     manager_ws_auth_check
                 login_path:                     manager_ws_auth_login
