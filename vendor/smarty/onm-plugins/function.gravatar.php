@@ -18,7 +18,7 @@ function smarty_function_gravatar($params, &$smarty)
             $img = $params['image'];
         }
 
-        $url = 'http://www.gravatar.com/avatar/';
+        $url = '//www.gravatar.com/avatar/';
 
         $url .= md5(strtolower(trim($params['email'])));
         $url .= "?s=$size&amp;d=$d&amp;r=$r";
