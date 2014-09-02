@@ -7,7 +7,8 @@
  *
  * @return Object The command controller.
  */
-angular.module('ManagerApp.controllers').controller('OpcacheCtrl',
+angular.module('ManagerApp.controllers').controller('OpcacheCtrl', [
+    '$scope', 'itemService', 'data',
     function ($scope, itemService, data) {
         /**
          * Opcache statistics
@@ -112,4 +113,4 @@ angular.module('ManagerApp.controllers').controller('OpcacheCtrl',
         });
 
     }
-);
+]);

@@ -11,7 +11,8 @@
  *
  * @return Object The instance list controller.
  */
-angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
+angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
+    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
     function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
@@ -335,4 +336,4 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl',
             $scope.total     = null;
         });
     }
-);
+]);

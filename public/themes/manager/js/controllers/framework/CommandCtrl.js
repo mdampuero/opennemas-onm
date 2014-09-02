@@ -7,7 +7,8 @@
  *
  * @return Object The command controller.
  */
-angular.module('ManagerApp.controllers').controller('CommandCtrl',
+angular.module('ManagerApp.controllers').controller('CommandCtrl', [
+    '$scope', 'itemService', 'data',
     function ($scope, itemService, data) {
         /**
          * List of available commands.
@@ -29,4 +30,4 @@ angular.module('ManagerApp.controllers').controller('CommandCtrl',
             $scope.output   = null;
         });
     }
-);
+]);

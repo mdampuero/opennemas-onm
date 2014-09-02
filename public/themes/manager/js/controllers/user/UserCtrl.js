@@ -7,7 +7,8 @@
  *
  * @return Object The command controller.
  */
-angular.module('ManagerApp.controllers').controller('UserCtrl',
+angular.module('ManagerApp.controllers').controller('UserCtrl', [
+    '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
     function ($location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * List of available users.
@@ -91,4 +92,4 @@ angular.module('ManagerApp.controllers').controller('UserCtrl',
             $scope.template = null;
         })
     }
-);
+]);

@@ -11,8 +11,10 @@
  *
  * @return Object The controller for user groups.
  */
-angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
+angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
+    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
     function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+
         /**
          * The criteria to search.
          *
@@ -248,4 +250,4 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
             $scope.total    = null;
         })
     }
-);
+]);

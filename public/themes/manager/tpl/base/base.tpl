@@ -61,7 +61,7 @@
 
                           @Common/plugins/webarch/js/core.js,
                           @Common/plugins/pace/pace.min.js,
-                          @Common/js/onm/scripts.js"}
+                          @Common/js/onm/scripts.js" filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
 
@@ -102,7 +102,7 @@
                           @ManagerTheme/js/Controllers.js,
 
                           @ManagerTheme/js/controllers/*
-        "}
+        "  filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
     {/block}

@@ -1,5 +1,6 @@
 
-angular.module('ManagerApp.controllers').controller('InstanceCtrl',
+angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
+    '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
     function ($location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * The instance object.
@@ -188,4 +189,4 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
             $scope.selected = null;
         })
     }
-);
+]);

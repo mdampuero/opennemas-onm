@@ -11,7 +11,8 @@
  *
  * @return Object The user list controller.
  */
-angular.module('ManagerApp.controllers').controller('UserListCtrl',
+angular.module('ManagerApp.controllers').controller('UserListCtrl', [
+    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
     function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
@@ -307,4 +308,4 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
             $scope.total    = null;
         })
     }
-);
+]);

@@ -1,5 +1,6 @@
 
-angular.module('ManagerApp.controllers').controller('modalCtrl',
+angular.module('ManagerApp.controllers').controller('modalCtrl', [
+    '$modalInstance', '$scope', 'template', 'success',
     function ($modalInstance, $scope, template, success) {
         $scope.template = template;
 
@@ -29,4 +30,4 @@ angular.module('ManagerApp.controllers').controller('modalCtrl',
             $scope.template = null;
         })
     }
-);
+]);
