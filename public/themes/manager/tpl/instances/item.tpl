@@ -70,6 +70,18 @@
                         <dd>
                             [% instance.media_size | number: 2 %] MB
                         </dd>
+                        <dt>
+                            <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
+                        </dt>
+                        <dd>
+                            [% template.languages[instance.external.site_language] %]
+                        </dd>
+                        <dt>
+                            <h5><i class="fa fa-globe"></i> {t}Time Zone{/t}</h5>
+                        </dt>
+                        <dd>
+                            [% template.timezones[instance.external.time_zone] %]
+                        </dd>
                     </dl>
                 </div>
                 <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
@@ -215,18 +227,6 @@
                         <label class="form-label" for="template">{t}Database{/t}</label>
                         <div class="controls">
                             <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="template">{t}Language{/t}</label>
-                        <div class="controls">
-                            <select ng-model="instance.external.site_language" ng-options="key as value for (key, value) in template.languages"></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">{t}Time Zone{/t}</label>
-                        <div class="controls">
-                            <select ng-model="instance.external.time_zone" ng-options="key as value for (key, value) in template.timezones"></select>
                         </div>
                     </div>
                     <div class="form-group">
