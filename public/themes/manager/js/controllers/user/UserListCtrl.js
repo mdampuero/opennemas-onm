@@ -79,18 +79,34 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
          * Confirm delete action.
          */
         $scope.delete = function(user) {
-            var modal =  $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
-                controller:  'UserModalCtrl',
+            var modal = $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                backdrop: 'static',
+                controller: 'modalCtrl',
                 resolve: {
-                    selected: function() {
-                        return user;
+                    template: function() {
+                        return {
+                            name: 'delete-user'
+                        };
+                    },
+                    success: function() {
+                        return function() {
+                            return itemService.delete(
+                                'manager_ws_user_delete', user.id);
+                        }
                     }
                 }
             });
 
-            modal.result.then(function(data) {
-                if (data) {
+            modal.result.then(function (response) {
+                if (response.data.success) {
+                    if (response.data.message) {
+                        messenger.post({
+                            message: response.data.message.text,
+                            type:    response.data.message.type
+                        });
+                    };
+
                     list();
                 }
             });
@@ -100,18 +116,35 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
          * Confirm delete action.
          */
         $scope.deleteSelected = function() {
-            var modal =  $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm_delete.tpl',
-                controller:  'UserModalCtrl',
+            var modal = $modal.open({
+                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                backdrop: 'static',
+                controller: 'modalCtrl',
                 resolve: {
-                    selected: function() {
-                        return $scope.selected.users;
+                    template: function() {
+                        return {
+                            name: 'delete-users'
+                        };
+                    },
+                    success: function() {
+                        return function() {
+                            return itemService.deleteSelected(
+                                'manager_ws_users_delete',
+                                $scope.selected.users);
+                        }
                     }
                 }
             });
 
-            modal.result.then(function(data) {
-                if (data) {
+            modal.result.then(function (response) {
+                if (response.data) {
+                    for (var i = 0; i < response.data.messages.length; i++) {
+                        messenger.post({
+                            message: response.data.messages[i].text,
+                            type:    response.data.messages[i].type
+                        });
+                    };
+
                     list();
                 }
             });
@@ -208,6 +241,15 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
         }
 
         /**
+         * Checks if a user is selected
+         *
+         * @param string id The group id.
+         */
+        $scope.isSelected = function(id) {
+            return $scope.selected.users.indexOf(id) != -1
+        }
+
+        /**
          * Refresh the list of elements when some parameter changes.
          *
          * @param array newValues The new values
@@ -224,15 +266,6 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl',
                 }, 500);
             }
         }, true);
-
-        /**
-         * Checks if a user is selected
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-            return $scope.selected.users.indexOf(id) != -1
-        }
 
         /**
          * Searches instances given a criteria.

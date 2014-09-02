@@ -12,6 +12,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
                 TEMPLATE_USER: 'base'
             },
             external: {
+                activated_modules: [],
                 site_language: 'es_ES',
                 pass_level:    -1,
                 max_mailing:   0,
@@ -107,8 +108,13 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.save = function() {
             $scope.saving = 1;
 
-            $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
-            $scope.instance.external.last_invoice  = $scope.instance.external.last_invoice.toString();
+            if ($scope.instance.external.domain_expire) {
+                $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            }
+
+            if ($scope.instance.external.last_invoice) {
+                $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+            }
 
             itemService.save('manager_ws_instance_create', $scope.instance)
                 .then(function (response) {
@@ -152,8 +158,13 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl',
         $scope.update = function() {
             $scope.saving = 1;
 
-            $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
-            $scope.instance.external.last_invoice  = $scope.instance.external.last_invoice.toString();
+            if ($scope.instance.external.domain_expire) {
+                $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            }
+
+            if ($scope.instance.external.last_invoice) {
+                $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+            }
 
             itemService.update('manager_ws_instance_update', $scope.instance.id,
                 $scope.instance).then(function (response) {
