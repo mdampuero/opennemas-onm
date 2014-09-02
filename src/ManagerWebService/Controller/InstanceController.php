@@ -44,6 +44,34 @@ class InstanceController extends Controller
             );
         }
 
+        $im = $this->get('instance_manager');
+
+        $criteria = array(
+            'domains' => array()
+        );
+
+        foreach ($domains as $domain) {
+            $criteria['domains']['union'] = 'OR';
+            $criteria['domains'][] = array(
+                'value' => "^$domain|,[ ]*$domain|$domain$",
+                'operator' => 'REGEXP'
+            );
+        }
+
+        $instance = $im->findOneBy($criteria);
+
+        if ($instance) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('An instance with that domain already exists')
+                    )
+                )
+            );
+        }
+
         // Create internalName from domains
         if (!$internalName) {
             $internalName = explode('.', array_pop($domains));
@@ -63,7 +91,6 @@ class InstanceController extends Controller
 
         $instance->created = date('Y-m-d H:i:s');
 
-        $im      = $this->get('instance_manager');
         $creator = new InstanceCreator($im->getConnection());
 
         $im->checkInternalName($instance);
@@ -562,6 +589,32 @@ class InstanceController extends Controller
                     'message' => array(
                         'type' => 'error',
                         'text' => 'Instance domains cannot be empty'
+                    )
+                )
+            );
+        }
+
+        $criteria = array(
+            'domains' => array()
+        );
+
+        foreach ($domains as $domain) {
+            $criteria['domains']['union'] = 'OR';
+            $criteria['domains'][] = array(
+                'value' => "^$domain|,[ ]*$domain|$domain$",
+                'operator' => 'REGEXP'
+            );
+        }
+
+        $instance = $im->findOneBy($criteria);
+
+        if ($instance && $instance->id != $id) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('An instance with that domain already exists')
                     )
                 )
             );
