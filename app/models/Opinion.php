@@ -369,7 +369,11 @@ class Opinion extends Content
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
                 $tpl->assign('item', $this);
-                return $tpl->fetch('frontpage/contents/_blog.tpl');
+                $template = 'frontpage/contents/_blog.tpl';
+                if ($params['custom'] == 1) {
+                    $template = $params['tpl'];
+                }
+                return $tpl->fetch($template);
             }
         }
 
