@@ -161,79 +161,33 @@
                 <!-- BEGIN CHAT TOGGLER -->
                 <div class="pull-right">
                     <div class="chat-toggler">
-                        <span class="a" class="dropdown-toggle" id="my-task-list" data-placement="bottom"  data-content='' data-toggle="dropdown" data-original-title="Notifications">
-                            <div class="user-details">
-                                <div class="username">
-                                    <span class="badge badge-important hidden">3</span> [% user.name %]
-                                </div>
-                            </div>
-                            <div class="iconset top-down-arrow"></div>
-                        </span>
-                        <div id="notification-list" style="display:none">
-                            <div style="width:300px">
-                                <div class="notification-messages info">
-
-                                    <div class="message-wrapper">
-                                        <div class="heading">{t}No notifications{/t}</div>
-                                        <div class="description"></div>
-                                    </div>
-                                </div>
-                                <div class="notification-messages info hidden">
-                                    <!-- <div class="user-profile"> <img src="/assets/plugins/webarch/img/profiles/d.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/d.jpg" data-src-retina="/assets/plugins/webarch/img/profiles/d2x.jpg" width="35" height="35"> </div> -->
-                                    <div class="message-wrapper">
-                                        <div class="heading"> David Nester - Commented on your wall </div>
-                                        <div class="description"> Meeting postponed to tomorrow </div>
-                                        <div class="date pull-left"> A min ago </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="notification-messages danger hidden">
-                                    <div class="iconholder"> <i class="icon-warning-sign"></i> </div>
-                                    <div class="message-wrapper">
-                                        <div class="heading"> Server load limited </div>
-                                        <div class="description"> Database server has reached its daily capicity </div>
-                                        <div class="date pull-left"> 2 mins ago </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="notification-messages success hidden">
-                                    <!-- <div class="user-profile"> <img src="assets/img/profiles/h.jpg"    alt="" data-src="/assets/plugins/webarch/img/profiles/h.jpg" data-src-retina="assets/img/profiles/h2x.jpg" width="35" height="35"> </div> -->
-                                    <div class="message-wrapper">
-                                        <div class="heading"> You have got 150 messages </div>
-                                        <div class="description"> 150 newly unread messages in your inbox </div>
-                                        <div class="date pull-left"> An hour ago </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="profile-pic">
-                            {if $smarty.session.avatar_url}
-                                <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="35" >
-                            {else}
-                                {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="35"}
-                            {/if}
-                            <!-- <img src="assets/img/profiles/avatar_small.jpg"  alt="" data-src="assets/img/profiles/avatar_small.jpg" data-src-retina="assets/img/profiles/avatar_small2x.jpg" width="35" height="35" /> -->
-                        </div>
+                      <ul class="nav quick-section">
+                          <li class="quicklinks">
+                              <span class="a dropdown-toggle pull-right" data-placement="bottom" data-toggle="dropdown">
+                                  <div class="user-details">
+                                      <div class="username">
+                                          <span class="badge badge-important hidden">3</span> [% user.name %]
+                                      </div>
+                                  </div>
+                                  <div class="iconset top-down-arrow"></div>
+                              </span>
+                              <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="user-options">
+                                  <li>
+                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> My Account</a>
+                                  </li>
+                                  <li class="divider"></li>
+                                  <li>
+                                      <span class="a" ng-click="logout();">
+                                        <i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
+                                      </span>
+                                  </li>
+                              </ul>
+                              <div class="profile-pic">
+                                  <img class="gravatar" email="[% user.email %]" image="1" size="35" >
+                              </div>
+                          </li>
+                      </ul>
                     </div>
-                    <ul class="nav quick-section ">
-                        <li class="quicklinks">
-                            <span data-toggle="dropdown" class="a dropdown-toggle pull-right " href="#" id="user-options">
-                                <i class="fa fa-gear fa-lg"></i>
-                            </span>
-                            <ul class="dropdown-menu    pull-right" role="menu" aria-labelledby="user-options">
-                                <li>
-                                    <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> My Account</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <span class="a" ng-click="logout();">
-                                      <i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
-                                    </span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </div>
                 <!-- END CHAT TOGGLER -->
             </div>
@@ -294,7 +248,7 @@
         <!-- END SIDEBAR -->
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content" ng-class="{ 'condensed': mini }">
-                <div ng-view autoscroll="true"></div>
+                <div id="view" ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
