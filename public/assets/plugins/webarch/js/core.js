@@ -365,7 +365,7 @@ $(document).ready(function() {
         $.sidr('close', 'sidr');
         if($('#main-menu').attr('data-inner-menu')=='1'){
             //Do nothing
-            console.log("Menu is already condensed");
+            // console.log("Menu is already condensed");
         }
         else{
             if($('#main-menu').hasClass('mini')){
@@ -534,6 +534,6 @@ $(document).ready(function() {
 	function calculateHeight(){
 			var contentHeight=parseInt($('.page-content').height());
 			if(911 > contentHeight){
-				console.log("Small");
+				// console.log("Small");
 			}
 	}
