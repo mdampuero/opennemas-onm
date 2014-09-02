@@ -202,6 +202,9 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl',
             });
         }
 
+        /**
+         * Frees up memory before controller destroy event
+         */
         $scope.$on('$destroy', function() {
             $scope.criteria = null;
             $scope.epp      = null;

@@ -90,6 +90,9 @@ angular.module('ManagerApp.controllers').controller('OpcacheCtrl',
         };
 
 
+        /**
+         * Formats a number into a computer space measure
+         */
         function formatSpace(bytes, precision) {
             if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
             if (typeof precision === 'undefined') precision = 1;
@@ -98,6 +101,9 @@ angular.module('ManagerApp.controllers').controller('OpcacheCtrl',
             return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
         }
 
+        /**
+         * Frees up memory before controller destroy event
+         */
         $scope.$on('$destroy', function() {
             $scope.serverData      = null;
             $scope.chartObjectMem  = null;

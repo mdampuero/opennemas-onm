@@ -69,6 +69,9 @@ angular.module('ManagerApp.controllers').controller('UserGroupModalCtrl',
                 });
         }
 
+        /**
+         * Frees up memory before controller destroy event
+         */
         $scope.$on('$destroy', function() {
             $scope.multiple = null;
             $scope.selected = null;

@@ -235,9 +235,9 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
             });
     })
     .value('googleChartApiConfig', {
-            version: '1',
-            optionalSettings: {
-                packages: ['corechart'],
-                language: 'fr'
-            }
+        version: '1',
+        optionalSettings: {
+            packages: ['corechart'],
+            language: 'fr'
+        }
     });;

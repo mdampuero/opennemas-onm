@@ -21,5 +21,12 @@ angular.module('ManagerApp.controllers').controller('modalCtrl',
                 $modalInstance.close(response);
             });
         }
+
+        /**
+         * Frees up memory before controller destroy event
+         */
+        $scope.$on('$destroy', function() {
+            $scope.template = null;
+        })
     }
 );

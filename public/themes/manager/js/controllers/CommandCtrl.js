@@ -16,6 +16,17 @@ angular.module('ManagerApp.controllers').controller('CommandCtrl',
          */
         $scope.name = data.name;
 
+        /**
+         * Output of the command
+         */
         $scope.output = data.output;
+
+        /**
+         * Frees up memory before controller destroy event
+         */
+        $scope.$on('$destroy', function() {
+            $scope.name  = null;
+            $scope.output   = null;
+        });
     }
 );
