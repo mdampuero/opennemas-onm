@@ -24,6 +24,7 @@ class ImportImagesFromArticleBodyCommand extends ContainerAwareCommand
             ->setDefinition(
                 array(
                     new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to import images from', '*'),
+                    new InputOption('wordpress', 'w', InputOption::VALUE_NONE, 'Import images from wordpress'),
                 )
             )
             ->setName('import:images')
@@ -44,6 +45,7 @@ EOF
 
         // Get instance name from prompt
         $instance = $input->getOption('instance');
+        $isWordpress = $input->getOption('wordpress');
 
         // Set input/output interface
         $this->input = $input;
@@ -122,8 +124,12 @@ EOF
         // Initialize script
         $output->writeln("\tStart importing images from articles");
 
-        // Import
-        $this->importImages();
+        // Check if wordpress option is selected and import
+        if ($isWordpress) {
+            $this->importImagesWP();
+        } else {
+            $this->importImages();
+        }
 
         // Finish script
         $output->writeln("\n\tFinished importing");
@@ -179,6 +185,147 @@ EOF
         }
     }
 
+    /**
+     * Import all images from articles
+     */
+    public function importImagesWP()
+    {
+        // Sql order, limit and filters
+        $order  = array('created' => 'DESC');
+        $filter = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'body'              => array(array('value' => '%<img%', 'operator' => 'LIKE'))
+        );
+
+        // Get entity repository
+        $this->er = getService('entity_repository');
+
+        // Count total articles
+        $articlesTotal = $this->er->countBy($filter);
+
+        // Fetch articles paginated
+        $perPage = 100;
+        $iterations = (int)($articlesTotal/$perPage)+1;
+        $i = 1;
+        while ($i <= $iterations) {
+            $articles = $this->er->findBy($filter, $order, $perPage, $i);
+            $this->output->write(
+                "Processing page $i of $iterations with ".count($articles)." articles\n"
+            );
+
+            // Process
+            $this->processArticlesWP($articles);
+
+            $i++;
+            unset($articles);
+            gc_collect_cycles();
+        }
+    }
+
+
+    /**
+     * Process articles to extract images from wordpress contents
+     *
+     * @param array $articles  Articles to process.
+     */
+    public function processArticlesWP($articles)
+    {
+        foreach ($articles as $key => $article) {
+            // Get all caption images from article body
+            preg_match_all(
+                '@\[caption .*?\].* src="?(.*?)" alt="?(.*?)".*?\[\/caption\]@',
+                $article->body,
+                $result
+            );
+
+            if (empty($result[0])) {
+                preg_match_all(
+                    '@\[caption .*?\].* alt="?(.*?)" src="?(.*?)".*?\[\/caption\]@',
+                    $article->body,
+                    $result
+                );
+
+                if (empty($result[0])) {
+                    preg_match_all(
+                        '@<a .*?href=".+?".*?><img .*?src="?(.*?)" alt="?(.*?)".*?><\/a>@',
+                        $article->body,
+                        $result
+                    );
+
+                    if (empty($result[0])) {
+                        preg_match_all(
+                            '@<a .*?href=".+?".*?><img .*?alt="?(.*?)" src="?(.*?)".*?><\/a>@',
+                            $article->body,
+                            $result
+                        );
+
+                        if (!empty($result[0])) {
+                            $imageSrc = $result[2][0];
+                            $footer   = $result[1][0];
+                        }
+                    } else {
+                        $imageSrc = $result[1][0];
+                        $footer   = $result[2][0];
+                    }
+                } else {
+                    $imageSrc = $result[2][0];
+                    $footer   = $result[1][0];
+                }
+            } else {
+                $imageSrc = $result[1][0];
+                $footer   = $result[2][0];
+            }
+
+            // Create image in onm
+            $imageId = $this->processImage(
+                html_entity_decode($imageSrc),
+                $article->category_name
+            );
+
+            // Replace body to eliminate [caption]
+            $body = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $article->body);
+            // Replace body to eliminate <a><img></a>
+            $body = preg_replace('@<a .*?href=".+?".*?><img .*?><\/a>@', '', $body);
+            $body = preg_replace('@<img .*?>@', '', $body);
+
+            // Set sql's for updating articles body
+            $sql = 'UPDATE `contents` SET `body` = \''.$body.'\',
+                   `description` = \''.\StringUtils::get_num_words($body, 50).'\'
+                    WHERE `pk_content` ='.$article->id;
+
+            $rs = $this->connection->Execute($sql);
+            if ($rs == false) {
+                $this->output->writeln(
+                    "\tArticle ".$article->id." body not updated"
+                );
+            }
+
+            // Set image to article and update
+            if ($imageId !== false) {
+                // Set sql's for updating articles images
+                $sql = 'UPDATE  `articles` SET  `img1` = '.$imageId.',
+                        `img1_footer` = \''.$footer.'\',
+                        `img2` = '.$imageId.',
+                        `img2_footer` = \''.$footer.'\' WHERE  `pk_article` = '.$article->id;
+
+                $rs = $this->connection->Execute($sql);
+                if ($rs == false) {
+                    $this->output->writeln(
+                        "\tArticle ".$article->id.
+                        " not updated with image ".$imageId
+                    );
+                }
+            }
+
+            unset($body);
+            unset($sql);
+            unset($result);
+            unset($imageSrc);
+            unset($footer);
+            gc_collect_cycles();
+            $this->output->writeln("\tArticle ".($key+1)." of ".count($articles)." processed");
+        }
+    }
 
     /**
      * Process articles to extract images
