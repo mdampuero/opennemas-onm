@@ -338,21 +338,26 @@ class InstanceController extends Controller
      */
     public function exportAction(Request $request)
     {
-        $name  = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
-        $email = $request->query->filter('email', '', FILTER_SANITIZE_STRING);
+        $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
+        $ids    = $request->query->filter('ids', '', FILTER_SANITIZE_STRING);
 
         $criteria = array();
         $order    = array('id' => 'asc');
 
-        if (!empty($name)) {
-            $criteria['name'] = array(
-                array('value' => "%$name%", 'operator' => 'LIKE')
+        if (!empty($search)) {
+            $criteria = array(
+                'name' => array(
+                    array('value' => "%$search%", 'operator' => 'LIKE')
+                ),
+                'contact_mail' => array(
+                    array('value' => "%$search%", 'operator' => 'LIKE')
+                )
             );
-        }
-
-        if (!empty($email)) {
-            $criteria['contact_mail'] = array(
-                array('value' => "%$email%", 'operator' => 'LIKE')
+        } elseif (!empty($ids)) {
+            $criteria = array(
+                'id' => array(
+                    array('value' => explode(',', $ids), 'operator' => 'IN')
+                ),
             );
         }
 
@@ -372,8 +377,8 @@ class InstanceController extends Controller
             )
         );
 
-        if ($name != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($name);
+        if (!empty($search) && $search != '*') {
+            $fileNameFilter = '-'.\Onm\StringUtils::get_title($search);
         } else {
             $fileNameFilter = '-complete';
         }

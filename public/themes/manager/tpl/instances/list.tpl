@@ -48,12 +48,12 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li>
-                                    <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name[0].value %]">
                                         <i class="fa fa-download"></i> {t}Export current list{/t}
                                     </a>
                                 </li>
                                 <li ng-if="selected.instances.length > 0">
-                                    <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">
+                                    <a ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
                                         <i class="fa fa-download"></i> {t}Export selection{/t}
                                     </a>
                                 </li>
