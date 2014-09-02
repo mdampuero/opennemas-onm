@@ -1,0 +1,11 @@
+manager_framework_commands:
+    path: /commands
+    defaults: { _controller:  ManagerBundle:Commands:list }
+    options:
+        expose: true
+
+manager_framework_opcache_status:
+    path: /opcache
+    defaults: { _controller:  ManagerBundle:FrameworkStatus:opcacheStatus }
+    options:
+        expose: true

@@ -1,441 +1,502 @@
-{extends file="base/base.tpl"}
-
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
-{block name="content"}
-<form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('instance', { contact_mail_like: '', name_like: '' }, 'last_login', 'asc', 'manager_ws_instances_list', '{{$smarty.const.CURRENT_LANGUAGE}}', 25); name = 1; domains = 1; contact_mail = 1; last_login = 1; created = 1; contents = 1; alexa = 1; page_views = 1">
-    <div class="top-action-bar clearfix" >
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Instances{/t}</h2>
-            </div>
-            <ul class="old-button">
-                <li ng-if="shvs.selected.length > 0">
-                    <a href="#">
-                        <img src="{$params.COMMON_ASSET_DIR}images/select.png" title="{t}Batch actions{/t}" alt="{t}Batch actions{/t}"/>
-                        <br/>{t}Batch actions{/t}
-                    </a>
-                    <ul class="dropdown-menu" style="margin-top: 0;">
-                        <li>
-                            <a href="#" id="batch-activate" ng-click="updateSelectedItems('manager_ws_instances_set_activated', 'activated', 1, 'loading')">
-                                {t}Batch activate{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="batch-desactivate" ng-click="updateSelectedItems('manager_ws_instances_set_activated', 'activated', 0, 'loading')">
-                                {t}Batch desactivate{/t}
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'manager_ws_instances_delete')">
-                                <i class="icon-trash"></i>
-                                {t}Delete{/t}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                <li>
-                    <a href="{url name=manager_instance_create category=$category}">
-                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" alt="{t}New Instance{/t}">
-                        <br />{t}Create{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
+<div class="content">
+    <div class="page-title">
+        <h3 class="pull-left">
+            <i class="fa fa-cubes"></i> {t}Instances{/t}
+        </h3>
+        <ul class="breadcrumb pull-right">
+            <li>
+                <p>{t}YOU ARE HERE{/t}</p>
+            </li>
+            <li>
+                <a href="#">{t}Dashboard{/t}</a>
+            </li>
+            <li>
+                <a href="#/instances" class="active">{t}Instances{/t}</a>
+            </li>
+        </ul>
     </div>
-<div class="wrapper-content">
-    {render_messages}
-    <div class="table-info clearfix">
-        <div class="pull-left">
+    <div class="grid simple">
+	   <div class="grid-title clearfix">
             <div class="form-inline">
-                <strong>{t}FILTER:{/t}</strong>
-                &nbsp;&nbsp;
-                <input type="text" placeholder="{t}Filter by instance name{/t}" name="name" ng-model="shvs.search.name_like"/>
-                &nbsp;&nbsp;
-                <input type="text" autofocus placeholder="{t}Filter by e-mail{/t}" name="contact_mail" ng-model="shvs.search.contact_mail_like"/>
-                &nbsp;&nbsp;
-                <select ng-model="shvs.elements_per_page" class="input-small">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="500">500</option>
-                </select>
-            </div>
-        </div>
-        <div class="pull-left">
-            <a href="{url name=manager_ws_instances_list_export}?name=[% shvs.search.name_like %]&email=[% shvs.search.contact_mail_like %]">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
-        </div>
-        <div class="pull-right">
-            <div class="dropdown">
-                <div class="btn dropdown-toggle">
-                    <span class="caret"></span>
+                <div class="form-filter">
+                    <div class="hidden-sm hidden-md hidden-lg filter">{t}Filter:{/t}</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon primary">
+                                <span class="arrow"></span>
+                                <i class="fa fa-cube"></i>
+                            </span>
+                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <select class="xsmall" ng-model="epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
+                    </div>
+                    <i class="fa fa-circle-o-notch fa-lg fa-spin" ng-if="loading"></i>
                 </div>
-                <div class="dropdown-menu pull-right container" role="menu">
-                    <div class="row">
-                        <div class="span2">
-                            <div ng-click="name = !name;">
-                                <i class="pull-right" ng-class="{ 'icon-ok': name }"></i>
-                                {t}Name{/t}
-                            </div>
-                            <div ng-click="domains = !domains">
-                                <i class="pull-right" ng-class="{ 'icon-ok': domains }"></i>
-                                {t}Domains{/t}
-                            </div>
-                            <div ng-click="contact_mail = !contact_mail">
-                                <i class="pull-right" ng-class="{ 'icon-ok': contact_mail }"></i>
-                                {t}Contact{/t}
-                            </div>
-                            <div ng-click="last_login = !last_login">
-                                <i class="pull-right" ng-class="{ 'icon-ok': last_login }"></i>
-                                {t}Last access{/t}
-                            </div>
-                            <div ng-click="created = !created">
-                                <i class="pull-right" ng-class="{ 'icon-ok': created }"></i>
-                                {t}Created{/t}
-                            </div>
-                            <div ng-click="contents = !contents">
-                                <i class="pull-right" ng-class="{ 'icon-ok': contents }"></i>
-                                {t}Contents{/t}
-                            </div>
-                            <div ng-click="articles = !articles">
-                                <i class="pull-right" ng-class="{ 'icon-ok': articles }"></i>
-                                {t}Articles{/t}
-                            </div>
-                            <div ng-click="opinions = !opinions">
-                                <i class="pull-right" ng-class="{ 'icon-ok': opinions }"></i>
-                                {t}Opinions{/t}
-                            </div>
-                            <div ng-click="advertisements = !advertisements">
-                                <i class="pull-right" ng-class="{ 'icon-ok': advertisements }"></i>
-                                {t}Advertisements{/t}
-                            </div>
-                            <div ng-click="albums = !albums">
-                                <i class="pull-right" ng-class="{ 'icon-ok': albums }"></i>
-                                {t}Albums{/t}
-                            </div>
-                            <div ng-click="photos = !photos">
-                                <i class="pull-right" ng-class="{ 'icon-ok': photos }"></i>
-                                {t}Photos{/t}
-                            </div>
+                <div class="action-buttons">
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name[0].value %]">
+                                        <i class="fa fa-download"></i> {t}Export current list{/t}
+                                    </a>
+                                </li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <a ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                                        <i class="fa fa-download"></i> {t}Export selection{/t}
+                                    </a>
+                                </li>
+                                <li class="divider" ng-if="selected.instances.length > 0"></li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="setEnabledSelected(1)">
+                                        <i class="fa fa-check"></i> {t}Enable{/t}
+                                    </span>
+                                </li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="setEnabledSelected(0)">
+                                        <i class="fa fa-times"></i> {t}Disable{/t}
+                                    </span>
+                                </li>
+                                <li class="divider" ng-if="selected.instances.length > 0"></li>
+                                <li ng-if="selected.instances.length > 0">
+                                    <span class="a" ng-click="deleteSelected()">
+                                        <i class="fa fa-trash-o"></i> {t}Delete{/t}
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="span2">
-                            <div ng-click="videos = !videos">
-                                <i class="pull-right" ng-class="{ 'icon-ok': videos }"></i>
-                                {t}Videos{/t}
-                            </div>
-                            <div ng-click="widgets = !widgets">
-                                <i class="pull-right" ng-class="{ 'icon-ok': widgets }"></i>
-                                {t}Widgets{/t}
-                            </div>
-                            <div ng-click="static_pages = !static_pages">
-                                <i class="pull-right" ng-class="{ 'icon-ok': static_pages }"></i>
-                                {t}Static pages{/t}
-                            </div>
-                            <div ng-click="attachments = !attachments">
-                                <i class="pull-right" ng-class="{ 'icon-ok': attachments }"></i>
-                                {t}Attachments{/t}
-                            </div>
-                            <div ng-click="polls = !polls">
-                                <i class="pull-right" ng-class="{ 'icon-ok': polls }"></i>
-                                {t}Polls{/t}
-                            </div>
-                            <div ng-click="letters = !letters">
-                                <i class="pull-right" ng-class="{ 'icon-ok': letters }"></i>
-                                {t}Letters{/t}
-                            </div>
-                            <div ng-click="media_size = !media_size">
-                                <i class="pull-right" ng-class="{ 'icon-ok': media_size }"></i>
-                                {t}Media size{/t}
-                            </div>
-                            <div ng-click="alexa = !alexa">
-                                <i class="pull-right" ng-class="{ 'icon-ok': alexa }"></i>
-                                {t}Alexa{/t}
-                            </div>
-                            <div ng-click="page_views = !page_views">
-                                <i class="pull-right" ng-class="{ 'icon-ok': page_views }"></i>
-                                {t}Page views{/t}
-                            </div>
-                            <div ng-click="users = !users">
-                                <i class="pull-right" ng-class="{ 'icon-ok': users }"></i>
-                                {t}Users{/t}
-                            </div>
-                            <div ng-click="$('th').length();">
-                                <i class="pull-right" ng-class="{ 'icon-ok': emails }"></i>
-                                {t}Emails{/t}
-                            </div>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> {t}Create{/t}
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div ng-include="'instances'"></div>
-    <script type="text/ng-template" id="instances">
-        <div class="spinner-wrapper" ng-if="loading">
-            <div class="spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
-        </div>
-
-        <table id="manager" class="table table-hover table-condensed" ng-if="!loading">
-
-            <thead ng-if="shvs.contents.length >= 0">
-                <tr>
-                    <th style="width:15px;">
-                        <checkbox select-all="true"></checkbox>
-                    </th>
-                    <th class="pointer" width="25px" ng-click="sort('id')">
-                        {t}#{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'id', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'id' }"></i>
-                    </th>
-                    <th class="pointer" width="" ng-click="sort('name')" ng-show="name">
-                        {t}Name{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'name', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'name' }"></i>
-                    </th>
-                    <th class="left pointer" ng-click="sort('domains')" ng-show="domains">
-                        {t}Domains{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'domains', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'domains' }"></i>
-                    </th>
-                    <th class="left pointer" ng-click="sort('contact_email')" ng-show="contact_mail">
-                        {t}Contact{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contact_mail', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contact_mail' }"></i>
-                    </th>
-                    <th class="left pointer" ng-click="sort('last_login')" ng-show="last_login">
-                        {t}Last access{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'last_login', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'last_login' }"></i>
-                    </th>
-                    <th class="left pointer" ng-click="sort('created')" ng-show="created">
-                        {t}Created{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'created', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'created' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('contents')" ng-show="contents">
-                        {t}Contents{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'contents', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'contents' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('articles')" ng-show="articles">
-                        {t}Articles{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'articles', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'articles' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('opinions')" ng-show="opinions">
-                        {t}Opinions{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'opinions', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'opinions' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('advertisements')" ng-show="advertisements">
-                        {t}Advertisements{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'advertisements', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'advertisements' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('albums')" ng-show="albums">
-                        {t}Albums{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'albums', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'albums' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('photos')" ng-show="photos">
-                        {t}Photos{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'photos', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'photos' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('videos')" ng-show="videos">
-                        {t}Videos{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'videos', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'videos' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('widgets')" ng-show="widgets">
-                        {t}Widgets{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'widgets', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'widgets' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('static_pages')" ng-show="static_pages">
-                        {t}Static pages{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'static_pages', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'static_pages' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('attachments')" ng-show="attachments">
-                        {t}Attachments{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'attachments', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'attachments' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('polls')" ng-show="polls">
-                        {t}Polls{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'polls', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'polls' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('letters')" ng-show="letters">
-                        {t}Letters{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'letters', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'letters' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('media_size')" ng-show="media_size">
-                        {t}Media size{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'media_size', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'media_size' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('alexa')" ng-show="alexa">
-                        {t}Alexa{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'alexa', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'alexa' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('page_views')" ng-show="page_views">
-                        {t}Page views{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'page_views', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'page_views' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('users')" ng-show="users">
-                        {t}Users{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'users', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'users' }"></i>
-                    </th>
-                    <th class="center pointer" ng-click="sort('emails')" ng-show="emails">
-                        {t}Emails{/t}
-                        <i ng-class="{ 'icon-caret-up': shvs.sort_order == 'asc' && shvs.sort_by == 'emails', 'icon-caret-down': shvs.sort_order == 'desc' && shvs.sort_by == 'emails' }"></i>
-                    </th>
-                    <th class="center" width="70px">{t}Activated{/t}
-                    </th>
-                    <th class="center" width="10px">{t}Actions{/t}
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr ng-if="shvs.contents.length == 0">
-                    <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
-                </tr>
-                <tr ng-if="shvs.contents.length >= 0" ng-repeat="instance in shvs.contents" ng-class="{ row_selected: isSelected(instance.id) }">
-                    <td>
-                        <checkbox index="[% instance.id %]">
-                    </td>
-                    <td>
-                        [% instance.id %]
-                    </td>
-                    <td ng-show="name">
-                        <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
-                            [% instance.name %]
-                        </a>
-                    </td>
-                    <td class="left" ng-show="domains">
-                        <div class="domains">
-                            <small>
-                                <ul ng-if="instance.domains.length > 1">
-                                    <li ng-repeat="domain in instance.domains">
-                                        <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
-                                    </li>
-                                </ul>
-                                <span ng-if="instance.domains.length <= 1">
-                                    <span ng-repeat="domain in instance.domains">
-                                        <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
-                                    </span>
+        <div class="grid-body no-padding">
+                <div class="grid-overlay" ng-if="loading"></div>
+                <table class="table table-hover no-margin">
+                    <thead ng-if="instances.length >= 0">
+                        <tr>
+                            <th style="width:15px;">
+                                <div class="checkbox checkbox-default">
+                                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                    <label for="select-all"></label>
+                                </div>
+                            </th>
+                            <th class="pointer" width="25px" ng-click="sort('id')">
+                                {t}#{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.id == 'asc', 'fa fa-caret-down': orderBy.id == 'desc' }"></i>
+                            </th>
+                            <th class="pointer" width="" ng-click="sort('name')" ng-show="columns.name">
+                                {t}Name{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
+                            </th>
+                            <th class="pointer" ng-click="sort('domains')" ng-show="columns.domains">
+                                {t}Domains{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
+                            </th>
+                            <th class="pointer" ng-click="sort('domain_expire')" ng-show="columns.domain_expire">
+                                {t}Domain expire{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
+                            </th>
+                            <th class="pointer" ng-click="sort('contact_email')" ng-show="columns.contact_mail">
+                                {t}Contact{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.contact_mail == 'asc', 'fa fa-caret-down': orderBy.contact_mail == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('last_login')" ng-show="columns.last_login">
+                                {t}Last access{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.last_login == 'asc', 'fa fa-caret-down': orderBy.last_login == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('created')" ng-show="columns.created">
+                                {t}Created{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.created == 'asc', 'fa fa-caret-down': orderBy.created == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('contents')" ng-show="columns.contents">
+                                <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.contents == 'asc', 'fa fa-caret-down': orderBy.contents == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('articles')" ng-show="columns.articles">
+                                {t}Articles{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.articles == 'asc', 'fa fa-caret-down': orderBy.articles == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('opinions')" ng-show="columns.opinions">
+                                {t}Opinions{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.opinions == 'asc', 'fa fa-caret-down': orderBy.opinions == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="columns.advertisements">
+                                {t}Advertisements{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.advertisements == 'asc', 'fa fa-caret-down': orderBy.advertisements == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('albums')" ng-show="columns.albums">
+                                {t}Albums{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.albums == 'asc', 'fa fa-caret-down': orderBy.albums == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('photos')" ng-show="columns.photos">
+                                {t}Photos{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.photos == 'asc', 'fa fa-caret-down': orderBy.photos == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('videos')" ng-show="columns.videos">
+                                {t}Videos{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.videos == 'asc', 'fa fa-caret-down': orderBy.videos == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('widgets')" ng-show="columns.widgets">
+                                {t}Widgets{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.widgets == 'asc', 'fa fa-caret-down': orderBy.widgets == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="columns.static_pages">
+                                {t}Static pages{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.static_pages == 'asc', 'fa fa-caret-down': orderBy.static_pages == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('attachments')" ng-show="columns.attachments">
+                                {t}Attachments{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.attachments == 'asc', 'fa fa-caret-down': orderBy.attachments == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('polls')" ng-show="columns.polls">
+                                {t}Polls{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.polls == 'asc', 'fa fa-caret-down': orderBy.polls == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('letters')" ng-show="columns.letters">
+                                {t}Letters{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.letters == 'asc', 'fa fa-caret-down': orderBy.letters == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('media_size')" ng-show="columns.media_size">
+                                {t}Media size{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.media_size == 'asc', 'fa fa-caret-down': orderBy.media_size == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('alexa')" ng-show="columns.alexa">
+                                {t}Alexa{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.alexa == 'asc', 'fa fa-caret-down': orderBy.alexa == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('page_views')" ng-show="columns.page_views">
+                                {t}Page views{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.page_views == 'asc', 'fa fa-caret-down': orderBy.page_views == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('users')" ng-show="columns.users">
+                                {t}Users{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.users == 'asc', 'fa fa-caret-down': orderBy.users == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('emails')" ng-show="columns.emails">
+                                {t}Emails{/t}
+                                <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
+                            </th>
+                            <th class="text-center" style="width: 10px">
+                                <div class="dropdown">
+                                    <div class="dropdown-toggle">
+                                        <i class="fa fa-columns" tooltip-html-unsafe="{t}Columns{/t}"></i>
+                                    </div>
+                                    <div class="dropdown-menu container pull-right" role="menu">
+                                        <div class="pull-left">
+                                            <ul class="no-style">
+                                                <li ng-click="columns.name = !columns.name;">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.name, 'fa-blank': !columns.name }"></i>
+                                                        {t}Name{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.domains = !columns.domains">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.domains, 'fa-blank': !columns.domains }"></i>
+                                                        {t}Domains{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.domain_expire = !columns.domain_expire;">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.domain_expire, 'fa-blank': !columns.domain_expire }"></i>
+                                                        {t}Doman expire{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.contact_mail = !columns.contact_mail">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.contact_mail, 'fa-blank': !columns.contact_mail }"></i>
+                                                        {t}Contact{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.last_login = !columns.last_login">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.last_login, 'fa-blank': !columns.last_login }"></i>
+                                                        {t}Last access{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.created = !columns.created">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.created, 'fa-blank': !columns.created }"></i>
+                                                        {t}Created{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.contents = !columns.contents">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.contents, 'fa-blank': !columns.contents }"></i>
+                                                        {t}Contents{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.articles = !columns.articles">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.articles, 'fa-blank': !columns.articles }"></i>
+                                                        {t}Articles{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.opinions = !columns.opinions">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.opinions, 'fa-blank': !columns.opinions }"></i>
+                                                        {t}Opinions{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.advertisements = !columns.advertisements">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.advertisements, 'fa-blank': !columns.advertisements }"></i>
+                                                        {t}Advertisements{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.albums = !columns.albums">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.albums, 'fa-blank': !columns.albums }"></i>
+                                                        {t}Albums{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.photos = !columns.photos">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.photos, 'fa-blank': !columns.photos }"></i>
+                                                        {t}Photos{/t}
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="pull-left">
+                                            <ul class="no-style">
+                                                <li ng-click="columns.videos = !columns.videos">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.videos, 'fa-blank': !columns.videos }"></i>
+                                                        {t}Videos{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.widgets = !columns.widgets">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.widgets, 'fa-blank': !columns.widgets }"></i>
+                                                        {t}Widgets{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.static_pages = !columns.static_pages">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.static_pages, 'fa-blank': !columns.static_pages }"></i>
+                                                        {t}Static pages{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.attachments = !columns.attachments">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.attachments, 'fa-blank': !columns.attachments }"></i>
+                                                        {t}Attachments{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.polls = !columns.polls">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.polls, 'fa-blank': !columns.polls }"></i>
+                                                        {t}Polls{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.letters = !columns.letters">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.letters, 'fa-blank': !columns.letters }"></i>
+                                                        {t}Letters{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.media_size = !columns.media_size">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.media_size, 'fa-blank': !columns.media_size }"></i>
+                                                        {t}Media size{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.alexa = !columns.alexa">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.alexa, 'fa-blank': !columns.alexa }"></i>
+                                                        {t}Alexa{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.page_views = !columns.page_views">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.page_views, 'fa-blank': !columns.page_views }"></i>
+                                                        {t}Page views{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.users = !columns.users">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.users, 'fa-blank': !columns.users }"></i>
+                                                        {t}Users{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.emails = !columns.emails;">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.emails, 'fa-blank': !columns.emails }"></i>
+                                                        {t}Emails{/t}
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="instances.length == 0">
+                            <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
+                        </tr>
+                        <tr ng-if="instances.length >= 0" ng-repeat="instance in instances" ng-class="{ row_selected: isSelected(instance.id) }">
+                            <td>
+                                <div class="checkbox check-default">
+                                    <input id="checkbox[%$index%]" checklist-model="selected.instances" checklist-value="instance.id" type="checkbox">
+                                    <label for="checkbox[%$index%]"></label>
+                                </div>
+                            </td>
+                            <td>
+                                [% instance.id %]
+                            </td>
+                            <td ng-show="columns.name">
+                                <a ng-href="[% instance.show_url %]" title="{t}Edit{/t}">
+                                    [% instance.name %]
+                                </a>
+                                <div class="listing-inline-actions">
+                                    <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
+                                        <i class="fa fa-pencil"></i>Editar
+                                    </a>
+                                    <button class="link link-danger" ng-click="delete(instance)" type="button">
+                                        <i class="fa fa-trash-o"></i>Eliminar
+                                    </button>
+                                </div>
+                            </td>
+                            <td ng-show="columns.domains">
+                                <div class="domains">
+                                    <small>
+                                        <ul class="domain-list no-style" ng-if="instance.domains.length > 1">
+                                            <li ng-repeat="domain in instance.domains">
+                                                <a href="http://[% domain %]" ng-class="{ 'active': $index == instance.main_domain - 1 }" target="_blank">[% domain %]</a>
+                                            </li>
+                                        </ul>
+                                        <span ng-if="instance.domains.length <= 1">
+                                            <span ng-repeat="domain in instance.domains">
+                                                <a href="http://[% domain %]" target="_blank" title="[% instance.name %]">[% domain %]</a>
+                                            </span>
+                                        </span>
+                                    </small>
+                                </div>
+                            </td>
+                            <td ng-show="columns.domain_expire">
+                                [% instance.external.domain_expire %]
+                            </td>
+                            <td ng-show="columns.contact_mail">
+                                <div class="creator">
+                                    <a ng-href="mailto:[% instance.contact_mail %]" title="Send an email to the instance manager"> [% instance.contact_mail %]</a>
+                                </div>
+                            </td>
+                            <td class="text-center" ng-show="columns.last_login">
+                                [% instance.last_login %]
+                            </td>
+                            <td class="nowrap" ng-show="columns.created">
+                                [% instance.created %]
+                            </td>
+                            <td class="text-center" ng-show="columns.contents">
+                                <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + instance.articles + '<br>{t}Ads{/t}: ' + instance.advertisements + '<br>{t}Files{/t}: ' + instance.attachments + '<br>{t}Opinions{/t}: ' + instance.opinions + '<br>{t}Albums{/t}: ' + instance.albums + '<br>{t}Images{/t}: ' + instance.photos + '<br>{t}Videos{/t}: ' + instance.videos + '<br>{t}Polls{/t}: ' + instance.polls + '<br>{t}Widgets{/t}: ' + instance.widgets + '<br>{t}Static pages{/t}: ' + instance.static_pages + '<br>{t}Letters{/t}: ' + instance.letters %]">
+                                    [% instance.contents %]
                                 </span>
-                            </small>
-                        </div>
-                    </td>
-                    <td class="left" ng-show="contact_mail"
-                        <div class="creator">
-                            <a ng-href="mailto:[% instance.contact_mail %]" title="Send an email to the instance manager"> [% instance.contact_mail %]</a>
-                        </div>
-                    </td>
-                    <td class="center" ng-show="last_login">
-                        [% instance.last_login  | moment : 'YYYY-MM-DD HH:mm' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    </td>
-                    <td class="nowrap left" ng-show="created">[% instance.created | moment : 'YYYY-MM-DD' : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    </td>
-                    <td class="center" ng-show="contents">
-                        <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + instance.articles + '<br>{t}Ads{/t}: ' + instance.advertisements + '<br>{t}Files{/t}: ' + instance.attachments + '<br>{t}Opinions{/t}: ' + instance.opinions + '<br>{t}Albums{/t}: ' + instance.albums + '<br>{t}Images{/t}: ' + instance.photos + '<br>{t}Videos{/t}: ' + instance.videos + '<br>{t}Polls{/t}: ' + instance.polls + '<br>{t}Widgets{/t}: ' + instance.widgets + '<br>{t}Static pages{/t}: ' + instance.static_pages + '<br>{t}Letters{/t}: ' + instance.letters %]">
-                            [% instance.contents %]
-                        </span>
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['contents'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['contents'] < 0 }" tooltip-html-unsafe="[% instance.deltas['contents'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="articles">
-                        [% instance.articles %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['articles'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['articles'] < 0 }" tooltip-html-unsafe="[% instance.deltas['articles'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="opinions">
-                        [% instance.opinions %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['opinions'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['opinions'] < 0 }" tooltip-html-unsafe="[% instance.deltas['opinions'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="advertisements">
-                        [% instance.advertisements %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['advertisements'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['advertisements'] < 0 }" tooltip-html-unsafe="[% instance.deltas['advertisements'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="albums">
-                        [% instance.albums %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['albums'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['albums'] < 0 }" tooltip-html-unsafe="[% instance.deltas['albums'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="photos">
-                        [% instance.photos %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['photos'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['photos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['photos'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="videos">
-                        [% instance.videos %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['videos'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['videos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['videos'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="widgets">
-                        [% instance.widgets %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['widgets'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['widgets'] < 0 }" tooltip-html-unsafe="[% instance.deltas['widgets'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="static_pages">
-                        [% instance.static_pages %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['static_pages'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['static_pages'] < 0 }" tooltip-html-unsafe="[% instance.deltas['static_pages'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="attachments">
-                        [% instance.attachments %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['attachments'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['attachments'] < 0 }" tooltip-html-unsafe="[% instance.deltas['attachments'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="polls">
-                        [% instance.polls %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['polls'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['polls'] < 0 }" tooltip-html-unsafe="[% instance.deltas['polls'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="letters">
-                        [% instance.letters %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['letters'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['letters'] < 0 }" tooltip-html-unsafe="[% instance.deltas['letters'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="media_size">
-                        [% instance.media_size | number : 2 %] Mb
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['media_size'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['media_size'] < 0 }" tooltip-html-unsafe="[% instance.deltas['media_size'] | number : 2 %] Mb"></i>
-                    </td>
-                    <td class="center" ng-show="alexa">
-                        [% instance.alexa %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['alexa'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['alexa'] < 0 }" tooltip-html-unsafe="[% instance.deltas['alexa'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="page_views">
-                        [% instance.page_views %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['page_views'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['page_views'] < 0 }" tooltip-html-unsafe="[% instance.deltas['page_views'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="users">
-                        [% instance.users %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['users'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['users'] < 0 }" tooltip-html-unsafe="[% instance.deltas['users'] %]"></i>
-                    </td>
-                    <td class="center" ng-show="emails">
-                        [% instance.emails %]
-                        <i ng-class="{ 'icon-long-arrow-up text-success': instance.deltas['emails'] > 0, 'icon-long-arrow-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
-                    </td>
-                    <td class="center">
-                        <button class="btn-link" ng-class="{ loading: instance.loading == 1, published: instance.activated == '1', unpublished: instance.activated == '0' }" ng-click="updateItem($index, instance.id, 'manager_ws_instance_set_activated', 'activated', instance.activated != 1 ? 1 : 0, 'loading')" type="button"></button>
-                    </td>
-                    <td class="right nowrap">
-                        <div class="btn-group">
-                            <a class="btn" href="[% instance.show_url%]" title="{t}Edit{/t}">
-                                <i class="icon-pencil"></i>
-                            </a>
-                            <button class="del btn btn-danger"
-                                ng-click="open('modal-delete', 'manager_ws_instance_delete', $index)" type="button">
-                                <i class="icon-trash icon-white"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="[% 4 + name + domains + contact_mail + last_login + created + contents + articles + opinions + advertisements + albums + photos + videos + widgets + static_pages + attachments + polls + letters + media_size + alexa + page_views + users + emails %]" class="center">
-                        <div class="pull-left" ng-if="shvs.contents.length > 0">
-                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
-                        </div>
-                        <div class="pull-right" ng-if="shvs.contents.length > 0">
-                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'manager_ws_instances_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
-                        </div>
-                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-        </script>
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['contents'] > 0, 'fa fa-angle-down text-danger': instance.deltas['contents'] < 0 }" tooltip-html-unsafe="[% instance.deltas['contents'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.articles">
+                                [% instance.articles %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['articles'] > 0, 'fa fa-angle-down text-danger': instance.deltas['articles'] < 0 }" tooltip-html-unsafe="[% instance.deltas['articles'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.opinions">
+                                [% instance.opinions %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['opinions'] > 0, 'fa fa-angle-down text-danger': instance.deltas['opinions'] < 0 }" tooltip-html-unsafe="[% instance.deltas['opinions'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.advertisements">
+                                [% instance.advertisements %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['advertisements'] > 0, 'fa fa-angle-down text-danger': instance.deltas['advertisements'] < 0 }" tooltip-html-unsafe="[% instance.deltas['advertisements'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.albums">
+                                [% instance.albums %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['albums'] > 0, 'fa fa-angle-down text-danger': instance.deltas['albums'] < 0 }" tooltip-html-unsafe="[% instance.deltas['albums'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.photos">
+                                [% instance.photos %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['photos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['photos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['photos'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.videos">
+                                [% instance.videos %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['videos'] > 0, 'fa fa-angle-down text-danger': instance.deltas['videos'] < 0 }" tooltip-html-unsafe="[% instance.deltas['videos'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.widgets">
+                                [% instance.widgets %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['widgets'] > 0, 'fa fa-angle-down text-danger': instance.deltas['widgets'] < 0 }" tooltip-html-unsafe="[% instance.deltas['widgets'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.static_pages">
+                                [% instance.static_pages %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['static_pages'] > 0, 'fa fa-angle-down text-danger': instance.deltas['static_pages'] < 0 }" tooltip-html-unsafe="[% instance.deltas['static_pages'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.attachments">
+                                [% instance.attachments %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['attachments'] > 0, 'fa fa-angle-down text-danger': instance.deltas['attachments'] < 0 }" tooltip-html-unsafe="[% instance.deltas['attachments'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.polls">
+                                [% instance.polls %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['polls'] > 0, 'fa fa-angle-down text-danger': instance.deltas['polls'] < 0 }" tooltip-html-unsafe="[% instance.deltas['polls'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.letters">
+                                [% instance.letters %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['letters'] > 0, 'fa fa-angle-down text-danger': instance.deltas['letters'] < 0 }" tooltip-html-unsafe="[% instance.deltas['letters'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.media_size">
+                                [% instance.media_size | number : 2 %] Mb
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['media_size'] > 0, 'fa fa-angle-down text-danger': instance.deltas['media_size'] < 0 }" tooltip-html-unsafe="[% instance.deltas['media_size'] | number : 2 %] Mb"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.alexa">
+                                [% instance.alexa %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['alexa'] > 0, 'fa fa-angle-down text-danger': instance.deltas['alexa'] < 0 }" tooltip-html-unsafe="[% instance.deltas['alexa'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.page_views">
+                                [% instance.page_views %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['page_views'] > 0, 'fa fa-angle-down text-danger': instance.deltas['page_views'] < 0 }" tooltip-html-unsafe="[% instance.deltas['page_views'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.users">
+                                [% instance.users %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['users'] > 0, 'fa fa-angle-down text-danger': instance.deltas['users'] < 0 }" tooltip-html-unsafe="[% instance.deltas['users'] %]"></i>
+                            </td>
+                            <td class="text-center" ng-show="columns.emails">
+                                [% instance.emails %]
+                                <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['emails'] > 0, 'fa fa-angle-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
+                            </td>
+                            <td>
+                                <button class="btn btn-white" type="button" ng-click="setEnabled(instance, instance.activated == '1' ? '0' : '1')">
+                                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': instance.loading, 'fa-check text-success' : !instance.loading &&instance.activated == '1', 'fa-times text-error': !instance.loading && instance.activated == '0' }"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-if="instances.length > 0">
+                        <tr>
+                            <td colspan="[% 4 + columns.name + columns.domains + columns.contact_mail + columns.last_login + columns.created + columns.contents + columns.articles + columns.opinions + columns.advertisements + columns.albums + columns.photos + columns.videos + columns.widgets + columns.static_pages + columns.attachments + columns.polls + columns.letters + columns.media_size + columns.alexa + columns.page_views + columns.users + columns.emails %]" class="center">
+                                <div class="pagination-info pull-left" ng-if="instances.length > 0">
+                                    {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
+                                </div>
+                                <div class="pull-right" ng-if="instances.length > 0">
+                                    <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="pages"></pagination>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
-    <script type="text/ng-template" id="modal-delete">
-        {include file="instances/modals/_modalDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-delete-selected">
-        {include file="instances/modals/_modalBatchDelete.tpl"}
-    </script>
-</form>
-{/block}
+</div>

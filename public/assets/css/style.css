@@ -3140,67 +3140,7 @@ div#modal-element-customize-content div.select-disposition{
 }
 
 
-/* =============================================================================
-   Manager opcache rules
-   ========================================================================== */
-.opcache-stats tbody tr:nth-child(even) {
-    background-color: #eee
-}
-.opcache-stats table {
-    text-align:left;
-    border-collapse:separate;
-    width: 100%
-}
-.opcache-stats #files table {
-    border-spacing:3px 10px;
-}
 
-.opcache-stats #status table {
-    float:left;
-    width:50%;
-}
-
-.opcache-stats .tabs > div {
-  dis
-}
-.opcache-stats #graph {
-    float: right;
-    width: 40%;
-    z-index:99;
-    position:relative;
-    text-align: center;
-}
-
-.opcache-stats #graph form {
-    text-align:left;
-}
-
-.opcache-stats #graphcontainer {
-    position:absolute;
-    right: 35%;
-    top: 25%;
-    z-index:99;
-    text-align:center;
-    min-width:150px;
-}
-.opcache-stats #graph > svg {
-
-}
-
-#graphcontainer #stats-opcode {
-    color:White;
-}
-
-.opcache-stats #stats-opcode th, .opcode-stats #stats-opcode td {
-    padding: 6px 10px;
-    font-size: 0.8em;
-    white-space: nowrap;
-    padding: 0 13px;
-}
-#stats-opcode td {
-  color:#333 !important;
-  padding: 0 13px;
-}
 
 .comment-type-selector {
     list-style:none;
