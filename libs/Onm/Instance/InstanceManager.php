@@ -619,10 +619,23 @@ class InstanceManager extends BaseManager
         // Build external parameters
         $instance->external['site_name']        = $instance->name;
         $instance->external['site_created']     = $instance->created;
-        $instance->external['site_title']       = $instance->name . ' - ' . $this->sm->get('site_title');
-        $instance->external['site_description'] = $instance->name . ' - ' . $this->sm->get('site_description');
-        $instance->external['site_keywords']    = $instance->name . ' - ' . $this->sm->get('site_keywords');
-        $instance->external['site_agency']      = $instance->internal_name . '.opennemas.com';
+
+        $title = $this->sm->get('site_title');
+        if (strpos($title, $instance->name) === false) {
+            $instance->external['site_title'] = $instance->name . ' - ' . $title;
+        }
+
+        $description = $this->sm->get('description');
+        if (strpos($description, $instance->name) === false) {
+            $instance->external['site_description'] = $instance->name . ' - ' . $description;
+        }
+
+        $keywords = $this->sm->get('site_keywords');
+        if (strpos($keywords, $instance->name) === false) {
+            $instance->external['site_keywords'] = $instance->name . ' - ' . $keywords;
+        }
+
+        $instance->external['site_agency'] = $instance->internal_name . '.opennemas.com';
 
         foreach ($instance->external as $key => $value) {
             $this->sm->invalidate($key);
