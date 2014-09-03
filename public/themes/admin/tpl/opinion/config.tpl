@@ -85,7 +85,7 @@
                 <label for="blog_orderFrontpage" class="control-label">{t}Order blog's frontpage by{/t}</label>
                 <div class="controls">
                     <select name="opinion_settings[blog_orderFrontpage]" id="blog_orderFrontpage" required >
-                        <option value="created" {if $configs['opinion_settings']['blog_orderFrontpage'] eq "created"} selected {/if}>{t}Created Date{/t}</option>
+                        <option value="created" {if !isset($configs['opinion_settings']['blog_orderFrontpage']) || $configs['opinion_settings']['blog_orderFrontpage'] eq "created"} selected {/if}>{t}Created Date{/t}</option>
                         <option value="blogger" {if $configs['opinion_settings']['blog_orderFrontpage'] eq "blogger"} selected {/if}>{t}Blogger{/t}</option>
                     </select>
                     <div class="help-block">
