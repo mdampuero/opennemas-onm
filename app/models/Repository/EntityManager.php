@@ -187,8 +187,10 @@ class EntityManager extends BaseManager
     public function countBy($criteria)
     {
         $fromSQL = 'contents';
+
         if (is_array($criteria) && array_key_exists('tables', $criteria)) {
-            $fromSQL .= implode(',', $criteria['tables']);
+            $fromSQL .= ', '.implode(',', $criteria['tables']);
+            unset($criteria['tables']);
         }
 
         $sql = "SELECT COUNT(pk_content) FROM $fromSQL ";
@@ -255,5 +257,37 @@ class EntityManager extends BaseManager
         }
 
         return $contentID;
+    }
+
+    /**
+     * Populates content meta for a given array of content objects
+     *
+     * @return array the list of contents with populated metadata
+     **/
+    public function populateContentMetasInContents(&$contentMap)
+    {
+        foreach ($contentMap as $content) {
+            $searchMap []= 'content-meta-'.$content->id;
+        }
+
+        // Fetch all content metas in one request
+        $contentMetaMap = $this->cache->fetch($searchMap);
+
+        // Populate contents with fetched content metas
+        foreach ($contentMap as $content) {
+            // If content metas weren't in cache fetch them from mysql
+            if (!array_key_exists('content-meta-'.$content->id, $contentMetaMap)) {
+                $content->loadAllContentProperties();
+            } else {
+                $contentMeta = $contentMetaMap['content-meta-'.$content->id];
+
+                foreach ($contentMeta as $key => $value) {
+                    $content->{$key} = $value;
+                }
+            }
+
+        }
+
+        return $contentMap;
     }
 }

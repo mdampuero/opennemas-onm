@@ -17,16 +17,17 @@
         "app/models",
         "vendor",
         "models",
-        "vendor/core",
+        "libs/core",
         "src/",
-        "src/WebService/Handlers"
+        "src/WebService/Handlers",
+        "libs"
     ],
     "autoload": {
         "psr-0": { "": "src/" },
         "files": [
-            "vendor/functions.php",
-            "vendor/adodb5/adodb.inc.php",
-            "vendor/Pager/Pager.php"
+            "libs/functions.php",
+            "libs/adodb5/adodb.inc.php",
+            "libs/Pager/Pager.php"
         ]
     },
 

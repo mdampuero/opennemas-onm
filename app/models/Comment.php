@@ -326,7 +326,7 @@ class Comment
         $sql = 'DELETE FROM comments WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            throw new \Exception(_('DB error.'));
+            throw new \Exception(_('Database error.'));
         }
 
         return true;

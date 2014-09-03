@@ -511,11 +511,11 @@ class PaywallController extends Controller
         }
 
         if (!$isValid) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect. Please try again."));
+            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect."));
         } elseif ($isIpnValid === 'waiting') {
-            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute and try again."));
+            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute."));
         } elseif (!$isIpnValid) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it and try again."));
+            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it."));
         } else {
             $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
             // If config is all ok save data

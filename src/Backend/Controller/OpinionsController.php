@@ -743,7 +743,7 @@ class OpinionsController extends Controller
         $userId = $request->query->getDigits('id');
 
         if (count($request->request) < 1) {
-            m::add(_("User data sent not valid."), m::ERROR);
+            m::add(_("The data send by the user is not valid."), m::ERROR);
 
             return $this->redirect(
                 $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
@@ -800,7 +800,7 @@ class OpinionsController extends Controller
                 // Clear caches
                 dispatchEventWithParams('author.update', array('id' => $userId));
 
-                m::add(_('Author data updated successfully.'), m::SUCCESS);
+                m::add(_('Author updated successfully.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to update the author with that information'), m::ERROR);
             }

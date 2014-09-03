@@ -75,7 +75,7 @@ class ArticlesController extends Controller
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
             if (!Acl::checkCategoryAccess($this->category)) {
-                m::add(_("You don't have enought privileges to see this category."));
+                m::add(_("You don't have enough privileges to see this category."));
 
                 return $this->redirect($this->generateUrl('admin_welcome'));
             }
@@ -552,7 +552,7 @@ class ArticlesController extends Controller
             $article->delete($id, $_SESSION['userid']);
             m::add(_("Article deleted successfully."), m::SUCCESS);
         } else {
-            m::add(_('You must give an id for delete an article.'), m::ERROR);
+            m::add(_('You must give an id to delete an article.'), m::ERROR);
         }
 
         if (!$request->isXmlHttpRequest()) {

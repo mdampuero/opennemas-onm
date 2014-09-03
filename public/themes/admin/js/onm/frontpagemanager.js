@@ -498,7 +498,6 @@ jQuery(function($) {
             properties[vformat] = '';
         }
 
-
         if (elementID) {
             $.ajax({
                 url:url,

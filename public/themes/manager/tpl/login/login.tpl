@@ -1,149 +1,174 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-
-    <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport"  content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="robots"    content="noindex, nofollow" />
-    <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
-    <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    {block name="meta"}
+    <title>OpenNeMaS - Manager</title>
+    {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
-
     {block name="header-css"}
-        {stylesheets
-            src="@Common/css/bootstrap/bootstrap.css,
-                @Common/css/fontawesome/font-awesome.min.css,
-                @Common/css/style.css,
-                @Common/css/loginadmin.css"
-            filters="cssrewrite"}
+        {stylesheets src="@Common/plugins/pace/pace-theme-flash.css,
+                          @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+                          @Common/plugins/webarch/css/animate.min.css,
+                          @Common/plugins/bootstrap-select2/select2.css,
+
+                          @Common/plugins/bootstrap/css/bootstrap.min.css,
+                          @Common/plugins/font-awesome/css/font-awesome.min.css,
+                          @Common/css/bootstrap/bootstrap-fileupload.min.css"
+                     filters="cssrewrite"}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
+        {stylesheets src="@Common/plugins/webarch/css/style.css,
+                          @Common/plugins/webarch/css/responsive.css,
+                          @Common/plugins/webarch/css/custom-icon-set.css,
+                          @Common/plugins/webarch/css/magic_space.css,
+                          @Common/plugins/webarch/css/tiles_responsive.css,
+
+                          @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+                          @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+                          @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+                          @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+                          @Common/plugins/jquery-notifications/css/messenger.css,
+                          @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+
+                          @Common/css/opennemas/style.css"
+                     filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
     {/block}
 
-</head>
-<body id="loginpage">
+    {block name="header-js"}
+        {javascripts src="@Common/plugins/jquery/jquery.min.js,
+                          @Common/plugins/jquery-ui/jquery-ui.min.js,
+                          @Common/plugins/bootstrap/js/bootstrap.min.js,
+                          @Common/plugins/breakpoints.js,
+                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
+                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
 
-    <header class="clearfix">
-        <div class="navbar navbar-inverse global-nav" style="position:fixed">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
+                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
+                          @Common/plugins/jquery-notifications/js/messenger.min.js,
+                          @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
 
-                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a><div class="nav-collapse collapse navbar-inverse-collapse">
-                <ul class="nav pull-left">
-                    <li>
-                        <a href="http://www.opennemas.com">{t}The CMS for journalism{/t}</a>
-                    </li>
-                </ul>
-                <div class="nav-collapse collapse navbar-inverse-collapse">
-                    <ul class="nav pull-right">
-                        <li class="help dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="form-wrapper">
-        <h2>{t}Log in{/t} <span class="pull-right muted">Manager</span></h2>
-        {render_messages}
-        <form method="post" autocomplete="off" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix form-horizontal">
-            <div class="input-wrapper">
-                <div class="control-group">
-                    <label class="control-label" for="_username">{t}Username or email{/t}</label>
-                    <div class="controls">
-                        <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="password">{t}Password{/t}</label>
-                    <div class="controls">
-                        <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label"></label>
-                    <div class="controls">
-                        {if $failed_login_attempts >= 3}
-                        <div class="control-group clearfix">
-                            <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
-                            <noscript>
-                                <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
-                                <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                                <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-                            </noscript>
-                        </div>
-                        {/if}
-
-                        <div class="submit">
-                            <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Log in{/t}</span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" name="_token" value="{$token}">
-            <input type="hidden" name="_referer" value="{$referer}">
-        </form>
-    </div>
-
-    <footer>
-        <div class="muted credit">
-            &copy; {strftime("%Y")} OpenHost S.L.
-            <nav>
-                <ul>
-                    <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                    <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                </ul>
-            </nav>
-            <select name="language" id="language" class="input-small">
-                {foreach from=$languages key=key item=language}
-                    <option value="{$key}" {if $key == $current_language}selected{/if}>{$language}</option>
-                {/foreach}
-            </select>
-        </div>
-    </footer>
-
-    {block name="footer-js"}
-        {javascripts
-            src="@Common/js/jquery/jquery.min.js,
-                @Common/js/libs/bootstrap.js,
-                @Common/js/libs/modernizr.min.js,
-                @Common/js/onm/md5.min.js,
-                @Common/js/admin.js"}
+                          @Common/plugins/webarch/js/core.js,
+                          @Common/plugins/pace/pace.min.js,
+                          @Common/js/onm/scripts.js"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
-        <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            BackendAuthentication.init()
-        });
-        </script>
+
+
+        {javascripts
+            src="@Common/js/jquery/select2/select2.min.js,
+                @Common/js/libs/modernizr.min.js,
+                @Common/js/onm/scripts.js,
+                @Common/js/onm/jquery.onm-editor.js"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
     {/block}
+
+    {block name="footer-js"}
+        {javascripts src="@FosJsRoutingBundle/js/router.js,
+                          @Common/js/routes.js,
+                          @Common/plugins/angular/angular.min.js,
+                          @Common/plugins/angular-google-chart/angular-google-chart.js,
+                          @Common/plugins/angular-checklist-model/checklist-model.js,
+                          @Common/plugins/angular-route/angular-route.min.js,
+                          @Common/plugins/angular-translate/angular-translate.min.js,
+                          @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+                          @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+                          @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+                          @Common/plugins/angular-ui/select2.js,
+
+                          @Common/plugins/angular-onm/services/*,
+
+                          @ManagerTheme/js/ManagerApp.js,
+                          @ManagerTheme/js/Controllers.js,
+
+                          @ManagerTheme/js/controllers/*
+        "}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
+
+</head>
+<body class="error-body" id="manager" ng-app="ManagerApp" ng-controller="LoginCtrl">
+    <div class="container">
+        <div class="row login-container column-seperation">
+            <div class="col-md-5 col-md-offset-1">
+                <h2>Sign in Opennemas</h2>
+                <p>Use Facebook, Twitter or your email to sign in.<br>
+                    <a href="#">Sign up Now!</a> for a webarch account,It's free and always will be..</p>
+                <br>
+                <button class="btn btn-block btn-info col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-facebook"></i></span>
+                    <span class="bold">Login with Facebook</span> </button>
+                <button class="btn btn-block btn-success col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-twitter"></i></span>
+                    <span class="bold">Login with Twitter</span>
+                </button>
+            </div>
+            <div class="col-md-5 "><br>
+                <form id="login-form" class="login-form" action="{url name=manager_login_processform}" method="post" novalidate="novalidate">
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Username</label>
+                            <div class="controls">
+                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" type="text" value="{$smarty.cookies.login_username|default:""}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">Password</label>
+                            <span class="help"></span>
+                            <div class="controls">
+                                <div class="input-with-icon    right">
+                                    <i class=""></i>
+                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" type="password" value="{$smarty.cookies.login_password|default:""}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {if $failed_login_attempts >= 3}
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label"></label>
+                            <div class="controls">
+                                <div class="control-group clearfix">
+                                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                                    <noscript>
+                                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                                    </noscript>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                    <input type="hidden" name="_referer" value="{$referer}">
+
+                    <div class="row">
+                        <div class="col-md-10">
+                            <button class="btn btn-primary btn-cons pull-right" type="submit">Login</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+    <!--[if lt IE 7 ]>
+        <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+        <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
+    <![endif]-->
 </body>
 </html>
