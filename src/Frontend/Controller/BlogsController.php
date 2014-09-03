@@ -65,7 +65,7 @@ class BlogsController extends Controller
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
             $opinionSettings = s::get('opinion_settings');
-            $itemsPerPage    = isset($opinionSettings['blog_itemsFrontpage']) ? $opinionSettings['blog_itemsFrontpage'] : '12';
+            $itemsPerPage    = isset($opinionSettings['blog_itemsFrontpage']) && is_int($opinionSettings['blog_itemsFrontpage']) ? $opinionSettings['blog_itemsFrontpage'] : '12';
             $orderBy         = isset($opinionSettings['blog_orderFrontpage']) ? $opinionSettings['blog_orderFrontpage'] : 'created';
 
             $ur              = $this->get('user_repository');
