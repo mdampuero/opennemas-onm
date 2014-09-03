@@ -56,7 +56,7 @@ class Frontpages
             }
 
             foreach ($imageList as &$img) {
-                $img->media_url = MEDIA_IMG_PATH_WEB;
+                $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
             }
 
             $ur = getService('user_repository');
@@ -167,7 +167,7 @@ class Frontpages
         }
 
         foreach ($imageList as &$img) {
-            $img->media_url = MEDIA_IMG_PATH_WEB;
+            $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
         }
 
         $ur = getService('user_repository');
@@ -180,7 +180,7 @@ class Frontpages
             $content->author         = $ur->find($content->fk_author);
             if (!is_null($content->author)) {
                 $content->author->photo  = $content->author->getPhoto();
-                $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
+                $content->author->photo->media_url  = MEDIA_IMG_ABSOLUTE_URL;
                 $content->author->external = 1;
             }
 
