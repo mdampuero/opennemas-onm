@@ -90,7 +90,7 @@ class NewsletterController extends Controller
                 'pagination'    => $pagination,
                 'totalSendings' => $totalSendings,
                 'maxAllowed'    => $maxAllowed,
-                'lastInvoice'   => $lastInvoice->format(_('d-m-Y')),
+                'lastInvoice'   => $lastInvoice->format(_('Y-m-d')),
             )
         );
     }
@@ -373,8 +373,7 @@ class NewsletterController extends Controller
         if (empty($newsletterSender)) {
             m::add(
                 _(
-                    'Your newsletter configuration is not complete. Please'.
-                    ' contact with Opennemas administrator. newsletter_sender fault'
+                    'Your newsletter configuration is not complete. You must complete the sender email addres.'
                 ),
                 m::ERROR
             );
@@ -556,13 +555,13 @@ class NewsletterController extends Controller
 
         if (is_null($sender) || !$sender) {
             m::add(
-                _('Please contact with Opennemas administrator to start to use your Newsletter module')
+                _('Please fill the sender email address in the module configuration.')
             );
         }
 
         if (is_null($maillist) || !$type) {
             m::add(
-                _('Please provide your Newsletter configuration to start to use your Newsletter module')
+                _('Please fill the mail list email address in the module configuration.')
             );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
@@ -572,7 +571,7 @@ class NewsletterController extends Controller
                     if (empty($value)) {
                         m::add(
                             _(
-                                'Your newsletter configuration is not complete. Please'.
+                                'Your newsletter configuration is not completed. Please'.
                                 ' go to settings and complete the form.'
                             ),
                             m::ERROR
@@ -623,7 +622,7 @@ class NewsletterController extends Controller
             if ($maxAllowed > 0) {
                 $result = $maxAllowed - $total;
                 if ($result <= 0) {
-                    m::add(_('You have send max mailing allowed'), m::ERROR);
+                    m::add(_('You have reached the maximum of emails allowed to send'), m::ERROR);
 
                     return $maxAllowed;
                 }

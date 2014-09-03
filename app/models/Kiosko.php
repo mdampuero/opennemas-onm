@@ -146,7 +146,7 @@ class Kiosko extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            throw new \Exception(_("Unable to save the cover data into the database."));
+            throw new \Exception(_("Unable to save the cover data."));
         }
 
         return $this->id;

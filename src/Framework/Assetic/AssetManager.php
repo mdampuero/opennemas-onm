@@ -120,18 +120,26 @@ abstract class AssetManager
     /**
      * Parses the list of assets.
      *
-     * @param array $assets The list of assets.
+     * @param array   $assets The list of assets.
+     * @param booelan $append Whether to append or restart the array of assets.
      */
-    public function initAssets($assets)
+    public function initAssets($assets, $append = false)
     {
-        $this->assets = array();
+        if (!$append) {
+            $this->assets = array();
+        }
+
         foreach ($assets as $asset) {
             $asset = $this->parseAssetSrc($asset);
 
             $pos = strrpos($asset, '*');
             if ($pos == strlen($asset) - 1) {
                 foreach (glob($asset) as $asset) {
-                    $this->assets[] = str_replace(SITE_PATH, '', $asset);
+                    if (!is_dir($asset)) {
+                        $this->assets[] = str_replace(SITE_PATH, '', $asset);
+                    } else {
+                        $this->initAssets(glob($asset . '/*'), true);
+                    }
                 }
             } else {
                 $this->assets[] = $asset;

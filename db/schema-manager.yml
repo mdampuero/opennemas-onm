@@ -12,6 +12,9 @@ instances:
         domains:
             type: string
             options: { default: null, length: 500 }
+        domain_expire:
+            type: datetime
+            options: {default: null, notnull: false }
         main_domain:
             type: string
             options: {default: null, length: 255 }

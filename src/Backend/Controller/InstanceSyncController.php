@@ -111,9 +111,9 @@ class InstanceSyncController extends Controller
         if (s::set('sync_params', $syncParams)
             && s::set('sync_colors', $syncColors)
         ) {
-            m::add(_('Instance sync module configuration saved successfully'), m::SUCCESS);
+            m::add(_('Configuration saved successfully'), m::SUCCESS);
         } else {
-            m::add(_('There was an error while saving the Instance sync module configuration'), m::ERROR);
+            m::add(_('There was an error while saving the configuration'), m::ERROR);
         }
 
         return $this->redirect($this->generateUrl('admin_instance_sync'));

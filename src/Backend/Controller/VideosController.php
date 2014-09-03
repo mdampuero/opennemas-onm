@@ -352,7 +352,7 @@ class VideosController extends Controller
 
             m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
         } else {
-            m::add(_('You must give an id for delete the video.'), m::ERROR);
+            m::add(_('You must give an id to delete the video.'), m::ERROR);
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -502,7 +502,7 @@ class VideosController extends Controller
         $relations = \RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
-            $msg = sprintf(_("<br>The video has some relations"));
+            $msg = sprintf(_("The video has some relations"));
             $cm  = new \ContentManager();
             $relat = $cm->getContents($relations);
             foreach ($relat as $contents) {

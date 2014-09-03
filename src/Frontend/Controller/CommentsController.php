@@ -182,7 +182,7 @@ class CommentsController extends Controller
         // Create the vote
         $vote = new \Vote($commentId);
         if (is_null($vote)) {
-            return new Response(_("Error no vote value!", 400));
+            return new Response(_("Error: no vote value!", 400));
         }
         $update = $vote->update($voteValue, $ip);
 
@@ -236,9 +236,20 @@ class CommentsController extends Controller
                     );
                     $data = array_map('strip_tags', $data);
 
+                    // Check moderation option
+                    $commentsOpt = s::get('comments_config');
+                    if (is_array($commentsOpt)
+                        && array_key_exists('moderation', $commentsOpt)
+                        && $commentsOpt['moderation'] == 0
+                    ) {
+                        $data['status'] = \Comment::STATUS_ACCEPTED;
+                        $message = _('Your comment was accepted. Refresh the page to see it.');
+                    } else {
+                        $message = _('Your comment was accepted and now we have to moderate it.');
+                    }
+
                     $comment->create($data);
                     $httpCode = 200;
-                    $message = _('Your comment was accepted and now we have to moderate it.');
                 } catch (\Exception $e) {
                     $message = $e->getMessage();
                 }

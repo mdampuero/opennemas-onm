@@ -1,0 +1,14 @@
+manager_user_groups_list:
+    path: /usergroups
+    options:
+        expose: true
+
+manager_user_group_show:
+    path: /usergroup/{id}/show
+    options:
+        expose: true
+
+manager_user_group_create:
+    path: /usergroup/create
+    options:
+        expose: true

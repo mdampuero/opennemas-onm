@@ -326,7 +326,7 @@ class ImagesController extends Controller
 
                         if (empty($upload['tmp_name'][$index])) {
                             $info [] = array(
-                                'error'         => _('Not valid file or the file exceeds the max allowed file size.'),
+                                'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
                             );
                             continue;
                         }

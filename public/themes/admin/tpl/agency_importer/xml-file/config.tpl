@@ -15,7 +15,7 @@
 <form action="{url name=admin_importer_xmlfile_config}" method="POST">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}EFE importer{/t} :: {t}Module configuration{/t}</h2></div>
+            <div class="title"><h2>{t}XML file importer{/t} :: {t}Module configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

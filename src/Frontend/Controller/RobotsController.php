@@ -46,6 +46,8 @@ Disallow: /harm/to/self
 
 Sitemap: ".SITE_URL."sitemapnews.xml.gz
 Sitemap: ".SITE_URL."sitemapweb.xml.gz
+Sitemap: ".SITE_URL."sitemapvideo.xml.gz
+Sitemap: ".SITE_URL."sitemapimage.xml.gz
 ";
         return new Response(
             $content,

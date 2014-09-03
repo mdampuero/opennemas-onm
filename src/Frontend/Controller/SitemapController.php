@@ -151,21 +151,28 @@ class SitemapController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('sitemap/sitemap.tpl', $cacheID)
         ) {
-            // Fetch contents
-            $contents = $this->fetchContents(
-                array('content_type_name' => array(array('value' => 'photo'))),
-                250
+            // Set sql filters for articles with inner image
+            $filters = array(
+                'tables'            => array('articles'),
+                'pk_content'        => array(array('value' => 'pk_article', 'field' => true)),
+                'content_type_name' => array(array('value' => 'article')),
+                'img2'              => array(array('value' => 'NULL', 'operator' => '<>')),
             );
 
-            // Get contents referenced for this image
-            foreach ($contents as $key => &$content) {
-                $content->referenced = $this->getContentsWithReferencedImage($content->id);
+            // Fetch contents
+            $contents = $this->fetchContents($filters);
 
-                if (!$content->referenced ||
-                    !empty($content->referenced->params['bodyLink'])
-                ) {
+            // Fetch images and videos from contents
+            $er = getService('entity_repository');
+            foreach ($contents as $key => &$content) {
+                if (!empty($content->params['bodyLink'])) {
                     // Remove external articles
                     unset($contents[$key]);
+                } else {
+                    // Get content image
+                    if (!empty($content->img2)) {
+                        $content->image = $er->find('Photo', $content->img2);
+                    }
                 }
             }
 
@@ -272,67 +279,5 @@ class SitemapController extends Controller
         $contents = $cm->getInTime($contents);
 
         return $contents;
-    }
-
-    /**
-    * Fetches articles or albums associated with the image
-    *
-    * @param $imageId The image id
-    *
-    * @return Array | Contents associated with this image
-    */
-    public function getContentsWithReferencedImage($imageId)
-    {
-        $cache = $this->get('cache');
-
-        $content = $cache->fetch(CACHE_PREFIX."_image_".$imageId);
-
-        if (!$content) {
-            $er = getService('entity_repository');
-
-            // Set sql filters for article
-            $filters = array(
-                'tables'            => array('articles'),
-                'pk_content'        => array(array('value' => 'pk_article', 'field' => true)),
-                'content_type_name' => array(array('value' => 'article')),
-                'content_status'    => array(array('value' => 1)),
-                'in_litter'         => array(array('value' => 1, 'operator' => '<>')),
-                'img2'              => array(array('value' => $imageId)),
-            );
-
-            $content = $er->findBy($filters, array('created' => 'desc'));
-
-            if (!$content) {
-                // Set sql filters for opinion
-                unset($filters['img2']);
-                $filters['tables']            = array('contentmeta');
-                $filters['pk_content']        = array(array('value' => 'fk_content', 'field' => true));
-                $filters['content_type_name'] = array(array('value' => 'opinion'));
-                $filters['meta_value']        = array(array('value' => $imageId));
-
-                $content = $er->findBy($filters, array('created' => 'desc'));
-
-                if (!$content) {
-                    // Set sql filters for album
-                    unset($filters['meta_value']);
-                    $filters['tables']            = array('albums_photos');
-                    $filters['pk_content']        = array(array('value' => 'pk_album', 'field' => true));
-                    $filters['pk_photo']          = array(array('value' => $imageId));
-                    $filters['content_type_name'] = array(array('value' => 'album'));
-
-                    $content = $er->findBy($filters, array('created' => 'desc'));
-                }
-            }
-
-            // Save the content in cache
-            $cache->save(CACHE_PREFIX."_image_".$imageId, $content, 300);
-        }
-
-        if (empty($content)) {
-            return false;
-        }
-
-        return $content[0];
-
     }
 }

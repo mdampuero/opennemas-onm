@@ -101,7 +101,7 @@ class FormController extends Controller
                         "Sorry, we were unable to complete your request.\n"
                         ."Check the form and try again"
                     );
-                    $message = _("Email is required but will not be published");
+                    $message = _("Email is required but it will not be published");
                     $class = 'error';
                 } else {
                     // Correct CAPTCHA, correct mail and name not empty

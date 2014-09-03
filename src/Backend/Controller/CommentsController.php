@@ -98,7 +98,7 @@ class CommentsController extends Controller
         switch ($type) {
             case 'onm':
                 $this->get('setting_repository')->set('comment_system', 'onm');
-                m::add(_("Congratulations! You are now using Opennemas comment system."), m::SUCCESS);
+                m::add(_("Now you are using the Opennemas comment system."), m::SUCCESS);
                 return $this->redirect($this->generateUrl('admin_comments_list'));
                 break;
 
@@ -108,7 +108,7 @@ class CommentsController extends Controller
 
             case 'facebook':
                 $this->get('setting_repository')->set('comment_system', 'facebook');
-                m::add(_("Congratulations! You are now using Facebook comment system."), m::SUCCESS);
+                m::add(_("Now you are using the Facebook comment system."), m::SUCCESS);
                 return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
                 break;
 

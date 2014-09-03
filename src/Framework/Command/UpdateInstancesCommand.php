@@ -188,11 +188,17 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         // Update created data
         if ($created) {
-            $sql = 'SELECT * FROM settings WHERE name=\'site_created\'';
-            $rs  = $this->im->getConnection()->fetchAssoc($sql);
+            $sql = 'SELECT * FROM settings WHERE name=\'site_created\' OR name=\'domain_expire\'';
+            $rs  = $this->im->getConnection()->fetchAll($sql);
 
-            if ($rs) {
-                $i->created = unserialize($rs['value']);
+            if ($rs !== false && !empty($rs)) {
+                foreach ($rs as $value) {
+                    if ($rs['name'] == 'site_created') {
+                        $i->created = unserialize($rs['value']);
+                    } elseif ($rs['name'] == 'domain_expire') {
+                        $i->created = unserialize($rs['value']);
+                    }
+                }
             }
         }
 

@@ -3,7 +3,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Article information{/t}</h2></div>
+        <div class="title"><h2>{t}News agency importer{/t} :: {t}Article information{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=import&id={$element->xmlFile}" class="admin_add" value="{t}Import{/t}" title="{t}Import{/t}">

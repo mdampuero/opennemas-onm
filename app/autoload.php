@@ -18,7 +18,8 @@ defined('APPLICATION_PATH')
 define('SRC_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."src/").DIRECTORY_SEPARATOR);
 define('SITE_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
-define('SITE_CORE_PATH', realpath(SITE_VENDOR_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
+define('SITE_LIBS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."libs").DIRECTORY_SEPARATOR);
+define('SITE_CORE_PATH', realpath(SITE_LIBS_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/models").DIRECTORY_SEPARATOR);
 define('APP_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/").DIRECTORY_SEPARATOR);
 define('SITE_WS_API_PATH', realpath(SRC_PATH.DIRECTORY_SEPARATOR."WebService/Handlers").DIRECTORY_SEPARATOR);
@@ -97,8 +98,8 @@ $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 // Registering namespaces
 $loader->registerNamespaces(
     array(
-        'Onm'               => __DIR__.'/../vendor',
-        'Luracast\\Restler' => __DIR__.'/../vendor/luracast/restler/vendor/',
+        'Onm'               => __DIR__.'/../libs',
+        'Luracast\\Restler' => __DIR__.'/../libs/luracast/restler/vendor/',
     )
 );
 
