@@ -105,7 +105,7 @@
                         <hr class="divisor">
 
                         {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && ($commentsConfig['with_comments'])) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
                         <label for="with_comment">{t}Allow comments{/t}</label>
                         <br>
                         {/is_module_activated}

@@ -194,7 +194,7 @@
                         <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}> <label for="content_status" >{t}Available{/t}</label>
                         <br/>
                         {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && ($commentsConfig['with_comments'])) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
                         <label for="with_comment">{t}Allow comments{/t}</label>
                         <hr class="divisor">
                         {/is_module_activated}
