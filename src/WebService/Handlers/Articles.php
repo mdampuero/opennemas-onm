@@ -51,12 +51,12 @@ class Articles
         $article->category_title   = $ccm->get_title($article->category_name);
         $article->actualCategoryId = $ccm->get_id($article->category_name);
         //assigned media_url used with author photo & related or machine articles with photo
-        $article->media_url        = MEDIA_IMG_PATH_WEB;
+        $article->media_url        = MEDIA_IMG_ABSOLUTE_URL;
 
         // Get inner image for this article
         if (isset($article->img2) && ($article->img2 != 0)) {
             $photoInt = $er->find('Photo', $article->img2);
-            $photoInt->media_url = MEDIA_IMG_PATH_WEB;
+            $photoInt->media_url = MEDIA_IMG_ABSOLUTE_URL;
             $article->photoInt = $photoInt;
         }
 

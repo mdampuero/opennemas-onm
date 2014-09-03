@@ -34,7 +34,7 @@ class Opinions
         $opinion->otherOpinions = $this->others($opinionId);
 
         // Get external media url
-        $opinion->externalMediaUrl = MEDIA_IMG_PATH_WEB;
+        $opinion->externalMediaUrl = MEDIA_IMG_ABSOLUTE_URL;
 
         return serialize($opinion);
     }
