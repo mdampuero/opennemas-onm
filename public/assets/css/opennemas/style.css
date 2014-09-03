@@ -621,7 +621,9 @@ td .btn .fa.fa-circle-o-notch {
     float: left;
 }
 
-.header .chat-toggler .dropdown-menu li a {
+.header .chat-toggler .dropdown-menu li a,
+.header .chat-toggler .dropdown-menu li .a {
+    display: block;
     float: none;
 }
 
