@@ -162,7 +162,7 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("User data sent not valid."), m::ERROR);
+            m::add(_("The data send by the user is not valid."), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }
@@ -224,7 +224,7 @@ class AclUserController extends Controller
             } else {
                 $request->getSession()->getFlashBag()->add(
                     'error',
-                    _('Unable to update the user with that information')
+                    _('Unable to update the user with the submitted information.')
                 );
             }
         } catch (\Exception $e) {
@@ -621,7 +621,7 @@ class AclUserController extends Controller
 
                     $request->getSession()->getFlashBag()->add(
                         'error',
-                        _('Unable to send your recover username email. Please try it later.')
+                        _('Unable to send the email to recover your username. Please try it later.')
                     );
                 }
 

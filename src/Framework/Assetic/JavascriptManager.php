@@ -39,11 +39,12 @@ class JavascriptManager extends AssetManager
         foreach ($filters as $filter) {
             switch ($filter) {
                 case 'uglifyjs':
+
                     $this->fm->set(
                         'uglifyjs',
                         new UglifyJsFilter(
-                            $filters['uglifyjs']['bin'],
-                            $filters['uglifyjs']['node']
+                            $this->config['filters']['uglifyjs']['bin'],
+                            $this->config['filters']['uglifyjs']['node']
                         )
                     );
                     break;
@@ -51,8 +52,8 @@ class JavascriptManager extends AssetManager
                     $this->fm->set(
                         'uglifyjs2',
                         new UglifyJs2Filter(
-                            $filters['uglifyjs2']['bin'],
-                            $filters['uglifyjs2']['node']
+                            $this->config['filters']['uglifyjs2']['bin'],
+                            $this->config['filters']['uglifyjs2']['node']
                         )
                     );
                     break;

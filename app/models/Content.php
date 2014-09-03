@@ -2190,6 +2190,8 @@ class Content
             return false;
         }
 
+        dispatchEventWithParams('content.update', array('content' => $this));
+
         return true;
     }
 
@@ -2218,6 +2220,8 @@ class Content
             return false;
         }
 
+        dispatchEventWithParams('content.update', array('content' => $this));
+
         return true;
     }
 
@@ -2242,6 +2246,7 @@ class Content
             return false;
         }
 
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -2251,27 +2256,37 @@ class Content
      *
      * @return array if it is in the contentmeta table
      **/
-
     public function loadAllContentProperties($id = null)
     {
-        if ($this->id == null && $id == null) {
-            return false;
-        }
-        if (!empty($id)) {
-            $this->id = $id;
+        $cache             = getService('cache');
+        $contentProperties = $cache->fetch('content-meta-'.$this->id);
+
+        if (!is_array($contentProperties)) {
+            $contentProperties = array();
+
+            if ($this->id == null && $id == null) {
+                return false;
+            }
+            if (!empty($id)) {
+                $this->id = $id;
+            }
+
+            $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
+            $properties = $GLOBALS['application']->conn->GetArray($sql, array((int) $this->id));
+
+            if (is_null($properties) || !is_array($properties)) {
+                $contentProperties = array();
+            } else {
+                foreach ($properties as $property) {
+                    $contentProperties[$property['meta_name']] = $property['meta_value'];
+                }
+            }
+
+            $cache->save('content-meta-'.$this->id, $contentProperties);
         }
 
-        $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-        if ($rs == false) {
-            return false;
-        }
-        while (!$rs->EOF) {
-            $name = $rs->fields['meta_name'];
-            $this->{$name} = $rs->fields['meta_value'];
-
-            $rs->MoveNext();
+        foreach ($contentProperties as $key => $value) {
+            $this->{$key} = $value;
         }
 
         return $this;
@@ -2298,6 +2313,8 @@ class Content
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }

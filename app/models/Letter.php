@@ -265,7 +265,7 @@ class Letter extends Content
         try {
             $html = $tpl->fetch('frontpage/contents/_content.tpl');
         } catch (\Exception $e) {
-            $html = _('Letter not available');
+            $html = '';
         }
 
         return $html;
