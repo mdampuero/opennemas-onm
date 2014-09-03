@@ -96,13 +96,6 @@ class Article extends Content
     public $footer_video2 = null;
 
     /**
-     * Wheter allowing comments in this article
-     *
-     * @var boolean
-     **/
-    public $with_comment  = null;
-
-    /**
      * The inner title of this article
      *
      * @var string
@@ -202,27 +195,21 @@ class Article extends Content
             = (!isset($data['img2_footer']) || empty($data['img2_footer']))
                 ? ''
                 : $data['img2_footer'];
-        $data['with_comment']
-            = (!isset($data['with_comment']) || empty($data['with_comment']))
-                ? ''
-                : intval($data['with_comment']);
 
         parent::create($data);
 
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
                             `summary`, `img1`, `img1_footer`,
                             `img2`, `img2_footer`, `fk_video`, `fk_video2`,
-                            `footer_video2`,
-                            `with_comment`, `title_int`) " .
-                        "VALUES (?,?,?,?, ?,?,?,?, ?,?,?, ?,?)";
+                            `footer_video2`, `title_int`) " .
+                        "VALUES (?,?,?, ?,?,?, ?,?,?,?, ?,?)";
 
         $values = array(
             $this->id,
             $data['subtitle'], $data['agency'],  $data['summary'],
             $data['img1'], $data['img1_footer'],
             $data['img2'], $data['img2_footer'], $data['fk_video'],
-            $data['fk_video2'], $data['footer_video2'],
-            $data['with_comment'], $data['title_int']
+            $data['fk_video2'], $data['footer_video2'], $data['title_int']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -313,10 +300,6 @@ class Article extends Content
             (!isset($data['img2_footer']) || empty($data['img2_footer']))
             ? ''
             : $data['img2_footer'];
-        $data['with_comment'] =
-        (!isset($data['with_comment']) || empty($data['with_comment']))
-            ? ''
-            : intval($data['with_comment']);
 
         parent::update($data);
 
@@ -324,14 +307,14 @@ class Article extends Content
                 ."SET `subtitle`=?, `agency`=?, `summary`=?, "
                 ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
                 ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                ."`with_comment`=?, `title_int`=? "
+                ."`title_int`=? "
                 ."WHERE pk_article=?";
 
         $values = array(
             strtoupper($data['subtitle']), $data['agency'], $data['summary'],
             $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
             $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
-            $data['with_comment'], $data['title_int'],
+            $data['title_int'],
             $data['id']
         );
 
