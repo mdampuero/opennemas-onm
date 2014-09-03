@@ -167,6 +167,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         $scope.user            = response.data.user;
 
                         httpInterceptor.loginConfirmed();
+
+                        fakeLogin();
                     } else {
                         $scope.token    = response.data.token;
                         $scope.attempts = response.data.attempts;
@@ -271,6 +273,25 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             }
         });
 
+        /**
+         * Submits a fake login form and force browsers to save credentials.
+         */
+        function fakeLogin() {
+            var iframe    = document.getElementById("fake-login");
+            var iframedoc = iframe.contentWindow ? iframe.contentWindow.document : iframe.contentDocument;
+
+            var fakeForm     = iframedoc.getElementById("fake-login-form");
+            var fakeUsername = iframedoc.getElementById("username");
+            var fakePassword = iframedoc.getElementById("password");
+
+            fakeUsername.value = $scope.username;
+            fakePassword.value = $scope.password;
+            fakeForm.submit();
+        }
+
+        /**
+         * Empties ng-view.
+         */
         function refreshApp() {
             var host = document.getElementById('view');
             if(host) {
@@ -280,6 +301,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             }
         }
 
+        /**
+         * Empties ng-view when route changes.
+         *
+         * @param Object event The event object.
+         * @param array  args  The list of arguments.
+         */
         $rootScope.$on('$routeChangeStart',
             function (event, next, current) {
                 refreshApp();

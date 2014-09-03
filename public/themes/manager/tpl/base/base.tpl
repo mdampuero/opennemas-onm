@@ -277,7 +277,9 @@
                 </button>
             </div>
             <div class="col-md-5 "><br>
-                <form class="login-form" name="loginForm" novalidate>
+                <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
+                    <!-- Hack to allow web browsers to remember credentials with AngularJS -->
+                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl" style="display:none"></iframe>
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">Username</label>
@@ -318,7 +320,7 @@
                     <input type="hidden" name="_referer" value="{$referer}">
                     <div class="row">
                         <div class="col-md-10">
-                            <button class="btn btn-primary btn-cons pull-right" ng-click="login()" ng-disabled="loading" type="button">
+                            <button class="btn btn-primary btn-cons pull-right" ng-disabled="loading" type="submit">
                               <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
                               Login
                             </button>

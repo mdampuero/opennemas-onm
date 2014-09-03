@@ -32,6 +32,10 @@ security:
             pattern:  ^/managerws/login$
             security: false
 
+        manager_ws_login_tpl:
+            pattern: ^/managerws/template/login:(fake_form|blank).tpl$
+            security: false
+
         frontend_login:
             pattern:  ^/login$
             security: false
