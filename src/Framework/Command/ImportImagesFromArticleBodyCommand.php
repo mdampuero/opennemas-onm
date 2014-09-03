@@ -288,9 +288,11 @@ EOF
             $body = preg_replace('@<a .*?href=".+?".*?><img .*?><\/a>@', '', $body);
             $body = preg_replace('@<img .*?>@', '', $body);
 
+            $summary = \StringUtils::get_num_words(html_entity_decode($body), 20);
+
             // Set sql's for updating articles body
             $sql = 'UPDATE `contents` SET `body` = \''.$body.'\',
-                   `description` = \''.\StringUtils::get_num_words($body, 50).'\'
+                   `description` = \''.$summary.'\'
                     WHERE `pk_content` ='.$article->id;
 
             $rs = $this->connection->Execute($sql);
@@ -300,11 +302,23 @@ EOF
                 );
             }
 
+            // Set sql's for updating articles images
+            $sql = 'UPDATE  `articles` SET  `summary` = \''.$summary.'\'
+                    WHERE  `pk_article` = '.$article->id;
+
+            $rs = $this->connection->Execute($sql);
+            if ($rs == false) {
+                $this->output->writeln(
+                    "\tArticle ".$article->id." summary not updated"
+                );
+            }
+
             // Set image to article and update
             if ($imageId !== false) {
                 // Set sql's for updating articles images
                 $sql = 'UPDATE  `articles` SET  `img1` = '.$imageId.',
                         `img1_footer` = \''.$footer.'\',
+                        `summary` = \''.$summary.'\',
                         `img2` = '.$imageId.',
                         `img2_footer` = \''.$footer.'\' WHERE  `pk_article` = '.$article->id;
 
