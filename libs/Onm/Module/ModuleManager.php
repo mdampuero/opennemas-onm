@@ -179,6 +179,11 @@ class ModuleManager
                     'name' => _('Advanced frontpage managers'),
                 ],
                 [
+                    'id'   => 'BLOG_MANAGER',
+                    'plan' => 'Other',
+                    'name' => _('Blog'),
+                ],
+                [
                     'id'   => 'BOOK_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Books'),
