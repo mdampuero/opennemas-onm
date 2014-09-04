@@ -240,8 +240,11 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     }
                 }
             })
+            .when('/404', {
+                templateUrl: 'error',
+            })
             .otherwise({
-                redirectTo: '/',
+                redirectTo: '/404',
             });
     })
     .value('googleChartApiConfig', {
