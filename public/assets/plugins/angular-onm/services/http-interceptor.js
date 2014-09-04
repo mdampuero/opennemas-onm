@@ -51,6 +51,8 @@
             httpBuffer.append(rejection.config, deferred);
             $rootScope.$broadcast('auth-login-required', rejection);
             return deferred.promise;
+          } else if (rejection.status === 404 && !rejection.config.ignoreAuthModule) {
+            $rootScope.$broadcast('http-error', rejection);
           } else if (rejection.status === 426 && !rejection.config.ignoreAuthModule) {
             $rootScope.$broadcast('application-need-upgrade', rejection);
           }
