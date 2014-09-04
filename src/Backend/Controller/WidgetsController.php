@@ -63,8 +63,13 @@ class WidgetsController extends Controller
         $category = $request->query->get('category', 'home');
 
         $widget = new \Widget($id);
-        $parameters = $widget->getProperty('parameters');
 
+        if (is_string($widget->params)) {
+            $widget->params = unserialize($widget->params);
+            if (!is_array($widget->params)) {
+                $widget->params = array();
+            }
+        }
         if (is_null($widget->id)) {
             m::add(sprintf(_('Unable to find a widget with the id "%d"'), $id), m::ERROR);
 
@@ -100,6 +105,8 @@ class WidgetsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $post = $request->request;
+            $items = $post->get('items');
+            $values = $post->get('values');
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
@@ -110,7 +117,7 @@ class WidgetsController extends Controller
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
                 'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
-                'parameters'     => $post->filter('parameters', null, FILTER_SANITIZE_STRING),
+                'params'         => array_combine($items, $values),
             );
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -166,6 +173,9 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
+        $items = $post->get('items');
+        $values = $post->get('values');
+
         $widgetData = array(
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
@@ -176,7 +186,7 @@ class WidgetsController extends Controller
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
             'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
-            'parameters'      => $post->filter('parameters', null, FILTER_SANITIZE_STRING),
+            'params'          => array_combine($items, $values),
         );
         if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
             $widgetData['content'] = $widgetData['intelligentType'];

@@ -69,6 +69,11 @@
                                 </select>
                             </div>
                         </div>
+                        {if isset($widget) && $widget->renderlet == 'intelligentwidget'}
+                            <button class="btn btn-params" type="button">
+                               Parameters
+                            </button>
+                        {/if}
                     </div>
                 </div>
 
@@ -82,6 +87,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="contentform-main">
@@ -108,18 +114,45 @@
                         </div>
                     </div>
                 </div>
-                {acl isAllowed="ONLY_MASTERS"}
-                <div class="control-group">
-                    <label for="parameters" class="control-label">{t}Parameters{/t}</label>
-                    <div class="controls">
-                        <textarea name="parameters" id="parameters" class="input-xxlarge" data-preset="simple">{$widget->parameters|clearslash}</textarea>
-                    </div>
-                </div>
-                {/acl}
+
             </div>
         </div>
     </div>
+
+    <div class="modal hide fade" id="modal-params">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3>{t}Parameters{/t}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{t}Use this option only if you are avanced user{/t}</p>
+            <div id="params">
+                {foreach $widget->params as $item => $value}
+                    <div class="widget-param">
+                        <div class="input-append" style="display:inline-block">
+                            <input type="text" name="items[]" value="{$item}"/>
+                            <input type="text" name="values[]" value="{$value}">
+                            <div class="btn addon del">
+                                <i class="icon-trash"></i>
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
+            <br>
+        </div>
+        <div class="modal-footer">
+            <a id="add_param" class="btn">
+                <i class="icon-plus"></i>
+                {t}Add parameter{/t}
+            </a>
+            <a id="save" class="btn" data-dismiss="modal" >
+                {t}Cerrar{/t}
+            </a>
+        </div>
+    </div>
 </form>
+
 {/block}
 
 
@@ -127,6 +160,18 @@
 {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
 {/javascripts}
+<script id="param-template" type="text/x-handlebars-template">
+<div class="widget-param">
+    <div class="input-append">
+        <input type="text" name="items[]" value=""/>
+        <input type="text" name="values[]" value=""/>
+        <div class="btn addon del">
+            <i class="icon-trash"></i>
+        </div>
+    </div>
+</div>
+</script>
+
 <script type="text/javascript">
 var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
 
@@ -143,6 +188,38 @@ jQuery(document).ready(function($) {
 
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+
+    $('#params').on('click', '.del', function() {
+        var button = $(this);
+        button.closest('.widget-param').each(function(){
+            $(this).remove();
+        });
+    });
+
+    $('#add_param').on('click', function(){
+        var source = $('#param-template').html();
+        $('#params').append(source);
+    });
+    $(".btn-params").on('click', function () {
+        $("#modal-params").modal({
+            backdrop: 'static', //Show a grey back drop
+            keyboard: true,
+        });
+    });
+    $('#modal-params a.btn.yes').on('click', function(e, ui) {
+        e.preventDefault();
+        var url = '';
+        if (url) {
+            $.ajax({
+                url:  url,
+                success: function(){
+                    $("#modal-params").modal('hide');
+                }
+            });
+        }
+
+        e.preventDefault();
     });
 
     $('#renderlet').on('change', function() {
