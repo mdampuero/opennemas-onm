@@ -12,14 +12,14 @@
         <tabset class="tab-form" ng-if="!serverData.not_supported_message">
             <tab heading="{t}Status{/t}">
 
-                <h4>Opcache summary</h4>
+                <h4>{t}Opcache summary{/t}</h4>
                 <div class="row">
                     <div google-chart chart="chartObjectMem" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
                     <div google-chart chart="chartObjectKeys" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
                     <div google-chart chart="chartObjectHits" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
                 </div>
 
-                <h4>Detailed statistics</h4>
+                <h4>{t}Detailed statistics{/t}</h4>
 
                 <table class="table table-condensed table-stripped">
                     <tr ng-repeat="(key, value) in serverData.status_key_values">
@@ -40,9 +40,9 @@
                 <table class="table table-condensed table-stripped">
                     <thead>
                         <tr>
-                            <th width="70%">Path</th>
-                            <th width="20%">Memory</th>
-                            <th width="10%">Hits</th>
+                            <th width="70%">{t}Path{/t}</th>
+                            <th width="20%">{t}Memory{/t}</th>
+                            <th width="10%">{t}Hits{/t}</th>
                         </tr>
                     </thead>
                     <tr ng-repeat-start="dir in  serverData.files_key_values">

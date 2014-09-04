@@ -118,8 +118,8 @@
             <div class="error-container">
                 <div class="error-main">
                     <div class="error-number"> 404 </div>
-                    <div class="error-description"> We seem to have lost you in the clouds. </div>
-                    <div class="error-description-mini"> The page your looking for is not here </div>
+                    <div class="error-description"> {t}We seem to have lost you in the clouds.{/t} </div>
+                    <div class="error-description-mini"> {t}The page your looking for is not here{/t} </div>
                     <br>
                 </div>
             </div>
@@ -129,10 +129,10 @@
 <div id="footer">
     <div class="error-container">
         <ul class="footer-links">
-            <li><a href="#">About</a></li>
-            <li><a href="#">Help &amp; FAQ</a></li>
-            <li><a href="#">Privacy </a></li>
-            <li><a href="#">Legal</a></li>
+            <li><a href="#">{t}About{/t}</a></li>
+            <li><a href="#">{t}Help &amp; FAQ{/t}</a></li>
+            <li><a href="#">{t}Privacy{/t} </a></li>
+            <li><a href="#">{t}Legal{/t}</a></li>
         </ul>
         <br>
         <div class="copyright"> © 2014 Openhost S.L. </div>

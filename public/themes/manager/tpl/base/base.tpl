@@ -173,7 +173,7 @@
                               </span>
                               <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="user-options">
                                   <li>
-                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> My Account</a>
+                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> {t}My Account{/t}</a>
                                   </li>
                                   <li class="divider"></li>
                                   <li>
@@ -202,7 +202,7 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
                     <li class="start" ng-class="{ 'active': false }">
-                        <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
+                        <a href="#"><i class="fa fa-home"></i> <span class="title">{t}Dashboard{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="go();">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
@@ -267,17 +267,16 @@
     <div class="container" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">
-                <h2>Sign in Opennemas</h2>
-                <p>Use Facebook, Twitter or your email to sign in.<br>
-                    <a href="#">Sign up Now!</a> for a webarch account,It's free and always will be..</p>
+                <h2>{t}Opennemas manager{/t}</h2>
+                <p>{t}Use manager account to sign in.{/t}<br>
                 <br>
-                <button class="btn btn-block btn-info col-md-8" type="button">
+<!--                 <button class="btn btn-block btn-info col-md-8" type="button">
                     <span class="pull-left"><i class="icon-facebook"></i></span>
                     <span class="bold">Login with Facebook</span> </button>
                 <button class="btn btn-block btn-success col-md-8" type="button">
                     <span class="pull-left"><i class="icon-twitter"></i></span>
                     <span class="bold">Login with Twitter</span>
-                </button>
+                </button> -->
             </div>
             <div class="col-md-5 "><br>
                 <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
@@ -285,7 +284,7 @@
                     <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl" style="display:none"></iframe>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">Username</label>
+                            <label class="form-label">{t}Username{/t}</label>
                             <div class="controls">
                                 <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
                             </div>
@@ -293,7 +292,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">Password</label>
+                            <label class="form-label">{t}Password</label>
                             <span class="help"></span>
                             <div class="controls">
                                 <div class="input-with-icon right">
@@ -325,7 +324,7 @@
                         <div class="col-md-10">
                             <button class="btn btn-primary btn-cons pull-right" ng-disabled="loading" type="submit">
                               <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-                              Login
+                              {t}Login{/t}
                             </button>
                         </div>
                     </div>
