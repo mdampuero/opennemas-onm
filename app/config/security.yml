@@ -36,6 +36,10 @@ security:
             pattern: ^/managerws/template/login:(fake_form|blank).tpl$
             security: false
 
+        manager_ws_instances:
+            pattern: ^/managerws/instances/(checkinstancename|checkmailinuse|create)
+            security: false
+
         frontend_login:
             pattern:  ^/login$
             security: false
