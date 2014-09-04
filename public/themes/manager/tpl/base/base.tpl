@@ -261,6 +261,9 @@
     <script type="text/ng-template" id="modal-upgrade">
         {include file="common/modal_application_upgrade.tpl"}
     </script>
+    <script type="text/ng-template" id="error">
+        {include file="error/404.tpl"}
+    </script>
     <div class="container" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">

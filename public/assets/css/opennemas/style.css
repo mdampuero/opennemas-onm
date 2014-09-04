@@ -1009,3 +1009,8 @@ tr:hover .listing-inline-actions {
     left: 50%;
     margin-left: -360px;
 }
+
+.error-container .error-main {
+    margin: 10% auto;
+    position: relative;
+}
