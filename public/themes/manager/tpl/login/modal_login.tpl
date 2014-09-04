@@ -3,7 +3,7 @@
     <p>Use Facebook, Twitter or your email to sign in.<br></p>
 </div>
 <div class="tiles grey p-t-20 p-b-20 text-black">
-    <form id="frm_login" class="animated fadeIn">
+    <form id="modal-login-form" class="animated fadeIn">
         <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -16,12 +16,12 @@
         <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <input name="reg_username" id="reg_username" class="form-control" ng-model="user.username" placeholder="Username" type="text">
+                    <input name="username" id="username" class="form-control" ng-model="user.username" placeholder="Username" type="text">
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <input name="reg_pass" id="reg_pass" class="form-control" ng-model="user.password" placeholder="Password" type="password">
+                    <input name="password" id="password" class="form-control" ng-model="user.password" placeholder="Password" type="password">
                 </div>
             </div>
         </div>
