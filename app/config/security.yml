@@ -88,9 +88,9 @@ security:
         #         path:   manager_logout
         #         target: manager_login_form
 
-        manager_ws_check_user:
-            pattern:  ^/managerws/check-user$
-            anonymous: ~
+        manager_ws:
+            entry_point: authentication_entry_point
+            pattern:    ^/managerws/*
             form_login:
                 check_path:                     manager_ws_auth_check
                 login_path:                     manager_ws_auth_login
@@ -103,9 +103,9 @@ security:
                 path:   manager_ws_auth_logout
                 target: manager_ws_auth_login
 
-        manager_ws:
-            entry_point: authentication_entry_point
-            pattern:    ^/managerws/*
+        manager_ws_check_user:
+            pattern:  ^/managerws/check-user$
+            anonymous: ~
             form_login:
                 check_path:                     manager_ws_auth_check
                 login_path:                     manager_ws_auth_login
