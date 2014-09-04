@@ -111,10 +111,12 @@ class WebServiceController extends Controller
 
         try {
             $im->persist($instance);
+
+
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
-            $im->configureInstance($instance->external, $instance->id);
+            $im->configureInstance($instance);
             $im->createUser($instance->id, $user);
         } catch (DatabaseNotRestoredException $e) {
             $errors[] = $e->getMessage();
