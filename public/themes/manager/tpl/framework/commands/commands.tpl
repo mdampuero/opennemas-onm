@@ -46,7 +46,7 @@
                             <div class="control-group">
                                 <div class="control">
                                     <select name="params[instance]" ng-model="theme">
-                                        <option value="">{tAll{/t}</option>
+                                        <option value="">{t}All{/t}</option>
                                         <option value="{$instance}" ng-repeat="instance in template.instances">[% instance %]</option>
                                     </select>
                                 </div>

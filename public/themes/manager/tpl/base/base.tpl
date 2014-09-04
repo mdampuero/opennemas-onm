@@ -292,7 +292,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">{t}Password</label>
+                            <label class="form-label">{t}Password{/t}</label>
                             <span class="help"></span>
                             <div class="controls">
                                 <div class="input-with-icon right">
