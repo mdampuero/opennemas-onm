@@ -609,7 +609,7 @@ class InstanceManager extends BaseManager
      *
      * @param Instance $instance The instance to configure.
      */
-    public function configureInstance($instance)
+    public function configureInstance(&$instance)
     {
         $namespace = $this->cache->getNamespace();
 
@@ -625,7 +625,7 @@ class InstanceManager extends BaseManager
             $instance->external['site_title'] = $instance->name . ' - ' . $title;
         }
 
-        $description = $this->sm->get('description');
+        $description = $this->sm->get('site_description');
         if (strpos($description, $instance->name) === false) {
             $instance->external['site_description'] = $instance->name . ' - ' . $description;
         }
