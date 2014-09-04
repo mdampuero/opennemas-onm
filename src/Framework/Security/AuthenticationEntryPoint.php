@@ -28,7 +28,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface {
     public function start(Request $request, AuthenticationException $authException = null)
     {
         $array = array('success' => false);
-        $response = new Response(json_encode($array), 401);
+        $response = new Response(json_encode($array), 499);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
