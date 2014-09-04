@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
 
 /**
  * Handles the actions for the user authentication in backend.
@@ -52,7 +53,7 @@ class AuthenticationController extends Controller
 
             if (!$user) {
                 $request->getSession()->getFlashBag()->add('error', _('Invalid token'));
-                return $this->redirect($this->generateUrl('admin_login_form'));
+                return $this->redirect($this->generateUrl('admin_login'));
             }
 
             $user = array_pop($user);
@@ -68,6 +69,13 @@ class AuthenticationController extends Controller
             if ($session->get('_security.backend.target_path')) {
                 $referer = $session->get('_security.backend.target_path');
             }
+
+            // Set last_login date
+            $time = new \DateTime();
+            $time->setTimezone(new \DateTimeZone('UTC'));
+            $time = $time->format('Y-m-d H:i:s');
+
+            s::set('last_login', $time);
 
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
