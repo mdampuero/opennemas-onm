@@ -195,6 +195,13 @@ a:hover {
     color: rgb(111, 123, 138);
 }
 
+.profile-pic {
+    margin-right:5px;
+}
+#main-menu-toggle-wrapper,
+#fake-login {
+    display:none
+}
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

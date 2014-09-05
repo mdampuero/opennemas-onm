@@ -59,7 +59,7 @@
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation" ng-hide="mini">
-                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper">
                     <li class="dropdown">
                         <a id="main-menu-toggle" href="#main-menu">
                             <div class="iconset top-menu-toggle-white"></div>
@@ -110,6 +110,10 @@
                       <ul class="nav quick-section">
                           <li class="quicklinks">
                               <span class="a dropdown-toggle pull-right" data-placement="bottom" data-toggle="dropdown">
+                                  <div class="profile-pic">
+                                      <img class="gravatar" email="[% user.email %]" image="1" size="35" >
+                                  </div>
+
                                   <div class="user-details">
                                       <div class="username">
                                           <span class="badge badge-important hidden">3</span> [% user.name %]
@@ -128,9 +132,6 @@
                                       </span>
                                   </li>
                               </ul>
-                              <div class="profile-pic">
-                                  <img class="gravatar" email="[% user.email %]" image="1" size="35" >
-                              </div>
                           </li>
                       </ul>
                     </div>
@@ -210,24 +211,26 @@
     <script type="text/ng-template" id="error">
         {include file="error/ws_404.tpl"}
     </script>
-    <div class="container" ng-show="!auth.status && !auth.modal">
+    <div class="container login-container-wrapper" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">
                 <h2>{t}Opennemas manager{/t}</h2>
                 <p>{t}Use manager account to sign in.{/t}<br>
                 <br>
-<!--                 <button class="btn btn-block btn-info col-md-8" type="button">
+                <!--
+                <button class="btn btn-block btn-info col-md-8" type="button">
                     <span class="pull-left"><i class="icon-facebook"></i></span>
                     <span class="bold">Login with Facebook</span> </button>
                 <button class="btn btn-block btn-success col-md-8" type="button">
                     <span class="pull-left"><i class="icon-twitter"></i></span>
                     <span class="bold">Login with Twitter</span>
-                </button> -->
+                </button>
+                -->
             </div>
             <div class="col-md-5 "><br>
                 <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
                     <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl" style="display:none"></iframe>
+                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl"></iframe>
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">{t}Username{/t}</label>
