@@ -94,14 +94,14 @@
                             </span>
                         </li>
                     </ul>
-                    <ul class="nav quick-section">
+                    <!-- <ul class="nav quick-section">
                         <li class="m-r-10 input-prepend inside search-form no-boarder">
                             <span class="add-on">
                                 <span class="iconset top-search"></span>
                             </span>
                             <input name="" type="text"  class="no-boarder " placeholder="{t}Search Dashboard{/t}" style="width:250px;">
                         </li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <!-- END TOP NAVIGATION MENU -->
                 <!-- BEGIN CHAT TOGGLER -->
