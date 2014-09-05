@@ -938,13 +938,15 @@ tr:hover .listing-inline-actions {
 }
 
 .listing-inline-actions {
-    margin-top:5px;
+    margin-top:10px;
     font-size:13px;
     opacity: 0.4;
     clear:both;
+    line-height:2em;
 }
-.listing-inline-actions *:first-child {
+.listing-inline-actions .link:first-child {
     padding-left:0;
+    margin-right:5px;
 }
 .listing-inline-actions .link {
     color:#576475;
@@ -960,6 +962,10 @@ tr:hover .listing-inline-actions {
 }
 .listing-inline-actions .link i {
     margin-right:4px;
+}
+.listing-inline-actions button.link-danger {
+    margin-left:0px;
+    padding-left:0px;
 }
 
 .listing-inline-actions > *{
