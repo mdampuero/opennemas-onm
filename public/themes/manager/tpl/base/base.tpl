@@ -14,97 +14,43 @@
     {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
+    <style>
+      @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+    </style>
     {block name="header-css"}
-        {stylesheets src="@Common/plugins/pace/pace-theme-minimal.css,
-                          @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
-                          @Common/plugins/webarch/css/animate.min.css,
-                          @Common/plugins/bootstrap-select2/select2.css,
+        {stylesheets src="
+            @Common/plugins/pace/pace-theme-minimal.css,
+            @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+            @Common/plugins/webarch/css/animate.min.css,
+            @Common/plugins/bootstrap-select2/select2.css,
 
-                          @Common/plugins/bootstrap/css/bootstrap.min.css,
-                          @Common/plugins/font-awesome/css/font-awesome.min.css,
-                          @Common/css/bootstrap/bootstrap-fileupload.min.css"
-                     filters="cssrewrite"}
-            <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/stylesheets}
-        {stylesheets src="@Common/plugins/webarch/css/style.css,
-                          @Common/plugins/webarch/css/responsive.css,
-                          @Common/plugins/webarch/css/custom-icon-set.css,
-                          @Common/plugins/webarch/css/magic_space.css,
-                          @Common/plugins/webarch/css/tiles_responsive.css,
+            @Common/plugins/bootstrap/css/bootstrap.min.css,
 
-                          @Common/plugins/angular-quickdate/css/ng-quick-date.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
-                          @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
-                          @Common/plugins/jquery-notifications/css/messenger.css,
-                          @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+            @Common/plugins/webarch/css/style.css,
+            @Common/plugins/font-awesome/css/font-awesome.min.css,
+            @Common/css/bootstrap/bootstrap-fileupload.min.css,
+            @Common/plugins/webarch/css/responsive.css,
+            @Common/plugins/webarch/css/custom-icon-set.css,
+            @Common/plugins/webarch/css/magic_space.css,
+            @Common/plugins/webarch/css/tiles_responsive.css,
 
-                          @Common/css/opennemas/style.css"
-                     filters="cssrewrite"}
-            <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/stylesheets}
+            @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+            @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+            @Common/plugins/jquery-notifications/css/messenger.css,
+            @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+
+            @Common/css/opennemas/style.css"
+        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
     {block name="header-js"}
-        {javascripts src="@Common/plugins/jquery/jquery.min.js,
-                          @Common/plugins/jquery-ui/jquery-ui.min.js,
-                          @Common/plugins/bootstrap/js/bootstrap.min.js,
-                          @Common/plugins/breakpoints.js,
-                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
-                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
-                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
-
-                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
-                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
-                          @Common/plugins/jquery-notifications/js/messenger.min.js,
-                          @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
-
-                          @Common/plugins/webarch/js/core.js,
-                          @Common/plugins/pace/pace.min.js,
-                          @Common/js/onm/scripts.js" filters="uglifyjs"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-
-        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-        {javascripts
-            src="@Common/js/jquery/select2/select2.min.js,
-                @Common/js/libs/modernizr.min.js,
-                @Common/js/onm/md5.min.js,
-                @Common/js/onm/scripts.js,
-                @Common/js/onm/jquery.onm-editor.js"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-    {/block}
-
-    {block name="footer-js"}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
         </script>
 
-        {javascripts src="@FosJsRoutingBundle/js/router.js,
-                          @Common/js/routes.js,
-                          @Common/plugins/angular/angular.min.js,
-                          @Common/plugins/angular-google-chart/angular-google-chart.js,
-                          @Common/plugins/angular-checklist-model/checklist-model.js,
-                          @Common/plugins/angular-route/angular-route.min.js,
-                          @Common/plugins/angular-recaptcha/module.js,
-                          @Common/plugins/angular-recaptcha/directive.js,
-                          @Common/plugins/angular-recaptcha/service.js,
-                          @Common/plugins/angular-translate/angular-translate.min.js,
-                          @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
-                          @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
-                          @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
-                          @Common/plugins/angular-ui/select2.js,
-
-                          @Common/plugins/angular-onm/*,
-
-                          @ManagerTheme/js/ManagerApp.js,
-                          @ManagerTheme/js/Controllers.js,
-
-                          @ManagerTheme/js/controllers/*
-        "  filters="uglifyjs"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {/block}
 
 </head>
@@ -336,5 +282,58 @@
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
+
+    {block name="footer-js"}
+
+        {javascripts src="
+            @Common/plugins/jquery/jquery.min.js,
+            @Common/plugins/jquery-ui/jquery-ui.min.js,
+            @Common/plugins/bootstrap/js/bootstrap.min.js,
+            @Common/plugins/breakpoints.js,
+            @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+            @Common/plugins/jquery-block-ui/jqueryblockui.js,
+            @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+            @Common/plugins/jquery-slider/jquery.sidr.min.js,
+            @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
+            @Common/plugins/jquery-notifications/js/messenger.min.js,
+            @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
+
+            @Common/plugins/webarch/js/core.js,
+            @Common/plugins/pace/pace.min.js,
+            @Common/js/onm/scripts.js,
+
+            @Common/js/jquery/select2/select2.min.js,
+            @Common/js/libs/modernizr.min.js,
+            @Common/js/onm/md5.min.js,
+            @Common/js/onm/scripts.js,
+            @Common/js/onm/jquery.onm-editor.js,
+
+
+            @FosJsRoutingBundle/js/router.js,
+            @Common/js/routes.js,
+            @Common/plugins/angular/angular.min.js,
+            @Common/plugins/angular-google-chart/angular-google-chart.js,
+            @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-route/angular-route.min.js,
+            @Common/plugins/angular-recaptcha/module.js,
+            @Common/plugins/angular-recaptcha/directive.js,
+            @Common/plugins/angular-recaptcha/service.js,
+            @Common/plugins/angular-translate/angular-translate.min.js,
+            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+            @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+            @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/plugins/angular-ui/select2.js,
+
+            @Common/plugins/angular-onm/*,
+
+            @ManagerTheme/js/ManagerApp.js,
+            @ManagerTheme/js/Controllers.js,
+
+            @ManagerTheme/js/controllers/*
+        " filters="uglifyjs"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
 </body>
 </html>
