@@ -79,13 +79,19 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                             epp: 25
                         };
 
+                        var filters = itemService.decodeFilters();
+                        for(var name in filters) {
+                            data[name] = filters[name];
+                        }
+
                         return itemService.list('manager_ws_instances_list', data).then(
                             function (response) {
                                 return response.data;
                             }
                         );
                     }
-                }
+                },
+                reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_create'), {
                 templateUrl: '/managerws/template/instances:item.tpl',
