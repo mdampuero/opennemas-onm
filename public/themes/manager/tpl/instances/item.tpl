@@ -127,7 +127,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row form-group" ng-repeat="domain in instance.domains">
+                    <div class="row form-group" ng-repeat="domain in instance.domains track by $index">
                         <div class="col-sm-12">
                             <div class="radio radio-input radio-primary">
                                 <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]" class="blue">

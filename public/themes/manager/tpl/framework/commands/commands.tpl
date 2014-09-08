@@ -35,17 +35,18 @@
                             clean:smarty-cache
                         </td>
                         <td>
-                            Cleans the cache for an specific instance
+                            {t}Cleans the cache for an specific instance{/t}
 
                             <div class="help-block">
-                                Select the desired instance where clean cache and compile files in. <br>Select 'All' for cleaning all the cache/compile files.
+                                {t}Select the desired instance where clean cache and compile files in.
+                                <br>Select 'All' for cleaning all the cache/compile files.{/t}
                             </div>
                         </td>
                         <td>
                             <div class="control-group">
                                 <div class="control">
                                     <select name="params[instance]" ng-model="theme">
-                                        <option value="">All</option>
+                                        <option value="">{t}All{/t}</option>
                                         <option value="{$instance}" ng-repeat="instance in template.instances">[% instance %]</option>
                                     </select>
                                 </div>

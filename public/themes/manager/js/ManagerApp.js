@@ -157,7 +157,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 controller:  'UserListCtrl',
                 resolve: {
                     data: function(itemService) {
-                        return itemService.list('manager_ws_users_list', {}).then(
+                        var data = {
+                            orderBy: { name: 'asc' },
+                            epp: 25
+                        };
+
+                        return itemService.list('manager_ws_users_list', data).then(
                             function (response) {
                                 return response.data;
                             }
@@ -196,7 +201,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 controller:  'UserGroupListCtrl',
                 resolve: {
                     data: function(itemService) {
-                        return itemService.list('manager_ws_user_groups_list', {}).then(
+                        var data = {
+                            orderBy: { name: 'asc' },
+                            epp: 25
+                        };
+
+                        return itemService.list('manager_ws_user_groups_list', data).then(
                             function (response) {
                                 return response.data;
                             }
@@ -230,8 +240,11 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     }
                 }
             })
+            .when('/404', {
+                templateUrl: 'error',
+            })
             .otherwise({
-                redirectTo: '/',
+                redirectTo: '/404',
             });
     })
     .value('googleChartApiConfig', {

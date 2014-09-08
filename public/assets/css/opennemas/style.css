@@ -195,6 +195,13 @@ a:hover {
     color: rgb(111, 123, 138);
 }
 
+.profile-pic {
+    margin-right:5px;
+}
+#main-menu-toggle-wrapper,
+#fake-login {
+    display:none
+}
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -938,13 +945,15 @@ tr:hover .listing-inline-actions {
 }
 
 .listing-inline-actions {
-    margin-top:5px;
+    margin-top:10px;
     font-size:13px;
     opacity: 0.4;
     clear:both;
+    line-height:2em;
 }
-.listing-inline-actions *:first-child {
+.listing-inline-actions .link:first-child {
     padding-left:0;
+    margin-right:5px;
 }
 .listing-inline-actions .link {
     color:#576475;
@@ -960,6 +969,10 @@ tr:hover .listing-inline-actions {
 }
 .listing-inline-actions .link i {
     margin-right:4px;
+}
+.listing-inline-actions button.link-danger {
+    margin-left:0px;
+    padding-left:0px;
 }
 
 .listing-inline-actions > *{
@@ -1008,4 +1021,9 @@ tr:hover .listing-inline-actions {
     width: 720px;
     left: 50%;
     margin-left: -360px;
+}
+
+.error-container .error-main {
+    margin: 10% auto;
+    position: relative;
 }

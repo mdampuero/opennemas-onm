@@ -7,10 +7,10 @@
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$http', '$location', '$modal', '$rootScope', '$scope', '$window', 'vcRecaptchaService',
-    'httpInterceptor', 'authService', 'fosJsRouting',
+    'httpInterceptor', 'authService', 'fosJsRouting', 'messenger',
     function (
         $http, $location, $modal, $rootScope, $scope, $window, vcRecaptchaService,
-        httpInterceptor, authService, fosJsRouting
+        httpInterceptor, authService, fosJsRouting, messenger
     ) {
         /**
          * The fosJsRouting service.
@@ -324,6 +324,19 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 templateUrl: 'modal-upgrade',
                 controller: 'MasterCtrl',
                 backdrop: 'static'
+            });
+        });
+
+        /**
+         * Shows a message when an error while sending an Ajax request occurs.
+         *
+         * @param Object event The event object.
+         * @param array  args  The list of arguments.
+         */
+        $scope.$on('http-error', function (event, args) {
+            messenger.post({
+                type: 'error',
+                message: args.data.text
             });
         });
     }

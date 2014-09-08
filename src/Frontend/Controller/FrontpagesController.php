@@ -95,7 +95,7 @@ class FrontpagesController extends Controller
             /***** GET ALL FRONTPAGE'S IMAGES *******/
             $imageIdsList = array();
             foreach ($contentsInHomepage as $content) {
-                if (isset($content->img1)) {
+                if (isset($content->img1) && !empty($content->img1)) {
                     $imageIdsList []= $content->img1;
                 }
             }

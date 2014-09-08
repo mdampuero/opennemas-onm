@@ -14,97 +14,43 @@
     {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
+    <style>
+      @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+    </style>
     {block name="header-css"}
-        {stylesheets src="@Common/plugins/pace/pace-theme-minimal.css,
-                          @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
-                          @Common/plugins/webarch/css/animate.min.css,
-                          @Common/plugins/bootstrap-select2/select2.css,
+        {stylesheets src="
+            @Common/plugins/pace/pace-theme-minimal.css,
+            @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+            @Common/plugins/webarch/css/animate.min.css,
+            @Common/plugins/bootstrap-select2/select2.css,
 
-                          @Common/plugins/bootstrap/css/bootstrap.min.css,
-                          @Common/plugins/font-awesome/css/font-awesome.min.css,
-                          @Common/css/bootstrap/bootstrap-fileupload.min.css"
-                     filters="cssrewrite"}
-            <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/stylesheets}
-        {stylesheets src="@Common/plugins/webarch/css/style.css,
-                          @Common/plugins/webarch/css/responsive.css,
-                          @Common/plugins/webarch/css/custom-icon-set.css,
-                          @Common/plugins/webarch/css/magic_space.css,
-                          @Common/plugins/webarch/css/tiles_responsive.css,
+            @Common/plugins/bootstrap/css/bootstrap.min.css,
 
-                          @Common/plugins/angular-quickdate/css/ng-quick-date.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
-                          @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
-                          @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
-                          @Common/plugins/jquery-notifications/css/messenger.css,
-                          @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+            @Common/plugins/webarch/css/style.css,
+            @Common/plugins/font-awesome/css/font-awesome.min.css,
+            @Common/css/bootstrap/bootstrap-fileupload.min.css,
+            @Common/plugins/webarch/css/responsive.css,
+            @Common/plugins/webarch/css/custom-icon-set.css,
+            @Common/plugins/webarch/css/magic_space.css,
+            @Common/plugins/webarch/css/tiles_responsive.css,
 
-                          @Common/css/opennemas/style.css"
-                     filters="cssrewrite"}
-            <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/stylesheets}
+            @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+            @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+            @Common/plugins/jquery-notifications/css/messenger.css,
+            @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+
+            @Common/css/opennemas/style.css"
+        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
     {block name="header-js"}
-        {javascripts src="@Common/plugins/jquery/jquery.min.js,
-                          @Common/plugins/jquery-ui/jquery-ui.min.js,
-                          @Common/plugins/bootstrap/js/bootstrap.min.js,
-                          @Common/plugins/breakpoints.js,
-                          @Common/plugins/jquery-unveil/jquery.unveil.min.js,
-                          @Common/plugins/jquery-block-ui/jqueryblockui.js,
-                          @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
-
-                          @Common/plugins/jquery-slider/jquery.sidr.min.js,
-                          @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
-                          @Common/plugins/jquery-notifications/js/messenger.min.js,
-                          @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
-
-                          @Common/plugins/webarch/js/core.js,
-                          @Common/plugins/pace/pace.min.js,
-                          @Common/js/onm/scripts.js" filters="uglifyjs"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-
-        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-        {javascripts
-            src="@Common/js/jquery/select2/select2.min.js,
-                @Common/js/libs/modernizr.min.js,
-                @Common/js/onm/md5.min.js,
-                @Common/js/onm/scripts.js,
-                @Common/js/onm/jquery.onm-editor.js"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-    {/block}
-
-    {block name="footer-js"}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
         </script>
 
-        {javascripts src="@FosJsRoutingBundle/js/router.js,
-                          @Common/js/routes.js,
-                          @Common/plugins/angular/angular.min.js,
-                          @Common/plugins/angular-google-chart/angular-google-chart.js,
-                          @Common/plugins/angular-checklist-model/checklist-model.js,
-                          @Common/plugins/angular-route/angular-route.min.js,
-                          @Common/plugins/angular-recaptcha/module.js,
-                          @Common/plugins/angular-recaptcha/directive.js,
-                          @Common/plugins/angular-recaptcha/service.js,
-                          @Common/plugins/angular-translate/angular-translate.min.js,
-                          @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
-                          @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
-                          @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
-                          @Common/plugins/angular-ui/select2.js,
-
-                          @Common/plugins/angular-onm/*,
-
-                          @ManagerTheme/js/ManagerApp.js,
-                          @ManagerTheme/js/Controllers.js,
-
-                          @ManagerTheme/js/controllers/*
-        "  filters="uglifyjs"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {/block}
 
 </head>
@@ -113,7 +59,7 @@
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation" ng-hide="mini">
-                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper">
                     <li class="dropdown">
                         <a id="main-menu-toggle" href="#main-menu">
                             <div class="iconset top-menu-toggle-white"></div>
@@ -148,14 +94,14 @@
                             </span>
                         </li>
                     </ul>
-                    <ul class="nav quick-section">
+                    <!-- <ul class="nav quick-section">
                         <li class="m-r-10 input-prepend inside search-form no-boarder">
                             <span class="add-on">
                                 <span class="iconset top-search"></span>
                             </span>
                             <input name="" type="text"  class="no-boarder " placeholder="{t}Search Dashboard{/t}" style="width:250px;">
                         </li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <!-- END TOP NAVIGATION MENU -->
                 <!-- BEGIN CHAT TOGGLER -->
@@ -164,6 +110,10 @@
                       <ul class="nav quick-section">
                           <li class="quicklinks">
                               <span class="a dropdown-toggle pull-right" data-placement="bottom" data-toggle="dropdown">
+                                  <div class="profile-pic">
+                                      <img class="gravatar" email="[% user.email %]" image="1" size="35" >
+                                  </div>
+
                                   <div class="user-details">
                                       <div class="username">
                                           <span class="badge badge-important hidden">3</span> [% user.name %]
@@ -173,7 +123,7 @@
                               </span>
                               <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="user-options">
                                   <li>
-                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> My Account</a>
+                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> {t}My Account{/t}</a>
                                   </li>
                                   <li class="divider"></li>
                                   <li>
@@ -182,9 +132,6 @@
                                       </span>
                                   </li>
                               </ul>
-                              <div class="profile-pic">
-                                  <img class="gravatar" email="[% user.email %]" image="1" size="35" >
-                              </div>
                           </li>
                       </ul>
                     </div>
@@ -202,7 +149,7 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul>
                     <li class="start" ng-class="{ 'active': false }">
-                        <a href="#"><i class="fa fa-home"></i> <span class="title">Dashboard</span></a>
+                        <a href="#"><i class="fa fa-home"></i> <span class="title">{t}Dashboard{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="go();">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
@@ -261,13 +208,16 @@
     <script type="text/ng-template" id="modal-upgrade">
         {include file="common/modal_application_upgrade.tpl"}
     </script>
-    <div class="container" ng-show="!auth.status && !auth.modal">
+    <script type="text/ng-template" id="error">
+        {include file="error/ws_404.tpl"}
+    </script>
+    <div class="container login-container-wrapper" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">
-                <h2>Sign in Opennemas</h2>
-                <p>Use Facebook, Twitter or your email to sign in.<br>
-                    <a href="#">Sign up Now!</a> for a webarch account,It's free and always will be..</p>
+                <h2>{t}Opennemas manager{/t}</h2>
+                <p>{t}Use manager account to sign in.{/t}<br>
                 <br>
+                <!--
                 <button class="btn btn-block btn-info col-md-8" type="button">
                     <span class="pull-left"><i class="icon-facebook"></i></span>
                     <span class="bold">Login with Facebook</span> </button>
@@ -275,14 +225,15 @@
                     <span class="pull-left"><i class="icon-twitter"></i></span>
                     <span class="bold">Login with Twitter</span>
                 </button>
+                -->
             </div>
             <div class="col-md-5 "><br>
                 <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
                     <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl" style="display:none"></iframe>
+                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl"></iframe>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">Username</label>
+                            <label class="form-label">{t}Username{/t}</label>
                             <div class="controls">
                                 <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
                             </div>
@@ -290,7 +241,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-10">
-                            <label class="form-label">Password</label>
+                            <label class="form-label">{t}Password{/t}</label>
                             <span class="help"></span>
                             <div class="controls">
                                 <div class="input-with-icon right">
@@ -322,7 +273,7 @@
                         <div class="col-md-10">
                             <button class="btn btn-primary btn-cons pull-right" ng-disabled="loading" type="submit">
                               <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-                              Login
+                              {t}Login{/t}
                             </button>
                         </div>
                     </div>
@@ -334,5 +285,58 @@
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
+
+    {block name="footer-js"}
+
+        {javascripts src="
+            @Common/plugins/jquery/jquery.min.js,
+            @Common/plugins/jquery-ui/jquery-ui.min.js,
+            @Common/plugins/bootstrap/js/bootstrap.min.js,
+            @Common/plugins/breakpoints.js,
+            @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+            @Common/plugins/jquery-block-ui/jqueryblockui.js,
+            @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+            @Common/plugins/jquery-slider/jquery.sidr.min.js,
+            @Common/plugins/jquery-slimscroll/jquery.slimscroll.min.js,
+            @Common/plugins/jquery-notifications/js/messenger.min.js,
+            @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
+
+            @Common/plugins/webarch/js/core.js,
+            @Common/plugins/pace/pace.min.js,
+            @Common/js/onm/scripts.js,
+
+            @Common/js/jquery/select2/select2.min.js,
+            @Common/js/libs/modernizr.min.js,
+            @Common/js/onm/md5.min.js,
+            @Common/js/onm/scripts.js,
+            @Common/js/onm/jquery.onm-editor.js,
+
+
+            @FosJsRoutingBundle/js/router.js,
+            @Common/js/routes.js,
+            @Common/plugins/angular/angular.min.js,
+            @Common/plugins/angular-google-chart/angular-google-chart.js,
+            @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-route/angular-route.min.js,
+            @Common/plugins/angular-recaptcha/module.js,
+            @Common/plugins/angular-recaptcha/directive.js,
+            @Common/plugins/angular-recaptcha/service.js,
+            @Common/plugins/angular-translate/angular-translate.min.js,
+            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+            @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+            @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/plugins/angular-ui/select2.js,
+
+            @Common/plugins/angular-onm/*,
+
+            @ManagerTheme/js/ManagerApp.js,
+            @ManagerTheme/js/Controllers.js,
+
+            @ManagerTheme/js/controllers/*
+        " filters="uglifyjs"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
 </body>
 </html>

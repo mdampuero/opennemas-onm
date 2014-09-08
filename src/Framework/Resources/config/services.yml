@@ -29,6 +29,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
+    kernel.listener.webservice_exceptions:
+        class: Framework\EventListener\WebServiceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
     kernel.listener.access_denied_exceptions:
         class: Framework\EventListener\AccessDeniedExceptionsListener
         tags:

@@ -12,7 +12,7 @@
     </div>
 
     <p>
-        Here you will see some statistics about <strong>instances</strong> and other <br>
-        awesome things that will blow out your imagination.
+        {t escape=off}Here you will see some statistics about <strong>instances</strong> and other <br>
+        awesome things that will blow out your imagination.{/t}
     </p>
 </div>

@@ -46,11 +46,14 @@
     $httpProvider.interceptors.push(['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
       return {
         responseError: function(rejection) {
-          if (rejection.status === 401 && !rejection.config.ignoreAuthModule) {
+          if (rejection.status === 499 && !rejection.config.ignoreAuthModule) {
             var deferred = $q.defer();
             httpBuffer.append(rejection.config, deferred);
             $rootScope.$broadcast('auth-login-required', rejection);
             return deferred.promise;
+          } else if ((rejection.status === 404 || rejection.status === 500)
+                && !rejection.config.ignoreAuthModule) {
+            $rootScope.$broadcast('http-error', rejection);
           } else if (rejection.status === 426 && !rejection.config.ignoreAuthModule) {
             $rootScope.$broadcast('application-need-upgrade', rejection);
           }

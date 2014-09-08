@@ -1,6 +1,6 @@
  <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10">
-    <h2 class="normal">Sign in to webarch</h2>
-    <p>Use Facebook, Twitter or your email to sign in.<br></p>
+    <h2 class="normal">Sign in to Opennemas</h2>
+    <!-- <p>Use Facebook, Twitter or your email to sign in.<br></p> -->
 </div>
 <div class="tiles grey p-t-20 p-b-20 text-black">
     <form id="modal-login-form" class="animated fadeIn">
@@ -38,7 +38,7 @@
             <div class="col-sm-12 text-right">
                 <button type="button" class="btn btn-primary btn-cons" id="login_toggle" ng-click="login()" ng-disabled="loading">
                     <i class="fa fa-circle-o-notch" ng-if="loading"></i>
-                    Login
+                    {t}Login{/t}
                 </button>
             </div>
         </div>
