@@ -1,3 +1,36 @@
+20140908 / 2014-09-08 
+==================
+Summary:
+ * Manager
+    * Port manager to SPA with webarch theme
+    * Improve manager listing information
+ * Use Assetic for minimize/unify CSS and JS files
+ * Implement system to use server assets
+ * Documentation for all API services (symfony services)
+ * Review original strings and translations
+
+List of bugfixes:
+ e10c288 Remove protocol from URL 2014-09-01
+ 5599685 Remove protocol from URLs 2014-09-01
+ b525a02 Added command to clean failed spool messages 2014-08-28
+ 7764f5f Fixed countBy sql contruction on EntityManager2014-08-27
+ 56207ef Create command to extract images from articles body/summary 2014-08-27
+ 92b8054 Call event content.update when voting on a poll 2014-08-25
+ 5a578b3 Fixed inner image href uri in newsML base template 2014-08-22
+ e8a7e14 Select the right namespace when deleting an instance 2014-08-21
+ ac30b99 Comment x-tags in OpinionController to avoid caching 2014-08-21
+ 175735b Changed logic for sitemap images to improve performance 2014-08-20
+ e9e169c Fix preg_replace to work with both simple and double quote in render_video plugin 2014-08-20
+ 387f2c5 Fix total iteraction counter for content_types on export command 2014-08-20
+ 70ae5a7 Added improvements on ExportContentsCommand and newsML base template 2014-08-20
+ ea3f9d8 Added sitemap video and image to robots.txt 2014-08-19
+ 99bb3e7 Fixed if conditions when saving comments 2014-08-18
+ cd41171 Check if exists comments option moderation before use it    2014-08-18
+ b603094 Updated spanish and galician translations   2014-08-18
+ 3aab3ce Check comments moderation option before save and set status 2014-08-18
+ 1229ff2 Use cache for content metas and use it in frontpages    2014-08-14
+ 8225782 Fix invalid references in Article and Tags frontend controllers 2014-08-12
+ 3f80416 Check if redirect URL is empty before redirect  2014-08-12
 
 20140812 / 2014-08-12 
 ==================
