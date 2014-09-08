@@ -139,7 +139,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $time->setTimezone(new \DateTimeZone('UTC'));
             $time = $time->format('Y-m-d H:i:s');
 
-            s::set('last_login', $time);
+            if (!$user->isMaster()) {
+                s::set('last_login', $time);
+            }
 
             return new RedirectResponse($request->get('_referer'));
         }
