@@ -26,7 +26,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-cube"></i>
                             </span>
-                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -51,7 +51,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li>
-                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name[0].value %]">
+                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name_like[0].value %]">
                                         <i class="fa fa-download"></i> {t}Export current list{/t}
                                     </a>
                                 </li>
@@ -99,11 +99,11 @@
                                     <label for="select-all"></label>
                                 </div>
                             </th>
-                            <th class="pointer" width="25px" ng-click="sort('id')">
+                            <th class="pointer" style="width: 50px;" ng-click="sort('id')">
                                 {t}#{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.id == 'asc', 'fa fa-caret-down': orderBy.id == 'desc' }"></i>
                             </th>
-                            <th class="pointer" width="" ng-click="sort('name')" ng-show="columns.name">
+                            <th class="pointer" ng-click="sort('name')" ng-show="columns.name">
                                 {t}Name{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
                             </th>
