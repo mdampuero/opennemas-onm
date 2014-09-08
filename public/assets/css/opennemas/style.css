@@ -563,7 +563,7 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 }
 th .dropdown .container {
     font-weight: normal;
-    width: 300px;
+    width: 310px;
     text-transform: none;
 }
 

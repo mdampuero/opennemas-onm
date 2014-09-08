@@ -29,12 +29,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.columns = {
-            name:         1,
-            domains:      1,
-            last_login:   1,
-            created:      1,
-            contents:     1,
-            alexa:        1,
+            name:       1,
+            domains:    1,
+            last_login: 1,
+            created:    1,
+            contents:   1,
+            alexa:      1,
+            activated:  1
         }
 
         /**
