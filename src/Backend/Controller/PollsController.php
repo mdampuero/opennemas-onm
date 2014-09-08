@@ -148,7 +148,7 @@ class PollsController extends Controller
 
 
         } else {
-            return $this->render('poll/new.tpl');
+            return $this->render('poll/new.tpl', array('commentsConfig' => s::get('comments_config')));
         }
     }
 
@@ -177,6 +177,7 @@ class PollsController extends Controller
             array(
                 'poll'  => $poll,
                 'items' => $poll->items,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }

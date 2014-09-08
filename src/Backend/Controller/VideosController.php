@@ -240,7 +240,11 @@ class VideosController extends Controller
 
                 return $this->render(
                     'video/new.tpl',
-                    array('type' => $type, 'authors' => $authors)
+                    array(
+                        'type'           => $type,
+                        'authors'        => $authors,
+                        'commentsConfig' => s::get('comments_config'),
+                    )
                 );
             }
         }
@@ -403,9 +407,10 @@ class VideosController extends Controller
         return $this->render(
             'video/new.tpl',
             array(
-                'information' => $video->information,
-                'video'       => $video,
-                'authors'     => $authors,
+                'information'    => $video->information,
+                'video'          => $video,
+                'authors'        => $authors,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }

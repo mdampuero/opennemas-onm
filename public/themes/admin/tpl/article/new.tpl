@@ -202,7 +202,7 @@
                                     <br/>
                                 {/acl}
                                 {is_module_activated name="COMMENT_MANAGER"}
-                                <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
+                                <input type="checkbox" name="with_comment" id="with_comment"  {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
                                 <label for="with_comment">{t}Allow coments{/t}</label>
                                 <br/>
                                 {/is_module_activated}

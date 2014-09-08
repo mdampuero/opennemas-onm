@@ -123,7 +123,6 @@ class Poll extends Content
         $this->pk_poll       = $rs->fields['pk_poll'];
         $this->subtitle      = $rs->fields['subtitle'];
         $this->total_votes   = $rs->fields['total_votes'];
-        $this->with_comment  = $rs->fields['with_comment'];
         $this->visualization = $rs->fields['visualization'];
         $this->used_ips      = unserialize($rs->fields['used_ips']);
 
@@ -152,14 +151,13 @@ class Poll extends Content
                 $GLOBALS['application']->conn->Execute($sql, $values);
             }
         }
-        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
-                VALUES (?,?,?,?,?)';
+        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`)
+                VALUES (?,?,?,?)';
         $values = array(
             $this->id,
             $data['subtitle'],
             0,
-            $data['visualization'],
-            $data['with_comment']
+            $data['visualization']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -199,14 +197,13 @@ class Poll extends Content
 
         }
 
-        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?, `with_comment`=?
+        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?
                         WHERE pk_poll= ?";
 
         $values = array(
             $data['subtitle'],
             $data['visualization'],
             $total,
-            $data['with_comment'],
             $data['id']
         );
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
