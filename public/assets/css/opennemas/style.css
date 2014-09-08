@@ -1027,3 +1027,7 @@ tr:hover .listing-inline-actions {
     margin: 10% auto;
     position: relative;
 }
+
+.pagination-info {
+    margin-right: 10px;
+}

@@ -41,6 +41,9 @@
                     <i class="fa fa-circle-o-notch fa-lg fa-spin" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
+                    <div class="form-group pagination-info">
+                        {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
+                    </div>
                     <div class="form-group">
                         <div class="btn-group">
                             <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
