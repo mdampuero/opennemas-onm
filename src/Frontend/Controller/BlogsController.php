@@ -17,6 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -53,20 +54,22 @@ class BlogsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
-            $authors = array();
-            foreach (\User::getAllUsersAuthors() as $author) {
-                if ($author->is_blog == 1) {
-                    $authors[$author->id] = $author;
-                }
-            }
+            $opinionSettings = s::get('opinion_settings');
+            $itemsPerPage    = isset($opinionSettings['blog_itemsFrontpage']) && is_int($opinionSettings['blog_itemsFrontpage']) ? $opinionSettings['blog_itemsFrontpage'] : '12';
+            $orderBy         = isset($opinionSettings['blog_orderFrontpage']) ? $opinionSettings['blog_orderFrontpage'] : 'created';
 
-            $itemsPerPage = s::get('items_in_blog');
+            $ur              = $this->get('user_repository');
+
 
             $order   = array('starttime' => 'DESC');
             $filters = array(
@@ -76,9 +79,15 @@ class BlogsController extends Controller
                 'blog'              => array(array('value' => 1)),
             );
 
-            $em         = $this->get('opinion_repository');
-            $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countItems = $em->countBy($filters);
+
+            $em  = $this->get('opinion_repository');
+            if ($orderBy == 'blogger') {
+                $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page, 0, 'opinions.fk_author');
+                $countItems = $em->countBy($filters, 'opinions.fk_author');
+            } else {
+                $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
+                $countItems = $em->countBy($filters);
+            }
 
             $pagination = \Pager::factory(
                 array(
@@ -97,18 +106,13 @@ class BlogsController extends Controller
             );
 
             foreach ($blogs as &$blog) {
-                if (array_key_exists($blog->fk_author, $authors)) {
-
-                    $blog->author           = $authors[$blog->fk_author];
+                if (!empty($blog->fk_author)) {
+                    $blog->author           = $ur->find($blog->fk_author);
                     $blog->name             = $blog->author->name;
                     $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
-                    // ????
-                    $item = new \Content();
-                    $item->loadAllContentProperties($blog->pk_content);
-                    $blog->summary = $item->summary;
-                    $blog->img1_footer = $item->img1_footer;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog->img1 = $this->get('entity_repository')->find('Photo', $item->img1);
+
+                    if (isset($blog->img1) && ($blog->img1 > 0)) {
+                        $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
                     }
 
                     $blog->author->uri = \Uri::generate(
@@ -124,7 +128,6 @@ class BlogsController extends Controller
             $this->view->assign(
                 array(
                     'opinions'   => $blogs,
-                    'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $page
                 )
@@ -151,6 +154,10 @@ class BlogsController extends Controller
     {
         $page = $this->request->query->getDigits('page', 1);
         $slug       = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
 
         if (empty($slug)) {
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
@@ -269,8 +276,6 @@ class BlogsController extends Controller
 
     }
 
-
-
     /**
      * Displays an blog given its id
      *
@@ -280,6 +285,10 @@ class BlogsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        if (!\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $dirtyID   = $request->query->getDigits('blog_id');
         $blogID = \Content::resolveID($dirtyID);
 
