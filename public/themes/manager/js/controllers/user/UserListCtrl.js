@@ -274,7 +274,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         function list() {
             $scope.loading = 1;
 
-            var cleaned = $scope.cleanFilters($scope.criteria);
+            var cleaned = itemService.cleanFilters($scope.criteria);
 
             // Search by name, domains and contact mail
             if (cleaned.name) {

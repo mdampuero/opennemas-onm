@@ -222,7 +222,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         function list() {
             $scope.loading = 1;
 
-            var cleaned = $scope.cleanFilters($scope.criteria);
+            var cleaned = itemService.cleanFilters($scope.criteria);
             var data = {
                 criteria: cleaned,
                 orderBy:  $scope.orderBy,
