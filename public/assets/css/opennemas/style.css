@@ -1,0 +1,1029 @@
+a, a:hover, a:focus {
+    color:#376092
+}
+a:hover {
+    cursor:pointer;
+}
+.logoonm {
+    display: block !important;
+    width:121px;
+    height: 21px;
+    background-image: url(../../images/logo-opennemas-small.png);
+    background-position: -9px center;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+}
+
+
+.page-sidebar.mini {
+    background-color: #1b1e24 !important;
+}
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.open > a,
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.active > a {
+    background-color:#223b5a !important;
+}
+
+.input-group-addon.primary {
+    background-color:#376092 !important;
+    border-color:#376092;
+}
+.input-group-addon.primary .arrow {
+    color:#376092 !important;
+}
+.btn-primary {
+    background-color:#376092 !important;
+    border: 1px solid #376092 !important;
+}
+
+.page-sidebar ul > li > a > .arrow:before {
+    content: "\f105";
+}
+
+.no-style {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.no-style li {
+    margin: 0;
+    padding: 0;
+}
+.nowrap {
+    white-space: nowrap;
+}
+
+.modal-footer {
+    background-color: white;
+}
+.modal-body {
+    background-color: white;
+    padding-top: 20px;
+}
+/*.btn {
+    background-color:#eee;
+}
+*/
+.logo {
+    margin-top:20px;
+    margin-left:20px;
+}
+@media (min-width: 1025px) {
+    .header-seperation .logo {
+        margin-left: 20px !important;
+    }
+}
+
+.grey .quick-section-logo {
+    margin-left:10px !important;
+}
+.quick-section-logo .mini-logo {
+    margin-top :-7px !important;
+    margin-left:-5px !important;
+}
+
+.mini-logo .logo{
+    margin:0 !important;
+}
+/*.error-body {
+    height:auto;
+}*/
+@media (min-width: 980px) {
+    .page-content {
+         min-height: 0 !important;
+    }
+    .page-container {
+        background:#e5e9ec;
+        min-height:100%;
+        height:100%;
+    }
+    body{
+        min-height:100%;
+        /*height:100%;*/
+
+    }
+}
+
+.grey .mini-logo {
+    display:block !important;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .page-sidebar {
+        background-color: #1b1e24 !important;
+    }
+    .page-sidebar .page-sidebar-wrapper > ul > li.open > a, .page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+        background-color: #376092 !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .top-menu-toggle-dark {
+        display: none;
+    }
+}
+
+.pointer {
+    cursor:pointer !important;
+}
+
+@media (min-width: 1025px) {
+    .logo {
+        margin-left:7px;
+    }
+
+    .grey .header-quick-nav .mini-logo {
+        display:block !important;
+    }
+    .header-quick-nav .mini-logo {
+        display:none !important;
+    }
+
+    .page-sidebar {
+        padding-top: 10px;
+    }
+    .page-sidebar.mini {
+        padding-top: 0;
+    }
+
+    .header .header-seperation,
+    .page-sidebar,
+    .page-sidebar ul {
+        width:210px
+    }
+
+    .page-content {
+        margin-left:210px;
+        height:100%;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li > a,
+    .page-sidebar .page-sidebar-wrapper > ul > li.open > a,
+    .page-sidebar .page-sidebar-wrapper > ul > li > a:hover,
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > a {
+        padding: 15px;
+    }
+
+
+    .page-sidebar.mini .page-sidebar-wrapper > ul > li > a,
+    .page-sidebar.mini .page-sidebar-wrapper > ul > li > a:hover,
+    .page-sidebar.mini .page-sidebar-wrapper > ul > li:hover >a {
+        padding: 13px;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
+        padding-left: 30px !important;
+    }
+}
+
+.tab-form .nav-tabs > .active > a,
+.tab-form .nav-tabs > .active > a:hover,
+.tab-form .nav-tabs > .active > a:focus {
+    border-radius:0;
+}
+.tab-form .nav-tabs {
+    background:#eee;
+}
+
+.form-filter {
+    float:left;
+}
+.form-inline .filter {
+    margin-bottom:10px;
+    font-size:1em;
+    text-transform: uppercase;
+    color: rgb(111, 123, 138);
+}
+
+.profile-pic {
+    margin-right:5px;
+}
+#main-menu-toggle-wrapper,
+#fake-login {
+    display:none
+}
+/* -------------------------------------------------------------
+  Botonera old definitions: This should be deleted
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.top-buttons {
+    display:inline-block;
+    float:right;
+    margin: 0 0 0 5px;
+    padding: 0px;
+    list-style: none;
+    vertical-align: middle;
+}
+
+.top-buttons > li {
+    position:relative;
+    display:inline-block;
+    float: right;
+    padding-right: 0px;
+    padding-left: 0px;
+    vertical-align:bottom;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.top-buttons > li a ,
+.top-buttons > li button {
+    display: block;
+    padding: 2px 4px;
+    padding:5px;
+    width: auto;
+    border:1px solid transparent;
+    background: transparent;
+    color:#464646;
+    text-decoration: none;
+    font-weight: bold;
+    font-size:11px;
+    font-family:Arial;
+}
+
+.top-buttons > li a img,
+.top-buttons > li a button {
+    height:35px !important;
+}
+.top-buttons ul {
+    position:absolute;
+    top:99%;
+    right:0%;
+    display:none;
+}
+
+.top-buttons > li:hover ul {
+    display:block;
+}
+
+.top-buttons > li a:hover,
+.top-buttons > button:hover,
+.top-buttons > li:hover > a {
+    position: relative;
+    outline: medium none;
+    border: 1px solid #D9D9D9;
+    border-radius:0px;
+    background:#e4e4e4;
+    color:Black;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.top-buttons > li.separator{
+    margin:0 2px;
+    width:4px;
+    height:57px;
+    border:0 none;
+    background:url(../images/separator.png) center center no-repeat;
+    vertical-align:middle;
+}
+.top-buttons img{
+    height:35px !important;
+}
+.top-buttons li ul {
+    z-index:88;
+}
+.top-buttons li ul li {
+    list-style:none;
+}
+
+.top-buttons .batch-actions {
+    display:none;
+}
+.top-buttons .batch-actions:hover > a {
+    z-index:89;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-bottom:0 none;
+    border-radius:5px 5px 0 0;
+    background:White;
+}
+.top-buttons .dropdown-menu {
+    right:0px !important;
+    left:auto;
+}
+.top-buttons .dropdown-menu li > a {
+    padding: 5px 20px;
+    text-align: left !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+}
+
+
+
+/* =============================================================================
+  upper header for filtering... no yet finished.
+   ========================================================================== */
+.table-info {
+    position: relative;
+    margin:0 auto;
+    padding: 0;
+    width: 100%;
+    width: 100%; width: 100%;
+    border-top:1px solid #d9d9d9;
+    background:#ecf0f2; color:#666;
+    text-align: left;
+    text-shadow:0 1px 0 #FFFFFF;
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9');*/
+}
+.table-info > .form-inline {padding-left:10px;}
+.table-info > div { padding: 4px 0 2px 10px;}
+.table-info div { height:100%;vertical-align:middle; }
+.table-info label {margin-bottom:0;}
+.table-info .right { float:right; text-align:right; }
+.table-info .left { float:left; text-align:left; }
+.table-info .center { text-align:center; }
+.table-info form {margin:0;}
+
+.table-info .dropdown-menu.container {
+    height: auto;
+    padding: 5px;
+    width: 390px;
+}
+
+.table-info .dropdown-menu.container .span2 div {
+    cursor: pointer;
+    padding: 4px 10px;
+    width: 100%;
+}
+
+.table-info .dropdown-menu.container .span2 div:hover {
+    background: #eee;
+}
+
+/* =============================================================================
+  Spinner for Angular listings
+   ========================================================================== */
+@media (min-width: 720px) {
+    .action-buttons {
+        float:right;
+    }
+}
+
+
+/* =============================================================================
+  Spinner for Angular listings
+   ========================================================================== */
+.spinner-wrapper {
+    margin: 50px 0;
+}
+
+.spinner-wrapper .spinner {
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+}
+
+.spinner-wrapper .spinner-text {
+    color: #29d;
+    font-weight: bold;
+    text-align: center;
+    margin-top:.2em;
+    font-size:1.2em;
+}
+
+/* =============================================================================
+    Ios Switch
+   ========================================================================== */
+
+input[type="checkbox"].ios-switch {
+    position: absolute;
+    opacity: 0;
+    width: 50px;
+    height: 25px;
+}
+
+/* Normal Track */
+input[type="checkbox"].ios-switch + div {
+    vertical-align: middle;
+    width: 40px;    height: 20px;
+    border: 1px solid rgba(0,0,0,.4);
+    border-radius: 999px;
+    background-color: rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: .4s;
+    -webkit-transition-property: background-color, box-shadow;
+    box-shadow: inset 0 0 0 0px rgba(0,0,0,0.4);
+    display:inline-block;
+}
+
+/* Checked Track (Blue) */
+input[type="checkbox"].ios-switch:checked + div {
+    width: 40px;
+    background-position: 0 0;
+    background-color: #376092;
+    border: 1px solid #376092;
+    box-shadow: inset 0 0 0 10px #376092;
+}
+
+/* Tiny Track */
+input[type="checkbox"].tinyswitch.ios-switch + div {
+    width: 34px;    height: 18px;
+}
+
+/* Big Track */
+input[type="checkbox"].bigswitch.ios-switch + div {
+    width: 50px;    height: 25px;
+}
+
+/* Green Track */
+input[type="checkbox"].green.ios-switch:checked + div {
+    background-color: #00e359;
+    border: 1px solid rgba(0, 162, 63,1);
+    box-shadow: inset 0 0 0 10px rgba(0,227,89,1);
+}
+
+/* Normal Knob */
+input[type="checkbox"].ios-switch + div > div {
+    float: left;
+    width: 18px; height: 18px;
+    border-radius: inherit;
+    background: #ffffff;
+    -webkit-transition-timing-function: cubic-bezier(.54,1.85,.5,1);
+    -webkit-transition-duration: 0.4s;
+    -webkit-transition-property: transform, background-color, box-shadow;
+    -moz-transition-timing-function: cubic-bezier(.54,1.85,.5,1);
+    -moz-transition-duration: 0.4s;
+    -moz-transition-property: transform, background-color;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    margin-top: 1px;
+    margin-left: 1px;
+}
+
+/* Checked Knob (Blue Style) */
+input[type="checkbox"].ios-switch:checked + div > div {
+    -webkit-transform: translate3d(20px, 0, 0);
+    -moz-transform: translate3d(20px, 0, 0);
+    background-color: #ffffff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+}
+
+/* Tiny Knob */
+input[type="checkbox"].tinyswitch.ios-switch + div > div {
+    width: 16px; height: 16px;
+    margin-top: 1px;
+}
+
+/* Checked Tiny Knob (Blue Style) */
+input[type="checkbox"].tinyswitch.ios-switch:checked + div > div {
+    -webkit-transform: translate3d(16px, 0, 0);
+    -moz-transform: translate3d(16px, 0, 0);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+}
+
+/* Big Knob */
+input[type="checkbox"].bigswitch.ios-switch + div > div {
+    width: 23px; height: 23px;
+    margin-top: 1px;
+}
+
+/* Checked Big Knob (Blue Style) */
+input[type="checkbox"].bigswitch.ios-switch:checked + div > div {
+    -webkit-transform: translate3d(25px, 0, 0);
+    -moz-transform: translate3d(16px, 0, 0);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), 0px 0px 0 1px rgba(8, 80, 172,1);
+}
+
+/* Green Knob */
+input[type="checkbox"].green.ios-switch:checked + div > div {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 162, 63,1);
+}
+
+.radio.radio-primary label:after {
+    background-color: #376092;
+    border:1px solid #376092;
+}
+.radio.radio-primary input[type=radio]:checked + label:before {
+    border:1px solid #376092;
+}
+
+
+/* =============================================================================
+    Listing tables
+   ========================================================================== */
+.grid.simple .grid-title {
+    padding: 15px;
+}
+
+.table tr.row_selected td {
+  background-color: #ffffcc !important;
+}
+.table tbody tr.row_selected:hover>td {
+  background-color: #fef8ae !important;
+}
+
+.pagination-info {
+    padding: 7px;
+}
+
+.grid-body {
+    position: relative;
+}
+
+.grid-overlay {
+    background: rgba(255,255,255,.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+}
+
+.grid-title .input-group-addon .fa-user {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.page-title .fa {
+  top: 0;
+}
+
+.page-title h3 {
+    width: auto;
+}
+
+.page-title .breadcrumb {
+    margin-top: 14px;
+}
+
+.domain-list li a.active {
+    font-weight: bold;
+}
+
+.instance-domain-list .row {
+    margin-bottom: 10px;
+}
+
+.instance-domain-list .new-domain {
+    margin-left:25px;
+    margin-right: 15px;
+}
+.instance-plan-block {
+    margin-bottom:20px;
+}
+th .dropdown .container {
+    font-weight: normal;
+    width: 300px;
+    text-transform: none;
+}
+
+th .dropdown .container ul > li i {
+    margin-right: 2px;
+}
+
+th .dropdown .container ul > li .a {
+    color: #333;
+}
+
+.fa-blank {
+    width: 12px;
+}
+
+td .btn .fa.fa-check,
+td .btn .fa.fa-times,
+td .btn .fa.fa-circle-o-notch {
+    text-align: center;
+    width: 14px;
+}
+
+
+/* =============================================================================
+   Pseudo <a>: Make .a class act like a elements
+   ========================================================================== */
+.a {
+    text-shadow: none !important;
+    color: #0d638f;
+    transition: color 0.1s linear 0s,background-color 0.1s linear 0s !important;
+}
+
+.a {
+    cursor: pointer;
+    color: #428bca;
+    text-decoration: none;
+}
+
+.a {
+    background: 0 0;
+}
+
+.header .nav > li.quicklinks > .a {
+    padding: 4px 2px !important;
+}
+
+.nav > li > .a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+
+.header .nav > li.quicklinks i {
+    font-size: 1.33333333em;
+}
+
+.header .chat-toggler .a {
+    color: #1b1e24;
+    font-size: 15px;
+    display: inline-block;
+    float: left;
+}
+
+.header .chat-toggler .dropdown-menu li a,
+.header .chat-toggler .dropdown-menu li .a {
+    display: block;
+    float: none;
+}
+
+.header .chat-toggler .quick-section {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu li .a,
+.dropdown-menu > li > .a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.dropdown-menu li .a,
+.dropdown-menu > li > .a {
+    line-height: 25px;
+    color: #2a2e36;
+    margin: 4px;
+    border-radius: 3px;
+    text-align: left;
+}
+
+.dropdown-menu li .a:hover,
+.dropdown-menu li .a:focus,
+.dropdown-menu > li > .a:hover,
+.dropdown-menu > li > .a:focus,
+.dropdown-submenu:hover > .a,
+.dropdown-submenu:focus > .a {
+    color: #1b1e24;
+    text-decoration: none;
+    background-color: #eff2f3;
+    background-image: none;
+}
+
+/* =============================================================================
+   Form elements
+   ========================================================================== */
+.btn-white,
+.btn-white:hover {
+    border: 1px solid #d1dade;
+}
+
+.btn-default,
+.btn-default:hover {
+    border: 1px solid #d1dade;
+}
+
+.btn-info,
+.btn-info:hover {
+    border: 1px solid #152639;
+}
+
+.btn-danger,
+.btn-danger:hover {
+    border: 1px solid #f35958;
+}
+
+.btn-primary,
+.btn-primary:hover {
+    border: 1px solid #0aa699;
+}
+
+.btn-success,
+.btn-success:hover {
+    border: 1px solid #1285d1;
+}
+
+.btn-warning,
+.btn-warning:hover {
+    border: 1px solid #fbb05e;
+}
+
+.radio-input label:after {
+    top: 12px;
+}
+
+.radio-input label:before {
+    bottom: 8.5px;
+}
+
+.select2-container {
+    width: 100%;
+}
+
+.input-group .btn {
+    padding-top: 6px;
+}
+
+.input-group-btn > .btn:hover,
+.input-group-btn > .btn:focus,
+.input-group-btn > .btn:active {
+    z-index: 0;
+}
+
+.input-group-addon.primary .arrow {
+    z-index: 3;
+}
+
+/* =============================================================================
+   Sidebar: fix submenus when sidebar is collapsed
+   ========================================================================== */
+.page-sidebar.mini .page-sidebar-wrapper > ul > li > ul.sub-menu {
+    display: none !important;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li:hover > ul.sub-menu {
+    display: block !important;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.open > a,
+.page-sidebar.mini .page-sidebar-wrapper > ul > li.active > a {
+    background: #0b9c8f;
+}
+
+.page-sidebar.mini .page-sidebar-wrapper > ul > li:hover > a {
+    background: #22262E;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu {
+        display: none !important;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > ul.sub-menu {
+        display: block !important;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li.open > a,
+    .page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+        background: #0b9c8f;
+    }
+
+    .page-sidebar .page-sidebar-wrapper > ul > li:hover > a {
+        background: #22262E;
+    }
+}
+
+
+tr .buttons {
+    opacity: 0;
+
+    -webkit-transition: opacity ease 0.175s ;
+    -o-transition: opacity ease 0.175s ;
+    transition: opacity ease 0.175s ;
+}
+
+tr:hover + tr .buttons,
+tr:hover .buttons {
+    opacity: 1;
+}
+
+
+/* =============================================================================
+   ngTagsInput
+   ========================================================================== */
+tags-input .tags {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border: 1px solid #e5e9ec;
+    box-shadow: none;
+    overflow: hidden;
+    cursor: text;
+    padding: 2px;
+    word-wrap: break-word;
+}
+
+tags-input .tags.focused {
+    outline: none;
+    box-shadow: none;
+}
+
+tags-input .tags {
+    transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused {
+    border-color: #e5e9ec;
+    background-color: #f4f5f7;
+}
+
+tags-input .tags .tag-item {
+    background: 0;
+    background-color: #0090d9;
+    border: 0;
+    border-radius: .25em;
+    color: #fff;
+    display: inline-block;
+    font-family: 'Open Sans';
+    font-weight: 600;
+    margin-right: 4px;
+    text-shadow: none;
+    vertical-align: middle;
+}
+
+tags-input .tags .input {
+    border: 0;
+    outline: 0;
+    margin: 2px;
+    padding: 0;
+    padding-left: 5px;
+    float: left;
+    height: 26px;
+    transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused .input {
+    background-color: #f4f5f7;
+}
+
+tags-input .tags .tag-item.selected {
+    background: 0;
+    background-color: #e94847;
+}
+
+tags-input .tags .tag-item .remove-button {
+    margin: 0 0 0 5px;
+    padding: 0;
+    border: none;
+    background: 0 0;
+    cursor: pointer;
+    vertical-align: middle;
+    font: 700 16px Arial,sans-serif;
+    color: #fff;
+}
+
+
+/* =============================================================================
+   ngQuickdate
+   ========================================================================== */
+.quickdate-popup {
+    font-size: 11px;
+}
+
+table.quickdate-calendar {
+    font-size:12px;
+    margin-top:0;
+}
+
+table.quickdate-calendar,
+table.quickdate-calendar th,
+table.quickdate-calendar td {
+    border:0 none;
+    padding: 5.5px !important;
+}
+
+
+
+table.quickdate-calendar th {
+    color: #0090d9;
+    text-transform: uppercase;
+}
+
+table.quickdate-calendar .other-month {
+    background: White !important;
+    color: #d0d3d8;
+}
+
+table.quickdate-calendar .other-month:hover {
+    background: #eeeeee;
+    opacity: 0.65;
+}
+
+.quickdate .quickdate-month {
+    color: #6f7b8a;
+    font-size: 13px;
+    font-weight:bold !important;
+}
+.quickdate-calendar-header {
+    margin-bottom:0;
+    margin-top:5px;
+}
+.quickdate-calendar-header .quickdate-action-link {
+    color: #0090d9;
+    font-weight: bold;
+}
+
+.quickdate-calendar-header .quickdate-action-link,
+.quickdate .quickdate-month {
+    padding:5px !important;
+    border-radius:4px;
+}
+
+.quickdate-calendar-header .quickdate-action-link:hover,
+.quickdate .quickdate-month:hover {
+    background: #eeeeee;
+}
+.quickdate-popup label {
+    font-size:13px;
+}
+.quickdate-popup {
+    box-shadow:none !important;
+    padding:15px;
+}
+.quickdate-popup input {
+    padding:5px !important;
+    min-height:20px;
+}
+
+.instance-form dd {
+    margin-left:20px;
+}
+
+tr:hover .listing-inline-actions {
+    opacity:1;
+}
+
+.listing-inline-actions {
+    margin-top:10px;
+    font-size:13px;
+    opacity: 0.4;
+    clear:both;
+    line-height:2em;
+}
+.listing-inline-actions .link:first-child {
+    padding-left:0;
+    margin-right:5px;
+}
+.listing-inline-actions .link {
+    color:#576475;
+}
+.listing-inline-actions .link:hover {
+    text-decoration: underline;
+}
+.listing-inline-actions .link-danger {
+    color:#d9534f;
+    border:0;
+    background:none;
+    font-size:13px;
+}
+.listing-inline-actions .link i {
+    margin-right:4px;
+}
+.listing-inline-actions button.link-danger {
+    margin-left:0px;
+    padding-left:0px;
+}
+
+.listing-inline-actions > *{
+    display:inline-block;
+}
+
+.popover {
+    border: 1px solid #ccc;
+}
+.popover.bottom>.arrow {
+    border-bottom-color: rgba(0,0,0,1);
+}
+
+.tab-content {
+    overflow: visible;
+}
+
+.checkbox.check-title  label:before {
+    top: 9.4px;
+}
+
+.checkbox.check-title label:after {
+    top: 8px;
+}
+
+.selected-items {
+    border: 1px solid #ddd;
+    padding: 0 5px 5px 5px;
+    min-height: 114px;
+}
+
+.selected-items .item {
+    background-color: #e8edf1;
+    background-image: none;
+    float: left;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+    border-radius: 8px;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 4px 8px;
+}
+
+.module-selector .modal-content {
+    width: 720px;
+    left: 50%;
+    margin-left: -360px;
+}
+
+.error-container .error-main {
+    margin: 10% auto;
+    position: relative;
+}

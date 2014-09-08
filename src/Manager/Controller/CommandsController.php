@@ -70,46 +70,6 @@ class CommandsController extends Controller
     }
 
     /**
-     * Executes a particular command given its name
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function executeCommandAction(Request $request)
-    {
-        $commandName = $request->query->filter('command', null, FILTER_SANITIZE_STRING);
-        $params = $request->query->get('params', null, FILTER_SANITIZE_STRING);
-
-        if (is_array($params)) {
-            foreach ($params as &$param) {
-                $param = filter_var($param, FILTER_SANITIZE_STRING);
-            }
-            $params = implode(' ', $params);
-        } else {
-            $params = '';
-        }
-
-        chdir(APPLICATION_PATH);
-
-        $output = shell_exec('app/console '.$commandName.' ' .$params.' 2>&1');
-
-        $application = $this->getApplication();
-        try {
-            $command = $application->find($commandName);
-        } catch (\InvalidArgumentException $e) {
-            $output = 'Command not valid';
-        }
-
-        return $this->render(
-            'framework/commands/execute.tpl',
-            array(
-                'output' => $output,
-            )
-        );
-    }
-
-    /**
      * Returns the command executer
      *
      * @return Application

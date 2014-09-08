@@ -15,12 +15,12 @@
             <tbody>
                 <tr valign="top">
                     <td class="center">
-                        Here you can mass-delete cache, compile, sessions, and other stuff<br>
-                        from one specific instance.
+                        {t}Here you can mass-delete cache, compile, sessions, and other stuff<br>
+                        from one specific instance.{/t}
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-</form> 
+</form>
 {/block}

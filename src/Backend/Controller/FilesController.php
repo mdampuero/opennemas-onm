@@ -248,8 +248,7 @@ class FilesController extends Controller
                 } else {
                     m::add(
                         _(
-                            'There was an error while uploading the file. <br />'
-                            .'Please, contact your system administrator.'
+                            'There was an error while uploading the file.'
                         ),
                         m::ERROR
                     );
@@ -260,7 +259,7 @@ class FilesController extends Controller
                 );
 
             } else {
-                m::add(_('Please select a file before send the form'), m::ERROR);
+                m::add(_('You must pick a file before submitting the form'), m::ERROR);
             }
         }
     }
@@ -323,7 +322,7 @@ class FilesController extends Controller
 
         if ($file->update($data)) {
             dispatchEventWithParams('content.update', array('content' => $file));
-            m::add(sprintf(_('File information updated successfully.')), m::SUCCESS);
+            m::add(sprintf(_('File successfully updated.')), m::SUCCESS);
         } else {
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
         }

@@ -13,14 +13,15 @@ namespace Framework\EventListener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Handles exceptions and returns a custom response.
@@ -57,33 +58,35 @@ class GeneralExceptionsListener implements EventSubscriberInterface
 
         $uri = $event->getRequest()->getRequestUri();
 
-        if (strpos($uri, '/admin') !== false) {
-            $controller = 'BackendBundle:Error:default';
-        } elseif (strpos($uri, '/manager') !== false) {
-            $controller = 'ManagerBundle:Error:default';
-        } else {
-            $controller = 'FrontendBundle:Error:default';
+        if (!($exception instanceof AuthenticationException)) {
+            if (strpos($uri, '/admin') !== false) {
+                $controller = 'BackendBundle:Error:default';
+            } elseif (strpos($uri, '/manager') !== false) {
+                $controller = 'ManagerBundle:Error:default';
+            } else {
+                $controller = 'FrontendBundle:Error:default';
+            }
+
+            $attributes = array(
+                '_controller' => $controller, //$this->controller,
+                'exception'   => FlattenException::create($exception),
+                // keep for BC -- as $format can be an argument of the controller callable
+                // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
+                // @deprecated in 2.4, to be removed in 3.0
+                'format'      => $request->getRequestFormat(),
+            );
+
+            $request = $request->duplicate(null, null, $attributes);
+            $request->setMethod('GET');
+
+            try {
+                $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+                $event->setResponse($response);
+            } catch (\Exception $e) {
+            }
+
+            $handling = false;
         }
-
-        $attributes = array(
-            '_controller' => $controller, //$this->controller,
-            'exception'   => FlattenException::create($exception),
-            // keep for BC -- as $format can be an argument of the controller callable
-            // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
-            // @deprecated in 2.4, to be removed in 3.0
-            'format'      => $request->getRequestFormat(),
-        );
-
-        $request = $request->duplicate(null, null, $attributes);
-        $request->setMethod('GET');
-
-        try {
-            $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
-            $event->setResponse($response);
-        } catch (\Exception $e) {
-        }
-
-        $handling = false;
     }
 
     /**

@@ -10,7 +10,7 @@ guard 'livereload' do
   watch(%r{app\/models/(Repository\/){0,1}.+\.php$})
 
   # Public
-  watch(%r{public\/[a-z_\.\/]*$})
+  watch(%r{public\/[0-9a-z_\.\/]*$})
 
   # src
   watch(%r{src\/[a-zA-Z_\.\/]*$})

@@ -12,12 +12,13 @@ namespace ManagerWebService\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Onm\Framework\Controller\Controller;
 use Onm\Instance\Instance;
 use Onm\Instance\InstanceCreator;
 use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
+
+use Onm\Framework\Controller\Controller;
 
 /**
  * Handles the actions for the manager web service
@@ -110,10 +111,12 @@ class WebServiceController extends Controller
 
         try {
             $im->persist($instance);
+
+
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
 
-            $im->configureInstance($instance->external, $instance->id);
+            $im->configureInstance($instance);
             $im->createUser($instance->id, $user);
         } catch (DatabaseNotRestoredException $e) {
             $errors[] = $e->getMessage();

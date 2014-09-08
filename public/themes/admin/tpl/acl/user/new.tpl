@@ -1,13 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
-{script_tag src="/jquery/jquery.multiselect.js" common=1}
-{script_tag src="/jquery/jquery.validate.min.js" common=1}
-{script_tag src="/jquery/localization/messages_es.js" common=1}
-{script_tag src="/onm/jquery.password-strength.js" common=1}
-{script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
-{script_tag src="/admin.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
+        @Common/js/jquery/jquery.multiselect.js,
+        @Common/js/jquery/jquery.validate.min.js,
+        @Common/js/jquery/localization/messages_es.js,
+        @Common/js/onm/jquery.password-strength.js,
+        @Common/js/onm/bootstrap-fileupload.min.js,
+        @Common/js/admin.js "}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 <script>
     jQuery(document).ready(function($){
         // Password strength checker
@@ -89,7 +91,10 @@
 {/block}
 
 {block name="header-css" append}
-{css_tag href="/bootstrap/bootstrap-fileupload.min.css" common=1}
+{stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" css="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}">
+{/stylesheets}
+
 <style type="text/css">
 label {
     font-weight:normal;

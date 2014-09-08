@@ -12,7 +12,7 @@ manager_webservice:
 
 manager:
     resource: @ManagerBundle/Resources/config/routing.yml
-    prefix:   /manager
+    prefix:   /
 
 webservice:
     resource: @WebServiceBundle/Resources/config/routing.yml
@@ -33,10 +33,6 @@ fos_js_routing:
 admin_welcome:
     path: '/admin'
     defaults: { _controller  : BackendBundle:Welcome:default }
-
-manager_welcome:
-    path: '/manager'
-    defaults: { _controller: ManagerBundle:Welcome:default }
 
 frontendmobile_root:
     path: '/mobile'

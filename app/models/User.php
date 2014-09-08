@@ -1137,6 +1137,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
+        dispatchEventWithParams('user.update', array('id' => $this->id));
+
         return true;
     }
 
@@ -1154,6 +1156,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
             return false;
         }
+
+        dispatchEventWithParams('user.update', array('id' => $this->id));
 
         return true;
     }

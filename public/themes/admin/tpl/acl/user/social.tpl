@@ -3,9 +3,11 @@
         <meta charset="UTF-8">
         <title>Document</title>
         {block name="header-css"}
-            {css_tag href="/bootstrap/bootstrap.css" common=1}
-            {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-            {css_tag href="/style.css" common=1}
+            {stylesheets src="@Common/css/bootstrap/bootstrap.css,
+                @Common/css/fontawesome/font-awesome.min.css,
+                @Common/css/style.css" filters="cssrewrite"}
+                <link rel="stylesheet" href="{$asset_url}">
+            {/stylesheets}
         {/block}
         <style>
             html, body {
@@ -17,6 +19,8 @@
         </style>
     </head>
     <body>
+        {block name="header-js"}
+        {/block}
         <div class="social-connections">
             {if $connected}
                 <p>
@@ -60,7 +64,5 @@
         </div>
     </body>
     {block name="footer-js"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/admin.js" common=1}
     {/block}
 </html>
