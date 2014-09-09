@@ -124,7 +124,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $this->router->generate('manager_ws_auth_login')
             );
         } else {
+            $user = $token->getUser();
+
             $this->session->set('failed_login_attempts', 0);
+            $this->session->set('user_language', $user->getMeta('user_language'));
 
             // Set last_login date
             $time = new \DateTime();
@@ -138,7 +141,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             return new JsonResponse(
                 array(
                     'success' => true,
-                    'user'    => $token->getUser()
+                    'user'    => $user
                 )
             );
         }
