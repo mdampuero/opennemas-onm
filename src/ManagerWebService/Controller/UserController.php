@@ -467,11 +467,11 @@ class UserController extends Controller
                     $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                 }
 
-                if ($user->id == $this->getUser()->id) {
-                    $request->getSession()->set('user_language', $user->meta['user_language']);
-                }
-
                 $this->dispatchEvent('user.update', array('id' => $id));
+
+                if ($id == $this->getUser()->id) {
+                    $request->getSession()->set('user_language', $user->getMeta('user_language'));
+                }
 
                 $success = true;
                 $message = array(

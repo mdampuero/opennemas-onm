@@ -49,6 +49,7 @@ class L10nSystemListener implements EventSubscriberInterface
         global $kernel;
         $container = $kernel->getContainer();
         $request = $event->getRequest();
+        $session = $request->getSession();
 
         $settings = $this->sr->get(array('time_zone', 'site_language'));
         $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 335;
@@ -67,10 +68,8 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            if (isset($_SESSION)
-                && array_key_exists('user_language', $_SESSION)
-            ) {
-                $userLanguage = $_SESSION['user_language'] ?: 'default';
+            if (isset($session) && $session->get('user_language')) {
+                $userLanguage = $session->get('user_language') ?: 'default';
             } else {
                 $userLanguage = 'default';
             }
