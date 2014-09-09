@@ -39,75 +39,63 @@
             <form name="userForm" novalidate>
                 <tabset class="tab-form clearfix">
                     <tab heading="{t}User info{/t}">
-                        <div class="col-md-3">
-                            <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
-                                {if $user->photo->name}
-                                <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
-                                </div>
-                                {else}
-                                <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                                    {gravatar email=$user->email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
-                                </div>
-                                {/if}
-                                <div>
-                                    <span class="btn btn-file">
-                                        <span class="fileupload-new">{t}Add new photo{/t}</span>
-                                        <span class="fileupload-exists">{t}Change{/t}</span>
-                                        <input type="file"/>
-                                        <input type="hidden" name="avatar" class="file-input" value="1">
-                                    </span>
-                                    <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload">{t}Remove{/t}</a>
+                        <div class="form-group">
+                            <label class="control-label" for="name">
+                                {t}Display name{/t}
+                                <span ng-show="userForm.name.$invalid">*</span>
+                            </label>
+                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.name.$dirty && userForm.name.$invalid, 'success-control': userForm.name.$dirty && userForm.name.$valid }">
+                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.name.$dirty && userForm.name.$invalid, 'fa-check': userForm.name.$dirty && userForm.name.$valid }"></i>
+                                <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="username">
+                                {t}User name{/t}
+                                <span ng-show="userForm.username.$invalid">*</span>
+                            </label>
+                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.username.$dirty && userForm.username.$invalid, 'success-control': userForm.username.$dirty && userForm.username.$valid }">
+                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.username.$dirty && userForm.username.$invalid, 'fa-check': userForm.username.$dirty && userForm.username.$valid }"></i>
+                                <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="email">
+                                {t}Email{/t}
+                                <span ng-show="userForm.email.$invalid">*</span>
+                            </label>
+                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.email.$dirty && userForm.email.$invalid, 'success-control': userForm.email.$dirty && userForm.email.$valid }">
+                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.email.$dirty && userForm.email.$invalid, 'fa-check': userForm.email.$dirty && userForm.email.$valid }"></i>
+                                <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="url">{t}Blog Url{/t}</label>
+                            <div class="controls">
+                                <input class="form-control" id="url" name="url" placeholder="http://" ng-model="user.url" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="bio">{t}Biography{/t}</label>
+                            <div class="controls">
+                                <textarea class="form-control" id="bio" name="bio" ng-model="user.bio" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid, 'has-success': userForm.password.$dirty && userForm.password.$valid }">
+                            <label class="control-label" for="password">{t}Password{/t}</label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                    <input class="form-control" id="password" name="password"  ng-model="user.password" maxlength="20" type="password"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="form-group" ng-class="{ 'has-error': userForm.name.$dirty && userForm.name.$invalid, 'has-success': userForm.name.$dirty && userForm.name.$valid }">
-                                <label class="control-label" for="name">{t}Display name{/t}</label>
-                                <div>
-                                    <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error': userForm.username.$dirty && userForm.username.$invalid, 'has-success': userForm.username.$dirty && userForm.username.$valid }">
-                                <label class="control-label" for="username">{t}User name{/t}</label>
-                                <div class="controls">
-                                    <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error': userForm.email.$dirty && userForm.email.$invalid, 'has-success': userForm.email.$dirty && userForm.email.$valid }">
-                                <label class="control-label" for="email">{t}Email{/t}</label>
-                                <div class="controls">
-                                    <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="url">{t}Blog Url{/t}</label>
-                                <div class="controls">
-                                    <input class="form-control" id="url" name="url" placeholder="http://" ng-model="user.url" type="text">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="bio">{t}Biography{/t}</label>
-                                <div class="controls">
-                                    <textarea class="form-control" id="bio" name="bio" ng-model="user.bio" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error': userForm.password.$dirty && userForm.password.$invalid, 'has-success': userForm.password.$dirty && userForm.password.$valid }">
-                                <label class="control-label" for="password">{t}Password{/t}</label>
-                                <div class="controls">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                        <input class="form-control" id="password" name="password"  ng-model="user.password" maxlength="20" type="password"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error': userForm.rpassword.$dirty && userForm.rpassword.$invalid, 'has-success': userForm.rpassword.$dirty && userForm.rpassword.$valid }">
-                                <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
-                                <div class="controls">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                        <input class="form-control" id="rpassword" id="rpassword"  ng-model="user.rpassword" maxlength="20" type="password"/>
-                                    </div>
+                        <div class="form-group" ng-class="{ 'has-error': userForm.rpassword.$dirty && userForm.rpassword.$invalid, 'has-success': userForm.rpassword.$dirty && userForm.rpassword.$valid }">
+                            <label class="control-label" for="rpassword">{t}Confirm password{/t}</label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                    <input class="form-control" id="rpassword" id="rpassword"  ng-model="user.rpassword" maxlength="20" type="password"/>
                                 </div>
                             </div>
                         </div>
