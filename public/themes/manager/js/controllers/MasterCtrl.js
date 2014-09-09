@@ -6,11 +6,13 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
-    '$http', '$location', '$modal', '$rootScope', '$scope', '$window', 'vcRecaptchaService',
-    'httpInterceptor', 'authService', 'fosJsRouting', 'messenger',
+    '$http', '$location', '$modal', '$rootScope', '$scope', '$window',
+    'vcRecaptchaService', 'httpInterceptor', 'authService', 'fosJsRouting',
+    'history', 'messenger',
     function (
-        $http, $location, $modal, $rootScope, $scope, $window, vcRecaptchaService,
-        httpInterceptor, authService, fosJsRouting, messenger
+        $http, $location, $modal, $rootScope, $scope, $window,
+        vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
+        history, messenger
     ) {
         /**
          * The fosJsRouting service.
@@ -252,11 +254,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param Object event The event object.
          * @param array  args  The list of arguments.
          */
-        $rootScope.$on('$routeChangeStart',
-            function (event, next, current) {
-                refreshApp();
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            refreshApp();
+
+            if (!history.restore($location.path())) {
+                history.push($location.path(), $location.search());
             }
-        );
+        });
 
         /**
          * Shows a modal to force page reload.

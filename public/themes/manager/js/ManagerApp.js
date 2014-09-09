@@ -3,7 +3,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
         'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
         'http-interceptor', 'googlechart', 'vcRecaptcha',
         'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth','onm.gravatar',
-        'onm.form-autofill-fix', 'ManagerApp.controllers'
+        'onm.form-autofill-fix', 'onm.history', 'ManagerApp.controllers'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
@@ -73,16 +73,12 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 templateUrl: '/managerws/template/instances:list.tpl',
                 controller:  'InstanceListCtrl',
                 resolve: {
-                    data: function(itemService) {
+                    data: function($routeParams, itemService) {
+                        // Default filters
                         var data = {
                             orderBy: { last_login: 'desc' },
                             epp: 25
                         };
-
-                        var filters = itemService.decodeFilters();
-                        for(var name in filters) {
-                            data[name] = filters[name];
-                        }
 
                         return itemService.list('manager_ws_instances_list', data).then(
                             function (response) {
@@ -174,7 +170,8 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                             }
                         );
                     }
-                }
+                },
+                reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_create'), {
                 templateUrl: '/managerws/template/user:item.tpl',
@@ -218,7 +215,8 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                             }
                         );
                     }
-                }
+                },
+                reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_create'), {
                 templateUrl: '/managerws/template/user_group:item.tpl',
