@@ -30,3 +30,5 @@ vendor/*
 !vendor/core
 public/assets/js/routes.js
 .development
+bin/tsmarty2c.php
+*.pot
