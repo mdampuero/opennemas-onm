@@ -432,7 +432,7 @@ class Content
             `metadata`, `starttime`, `endtime`,
             `created`, `changed`, `content_status`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `home_pos`,`available`, `with_comment`
+            `in_home`, `home_pos`,`available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
            " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?, ?,?,?,?)";
 
