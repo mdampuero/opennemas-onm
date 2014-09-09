@@ -12,15 +12,15 @@
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$location', '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
          * @type Object
          */
         $scope.criteria = {
-            name: [ { value: '', operator: 'like' } ]
+            name_like: []
         };
 
         /**
@@ -29,12 +29,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.columns = {
-            name:         1,
-            domains:      1,
-            last_login:   1,
-            created:      1,
-            contents:     1,
-            alexa:        1,
+            name:       1,
+            domains:    1,
+            last_login: 1,
+            created:    1,
+            contents:   1,
+            alexa:      1,
+            activated:  1
         }
 
         /**
@@ -90,11 +91,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         var search;
 
         /**
-         * Flag to know if it is the first run.
+         * Checks if an instance is selected
          *
-         * @type boolean
+         * @param string id The group id.
          */
-        var init = true;
+        $scope.isSelected = function(id) {
+            return $scope.selected.instances.indexOf(id) != -1
+        }
 
         /**
          * Confirm delete action.
@@ -172,6 +175,17 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         };
 
         /**
+         * Reloads the list on keypress.
+         *
+         * @param  Object event The even object.
+         */
+        $scope.searchByKeypress = function(event) {
+            if (event.keyCode == 13) {
+                list();
+            };
+        }
+
+        /**
          * Selects/unselects all instances.
          */
         $scope.selectAll = function() {
@@ -244,15 +258,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         }
 
         /**
-         * Checks if an instance is selected
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-            return $scope.selected.instances.indexOf(id) != -1
-        }
-
-        /**
          * Changes the sort order.
          *
          * @param string name Field name.
@@ -270,11 +275,19 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             }
         }
 
-        $scope.searchByKeypress = function(event) {
-            if (event.keyCode == 13) {
-                list();
-            };
-        }
+        /**
+         * Marks variables to delete for garbage collector;
+         */
+        $scope.$on('$destroy', function() {
+            $scope.criteria  = null;
+            $scope.columns   = null;
+            $scope.epp       = null;
+            $scope.instances = null;
+            $scope.selected  = null;
+            $scope.orderBy   = null;
+            $scope.page      = null;
+            $scope.total     = null;
+        });
 
         /**
          * Refresh the list of elements when some parameter changes.
@@ -300,7 +313,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         function list() {
             $scope.loading = 1;
 
-            var cleaned = $scope.cleanFilters($scope.criteria);
+            var cleaned = itemService.cleanFilters($scope.criteria);
 
             // Search by name, domains and contact mail
             if (cleaned.name) {
@@ -317,6 +330,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 page: $scope.page
             };
 
+            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+
             itemService.list('manager_ws_instances_list', data).then(function (response) {
                 $scope.instances = response.data.results;
                 $scope.total = response.data.total;
@@ -325,15 +340,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             });
         }
 
-        $scope.$on('$destroy', function() {
-            $scope.criteria  = null;
-            $scope.columns   = null;
-            $scope.epp       = null;
-            $scope.instances = null;
-            $scope.selected  = null;
-            $scope.orderBy   = null;
-            $scope.page      = null;
-            $scope.total     = null;
-        });
+        // Initialize filters from URL
+        var filters = itemService.decodeFilters();
+        for(var name in filters) {
+            $scope[name] = filters[name];
+        }
     }
 ]);

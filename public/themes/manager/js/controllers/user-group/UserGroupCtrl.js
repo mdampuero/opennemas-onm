@@ -171,10 +171,14 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
             }
         };
 
-        $scope.toggleAllPrivileges = function() {
+        /**
+         * Selects/unselects all privileges
+         */
+        $scope.selectAllPrivileges = function() {
             if (!$scope.group.privileges) {
                 $scope.group.privileges = [];
             }
+
             if (!$scope.selected.allSelected) {
                 for (var module in $scope.template.modules) {
                     if (!$scope.selected.all[module]) {
@@ -201,7 +205,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
             };
         }
 
-
         /**
          * Updates an user group.
          */
@@ -219,6 +222,16 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 });
         };
 
+        /**
+         * Frees up memory before controller destroy event
+         */
+        $scope.$on('$destroy', function() {
+            $scope.group    = null;
+            $scope.sections = null;
+            $scope.selected = null;
+            $scope.template = null;
+        });
+
         // Initialize group
         if (data.group) {
             $scope.group = data.group;
@@ -234,15 +247,5 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
                 };
             };
         }
-
-        /**
-         * Frees up memory before controller destroy event
-         */
-        $scope.$on('$destroy', function() {
-            $scope.group    = null;
-            $scope.sections = null;
-            $scope.selected = null;
-            $scope.template = null;
-        });
     }
 ]);

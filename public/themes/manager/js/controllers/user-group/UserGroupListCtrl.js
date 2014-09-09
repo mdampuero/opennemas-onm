@@ -21,7 +21,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          * @type Object
          */
         $scope.criteria = {
-            name: [ { value: '', operator: 'like' } ]
+            name_like: [ { value: '', operator: 'like' } ]
         };
 
         /**
@@ -172,22 +172,24 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         };
 
         /**
-         * Refresh the list of elements when some parameter changes.
+         * Checks if a group is selected
          *
-         * @param array newValues The new values
-         * @param array oldValues The old values
+         * @param string id The group id.
          */
-        $scope.$watch('[criteria, orderBy, epp, page]', function(newValues, oldValues) {
-            if (newValues !== oldValues) {
-                if (search) {
-                    $timeout.cancel(search);
-                }
+        $scope.isSelected = function(id) {
+            return $scope.selected.groups.indexOf(id) != -1
+        }
 
-                search = $timeout(function() {
-                    list();
-                }, 500);
-            }
-        }, true);
+        /**
+         * Reloads the list on keypress.
+         *
+         * @param  Object event The even object.
+         */
+        $scope.searchByKeypress = function(event) {
+            if (event.keyCode == 13) {
+                list();
+            };
+        }
 
         /**
          * Changes the sort order.
@@ -208,36 +210,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         }
 
         /**
-         * Checks if a group is selected
-         *
-         * @param string id The group id.
-         */
-        $scope.isSelected = function(id) {
-            return $scope.selected.groups.indexOf(id) != -1
-        }
-
-        /**
-         * Searches groups given a criteria.
-         */
-        function list() {
-            $scope.loading = 1;
-
-            var cleaned = $scope.cleanFilters($scope.criteria);
-            var data = {
-                criteria: cleaned,
-                orderBy:  $scope.orderBy,
-                epp:      $scope.epp,
-                page:     $scope.page
-            };
-
-            itemService.list('manager_ws_user_groups_list', data).then(function (response) {
-                $scope.groups  = response.data.results;
-                $scope.total   = response.data.total;
-                $scope.loading = 0;
-            });
-        }
-
-        /**
          * Frees up memory before controller destroy event
          */
         $scope.$on('$destroy', function() {
@@ -249,5 +221,47 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
             $scope.page     = null;
             $scope.total    = null;
         })
+
+        /**
+         * Refresh the list of elements when some parameter changes.
+         *
+         * @param array newValues The new values
+         * @param array oldValues The old values
+         */
+        $scope.$watch('[orderBy, epp, page]', function(newValues, oldValues) {
+            if (newValues !== oldValues) {
+                if (search) {
+                    $timeout.cancel(search);
+                }
+
+                search = $timeout(function() {
+                    list();
+                }, 500);
+            }
+        }, true);
+
+        /**
+         * Searches groups given a criteria.
+         */
+        function list() {
+            $scope.loading = 1;
+
+            var cleaned = itemService.cleanFilters($scope.criteria);
+
+            var data = {
+                criteria: cleaned,
+                orderBy:  $scope.orderBy,
+                epp:      $scope.epp,
+                page:     $scope.page
+            };
+
+            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+
+            itemService.list('manager_ws_user_groups_list', data).then(function (response) {
+                $scope.groups  = response.data.results;
+                $scope.total   = response.data.total;
+                $scope.loading = 0;
+            });
+        }
     }
 ]);

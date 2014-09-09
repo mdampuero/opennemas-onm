@@ -86,10 +86,14 @@
                 </div>
                 <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
                     <div class="form-group">
-                        <label class="form-label">{t}Site name{/t}</label>
+                        <label class="form-label">
+                            {t}Site name{/t}
+                            <span ng-show="instanceForm.name.$invalid">*</span>
+                        </label>
                         <span class="help">{t}(Human readable name){/t}</span>
-                        <div class="controls">
-                            <input class="form-control" ng-model="instance.name" required type="text">
+                        <div class="controls input-with-icon right" ng-class="{ 'error-control': instanceForm.name.$dirty && instanceForm.name.$invalid, 'success-control': instanceForm.name.$dirty && instanceForm.name.$valid }">
+                            <i class="fa" ng-class="{ 'fa-exclamation': instanceForm.name.$dirty && instanceForm.name.$invalid, 'fa-check': instanceForm.name.$dirty && instanceForm.name.$valid }"></i>
+                            <input class="form-control" name="name" ng-model="instance.name" required type="text">
                         </div>
                     </div>
                     <div class="form-group">
@@ -106,17 +110,18 @@
                             <div><div></div></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-sm-6">
             <div class="grid simple">
                 <div class="grid-title no-border">
-                    <h4>{t}Domains{/t}</h4>
+                    <h4>
+                        {t}Domains{/t}
+                        <span ng-show="instance.domains.length == 0">*</span>
+                    </h4>
                 </div>
                 <div class="grid-body no-border instance-domain-list">
                     <div class="row form-group" ng-if="instance.domains.length > 0">

@@ -27,6 +27,76 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     }
 
     /**
+     * Cleans the criteria for the current listing.
+     *
+     * @param Object criteria The search criteria.
+     *
+     * @return Object The cleaned criteria.
+     */
+    itemService.cleanFilters = function (criteria) {
+        var cleaned = {};
+
+        for (var name in criteria) {
+            for (var i = 0; i < criteria[name].length; i++) {
+                if (criteria[name][i]['value'] != -1
+                    && criteria[name][i]['value'] !== ''
+                ){
+                    if (criteria[name][i]['value']) {
+                        var values = criteria[name][i]['value'].split(' ');
+
+                        if (name.indexOf('_like') !== -1 ) {
+                            var shortName = name.substr(0, name.indexOf('_like'));
+                            cleaned[shortName] = [];
+
+                            for (var i = 0; i < values.length; i++) {
+                                cleaned[shortName][i] = {
+                                    value:    '%' + values[i] + '%',
+                                    operator: 'LIKE'
+                                };
+                            }
+                        } else {
+                            cleaned[name] = [];
+                            for (var i = 0; i < values.length; i++) {
+                                switch(criteria[name][i]['operator']) {
+                                    case 'like':
+                                        cleaned[name][i] = {
+                                            value:    '%' + values[i] + '%',
+                                            operator: 'LIKE'
+                                        };
+                                        break;
+                                    case 'regexp':
+                                        cleaned[name][i] = {
+                                            value:    '(^' + values[i] + ',)|('
+                                                + ',' + values[i] + ',)|('
+                                                + values[i] + '$)',
+                                            operator: 'REGEXP'
+                                        };
+                                        break;
+                                    default:
+                                        cleaned[name][i] = {
+                                            value:    values[i],
+                                            operator: criteria[name][i]['operator']
+                                        };
+                                }
+                            }
+                        }
+                    } else {
+                        if (!cleaned[name]) {
+                            cleaned[name] = [];
+                        }
+
+                        cleaned[name][i] = {
+                            value: criteria[name][i]['value']
+                        };
+                    }
+                }
+            }
+        };
+
+        return cleaned;
+    }
+
+    /**
      * Deletes a plugin given its id.
      *
      * @param string  route The route name.
@@ -60,6 +130,87 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     };
 
     /**
+     * Parses the current URL and initializes the current filters.
+     */
+    itemService.decodeFilters = function() {
+        var params = $location.search();
+        params = angular.copy(params);
+
+        var filters = {};
+
+        if (params.epp) {
+            filters.epp = params.epp;
+            delete params.epp;
+        }
+
+        if (params.page) {
+            filters.page = params.page
+            delete params.page
+        }
+
+        if (params.orderBy) {
+            filters.orderBy = {};
+
+            if (params.order) {
+                filters.orderBy[params.orderBy] = params.order;
+                delete params.order;
+            } else {
+                filters.orderBy[params.orderBy] = 'asc';
+            }
+
+            delete params.orderBy;
+        }
+
+        filters.criteria = {};
+        var pattern = /[a-z_]\d+/;
+        for (var name in params) {
+            var target = name;
+            if (pattern.test(name)) {
+                target = name.substr(0, name.lastIndexOf('_'));
+            }
+
+            if (!filters.criteria[target]) {
+                filters.criteria[target] = [];
+            }
+
+            filters.criteria[target].push({ value: params[name] });
+
+            delete params[name];
+        }
+
+        return filters;
+    }
+
+    /**
+     * Parses the current filters and updates the URL.
+     *
+     * @param Object  criteria The criteria to search by.
+     * @param Object  orderBy  The order to use while searching.
+     * @param integer epp      The elements per page.
+     * @param integer page     The current page.
+     */
+    itemService.encodeFilters = function(criteria, orderBy, epp, page) {
+        for (var name in criteria) {
+            for (var i in criteria[name]) {
+                $location.search(name + '_' + i, criteria[name][i].value);
+            };
+        }
+
+        for (var name in orderBy) {
+            $location.search('orderBy', name);
+            $location.search('order', orderBy[name]);
+        }
+
+        if (epp) {
+            $location.search('epp', epp);
+        }
+
+        if (page) {
+            $location.search('page', page)
+        }
+    }
+
+    /**
      * Checks if the given name is available.
      *
      * @param string route The route name.
@@ -84,10 +235,18 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      *
      * @return Object The response object.
      */
-    itemService.list = function(route, criteria) {
+    itemService.list = function(route, data) {
         var url = fosJsRouting.generate(route);
 
-        return $http.post(url, criteria).success(function (response) {
+        // Decode filters from URL and overwrite data
+        var filters = itemService.decodeFilters();
+        for(var name in filters) {
+            data[name] = filters[name];
+        }
+
+        data.criteria = itemService.cleanFilters(data.criteria);
+
+        return $http.post(url, data).success(function (response) {
             return response;
         });
     };
@@ -213,7 +372,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             return response;
         });
     };
-
 
     /**
      * Fetches the Zend Opcache.

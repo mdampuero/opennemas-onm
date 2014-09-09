@@ -43,20 +43,16 @@
         <div class="grid-body clearfix">
             <form name="groupForm" novalidate>
                 <div class="form-group">
-                    <label class="form-label">{t}Group name{/t}</label>
-                    <div class="controls">
-                        <input class="form-control" ng-model="group.name" required type="text">
+                    <label class="form-label">
+                        {t}Group name{/t}
+                        <span ng-show="groupForm.name.$invalid">*</span>
+                    </label>
+                    <div class="controls input-with-icon right" ng-class="{ 'error-control': groupForm.name.$dirty && groupForm.name.$invalid, 'success-control': groupForm.name.$dirty && groupForm.name.$valid }">
+                        <i class="fa" ng-class="{ 'fa-exclamation': groupForm.name.$dirty && groupForm.name.$invalid, 'fa-check': groupForm.name.$dirty && groupForm.name.$valid }"></i>
+                        <input class="form-control" name="name" ng-model="group.name" required type="text">
                     </div>
                 </div>
                 <h4>{t}Privileges{/t}</h4>
-<!--                 <div class="form-group">
-                    <label class="form-label">{t}Presets{/t}</label>
-                    <div class="controls">
-                        <button class="btn btn-white" type="button">{t}Admin{/t}</button>
-                        <button class="btn btn-white" type="button">{t}Author{/t}</button>
-                        <button class="btn btn-white" type="button">{t}User{/t}</button>
-                    </div>
-                </div> -->
                 <div class="form-group">
                     <label class="form-label">{t}Selected privileges{/t}</label>
                     <select id="modules" multiple ui-select2 ng-model="group.privileges">

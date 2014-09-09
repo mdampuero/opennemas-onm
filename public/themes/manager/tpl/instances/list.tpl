@@ -26,7 +26,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-cube"></i>
                             </span>
-                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name[0].value" type="text"/>
+                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,6 +41,9 @@
                     <i class="fa fa-circle-o-notch fa-lg fa-spin" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
+                    <div class="form-group pagination-info">
+                        {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
+                    </div>
                     <div class="form-group">
                         <div class="btn-group">
                             <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
@@ -48,7 +51,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li>
-                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name[0].value %]">
+                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name_like[0].value %]">
                                         <i class="fa fa-download"></i> {t}Export current list{/t}
                                     </a>
                                 </li>
@@ -96,11 +99,11 @@
                                     <label for="select-all"></label>
                                 </div>
                             </th>
-                            <th class="pointer" width="25px" ng-click="sort('id')">
+                            <th class="pointer" style="width: 50px;" ng-click="sort('id')">
                                 {t}#{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.id == 'asc', 'fa fa-caret-down': orderBy.id == 'desc' }"></i>
                             </th>
-                            <th class="pointer" width="" ng-click="sort('name')" ng-show="columns.name">
+                            <th class="pointer" ng-click="sort('name')" ng-show="columns.name">
                                 {t}Name{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
                             </th>
@@ -192,8 +195,14 @@
                                 {t}Emails{/t}
                                 <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
                             </th>
+                            <th class="text-center pointer" ng-click="sort('activated')" ng-show="columns.activated" style="width: 60px">
+                                <span>
+                                    <i class="fa fa-check"></i>
+                                    <i ng-class="{ 'fa fa-caret-up': orderBy.activated == 'asc', 'fa fa-caret-down': orderBy.activated == 'desc'}"></i>
+                                </span>
+                            </th>
                             <th class="text-center" style="width: 10px">
-                                <div class="dropdown">
+                                <div class="dropdown pointer">
                                     <div class="dropdown-toggle">
                                         <i class="fa fa-columns" tooltip-html-unsafe="{t}Columns{/t}"></i>
                                     </div>
@@ -274,7 +283,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="pull-left">
+                                        <div class="pull-right">
                                             <ul class="no-style">
                                                 <li ng-click="columns.videos = !columns.videos">
                                                     <span class="a">
@@ -340,6 +349,12 @@
                                                     <span class="a">
                                                         <i class="fa" ng-class="{ 'fa-eye': columns.emails, 'fa-blank': !columns.emails }"></i>
                                                         {t}Emails{/t}
+                                                    </span>
+                                                </li>
+                                                <li ng-click="columns.activated = !columns.activated;">
+                                                    <span class="a">
+                                                        <i class="fa" ng-class="{ 'fa-eye': columns.activated, 'fa-blank': !columns.activated }"></i>
+                                                        {t}Enabled{/t}
                                                     </span>
                                                 </li>
                                             </ul>
@@ -476,16 +491,17 @@
                                 [% instance.emails %]
                                 <i ng-class="{ 'fa fa-angle-up text-success': instance.deltas['emails'] > 0, 'fa fa-angle-down text-danger': instance.deltas['emails'] < 0 }" tooltip-html-unsafe="[% instance.deltas['emails'] %]"></i>
                             </td>
-                            <td>
+                            <td class="text-center" ng-show="columns.activated">
                                 <button class="btn btn-white" type="button" ng-click="setEnabled(instance, instance.activated == '1' ? '0' : '1')">
                                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': instance.loading, 'fa-check text-success' : !instance.loading &&instance.activated == '1', 'fa-times text-error': !instance.loading && instance.activated == '0' }"></i>
                                 </button>
                             </td>
+                            <td></td>
                         </tr>
                     </tbody>
                     <tfoot ng-if="instances.length > 0">
                         <tr>
-                            <td colspan="[% 4 + columns.name + columns.domains + columns.contact_mail + columns.last_login + columns.created + columns.contents + columns.articles + columns.opinions + columns.advertisements + columns.albums + columns.photos + columns.videos + columns.widgets + columns.static_pages + columns.attachments + columns.polls + columns.letters + columns.media_size + columns.alexa + columns.page_views + columns.users + columns.emails %]" class="center">
+                            <td colspan="[% 5 + columns.name + columns.domains + columns.contact_mail + columns.last_login + columns.created + columns.contents + columns.articles + columns.opinions + columns.advertisements + columns.albums + columns.photos + columns.videos + columns.widgets + columns.static_pages + columns.attachments + columns.polls + columns.letters + columns.media_size + columns.alexa + columns.page_views + columns.users + columns.emails %]" class="center">
                                 <div class="pagination-info pull-left" ng-if="instances.length > 0">
                                     {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
                                 </div>

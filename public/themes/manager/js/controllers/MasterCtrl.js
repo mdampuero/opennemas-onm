@@ -6,11 +6,13 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
-    '$http', '$location', '$modal', '$rootScope', '$scope', '$window', 'vcRecaptchaService',
-    'httpInterceptor', 'authService', 'fosJsRouting', 'messenger',
+    '$http', '$location', '$modal', '$rootScope', '$scope', '$window',
+    'vcRecaptchaService', 'httpInterceptor', 'authService', 'fosJsRouting',
+    'history', 'messenger',
     function (
-        $http, $location, $modal, $rootScope, $scope, $window, vcRecaptchaService,
-        httpInterceptor, authService, fosJsRouting, messenger
+        $http, $location, $modal, $rootScope, $scope, $window,
+        vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
+        history, messenger
     ) {
         /**
          * The fosJsRouting service.
@@ -38,63 +40,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
-         * Cleans the criteria for the current listing.
-         *
-         * @param Object criteria The search criteria.
-         *
-         * @return Object The cleaned criteria.
+         * Removes a class from body and checks if user is authenticated.
          */
-        $scope.cleanFilters = function (criteria) {
-            var cleaned = {};
-
-            for (var name in criteria) {
-                for (var i = 0; i < criteria[name].length; i++) {
-                    if (criteria[name][i]['value'] != -1
-                        && criteria[name][i]['value'] !== ''
-                    ){
-                        if (criteria[name][i]['value']) {
-                            var values = criteria[name][i]['value'].split(' ');
-
-                            cleaned[name] = [];
-                            for (var i = 0; i < values.length; i++) {
-                                switch(criteria[name][i]['operator']) {
-                                    case 'like':
-                                        cleaned[name][i] = {
-                                            value:    '%' + values[i] + '%',
-                                            operator: 'LIKE'
-                                        };
-                                        break;
-                                    case 'regexp':
-                                        cleaned[name][i] = {
-                                            value:    '(^' + values[i] + ',)|('
-                                                + ',' + values[i] + ',)|('
-                                                + values[i] + '$)',
-                                            operator: 'REGEXP'
-                                        };
-                                        break;
-                                    default:
-                                        cleaned[name][i] = {
-                                            value:    values[i],
-                                            operator: criteria[name][i]['operator']
-                                        };
-                                }
-                            };
-                        } else {
-                            if (!cleaned[name]) {
-                                cleaned[name] = [];
-                            }
-
-                            cleaned[name][i] = {
-                                value: criteria[name][i]['value']
-                            };
-                        }
-                    }
-                }
-            };
-
-            return cleaned;
-        }
-
         $scope.init = function() {
             $('body').removeClass('application-loading');
 
@@ -114,6 +61,20 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
+         * Checks and loads an user if it is authenticated in the system.
+         */
+        $scope.isAuthenticated = function() {
+            authService.isAuthenticated('manager_ws_auth_check_user')
+                .then(function (response) {
+                    if (response.data.success) {
+                        $scope.user        = response.data.user;
+                        $scope.auth.status = true;
+                        $scope.auth.modal  = false;
+                    }
+                });
+        }
+
+        /**
          * Toggles the sidebar.
          *
          * @param integer status The toggle status.
@@ -130,20 +91,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $.sidr('close', 'main-menu');
                 $.sidr('close', 'sidr');
             }
-        }
-
-        /**
-         * Checks and loads an user if it is authenticated in the system.
-         */
-        $scope.isAuthenticated = function() {
-            authService.isAuthenticated('manager_ws_auth_check_user')
-                .then(function (response) {
-                    if (response.data.success) {
-                        $scope.user        = response.data.user;
-                        $scope.auth.status = true;
-                        $scope.auth.modal  = false;
-                    }
-                });
         }
 
         /**
@@ -307,11 +254,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param Object event The event object.
          * @param array  args  The list of arguments.
          */
-        $rootScope.$on('$routeChangeStart',
-            function (event, next, current) {
-                refreshApp();
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            refreshApp();
+
+            if (!history.restore($location.path())) {
+                history.push($location.path(), $location.search());
             }
-        );
+        });
 
         /**
          * Shows a modal to force page reload.
