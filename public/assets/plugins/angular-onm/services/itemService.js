@@ -164,7 +164,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         filters.criteria = {};
         var pattern = /[a-z_]\d+/;
         for (var name in params) {
-            var target = name
+            var target = name;
             if (pattern.test(name)) {
                 target = name.substr(0, name.lastIndexOf('_'));
             }
@@ -177,8 +177,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
             delete params[name];
         }
-
-        filters.criteria = itemService.cleanFilters(filters.criteria);
 
         return filters;
     }
@@ -193,7 +191,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      */
     itemService.encodeFilters = function(criteria, orderBy, epp, page) {
         for (var name in criteria) {
-            for (var i = 0; i < criteria[name].length; i++) {
+            for (var i in criteria[name]) {
                 $location.search(name + '_' + i, criteria[name][i].value);
             };
         }
@@ -237,10 +235,18 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      *
      * @return Object The response object.
      */
-    itemService.list = function(route, criteria) {
+    itemService.list = function(route, data) {
         var url = fosJsRouting.generate(route);
 
-        return $http.post(url, criteria).success(function (response) {
+        // Decode filters from URL and overwrite data
+        var filters = itemService.decodeFilters();
+        for(var name in filters) {
+            data[name] = filters[name];
+        }
+
+        data.criteria = itemService.cleanFilters(data.criteria);
+
+        return $http.post(url, data).success(function (response) {
             return response;
         });
     };
