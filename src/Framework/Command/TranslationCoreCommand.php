@@ -77,7 +77,7 @@ EOF
             ."-o ".APP_PATH.$this->localeFolder."/opennemas_template_strings.pot "
             .implode(' ', $tplFolders);
 
-        // echo(exec($command));
+        echo(exec($command));
 
         $output->writeln("\t- From PHP files");
 
