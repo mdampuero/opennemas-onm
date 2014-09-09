@@ -43,10 +43,10 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label for="config[with_comments]" class="control-label">{t}Allow comments by default in contents{/t}</label>
+                    <label for="config[with_comments]" class="control-label">{t}Allow comments in contents by default{/t}</label>
                     <div class="controls">
                         <input type="checkbox" id="name" name="configs[with_comments]" value="1" {if !isset($configs['with_comments']) || $configs['with_comments'] == true}checked="checked"{/if} >
-                        <div class="help-block help-block-inline">{t} Contents are added with comments activated{/t}</div>
+                        <div class="help-block help-block-inline">{t}Whether to allow users to comment in comments by default for all contents (you can change this setting for specific contents){/t}</div>
                     </div>
                 </div>
                 <div class="control-group">

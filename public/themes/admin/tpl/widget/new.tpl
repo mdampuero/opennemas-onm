@@ -147,7 +147,7 @@
                 {t}Add parameter{/t}
             </a>
             <a id="save" class="btn" data-dismiss="modal" >
-                {t}Cerrar{/t}
+                {t}Close{/t}
             </a>
         </div>
     </div>
