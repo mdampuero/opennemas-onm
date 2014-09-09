@@ -27,7 +27,7 @@
                                 <span class="arrow"></span>
                                 <i class="fa fa-users"></i>
                             </span>
-                            <input class="form-control" ng-model="criteria.name[0].value" placeholder="Filter by name" type="text">
+                            <input class="form-control" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name" type="text">
                         </div>
                     </div>
                     <div class="form-group">

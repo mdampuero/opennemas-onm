@@ -152,6 +152,26 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         };
 
         /**
+         * Checks if a user is selected
+         *
+         * @param string id The group id.
+         */
+        $scope.isSelected = function(id) {
+            return $scope.selected.users.indexOf(id) != -1
+        }
+
+        /**
+         * Reloads the list on keypress.
+         *
+         * @param  Object event The even object.
+         */
+        $scope.searchByKeypress = function(event) {
+            if (event.keyCode == 13) {
+                list();
+            };
+        }
+
+        /**
          * Selects/unselects all users.
          */
         $scope.selectAll = function() {
@@ -242,13 +262,17 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         }
 
         /**
-         * Checks if a user is selected
-         *
-         * @param string id The group id.
+         * Marks variables to delete for garbage collector;
          */
-        $scope.isSelected = function(id) {
-            return $scope.selected.users.indexOf(id) != -1
-        }
+        $scope.$on('$destroy', function() {
+            $scope.criteria = null;
+            $scope.epp      = null;
+            $scope.users    = null;
+            $scope.selected = null;
+            $scope.orderBy  = null;
+            $scope.page     = null;
+            $scope.total    = null;
+        })
 
         /**
          * Refresh the list of elements when some parameter changes.
@@ -256,7 +280,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          * @param array newValues The new values
          * @param array oldValues The old values
          */
-        $scope.$watch('[criteria, orderBy, epp, page]', function(newValues, oldValues) {
+        $scope.$watch('[criteria.fk_user_group, orderBy, epp, page]', function(newValues, oldValues) {
             if (newValues !== oldValues) {
                 if (search) {
                     $timeout.cancel(search);
@@ -291,6 +315,8 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                 page: $scope.page
             };
 
+            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+
             itemService.list('manager_ws_users_list', data).then(function (response) {
                 $scope.users   = response.data.results;
                 $scope.total   = response.data.total;
@@ -298,14 +324,10 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
             });
         }
 
-        $scope.$on('$destroy', function() {
-            $scope.criteria = null;
-            $scope.epp      = null;
-            $scope.users    = null;
-            $scope.selected = null;
-            $scope.orderBy  = null;
-            $scope.page     = null;
-            $scope.total    = null;
-        })
+        // Initialize filters from URL
+        var filters = itemService.decodeFilters();
+        for(var name in filters) {
+            $scope[name] = filters[name];
+        }
     }
 ]);

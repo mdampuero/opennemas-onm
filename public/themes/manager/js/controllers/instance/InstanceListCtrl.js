@@ -20,7 +20,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.criteria = {
-            name_like: [ { value: 'prueba' }, { value: 'example' } ]
+            name_like: []
         };
 
         /**
@@ -175,6 +175,17 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         };
 
         /**
+         * Reloads the list on keypress.
+         *
+         * @param  Object event The even object.
+         */
+        $scope.searchByKeypress = function(event) {
+            if (event.keyCode == 13) {
+                list();
+            };
+        }
+
+        /**
          * Selects/unselects all instances.
          */
         $scope.selectAll = function() {
@@ -244,17 +255,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                         messenger.post(params);
                     };
                 });
-        }
-
-        /**
-         * Reloads the list on keypress.
-         *
-         * @param  Object event The even object.
-         */
-        $scope.searchByKeypress = function(event) {
-            if (event.keyCode == 13) {
-                list();
-            };
         }
 
         /**
@@ -344,7 +344,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         var filters = itemService.decodeFilters();
         for(var name in filters) {
             $scope[name] = filters[name];
-            console.log($scope[name]);
         }
     }
 ]);
