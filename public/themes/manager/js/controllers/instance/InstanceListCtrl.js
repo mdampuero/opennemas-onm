@@ -68,7 +68,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.orderBy = {
-            'last_login': 'asc'
+            'last_login': 'desc'
         }
 
         /**
