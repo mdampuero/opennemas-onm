@@ -37,6 +37,7 @@ angular.module('onm.history', []).factory('history', function($location) {
             if (history.routes[i].route == url) {
                 for (var name in history.routes[i].params) {
                     $location.search(name, history.routes[i].params[name]);
+                    delete history.routes[i].params[name];
                 };
 
                 return true;
