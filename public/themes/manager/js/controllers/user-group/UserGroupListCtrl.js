@@ -187,7 +187,13 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                list();
+                $scope.page = 1;
+
+                if (search) {
+                    $timeout.cancel(search);
+                }
+
+                search = list();
             };
         }
 
@@ -234,34 +240,36 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                     $timeout.cancel(search);
                 }
 
-                search = $timeout(function() {
-                    list();
-                }, 500);
+                search = list();
             }
         }, true);
 
         /**
          * Searches groups given a criteria.
+         *
+         * @return Object The function to execute past 500 ms.
          */
         function list() {
-            $scope.loading = 1;
+            return $timeout(function() {
+                $scope.loading = 1;
 
-            var cleaned = itemService.cleanFilters($scope.criteria);
+                var cleaned = itemService.cleanFilters($scope.criteria);
 
-            var data = {
-                criteria: cleaned,
-                orderBy:  $scope.orderBy,
-                epp:      $scope.epp,
-                page:     $scope.page
-            };
+                var data = {
+                    criteria: cleaned,
+                    orderBy:  $scope.orderBy,
+                    epp:      $scope.epp,
+                    page:     $scope.page
+                };
 
-            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
 
-            itemService.list('manager_ws_user_groups_list', data).then(function (response) {
-                $scope.groups  = response.data.results;
-                $scope.total   = response.data.total;
-                $scope.loading = 0;
-            });
+                itemService.list('manager_ws_user_groups_list', data).then(function (response) {
+                    $scope.groups  = response.data.results;
+                    $scope.total   = response.data.total;
+                    $scope.loading = 0;
+                });
+            }, 500);
         }
     }
 ]);

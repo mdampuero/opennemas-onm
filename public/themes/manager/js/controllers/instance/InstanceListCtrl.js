@@ -181,7 +181,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                list();
+                $scope.page = 1;
+
+                if (search) {
+                    $timeout.cancel(search);
+                }
+
+                search = list();
             };
         }
 
@@ -303,43 +309,45 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     $timeout.cancel(search);
                 }
 
-                search = $timeout(function() {
-                    list();
-                }, 500);
+                search = list();
             }
         }, true);
 
         /**
          * Searches instances given a criteria.
+         *
+         * @return Object The function to execute past 500 ms.
          */
         function list() {
-            $scope.loading = 1;
+            return $timeout(function() {
+                $scope.loading = 1;
 
-            var cleaned = itemService.cleanFilters($scope.criteria);
+                var cleaned = itemService.cleanFilters($scope.criteria);
 
-            // Search by name, domains and contact mail
-            if (cleaned.name) {
-                cleaned.domains = cleaned.contact_mail = cleaned.name;
+                // Search by name, domains and contact mail
+                if (cleaned.name) {
+                    cleaned.domains = cleaned.contact_mail = cleaned.name;
 
-                // OR operator
-                cleaned.union = 'OR';
-            }
+                    // OR operator
+                    cleaned.union = 'OR';
+                }
 
-            var data = {
-                criteria: cleaned,
-                orderBy: $scope.orderBy,
-                epp: $scope.epp,
-                page: $scope.page
-            };
+                var data = {
+                    criteria: cleaned,
+                    orderBy: $scope.orderBy,
+                    epp: $scope.epp,
+                    page: $scope.page
+                };
 
-            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
 
-            itemService.list('manager_ws_instances_list', data).then(function (response) {
-                $scope.instances = response.data.results;
-                $scope.total = response.data.total;
+                itemService.list('manager_ws_instances_list', data).then(function (response) {
+                    $scope.instances = response.data.results;
+                    $scope.total = response.data.total;
 
-                $scope.loading = 0;
-            });
+                    $scope.loading = 0;
+                });
+            }, 500);
         }
 
         // Initialize filters from URL

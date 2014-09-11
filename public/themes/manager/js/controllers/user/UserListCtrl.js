@@ -167,7 +167,13 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                list();
+                $scope.page = 1;
+
+                if (search) {
+                    $timeout.cancel(search);
+                }
+
+                search = list();
             };
         }
 
@@ -286,42 +292,44 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                     $timeout.cancel(search);
                 }
 
-                search = $timeout(function() {
-                    list();
-                }, 500);
+                search = list();
             }
         }, true);
 
         /**
          * Searches instances given a criteria.
+         *
+         * @return Object The function to execute past 500 ms.
          */
         function list() {
-            $scope.loading = 1;
+            return $timeout(function() {
+                $scope.loading = 1;
 
-            var cleaned = itemService.cleanFilters($scope.criteria);
+                var cleaned = itemService.cleanFilters($scope.criteria);
 
-            // Search by name, domains and contact mail
-            if (cleaned.name) {
-                cleaned.username = cleaned.name;
+                // Search by name, domains and contact mail
+                if (cleaned.name) {
+                    cleaned.username = cleaned.name;
 
-                // OR operator
-                cleaned.union = 'OR';
-            }
+                    // OR operator
+                    cleaned.union = 'OR';
+                }
 
-            var data = {
-                criteria: cleaned,
-                orderBy: $scope.orderBy,
-                epp: $scope.epp,
-                page: $scope.page
-            };
+                var data = {
+                    criteria: cleaned,
+                    orderBy: $scope.orderBy,
+                    epp: $scope.epp,
+                    page: $scope.page
+                };
 
-            itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
 
-            itemService.list('manager_ws_users_list', data).then(function (response) {
-                $scope.users   = response.data.results;
-                $scope.total   = response.data.total;
-                $scope.loading = 0;
-            });
+                itemService.list('manager_ws_users_list', data).then(function (response) {
+                    $scope.users   = response.data.results;
+                    $scope.total   = response.data.total;
+                    $scope.loading = 0;
+                });
+            }, 500);
         }
 
         // Initialize filters from URL
