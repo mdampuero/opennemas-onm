@@ -237,6 +237,10 @@ class VideosController extends Controller
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;
 
+            if ($video->content_status == 0 || $video->in_litter == 1) {
+                throw new ResourceNotFoundException();
+            }
+
             // Fetch video author
             $ur = getService('user_repository');
             $video->author = $ur->find($video->fk_author);
