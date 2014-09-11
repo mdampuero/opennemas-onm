@@ -257,9 +257,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
             refreshApp();
 
-            if (!history.restore($location.path())) {
-                history.push($location.path(), $location.search());
-            }
+            history.restore($location.path());
+            history.push($location.path(), $location.search());
         });
 
         /**
