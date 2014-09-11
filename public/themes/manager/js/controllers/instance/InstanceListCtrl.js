@@ -273,6 +273,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 $scope.orderBy = {};
                 $scope.orderBy[name] = 'asc';
             }
+
+            $scope.page = 1;
         }
 
         /**
