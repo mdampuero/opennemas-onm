@@ -185,7 +185,7 @@ class Validator
         $exists = $this->instanceManager->instanceExists($this->data[$field]);
 
         if ($exists) {
-            $this->errors []= _('The address that you entered is already in use');
+            $this->errors []= _('The url that you entered is already in use');
             return false;
         }
 

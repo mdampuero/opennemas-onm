@@ -53,15 +53,20 @@ class WebServiceController extends Controller
             'user_email'    => $instance->contact_mail,
         ));
 
+        $im = $this->get('instance_manager');
+
+        // Check for repeated internalnameshort and if so, add a number at the end
+        $im->checkInternalName($instance);
+
         if (count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
 
-        $instance->domains       = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
-        $instance->main_domain   = 1;
-        $instance->activated     = 1;
-        $instance->plan          = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
-        $instance->price         = 0;
+        $instance->domains     = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
+        $instance->main_domain = 1;
+        $instance->activated   = 1;
+        $instance->plan        = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
+        $instance->price       = 0;
 
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone("UTC"));
@@ -103,15 +108,9 @@ class WebServiceController extends Controller
 
         $errors = array();
 
-        $im = $this->get('instance_manager');
-        $creator = new InstanceCreator($im->getConnection());
-
-        // Check for repeated internalnameshort and if so, add a number at the end
-        $im->checkInternalName($instance);
-
         try {
+            $creator = new InstanceCreator($im->getConnection());
             $im->persist($instance);
-
 
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);

@@ -2,6 +2,10 @@ manager_welcome:
     pattern:  /manager
     defaults: { _controller: ManagerBundle:Welcome:default }
 
+manager_playground:
+    pattern:  /manager/playground/{action}
+    defaults: { _controller: ManagerBundle:Playground:default }
+
 manager_auth:
     prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/auth.yml
