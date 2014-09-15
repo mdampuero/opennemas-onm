@@ -106,7 +106,7 @@ class InstanceController extends Controller
             $message = array(
                 'id'   => $instance->id,
                 'type' => 'success',
-                'text' => 'Instance saved successfully'
+                'text' => _('Instance saved successfully')
             );
 
         } catch (DatabaseNotRestoredException $e) {
@@ -309,13 +309,13 @@ class InstanceController extends Controller
             }
         }
 
-        if (count($updated) > 0) {
+        if ($updated) {
             $success = true;
 
             array_unshift(
                 $messages,
                 array(
-                    'text' => sprintf(_('%s instances deleted successfully.'), count($updated)),
+                    'text' => sprintf(_('%s instances deleted successfully.'), $updated),
                     'type' => 'success'
                 )
             );
@@ -593,7 +593,7 @@ class InstanceController extends Controller
                     'success' => false,
                     'message' => array(
                         'type' => 'error',
-                        'text' => 'Instance domains cannot be empty'
+                        'text' => _('Instance domains cannot be empty')
                     )
                 )
             );
@@ -654,7 +654,7 @@ class InstanceController extends Controller
             $success = true;
             $message = array(
                 'type' => 'success',
-                'text' => 'Instance saved successfully'
+                'text' => _('Instance saved successfully')
             );
 
         } catch (InstanceNotFoundException $e) {
