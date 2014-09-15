@@ -1,19 +1,21 @@
 /**
  * Handles all actions in instances listing.
  *
- * @param  Object $modal       The modal service.
- * @param  Object $scope       The current scope.
- * @param  Object $timeout     The timeout service.
- * @param  Object itemService  The item service.
- * @param  Object fosJsRouting The fosJsRouting service.
- * @param  Object messenger    The messenger service.
- * @param  Object data         The input data.
+ * @param Object $anchorScroll The anchor scroll service.
+ * @param Object $location     The location service.
+ * @param Object $modal        The modal service.
+ * @param Object $scope        The current scope.
+ * @param Object $timeout      The timeout service.
+ * @param Object itemService   The item service.
+ * @param Object fosJsRouting  The fosJsRouting service.
+ * @param Object messenger     The messenger service.
+ * @param Object data          The input data.
  *
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$location', '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$anchorScroll', '$location', '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
+    function ($anchorScroll, $location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -374,6 +376,9 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                         $scope.total = response.data.total;
 
                         $scope.loading = 0;
+
+                        $location.hash('manager');
+                        $anchorScroll();
                     }
                 );
             }, 500);
