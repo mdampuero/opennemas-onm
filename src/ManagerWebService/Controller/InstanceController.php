@@ -309,13 +309,13 @@ class InstanceController extends Controller
             }
         }
 
-        if (count($updated) > 0) {
+        if ($updated) {
             $success = true;
 
             array_unshift(
                 $messages,
                 array(
-                    'text' => sprintf(_('%s instances deleted successfully.'), count($updated)),
+                    'text' => sprintf(_('%s instances deleted successfully.'), $updated),
                     'type' => 'success'
                 )
             );
