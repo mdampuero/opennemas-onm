@@ -1,19 +1,21 @@
 /**
  * Handles all actions in instances listing.
  *
- * @param  Object $modal       The modal service.
- * @param  Object $scope       The current scope.
- * @param  Object $timeout     The timeout service.
- * @param  Object itemService  The item service.
- * @param  Object fosJsRouting The fosJsRouting service.
- * @param  Object messenger    The messenger service.
- * @param  Object data         The input data.
+ * @param Object $anchorScroll The anchor scroll service.
+ * @param Object $location     The location service.
+ * @param Object $modal        The modal service.
+ * @param Object $scope        The current scope.
+ * @param Object $timeout      The timeout service.
+ * @param Object itemService   The item service.
+ * @param Object fosJsRouting  The fosJsRouting service.
+ * @param Object messenger     The messenger service.
+ * @param Object data          The input data.
  *
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$location', '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$anchorScroll', '$location', '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
+    function ($anchorScroll, $location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -33,7 +35,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             domains:    1,
             last_login: 1,
             created:    1,
-            contents:   1,
+            articles:   1,
             alexa:      1,
             activated:  1
         }
@@ -86,6 +88,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.total = data.total;
 
         /**
+         * Default join operator for filters.
+         *
+         * @type string
+         */
+        $scope.union = 'OR';
+
+        /**
          * Variable to store the current search.
          */
         var search;
@@ -110,7 +119,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 resolve: {
                     template: function() {
                         return {
-                            name: 'delete-instance'
+                            name: 'delete-instance',
+                            item: instance
                         };
                     },
                     success: function() {
@@ -146,8 +156,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 controller: 'modalCtrl',
                 resolve: {
                     template: function() {
+                        var selected = [];
+
+                        for (var i = 0; i < $scope.instances.length; i++) {
+                            if ($scope.selected.instances.indexOf(
+                                    $scope.instances[i].id) != -1) {
+                                selected.push($scope.instances[i]);
+                            }
+                        };
+
                         return {
-                            name: 'delete-instances'
+                            name: 'delete-instances',
+                            selected: selected
                         };
                     },
                     success: function() {
@@ -280,6 +300,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 $scope.orderBy[name] = 'asc';
             }
 
+            if (!$scope.orderBy.last_login) {
+                $scope.orderBy.last_login = 'desc';
+            }
+
             $scope.page = 1;
         }
 
@@ -322,14 +346,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             return $timeout(function() {
                 $scope.loading = 1;
 
+                // Search by name, domains and contact mail
+                if ($scope.criteria.name_like) {
+                    $scope.criteria.domains_like =
+                        $scope.criteria.contact_mail_like =
+                            $scope.criteria.name_like;
+                }
+
                 var cleaned = itemService.cleanFilters($scope.criteria);
 
-                // Search by name, domains and contact mail
-                if (cleaned.name) {
-                    cleaned.domains = cleaned.contact_mail = cleaned.name;
-
+                if (cleaned.name && cleaned.domains && cleaned.contact_mail) {
                     // OR operator
-                    cleaned.union = 'OR';
+                    cleaned.union = $scope.union;
                 }
 
                 var data = {
@@ -339,14 +367,20 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     page: $scope.page
                 };
 
-                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                    $scope.epp, $scope.page, $scope.union);
 
-                itemService.list('manager_ws_instances_list', data).then(function (response) {
-                    $scope.instances = response.data.results;
-                    $scope.total = response.data.total;
+                itemService.list('manager_ws_instances_list', data).then(
+                    function (response) {
+                        $scope.instances = response.data.results;
+                        $scope.total = response.data.total;
 
-                    $scope.loading = 0;
-                });
+                        $scope.loading = 0;
+
+                        $location.hash('manager');
+                        $anchorScroll();
+                    }
+                );
             }, 500);
         }
 
