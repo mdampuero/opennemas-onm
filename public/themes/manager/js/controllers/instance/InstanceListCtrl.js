@@ -345,8 +345,11 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 $scope.loading = 1;
 
                 // Search by name, domains and contact mail
-                $scope.criteria.domains_like = $scope.criteria.contact_mail_like
-                    = $scope.criteria.name_like;
+                if ($scope.criteria.name_like) {
+                    $scope.criteria.domains_like =
+                        $scope.criteria.contact_mail_like =
+                            $scope.criteria.name_like;
+                }
 
                 var cleaned = itemService.cleanFilters($scope.criteria);
 
