@@ -106,7 +106,7 @@ class InstanceController extends Controller
             $message = array(
                 'id'   => $instance->id,
                 'type' => 'success',
-                'text' => 'Instance saved successfully'
+                'text' => _('Instance saved successfully')
             );
 
         } catch (DatabaseNotRestoredException $e) {
