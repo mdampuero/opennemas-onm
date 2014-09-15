@@ -593,7 +593,7 @@ class InstanceController extends Controller
                     'success' => false,
                     'message' => array(
                         'type' => 'error',
-                        'text' => 'Instance domains cannot be empty'
+                        'text' => _('Instance domains cannot be empty')
                     )
                 )
             );
@@ -654,7 +654,7 @@ class InstanceController extends Controller
             $success = true;
             $message = array(
                 'type' => 'success',
-                'text' => 'Instance saved successfully'
+                'text' => _('Instance saved successfully')
             );
 
         } catch (InstanceNotFoundException $e) {
