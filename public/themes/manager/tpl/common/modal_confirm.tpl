@@ -19,6 +19,22 @@
     <p ng-if="template.name == 'delete-users'">{t}Do you really want to delete the selected users?{/t}</p>
     <p ng-if="template.name == 'delete-user-group'">{t}Do you really want to delete the user group?{/t}</p>
     <p ng-if="template.name == 'delete-user-groups'">{t}Do you really want to delete the selected user groups?{/t}</p>
+    <ul ng-if="template.item">
+        <li>
+            [% template.item.name %]
+            <span ng-if="template.item.domains">
+                (<a ng-href="http://[% template.item.domains[template.item.main_domain - 1] %]">[% template.item.domains[template.item.main_domain - 1] %]</a>)
+            </span>
+        </li>
+    </ul>
+    <ul ng-if="template.selected">
+        <li ng-repeat="item in template.selected">
+            [% item.name %]
+            <span ng-if="item.domains">
+                (<a ng-href="http://[% item.domains[item.main_domain - 1] %]">[% item.domains[item.main_domain - 1] %]</a>)
+            </span>
+        </li>
+    </ul>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-link" data-dismiss="modal" ng-click="close();" ng-disabled="loading">
