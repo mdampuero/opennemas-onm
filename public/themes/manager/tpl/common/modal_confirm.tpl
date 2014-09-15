@@ -23,7 +23,12 @@
         <li>
             [% template.item.name %]
             <span ng-if="template.item.domains">
-                (<a ng-href="http://[% template.item.domains[template.item.main_domain - 1] %]">[% template.item.domains[template.item.main_domain - 1] %]</a>)
+                <a ng-href="http://[% template.item.domains[template.item.main_domain - 1] %]" ng-if="template.item.main_domain > 0">
+                    ([% template.item.domains[template.item.main_domain - 1] %])
+                </a>
+                <a ng-href="http://[% template.item.domains[0] %]" ng-if="template.item.main_domain <= 0">
+                    ([% template.item.domains[0] %])
+                </a>
             </span>
         </li>
     </ul>
@@ -31,8 +36,13 @@
         <li ng-repeat="item in template.selected">
             [% item.name %]
             <span ng-if="item.domains">
-                (<a ng-href="http://[% item.domains[item.main_domain - 1] %]">[% item.domains[item.main_domain - 1] %]</a>)
+                <a ng-href="http://[% item.domains[item.main_domain - 1] %]" ng-if="item.main_domain > 0">
+                    ([% item.domains[item.main_domain - 1] %])
+                </a>
             </span>
+            <a ng-href="http://[% item.domains[0] %]" ng-if="item.main_domain <= 0">
+                ([% item.domains[0] %])
+            </a>
         </li>
     </ul>
 </div>
