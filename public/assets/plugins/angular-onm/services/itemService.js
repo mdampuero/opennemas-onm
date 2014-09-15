@@ -37,11 +37,12 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var cleaned = {};
 
         for (var name in criteria) {
-            for (var i = 0; i < criteria[name].length; i++) {
-                if (criteria[name][i]['value'] != -1
-                    && criteria[name][i]['value'] !== ''
-                ){
-                    if (criteria[name][i]['value']) {
+            if (name != 'union') {
+                for (var i = 0; i < criteria[name].length; i++) {
+                    if (criteria[name][i]['value']
+                        && criteria[name][i]['value'] != -1
+                        && criteria[name][i]['value'] !== ''
+                    ){
                         var values = criteria[name][i]['value'].split(' ');
 
                         if (name.indexOf('_like') !== -1 ) {
@@ -57,39 +58,39 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
                         } else {
                             cleaned[name] = [];
                             for (var i = 0; i < values.length; i++) {
-                                switch(criteria[name][i]['operator']) {
-                                    case 'like':
-                                        cleaned[name][i] = {
-                                            value:    '%' + values[i] + '%',
-                                            operator: 'LIKE'
-                                        };
-                                        break;
-                                    case 'regexp':
-                                        cleaned[name][i] = {
-                                            value:    '(^' + values[i] + ',)|('
-                                                + ',' + values[i] + ',)|('
-                                                + values[i] + '$)',
-                                            operator: 'REGEXP'
-                                        };
-                                        break;
-                                    default:
-                                        cleaned[name][i] = {
-                                            value:    values[i],
-                                            operator: criteria[name][i]['operator']
-                                        };
+                                if (criteria[name]['operator']) {
+                                    switch(criteria[name]['operator']) {
+                                        case 'like':
+                                            cleaned[name][i] = {
+                                                value:    '%' + values[i] + '%',
+                                                operator: 'LIKE'
+                                            };
+                                            break;
+                                        case 'regexp':
+                                            cleaned[name][i] = {
+                                                value:    '(^' + values[i] + ',)|('
+                                                    + ',' + values[i] + ',)|('
+                                                    + values[i] + '$)',
+                                                operator: 'REGEXP'
+                                            };
+                                            break;
+                                        default:
+                                            cleaned[name][i] = {
+                                                value:    values[i],
+                                                operator: criteria[name]['operator']
+                                            };
+                                    }
+                                } else {
+                                    cleaned[name][i] = {
+                                        value: values[i],
+                                    };
                                 }
                             }
                         }
-                    } else {
-                        if (!cleaned[name]) {
-                            cleaned[name] = [];
-                        }
-
-                        cleaned[name][i] = {
-                            value: criteria[name][i]['value']
-                        };
                     }
                 }
+            } else {
+                cleaned[name] = criteria[name];
             }
         };
 
@@ -161,7 +162,14 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             delete params.orderBy;
         }
 
+        var union = null;
+        if (params.union) {
+            union = params.union;
+            delete params.union;
+        }
+
         filters.criteria = {};
+        var empty = 1;
         var pattern = /[a-z_]\d+/;
         for (var name in params) {
             var target = name;
@@ -174,8 +182,13 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             }
 
             filters.criteria[target].push({ value: params[name] });
+            empty = 0;
 
             delete params[name];
+        }
+
+        if (!empty && union) {
+            filters.criteria.union = union;
         }
 
         return filters;
@@ -188,11 +201,16 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @param Object  orderBy  The order to use while searching.
      * @param integer epp      The elements per page.
      * @param integer page     The current page.
+     * @param integer union    The operator to join filters.
      */
-    itemService.encodeFilters = function(criteria, orderBy, epp, page) {
+    itemService.encodeFilters = function(criteria, orderBy, epp, page, union) {
         for (var name in criteria) {
             for (var i in criteria[name]) {
-                $location.search(name + '_' + i, criteria[name][i].value);
+                if (criteria[name][i].value != '' && criteria[name][i].value != -1) {
+                    $location.search(name + '_' + i, criteria[name][i].value);
+                } else {
+                    $location.search(name + '_' + i, null);
+                }
             };
         }
 
@@ -207,6 +225,10 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
         if (page) {
             $location.search('page', page)
+        }
+
+        if (union) {
+            $location.search('union', union)
         }
     }
 
@@ -240,11 +262,17 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
         // Decode filters from URL and overwrite data
         var filters = itemService.decodeFilters();
-        for(var name in filters) {
-            data[name] = filters[name];
+        filters.criteria = itemService.cleanFilters(filters.criteria);
+
+        // Merge data with filters from URL
+        if (filters.criteria && !data.criteria) {
+            data.criteria = {};
         }
 
-        data.criteria = itemService.cleanFilters(data.criteria);
+        for(var name in filters.criteria) {
+            data.criteria[name] = filters.criteria[name];
+        }
+
 
         return $http.post(url, data).success(function (response) {
             return response;
