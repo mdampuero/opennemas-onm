@@ -101,7 +101,7 @@ class BlogsController extends Controller
 
                     $blog->author           = $authors[$blog->fk_author];
                     $blog->name             = $blog->author->name;
-                    $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
+                    $blog->author_name_slug = $blog->author->username;
                     // ????
                     $item = new \Content();
                     $item->loadAllContentProperties($blog->pk_content);
@@ -114,7 +114,7 @@ class BlogsController extends Controller
                     $blog->author->uri = \Uri::generate(
                         'frontend_blog_author_frontpage',
                         array(
-                            'slug' => $blog->author->name,
+                            'slug' => $blog->author->username,
                             'id'   => $blog->author->id
                         )
                     );
@@ -313,7 +313,7 @@ class BlogsController extends Controller
             $blog->author = $author;
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-            $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
+            $blog->author_name_slug = $author->username;
             if (!array_key_exists('is_blog', $author->meta) || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)) {
                 return new RedirectResponse(
                     $this->generateUrl(
