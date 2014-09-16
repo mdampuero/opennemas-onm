@@ -109,12 +109,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.save = function() {
             $scope.saving = 1;
 
-            if ($scope.instance.external.domain_expire) {
-                $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
+                $scope.instance.domain_expire = $scope.instance.domain_expire.toString();
             }
 
-            if ($scope.instance.external.last_invoice) {
-                $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+            if ($scope.instance.external_last_invoice && angular.isObject($scope.instance.domain_expire)) {
+                $scope.instance.external_last_invoice = $scope.instance.external_last_invoice.toString();
             }
 
             itemService.save('manager_ws_instance_create', $scope.instance)
@@ -159,12 +159,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.update = function() {
             $scope.saving = 1;
 
-            if ($scope.instance.external.domain_expire) {
-                $scope.instance.external.domain_expire = $scope.instance.external.domain_expire.toString();
+            if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
+                $scope.instance.domain_expire = $scope.instance.domain_expire.toString();
             }
 
-            if ($scope.instance.external.last_invoice) {
-                $scope.instance.external.last_invoice = $scope.instance.external.last_invoice.toString();
+            if ($scope.instance.external_last_invoice && angular.isObject($scope.instance.domain_expire)) {
+                $scope.instance.external_last_invoice = $scope.instance.external_last_invoice.toString();
             }
 
             itemService.update('manager_ws_instance_update', $scope.instance.id,
