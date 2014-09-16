@@ -71,7 +71,7 @@ class Template extends Smarty
     public function setBasePaths($theme)
     {
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.'/themes/'.$theme.DS;
+        $this->templateBaseDir = realpath(SITE_PATH.'/themes/'.$theme.DS);
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
 
         $instanceManager = getService('instance_manager');
@@ -80,12 +80,12 @@ class Template extends Smarty
             $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
 
             if (!empty($baseTheme)) {
-                $this->addTemplateDir(SITE_PATH."/themes/{$baseTheme}/tpl");
+                $this->addTemplateDir(realpath(SITE_PATH."/themes/{$baseTheme}/tpl"));
             }
         }
         $this->setupCachePath($baseTheme);
 
-        $this->addTemplateDir(SITE_PATH.'/themes/'.'base'.'/tpl');
+        $this->addTemplateDir(realpath(SITE_PATH.'/themes/'.'base'.'/tpl'));
     }
 
     /**
