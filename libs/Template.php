@@ -72,7 +72,7 @@ class Template extends Smarty
     {
         // Parent variables
         $this->templateBaseDir = realpath(SITE_PATH.'/themes/'.$theme.DS);
-        $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
+        $this->setTemplateDir(realpath($this->templateBaseDir.'/tpl/'));
 
         $instanceManager = getService('instance_manager');
         $baseTheme = '';
