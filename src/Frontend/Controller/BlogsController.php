@@ -109,7 +109,7 @@ class BlogsController extends Controller
                 if (!empty($blog->fk_author)) {
                     $blog->author           = $ur->find($blog->fk_author);
                     $blog->name             = $blog->author->name;
-                    $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
+                    $blog->author_name_slug = $blog->author->username;
 
                     if (isset($blog->img1) && ($blog->img1 > 0)) {
                         $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
