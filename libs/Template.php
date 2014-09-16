@@ -71,7 +71,7 @@ class Template extends Smarty
     public function setBasePaths($theme)
     {
         // Parent variables
-        $this->templateBaseDir = realpath(SITE_PATH.'/themes/'.$theme.DS);
+        $this->templateBaseDir = realpath(SITE_PATH.'/themes/'.$theme);
         $this->setTemplateDir(realpath($this->templateBaseDir.'/tpl/'));
 
         $instanceManager = getService('instance_manager');
@@ -85,7 +85,7 @@ class Template extends Smarty
         }
         $this->setupCachePath($baseTheme);
 
-        $this->addTemplateDir(realpath(SITE_PATH.'/themes/'.'base'.'/tpl'));
+        $this->addTemplateDir(realpath(SITE_PATH.'/themes/base/tpl'));
     }
 
     /**
@@ -145,8 +145,8 @@ class Template extends Smarty
      **/
     public function setPluginLoadPaths()
     {
-        $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/'));
-        $this->addPluginsDir(realpath(SITE_LIBS_PATH.DS.'/smarty-onm-plugins/'));
+        $this->addPluginsDir(realpath($this->templateBaseDir.'/plugins/'));
+        $this->addPluginsDir(realpath(SITE_LIBS_PATH.'/smarty-onm-plugins/'));
     }
 
     /**
