@@ -85,6 +85,14 @@ class InstanceController extends Controller
             $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
 
             if (!is_null($value)) {
+                if ($key == 'domain_expire') {
+                    $value = new \Datetime($value);
+                    $value = $value->format('Y-m-d H:i:s');
+                } elseif ($key == 'external' && array_key_exists('last_invoice', $value)) {
+                    $value['last_invoice'] = new \Datetime($value['last_invoice']);
+                    $value['last_invoice'] = $value['last_invoice']->format('Y-m-d H:i:s');
+                }
+
                 $instance->{$key} = $value;
             }
         }
@@ -641,7 +649,16 @@ class InstanceController extends Controller
             foreach (array_keys($request->request->all()) as $key) {
                 $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
 
+
                 if (!is_null($value)) {
+                    if ($key == 'domain_expire') {
+                        $value = new \Datetime($value);
+                        $value = $value->format('Y-m-d H:i:s');
+                    } elseif ($key == 'external' && array_key_exists('last_invoice', $value)) {
+                        $value['last_invoice'] = new \Datetime($value['last_invoice']);
+                        $value['last_invoice'] = $value['last_invoice']->format('Y-m-d H:i:s');
+                    }
+
                     $instance->{$key} = $value;
                 }
             }
