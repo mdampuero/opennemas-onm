@@ -162,7 +162,7 @@
                     <div class="form-group">
                         <label class="form-label">{t}Domain expire date:{/t}</label>
                         <div class="controls">
-                            <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.external.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                            <quick-datepicker icon-class="fa fa-clock-o" ng-model="instance.domain_expire" placeholder="{t}Click to set date{/t}"></quick-datepicker>
                         </div>
                     </div>
                 </div>

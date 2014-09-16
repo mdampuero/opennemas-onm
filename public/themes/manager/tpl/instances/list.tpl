@@ -408,7 +408,7 @@
                                 </div>
                             </td>
                             <td ng-show="columns.domain_expire">
-                                [% instance.external.domain_expire %]
+                                [% instance.domain_expire %]
                             </td>
                             <td ng-show="columns.contact_mail">
                                 <div class="creator">
