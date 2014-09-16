@@ -84,7 +84,8 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $criteria = array(
                     'domains' => array(
                         array(
-                            'value' => "^$host|,[ ]*$host|$host$",
+                            'value' => '^' . $host . '|,[ ]*' . $host
+                                . '[ ]*,|,[ ]*' . $host . '$',
                             'operator' => 'REGEXP'
                         )
                     )
