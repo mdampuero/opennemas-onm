@@ -129,6 +129,10 @@ class MediaUploaderController extends Controller
         }
 
         foreach ($photos as &$photo) {
+            if (!$photo->type_img) {
+                $photo->type_img = pathinfo($photo->name, PATHINFO_EXTENSION);
+            }
+
             $photo->image_path = INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name;
             $photo->crop_thumbnail_url = $this->generateUrl(
                 'asset_image',
