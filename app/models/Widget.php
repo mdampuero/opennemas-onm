@@ -413,7 +413,11 @@ class Widget extends Content
 
         try {
             if (class_exists($className)) {
-                $class = new $className($this);
+
+                $er = getService('entity_repository');
+                $widget = $er->find('Widget', $this->id);
+
+                $class = new $className($widget);
             } else {
                 throw new Exception('', 1);
 
