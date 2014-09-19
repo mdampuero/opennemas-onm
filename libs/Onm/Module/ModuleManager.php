@@ -220,7 +220,7 @@ class ModuleManager
                 ],
                 [
                     'id'   => 'FRONTPAGE_MANAGER',
-                    'plan' => '',
+                    'plan' => 'Base',
                     'name' => _('Frontpages'),
                 ],
                 [
