@@ -663,8 +663,6 @@ class InstanceController extends Controller
                 }
             }
 
-            $instance->created = date('Y-m-d H:i:s');
-
             $im->persist($instance);
             $im->configureInstance($instance);
 
