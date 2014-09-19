@@ -649,4 +649,40 @@ class InstanceManager extends BaseManager
 
         $this->cache->setNamespace($namespace);
     }
+
+    /**
+     * Update settings in instance database.
+     *
+     * @param Instance The instance to configure.
+     */
+    public function updateSettings($instance)
+    {
+        $namespace = $this->cache->getNamespace();
+
+        $this->cache->setNamespace($instance->internal_name);
+        $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
+
+        $settings = array('activated_modules', 'pass_level', 'piwik', 'max_mailing');
+
+        foreach ($settings as $key) {
+            $this->sm->invalidate($key);
+
+            $value = '';
+            if ($key == 'activated_modules') {
+                $value = array();
+            }
+
+            if (array_key_exists($key, $instance->external)) {
+                $value = $instance->external[$key];
+            }
+
+            if (!$this->sm->set($key, $value)) {
+                throw new InstanceNotConfiguredException(
+                    'The instance could not be configured'
+                );
+            }
+        }
+
+        $this->cache->setNamespace($namespace);
+    }
 }
