@@ -664,6 +664,7 @@ class InstanceController extends Controller
             }
 
             $im->persist($instance);
+            $im->updateSettings($instance);
 
             $success = true;
             $message = array(
