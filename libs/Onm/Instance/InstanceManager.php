@@ -617,8 +617,8 @@ class InstanceManager extends BaseManager
         $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
 
         // Build external parameters
-        $instance->external['site_name']        = $instance->name;
-        $instance->external['site_created']     = $instance->created;
+        $instance->external['site_name']    = $instance->name;
+        $instance->external['site_created'] = $instance->created;
 
         $title = $this->sm->get('site_title');
         if (strpos($title, $instance->name) === false) {
