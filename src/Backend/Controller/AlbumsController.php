@@ -103,15 +103,12 @@ class AlbumsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $this->request->getMethod()) {
-            $request  = $this->request->request;
-
-            $page     = $request->getDigits('page', 1);
-            $category = $request->getDigits('category');
-            $continue = $request->filter('continue', false, FILTER_SANITIZE_STRING);
-
             $album = new \Album();
             $album->create($_POST);
-            m::add(_('Album created successfully'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Album created successfully')
+            );
 
             // Get category name
             $ccm = \ContentCategoryManager::get_instance();
@@ -122,35 +119,10 @@ class AlbumsController extends Controller
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
             $tplManager->delete('home|1');
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_album_show', array('id' => $album->id))
-                );
-            } else {
-                $page = $this->request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_albums',
-                        array(
-                            'category' => $album->category,
-                            'page'     => $page,
-                        )
-                    )
-                );
-            }
-
             return $this->redirect(
-                $this->generateUrl(
-                    'admin_albums',
-                    array(
-                        'category' => $category,
-                        'page'     => $page
-                    )
-                )
+                $this->generateUrl('admin_album_show', array('id' => $album->id))
             );
         } else {
-
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array( '0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -181,14 +153,20 @@ class AlbumsController extends Controller
         $album = new \Album($id);
 
         if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find an album with the id "%d".'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an album with the id "%d".'), $id)
+            );
         }
 
         $rel= new \RelatedContent();
         $rel->deleteAll($id);
         $album->delete($id, $_SESSION['userid']);
 
-        m::add(_('Album delete successfully.'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Album delete successfully.')
+        );
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect(
@@ -215,26 +193,25 @@ class AlbumsController extends Controller
      */
     public function showAction(Request $request)
     {
-        $request = $this->get('request');
         $id = $request->query->getDigits('id');
 
         $album = new \Album($id);
 
         if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find the album with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an album with the id "%d".'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        $photos = array();
-        $photos = $album->_getAttachedPhotos($id);
-
+        $photos          = $album->_getAttachedPhotos($id);
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array( '0' => _(' - Select one author - '));
+        $authors         = array( '0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
-
 
         return $this->render(
             'album/new.tpl',
@@ -258,13 +235,14 @@ class AlbumsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $request  = $this->get('request');
-        $id       = $request->request->getDigits('id');
-
+        $id    = $request->request->getDigits('id');
         $album = new \Album($id);
 
         if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find the album with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an album with the id "%d".'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_albums'));
         }
@@ -273,7 +251,10 @@ class AlbumsController extends Controller
             && !Acl::check('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($_SESSION['userid'])
         ) {
-            m::add(_("You don't have enough privileges for modify this album."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You don't have enough privileges for modify this album.")
+            );
 
             return $this->redirect(
                 $this->generateUrl(
@@ -285,7 +266,10 @@ class AlbumsController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Album data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Album data sent not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
         }
@@ -307,7 +291,10 @@ class AlbumsController extends Controller
         );
 
         $album->update($data);
-        m::add(_("Album updated successfully."), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _("Album updated successfully.")
+        );
 
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
         $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
@@ -472,31 +459,7 @@ class AlbumsController extends Controller
      */
     public function configAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
-
-            $formValues = $this->get('request')->request;
-
-            $settings = array(
-                'album_settings' => array(
-                    'total_widget'     => $formValues->getDigits('album_settings_total_widget'),
-                    'crop_width'       => $formValues->getDigits('album_settings_crop_width'),
-                    'crop_height'      => $formValues->getDigits('album_settings_crop_height'),
-                    'orderFrontpage'   =>
-                        $formValues->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
-                    'time_last'        => $formValues->getDigits('album_settings_time_last'),
-                    'total_front'      => $formValues->getDigits('album_settings_total_front'),
-                    'total_front_more' => $formValues->getDigits('album_settings_total_front_more'),
-                )
-            );
-
-            foreach ($settings as $key => $value) {
-                s::set($key, $value);
-            }
-
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
-
-            return $this->redirect($this->generateUrl('admin_albums_config'));
-        } else {
+        if ('POST' !== $this->request->getMethod()) {
             $configurationsKeys = array('album_settings',);
             $configurations = s::get($configurationsKeys);
 
@@ -505,5 +468,28 @@ class AlbumsController extends Controller
                 array('configs'   => $configurations,)
             );
         }
+
+        $settings = array(
+            'album_settings' => array(
+                'total_widget'     => $request->request->getDigits('album_settings_total_widget'),
+                'crop_width'       => $request->request->getDigits('album_settings_crop_width'),
+                'crop_height'      => $request->request->getDigits('album_settings_crop_height'),
+                'orderFrontpage'   => $request->request->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
+                'time_last'        => $request->request->getDigits('album_settings_time_last'),
+                'total_front'      => $request->request->getDigits('album_settings_total_front'),
+                'total_front_more' => $request->request->getDigits('album_settings_total_front_more'),
+            )
+        );
+
+        foreach ($settings as $key => $value) {
+            s::set($key, $value);
+        }
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Settings saved successfully.')
+        );
+
+        return $this->redirect($this->generateUrl('admin_albums_config'));
     }
 }
