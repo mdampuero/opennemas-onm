@@ -310,7 +310,7 @@ class ModuleManager
                 ],
                 [
                     'id'   => 'STATIC_PAGES_MANAGER',
-                    'plan' => '',
+                    'plan' => 'Base',
                     'name' => _('Static pages'),
                 ],
                 [
