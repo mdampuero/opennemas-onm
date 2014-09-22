@@ -111,7 +111,7 @@ class Template extends Smarty
 
         $cachePath = $this->baseCachePath.'/smarty/config/';
         $cacheFilePath = $cachePath.'cache.conf';
-        $templateConfigPath = $this->templateBaseDir.'config';
+        $templateConfigPath = $this->templateBaseDir.'/config';
 
         // If config dir exists copy it to cache directory to make instance aware.
         if (!is_file($cacheFilePath)
