@@ -75,7 +75,10 @@ class ArticlesController extends Controller
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
             if (!Acl::checkCategoryAccess($this->category)) {
-                m::add(_("You don't have enough privileges to see this category."));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("You don't have enough privileges to see this category.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_welcome'));
             }
@@ -191,27 +194,23 @@ class ArticlesController extends Controller
                     dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
                 }
 
-                m::add(_('Article successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Article successfully created.')
+                );
             } else {
-                m::add(_('Unable to create the new article.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new article.')
+                );
             }
 
-            $continue = $request->request->filter('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_article_show',
-                        array('id' => $article->id)
-                    )
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_articles',
-                        array('status' => $data['content_status'])
-                    )
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_article_show',
+                    array('id' => $article->id)
+                )
+            );
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array( '0' => _(' - Select one author - '));
@@ -258,7 +257,10 @@ class ArticlesController extends Controller
         $article = new \Article($id);
 
         if (is_null($article->id)) {
-            m::add(sprintf(_('Unable to find the article with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the article with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_articles'));
         }
@@ -396,13 +398,19 @@ class ArticlesController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$article->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this article because you don't have enought privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("You can't modify this article because you don't have enought privileges.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_articles'));
             }
 
             if (count($request->request) < 1) {
-                m::add(_("Article data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Article data sent not valid.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_article_show', array('id' => $id)));
             }
@@ -419,69 +427,48 @@ class ArticlesController extends Controller
                 'id'             => $id,
                 'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'title_int'      => $request->request->filter('title_int', '', FILTER_SANITIZE_STRING),
-                'content_status'                 => (empty($contentStatus)) ? 0 : 1,
+                'content_status' => (empty($contentStatus)) ? 0 : 1,
+                'with_comment'   => (empty($withComment)) ? 0 : 1,
+                'frontpage'      => (empty($frontpage)) ? 0 : 1,
+                'category'       => $request->request->getDigits('category'),
+                'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
+                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'summary'        => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'img1_footer'    => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
+                'img2'           => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
+                'img2_footer'    => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
+                'fk_video'       => $request->request->filter('fk_video', '', FILTER_SANITIZE_STRING),
+                'footer_video2'  => $request->request->filter('footer_video2', '', FILTER_SANITIZE_STRING),
+                'fk_video2'      => $request->request->filter('fk_video2', '', FILTER_SANITIZE_STRING),
+                'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
+                'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'        => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'relatedFront'   => json_decode($request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)),
+                'relatedInner'   => json_decode($request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)),
+                'relatedHome'    => json_decode($request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)),
+                'fk_author'      => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
                 'promoted_to_category_frontpage' => (empty($inhome)) ? 0 : 1,
-                'with_comment'                   => (empty($withComment)) ? 0 : 1,
-                'frontpage'                   => (empty($frontpage)) ? 0 : 1,
-                'category'  => $request->request->getDigits('category'),
-                'agency'    => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
                 'params' =>  array(
-                        'agencyBulletin'    =>
-                            array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
-                        'imageHomeFooter'   =>
-                            array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
-                        'imageHome'         =>
-                            array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
-                        'titleSize'         =>
-                            array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
-                        'imagePosition'     =>
-                            array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
-                        'titleHome'         =>
-                            array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
-                        'titleHomeSize'     =>
-                            array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
-                        'subtitleHome'      =>
-                            array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
-                        'summaryHome'       =>
-                            array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
-                        'imageHomePosition' =>
-                            array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
-                        'withGallery'       =>
-                            array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
-                        'withGalleryInt'    =>
-                            array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
-                        'withGalleryHome'   =>
-                            array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
-                        'only_subscribers'          =>
-                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
-                        'bodyLink'   =>
-                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
+                    'agencyBulletin'    => array_key_exists('agencyBulletin', $params) ? $params['agencyBulletin'] : '',
+                    'imageHomeFooter'   => array_key_exists('imageHomeFooter', $params) ? $params['imageHomeFooter'] : '',
+                    'imageHome'         => array_key_exists('imageHome', $params) ? $params['imageHome'] : '',
+                    'titleSize'         => array_key_exists('titleSize', $params) ? $params['titleSize'] : '',
+                    'imagePosition'     => array_key_exists('imagePosition', $params) ? $params['imagePosition'] : '',
+                    'titleHome'         => array_key_exists('titleHome', $params) ? $params['titleHome'] : '',
+                    'titleHomeSize'     => array_key_exists('titleHomeSize', $params) ? $params['titleHomeSize'] : '',
+                    'subtitleHome'      => array_key_exists('subtitleHome', $params) ? $params['subtitleHome'] : '',
+                    'summaryHome'       => array_key_exists('summaryHome', $params) ? $params['summaryHome'] : '',
+                    'imageHomePosition' => array_key_exists('imageHomePosition', $params) ? $params['imageHomePosition'] : '',
+                    'withGallery'       => array_key_exists('withGallery', $params) ? $params['withGallery'] : '',
+                    'withGalleryInt'    => array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
+                    'withGalleryHome'   => array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                    'only_subscribers'  => array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                    'bodyLink'          => array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
-                'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'summary'           => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
-                'body'              => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-                'img1'              => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'       => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'              => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'       => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'fk_video'          => $request->request->filter('fk_video', '', FILTER_SANITIZE_STRING),
-                'footer_video2'     => $request->request->filter('footer_video2', '', FILTER_SANITIZE_STRING),
-                'fk_video2'         => $request->request->filter('fk_video2', '', FILTER_SANITIZE_STRING),
-                'slug'              => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
-                'description'       => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'relatedFront'      => json_decode(
-                    $request->request->filter('relatedFront', '', FILTER_SANITIZE_STRING)
-                ),
-                'relatedInner'      => json_decode(
-                    $request->request->filter('relatedInner', '', FILTER_SANITIZE_STRING)
-                ),
-                'relatedHome'       => json_decode(
-                    $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
-                ),
-                'fk_author'         => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             );
 
             if ($article->update($data)) {
@@ -501,31 +488,23 @@ class ArticlesController extends Controller
                 dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
                 dispatchEventWithParams('frontpage.save_position', array('category' => 0));
 
-                m::add(_('Article successfully updated.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to update the article.'), m::ERROR);
-            }
-
-            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_article_show',
-                        array('id' => $article->id)
-                    )
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Article successfully updated.")
                 );
             } else {
-                if (!empty($_SESSION['_from'])) {
-                    return $this->redirect($_SESSION['_from']);
-                } else {
-                    return $this->redirect(
-                        $this->generateUrl(
-                            'admin_articles',
-                            array('status' => $data['content_status'])
-                        )
-                    );
-                }
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Unable to update the article.")
+                );
             }
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_article_show',
+                    array('id' => $article->id)
+                )
+            );
         }
     }
 
@@ -550,9 +529,15 @@ class ArticlesController extends Controller
             $article = new \Article($id);
 
             $article->delete($id, $_SESSION['userid']);
-            m::add(_("Article deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Article deleted successfully.")
+            );
         } else {
-            m::add(_('You must give an id to delete an article.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id to delete an article.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -805,10 +790,15 @@ class ArticlesController extends Controller
     {
         $cm  = new \ContentManager();
         $ccm = \ContentCategoryManager::get_instance();
-        $this->view = new \Template(TEMPLATE_USER);
-        $article = new \Article();
+        $er  = $this->get('entity_repository');
 
+        $article    = new \Article();
         $articleContents = $request->request->filter('contents');
+
+        // Load config
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('articles');
+        $this->view->caching = 0;
 
         // Fetch all article properties and generate a new object
         foreach ($articleContents as $key => $value) {
@@ -823,30 +813,28 @@ class ArticlesController extends Controller
             $article->id = '-1';
         }
 
-        // Load config
-        $this->view->setConfig('articles');
-
         // Fetch article category name
-        $category_name = $ccm->get_name($article->category);
+        $category_name         = $ccm->get_name($article->category);
         $actual_category_title = $ccm->get_title($category_name);
 
         // Get advertisements for single article
         $actualCategoryId = $ccm->get_id($category_name);
-        \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
+        $ads = \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
+        $this->view->assign('advertisements', $ads);
 
         // Fetch media associated to the article
         $photoInt = '';
         if (isset($article->img2)
             && ($article->img2 != 0)
         ) {
-            $photoInt = new \Photo($article->img2);
+            $photoInt = $er->find('Photo', $article->img2);
         }
 
         $videoInt = '';
         if (isset($article->fk_video2)
             && ($article->fk_video2 != 09)
         ) {
-            $videoInt = new \Video($article->fk_video2);
+            $videoInt = $er->find('Video', $article->fk_video2);
         }
 
         // Fetch related contents to the inner article
@@ -861,8 +849,7 @@ class ArticlesController extends Controller
         $relat = $cm->cache->getAvailable($relat);
 
         foreach ($relat as $ril) {
-            $ril->category_name =
-                $ccm->get_category_name_by_content_id($ril->id);
+            $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
         }
 
         // Machine suggested contents code -----------------------------
@@ -872,11 +859,7 @@ class ArticlesController extends Controller
             4
         );
 
-        $this->view->caching = 0;
-
-        $session = $this->get('session');
-
-        $session->set(
+        $this->get('session')->set(
             'last_preview',
             $this->view->fetch(
                 'article/article.tpl',

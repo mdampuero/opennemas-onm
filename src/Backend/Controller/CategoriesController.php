@@ -156,17 +156,12 @@ class CategoriesController extends Controller
                 m::add(_("Category created successfully."), m::SUCCESS);
             }
 
-            $continue = $request->request->getDigits('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_category_show',
-                        array('id' => $category->pk_content_category)
-                    )
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_categories'));
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_category_show',
+                    array('id' => $category->pk_content_category)
+                )
+            );
         } else {
             $allcategorys  = $ccm->categories;
             $categories = array();
