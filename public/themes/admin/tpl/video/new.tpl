@@ -81,8 +81,13 @@
                                     {html_options options=$authors selected=$video->fk_author}
                                 </select>
                             {aclelse}
-                                {if !isset($video->author->name)}{t}No author assigned{/t}{else}{$video->author->name}{/if}
-                                <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                                {if !isset($video->fk_author)}
+                                    {$smarty.session.realname}
+                                    <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                                {else}
+                                    {$authors[$video->fk_author]}
+                                    <input type="hidden" name="fk_author" value="{$video->fk_author}">
+                                {/if}
                             {/acl}
                         </div>
                     </div>

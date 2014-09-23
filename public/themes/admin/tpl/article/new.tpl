@@ -247,8 +247,13 @@
                                         {html_options options=$authors selected=$article->fk_author}
                                     </select>
                                 {aclelse}
-                                    {if !isset($article->author->name)}{t}No author assigned{/t}{else}{$article->author->name}{/if}
-                                    <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                    {if !isset($article->fk_author)}
+                                        {$smarty.session.realname}
+                                        <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                                    {else}
+                                        {$authors[$article->fk_author]}
+                                        <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                    {/if}
                                 {/acl}
                             </div>
                         </div>
