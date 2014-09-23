@@ -133,13 +133,13 @@
                 <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y continuar" ><br />{t}Save{/t}
                         </button>
                         {/acl}
