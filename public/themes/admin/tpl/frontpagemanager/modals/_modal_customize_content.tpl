@@ -88,9 +88,9 @@
             <div class="control-group">
                 <label for="font-style" class="control-label">{t}Title font style{/t}</label>
                 <div class="controls">
-                  {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
+                  {assign var='availableStyle'  value=','|explode:"Italic,Oblique,Normal"}
                   <select id="font-style" name="font-style">
-                      {html_options values=$availableStyle output=$availableStyle selected=Auto}
+                      {html_options values=$availableStyle output=$availableStyle selected=Normal}
                   </select>
               </div>
             </div>
