@@ -205,12 +205,20 @@ class ArticlesController extends Controller
                 );
             }
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_article_show',
-                    array('id' => $article->id)
-                )
-            );
+            // Return user to list if has no update acl
+            if (Acl::check('ARTICLE_UPDATE')) {
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_article_show',
+                        array('id' => $article->id)
+                    )
+                );
+            } else {
+                return $this->redirect(
+                    $this->generateUrl('admin_articles')
+                );
+            }
+
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array( '0' => _(' - Select one author - '));
