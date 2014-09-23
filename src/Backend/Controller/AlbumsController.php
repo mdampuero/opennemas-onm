@@ -119,9 +119,17 @@ class AlbumsController extends Controller
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
             $tplManager->delete('home|1');
 
-            return $this->redirect(
-                $this->generateUrl('admin_album_show', array('id' => $album->id))
-            );
+            // Return user to list if has no update acl
+            if (Acl::check('ALBUM_UPDATE')) {
+                return $this->redirect(
+                    $this->generateUrl('admin_album_show', array('id' => $album->id))
+                );
+            } else {
+                return $this->redirect(
+                    $this->generateUrl('admin_albums')
+                );
+            }
+
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array( '0' => _(' - Select one author - '));
