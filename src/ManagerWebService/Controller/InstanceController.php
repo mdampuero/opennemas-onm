@@ -679,7 +679,7 @@ class InstanceController extends Controller
             );
         } catch (\Exception $e) {
             $message = array(
-                'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                'text' => sprintf(_('Error while updating the instance with id "%s"'), $id),
                 'type' => 'error'
             );
         }
