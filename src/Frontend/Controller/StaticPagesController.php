@@ -73,7 +73,7 @@ class StaticPagesController extends Controller
 
         // Get static_pages positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup(null, array(1, 2, 103, 105, 7, 9, 10));
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
