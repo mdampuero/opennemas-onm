@@ -1,30 +1,41 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-div.book-preview {
-    background: none repeat scroll 0 0 #DDDDDD;
-    border-radius: 5px 5px 5px 5px;
-    padding: 10px;
-    width: 160px;
-}
-input[type="text"].required {
-    width: 90%;
-}
-
-</style>
-{/block}
-
 {block name="footer-js" append}
-<script>
-    jQuery('#starttime').datepicker({
-        showAnim: "fadeIn",
-        dateFormat: 'yy-mm-dd'
-    });
+{include file="media_uploader/media_uploader.tpl"}
+<script type="text/javascript">
     jQuery('#title').on('change', function(e, ui) {
         fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
+
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+
+                if (params['position'] == 'cover-image') {
+                    var container = $('.cover-image');
+                    var image_element = mediapicker.buildHTMLElement(params, true);
+                    var image_data_el = container.find('.image-data');
+                    image_data_el.find('.book-cover-image').val(params.content.pk_photo);
+                    container.addClass('assigned');
+
+                    image_data_el.find('.image').html(image_element);
+
+                }
+            }
+        }
+    });
 </script>
+{/block}
+
+{block name="header-css" append}
+    <style>
+        .contentbox-container { float:none;margin-right:0; }
+    </style>
 {/block}
 
 {block name="content"}
@@ -65,133 +76,127 @@ input[type="text"].required {
 
         {render_messages}
 
-        <table class="adminform">
-        <tbody>
-            <tr>
-                <td rowspan="11" style="padding:10px;width:160px;">
-                    {if (!empty($book->id))}
-                    <div class="book-preview">
-                        <label for="title">{t}Preview:{/t}</label><br>
-                            <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width:164px;" alt="{$book->file_img}" />
-                    </div>
-                    {/if}
-                </td>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="title">{t}Title:{/t}</label>
-                </td>
-                <td>
-                    <input type="text" id="title" name="title" title={t}"Album"{/t}
-                        value="{$book->title|clearslash|escape:"html"}" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding:4px;">
-                    <label for="title">Tapa libro:(jpg)</label>
-                </td>
-                <td>
-                    {if (isset($book->file_img) && !empty($book->file_img) )}
-                        <input name="file_img_name" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
-                    {else}
-                        <input name="file_img" type="file" accept="image/jpg, image/jpeg"/>
-                    {/if}
-                </td>
-            </tr>
-                <tr>
-                    <td>
-                        <label for="title">{t}Author{/t}:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="author" name="author" title="{t}author{/t}"
-                            size="30" value="{$book->author|clearslash|escape:"html"}" />
-                    </td>
-                </tr>
-                 <tr>
-                    <td>
-                        <label for="title">{t}Date{/t}:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="starttime" name="starttime" title="{t}Date{/t}"
-                            size="60" value="{$book->starttime|clearslash|date_format:"Y-m-d"}" />
-                    </td>
-                </tr>
-                 <tr>
-                    <td>
-                        <label for="title">{t}Editorial{/t}:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="editorial" name="editorial" title="{t}editorial{/t}"
-                            size="60" value="{$book->editorial|clearslash|escape:"html"}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding:4px;">
-                        <label for="title">Descripci&oacute;n:</label>
-                    </td>
-                    <td>
-                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash}%1{/t}</textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="title">Secci&oacute;n:</label>
-                    </td>
-                    <td>
-                        <select name="category" id="category"  >
-                            {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                                {section name=su loop=$subcat[as]}
-                                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                                {/section}
-                            {/section}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top">
-                        <label for="content_status"> {t}Available:{/t} </label>
-                    </td>
-                    <td valign="top">
-                            <select name="content_status" id="content_status"
-                                class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
-                                <option value="0" {if $book->content_status eq 0} selected {/if}>{t}No{/t}</option>
-                                <option value="1" {if !isset($book) || $book->content_status eq 1} selected {/if}>{t}Yes{/t}</option>
+        <div class="form-horizontal panel">
+            <div class="control-group">
+                <label for="title" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" value="{$book->title|default:""}" required="required" class="input-xxlarge"/>
+                </div>
+            </div>
 
-                            </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding:4px;">
-                        <label for="metadata">{t}Keywords:{/t}</label>
-                    </td>
-                    <td>
-                        <input type="text" id="metadata" name="metadata" size="60"
-                           class="required" title="Metadata" value="{$book->metadata}" />
-                        <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="control-group">
+                <label for="contentbox" class="control-label"></label>
+                <div class="contentbox-container controls">
+                    <div class="contentbox">
+                        <h3 class="title">{t}Cover image{/t}</h3>
+                        <div class="content cover-image {if !empty($book->cover_id)}assigned{/if}">
+                            <div class="image-data">
+                                <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
+                                    {if !is_null($book->cover_img)}
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$book->cover_img->path_file}{$book->cover_img->name}"/>
+                                    {/if}
+                                </a>
+
+                                <div class="book-resource-footer">
+                                    <input type="hidden" name="cover_image" value="{$book->cover_id|default:""}" class="book-cover-image"/>
+                                </div>
+                            </div>
+
+
+                            <div class="not-set">
+                                {t}Image not set{/t}
+                            </div>
+
+                            <div class="btn-group">
+                                <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                                <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <label for="author" class="control-label">{t}Author{/t}</label>
+                <div class="controls">
+                    <input type="text" id="author" name="author" value="{$book->author|default:""}" required="required" class="input-xxlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="starttime" class="control-label">{t}Date{/t}</label>
+                <div class="controls">
+                    <input type="datetime" id="date" name="starttime" value="{$book->starttime}">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="editorial" class="control-label">{t}Editorial{/t}</label>
+                <div class="controls">
+                    <input type="text" id="editorial" name="editorial" value="{$book->editorial|default:""}" required="required" class="input-xxlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="description" class="control-label">{t}Description{/t}</label>
+                <div class="controls">
+                    <textarea id="description" name="description" rows="3" class="input-xxlarge">{$book->description|clearslash}</textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="category" class="control-label">{t}Category{/t}</label>
+                <div class="controls">
+                    <select name="category" id="category">
+                        {section name=as loop=$allcategorys}
+                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
+                                    {$allcategorys[as]->title}</option>
+                            {/acl}
+                            {section name=su loop=$subcat[as]}
+                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                {if $subcat[as][su]->internal_category eq 1}
+                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                    {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                    {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
+                                    &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                {/if}
+                                {/acl}
+                            {/section}
+                        {/section}
+                        <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="content_status" class="control-label">{t}Available{/t}</label>
+                <div class="controls">
+                    <select name="content_status" id="content_status"
+                        class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
+                        <option value="0" {if $book->content_status eq 0} selected {/if}>{t}No{/t}</option>
+                        <option value="1" {if !isset($book) || $book->content_status eq 1} selected {/if}>{t}Yes{/t}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" value="{$book->metadata|default:""}" required="required" class="input-xxlarge"/>
+                    <span class="help-block">{t}Separated by coma{/t}</span>
+                </div>
+            </div>
+        </div>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
     </div>
 </form>
-{capture assign="language"}{setting name=site_language}{/capture}
-{assign var="lang" value=$language|truncate:2:""}
-{if !empty($lang)}
-    {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
-
-    {javascripts src="@AdminTheme/js/$js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-
-    <script>
-    jQuery(document).ready(function() {
-        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
-    });
-    </script>
-{/if}
+{javascripts src="@AdminTheme/js/onm/jquery.datepicker.js"}
+    <script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 {/block}
