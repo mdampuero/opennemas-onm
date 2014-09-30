@@ -494,7 +494,6 @@ class ArticlesController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('content.update', array('content' => $article));
                 dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
                 dispatchEventWithParams('frontpage.save_position', array('category' => 0));
 
