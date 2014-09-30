@@ -161,6 +161,8 @@ class ArticlesController extends Controller
                 'article'         => $article,
                 'content'         => $article,
                 'actual_category' => $categoryName,
+                'x-tags'          => 'article,'.$article->id,
+                'x-cache-for'     => '1d'
             )
         );
     }
