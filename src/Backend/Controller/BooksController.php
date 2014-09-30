@@ -67,16 +67,6 @@ class BooksController extends Controller
                 'timezone'     => $timezone->getName()
             )
         );
-        // ---------------------------------------------------------------------
-
-        // Optimize  this crap  ---------------------------------------
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        // Create folder if it doesn't exist
-        if (!file_exists($bookSavePath)) {
-            \FilesManager::createDirectory($bookSavePath);
-        }
-        // ---------------------------------------------------------------------
     }
 
     /**
@@ -143,14 +133,11 @@ class BooksController extends Controller
             return $this->render('book/new.tpl');
 
         } else {
-            $bookSavePath       = INSTANCE_MEDIA_PATH.'/books/';
-            $imageName          = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'file_img'    => $imageName,
+                'cover_id'    => $request->request->filter('cover_id', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -160,14 +147,13 @@ class BooksController extends Controller
             );
 
             $book = new \Book();
-            $id   =$book->create($data);
-
+            $id   = $book->create($data);
 
             if (!empty($id)) {
 
                 $book = $book->read($id);
 
-                return $this->render('book/new.tpl', array( 'book' => $book, ));
+                return $this->render('book/new.tpl', array('book' => $book));
 
             } else {
                 m::add(sprintf(_("Unable to create the new book.")));
@@ -241,21 +227,12 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
         }
 
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        if (!empty($_FILES['file_img']['name'])) {
-            $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
-        } else {
-            $imageName = $book->file_img;
-        }
-
         $data = array(
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'file_img'       => $imageName,
+            'cover_id'       => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),

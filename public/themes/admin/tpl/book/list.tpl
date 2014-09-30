@@ -58,9 +58,9 @@
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                     </a>
                 </li>
+                <li class="separator"></li>
                 {/if}
                 {acl isAllowed="BOOK_CREATE"}
-                <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_books_create category=$category}"  title="{t}New book{/t}">
                         <img src="{$params.IMAGE_DIR}/book.gif" alt="{t}New book{/t}"><br />{t}New book{/t}

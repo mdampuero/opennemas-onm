@@ -33,11 +33,11 @@ class Book extends Content
     public $author  = null;
 
     /**
-     * The file name of the book
+     * The id of the cover image
      *
      * @var string
      **/
-    public $file_name  = null;
+    public $cover_id  = null;
 
     /**
      * The editorial of the book
@@ -46,12 +46,6 @@ class Book extends Content
      **/
     public $editorial  = null;
 
-    /**
-     * The path of the book file
-     *
-     * @var string
-     **/
-    public $books_path = null;
 
     /**
      * Initializes the book instance given an id
@@ -63,7 +57,6 @@ class Book extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Book');
-        $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
 
         parent::__construct($id);
     }
@@ -118,13 +111,13 @@ class Book extends Content
         parent::create($data);
 
         $sql = "INSERT INTO books "
-             . "(`pk_book`, `author`, `file_img`, `editorial`) "
+             . "(`pk_book`, `author`, `cover_id`, `editorial`) "
              . "VALUES (?,?,?,?)";
 
         $values = array(
             $this->id,
             $data['author'],
-            $data['file_img'],
+            $data['cover_id'],
             $data['editorial']
         );
 
@@ -156,9 +149,10 @@ class Book extends Content
 
         $this->pk_book   = $rs->fields['pk_book'];
         $this->author    = $rs->fields['author'];
-        $this->file_name = $rs->fields['file'];
-        $this->file_img  = $rs->fields['file_img'];
+        $this->cover_id  = $rs->fields['cover_id'];
+        $this->cover_img = new Photo($rs->fields['cover_id']);
         $this->editorial = $rs->fields['editorial'];
+
 
         return $this;
     }
@@ -175,12 +169,12 @@ class Book extends Content
         parent::update($data);
 
         $sql = "UPDATE books "
-             . "SET  `author`=?, `file_img`=?, `editorial`=? "
+             . "SET  `author`=?, `cover_id`=?, `editorial`=? "
              . "WHERE pk_book=?";
 
         $values = array(
             $data['author'],
-            $data['file_img'],
+            $data['cover_id'],
             $data['editorial'],
             intval($data['id']),
         );
@@ -205,11 +199,6 @@ class Book extends Content
         parent::remove($this->id);
 
         $sql = 'DELETE FROM books WHERE pk_book=?';
-
-        $bookPdf   = $this->books_path.$this->file_name;
-        $bookImage = $this->books_path.$this->file_img;
-        @unlink($bookPdf);
-        @unlink($bookImage);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         if ($rs === false) {

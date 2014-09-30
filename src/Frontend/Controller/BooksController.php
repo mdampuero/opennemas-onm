@@ -35,12 +35,10 @@ class BooksController extends Controller
      **/
     public function init()
     {
-        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
-        $this->view->assign(
-            array(
-                'LIBROS_IMG_PATH'   => INSTANCE_MEDIA_PATH.'/books/',
-                'LIBROS_FILES_PATH' => INSTANCE_MEDIA_PATH.'/books/',
-            )
+        $this->categoryName = $this->request->query->filter(
+            'category_name',
+            'all',
+            FILTER_SANITIZE_STRING
         );
     }
 
@@ -124,8 +122,6 @@ class BooksController extends Controller
         ) {
             $book->category_title = $book->loadCategoryTitle($book->id);
 
-            $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
-
             $contentManager  = new \ContentManager();
             $books = $contentManager->find_by_category(
                 'Book',
@@ -141,7 +137,6 @@ class BooksController extends Controller
                     'libros'      => $books,
                     'contentId'   => $id,
                     'category'    => $book->category,
-                    'archivo_swf' => $swf,
                     'cache_id'    => $cacheID,
                 )
             );

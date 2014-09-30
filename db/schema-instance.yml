@@ -215,12 +215,9 @@ books:
         author:
             type: string
             options: { default: null, notnull: false, length: 250 }
-        file:
-            type: string
-            options: { default: null, notnull: false, length: 250 }
-        file_img:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+        cover_id:
+            type: bigint
+            options: { default: null, notnull: false }
         editorial:
             type: string
             options: { default: null, notnull: false, length: 250 }
