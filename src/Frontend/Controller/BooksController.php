@@ -80,6 +80,12 @@ class BooksController extends Controller
                     'content_status=1',
                     'ORDER BY position ASC, created DESC LIMIT 5'
                 );
+
+                // Get books cover image
+                foreach ($bookCategories[$i]->books as &$book) {
+                    $book->cover_img = new \Photo($book->cover_id);
+                }
+
                 $i++;
             }
         }
@@ -129,6 +135,11 @@ class BooksController extends Controller
                 'content_status=1',
                 'ORDER BY position ASC, created DESC LIMIT 5'
             );
+
+            // Get books cover image
+            foreach ($books as &$book) {
+                $book->cover_img = new \Photo($book->cover_id);
+            }
 
             $this->view->assign(
                 array(
@@ -185,6 +196,11 @@ class BooksController extends Controller
                 'ORDER BY position ASC, created DESC '. $limit
             );
             $last = true;
+        }
+
+        // Get books cover image
+        foreach ($books as &$book) {
+            $book->cover_img = new \Photo($book->cover_id);
         }
 
         $this->view = new \Template(TEMPLATE_USER);
