@@ -204,8 +204,7 @@ DROP TABLE IF EXISTS `books`;
 CREATE TABLE `books` (
   `pk_book` bigint(20) unsigned NOT NULL,
   `author` varchar(250) DEFAULT NULL,
-  `file` varchar(250) DEFAULT NULL,
-  `file_img` varchar(255) DEFAULT NULL,
+  `cover_id` bigint(255) DEFAULT NULL,
   `editorial` varchar(250) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
