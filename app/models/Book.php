@@ -150,7 +150,7 @@ class Book extends Content
         $this->pk_book   = $rs->fields['pk_book'];
         $this->author    = $rs->fields['author'];
         $this->cover_id  = $rs->fields['cover_id'];
-        $this->cover_img = new Photo($rs->fields['cover_id']);
+        $this->cover_img = new \Photo($rs->fields['cover_id']);
         $this->editorial = $rs->fields['editorial'];
 
 
