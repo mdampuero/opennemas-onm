@@ -47,7 +47,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dbConn = $this->getContainer()->get('db_conn_manager');
-        $rs = $dbConn->GetArray('SELECT * FROM instances');
+        $rs = $dbConn->GetArray('SELECT * FROM instances ORDER BY id');
 
         $field = $input->getOption('field');
         foreach ($rs as $instance) {
