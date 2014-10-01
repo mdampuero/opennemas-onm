@@ -97,6 +97,7 @@ class ModuleManager
                 'ARTICLE_MANAGER'           => _('Articles'),
                 'AVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
                 'AVANCED_FRONTPAGE_MANAGER' => _('Advanced frontpage managers'),
+                'BLOG_MANAGER'              => _('Blog'),
                 'BOOK_MANAGER'              => _('Books'),
                 'CACHE_MANAGER'             => _('Cache manager'),
                 'CATEGORY_MANAGER'          => _('Category'),
@@ -176,6 +177,11 @@ class ModuleManager
                     'id'   => 'AVANCED_FRONTPAGE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Advanced frontpage managers'),
+                ],
+                [
+                    'id'   => 'BLOG_MANAGER',
+                    'plan' => 'Other',
+                    'name' => _('Blog'),
                 ],
                 [
                     'id'   => 'BOOK_MANAGER',

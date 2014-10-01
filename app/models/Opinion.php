@@ -46,13 +46,6 @@ class Opinion extends Content
     public $fk_author_img         = null;
 
     /**
-     * Whether allowing comments on this opinion
-     *
-     * @var boolean
-     **/
-    public $with_comment          = null;
-
-    /**
      * The type of the opinion (0,1,2)
      *
      * @var int
@@ -174,15 +167,14 @@ class Opinion extends Content
         parent::create($data);
 
         $sql = 'INSERT INTO opinions
-                    (`pk_opinion`, `fk_author`, `fk_author_img`,`with_comment`, type_opinion)
+                    (`pk_opinion`, `fk_author`, `fk_author_img`, type_opinion)
                 VALUES
-                    (?,?,?,?,?)';
+                    (?,?,?,?)';
 
         $values = array(
             $this->id,
             $data['fk_author'],
             $data['fk_author_img'],
-            $data['with_comment'],
             $data['type_opinion']
         );
 
@@ -264,14 +256,12 @@ class Opinion extends Content
         parent::update($data);
 
         $sql = "UPDATE opinions "
-             . "SET `fk_author`=?, `fk_author_img`=?, "
-             . "`with_comment`=?, `type_opinion`=?"
+             . "SET `fk_author`=?, `fk_author_img`=?, `type_opinion`=? "
              . "WHERE pk_opinion=?";
 
         $values = array(
             $data['fk_author'],
             $data['fk_author_img'],
-            $data['with_comment'],
             $data['type_opinion'],
             $data['id']
         );

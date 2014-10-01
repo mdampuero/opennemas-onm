@@ -7,7 +7,7 @@
         <select class="select2" ng-model="shvs.search.blog" data-label="{t}Type{/t}">
             <option value="-1">-- All --</option>
             <option value="0">Opinion</option>
-            <option value="1">Blog</option>
+            {is_module_activated name="BLOG_MANAGER"}<option value="1">Blog</option>{/is_module_activated}
         </select>
         &nbsp;&nbsp;
         <select class="select2" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">

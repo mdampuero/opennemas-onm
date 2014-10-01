@@ -105,6 +105,9 @@ class Widget extends Content
 
         // Sort values
         $values = array($this->id, $data['content'], $data['renderlet']);
+        if (array_key_exists('parameters', $data) && !empty($data['parameters'])) {
+            parent::setProperty('parameters', $data['parameters']);
+        }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $GLOBALS['application']->conn->RollbackTrans();
@@ -137,6 +140,7 @@ class Widget extends Content
         if ($rs === false) {
             return null;
         }
+        $this->loadAllContentProperties();
 
         $this->load($rs->fields);
     }
@@ -164,6 +168,7 @@ class Widget extends Content
         $this->id = array($id);
         $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
         $values   = array($id);
+        $this->loadAllContentProperties();
 
         $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
@@ -227,7 +232,11 @@ class Widget extends Content
 
             return false;
         }
-
+        if (array_key_exists('parameters', $data) && !empty($data['parameters'])) {
+            parent::setProperty('parameters', $data['parameters']);
+        } else {
+            parent::clearProperty('parameters');
+        }
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
 
@@ -404,7 +413,11 @@ class Widget extends Content
 
         try {
             if (class_exists($className)) {
-                $class = new $className($this);
+
+                $er = getService('entity_repository');
+                $widget = $er->find('Widget', $this->id);
+
+                $class = new $className($widget);
             } else {
                 throw new Exception('', 1);
 

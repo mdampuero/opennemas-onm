@@ -1734,7 +1734,7 @@ class ContentManager
             'SELECT contents.pk_content, contents.position, users.avatar_img_id,
                 opinions.pk_opinion as id, users.name, users.bio, contents.title,
                 contents.slug, opinions.type_opinion, contents.body,
-                contents.changed, contents.created, opinions.with_comment,
+                contents.changed, contents.created, contents.with_comment,
                 contents.starttime, contents.endtime
             FROM contents, opinions
             LEFT JOIN users ON (users.id=opinions.fk_author)

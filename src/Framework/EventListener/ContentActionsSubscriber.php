@@ -157,14 +157,15 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $instanceName = getService('instance_manager')->current_instance->internal_name;
 
-        $baseRequest = "obj.http.x-instance ~ {$instanceName} && ";
-        // $baseRequest = '';
 
         $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
-            ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
-            ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
-            ->addBanMessage('obj.http.x-tags ~ rss');
+            ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
 
+        // $baseRequest = "obj.http.x-instance ~ {$instanceName} && ";
+        // $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        //     ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
+        //     ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
+        //     ->addBanMessage('obj.http.x-tags ~ rss')
     }
 
     /**

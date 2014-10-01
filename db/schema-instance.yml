@@ -167,9 +167,6 @@ articles:
         fk_video:
             type: bigint
             options: { default: null, notnull: false, unsigned: true }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
         fk_video2:
             type: bigint
             options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
@@ -480,6 +477,9 @@ contents:
             type: string
             options: { default: null, notnull: false, length: 255 }
         available:
+            type: smallint
+            options: { default: '1', notnull: false }
+        with_comment:
             type: smallint
             options: { default: '1', notnull: false }
         params:
@@ -796,9 +796,6 @@ opinions:
         fk_author_img:
             type: integer
             options: { default: null, notnull: false }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
         type_opinion:
             type: string
             options: { default: null, notnull: false, length: 150 }
@@ -988,9 +985,6 @@ polls:
         visualization:
             type: smallint
             options: { default: '0', notnull: false }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
     index:
         -
             name: PRIMARY

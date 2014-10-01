@@ -76,7 +76,7 @@ class MachineSearcher
 
             try {
                 $rs = $this->dbConn->fetchAll($sql);
-
+                $contentProps = array();
                 foreach ($rs as $content) {
                     $contentProps []= array($content['content_type_name'], $content['pk_content']);
                 }
