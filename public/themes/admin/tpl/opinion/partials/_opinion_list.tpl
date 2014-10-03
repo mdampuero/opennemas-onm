@@ -66,7 +66,7 @@
                         [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                 <td class="center">
-                    [% content.views %]
+                    [% shvs.extra.views[content.id] %]
                 </td>
                 <td class="center">
                     {acl isAllowed="OPINION_HOME"}
