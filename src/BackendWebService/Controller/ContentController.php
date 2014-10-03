@@ -1004,10 +1004,14 @@ class ContentController extends Controller
 
         $ids = array();
 
+        $vm = $this->get('content_views_repository');
+        $extra['views'] = array();
         foreach ($contents as $content) {
             $ids[] = $content->fk_author;
             $ids[] = $content->fk_publisher;
             $ids[] = $content->fk_user_last_editor;
+
+            $extra['views'][$content->id] = $vm->getViews($content->id);
         }
         $ids = array_unique($ids);
 
@@ -1018,7 +1022,6 @@ class ContentController extends Controller
         if (($key = array_search(null, $ids)) !== false) {
             unset($ids[$key]);
         }
-
 
         $users = $this->get('user_repository')->findMulti($ids);
 
