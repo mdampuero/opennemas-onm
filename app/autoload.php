@@ -11,19 +11,20 @@
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Composer\Autoload\ClassLoader;
 
+$rootDir = empty($_SERVER['DOCUMENT_ROOT']) ? __DIR__ : $_SERVER['DOCUMENT_ROOT'];
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
+    || define('APPLICATION_PATH', realpath($rootDir. '/../'));
 
 // Paths settings
-define('SRC_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."src/").DIRECTORY_SEPARATOR);
-define('SITE_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
-define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
-define('SITE_LIBS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."libs").DIRECTORY_SEPARATOR);
-define('SITE_CORE_PATH', realpath(SITE_LIBS_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
-define('SITE_MODELS_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/models").DIRECTORY_SEPARATOR);
-define('APP_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/").DIRECTORY_SEPARATOR);
-define('SITE_WS_API_PATH', realpath(SRC_PATH.DIRECTORY_SEPARATOR."WebService/Handlers").DIRECTORY_SEPARATOR);
-define('PP_CONFIG_PATH', APP_PATH.'/config/');
+define('SRC_PATH',         APPLICATION_PATH.'/src/');
+define('SITE_PATH',        APPLICATION_PATH.'/public/');
+define('SITE_VENDOR_PATH', APPLICATION_PATH.'/vendor/');
+define('SITE_LIBS_PATH',   APPLICATION_PATH.'/libs/');
+define('SITE_CORE_PATH',   SITE_LIBS_PATH.'/core/');
+define('SITE_MODELS_PATH', APPLICATION_PATH.'/app/models/');
+define('APP_PATH',         APPLICATION_PATH.'/app/');
+define('SITE_WS_API_PATH', SRC_PATH.'/WebService/Handlers/');
+define('PP_CONFIG_PATH',   APP_PATH.'/config/');
 
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
@@ -34,42 +35,42 @@ if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
 if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
     || (array_key_exists('SERVER_PORT', $_SERVER) && $_SERVER['SERVER_PORT'] == 443)
 ) {
-    $protocol = "https://";
+    $protocol = 'https://';
 } else {
-    $protocol = "http://";
+    $protocol = 'http://';
 }
 
-define('SS', "/");
+define('SS', '/');
 define('DS', DIRECTORY_SEPARATOR);
-define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
+define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'../tmp/logs'));
 
 $serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : 'console';
 define('SITE', $serverName);
 define('BASE_URL', '/');
-define('ADMIN_DIR', "admin");
+define('ADMIN_DIR', 'admin');
 define('SITE_URL', $protocol.SITE.BASE_URL);
 define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
 
 define('SYS_NAME_GROUP_ADMIN', 'Administrador');
 
-define('IMG_DIR', "images");
-define('FILE_DIR', "files");
-define('ADS_DIR', "advertisements");
-define('OPINION_DIR', "opinions");
+define('IMG_DIR', 'images');
+define('FILE_DIR', 'files');
+define('ADS_DIR', 'advertisements');
+define('OPINION_DIR', 'opinions');
 
-define('TEMPLATE_MANAGER', "manager");
+define('TEMPLATE_MANAGER', 'manager');
 
-define('ITEMS_PAGE', "20"); // TODO: delete from application
+define('ITEMS_PAGE', '20'); // TODO: delete from application
 
-define('TEMPLATE_ADMIN', "admin");
-define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.DS."themes".DS.TEMPLATE_ADMIN.SS);
-define('TEMPLATE_ADMIN_PATH_WEB', SS."themes".SS.TEMPLATE_ADMIN.SS);
-define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN', 'admin');
+define('TEMPLATE_ADMIN_PATH', SITE_PATH.'/themes/'.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN_PATH_WEB', '/themes/'.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN_URL', '/themes/'.TEMPLATE_ADMIN.SS);
 
 define('STATIC_PAGE_PATH', 'estaticas');
 
 // Backup paths
-define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
+define('BACKUP_PATH', SITE_PATH.DS.'../tmp/backups');
 
 $maxUpload          = (int) (ini_get('upload_max_filesize'));
 $maxPost            = (int) (ini_get('post_max_size'));
@@ -77,7 +78,7 @@ $memoryLimit        = (int) (ini_get('memory_limit'));
 $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
 define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
 
-$commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
+$commonCachepath = APPLICATION_PATH.'/tmp/instances/common';
 if (!file_exists($commonCachepath)) {
     mkdir($commonCachepath, 0755, true);
 }
@@ -87,7 +88,7 @@ if (!defined('DEPLOYED_AT')) {
     define('DEPLOYED_AT', '0000000000');
 }
 
-mb_internal_encoding("UTF-8");
+mb_internal_encoding('UTF-8');
 
 /**
  * @var $loader ClassLoader
