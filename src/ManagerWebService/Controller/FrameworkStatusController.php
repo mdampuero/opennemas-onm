@@ -167,7 +167,8 @@ class FrameworkStatusController extends Controller
             $newDirs []= $newDir;
         }
 
-        return new JsonResponse(array(
+        return new JsonResponse(
+            array(
                 'not_supported_message' => $notSupportedMessage,
                 'config'                => $config,
                 'status'                => $status,

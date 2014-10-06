@@ -47,7 +47,7 @@ class Categories
     {
         $ccm = new ContentCategoryManager();
 
-        return $ccm->get_title($actualCategory);
+        return $ccm->getTitle($actualCategory);
     }
 
     /*

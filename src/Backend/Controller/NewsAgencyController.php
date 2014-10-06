@@ -944,7 +944,7 @@ class NewsAgencyController extends Controller
                 // Get author object,decode it and create new author
                 $authorObj = json_decode($element->getRightsOwner());
 
-                if(!is_null($authorObj)) {
+                if (!is_null($authorObj)) {
                     // Fetch author data
                     $authorArray = get_object_vars($authorObj);
 

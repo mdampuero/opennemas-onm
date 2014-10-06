@@ -386,7 +386,7 @@ class InstanceController extends Controller
         );
 
         if (!empty($search) && $search != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($search);
+            $fileNameFilter = '-'.\Onm\StringUtils::getTitle($search);
         } else {
             $fileNameFilter = '-complete';
         }

@@ -49,5 +49,4 @@ class PlaygroundController extends Controller
     {
         // Your code here...
     }
-
 }

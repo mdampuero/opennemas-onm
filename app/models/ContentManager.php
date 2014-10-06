@@ -1632,7 +1632,7 @@ class ContentManager
                 'slug'           => $rs->fields['slug'],
                 'created'        => $rs->fields['created'],
                 'category_title' =>
-                    $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                    $ccm->getTitle($ccm->get_name($rs->fields['category_id'])),
                 'id'             => $rs->fields['pk_content'],
 
                 /* to filter in getInTime() */
@@ -1686,7 +1686,7 @@ class ContentManager
                     'catName'        => $ccm->get_name($rs->fields['category_id']),
                     'slug'           => $rs->fields['slug'],
                     'created'        => $rs->fields['created'],
-                    'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                    'category_title' => $ccm->getTitle($ccm->get_name($rs->fields['category_id'])),
                     'id'             => $rs->fields['pk_content'],
                     'starttime'      => $rs->fields['starttime'],
                     'endtime'        => $rs->fields['endtime'],

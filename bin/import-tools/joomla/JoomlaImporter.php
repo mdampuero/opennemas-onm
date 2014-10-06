@@ -347,7 +347,7 @@ class JoomlaImporter
                     'fk_user' => self::$configuration['data']['userId'],
                     'fk_publisher' => self::$configuration['data']['userId'],
                     'description' => substr(ImportHelper::convertoUTF8($data['introtext']), 0, 120),
-                    'slug' => \StringUtils::get_title(ImportHelper::convertoUTF8($rs->fields['title'])),
+                    'slug' => \StringUtils::getTitle(ImportHelper::convertoUTF8($rs->fields['title'])),
                 );
 
 

@@ -153,7 +153,7 @@ class Article extends Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::get_title($this->title);
+                    return StringUtils::getTitle($this->title);
                 }
                 break;
             case 'author':

@@ -86,7 +86,7 @@ class Contents
 
         $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
-        return $ccm->get_title($rs);
+        return $ccm->getTitle($rs);
     }
 
     /*

@@ -824,7 +824,7 @@ class ArticlesController extends Controller
 
         // Fetch article category name
         $category_name         = $ccm->get_name($article->category);
-        $actual_category_title = $ccm->get_title($category_name);
+        $actual_category_title = $ccm->getTitle($category_name);
 
         // Get advertisements for single article
         $actualCategoryId = $ccm->get_id($category_name);

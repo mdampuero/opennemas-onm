@@ -307,7 +307,7 @@ class ContentCategoryManager
      *
      * @return string the category title
      **/
-    public function get_title($categoryName)
+    public function getTitle($categoryName)
     {
         if (is_null($this->categories)) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';

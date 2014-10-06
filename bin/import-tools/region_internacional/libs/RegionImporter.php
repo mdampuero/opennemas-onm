@@ -107,7 +107,7 @@ class RegionImporter
                 echo "Category with id {$originalID} already imported\n";
             } else {
                 $data = array(
-                    'name'              => (StringUtils::get_title($category['Nombre'])),
+                    'name'              => (StringUtils::getTitle($category['Nombre'])),
                     'title'             => $category['Nombre'],
                     'inmenu'            => 1,
                     'subcategory'       => 0,
@@ -329,7 +329,7 @@ class RegionImporter
         if ($rs == null) {
             $data = array(
                 'title'               => $categoryName,
-                'name'                => \Onm\StringUtils::get_title($categoryName),
+                'name'                => \Onm\StringUtils::getTitle($categoryName),
                 'inmenu'              => 1,
                 'internal_category'   => 7,
                 'fk_content_category' => '0',

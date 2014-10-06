@@ -90,7 +90,7 @@ class Attachment extends Content
 
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             default:

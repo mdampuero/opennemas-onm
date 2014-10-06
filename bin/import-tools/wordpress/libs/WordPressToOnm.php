@@ -165,7 +165,7 @@ class WordPressToOnm {
 
                 $data = array(
                     'title'=> $elem[0],
-                    'name' => (StringUtils::get_title( ImportHelper::convertoUTF8($elem[0]))),
+                    'name' => (StringUtils::getTitle( ImportHelper::convertoUTF8($elem[0]))),
                     'inmenu'=> 1,
                     'internal_category' => 0,
                     'subcategory' => $this->matchCategory($elem[1]),

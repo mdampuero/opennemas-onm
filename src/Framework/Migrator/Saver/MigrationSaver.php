@@ -482,7 +482,7 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
-                $categoryName = StringUtils::normalize_name(
+                $categoryName = StringUtils::normalizeName(
                     strtolower($values['name'])
                 );
 
@@ -1019,7 +1019,7 @@ class MigrationSaver
      */
     protected function convertToSlug($string)
     {
-        return \Onm\StringUtils::get_title($string);
+        return \Onm\StringUtils::getTitle($string);
     }
 
     /**
@@ -1242,7 +1242,7 @@ class MigrationSaver
                     );
                     break;
                 case 'username':
-                    $field = \Onm\StringUtils::get_title(
+                    $field = \Onm\StringUtils::getTitle(
                         $field,
                         true,
                         $params['separator']

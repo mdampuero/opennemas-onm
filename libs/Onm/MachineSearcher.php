@@ -113,7 +113,7 @@ class MachineSearcher
                         'id'       => $content['pk_content'],
                         'date'     => date('YmdHis', strtotime($content['created'])),
                         'category' => $content['catName'],
-                        'slug'     => StringUtils::get_title($content['title']),
+                        'slug'     => StringUtils::getTitle($content['title']),
                     )
                 );
             }

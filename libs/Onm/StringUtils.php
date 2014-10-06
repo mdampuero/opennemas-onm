@@ -25,7 +25,7 @@ class StringUtils
      *
      * @return string the string cleaned
      **/
-    public static function normalize_name($name)
+    public static function normalizeName($name)
     {
         $name = self::normalize($name);
         $name = preg_replace('/[\- ]+/', '-', $name);
@@ -119,12 +119,12 @@ class StringUtils
      *
      * @return string
      **/
-    public static function get_title($title, $useStopList = true, $delimiter = '-')
+    public static function getTitle($title, $useStopList = true, $delimiter = '-')
     {
         $titule = '';
         $title = self::toAscii($title);
 
-        // $title = self::normalize_name($title);
+        // $title = self::normalizeName($title);
         $title = self::clearSpecialChars($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
         $title = trim($title);

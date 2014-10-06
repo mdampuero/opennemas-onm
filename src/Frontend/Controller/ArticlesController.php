@@ -84,7 +84,7 @@ class ArticlesController extends Controller
                 // TODO: Seems that this is rubbish, evaluate its removal
                 $actualCategory      = $categoryName;
                 $actualCategoryId    = $this->ccm->get_id($actualCategory);
-                $actualCategoryTitle = $this->ccm->get_title($actualCategory);
+                $actualCategoryTitle = $this->ccm->getTitle($actualCategory);
                 $categoryData        = null;
                 if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
                     $categoryData = $this->ccm->categories[$actualCategoryId];

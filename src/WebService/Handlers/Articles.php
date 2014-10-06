@@ -48,7 +48,7 @@ class Articles
         $article = $er->find('Article', $articleId);
 
         // Get category title used on tpl's
-        $article->category_title   = $ccm->get_title($article->category_name);
+        $article->category_title   = $ccm->getTitle($article->category_name);
         $article->actualCategoryId = $ccm->get_id($article->category_name);
         //assigned media_url used with author photo & related or machine articles with photo
         $article->media_url        = MEDIA_IMG_ABSOLUTE_URL;
@@ -131,7 +131,7 @@ class Articles
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
-                    'slug'     => StringUtils::get_title($element['title']),
+                    'slug'     => StringUtils::getTitle($element['title']),
                 )
             );
         }

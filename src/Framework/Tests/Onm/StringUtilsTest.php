@@ -34,11 +34,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalize_name
+     * @covers Onm\StringUtils::normalizeName
      */
     public function testNormalizeName()
     {
-        $this->assertEquals('the-great-boy', $this->object->normalize_name('The great boy'));
+        $this->assertEquals('the-great-boy', $this->object->normalizeName('The great boy'));
     }
 
     /**
@@ -88,20 +88,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_title
+     * @covers Onm\StringUtils::getTitle
      */
     public function testGetTitle()
     {
         $this->assertEquals(
             'es-por-tu-bien',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '"Es por tu bien..."'
             )
         );
 
         $this->assertEquals(
             'es-por-tu-bien',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '"Es por tu bien…"'
             )
         );
@@ -109,7 +109,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
             'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->get_title(
+            $this->object->getTitle(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
@@ -119,7 +119,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
             'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->get_title(
+            $this->object->getTitle(
                 'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
@@ -127,34 +127,34 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '¡El cambio de look de Mariana Antoniale!'
             )
         );
 
         $this->assertEquals(
             '0001-cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '0001 ¡El cambio de look de Mariana Antoniale!'
             )
         );
 
         $this->assertEquals(
             '0001-cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '0001 ¡El cambio de look de Mariana Antoniale!'
             )
         );
     }
 
     /**
-     * @covers Onm\StringUtils::get_title
+     * @covers Onm\StringUtils::getTitle
      */
     public function testGetTitleReturnsTheSameString()
     {
         $this->assertEquals(
             '',
-            $this->object->get_title(
+            $this->object->getTitle(
                 ''
             )
         );
