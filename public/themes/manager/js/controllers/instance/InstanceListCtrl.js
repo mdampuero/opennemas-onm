@@ -293,15 +293,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 if ($scope.orderBy[name] == 'asc') {
                     $scope.orderBy[name] = 'desc';
                 } else {
-                    $scope.orderBy[name] = 'asc';
+                    delete $scope.orderBy[name];
                 }
             } else {
-                $scope.orderBy = {};
                 $scope.orderBy[name] = 'asc';
-            }
-
-            if (!$scope.orderBy.last_login) {
-                $scope.orderBy.last_login = 'desc';
             }
 
             $scope.page = 1;
