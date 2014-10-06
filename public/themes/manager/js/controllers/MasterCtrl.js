@@ -40,6 +40,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
+         * Clears the last value for the current path.
+         */
+        $scope.clear = function(url) {
+            history.clear(url);
+        }
+
+        /**
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function() {

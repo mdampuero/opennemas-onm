@@ -13,6 +13,26 @@ angular.module('onm.history', []).factory('history', function($location) {
     };
 
     /**
+     * Clears the history basing on the URL.
+     *
+     * @param string url The URL to clear.
+     *
+     * @return boolean True if the history could be cleared successfully.
+     *                 Otherwise, returns false.
+     */
+    history.clear = function(url) {
+        for (var i = history.routes.length - 1; i >= 0; i--) {
+            if (history.routes[i].route == url) {
+                history.routes.splice(i, 1);
+
+                return true;
+            }
+        };
+
+        return false;
+    };
+
+    /**
      * Saves the page status for an URL
      *
      * @param string url    The URL to save.
@@ -37,8 +57,9 @@ angular.module('onm.history', []).factory('history', function($location) {
             if (history.routes[i].route == url) {
                 for (var name in history.routes[i].params) {
                     $location.search(name, history.routes[i].params[name]);
-                    delete history.routes[i].params[name];
                 };
+
+                history.routes.splice(i, 1);
 
                 return true;
             }
