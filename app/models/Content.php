@@ -668,7 +668,7 @@ class Content
     {
         $changed = date("Y-m-d H:i:s");
 
-        $this->set_available(0, $lastEditor);
+        $this->setAvailable(0, $lastEditor);
 
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
@@ -869,10 +869,14 @@ class Content
      *
      * @return boolean true if it was changed successfully
      **/
-    public function set_available($status, $lastEditor)
+    public function setAvailable($status = 1, $lastEditor = null)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
+        }
+
+        if ($lastEditor == null) {
+            $lastEditor = $_SESSION['userid'];
         }
 
         $sql = 'UPDATE contents '
@@ -1013,56 +1017,6 @@ class Content
                 'last_author'     => $author->name,
             );
         }
-    }
-
-
-    /**
-     * Sets the available status for this content.
-     *
-     * @return boolean true if all went well
-     **/
-    public function setAvailable()
-    {
-        // NEW APPROACH
-        // Set previous status = the actual value
-        // Set status = available
-
-        // OLD APPROACH
-        if ($this->id == null) {
-            return false;
-        }
-
-        if ($this->starttime =='0000-00-00 00:00:00') {
-            $this->starttime = date("Y-m-d H:i:s");
-        }
-
-        $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
-                .'`fk_user_last_editor`=?, `starttime`=?, `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-
-        $values = array(
-            $_SESSION['userid'],
-            $this->starttime,
-            date("Y-m-d H:i:s"),
-            $this->id
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-        if ($rs === false) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        // Set status for it's updated to next event
-        $this->available      = 1;
-        $this->content_status = 1;
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
