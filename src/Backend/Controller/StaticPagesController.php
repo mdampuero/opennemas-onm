@@ -118,7 +118,7 @@ class StaticPagesController extends Controller
                 $data,
                 array(
                     'slug'     => $staticPage->buildSlug($data['slug'], $data['id'], $data['title']),
-                    'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                    'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                 )
             );
 
@@ -174,7 +174,7 @@ class StaticPagesController extends Controller
                     $data,
                     array(
                         'slug'     => $staticPage->buildSlug($data['slug'], 0, $data['title']),
-                        'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                        'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                     )
                 );
 
@@ -231,7 +231,7 @@ class StaticPagesController extends Controller
         // If the action is an Ajax request handle it, if not redirect to list
         if ($request->isXmlHttpRequest()) {
             try {
-                $output  = StringUtils::normalize_metadata($metadata);
+                $output  = StringUtils::normalizeMetadata($metadata);
             } catch (\Exception $e) {
                 $output = _("Can't get static page metadata.");
             }

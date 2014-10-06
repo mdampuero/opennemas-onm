@@ -303,7 +303,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => \StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -405,7 +405,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -494,7 +494,7 @@ class CanariasToOnm
                         'fk_user' => USER_ID,
                         'fk_author' => USER_ID,
                         'slug' => $this->helper->getSlug($rs->fields['foto_texto']),
-                        'metadata' => \Onm\StringUtils::get_tags(
+                        'metadata' => \Onm\StringUtils::getTags(
                             'fauna',
                             $this->helper->convertToUtf8($rs->fields['foto_texto'])
                         ),
@@ -578,7 +578,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -645,7 +645,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'img1' =>$this->helper->imageIsImported(
@@ -824,7 +824,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' =>$this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
@@ -913,7 +913,7 @@ class CanariasToOnm
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'description' => substr($rs->fields['texto'], 0, 120 . '...'),
                         'content_status' =>1,
                         'available' => 1,
@@ -1011,7 +1011,7 @@ class CanariasToOnm
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'content_status' => 1,
                         'available' => 1,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1086,7 +1086,7 @@ class CanariasToOnm
                     $data = array(
                         'title' => $title,
                         'category' => $category,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
@@ -1300,7 +1300,7 @@ class CanariasToOnm
                             'category'=> '7',
                             'title' =>$this->helper->convertToUtf8($rs->fields['autor']),
                             'category_name'=>'autor',
-                            'metadata' => StringUtils::get_tags($this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
+                            'metadata' => StringUtils::getTags($this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
                             'description' => $this->helper->convertToUtf8($rs->fields['autor']),
                             'created' => $rs->fields['fecha'],
                             'starttime' => $rs->fields['fecha'],
@@ -1388,7 +1388,7 @@ class CanariasToOnm
                             'category_name' => 'opinion',
                             'type_opinion' => $typeOpinion,
                             'body' => $this->helper->convertToUtf8($rs->fields['texto'])." <br> ".$colab,
-                            'metadata' => \StringUtils::get_tags($title.',  opinion', $colab),
+                            'metadata' => \StringUtils::getTags($title.',  opinion', $colab),
                             'description' => $this->helper->convertToUtf8('opinion '.strip_tags(substr($rs->fields['texto'], 0, 100))),
                             'fk_author' => $fkAuthor,
                             'available' => 1,
@@ -1474,7 +1474,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($photoName.', '.$category_name),
+                            'metadata' => StringUtils::getTags($photoName.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1537,8 +1537,8 @@ class CanariasToOnm
                             'category_name' => 'letter',
                             'email' => '',
                             'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'metadata' => StringUtils::get_tags($rs->fields['autor'])
-                                .', '. StringUtils::get_tags($rs->fields['titulo']).', carta',
+                            'metadata' => StringUtils::getTags($rs->fields['autor'])
+                                .', '. StringUtils::getTags($rs->fields['titulo']).', carta',
                             'description' => 'opinion '.$rs->fields['autor']
                                 .' '.strip_tags(substr($this->helper->convertToUtf8($data['texto']), 0, 100)),
                             'author' => $rs->fields['autor'],
@@ -1627,7 +1627,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($photoName.', '.$category_name),
+                            'metadata' => StringUtils::getTags($photoName.', '.$category_name),
                             'description' => $this->helper->convertToUtf8($rs->fields['piedefoto']),
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1674,7 +1674,7 @@ class CanariasToOnm
                     'name' => $name,
                     'category'=> $category,
                     'category_name'=>  $category_name,
-                    'metadata' => StringUtils::get_tags($title.','.$category_name),
+                    'metadata' => StringUtils::getTags($title.','.$category_name),
                     'description' => $title,
                     'created' => $fields['fecha'].' '.$fields['hora'],
                     'changed' => $fields['fecha'].' '.$fields['hora'],
@@ -1739,7 +1739,7 @@ class CanariasToOnm
                         'with_comment' => 0,
                         'content_status' => ($rs->fields['activar'] == 0)? 0:1,
                         'available' => ($rs->fields['activar'] == 0)? 0:1,
-                        'metadata' => \StringUtils::get_tags($rs->fields['title']),
+                        'metadata' => \StringUtils::getTags($rs->fields['title']),
                         'subtitle' => '',
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => '',
@@ -1838,7 +1838,7 @@ class CanariasToOnm
                     $data['available'] = 1;
 
                     $data['description'] = $title;
-                    $data['metadata'] = StringUtils::get_tags($title.', '.$category_name);
+                    $data['metadata'] = StringUtils::getTags($title.', '.$category_name);
                     $data['fk_publisher'] = $_SESSION['userid'];
                     $data['fk_user'] =  USER_ID;
                     $data['fk_author'] = USER_ID;
@@ -1917,7 +1917,7 @@ class CanariasToOnm
                                 'name' => $rs->fields['video'],
                                 'available' =>1,
                                 'category'=> $category,
-                                'metadata' => StringUtils::get_tags($photoName),
+                                'metadata' => StringUtils::getTags($photoName),
                                 'description' => $rs->fields['texto'],
                                 'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                                 'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -2115,7 +2115,7 @@ class CanariasToOnm
                         'with_comment' => 0,
                         'content_status' => ($rs->fields['activar'] === 0)? 0:1,
                         'available' => ($rs->fields['activar'] === 0)? 0:1,
-                        'metadata' => \StringUtils::get_tags($title),
+                        'metadata' => \StringUtils::getTags($title),
                         'subtitle' => '',
                         'agency' => '',
                         'summary' => '',
@@ -2217,7 +2217,7 @@ class CanariasToOnm
                     $sql = '';
                     $sqlContents = "UPDATE `contents` SET "
                         ."`title`='".addslashes($rs->fields['titulo'])."', "
-                        ."`metadata`='".StringUtils::get_tags($rs->fields['titulo'])."' "
+                        ."`metadata`='".StringUtils::getTags($rs->fields['titulo'])."' "
                         ." WHERE pk_content=".$id.";  \n";
 
                     $sqlAttach = "UPDATE `attachments` SET "

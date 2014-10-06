@@ -161,25 +161,25 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalize_metadata
+     * @covers Onm\StringUtils::normalizeMetadata
      */
     public function testNormalizeMetadata()
     {
         $this->assertEquals(
             'a,list,of,comma,separated,tags',
-            $this->object->normalize_metadata('a , list, of,comma, separated, tags')
+            $this->object->normalizeMetadata('a , list, of,comma, separated, tags')
         );
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTags()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing'.
                 ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
@@ -187,14 +187,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTagsReturnsStringWithUniqueElements()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. '.
                 'Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
@@ -202,14 +202,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTagsRemovesUnnecesaryWords()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.
                 ' Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )

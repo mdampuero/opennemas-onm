@@ -77,7 +77,7 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $tokens = \Onm\StringUtils::get_tags($searchString);
+            $tokens = \Onm\StringUtils::getTags($searchString);
             $tokens = explode(', ', $tokens);
 
             $szWhere = '';

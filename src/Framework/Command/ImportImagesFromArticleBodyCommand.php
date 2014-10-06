@@ -444,7 +444,7 @@ EOF
             'fk_category'       => $category,
             'category_name'     => $category,
             'category'          => $category,
-            'metadata'          => \Onm\StringUtils::get_tags($filePath['filename']),
+            'metadata'          => \Onm\StringUtils::getTags($filePath['filename']),
             'author_name'       => '&copy; '.INSTANCE_UNIQUE_NAME.' '.date('Y'),
             'original_filename' => $filePath['basename'],
         );

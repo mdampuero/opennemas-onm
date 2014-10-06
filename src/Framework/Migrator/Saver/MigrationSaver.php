@@ -1009,7 +1009,7 @@ class MigrationSaver
      */
     protected function convertToMetadata($string)
     {
-        return \Onm\StringUtils::get_tags($string);
+        return \Onm\StringUtils::getTags($string);
     }
 
     /**
@@ -1183,7 +1183,7 @@ class MigrationSaver
                     $field = $this->convertToMap($field, $params['map']);
                     break;
                 case 'metadata':
-                    $field = \Onm\StringUtils::get_tags($field);
+                    $field = \Onm\StringUtils::getTags($field);
                     break;
                 case 'merge':
                     if (is_array($field) && count($field) > 0) {
@@ -1553,8 +1553,8 @@ class MigrationSaver
                         'content_status'      => 1,
                         'frontpage'           => 0,
                         'in_home'             => 0,
-                        'metadata'            => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
-                        'description'         => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'metadata'            => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
+                        'description'         => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
                         'id'                  => 0,
                         'created'             => $rs->fields['post_date_gmt'],
                         'starttime'           => $rs->fields['post_date_gmt'],

@@ -162,7 +162,7 @@ class StringUtils
      *
      * @return string the cleaned metadata string
      **/
-    public static function normalize_metadata($metadata, $separator = ',')
+    public static function normalizeMetadata($metadata, $separator = ',')
     {
         $items = explode(',', $metadata);
 
@@ -185,7 +185,7 @@ class StringUtils
      *
      * @return string the string of keywords separated by commas
      **/
-    public static function get_tags($text)
+    public static function getTags($text)
     {
         $tags = self::clearSpecialChars($text);
 

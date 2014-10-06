@@ -145,7 +145,7 @@ class Poll extends Content
         if ($data['item']) {
             foreach ($data['item'] as $item) {
                 $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = StringUtils::get_tags($item);
+                $tags   = StringUtils::getTags($item);
                 $values = array($this->id,$item, $tags);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);

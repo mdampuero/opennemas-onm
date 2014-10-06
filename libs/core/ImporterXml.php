@@ -277,7 +277,7 @@ class ImporterXml
             $this->data['category']=  20;
         }
 
-        $this->data['metadata'] =  StringUtils::get_tags($this->data['title']);
+        $this->data['metadata'] =  StringUtils::getTags($this->data['title']);
 
         return ($this->data);
     }

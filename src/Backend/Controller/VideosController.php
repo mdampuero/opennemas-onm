@@ -694,7 +694,7 @@ class VideosController extends Controller
         }
 
         if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = \Onm\StringUtils::getTags($metadata);
             $tokens = explode(', ', $tokens);
 
             $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));
