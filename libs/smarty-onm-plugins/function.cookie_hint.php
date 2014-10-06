@@ -20,12 +20,12 @@ function smarty_function_cookie_hint($params, &$smarty)
         $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'
                 ."<script type='text/javascript'>$(function() {
 
-                    if($.cookie('cookieoverlay_accepted') == null) {
+                    if($.cookie('cookie_overlay_accepted') == null) {
                         $('#cookies_overlay').css('display', 'block');
                     }
 
                     $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
-                        $.cookie('cookieoverlay_accepted', 1, { expires: 365, path: '/' });
+                        $.cookie('cookie_overlay_accepted', 1, { expires: 365, path: '/' });
                         $(this).closest('#cookies_overlay').hide();
                     });
 

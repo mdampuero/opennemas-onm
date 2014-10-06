@@ -1,7 +1,3 @@
-accept_cookies:
-    path: /accepted_cookies
-    defaults: { _controller: FrontendBundle:Utilities:acceptCookies }
-
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
