@@ -75,7 +75,10 @@
                                 <label for="select-all"></label>
                             </div>
                         </th>
-                        <th class="pointer" ng-click="sort('name')">{t}Group name{/t}</th>
+                        <th class="pointer" ng-click="sort('name')">
+                            {t}Group name{/t}
+                            <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>

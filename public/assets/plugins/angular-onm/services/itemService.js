@@ -150,14 +150,14 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         delete params.page
 
         if (params.orderBy) {
-            filters.orderBy = {};
+            filters.orderBy = [];
 
             var orders = params.orderBy.split(',');
 
             for (var i = 0; i < orders.length; i++) {
                 var order = orders[i].split(':');
 
-                filters.orderBy[order[0]] = order[1];
+                filters.orderBy.push({ name: order[0], value: order[1] });
             };
 
         }
@@ -218,13 +218,13 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         }
 
         var order = null;
-        for (var name in orderBy) {
+        for (var i = 0; i < orderBy.length; i++) {
             if (!order) {
                 order = [];
             }
 
-            order.push(name + ':' + orderBy[name]);
-        }
+            order.push(orderBy[i].name + ':' + orderBy[i].value);
+        };
 
         if (order) {
             order = order.join(',');

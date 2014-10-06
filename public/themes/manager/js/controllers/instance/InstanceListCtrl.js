@@ -69,9 +69,12 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          *
          * @type Object
          */
-        $scope.orderBy = {
-            'last_login': 'desc'
-        }
+        $scope.orderBy = [ { name: 'last_login', value: 'desc' } ];
+
+        /**
+         * The listing order for UI
+         */
+        $scope.orderUI = {};
 
         /**
          * The current page
@@ -98,6 +101,28 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * Variable to store the current search.
          */
         var search;
+
+        /**
+         * Checks if the listing is ordered by the given field name.
+         *
+         * @param string name The field name.
+         *
+         * @return mixed The order value, if the order exists. Otherwise,
+         *               returns false.
+         */
+        $scope.isOrderedBy = function(name) {
+            var i = 0;
+            while (i < $scope.orderBy.length
+                    && $scope.orderBy[i].name != name) {
+                i++;
+            }
+
+            if (i < $scope.orderBy.length) {
+                return $scope.orderBy[i].value;
+            }
+
+            return false;
+        }
 
         /**
          * Checks if an instance is selected
@@ -289,14 +314,19 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @param string name Field name.
          */
         $scope.sort = function(name) {
-            if ($scope.orderBy[name]) {
-                if ($scope.orderBy[name] == 'asc') {
-                    $scope.orderBy[name] = 'desc';
-                } else {
-                    delete $scope.orderBy[name];
-                }
+            var i = 0;
+            while (i < $scope.orderBy.length && $scope.orderBy[i].name != name) {
+                i++;
+            }
+
+            if (i >= $scope.orderBy.length) {
+                $scope.orderBy.push({ name: name, value: 'asc' });
             } else {
-                $scope.orderBy[name] = 'asc';
+                if ($scope.orderBy[i].value == 'asc') {
+                    $scope.orderBy[i].value = 'desc';
+                } else {
+                    $scope.orderBy.splice(i, 1);
+                }
             }
 
             $scope.page = 1;

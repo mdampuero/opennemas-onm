@@ -432,8 +432,13 @@ class InstanceController extends Controller
         $criteria = $request->request->filter('criteria') ? : array();
         $orderBy  = $request->request->filter('orderBy') ? : array();
 
+        $order = array();
+        foreach ($orderBy as $value) {
+            $order[$value['name']] = $value['value'];
+        }
+
         $im = $this->get('instance_manager');
-        $instances = $im->findBy($criteria, $orderBy, $epp, $page);
+        $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
 
         return new JsonResponse(

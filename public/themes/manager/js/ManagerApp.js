@@ -76,7 +76,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                     data: function($routeParams, itemService) {
                         // Default filters
                         var data = {
-                            orderBy: { last_login: 'desc' },
+                            orderBy: [ { name: 'last_login', value: 'desc' } ],
                             epp: 25
                         };
 
@@ -160,7 +160,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 resolve: {
                     data: function(itemService) {
                         var data = {
-                            orderBy: { name: 'asc' },
+                            orderBy: [ { name: 'name', value: 'asc' } ],
                             epp: 25
                         };
 
@@ -205,7 +205,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 resolve: {
                     data: function(itemService) {
                         var data = {
-                            orderBy: { name: 'asc' },
+                            orderBy: [ { name: 'name', value: 'asc' } ],
                             epp: 25
                         };
 

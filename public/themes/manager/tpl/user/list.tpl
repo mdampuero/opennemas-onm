@@ -91,11 +91,11 @@
 	                    </th>
 						<th class="left pointer" ng-click="sort('name')">
                             {t}Full name{/t}
-                            <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
+                            <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                         </th>
 						<th class="left pointer" ng-click="sort('username')">
                             {t}Username{/t}
-                            <i ng-class="{ 'fa fa-caret-up': orderBy.username == 'asc', 'fa fa-caret-down': orderBy.username == 'desc'}"></i>
+                            <i ng-class="{ 'fa fa-caret-up': isOrderedBy('username') == 'asc', 'fa fa-caret-down': isOrderedBy('username') == 'desc'}"></i>
                         </th>
                         <th>{t}Group{/t}</th>
 						<th class="text-center pointer" style="width: 10px;" ng-click="sort('activated')">{t}Activated{/t}</th>
