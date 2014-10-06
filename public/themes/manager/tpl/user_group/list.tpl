@@ -39,6 +39,15 @@
                             <option value="500">500</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; refresh()">
+                            <i class="fa fa-times"></i>
+                            {t}Clear{/t}
+                        </button>
+                        <button class="btn btn-white" ng-click="refresh()">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
                     <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">

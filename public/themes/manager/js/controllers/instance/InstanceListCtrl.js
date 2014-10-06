@@ -220,6 +220,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         };
 
         /**
+         * Reloads the listing.
+         */
+        $scope.refresh = function() {
+            search = list();
+        }
+
+        /**
          * Reloads the list on keypress.
          *
          * @param  Object event The even object.

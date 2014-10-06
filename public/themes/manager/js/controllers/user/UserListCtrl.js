@@ -181,6 +181,13 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         }
 
         /**
+         * Reloads the listing.
+         */
+        $scope.refresh = function() {
+            search = list();
+        }
+
+        /**
          * Reloads the list on keypress.
          *
          * @param  Object event The even object.

@@ -188,6 +188,13 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         }
 
         /**
+         * Reloads the listing.
+         */
+        $scope.refresh = function() {
+            search = list();
+        }
+
+        /**
          * Selects/unselects all groups.
          */
         $scope.selectAll = function() {
