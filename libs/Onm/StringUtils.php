@@ -339,7 +339,7 @@ EOF;
      *
      * @return string the trimmed string
      **/
-    public static function str_stop($string, $maxLength = 30, $suffix = '...')
+    public static function strStop($string, $maxLength = 30, $suffix = '...')
     {
         if (strlen($string) > $maxLength) {
             $string = substr($string, 0, $maxLength);
@@ -381,7 +381,7 @@ EOF;
      *
      * @return void
      **/
-    public static function disabled_magic_quotes(&$data = null)
+    public static function disabledMagicQuotes(&$data = null)
     {
         // @codeCoverageIgnoreStart
         if (get_magic_quotes_gpc()) {
@@ -420,7 +420,7 @@ EOF;
      *
      * @return string
      **/
-    public static function get_num_words($text, $numWords)
+    public static function getNumWords($text, $numWords)
     {
         $noHtml      = strip_tags($text);
         $description = explode(" ", $noHtml, $numWords + 1);

@@ -183,7 +183,7 @@ class Article extends Content
     public function create($data)
     {
         if (!isset($data['description'])) {
-            $data['description'] = StringUtils::get_num_words($data['body'], 50);
+            $data['description'] = StringUtils::getNumWords($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
@@ -285,7 +285,7 @@ class Article extends Content
     {
         // Update an article
         if (!$data['description']) {
-            $data['description'] = StringUtils::get_num_words(
+            $data['description'] = StringUtils::getNumWords(
                 $data['body'],
                 50
             );

@@ -288,7 +288,7 @@ EOF
             $body = preg_replace('@<a .*?href=".+?".*?><img .*?><\/a>@', '', $body);
             $body = preg_replace('@<img .*?>@', '', $body);
 
-            $summary = \StringUtils::get_num_words(html_entity_decode($body), 20);
+            $summary = \StringUtils::getNumWords(html_entity_decode($body), 20);
 
             // Set sql's for updating articles body
             $sql = 'UPDATE `contents` SET `body` = \''.$body.'\',

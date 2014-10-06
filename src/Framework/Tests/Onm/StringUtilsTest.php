@@ -228,46 +228,46 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStop()
     {
         $this->assertEquals(
             'Example phrase to test...',
-            $this->object->str_stop('Example phrase to test str_stop method')
+            $this->object->strStop('Example phrase to test strStop method')
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopWithLimit()
     {
         $this->assertEquals(
             'Example phrase to...',
-            $this->object->str_stop('Example phrase to test str_stop method', 20)
+            $this->object->strStop('Example phrase to test strStop method', 20)
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopWithPhraseWithoutSpaces()
     {
         $this->assertEquals(
             'Examplephrasetotests...',
-            $this->object->str_stop('Examplephrasetoteststr_stopmethod', 20)
+            $this->object->strStop('ExamplephrasetoteststrStopmethod', 20)
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopReturnsOriginalStringIfLongerThanLimit()
     {
         $this->assertEquals(
-            'Example phrase to test str_stop method',
-            $this->object->str_stop('Example phrase to test str_stop method', 100)
+            'Example phrase to test strStop method',
+            $this->object->strStop('Example phrase to test strStop method', 100)
         );
     }
 
@@ -284,10 +284,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     // }
 
     // /**
-    //  * @covers Onm\StringUtils::disabled_magic_quotes
-    //  * @todo   Implement testDisabled_magic_quotes().
+    //  * @covers Onm\StringUtils::disabledMagicQuotes
+    //  * @todo   Implement testdisabledMagicQuotes().
     //  */
-    // public function testDisabled_magic_quotes()
+    // public function testdisabledMagicQuotes()
     // {
     //     // Remove the following lines when you implement this test.
     //     $this->markTestIncomplete(
@@ -306,14 +306,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_num_words
-     * @todo   Implement testGet_num_words().
+     * @covers Onm\StringUtils::getNumWords
+     * @todo   Implement testgetNumWords().
      */
     public function testGetNumWords()
     {
         $this->assertEquals(
             'Some example text longer...',
-            $this->object->get_num_words(
+            $this->object->getNumWords(
                 'Some example text longer than four words',
                 4
             )
