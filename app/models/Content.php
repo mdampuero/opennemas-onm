@@ -1652,33 +1652,6 @@ class Content
     }
 
     /**
-     * Define contents as un/favorite for include them in a widget
-     *
-     * @param array $status array of contents id's
-     *
-     * @return true or false
-    */
-    public function set_favorite($status)
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=?";
-        $values = array($status, $this->id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return false;
-        }
-
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
-    }
-
-    /**
      * Inserts this content directly to the category frontpage
      *
      * @return boolean true if all went well
