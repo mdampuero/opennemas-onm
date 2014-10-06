@@ -322,13 +322,19 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                     page: $scope.page
                 };
 
-                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                    $scope.epp, $scope.page);
 
-                itemService.list('manager_ws_users_list', data).then(function (response) {
-                    $scope.users   = response.data.results;
-                    $scope.total   = response.data.total;
-                    $scope.loading = 0;
-                });
+                itemService.list('manager_ws_users_list', data).then(
+                    function (response) {
+                        $scope.users   = response.data.results;
+                        $scope.total   = response.data.total;
+                        $scope.loading = 0;
+
+                        // Scroll top
+                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
+                    }
+                );
             }, 500);
         }
 

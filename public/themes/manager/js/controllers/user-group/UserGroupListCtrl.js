@@ -262,13 +262,19 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                     page:     $scope.page
                 };
 
-                itemService.encodeFilters($scope.criteria, $scope.orderBy, $scope.epp, $scope.page);
+                itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                    $scope.epp, $scope.page);
 
-                itemService.list('manager_ws_user_groups_list', data).then(function (response) {
-                    $scope.groups  = response.data.results;
-                    $scope.total   = response.data.total;
-                    $scope.loading = 0;
-                });
+                itemService.list('manager_ws_user_groups_list', data).then(
+                    function (response) {
+                        $scope.groups  = response.data.results;
+                        $scope.total   = response.data.total;
+                        $scope.loading = 0;
+
+                        // Scroll top
+                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
+                    }
+                );
             }, 500);
         }
     }

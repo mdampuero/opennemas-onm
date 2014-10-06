@@ -14,8 +14,8 @@
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$anchorScroll', '$location', '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
-    function ($anchorScroll, $location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
+    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -372,8 +372,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
                         $scope.loading = 0;
 
-                        $location.hash('manager');
-                        $anchorScroll();
+                        // Scroll top
+                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
                     }
                 );
             }, 500);
