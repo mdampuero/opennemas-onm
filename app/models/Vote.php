@@ -163,7 +163,7 @@ class Vote
      **/
     public function update($vote, $ip)
     {
-        $this->ips_count_vote = $this->add_count($this->ips_count_vote, $ip);
+        $this->ips_count_vote = $this->addCount($this->ips_count_vote, $ip);
 
         if (!$this->ips_count_vote) {
             return false;
@@ -243,7 +243,7 @@ class Vote
      *
      * @return array the new list of ips and vote counts
      **/
-    public function add_count($countIPs, $ip)
+    public function addCount($countIPs, $ip)
     {
         $ips = array();
         foreach ($countIPs as $ip_array) {

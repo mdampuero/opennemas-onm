@@ -295,7 +295,7 @@ class Poll extends Content
      **/
     public function vote($pkItem, $ip)
     {
-        $this->used_ips = $this->add_count($this->used_ips, $ip);
+        $this->used_ips = $this->addCount($this->used_ips, $ip);
         if (!$this->used_ips) {
             return false;
         }
@@ -333,7 +333,7 @@ class Poll extends Content
      *
      * @return array
      **/
-    public function add_count($ips_count, $ip)
+    public function addCount($ips_count, $ip)
     {
         $ips = array();
         if ($ips_count) {

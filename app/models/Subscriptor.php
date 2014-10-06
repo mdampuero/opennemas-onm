@@ -335,7 +335,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor is already registered
      **/
-    public function exists_email($email)
+    public function existsEmail($email)
     {
         $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($email));

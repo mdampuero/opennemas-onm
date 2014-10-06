@@ -104,7 +104,7 @@ class NewsletterSubscriptorsController extends Controller
             );
 
             // Check for repeated e-mail
-            if ($user->exists_email($data['email'])) {
+            if ($user->existsEmail($data['email'])) {
                 m::add(_('Unable to create the new subscriptor. This email is already in use'), m::ERROR);
                 return $this->redirect(
                     $this->generateUrl('admin_newsletter_subscriptor_create')
