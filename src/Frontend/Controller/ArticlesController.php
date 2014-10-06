@@ -61,7 +61,7 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
-        $this->paywallHook($article);
+        $cacheable = $this->paywallHook($article);
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
@@ -152,18 +152,28 @@ class ArticlesController extends Controller
 
         } // end if $this->view->is_cached
 
+        $renderParams = [
+            'cache_id'        => $cacheID,
+            'contentId'       => $articleID,
+            'category_name'   => $categoryName,
+            'article'         => $article,
+            'content'         => $article,
+            'actual_category' => $categoryName,
+        ];
+
+        if ($cacheable) {
+            $renderParams = array_merge(
+                $renderParams,
+                [
+                    'x-tags'      => 'article,'.$article->id,
+                    'x-cache-for' => '1d'
+                ]
+            );
+        }
+
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
-            array(
-                'cache_id'        => $cacheID,
-                'contentId'       => $articleID,
-                'category_name'   => $categoryName,
-                'article'         => $article,
-                'content'         => $article,
-                'actual_category' => $categoryName,
-                'x-tags'          => 'article,'.$article->id,
-                'x-cache-for'     => '1d'
-            )
+            $renderParams
         );
     }
 
@@ -283,10 +293,10 @@ class ArticlesController extends Controller
      **/
     public function paywallHook(&$content)
     {
-        $this->cm   = new \ContentManager();
-
         $paywallActivated = ModuleManager::isActivated('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
+
+        $cacheable = true;
 
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $newContent = $this->renderView(
@@ -325,6 +335,10 @@ class ArticlesController extends Controller
             } else {
                 $content->body = $newContent;
             }
+
+            $cacheable = false;
         }
+
+        return $cacheable;
     }
 }
