@@ -299,7 +299,7 @@ class PollsController extends Controller
         if (is_null($poll->id)) {
             m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
         } else {
-            $poll->set_available($status, $_SESSION['userid']);
+            $poll->setAvailable($status, $_SESSION['userid']);
             if ($status == 0) {
                 $poll->set_favorite($status);
             }
@@ -372,7 +372,7 @@ class PollsController extends Controller
         if (is_null($poll->id)) {
             m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
         } else {
-            $poll->set_inhome($status);
+            $poll->setInHome($status, $_SESSION['userid']);
             m::add(sprintf(_('Successfully changed suggested flag for the poll "%s"'), $poll->title), m::SUCCESS);
         }
 
@@ -456,7 +456,7 @@ class PollsController extends Controller
             foreach ($selected as $id) {
                 $poll = new \Poll((int) $id);
                 if (!is_null($poll->id)) {
-                    $poll->set_available($status, $_SESSION['userid']);
+                    $poll->setAvailable($status, $_SESSION['userid']);
                     if ($status == 0) {
                         $poll->set_favorite($status);
                     }

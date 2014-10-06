@@ -345,7 +345,7 @@ class BooksController extends Controller
         ) {
             foreach ($selected as $id) {
                 $book = new \Book($id);
-                $book->set_available($status, $_SESSION['userid']);
+                $book->setAvailable($status, $_SESSION['userid']);
                 if ($status == 0) {
                     $book->set_favorite($status, $_SESSION['userid']);
                 }

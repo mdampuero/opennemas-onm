@@ -11,6 +11,7 @@
  * @package    Model
  **/
 use Onm\Settings as s;
+
 /**
  * Handles all the common actions in all the contents
  *
@@ -924,7 +925,7 @@ class Content
      *
      * @return boolean true if it was changed successfully
      **/
-    public function set_in_home($status, $lastEditor)
+    public function setInHome($status, $lastEditor = null)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
@@ -1523,47 +1524,6 @@ class Content
     }
 
     /**
-     * Sets the content_status flag for the actual content, given the status value
-     * @deprecated not valid anymore
-     *
-     * @param int $status the content_status value
-     * @param int $last_editor the author id that performs the action
-     *
-     * @return void
-     **/
-    public function set_status($status, $last_editor)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-        $sql = 'UPDATE contents SET `content_status`=?, `available`=?, '
-             . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-        if (!is_array($status)) {
-            $values = array($status, $last_editor, $currentTime, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-    /**
      * Returns true if the content is suggested
      *
      * @return boolean true if the content is suggested
@@ -1572,78 +1532,6 @@ class Content
     {
         return ($this->frontpage == 1);
     }
-
-    /**
-     * Sets the frontpage flag
-     *
-     * @param int $status the status of the flag
-     * @param int $lastEditor the id of the user that is changing the content
-     *
-     * @return boolean if the change was done
-     **/
-    public function set_frontpage($status, $lastEditor)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `frontpage`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-    /**
-     * Sets the in_home flag
-     *
-     * @param int $status the status of the flag
-     * @param int $lastEditor the id of the user that is changing the content
-     *
-     * @return boolean if the change was done
-     **/
-    public function set_inhome($status, $lastEditor = null)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE `contents` SET `in_home`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-
 
     /**
      * Return the content type name for this content

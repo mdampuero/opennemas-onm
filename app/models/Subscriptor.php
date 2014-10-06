@@ -316,7 +316,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor status property was changed
      **/
-    public function set_status($id, $status)
+    public function setStatus($id, $status)
     {
         $sql = 'UPDATE ' . $this->tableName
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);

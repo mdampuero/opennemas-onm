@@ -414,7 +414,7 @@ class OpinionsController extends Controller
         if (is_null($opinion->id)) {
             m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
         } else {
-            $opinion->set_inhome($status, $_SESSION['userid']);
+            $opinion->setInHome($status, $_SESSION['userid']);
             m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
         }
 

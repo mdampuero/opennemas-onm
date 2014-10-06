@@ -270,7 +270,7 @@ class NewsletterSubscriptorsController extends Controller
         $user = new \Subscriptor($id);
 
         $status = ($user->status == 2) ? 3: 2;
-        $user->set_status($id, $status);
+        $user->setStatus($id, $status);
 
         return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
     }
