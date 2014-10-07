@@ -178,9 +178,17 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 });
         };
 
-        // Initialize instance
         if (data.instance) {
+            // Initialize instance
             $scope.instance = data.instance;
+        } else {
+            // Select Base plan as default
+            for (var i = 0; i < data.template.available_modules.length; i++) {
+                if (data.template.available_modules[i].plan == 'Base') {
+                    $scope.instance.external.activated_modules.push(
+                        data.template.available_modules[i].id);
+                }
+            };
         }
 
         $scope.$on('$destroy', function() {
