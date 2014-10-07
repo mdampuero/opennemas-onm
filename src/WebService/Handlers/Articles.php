@@ -96,7 +96,7 @@ class Articles
 
             // Add category name
             foreach ($relatedContents as &$content) {
-                $content->category_name = $ccm->get_category_name_by_content_id($content->id);
+                $content->category_name = $ccm->getCategoryNameByContentId($content->id);
                 // Generate content uri if it's not an attachment
                 if ($content->fk_content_type == '4') {
                     $content->uri = "ext".preg_replace('@//@', '/author/', $content->uri);

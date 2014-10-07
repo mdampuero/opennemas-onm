@@ -426,7 +426,7 @@ class Content
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
         $ccm     = ContentCategoryManager::get_instance();
-        $catName = $ccm->get_name($data['category']);
+        $catName = $ccm->getName($data['category']);
 
         $sql = "INSERT INTO contents
             (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
@@ -579,7 +579,7 @@ class Content
 
         if ($data['category'] != $this->category) {
             $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->get_name($data['category']);
+            $catName = $ccm->getName($data['category']);
 
             $sql2   = "UPDATE contents_categories "
                       ."SET `pk_fk_content_category`=?, `catName`=? "
@@ -1008,7 +1008,7 @@ class Content
 
             return array(
                 'title'           => $this->title,
-                'category'        => $ccm->get_name($this->category),
+                'category'        => $ccm->getName($this->category),
                 'views'           => $views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
@@ -1203,7 +1203,7 @@ class Content
             }
         }
 
-        return $ccm->get_name($this->category);
+        return $ccm->getName($this->category);
     }
 
     /**
@@ -1281,7 +1281,7 @@ class Content
 
         if (isset($this->category_name)) {
             $ccm = ContentCategoryManager::get_instance();
-            $this->category_name = $ccm->get_name($this->category);
+            $this->category_name = $ccm->getName($this->category);
         }
 
         $this->permalink = '';//$this->uri;
@@ -1567,7 +1567,7 @@ class Content
             $categoryName = 'home';
             $category = 0;
         } else {
-            $categoryName = $ccm->get_name($category);
+            $categoryName = $ccm->getName($category);
         }
 
         $sql = 'DELETE FROM content_positions '
@@ -1835,7 +1835,7 @@ class Content
                     if ($content->fk_content_type == 4) {
                          $content = $content->get($relatedContentId);
                     }
-                    $content->categoryName = $ccm->get_name($content->category);
+                    $content->categoryName = $ccm->getName($content->category);
                     $this->related_contents []= $content;
                 }
             }

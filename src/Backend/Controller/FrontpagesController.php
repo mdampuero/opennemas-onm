@@ -51,7 +51,7 @@ class FrontpagesController extends Controller
          * Getting categories
         */
         $ccm = \ContentCategoryManager::get_instance();
-        $section = $ccm->get_name($category);
+        $section = $ccm->getName($category);
         $section = (empty($section))? 'home': $section;
         $categoryID = ($category == 'home') ? 0 : $category;
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
@@ -69,7 +69,7 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         } elseif (!Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
-            $section = $ccm->get_name($categoryID);
+            $section = $ccm->getName($categoryID);
             $_REQUEST['category'] = $categoryID;
             list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 

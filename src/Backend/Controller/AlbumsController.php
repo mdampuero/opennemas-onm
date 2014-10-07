@@ -112,7 +112,7 @@ class AlbumsController extends Controller
 
             // Get category name
             $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($category);
+            $categoryName = $ccm->getName($category);
 
             // Clean cache album home and frontpage for category
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);

@@ -128,7 +128,7 @@ class ContentCategoryManager
             return array($categoryName, $subcategoryName);
         }
 
-        $father = $this->get_father($categoryName);
+        $father = $this->getFather($categoryName);
         if (!empty($father)) {
             return array($father, $categoryName);
         }
@@ -179,7 +179,7 @@ class ContentCategoryManager
      * @return string the category name
      * @return boolean false if the category doesn't exists
      **/
-    public function get_name($id)
+    public function getName($id)
     {
         if (is_null($this->categories)) {
             $sql = 'SELECT name FROM content_categories '
@@ -197,39 +197,6 @@ class ContentCategoryManager
         } else {
             return false;
         }
-    }
-
-    /**
-     * Returns the position in menu
-     *
-     * @param  int $id Category ID
-     *
-     * @return int Category position
-     */
-    public function get_pos($id)
-    {
-        if (is_null($this->categories)) {
-            if (is_numeric($id)) {
-                $sql = 'SELECT posmenu FROM content_categories'
-                     . ' WHERE pk_content_category = ?';
-                $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-                if (!$rs) {
-                    return;
-                }
-
-                return $rs->fields['posmenu'];
-            }
-
-            return 0;
-        }
-
-        if (!isset($this->categories[$id])) {
-            return 0;
-        }
-
-        // Singleton version
-        return $this->categories[$id]->posmenu;
     }
 
     /**
@@ -289,7 +256,7 @@ class ContentCategoryManager
         }
 
         // Singleton version
-        $categories = $this->order_by_posmenu($this->categories);
+        $categories = $this->orderByPosmenu($this->categories);
 
         foreach ($categories as $category) {
             if (($category->internal_category == $categoryType)
@@ -363,41 +330,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Returns an array with all the available category objects
-     *
-     * @return array ContentCategory object list
-     **/
-    public function get_all_categories()
-    {
-        if (is_null($this->categories)) {
-            $sql = 'SELECT name FROM content_categories';
-
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            if (!$rs) {
-                return;
-            }
-
-            $items = array ();
-            while (!$rs->EOF) {
-                $str = $rs->fields['name'];
-                $items[$str]=0;
-                $rs->MoveNext();
-            }
-
-            return $items;
-        }
-
-        // Singleton version
-        $items = array();
-        foreach ($this->categories as $category) {
-            $items[$category->name] = 0;
-        }
-
-        return $items;
-    }
-
-    /**
      * Returns an array with subcetegories from a single category
      * with internal_name as index
      *
@@ -405,7 +337,7 @@ class ContentCategoryManager
      *
      * @return array list of ContentCategory objects
      **/
-    public function get_all_subcategories($id)
+    public function getAllSubcategories($id)
     {
         if (is_null($this->categories)) {
             $sql = 'SELECT name,title,internal_category '
@@ -428,7 +360,7 @@ class ContentCategoryManager
         }
 
         // Singleton version
-        $categories = $this->order_by_posmenu($this->categories);
+        $categories = $this->orderByPosmenu($this->categories);
 
         $items = array ();
         foreach ($categories as $category) {
@@ -452,7 +384,7 @@ class ContentCategoryManager
      *
      * @return array the sorted list of categories
      **/
-    public function order_by_posmenu($categories)
+    public function orderByPosmenu($categories)
     {
         $categories = array_values($categories);
 
@@ -530,7 +462,7 @@ class ContentCategoryManager
     {
         $tree = array();
 
-        $categories = $this->order_by_posmenu($this->categories);
+        $categories = $this->orderByPosmenu($this->categories);
 
         // First loop categories
         foreach ($categories as $category) {
@@ -606,7 +538,7 @@ class ContentCategoryManager
     {
         $tree = array();
 
-        $categories = $this->order_by_posmenu($this->categories);
+        $categories = $this->orderByPosmenu($this->categories);
 
         // First loop categories
         foreach ($categories as $category) {
@@ -660,7 +592,7 @@ class ContentCategoryManager
         }
 
         // Singleton version
-        $categories = $this->order_by_posmenu($this->categories);
+        $categories = $this->orderByPosmenu($this->categories);
 
         foreach ($categories as $category) {
             if ($category->fk_content_category == $categoryId
@@ -679,7 +611,7 @@ class ContentCategoryManager
      *
      * @return string the parent category name
      **/
-    public function get_father($category_name)
+    public function getFather($category_name)
     {
         if (is_null($this->categories)) {
             $sql = 'SELECT content2.name '
@@ -922,7 +854,7 @@ class ContentCategoryManager
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-        //$fullcat = $this->order_by_posmenu($this->categories);
+        //$fullcat = $this->orderByPosmenu($this->categories);
         $fullcat = $this->groupByType($this->categories);
 
         $parentCategories = array();
@@ -991,7 +923,7 @@ class ContentCategoryManager
      * @param  int $id Content ID
      * @return int Return category name
      */
-    public function get_category_name_by_content_id($id)
+    public function getCategoryNameByContentId($id)
     {
         if (!is_numeric($id)) {
             return null;

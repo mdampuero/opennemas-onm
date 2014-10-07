@@ -823,7 +823,7 @@ class ArticlesController extends Controller
         }
 
         // Fetch article category name
-        $category_name         = $ccm->get_name($article->category);
+        $category_name         = $ccm->getName($article->category);
         $actual_category_title = $ccm->getTitle($category_name);
 
         // Get advertisements for single article
@@ -858,7 +858,7 @@ class ArticlesController extends Controller
         $relat = $cm->cache->getAvailable($relat);
 
         foreach ($relat as $ril) {
-            $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
+            $ril->category_name = $ccm->getCategoryNameByContentId($ril->id);
         }
 
         // Machine suggested contents code -----------------------------

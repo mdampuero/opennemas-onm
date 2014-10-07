@@ -1628,11 +1628,11 @@ class ContentManager
         while (!$rs->EOF) {
             $items[] = array(
                 'title'          => $rs->fields['title'],
-                'catName'        => $ccm->get_name($rs->fields['category_id']),
+                'catName'        => $ccm->getName($rs->fields['category_id']),
                 'slug'           => $rs->fields['slug'],
                 'created'        => $rs->fields['created'],
                 'category_title' =>
-                    $ccm->getTitle($ccm->get_name($rs->fields['category_id'])),
+                    $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
                 'id'             => $rs->fields['pk_content'],
 
                 /* to filter in getInTime() */
@@ -1683,10 +1683,10 @@ class ContentManager
             if ($rsAux->fields['num'] <= 0 || $frontIncluded) {
                 $items[] = array(
                     'title'          => $rs->fields['title'],
-                    'catName'        => $ccm->get_name($rs->fields['category_id']),
+                    'catName'        => $ccm->getName($rs->fields['category_id']),
                     'slug'           => $rs->fields['slug'],
                     'created'        => $rs->fields['created'],
-                    'category_title' => $ccm->getTitle($ccm->get_name($rs->fields['category_id'])),
+                    'category_title' => $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
                     'id'             => $rs->fields['pk_content'],
                     'starttime'      => $rs->fields['starttime'],
                     'endtime'        => $rs->fields['endtime'],
@@ -2121,7 +2121,7 @@ class ContentManager
                 && $content->content_status == 1
                 && $content->in_litter == 0
             ) {
-                $content->category_name = $ccm->get_name($content->category);
+                $content->category_name = $ccm->getName($content->category);
                 $relatedContent[] = $content;
             }
             // }}}

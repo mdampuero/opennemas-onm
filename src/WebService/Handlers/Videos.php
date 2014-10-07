@@ -27,7 +27,7 @@ class Videos
         $this->validateInt(func_get_args());
 
         $ccm = new ContentCategoryManager();
-        $categoryName = $ccm->get_name($id);
+        $categoryName = $ccm->getName($id);
 
         $cm = new ContentManager();
         $video =  $cm->find_by_category_name(

@@ -108,7 +108,7 @@ class FilesController extends Controller
         $cm               = new \ContentManager();
         $total_num_photos = 0;
         $files            = $size = $sub_size = $num_photos = array();
-        $fullcat          = $this->ccm->order_by_posmenu($this->ccm->categories);
+        $fullcat          = $this->ccm->orderByPosmenu($this->ccm->categories);
 
         $num_sub_photos = array();
         $sub_files = array();
@@ -168,8 +168,8 @@ class FilesController extends Controller
                 foreach ($aux_categories as $ind) {
                     if (!empty ($sub_files[$ind][0])) {
                         foreach ($sub_files[$ind][0] as $value) {
-                            if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
-                                if ($ccm->get_id($ccm->get_father($value->catName))) {
+                            if ($v->pk_content_category == $ccm->get_id($ccm->getFather($value->catName))) {
+                                if ($ccm->get_id($ccm->getFather($value->catName))) {
                                     $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
                                 }
                             }
