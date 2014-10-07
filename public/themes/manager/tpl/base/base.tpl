@@ -54,7 +54,7 @@
     {/block}
 
 </head>
-<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init()">
+<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')">
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
