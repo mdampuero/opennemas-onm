@@ -6,22 +6,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for news agency.
+ *
+ * @package WebService
+ **/
 class Agency
 {
     public $restler;
 
     /**
-    * Get intance for contentManager
+    * Get instance for contentManager
     * This is used in some actions at lists function
     */
     public function __construct()
     {
-        $this->cm = new ContentManager();
+        $this->cm = new \ContentManager();
     }
 
     /**
-     * Get an xml with elements containig url to the NewsML content
+     * Get an xml with elements containing url to the NewsML content
      *
      * @param type $timeLimit the mtime limit for the last content 1 day by default
      *
@@ -54,7 +60,7 @@ class Agency
         $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
 
         $xml = new \XmlFormat();
-        XmlFormat::$root_name = 'contents';
+        \XmlFormat::$root_name = 'contents';
 
         $output = $xml->toArray($output);
 
@@ -76,7 +82,7 @@ class Agency
         $article = $er->find('Article', $id);
 
         if (is_null($article->id)) {
-            throw new RestException(400, 'parameter is not valid');
+            throw new \RestException(400, 'parameter is not valid');
         }
 
         $tpl = new \TemplateAdmin('admin');
@@ -163,10 +169,10 @@ class Agency
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new RestException(400, 'parameter is not a number');
+            throw new \RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new RestException(400, 'parameter is not finite');
+            throw new \RestException(400, 'parameter is not finite');
         }
     }
 }

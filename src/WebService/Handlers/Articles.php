@@ -6,12 +6,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+namespace WebService\Handlers;
+
 /**
- * Handles all the CRUD actions over Related contents.
+ * Handles REST actions for articles.
  *
- * @package    Onm
- * @subpackage Rest
- * @author     me
+ * @package WebService
  **/
 class Articles
 {
@@ -23,7 +23,7 @@ class Articles
     */
     public function __construct()
     {
-        $this->cm = new ContentManager();
+        $this->cm = new \ContentManager();
     }
 
     /**
@@ -39,10 +39,10 @@ class Articles
 
         $machineSearcher = getService('automatic_contents');
         $er              = getService('entity_repository');
-        $ccm             = ContentCategoryManager::get_instance();
+        $ccm             = \ContentCategoryManager::get_instance();
 
         // Resolve dirty Id
-        $articleId = Content::resolveID($id);
+        $articleId = \Content::resolveID($id);
 
         // Fetch the content to work with
         $article = $er->find('Article', $articleId);
@@ -83,7 +83,7 @@ class Articles
         }
 
         // Get Related contents
-        $relContent      = new RelatedContent();
+        $relContent      = new \RelatedContent();
         $relatedContents = array();
 
         $relationIDs     = $relContent->getRelationsForInner($articleId);
@@ -105,7 +105,7 @@ class Articles
                     $basePath = INSTANCE_MEDIA;
 
                     // Get file path for attachments
-                    $filePath = ContentManager::getFilePathFromId($content->id);
+                    $filePath = \ContentManager::getFilePathFromId($content->id);
 
                     // Compose the full url to the file
                     $content->fullFilePath = $basePath.FILE_DIR.$filePath;
@@ -131,7 +131,7 @@ class Articles
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
-                    'slug'     => StringUtils::getTitle($element['title']),
+                    'slug'     => \StringUtils::getTitle($element['title']),
                 )
             );
         }
@@ -151,10 +151,10 @@ class Articles
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new RestException(400, 'parameter is not a number');
+            throw new \RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new RestException(400, 'parameter is not finite');
+            throw new \RestException(400, 'parameter is not finite');
         }
     }
 }

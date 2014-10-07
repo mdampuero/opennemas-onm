@@ -10,10 +10,10 @@
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    2.1.4
+ * @version    2.1.7
  */
 class Restler {
-	const VERSION = '2.1.4';
+	const VERSION = '2.1.7';
 	/**
 	 * URL of the currently mapped service
 	 * @var string
@@ -242,8 +242,14 @@ class Restler {
 		}
 		$this->loadCache();
 		if(!$this->cached){
-			if(is_null($base_path))$base_path=strtolower($class_name);
-			$base_path = trim($base_path,'/');
+			if(is_null($base_path)){
+				$base_path=strtolower($class_name);
+				$index = strrpos($class_name, '\\');
+				if($index!==FALSE){
+					$base_path=substr($base_path, $index+1);
+				}
+			}else
+				$base_path = trim($base_path,'/');
 			if(strlen($base_path)>0)$base_path .= '/';
 			$this->generateMap($class_name, $base_path);
 		}
@@ -301,7 +307,7 @@ class Restler {
 	 */
 	public function handle () {
 		if(empty($this->format_map))$this->setSupportedFormats('JsonFormat');
-		$this->url = $this->getPath();
+		$this->url = strtolower($this->getPath());
 		$this->request_method = $this->getRequestMethod();
 		$this->response_format = $this->getResponseFormat();
 		$this->request_format = $this->getRequestFormat();
@@ -364,8 +370,8 @@ class Restler {
 		$responder = new $this->response();
 		$responder->restler = $this;
 		$this->applyClassMetadata($this->response, $responder, $o);
-		$result = $responder->__formatResponse($result);
 		if (isset($result) && $result !== NULL) {
+			$result = $responder->__formatResponse($result);
 			$this->sendData($result);
 		}
 	}
@@ -388,6 +394,7 @@ class Restler {
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Expires: 0");
 		header('Content-Type: ' . $this->response_format->getMIME());
+		//header('Content-Type: ' . $this->response_format->getMIME().'; charset=utf-8');
 		header("X-Powered-By: Luracast Restler v".Restler::VERSION);
 		die($data);
 	}
@@ -942,7 +949,7 @@ class JsonFormat implements iFormat
 	}
 	public function encode($data, $human_readable=FALSE){
 		return $human_readable ?
-		$this->json_format(@json_encode(object_to_array($data))) :
+		$this->json_format(json_encode(object_to_array($data))) :
 		json_encode(object_to_array($data));
 	}
 	public function decode($data) {
@@ -1078,7 +1085,6 @@ class DocParser {
 	}
 
 	private function parseLines($lines) {
-		//$desc = array();
 		foreach($lines as $line) {
 			$parsedLine = $this->parseLine($line); //Parse the line
 
@@ -1134,8 +1140,8 @@ class DocParser {
 		return true;
 	}
 	private function formatClass($value) {
-		$r = preg_split("[\(|\)]",$value);
-		if(is_array($r)){
+		$r = preg_split("[\(|\)]", $value);
+		if(count($r)>1){
 			$param = $r[0];
 			parse_str($r[1],$value);
 			foreach ($value as $key => $val) {

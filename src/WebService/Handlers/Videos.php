@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for videos.
+ *
+ * @package WebService
+ **/
 class Videos
 {
     public $restler;
@@ -26,7 +39,7 @@ class Videos
     {
         $this->validateInt(func_get_args());
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
         $video =  $cm->find_by_category(
             'Video',
             $id,
@@ -41,10 +54,10 @@ class Videos
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
-                throw new RestException(400, 'parameter is not a number');
+                throw new \RestException(400, 'parameter is not a number');
             }
             if (is_infinite($value)) {
-                throw new RestException(400, 'parameter is not finite');
+                throw new \RestException(400, 'parameter is not finite');
             }
         }
     }
