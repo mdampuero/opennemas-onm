@@ -28,28 +28,26 @@
 								<i class="fa fa-user"></i>
 							</span>
 							<input class="form-control" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name or username" type="text">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<span class="input-group-addon primary">
-								<i class="fa fa-users"></i>
-							</span>
-							<select ng-model="criteria.fk_user_group[0].value" ng-options="value.id as value.name for (key, value) in template.groups">
-								<option value="">{t}All{/t}</option>
-							</select>
-						</div>
-					</div>
-                    <div class="form-group">
-                        <button class="btn btn-white" ng-click="criteria = { name_like: [ { value: '', operator: 'like' } ], fk_user_group: [ { value: '' }] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; refresh()">
-                            <i class="fa fa-times"></i>
-                            {t}Clear{/t}
-                        </button>
-                        <button class="btn btn-white" ng-click="refresh()">
-                            <i class="fa fa-refresh"></i>
-                        </button>
+                            <div class="input-group-btn">
+    							<select class="btn btn-white form-control" ng-model="criteria.fk_user_group[0].value" ng-options="value.id as value.name for (key, value) in template.groups">
+    								<option value="">{t}All groups{/t}</option>
+    							</select>
+                                <select class="btn btn-white xmedium form-control" ng-model="epp">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                </select>
+                                <button class="btn btn-white" ng-click="criteria = { name_like: [ { value: '', operator: 'like' } ], fk_user_group: [ { value: '' }] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; epp = 25; refresh()">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                                <button class="btn btn-white" ng-click="refresh()">
+                                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-refresh': !loading }"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loading"></i>
                 </div>
 				<div class="action-buttons">
 					<div class="form-group" ng-if="selected.users.length > 0">

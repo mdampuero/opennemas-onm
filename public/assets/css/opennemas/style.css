@@ -30,6 +30,15 @@ a:hover {
 .input-group-addon.primary .arrow {
     color:#376092 !important;
 }
+
+.input-group select {
+    height: 37px !important;
+}
+
+.input-group .btn i.fa-refresh {
+    padding: 0 1px;
+}
+
 .btn-primary {
     background-color:#376092 !important;
     border: 1px solid #376092 !important;
