@@ -227,7 +227,7 @@ label {
                         <div class="control-group">
                             <label for="name" class="control-label">{t}Display name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" required="required" maxlength="50"/>
+                                <input type="text" id="name" name="name" value="{$user->name|escape:"html"|default:""}" class="input-xlarge required" required="required" maxlength="50"/>
                             </div>
                         </div>
                     </fieldset>
