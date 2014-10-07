@@ -119,7 +119,7 @@ class FilesController extends Controller
                 $this->ccm->countContentByType($v->pk_content_category, $this->contentType);
             $total_num_photos += $num_photos[$k];
 
-            $files[$v->pk_content_category] = $cm->find_all(
+            $files[$v->pk_content_category] = $cm->findAll(
                 'Attachment',
                 'fk_content_type = 3 AND category = '.$v->pk_content_category,
                 'ORDER BY created DESC'
@@ -133,7 +133,7 @@ class FilesController extends Controller
                         $total_num_photos +=
                             $num_sub_photos[$k][$child->pk_content_category];
                         $sub_files[$child->pk_content_category][] =
-                            $cm->find_all(
+                            $cm->findAll(
                                 'Attachment',
                                 'fk_content_type = 3 AND category = '.$child->pk_content_category,
                                 'ORDER BY created DESC'

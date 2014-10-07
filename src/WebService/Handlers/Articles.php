@@ -71,9 +71,9 @@ class Articles
             $videoInt = $er->find('Video', $article->fk_video2);
             $article->videoInt = $videoInt;
         } else {
-            $video =  $this->cm->find_by_category_name(
+            $video =  $this->cm->find_by_category(
                 'Video',
-                $article->category_name,
+                $article->actualCategoryId,
                 'contents.content_status=1',
                 'ORDER BY created DESC LIMIT 0 , 1'
             );

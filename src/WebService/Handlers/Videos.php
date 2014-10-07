@@ -26,13 +26,10 @@ class Videos
     {
         $this->validateInt(func_get_args());
 
-        $ccm = new ContentCategoryManager();
-        $categoryName = $ccm->getName($id);
-
         $cm = new ContentManager();
-        $video =  $cm->find_by_category_name(
+        $video =  $cm->find_by_category(
             'Video',
-            $categoryName,
+            $id,
             'contents.content_status=1',
             'ORDER BY created LIMIT 1'
         );
