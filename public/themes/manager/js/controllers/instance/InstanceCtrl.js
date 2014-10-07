@@ -107,6 +107,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          * Creates a new instance.
          */
         $scope.save = function() {
+            if ($scope.instanceForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
@@ -157,6 +163,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          * Updates an instance.
          */
         $scope.update = function() {
+            if ($scope.instanceForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {

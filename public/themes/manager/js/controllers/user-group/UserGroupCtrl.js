@@ -123,6 +123,12 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * Creates a new user group.
          */
         $scope.save = function() {
+            if ($scope.groupForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             itemService.save('manager_ws_user_group_create', $scope.group)
@@ -209,6 +215,12 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * Updates an user group.
          */
         $scope.update = function() {
+            if ($scope.groupForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             itemService.update('manager_ws_user_group_update', $scope.group.id,

@@ -32,6 +32,12 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
          * Creates a new user.
          */
         $scope.save = function() {
+            if ($scope.userForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.user.meta.paywall_time_limit) {
@@ -59,6 +65,12 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
          * Updates an user.
          */
         $scope.update = function() {
+            if ($scope.userForm.$invalid) {
+                $scope.formValidated = 1;
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.user.meta.paywall_time_limit) {

@@ -33,10 +33,10 @@
                 </span>
             </h3>
             <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving || instanceForm.$invalid || instance.domains.length == 0" ng-if="!instance.id">
+                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving || instanceForm.$invalid || instance.domains.length == 0" ng-if="instance.id">
+                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
             </div>
@@ -91,10 +91,12 @@
                             <span ng-show="instanceForm.name.$invalid">*</span>
                         </label>
                         <span class="help">{t}(Human readable name){/t}</span>
-                        <div class="controls input-with-icon right" ng-class="{ 'error-control': instanceForm.name.$dirty && instanceForm.name.$invalid, 'success-control': instanceForm.name.$dirty && instanceForm.name.$valid }">
-                            <i class="fa" ng-class="{ 'fa-exclamation': instanceForm.name.$dirty && instanceForm.name.$invalid, 'fa-check': instanceForm.name.$dirty && instanceForm.name.$valid }"></i>
+                        <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.name.$invalid }">
                             <input class="form-control" name="name" ng-model="instance.name" required type="text">
                         </div>
+                        <span class="error" ng-show="formValidated && instanceForm.name.$invalid">
+                            <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label for="template" class="form-label">{t}Template{/t}</label>
@@ -151,11 +153,16 @@
                     </div>
                     <div class="form-group">
                         <div class="controls">
-                            <div class="input-group new-domain">
+                            <div class="input-group new-domain" ng-class="{ 'error-control': formValidated && instance.domains.length == 0 }">
                                 <input class="form-control " ng-model="new_domain" type="text">
                                 <div class="input-group-btn">
                                     <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
                                 </div>
+                            </div>
+                            <div class="new-domain">
+                                <span class="error" ng-show="formValidated && instance.domains.length == 0">
+                                    <label for="form1Amount" class="error">{t}Instance domains cannot be empty.{/t}</label>
+                                </span>
                             </div>
                         </div>
                     </div>
