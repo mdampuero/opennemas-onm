@@ -13,7 +13,7 @@ use Composer\Autoload\ClassLoader;
 
 $rootDir = empty($_SERVER['DOCUMENT_ROOT']) ? __DIR__ : $_SERVER['DOCUMENT_ROOT'];
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath($rootDir. '/../'));
+    || define('APPLICATION_PATH', dirname($rootDir));
 
 // Paths settings
 define('SRC_PATH',         APPLICATION_PATH.'/src/');
@@ -26,6 +26,7 @@ define('APP_PATH',         APPLICATION_PATH.'/app/');
 define('SITE_WS_API_PATH', SRC_PATH.'/WebService/Handlers/');
 define('PP_CONFIG_PATH',   APP_PATH.'/config/');
 
+define('SMARTY_DIR', SITE_VENDOR_PATH.'smarty/smarty/distribution/libs/');
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
