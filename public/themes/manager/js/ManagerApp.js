@@ -51,16 +51,19 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
         }];
     }).config(function ($translateProvider, paginationConfig) {
         $translateProvider.translations('en', {
-            Next:     'Next',
-            Previous: 'Previous',
+            Next:       'Next',
+            Previous:   'Previous',
+            FormErrors: 'There are errors in the form'
         });
         $translateProvider.translations('es', {
-            Next:     'Siguiente',
-            Previous: 'Anterior',
+            Next:       'Siguiente',
+            Previous:   'Anterior',
+            FormErrors: 'El formulario contiene errores'
         });
         $translateProvider.translations('gl', {
-            Next:     'Seguinte',
-            Previous: 'Anterior',
+            Next:       'Seguinte',
+            Previous:   'Anterior',
+            FormErrors: 'O formulario contén errores'
         });
 
         $translateProvider.preferredLanguage('en');
@@ -257,4 +260,4 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
             packages: ['corechart'],
             language: 'fr'
         }
-    });;
+    });
