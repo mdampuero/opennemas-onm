@@ -26,7 +26,7 @@ define('APP_PATH',         APPLICATION_PATH.'/app/');
 define('SITE_WS_API_PATH', SRC_PATH.'/WebService/Handlers/');
 define('PP_CONFIG_PATH',   APP_PATH.'/config/');
 
-define('SMARTY_DIR', SITE_VENDOR_PATH.'smarty/smarty/distribution/libs/');
+define('SMARTY_DIR', SITE_VENDOR_PATH.'smarty/smarty/libs/');
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
