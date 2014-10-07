@@ -1,7 +1,7 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
-    '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($filter, $location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * The instance object.
          *
@@ -110,6 +110,11 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             if ($scope.instanceForm.$invalid) {
                 $scope.formValidated = 1;
 
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
                 return false;
             }
 
@@ -165,6 +170,11 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.update = function() {
             if ($scope.instanceForm.$invalid) {
                 $scope.formValidated = 1;
+
+                messenger.post({
+                    message: 'There are errors in the form.',
+                    type:    'error'
+                });
 
                 return false;
             }

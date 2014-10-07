@@ -8,8 +8,8 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserCtrl', [
-    '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($filter, $location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * List of available users.
          *
@@ -34,6 +34,11 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
         $scope.save = function() {
             if ($scope.userForm.$invalid) {
                 $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
 
                 return false;
             }
@@ -67,6 +72,11 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
         $scope.update = function() {
             if ($scope.userForm.$invalid) {
                 $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
 
                 return false;
             }
