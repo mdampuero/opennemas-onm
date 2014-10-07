@@ -50,7 +50,7 @@
                     <div class="controls" ng-class="{ 'error-control': formValidated && groupForm.name.$invalid }">
                         <input class="form-control" name="name" ng-model="group.name" required type="text">
                         <span class="error" ng-show="formValidated && groupForm.name.$invalid">
-                            <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                            <label for="form1Amount" class="error">{t}This field is required{/t}</label>
                         </span>
                     </div>
                 </div>

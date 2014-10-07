@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-15 09:41+0000\n"
-"PO-Revision-Date: 2014-09-15 11:45+0200\n"
+"POT-Creation-Date: 2014-10-07 10:15+0000\n"
+"PO-Revision-Date: 2014-10-07 12:16+0200\n"
 "Last-Translator: Diego Blanco <diego@openhost.es>\n"
 "Language-Team: Openhost S.L.\n"
 "Language: gl\n"
@@ -163,7 +163,7 @@ msgstr "Busca interna"
 #: public/themes/admin/tpl/comment/read.tpl:58
 #: public/themes/admin/tpl/login/recover_pass.tpl:91
 #: public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl:5
-#: public/themes/manager/tpl/user/item.tpl:64
+#: public/themes/manager/tpl/user/item.tpl:68
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -229,10 +229,10 @@ msgstr "Activar/desactivar"
 #: public/themes/admin/tpl/advertisement/content-provider/advertisement.tpl:20
 #: public/themes/admin/tpl/comment/list.tpl:134
 #: public/themes/admin/tpl/instance_sync/list.tpl:62
-#: public/themes/manager/tpl/instances/list.tpl:382
-#: public/themes/manager/tpl/instances/list.tpl:386
-#: public/themes/manager/tpl/user_group/list.tpl:96
-#: public/themes/manager/tpl/user/list.tpl:118
+#: public/themes/manager/tpl/instances/list.tpl:391
+#: public/themes/manager/tpl/instances/list.tpl:395
+#: public/themes/manager/tpl/user_group/list.tpl:108
+#: public/themes/manager/tpl/user/list.tpl:127
 msgid "Edit"
 msgstr "Editar"
 
@@ -241,9 +241,9 @@ msgstr "Editar"
 msgid "Remove"
 msgstr "Eliminar"
 
-#: public/themes/manager/tpl/instances/list.tpl:85
-#: public/themes/manager/tpl/user_group/list.tpl:61
-#: public/themes/manager/tpl/user/list.tpl:73
+#: public/themes/manager/tpl/instances/list.tpl:94
+#: public/themes/manager/tpl/user_group/list.tpl:70
+#: public/themes/manager/tpl/user/list.tpl:82
 msgid "Create"
 msgstr "Crear"
 
@@ -268,7 +268,7 @@ msgstr "Publicar/despublicar"
 #: public/themes/admin/tpl/letter/list.tpl:40
 #: public/themes/admin/tpl/letter/content-provider/letter.tpl:46
 #: public/themes/admin/tpl/special/list.tpl:69
-#: public/themes/admin/tpl/opinion/list.tpl:83
+#: public/themes/admin/tpl/opinion/list.tpl:85
 #: public/themes/admin/tpl/opinion/content-provider/opinion.tpl:52
 #: public/themes/admin/tpl/opinion/author_list.tpl:23
 #: public/themes/admin/tpl/static_pages/list.tpl:38
@@ -293,11 +293,11 @@ msgstr "Publicar/despublicar"
 #: public/themes/admin/tpl/comment/list.tpl:51
 #: public/themes/admin/tpl/comment/read.tpl:32
 #: public/themes/admin/tpl/instance_sync/list.tpl:66
-#: public/themes/manager/tpl/instances/list.tpl:77
-#: public/themes/manager/tpl/user_group/list.tpl:53
-#: public/themes/manager/tpl/user_group/list.tpl:99
-#: public/themes/manager/tpl/user/list.tpl:65
-#: public/themes/manager/tpl/user/list.tpl:121
+#: public/themes/manager/tpl/instances/list.tpl:86
+#: public/themes/manager/tpl/user_group/list.tpl:62
+#: public/themes/manager/tpl/user_group/list.tpl:111
+#: public/themes/manager/tpl/user/list.tpl:74
+#: public/themes/manager/tpl/user/list.tpl:130
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -651,10 +651,6 @@ msgstr "Non se puido atopar un álbum co identificador «%d»."
 
 msgid "Album delete successfully."
 msgstr "Álbum eliminado correctamente."
-
-#, php-format
-msgid "Unable to find the album with the id \"%d\""
-msgstr "Non se puido atopar o álbum co identificador «%d»"
 
 msgid "You don't have enough privileges for modify this album."
 msgstr "Non tes permisos dabondo para modificar este álbum."
@@ -1071,7 +1067,6 @@ msgstr "Sen posición"
 msgid "Menu '%s' created successfully."
 msgstr "Menú «%s» creado correctamente."
 
-#, php-format
 msgid "Unable to create the menu"
 msgstr "Non se puido crear o menú"
 
@@ -1532,8 +1527,8 @@ msgstr "Xestor de portada"
 #: public/themes/admin/tpl/category/list.tpl:214
 #: public/themes/admin/tpl/trash/partials/_pills.tpl:20
 #: public/themes/admin/tpl/advertisement/list.tpl:12
-#: public/themes/manager/tpl/instances/list.tpl:143
-#: public/themes/manager/tpl/instances/list.tpl:269
+#: public/themes/manager/tpl/instances/list.tpl:152
+#: public/themes/manager/tpl/instances/list.tpl:278
 msgid "Advertisements"
 msgstr "Publicidade"
 
@@ -1541,9 +1536,9 @@ msgstr "Publicidade"
 #: public/themes/admin/tpl/widget/list.tpl:12
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:53
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:156
-#: public/themes/manager/tpl/instances/list.tpl:159
-#: public/themes/manager/tpl/instances/list.tpl:297
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:168
+#: public/themes/manager/tpl/instances/list.tpl:306
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Widgets"
 msgstr "Widgets"
 
@@ -1552,8 +1547,8 @@ msgid "Menus"
 msgstr "Menús"
 
 #: public/themes/admin/tpl/advertisement/new.tpl:195
-#: public/themes/manager/tpl/instances/list.tpl:131
-#: public/themes/manager/tpl/instances/list.tpl:251
+#: public/themes/manager/tpl/instances/list.tpl:140
+#: public/themes/manager/tpl/instances/list.tpl:260
 msgid "Contents"
 msgstr "Contidos"
 
@@ -1568,9 +1563,9 @@ msgstr "Contidos"
 #: public/themes/admin/tpl/article/related/_related_provider.tpl:11
 #: public/themes/admin/tpl/trash/partials/_pills.tpl:5
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:6
-#: public/themes/manager/tpl/instances/list.tpl:135
-#: public/themes/manager/tpl/instances/list.tpl:257
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:144
+#: public/themes/manager/tpl/instances/list.tpl:266
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Articles"
 msgstr "Artigos"
 
@@ -1582,9 +1577,9 @@ msgstr "Artigos"
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:12
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:58
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:161
-#: public/themes/manager/tpl/instances/list.tpl:139
-#: public/themes/manager/tpl/instances/list.tpl:263
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:148
+#: public/themes/manager/tpl/instances/list.tpl:272
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Opinions"
 msgstr "Artigos de opinión"
 
@@ -1612,9 +1607,9 @@ msgstr "Comentarios"
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:182
 #: public/themes/admin/tpl/advertisement/partials/advertisement_positions_poll_inner.tpl:6
 #: public/themes/admin/tpl/advertisement/partials/advertisement_positions_poll.tpl:6
-#: public/themes/manager/tpl/instances/list.tpl:171
-#: public/themes/manager/tpl/instances/list.tpl:315
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:180
+#: public/themes/manager/tpl/instances/list.tpl:324
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Polls"
 msgstr "Enquisas"
 
@@ -1644,7 +1639,7 @@ msgstr "Multimedia"
 #: public/themes/admin/tpl/trash/partials/_pills.tpl:36
 #: public/themes/admin/tpl/image/list.tpl:12
 #: public/themes/admin/tpl/image/config.tpl:31
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Images"
 msgstr "Imaxes"
 
@@ -1654,7 +1649,7 @@ msgstr "Imaxes"
 #: public/themes/admin/tpl/files/list.tpl:12
 #: public/themes/admin/tpl/files/statistics.tpl:7
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:32
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Files"
 msgstr "Ficheiros"
 
@@ -1667,9 +1662,9 @@ msgstr "Ficheiros"
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:63
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:166
 #: public/themes/admin/tpl/news_agency/show.tpl:55
-#: public/themes/manager/tpl/instances/list.tpl:155
-#: public/themes/manager/tpl/instances/list.tpl:291
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:164
+#: public/themes/manager/tpl/instances/list.tpl:300
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Videos"
 msgstr "Videos"
 
@@ -1682,9 +1677,9 @@ msgstr "Videos"
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:17
 #: public/themes/admin/tpl/common/content_provider/content_provider.tpl:69
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:172
-#: public/themes/manager/tpl/instances/list.tpl:147
-#: public/themes/manager/tpl/instances/list.tpl:275
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:156
+#: public/themes/manager/tpl/instances/list.tpl:284
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Albums"
 msgstr "Álbumes"
 
@@ -1719,18 +1714,19 @@ msgstr "Boletin de novas"
 #: public/themes/admin/tpl/keywords/list.tpl:7
 #: public/themes/admin/tpl/covers/new.tpl:91
 #: public/themes/admin/tpl/covers/read.tpl:76
+#: public/themes/admin/tpl/book/new.tpl:187
 #: public/themes/admin/tpl/image/_partials/photo_data.tpl:49
 #: public/themes/admin/tpl/advertisement/new.tpl:154
 msgid "Keywords"
 msgstr "Palabras chave"
 
-#: public/themes/admin/tpl/article/new.tpl:290
+#: public/themes/admin/tpl/article/new.tpl:294
 #: public/themes/admin/tpl/acl/user/new.tpl:197
 #: public/themes/admin/tpl/paywall/list.tpl:66
 #: public/themes/admin/tpl/paywall/users.tpl:7
 #: public/themes/admin/tpl/paywall/settings.tpl:65
 #: public/themes/admin/tpl/paywall/purchases.tpl:7
-#: public/themes/manager/tpl/user/item.tpl:126
+#: public/themes/manager/tpl/user/item.tpl:132
 msgid "Paywall"
 msgstr "Paywall"
 
@@ -1767,7 +1763,7 @@ msgstr "Importador de XML"
 #: public/themes/admin/tpl/special/config.tpl:7
 #: public/themes/admin/tpl/category/list.tpl:40
 #: public/themes/admin/tpl/category/config.tpl:7
-#: public/themes/admin/tpl/opinion/list.tpl:35
+#: public/themes/admin/tpl/opinion/list.tpl:37
 #: public/themes/admin/tpl/opinion/config.tpl:26
 #: public/themes/admin/tpl/album/list.tpl:28
 #: public/themes/admin/tpl/acl/user/new.tpl:191
@@ -1783,7 +1779,7 @@ msgstr "Importador de XML"
 #: public/themes/admin/tpl/comment/disqus/config.tpl:8
 #: public/themes/admin/tpl/comment/config.tpl:9
 #: public/themes/manager/tpl/base/base.tpl:174
-#: public/themes/manager/tpl/user/item.tpl:103
+#: public/themes/manager/tpl/user/item.tpl:109
 msgid "Settings"
 msgstr "Preferencias"
 
@@ -1795,8 +1791,8 @@ msgid "Users & Groups"
 msgstr "Usuarios e grupos"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:11
-#: public/themes/manager/tpl/instances/list.tpl:191
-#: public/themes/manager/tpl/instances/list.tpl:345
+#: public/themes/manager/tpl/instances/list.tpl:200
+#: public/themes/manager/tpl/instances/list.tpl:354
 #: public/themes/manager/tpl/base/base.tpl:180
 #: public/themes/manager/tpl/user/list.tpl:5
 #: public/themes/manager/tpl/user/list.tpl:15
@@ -2000,8 +1996,8 @@ msgstr "A información foi enviada"
 #: public/themes/admin/tpl/paywall/settings.tpl:174
 #: public/themes/admin/tpl/widget/list.tpl:91
 #: public/themes/admin/tpl/menues/new.tpl:54
-#: public/themes/manager/tpl/instances/list.tpl:107
-#: public/themes/manager/tpl/instances/list.tpl:215
+#: public/themes/manager/tpl/instances/list.tpl:116
+#: public/themes/manager/tpl/instances/list.tpl:224
 msgid "Name"
 msgstr "Nome"
 
@@ -2213,6 +2209,10 @@ msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+#, fuzzy, php-format
+msgid "Error while updating the instance with id \"%s\""
+msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
+
 msgid "User saved successfully"
 msgstr "Usuario gardado con éxito"
 
@@ -2320,17 +2320,22 @@ msgstr "Opcións avanzadas de artigo"
 msgid "Advanced frontpage managers"
 msgstr "Xestor avanzado de portadas"
 
+#: public/themes/admin/tpl/opinion/list.tpl:27
+#: public/themes/admin/tpl/opinion/content-provider/opinion.tpl:13
+msgid "Blog"
+msgstr "Blog"
+
 #: public/themes/admin/tpl/poll/list.tpl:104
 #: public/themes/admin/tpl/poll/new.tpl:119
 #: public/themes/admin/tpl/video/list.tpl:116
-#: public/themes/admin/tpl/video/new.tpl:74
+#: public/themes/admin/tpl/video/new.tpl:80
 #: public/themes/admin/tpl/tpl_manager/tpl_manager.tpl:116
 #: public/themes/admin/tpl/special/list.tpl:114
 #: public/themes/admin/tpl/special/new.tpl:106
 #: public/themes/admin/tpl/article/list.tpl:69
-#: public/themes/admin/tpl/article/new.tpl:220
+#: public/themes/admin/tpl/article/new.tpl:219
 #: public/themes/admin/tpl/album/list.tpl:108
-#: public/themes/admin/tpl/album/new.tpl:198
+#: public/themes/admin/tpl/album/new.tpl:202
 #: public/themes/admin/tpl/search_advanced/partials/_list.tpl:28
 #: public/themes/admin/tpl/files/list.tpl:90
 #: public/themes/admin/tpl/files/list.tpl:139
@@ -2339,6 +2344,7 @@ msgstr "Xestor avanzado de portadas"
 #: public/themes/admin/tpl/covers/new.tpl:57
 #: public/themes/admin/tpl/covers/read.tpl:102
 #: public/themes/admin/tpl/book/list.tpl:84
+#: public/themes/admin/tpl/book/new.tpl:149
 #: public/themes/admin/tpl/advertisement/list.tpl:72
 #: public/themes/admin/tpl/advertisement/new.tpl:272
 #: public/themes/admin/tpl/news_agency/import_select_category.tpl:48
@@ -2361,9 +2367,9 @@ msgid "Frontpages layout"
 msgstr "Disposicion de portadas"
 
 #: public/themes/admin/tpl/trash/partials/_pills.tpl:15
-#: public/themes/manager/tpl/instances/list.tpl:175
-#: public/themes/manager/tpl/instances/list.tpl:321
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:184
+#: public/themes/manager/tpl/instances/list.tpl:330
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Letters"
 msgstr "Cartas"
 
@@ -2389,9 +2395,9 @@ msgid "Static library"
 msgstr "Hemeroteca de estáticos"
 
 #: public/themes/admin/tpl/static_pages/list.tpl:11
-#: public/themes/manager/tpl/instances/list.tpl:163
-#: public/themes/manager/tpl/instances/list.tpl:303
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:172
+#: public/themes/manager/tpl/instances/list.tpl:312
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Static pages"
 msgstr "Páxinas estáticas"
 
@@ -2562,7 +2568,7 @@ msgstr "Si, eliminar"
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:141
 #: public/themes/admin/tpl/book/modals/_modalDelete.tpl:12
 #: public/themes/admin/tpl/book/modals/_modalBatchDelete.tpl:12
-#: public/themes/admin/tpl/book/new.tpl:159
+#: public/themes/admin/tpl/book/new.tpl:180
 #: public/themes/admin/tpl/image/modals/_modalDelete.tpl:12
 #: public/themes/admin/tpl/image/modals/_modalBatchDelete.tpl:12
 #: public/themes/admin/tpl/advertisement/config.tpl:63
@@ -2684,7 +2690,7 @@ msgstr "Configuración do módulo «Álbum»"
 #: public/themes/admin/tpl/video/list.tpl:34
 #: public/themes/admin/tpl/letter/list.tpl:18
 #: public/themes/admin/tpl/special/list.tpl:34
-#: public/themes/admin/tpl/opinion/list.tpl:43
+#: public/themes/admin/tpl/opinion/list.tpl:45
 #: public/themes/admin/tpl/opinion/author_list.tpl:16
 #: public/themes/admin/tpl/static_pages/list.tpl:16
 #: public/themes/admin/tpl/article/list.tpl:18
@@ -2709,7 +2715,7 @@ msgstr "Accións en lote"
 #: public/themes/admin/tpl/video/list.tpl:41
 #: public/themes/admin/tpl/letter/list.tpl:25
 #: public/themes/admin/tpl/special/list.tpl:41
-#: public/themes/admin/tpl/opinion/list.tpl:51
+#: public/themes/admin/tpl/opinion/list.tpl:53
 #: public/themes/admin/tpl/static_pages/list.tpl:23
 #: public/themes/admin/tpl/article/list.tpl:25
 #: public/themes/admin/tpl/album/list.tpl:43
@@ -2725,7 +2731,7 @@ msgstr "Publicar"
 #: public/themes/admin/tpl/video/list.tpl:47
 #: public/themes/admin/tpl/letter/list.tpl:31
 #: public/themes/admin/tpl/special/list.tpl:47
-#: public/themes/admin/tpl/opinion/list.tpl:57
+#: public/themes/admin/tpl/opinion/list.tpl:59
 #: public/themes/admin/tpl/static_pages/list.tpl:29
 #: public/themes/admin/tpl/article/list.tpl:31
 #: public/themes/admin/tpl/album/list.tpl:49
@@ -2743,9 +2749,9 @@ msgstr "Despublicar"
 #: public/themes/admin/tpl/video/list.tpl:88
 #: public/themes/admin/tpl/special/list.tpl:79
 #: public/themes/admin/tpl/special/list.tpl:80
-#: public/themes/admin/tpl/opinion/list.tpl:95
-#: public/themes/admin/tpl/opinion/list.tpl:96
 #: public/themes/admin/tpl/opinion/list.tpl:97
+#: public/themes/admin/tpl/opinion/list.tpl:98
+#: public/themes/admin/tpl/opinion/list.tpl:99
 #: public/themes/admin/tpl/album/list.tpl:81
 #: public/themes/admin/tpl/album/list.tpl:82
 #: public/themes/admin/tpl/files/list.tpl:66
@@ -2881,7 +2887,7 @@ msgstr "Cargando"
 #: public/themes/admin/tpl/static_pages/list.tpl:82
 #: public/themes/admin/tpl/static_pages/new.tpl:30
 #: public/themes/admin/tpl/article/list.tpl:120
-#: public/themes/admin/tpl/article/new.tpl:172
+#: public/themes/admin/tpl/article/new.tpl:171
 #: public/themes/admin/tpl/trash/list.tpl:63
 #: public/themes/admin/tpl/album/list.tpl:157
 #: public/themes/admin/tpl/album/new.tpl:167
@@ -2895,6 +2901,7 @@ msgstr "Cargando"
 #: public/themes/admin/tpl/menues/list.tpl:56
 #: public/themes/admin/tpl/menues/partials/_menu_item.tpl:48
 #: public/themes/admin/tpl/book/list.tpl:132
+#: public/themes/admin/tpl/book/new.tpl:81
 #: public/themes/admin/tpl/advertisement/list.tpl:133
 #: public/themes/admin/tpl/advertisement/new.tpl:147
 #: public/themes/admin/tpl/news_agency/list.tpl:99
@@ -2919,8 +2926,7 @@ msgstr "Sección"
 #: public/themes/admin/tpl/covers/list.tpl:170
 #: public/themes/admin/tpl/covers/new.tpl:108
 #: public/themes/admin/tpl/covers/read.tpl:140
-#: public/themes/admin/tpl/book/new.tpl:113
-#: public/themes/admin/tpl/book/new.tpl:116
+#: public/themes/admin/tpl/book/new.tpl:128
 #: public/themes/admin/tpl/image/_partials/photo_data.tpl:65
 #: public/themes/admin/tpl/news_agency/list.tpl:101
 msgid "Date"
@@ -2984,10 +2990,10 @@ msgstr "No hai enquisas dispoñibeis."
 #: public/themes/admin/tpl/advertisement/list.tpl:198
 #: public/themes/admin/tpl/news_agency/list.tpl:165
 #: public/themes/admin/tpl/comment/list.tpl:156
-#: public/themes/manager/tpl/instances/list.tpl:45
-#: public/themes/manager/tpl/instances/list.tpl:506
-#: public/themes/manager/tpl/user_group/list.tpl:109
-#: public/themes/manager/tpl/user/list.tpl:146
+#: public/themes/manager/tpl/instances/list.tpl:54
+#: public/themes/manager/tpl/instances/list.tpl:515
+#: public/themes/manager/tpl/user_group/list.tpl:121
+#: public/themes/manager/tpl/user/list.tpl:155
 msgid "Showing"
 msgstr "Mostrando"
 
@@ -3013,10 +3019,10 @@ msgstr "Mostrando"
 #: public/themes/admin/tpl/advertisement/list.tpl:198
 #: public/themes/admin/tpl/news_agency/list.tpl:165
 #: public/themes/admin/tpl/comment/list.tpl:156
-#: public/themes/manager/tpl/instances/list.tpl:45
-#: public/themes/manager/tpl/instances/list.tpl:506
-#: public/themes/manager/tpl/user_group/list.tpl:109
-#: public/themes/manager/tpl/user/list.tpl:146
+#: public/themes/manager/tpl/instances/list.tpl:54
+#: public/themes/manager/tpl/instances/list.tpl:515
+#: public/themes/manager/tpl/user_group/list.tpl:121
+#: public/themes/manager/tpl/user/list.tpl:155
 msgid "of"
 msgstr "de"
 
@@ -3113,7 +3119,7 @@ msgstr "Enviar ao lixo"
 #: public/themes/admin/tpl/static_pages/new.tpl:118
 #: public/themes/admin/tpl/article/new.tpl:51
 #: public/themes/admin/tpl/album/new.tpl:58
-#: public/themes/admin/tpl/widget/new.tpl:123
+#: public/themes/admin/tpl/widget/new.tpl:176
 msgid "Write a tag and press Enter..."
 msgstr "Escribe unha etiqueta e preme Intro…"
 
@@ -3149,7 +3155,7 @@ msgstr "Creando enquisa"
 #: public/themes/admin/tpl/opinion/config.tpl:30
 #: public/themes/admin/tpl/static_pages/new.tpl:11
 #: public/themes/admin/tpl/article/new.tpl:112
-#: public/themes/admin/tpl/article/new.tpl:121
+#: public/themes/admin/tpl/article/new.tpl:120
 #: public/themes/admin/tpl/album/modals/_edit_album_photo.tpl:18
 #: public/themes/admin/tpl/album/new.tpl:137
 #: public/themes/admin/tpl/album/new.tpl:143
@@ -3165,8 +3171,8 @@ msgstr "Creando enquisa"
 #: public/themes/admin/tpl/frontpagemanager/modals/_modal_customize_content.tpl:162
 #: public/themes/admin/tpl/menues/new.tpl:33
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:94
-#: public/themes/admin/tpl/book/new.tpl:42
-#: public/themes/admin/tpl/book/new.tpl:50
+#: public/themes/admin/tpl/book/new.tpl:53
+#: public/themes/admin/tpl/book/new.tpl:61
 #: public/themes/admin/tpl/image/new.tpl:49
 #: public/themes/admin/tpl/image/new.tpl:51
 #: public/themes/admin/tpl/image/config.tpl:36
@@ -3201,7 +3207,7 @@ msgstr "Gardar"
 #: public/themes/admin/tpl/opinion/author_new.tpl:84
 #: public/themes/admin/tpl/static_pages/new.tpl:16
 #: public/themes/admin/tpl/static_pages/new.tpl:17
-#: public/themes/admin/tpl/article/new.tpl:135
+#: public/themes/admin/tpl/article/new.tpl:134
 #: public/themes/admin/tpl/album/new.tpl:151
 #: public/themes/admin/tpl/acl/user_group/new.tpl:27
 #: public/themes/admin/tpl/acl/user_group/new.tpl:28
@@ -3213,7 +3219,7 @@ msgstr "Gardar"
 #: public/themes/admin/tpl/widget/new.tpl:20
 #: public/themes/admin/tpl/menues/new.tpl:38
 #: public/themes/admin/tpl/menues/new.tpl:39
-#: public/themes/admin/tpl/book/new.tpl:58
+#: public/themes/admin/tpl/book/new.tpl:69
 #: public/themes/admin/tpl/image/new.tpl:58
 #: public/themes/admin/tpl/image/new.tpl:63
 #: public/themes/admin/tpl/image/create.tpl:18
@@ -3239,7 +3245,7 @@ msgstr "Subtitulo"
 #: public/themes/admin/tpl/video/new.tpl:69
 #: public/themes/admin/tpl/opinion/new.tpl:152
 #: public/themes/admin/tpl/static_pages/new.tpl:50
-#: public/themes/admin/tpl/article/new.tpl:197
+#: public/themes/admin/tpl/article/new.tpl:196
 #: public/themes/admin/tpl/album/new.tpl:192
 #: public/themes/admin/tpl/widget/new.tpl:61
 msgid "Attributes"
@@ -3258,16 +3264,19 @@ msgstr "Atributos"
 #: public/themes/admin/tpl/category/list.tpl:336
 #: public/themes/admin/tpl/category/new.tpl:112
 #: public/themes/admin/tpl/opinion/new.tpl:155
-#: public/themes/admin/tpl/article/new.tpl:201
+#: public/themes/admin/tpl/article/new.tpl:200
 #: public/themes/admin/tpl/album/new.tpl:194
 #: public/themes/admin/tpl/covers/new.tpl:65
 #: public/themes/admin/tpl/covers/read.tpl:120
+#: public/themes/admin/tpl/book/new.tpl:176
 #: public/themes/admin/tpl/advertisement/list.tpl:137
 msgid "Available"
 msgstr "Dispoñibel"
 
 #: public/themes/admin/tpl/poll/new.tpl:109
+#: public/themes/admin/tpl/video/new.tpl:76
 #: public/themes/admin/tpl/opinion/new.tpl:161
+#: public/themes/admin/tpl/album/new.tpl:198
 msgid "Allow comments"
 msgstr "Permitir comentarios"
 
@@ -3279,9 +3288,9 @@ msgstr "Permitir comentarios"
 #: public/themes/admin/tpl/static_pages/new.tpl:67
 #: public/themes/admin/tpl/article/partials/_images.tpl:130
 #: public/themes/admin/tpl/article/partials/_images.tpl:164
-#: public/themes/admin/tpl/article/new.tpl:257
-#: public/themes/admin/tpl/album/new.tpl:216
-#: public/themes/admin/tpl/widget/new.tpl:76
+#: public/themes/admin/tpl/article/new.tpl:261
+#: public/themes/admin/tpl/album/new.tpl:225
+#: public/themes/admin/tpl/widget/new.tpl:81
 #: public/themes/admin/tpl/common/images_provider.tpl:52
 msgid "Tags"
 msgstr "Etiquetas"
@@ -3424,7 +3433,7 @@ msgstr "Configuración do módulo «Video»"
 
 #: public/themes/admin/tpl/video/list.tpl:54
 #: public/themes/admin/tpl/special/list.tpl:54
-#: public/themes/admin/tpl/opinion/list.tpl:66
+#: public/themes/admin/tpl/opinion/list.tpl:68
 #: public/themes/admin/tpl/opinion/partials/_opinion_list.tpl:42
 #: public/themes/admin/tpl/album/list.tpl:56
 #: public/themes/admin/tpl/covers/list.tpl:58
@@ -3433,7 +3442,7 @@ msgstr "En portada"
 
 #: public/themes/admin/tpl/video/list.tpl:60
 #: public/themes/admin/tpl/special/list.tpl:60
-#: public/themes/admin/tpl/opinion/list.tpl:72
+#: public/themes/admin/tpl/opinion/list.tpl:74
 #: public/themes/admin/tpl/album/list.tpl:62
 #: public/themes/admin/tpl/covers/list.tpl:64
 msgid "Drop from home"
@@ -3464,6 +3473,7 @@ msgstr "No hai vídeos dispoñibeis."
 #: public/themes/admin/tpl/files/new.tpl:63
 #: public/themes/admin/tpl/widget/new.tpl:52
 #: public/themes/admin/tpl/common/images_provider.tpl:48
+#: public/themes/admin/tpl/book/new.tpl:142
 #: public/themes/admin/tpl/image/_partials/photo_data.tpl:35
 #: public/themes/admin/tpl/news_agency/show.tpl:108
 #: public/themes/manager/tpl/framework/commands/commands.tpl:26
@@ -3482,7 +3492,7 @@ msgstr "Escribe o código HTML"
 #: public/themes/admin/tpl/newsletter/steps/2-preview.tpl:39
 #: public/themes/admin/tpl/newsletter/steps/2-preview.tpl:89
 #: public/themes/admin/tpl/opinion/new.tpl:119
-#: public/themes/admin/tpl/article/new.tpl:129
+#: public/themes/admin/tpl/article/new.tpl:128
 #: public/themes/admin/tpl/frontpagemanager/list.tpl:93
 msgid "Preview"
 msgstr "Previsualizar"
@@ -3498,7 +3508,8 @@ msgstr "Captura do vídeo"
 #: public/themes/admin/tpl/article/partials/_images.tpl:23
 #: public/themes/admin/tpl/article/partials/_images.tpl:49
 #: public/themes/admin/tpl/article/partials/_images.tpl:76
-#: public/themes/admin/tpl/album/new.tpl:280
+#: public/themes/admin/tpl/album/new.tpl:288
+#: public/themes/admin/tpl/book/new.tpl:107
 #: public/themes/admin/tpl/advertisement/partials/advertisement_images.tpl:43
 msgid "Image not set"
 msgstr "Imaxe non estabelecida"
@@ -3510,7 +3521,8 @@ msgstr "Imaxe non estabelecida"
 #: public/themes/admin/tpl/article/partials/_images.tpl:27
 #: public/themes/admin/tpl/article/partials/_images.tpl:53
 #: public/themes/admin/tpl/article/partials/_images.tpl:80
-#: public/themes/admin/tpl/album/new.tpl:284
+#: public/themes/admin/tpl/album/new.tpl:292
+#: public/themes/admin/tpl/book/new.tpl:111
 msgid "Set image"
 msgstr "Estabelecer imaxe"
 
@@ -3569,7 +3581,7 @@ msgstr "Selecciona un ficheiro para subir"
 #: public/themes/admin/tpl/letter/new.tpl:164
 #: public/themes/admin/tpl/opinion/new.tpl:237
 #: public/themes/admin/tpl/static_pages/new.tpl:82
-#: public/themes/admin/tpl/article/new.tpl:362
+#: public/themes/admin/tpl/article/new.tpl:366
 #: public/themes/admin/tpl/comment/read.tpl:85
 msgid "Body"
 msgstr "Corpo"
@@ -3652,30 +3664,24 @@ msgstr "Editando vídeo"
 #: public/themes/admin/tpl/category/new.tpl:82
 #: public/themes/admin/tpl/covers/read.tpl:53
 #: public/themes/admin/tpl/covers/read.tpl:54
-#: public/themes/admin/tpl/book/new.tpl:57
+#: public/themes/admin/tpl/book/new.tpl:68
 msgid "Go Back"
 msgstr "Atrás"
 
-#: public/themes/admin/tpl/video/new.tpl:78
+#: public/themes/admin/tpl/video/new.tpl:84
 #: public/themes/admin/tpl/letter/list.tpl:88
 #: public/themes/admin/tpl/opinion/partials/_opinion_list_home.tpl:5
 #: public/themes/admin/tpl/opinion/partials/_opinion_list.tpl:19
 #: public/themes/admin/tpl/opinion/new.tpl:179
 #: public/themes/admin/tpl/article/list.tpl:101
 #: public/themes/admin/tpl/article/list.tpl:140
-#: public/themes/admin/tpl/article/new.tpl:244
-#: public/themes/admin/tpl/album/new.tpl:203
-#: public/themes/admin/tpl/book/new.tpl:104
+#: public/themes/admin/tpl/article/new.tpl:243
+#: public/themes/admin/tpl/album/new.tpl:207
+#: public/themes/admin/tpl/book/new.tpl:121
 #: public/themes/admin/tpl/comment/list.tpl:96
 #: public/themes/admin/tpl/comment/read.tpl:53
 msgid "Author"
 msgstr "Autor"
-
-#: public/themes/admin/tpl/video/new.tpl:84
-#: public/themes/admin/tpl/article/new.tpl:250
-#: public/themes/admin/tpl/album/new.tpl:209
-msgid "No author assigned"
-msgstr "Ningún autor asignado"
 
 #: public/themes/admin/tpl/video/config.tpl:39
 #: public/themes/admin/tpl/agency_importer/xml-file/show.tpl:15
@@ -3995,9 +4001,9 @@ msgstr "Tamaño"
 #: public/themes/admin/tpl/files/list.tpl:144
 #: public/themes/admin/tpl/news_agency/config/list.tpl:42
 #: public/themes/admin/tpl/instance_sync/list.tpl:41
-#: public/themes/manager/tpl/instances/list.tpl:50
-#: public/themes/manager/tpl/user_group/list.tpl:48
-#: public/themes/manager/tpl/user/list.tpl:49
+#: public/themes/manager/tpl/instances/list.tpl:59
+#: public/themes/manager/tpl/user_group/list.tpl:57
+#: public/themes/manager/tpl/user/list.tpl:58
 msgid "Actions"
 msgstr "Accións"
 
@@ -4115,8 +4121,8 @@ msgstr ""
 #: public/themes/admin/tpl/newsletter/subscriptions/new.tpl:35
 #: public/themes/admin/tpl/newsletter/subscriptions/new.tpl:36
 #: public/themes/admin/tpl/static_pages/new.tpl:17
+#: public/themes/admin/tpl/article/new.tpl:133
 #: public/themes/admin/tpl/article/new.tpl:134
-#: public/themes/admin/tpl/article/new.tpl:135
 #: public/themes/admin/tpl/media_uploader/media_uploader.tpl:239
 #: public/themes/admin/tpl/media_uploader/media_uploader.tpl:243
 #: public/themes/admin/tpl/covers/new.tpl:27
@@ -4269,12 +4275,11 @@ msgstr "Configuración do módulo"
 #: public/themes/admin/tpl/agency_importer/xml-file/config.tpl:40
 #: public/themes/admin/tpl/menues/modals/_modalAddItem.tpl:9
 #: public/themes/admin/tpl/menues/new.tpl:96
-#: public/themes/admin/tpl/book/new.tpl:83
 msgid "Title:"
 msgstr "Titulo:"
 
 #: public/themes/admin/tpl/agency_importer/xml-file/config.tpl:46
-#: public/themes/admin/tpl/article/new.tpl:183
+#: public/themes/admin/tpl/article/new.tpl:182
 msgid "Inner title"
 msgstr "Titulo interior:"
 
@@ -4436,8 +4441,8 @@ msgstr "Dende %1 enviaronse %2 emails"
 #: public/themes/admin/tpl/newsletter/list.tpl:58
 #: public/themes/admin/tpl/article/list.tpl:124
 #: public/themes/admin/tpl/search_advanced/partials/_list.tpl:30
-#: public/themes/manager/tpl/instances/list.tpl:127
-#: public/themes/manager/tpl/instances/list.tpl:245
+#: public/themes/manager/tpl/instances/list.tpl:136
+#: public/themes/manager/tpl/instances/list.tpl:254
 msgid "Created"
 msgstr "Creado"
 
@@ -4531,8 +4536,8 @@ msgstr "Filtrar"
 #: public/themes/admin/tpl/advertisement/new.tpl:162
 #: public/themes/admin/tpl/news_agency/config/list.tpl:41
 #: public/themes/admin/tpl/news_agency/config/new.tpl:76
-#: public/themes/manager/tpl/instances/item.tpl:107
-#: public/themes/manager/tpl/user/list.tpl:101
+#: public/themes/manager/tpl/instances/item.tpl:109
+#: public/themes/manager/tpl/user/list.tpl:110
 msgid "Activated"
 msgstr "Activado"
 
@@ -4608,7 +4613,7 @@ msgstr "Apelido"
 #: public/themes/admin/tpl/covers/read.tpl:134
 #: public/themes/admin/tpl/widget/new.tpl:67
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:142
-#: public/themes/admin/tpl/book/new.tpl:160
+#: public/themes/admin/tpl/book/new.tpl:181
 #: public/themes/admin/tpl/advertisement/config.tpl:62
 #: public/themes/manager/tpl/common/modal_confirm.tpl:55
 msgid "Yes"
@@ -4814,7 +4819,7 @@ msgstr "Personalizado"
 
 #: public/themes/admin/tpl/newsletter/steps/3-pick-recipients.tpl:142
 #: public/themes/manager/tpl/instances/modal_modules.tpl:13
-#: public/themes/manager/tpl/instances/item.tpl:195
+#: public/themes/manager/tpl/instances/item.tpl:202
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -5078,7 +5083,7 @@ msgstr "Editando especial"
 
 #: public/themes/admin/tpl/special/new.tpl:124
 #: public/themes/admin/tpl/category/new.tpl:103
-#: public/themes/admin/tpl/article/new.tpl:386
+#: public/themes/admin/tpl/article/new.tpl:390
 msgid "Slug"
 msgstr "Slug"
 
@@ -5175,7 +5180,7 @@ msgstr "Para libros"
 #: public/themes/admin/tpl/category/list.tpl:293
 #: public/themes/admin/tpl/category/list.tpl:333
 #: public/themes/admin/tpl/category/new.tpl:209
-#: public/themes/manager/tpl/instances/item.tpl:225
+#: public/themes/manager/tpl/instances/item.tpl:232
 msgid "Internal name"
 msgstr "Nome interno"
 
@@ -5268,19 +5273,14 @@ msgstr "Eliminar opinións"
 msgid "Opinion frontpage"
 msgstr "Portada de opinión"
 
-#: public/themes/admin/tpl/opinion/list.tpl:26
-#: public/themes/admin/tpl/opinion/content-provider/opinion.tpl:13
-msgid "Blog"
-msgstr "Blog"
-
-#: public/themes/admin/tpl/opinion/list.tpl:33
-#: public/themes/admin/tpl/opinion/list.tpl:34
+#: public/themes/admin/tpl/opinion/list.tpl:35
+#: public/themes/admin/tpl/opinion/list.tpl:36
 msgid "Config opinion module"
 msgstr "Configuración do módulo de opinión"
 
-#: public/themes/admin/tpl/opinion/list.tpl:105
-#: public/themes/admin/tpl/opinion/list.tpl:106
 #: public/themes/admin/tpl/opinion/list.tpl:107
+#: public/themes/admin/tpl/opinion/list.tpl:108
+#: public/themes/admin/tpl/opinion/list.tpl:109
 #: public/themes/admin/tpl/welcome/index.tpl:52
 #: public/themes/admin/tpl/welcome/index.tpl:53
 msgid "New opinion"
@@ -5308,7 +5308,7 @@ msgstr "Artigos da editorial"
 
 #: public/themes/admin/tpl/opinion/partials/_opinion_list_home.tpl:70
 #: public/themes/admin/tpl/opinion/partials/_opinion_list.tpl:22
-#: public/themes/admin/tpl/book/new.tpl:122
+#: public/themes/admin/tpl/book/new.tpl:135
 msgid "Editorial"
 msgstr "Editorial"
 
@@ -5357,36 +5357,36 @@ msgid "Director's letter"
 msgstr "Carta do director"
 
 #: public/themes/admin/tpl/opinion/new.tpl:208
-#: public/themes/admin/tpl/article/new.tpl:268
+#: public/themes/admin/tpl/article/new.tpl:272
 msgid "Schedule"
 msgstr "Planificación"
 
 #: public/themes/admin/tpl/opinion/new.tpl:211
-#: public/themes/admin/tpl/article/new.tpl:272
+#: public/themes/admin/tpl/article/new.tpl:276
 msgid "Publication start date"
 msgstr "Data de inicio de publicación"
 
 #: public/themes/admin/tpl/opinion/new.tpl:214
-#: public/themes/admin/tpl/article/new.tpl:275
+#: public/themes/admin/tpl/article/new.tpl:279
 msgid "Server hour:"
 msgstr "Hora do servidor:"
 
 #: public/themes/admin/tpl/opinion/new.tpl:218
-#: public/themes/admin/tpl/article/new.tpl:279
+#: public/themes/admin/tpl/article/new.tpl:283
 msgid "Publication end date"
 msgstr "Data de final de publicación"
 
 #: public/themes/admin/tpl/opinion/new.tpl:229
 #: public/themes/admin/tpl/article/partials/_article_avanced_customize.tpl:48
-#: public/themes/admin/tpl/article/new.tpl:344
+#: public/themes/admin/tpl/article/new.tpl:348
 msgid "Summary"
 msgstr "Resumo"
 
 #: public/themes/admin/tpl/opinion/new.tpl:240
 #: public/themes/admin/tpl/static_pages/new.tpl:85
-#: public/themes/admin/tpl/article/new.tpl:348
-#: public/themes/admin/tpl/article/new.tpl:365
-#: public/themes/admin/tpl/widget/new.tpl:93
+#: public/themes/admin/tpl/article/new.tpl:352
+#: public/themes/admin/tpl/article/new.tpl:369
+#: public/themes/admin/tpl/widget/new.tpl:99
 msgid "Insert image"
 msgstr "Inserir imaxe"
 
@@ -5415,19 +5415,19 @@ msgstr "Avatar"
 #: public/themes/admin/tpl/paywall/partials/purchases_csv.tpl:1
 #: public/themes/admin/tpl/paywall/partials/users_csv.tpl:1
 #: public/themes/admin/tpl/paywall/purchases.tpl:44
-#: public/themes/manager/tpl/user/list.tpl:93
+#: public/themes/manager/tpl/user/list.tpl:102
 msgid "Full name"
 msgstr "Nome completo"
 
 #: public/themes/admin/tpl/opinion/author_list.tpl:63
 #: public/themes/admin/tpl/opinion/author_new.tpl:170
 #: public/themes/admin/tpl/acl/user/new.tpl:265
-#: public/themes/manager/tpl/user/item.tpl:79
+#: public/themes/manager/tpl/user/item.tpl:85
 msgid "Biography"
 msgstr "Biografia"
 
 #: public/themes/admin/tpl/opinion/author_list.tpl:104
-#: public/themes/manager/tpl/user/list.tpl:81
+#: public/themes/manager/tpl/user/list.tpl:90
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
@@ -5487,7 +5487,7 @@ msgstr "Usuario de Twitter"
 #: public/themes/admin/tpl/acl/user/list.tpl:87
 #: public/themes/admin/tpl/news_agency/config/new.tpl:91
 #: public/themes/manager/tpl/base/base.tpl:236
-#: public/themes/manager/tpl/user/list.tpl:97
+#: public/themes/manager/tpl/user/list.tpl:106
 msgid "Username"
 msgstr "Nome de usuario"
 
@@ -5536,15 +5536,39 @@ msgstr "Opinións a mostrar na portada de opinión"
 msgid "How many opinions opinions will be shown in the opinion frontpage."
 msgstr "Cantas opinións se mostrarán na portada de opinión."
 
-#: public/themes/admin/tpl/opinion/config.tpl:72
+#: public/themes/admin/tpl/opinion/config.tpl:74
 msgid "Author opinions in frontpage opinion widget:"
 msgstr "Opinións de autores no widget de portada de opinión:"
 
-#: public/themes/admin/tpl/opinion/config.tpl:76
+#: public/themes/admin/tpl/opinion/config.tpl:78
 msgid "How many author opinions will be shown in the widget."
 msgstr ""
 "Número de opinións de autores que se mostrarán no widget de opinión en "
 "portada."
+
+#: public/themes/admin/tpl/opinion/config.tpl:85
+msgid "Order blog's frontpage by"
+msgstr "Ordenar portada de blogues segundo"
+
+#: public/themes/admin/tpl/opinion/config.tpl:88
+#: public/themes/admin/tpl/album/config.tpl:54
+msgid "Created Date"
+msgstr "Data de creación"
+
+#: public/themes/admin/tpl/opinion/config.tpl:89
+msgid "Blogger"
+msgstr "Autor de blog"
+
+#: public/themes/admin/tpl/opinion/config.tpl:92
+msgid "Select if order blogs's frontpages by created date or bloggers name."
+msgstr ""
+"Seleccione se quere ordenar a portada de blogues por data de creación ou por "
+"nome do autor."
+
+#: public/themes/admin/tpl/opinion/config.tpl:98
+#: public/themes/admin/tpl/system_settings/system_settings.tpl:292
+msgid "Items per blog page"
+msgstr "Resultados por páxina do blog"
 
 #: public/themes/admin/tpl/opinion/newPhoto.tpl:30
 msgid "Invalid image: the filename name contains spaces or special chars."
@@ -5728,56 +5752,58 @@ msgstr "Creando artigo"
 msgid "Editing article"
 msgstr "Editar artigo"
 
-#: public/themes/admin/tpl/article/new.tpl:150
-#: public/themes/admin/tpl/widget/new.tpl:90
+#: public/themes/admin/tpl/article/new.tpl:149
+#: public/themes/admin/tpl/widget/new.tpl:96
 #: public/themes/admin/tpl/news_agency/import_select_category.tpl:38
 msgid "Content"
 msgstr "Contido"
 
-#: public/themes/admin/tpl/article/new.tpl:153
+#: public/themes/admin/tpl/article/new.tpl:152
+#: public/themes/admin/tpl/widget/new.tpl:125
 msgid "Parameters"
 msgstr "Parámetros"
 
-#: public/themes/admin/tpl/article/new.tpl:157
+#: public/themes/admin/tpl/article/new.tpl:156
 msgid "Customize"
 msgstr "Personalizar"
 
-#: public/themes/admin/tpl/article/new.tpl:161
+#: public/themes/admin/tpl/article/new.tpl:160
 msgid "Related contents"
 msgstr "Contidos relacionados"
 
-#: public/themes/admin/tpl/article/new.tpl:206
+#: public/themes/admin/tpl/article/new.tpl:205
 msgid "Allow coments"
 msgstr "Permitir comentarios"
 
-#: public/themes/admin/tpl/article/new.tpl:212
+#: public/themes/admin/tpl/article/new.tpl:211
 msgid "Put in category frontpage"
 msgstr "Poñer en portada de categoría"
 
-#: public/themes/admin/tpl/article/new.tpl:217
+#: public/themes/admin/tpl/article/new.tpl:216
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
-#: public/themes/admin/tpl/article/new.tpl:240
+#: public/themes/admin/tpl/article/new.tpl:239
 #: public/themes/admin/tpl/common/selector_categories.tpl:24
+#: public/themes/admin/tpl/book/new.tpl:170
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: public/themes/admin/tpl/article/new.tpl:293
+#: public/themes/admin/tpl/article/new.tpl:297
 msgid "Only available for subscribers"
 msgstr "Só dispoñíbel para subscritores"
 
-#: public/themes/admin/tpl/article/new.tpl:303
-#: public/themes/admin/tpl/article/new.tpl:316
+#: public/themes/admin/tpl/article/new.tpl:307
+#: public/themes/admin/tpl/article/new.tpl:320
 #: public/themes/admin/tpl/paywall/settings.tpl:108
 msgid "Signature"
 msgstr "Sinatura"
 
-#: public/themes/admin/tpl/article/new.tpl:331
+#: public/themes/admin/tpl/article/new.tpl:335
 msgid "Pretitle"
 msgstr "Antetitulo"
 
-#: public/themes/admin/tpl/article/new.tpl:398
+#: public/themes/admin/tpl/article/new.tpl:402
 #: public/themes/admin/tpl/menues/partials/_menu_item.tpl:11
 #: public/themes/admin/tpl/menues/new.tpl:91
 msgid "External link"
@@ -5866,6 +5892,7 @@ msgid "Assign an image as a cover image"
 msgstr "Debes asignar unha imaxe como imaxe principal"
 
 #: public/themes/admin/tpl/album/modals/_edit_album_error.tpl:13
+#: public/themes/admin/tpl/widget/new.tpl:150
 #: public/themes/admin/tpl/frontpagemanager/modals/_modal_new_version.tpl:14
 #: public/themes/admin/tpl/advertisement/test_script.tpl:21
 msgid "Close"
@@ -5889,7 +5916,7 @@ msgid "No available albums."
 msgstr "No hai álbums dispoñibeis."
 
 #: public/themes/admin/tpl/album/new.tpl:39
-#: public/themes/admin/tpl/album/new.tpl:241
+#: public/themes/admin/tpl/album/new.tpl:249
 #: public/themes/admin/tpl/frontpagemanager/modals/_modal_drop_selected.tpl:14
 msgid "Drop"
 msgstr "Quitar"
@@ -5907,15 +5934,16 @@ msgstr "Creado álbum"
 msgid "Agency"
 msgstr "Axencia"
 
-#: public/themes/admin/tpl/album/new.tpl:231
+#: public/themes/admin/tpl/album/new.tpl:239
 msgid "Album images"
 msgstr "Imaxes do álbum"
 
-#: public/themes/admin/tpl/album/new.tpl:255
+#: public/themes/admin/tpl/album/new.tpl:263
 msgid "Add images"
 msgstr "Engadir imaxes"
 
-#: public/themes/admin/tpl/album/new.tpl:266
+#: public/themes/admin/tpl/album/new.tpl:274
+#: public/themes/admin/tpl/book/new.tpl:91
 msgid "Cover image"
 msgstr "Imaxe principal"
 
@@ -5934,10 +5962,6 @@ msgstr "Tamaño da portada no widget de álbums (ancho x alto)"
 #: public/themes/admin/tpl/album/config.tpl:51
 msgid "Order album's frontpage by"
 msgstr "Ordenar portada de álbums segundo"
-
-#: public/themes/admin/tpl/album/config.tpl:54
-msgid "Created Date"
-msgstr "Data de creación"
 
 #: public/themes/admin/tpl/album/config.tpl:55
 msgid "Most views"
@@ -5993,7 +6017,7 @@ msgstr "Nuevo grupo de usuario"
 
 #: public/themes/admin/tpl/acl/user_group/list.tpl:63
 #: public/themes/admin/tpl/acl/user_group/new.tpl:40
-#: public/themes/manager/tpl/user_group/list.tpl:78
+#: public/themes/manager/tpl/user_group/list.tpl:88
 #: public/themes/manager/tpl/user_group/item.tpl:47
 msgid "Group name"
 msgstr "Nome do grupo"
@@ -6021,8 +6045,8 @@ msgstr "Creando grupo de usuario"
 
 #: public/themes/admin/tpl/acl/user_group/new.tpl:47
 #: public/themes/admin/tpl/acl/user/new.tpl:193
-#: public/themes/manager/tpl/user_group/item.tpl:55
-#: public/themes/manager/tpl/user/item.tpl:117
+#: public/themes/manager/tpl/user_group/item.tpl:57
+#: public/themes/manager/tpl/user/item.tpl:123
 msgid "Privileges"
 msgstr "Privilexios"
 
@@ -6032,14 +6056,14 @@ msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:23
-#: public/themes/manager/tpl/instances/list.tpl:66
-#: public/themes/manager/tpl/user/list.tpl:54
+#: public/themes/manager/tpl/instances/list.tpl:75
+#: public/themes/manager/tpl/user/list.tpl:63
 msgid "Enable"
 msgstr "Activado"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:29
-#: public/themes/manager/tpl/instances/list.tpl:71
-#: public/themes/manager/tpl/user/list.tpl:59
+#: public/themes/manager/tpl/instances/list.tpl:80
+#: public/themes/manager/tpl/user/list.tpl:68
 msgid "Disable"
 msgstr "Desactivado"
 
@@ -6063,19 +6087,19 @@ msgstr "--Todos--"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:67
 #: public/themes/admin/tpl/acl/user/new.tpl:322
-#: public/themes/manager/tpl/user/item.tpl:107
+#: public/themes/manager/tpl/user/item.tpl:113
 msgid "Backend"
 msgstr "Panel de control"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:68
 #: public/themes/admin/tpl/acl/user/new.tpl:323
-#: public/themes/manager/tpl/user/item.tpl:108
+#: public/themes/manager/tpl/user/item.tpl:114
 msgid "Frontend"
 msgstr "Públicos"
 
 #: public/themes/admin/tpl/acl/user/list.tpl:71
 #: public/themes/admin/tpl/acl/user/list.tpl:89
-#: public/themes/manager/tpl/user/list.tpl:100
+#: public/themes/manager/tpl/user/list.tpl:109
 msgid "Group"
 msgstr "Grupo"
 
@@ -6130,12 +6154,12 @@ msgstr "Eliminar imaxe"
 #: public/themes/admin/tpl/login/login.tpl:92
 #: public/themes/admin/tpl/login/regenerate_pass.tpl:85
 #: public/themes/manager/tpl/base/base.tpl:238
-#: public/themes/manager/tpl/user/item.tpl:54
+#: public/themes/manager/tpl/user/item.tpl:56
 msgid "User name"
 msgstr "Nome do usuario"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:251
-#: public/themes/manager/tpl/user/item.tpl:73
+#: public/themes/manager/tpl/user/item.tpl:79
 msgid "Blog Url"
 msgstr "Url do blogue"
 
@@ -6149,12 +6173,12 @@ msgstr "Url do blogue"
 #: public/themes/admin/tpl/login/regenerate_pass.tpl:106
 #: public/themes/manager/tpl/base/base.tpl:244
 #: public/themes/manager/tpl/base/base.tpl:249
-#: public/themes/manager/tpl/user/item.tpl:85
+#: public/themes/manager/tpl/user/item.tpl:91
 msgid "Password"
 msgstr "Contrasinal"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:285
-#: public/themes/manager/tpl/user/item.tpl:94
+#: public/themes/manager/tpl/user/item.tpl:100
 msgid "Confirm password"
 msgstr "Confirmar contrasinal"
 
@@ -6172,18 +6196,18 @@ msgid "Twitter"
 msgstr "Twitter"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:319
-#: public/themes/manager/tpl/user/item.tpl:105
+#: public/themes/manager/tpl/user/item.tpl:111
 msgid "User type"
 msgstr "Tipo de usuario"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:330
-#: public/themes/manager/tpl/user/item.tpl:112
+#: public/themes/manager/tpl/user/item.tpl:118
 msgid "User language"
 msgstr "Idioma do usuario"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:333
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:260
-#: public/themes/manager/tpl/user/item.tpl:114
+#: public/themes/manager/tpl/user/item.tpl:120
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
@@ -6201,7 +6225,7 @@ msgid "HOME"
 msgstr "Portada"
 
 #: public/themes/admin/tpl/acl/user/new.tpl:385
-#: public/themes/manager/tpl/user/item.tpl:128
+#: public/themes/manager/tpl/user/item.tpl:134
 msgid "Paywall time limit:"
 msgstr "Limite de tiempo del paywall:"
 
@@ -6709,6 +6733,9 @@ msgid "Uploading files"
 msgstr "Subindo ficheiros"
 
 #: public/themes/admin/tpl/media_uploader/media_uploader.tpl:149
+#: public/themes/manager/tpl/instances/list.tpl:44
+#: public/themes/manager/tpl/user_group/list.tpl:45
+#: public/themes/manager/tpl/user/list.tpl:46
 msgid "Clear"
 msgstr "Limpar"
 
@@ -6916,9 +6943,6 @@ msgstr "Suscrición"
 #: public/themes/admin/tpl/covers/read.tpl:111
 #: public/themes/admin/tpl/frontpagemanager/_render_menu_categories.tpl:17
 #: public/themes/admin/tpl/frontpagemanager/_render_menu_categories.tpl:25
-#: public/themes/admin/tpl/book/new.tpl:134
-#: public/themes/admin/tpl/book/new.tpl:144
-#: public/themes/admin/tpl/book/new.tpl:146
 msgid "%1"
 msgstr "%1"
 
@@ -6967,6 +6991,14 @@ msgstr "Tipo do widget"
 #: public/themes/admin/tpl/widget/new.tpl:44
 msgid "Intelligent Widget"
 msgstr "Widget intelixente"
+
+#: public/themes/admin/tpl/widget/new.tpl:128
+msgid "Use this option only if you are avanced user"
+msgstr "Use esta opción só se é un usuario avanzado"
+
+#: public/themes/admin/tpl/widget/new.tpl:147
+msgid "Add parameter"
+msgstr "Engadir parámetro"
 
 #: public/themes/admin/tpl/welcome/modals/policies.tpl:16
 msgid "Terms of Service Agreement"
@@ -7068,7 +7100,7 @@ msgstr "Conteñen varias funcionalidades a un prezo reducido"
 
 #: public/themes/admin/tpl/welcome/index.tpl:114
 #: public/themes/admin/tpl/menues/new.tpl:222
-#: public/themes/manager/tpl/instances/item.tpl:189
+#: public/themes/manager/tpl/instances/item.tpl:196
 msgid "Modules"
 msgstr "Modulos"
 
@@ -7839,7 +7871,7 @@ msgstr ""
 "incluilos como elementos deste menú."
 
 #: public/themes/admin/tpl/menues/new.tpl:103
-#: public/themes/manager/tpl/instances/item.tpl:157
+#: public/themes/manager/tpl/instances/item.tpl:159
 msgid "Add"
 msgstr "Engadir"
 
@@ -8038,10 +8070,6 @@ msgstr ""
 msgid "Items per page"
 msgstr "Elementos por páxina"
 
-#: public/themes/admin/tpl/system_settings/system_settings.tpl:292
-msgid "Items per blog page"
-msgstr "Resultados por páxina do blog"
-
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:302
 msgid "Form Module"
 msgstr "Módulo de formulario"
@@ -8191,8 +8219,8 @@ msgid "User"
 msgstr "Usuario"
 
 #: public/themes/admin/tpl/system_settings/system_settings.tpl:453
-#: public/themes/manager/tpl/instances/item.tpl:265
-#: public/themes/manager/tpl/instances/item.tpl:274
+#: public/themes/manager/tpl/instances/item.tpl:272
+#: public/themes/manager/tpl/instances/item.tpl:281
 msgid "Piwik Statistics"
 msgstr "Estatisticas de Piwik"
 
@@ -8301,39 +8329,15 @@ msgstr "Novo libro"
 msgid "No available books."
 msgstr "No hai libros dispoñibeis."
 
-#: public/themes/admin/tpl/book/new.tpl:36
+#: public/themes/admin/tpl/book/new.tpl:47
 msgid "Creating Book"
 msgstr "Creando libro"
 
-#: public/themes/admin/tpl/book/new.tpl:36
+#: public/themes/admin/tpl/book/new.tpl:47
 msgid "Editing Book"
 msgstr "Editando libro"
 
-#: public/themes/admin/tpl/book/new.tpl:74
-msgid "Preview:"
-msgstr "Previsualización:"
-
-#: public/themes/admin/tpl/book/new.tpl:86
-msgid "\"Album\""
-msgstr "Álbum"
-
-#: public/themes/admin/tpl/book/new.tpl:107
-msgid "author"
-msgstr "autor"
-
-#: public/themes/admin/tpl/book/new.tpl:125
-msgid "editorial"
-msgstr "editorial"
-
-#: public/themes/admin/tpl/book/new.tpl:154
-msgid "Available:"
-msgstr "Dispoñíbel:"
-
-#: public/themes/admin/tpl/book/new.tpl:167
-msgid "Keywords:"
-msgstr "Palabras chave:"
-
-#: public/themes/admin/tpl/book/new.tpl:172
+#: public/themes/admin/tpl/book/new.tpl:190
 msgid "Separated by coma"
 msgstr "Separadas por comas"
 
@@ -8974,8 +8978,8 @@ msgid "Basic"
 msgstr "Básica"
 
 #: public/themes/admin/tpl/news_agency/list.tpl:132
-#: public/themes/manager/tpl/instances/list.tpl:167
-#: public/themes/manager/tpl/instances/list.tpl:309
+#: public/themes/manager/tpl/instances/list.tpl:176
+#: public/themes/manager/tpl/instances/list.tpl:318
 msgid "Attachments"
 msgstr "Anexos"
 
@@ -9083,8 +9087,8 @@ msgid "This article was imported before. Take care of it."
 msgstr "Este artigo foi importado con anterioridade."
 
 #: public/themes/admin/tpl/news_agency/show.tpl:54
-#: public/themes/manager/tpl/instances/list.tpl:151
-#: public/themes/manager/tpl/instances/list.tpl:281
+#: public/themes/manager/tpl/instances/list.tpl:160
+#: public/themes/manager/tpl/instances/list.tpl:290
 msgid "Photos"
 msgstr "Fotos"
 
@@ -9257,10 +9261,22 @@ msgid "Number of comments to show by page"
 msgstr "Numero de comentarios a mostrar por páxina"
 
 #: public/themes/admin/tpl/comment/config.tpl:46
+msgid "Allow comments in contents by default"
+msgstr "Permitir comentarios nos contidos por omisión"
+
+#: public/themes/admin/tpl/comment/config.tpl:49
+msgid ""
+"Whether to allow users to comment in comments by default for all contents "
+"(you can change this setting for specific contents)"
+msgstr ""
+"Indica se os usuarios poden comentar nos contidos por omisión para todos os "
+"contidos (pode cambiar esta preferencia para contidos específicos)"
+
+#: public/themes/admin/tpl/comment/config.tpl:53
 msgid "Before a comment appears"
 msgstr "Antes de que o comentario apareza"
 
-#: public/themes/admin/tpl/comment/config.tpl:49
+#: public/themes/admin/tpl/comment/config.tpl:56
 msgid "An administrator must always approve the comment "
 msgstr "Un administrador debe aprobar o comentario"
 
@@ -9586,76 +9602,76 @@ msgstr "Filtrar:"
 msgid "Filter by name, domain or contact"
 msgstr "Filtrar por nome, dominio ou contacto"
 
-#: public/themes/manager/tpl/instances/list.tpl:55
+#: public/themes/manager/tpl/instances/list.tpl:64
 msgid "Export current list"
 msgstr "Exportar a lista actual"
 
-#: public/themes/manager/tpl/instances/list.tpl:60
+#: public/themes/manager/tpl/instances/list.tpl:69
 msgid "Export selection"
 msgstr "Exportar selección"
 
-#: public/themes/manager/tpl/instances/list.tpl:103
+#: public/themes/manager/tpl/instances/list.tpl:112
 msgid "#"
 msgstr "#"
 
-#: public/themes/manager/tpl/instances/list.tpl:111
-#: public/themes/manager/tpl/instances/list.tpl:221
-#: public/themes/manager/tpl/instances/item.tpl:122
+#: public/themes/manager/tpl/instances/list.tpl:120
+#: public/themes/manager/tpl/instances/list.tpl:230
+#: public/themes/manager/tpl/instances/item.tpl:124
 msgid "Domains"
 msgstr "Dominios"
 
-#: public/themes/manager/tpl/instances/list.tpl:115
+#: public/themes/manager/tpl/instances/list.tpl:124
 msgid "Domain expire"
 msgstr "Expiración do dominio:"
 
-#: public/themes/manager/tpl/instances/list.tpl:119
-#: public/themes/manager/tpl/instances/list.tpl:233
+#: public/themes/manager/tpl/instances/list.tpl:128
+#: public/themes/manager/tpl/instances/list.tpl:242
 msgid "Contact"
 msgstr "Contacto"
 
-#: public/themes/manager/tpl/instances/list.tpl:123
-#: public/themes/manager/tpl/instances/list.tpl:239
+#: public/themes/manager/tpl/instances/list.tpl:132
+#: public/themes/manager/tpl/instances/list.tpl:248
 msgid "Last access"
 msgstr "Último accesso"
 
-#: public/themes/manager/tpl/instances/list.tpl:179
-#: public/themes/manager/tpl/instances/list.tpl:327
+#: public/themes/manager/tpl/instances/list.tpl:188
+#: public/themes/manager/tpl/instances/list.tpl:336
 #: public/themes/manager/tpl/instances/item.tpl:68
 msgid "Media size"
 msgstr "Tamaño do media"
 
-#: public/themes/manager/tpl/instances/list.tpl:183
-#: public/themes/manager/tpl/instances/list.tpl:333
+#: public/themes/manager/tpl/instances/list.tpl:192
+#: public/themes/manager/tpl/instances/list.tpl:342
 msgid "Alexa"
 msgstr "Alexa"
 
-#: public/themes/manager/tpl/instances/list.tpl:187
-#: public/themes/manager/tpl/instances/list.tpl:339
+#: public/themes/manager/tpl/instances/list.tpl:196
+#: public/themes/manager/tpl/instances/list.tpl:348
 msgid "Page views"
 msgstr "Páx. vistas"
 
-#: public/themes/manager/tpl/instances/list.tpl:195
-#: public/themes/manager/tpl/instances/list.tpl:351
+#: public/themes/manager/tpl/instances/list.tpl:204
+#: public/themes/manager/tpl/instances/list.tpl:360
 msgid "Emails"
 msgstr "Correos-e"
 
-#: public/themes/manager/tpl/instances/list.tpl:207
+#: public/themes/manager/tpl/instances/list.tpl:216
 msgid "Columns"
 msgstr "Columnas"
 
-#: public/themes/manager/tpl/instances/list.tpl:227
+#: public/themes/manager/tpl/instances/list.tpl:236
 msgid "Doman expire"
 msgstr "Expiración do dominio"
 
-#: public/themes/manager/tpl/instances/list.tpl:357
+#: public/themes/manager/tpl/instances/list.tpl:366
 msgid "Enabled"
 msgstr "Activada"
 
-#: public/themes/manager/tpl/instances/list.tpl:369
+#: public/themes/manager/tpl/instances/list.tpl:378
 msgid "There is no available instances yet"
 msgstr "Ainda non hai ningunha instancia"
 
-#: public/themes/manager/tpl/instances/list.tpl:425
+#: public/themes/manager/tpl/instances/list.tpl:434
 msgid "Ads"
 msgstr "Anuncios"
 
@@ -9754,73 +9770,86 @@ msgstr "Idioma:"
 msgid "(Human readable name)"
 msgstr "(Nome lexibel por humanos)"
 
-#: public/themes/manager/tpl/instances/item.tpl:100
+#: public/themes/manager/tpl/instances/item.tpl:98
+#: public/themes/manager/tpl/user_group/item.tpl:53
+#: public/themes/manager/tpl/user/item.tpl:50
+#: public/themes/manager/tpl/user/item.tpl:62
+#: public/themes/manager/tpl/user/item.tpl:74
+msgid "This field is required"
+msgstr "Este campo é obligatorio"
+
+#: public/themes/manager/tpl/instances/item.tpl:102
 msgid "Template"
 msgstr "Plantilla"
 
-#: public/themes/manager/tpl/instances/item.tpl:131
+#: public/themes/manager/tpl/instances/item.tpl:133
 msgid "No main domain"
 msgstr "Sen dominio principal"
 
-#: public/themes/manager/tpl/instances/item.tpl:163
+#: public/themes/manager/tpl/instances/item.tpl:164
+#, fuzzy
+msgid "Instance domains cannot be empty."
+msgstr "Os dominios da instancia non poden quedar valeiros"
+
+#: public/themes/manager/tpl/instances/item.tpl:170
 msgid "Domain expire date:"
 msgstr "Data de expiración do dominio:"
 
-#: public/themes/manager/tpl/instances/item.tpl:165
-#: public/themes/manager/tpl/instances/item.tpl:180
-#: public/themes/manager/tpl/user/item.tpl:129
+#: public/themes/manager/tpl/instances/item.tpl:172
+#: public/themes/manager/tpl/instances/item.tpl:187
+#: public/themes/manager/tpl/user/item.tpl:135
 msgid "Click to set date"
 msgstr "Prema para estabelecer unha data"
 
-#: public/themes/manager/tpl/instances/item.tpl:174
+#: public/themes/manager/tpl/instances/item.tpl:181
 msgid "Billing"
 msgstr "Facturación"
 
-#: public/themes/manager/tpl/instances/item.tpl:178
+#: public/themes/manager/tpl/instances/item.tpl:185
 msgid "Last invoice date"
 msgstr "Data da última factura"
 
-#: public/themes/manager/tpl/instances/item.tpl:221
+#: public/themes/manager/tpl/instances/item.tpl:228
 msgid "Internal settings"
 msgstr "Preferencias internas"
 
-#: public/themes/manager/tpl/instances/item.tpl:226
+#: public/themes/manager/tpl/instances/item.tpl:233
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
 
-#: public/themes/manager/tpl/instances/item.tpl:232
+#: public/themes/manager/tpl/instances/item.tpl:239
 msgid "Database"
 msgstr "Base de datos"
 
-#: public/themes/manager/tpl/instances/item.tpl:238
+#: public/themes/manager/tpl/instances/item.tpl:245
 msgid "Minimum password level"
 msgstr "Nivel minimo de contrasinal"
 
-#: public/themes/manager/tpl/instances/item.tpl:241
+#: public/themes/manager/tpl/instances/item.tpl:248
 msgid "Default"
 msgstr "Por omisión"
 
-#: public/themes/manager/tpl/instances/item.tpl:242
+#: public/themes/manager/tpl/instances/item.tpl:249
 msgid "Weak"
 msgstr "Débil"
 
-#: public/themes/manager/tpl/instances/item.tpl:243
+#: public/themes/manager/tpl/instances/item.tpl:250
 msgid "Good"
 msgstr "Bo"
 
-#: public/themes/manager/tpl/instances/item.tpl:244
+#: public/themes/manager/tpl/instances/item.tpl:251
 msgid "Strong"
 msgstr "Forte"
 
-#: public/themes/manager/tpl/instances/item.tpl:249
+#: public/themes/manager/tpl/instances/item.tpl:256
 msgid "Num Max emails sent by month"
 msgstr "Número máximo de correos-e por mes"
 
-#: public/themes/manager/tpl/instances/item.tpl:265
+#: public/themes/manager/tpl/instances/item.tpl:272
 msgid "Page ID:"
 msgstr "ID da páxina:"
 
-#: public/themes/manager/tpl/instances/item.tpl:269
+#: public/themes/manager/tpl/instances/item.tpl:276
 msgid ""
 "You can get your Piwik Site information from <a href=\"https://piwik."
 "openhost.es/admin\">our Piwik server</a>."
@@ -9828,7 +9857,7 @@ msgstr ""
 "Podes obter información do sitio de Piwik desde <a href=\"https://piwik."
 "openhost.es/admin\">o noso servidor de Piwik</a>."
 
-#: public/themes/manager/tpl/instances/item.tpl:274
+#: public/themes/manager/tpl/instances/item.tpl:281
 msgid "Server url"
 msgstr "URL do servidor"
 
@@ -9837,11 +9866,11 @@ msgstr "URL do servidor"
 msgid "Users groups"
 msgstr "Grupos de usuarios"
 
-#: public/themes/manager/tpl/user_group/list.tpl:83
+#: public/themes/manager/tpl/user_group/list.tpl:95
 msgid "There is no available groups yet"
 msgstr "Non hai ningún grupo de usuario dispoñíbel"
 
-#: public/themes/manager/tpl/user_group/list.tpl:95
+#: public/themes/manager/tpl/user_group/list.tpl:107
 msgid "Edit group"
 msgstr "Editar grupo"
 
@@ -9850,15 +9879,15 @@ msgstr "Editar grupo"
 msgid "Edit user group"
 msgstr "Editar grupo de usuarios"
 
-#: public/themes/manager/tpl/user_group/item.tpl:57
+#: public/themes/manager/tpl/user_group/item.tpl:59
 msgid "Selected privileges"
 msgstr "Privilexios seleccionados"
 
-#: public/themes/manager/tpl/user_group/item.tpl:65
+#: public/themes/manager/tpl/user_group/item.tpl:67
 msgid "Toggle all privileges"
 msgstr "Activar/desactivar todos os privilexios"
 
-#: public/themes/manager/tpl/user_group/item.tpl:69
+#: public/themes/manager/tpl/user_group/item.tpl:71
 msgid "[% section.title %]"
 msgstr "[% section.title %]"
 
@@ -10013,7 +10042,7 @@ msgstr "Memoria"
 msgid "Hits"
 msgstr "Impactos"
 
-#: public/themes/manager/tpl/user/item.tpl:120
+#: public/themes/manager/tpl/user/item.tpl:126
 msgid "User group"
 msgstr "Grupo de usuarios"
 
@@ -10021,35 +10050,32 @@ msgstr "Grupo de usuarios"
 msgid "Here you can manage global settings about this onm-multiinstance."
 msgstr "Aquí pode xestionar as preferencias globais de onm multiinstancia."
 
+#~ msgid "Unable to find the album with the id \"%d\""
+#~ msgstr "Non se puido atopar o álbum co identificador «%d»"
+
+#~ msgid "No author assigned"
+#~ msgstr "Ningún autor asignado"
+
+#~ msgid "Preview:"
+#~ msgstr "Previsualización:"
+
+#~ msgid "\"Album\""
+#~ msgstr "Álbum"
+
+#~ msgid "author"
+#~ msgstr "autor"
+
+#~ msgid "editorial"
+#~ msgstr "editorial"
+
+#~ msgid "Available:"
+#~ msgstr "Dispoñíbel:"
+
+#~ msgid "Keywords:"
+#~ msgstr "Palabras chave:"
+
 #~ msgid "The address that you entered is already in use"
 #~ msgstr "O enderezo que escribiu xa está en uso"
-
-#~ msgid "Use this option only if you are avanced user"
-#~ msgstr "Use esta opción só se é un usuario avanzado"
-
-#~ msgid "Add parameter"
-#~ msgstr "Engadir parámetro"
-
-#~ msgid "Allow comments in contents by default"
-#~ msgstr "Permitir comentarios nos contidos por omisión"
-
-#~ msgid ""
-#~ "Whether to allow users to comment in comments by default for all contents "
-#~ "(you can change this setting for specific contents)"
-#~ msgstr ""
-#~ "Indica se os usuarios poden comentar nos contidos por omisión para todos "
-#~ "os contidos (pode cambiar esta preferencia para contidos específicos)"
-
-#~ msgid "Order blog's frontpage by"
-#~ msgstr "Ordenar portada de blogues segundo"
-
-#~ msgid "Blogger"
-#~ msgstr "Autor de blog"
-
-#~ msgid "Select if order blogs's frontpages by created date or bloggers name."
-#~ msgstr ""
-#~ "Seleccione se quere ordenar a portada de blogues por data de creación ou "
-#~ "por nome do autor."
 
 #~ msgid "Presets"
 #~ msgstr "Predefinicións"

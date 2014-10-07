@@ -95,7 +95,7 @@
                             <input class="form-control" name="name" ng-model="instance.name" required type="text">
                         </div>
                         <span class="error" ng-show="formValidated && instanceForm.name.$invalid">
-                            <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                            <label for="form1Amount" class="error">{t}This field is required{/t}</label>
                         </span>
                     </div>
                     <div class="form-group">

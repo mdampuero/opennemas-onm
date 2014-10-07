@@ -47,7 +47,7 @@
                             <div class="controls input-with-icon right" ng-class="{ 'error-control': formValidated && userForm.name.$invalid }">
                                 <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
                                 <span class="error" ng-show="formValidated && userForm.name.$invalid">
-                                    <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
                                 </span>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                             <div class="controls" ng-class="{ 'error-control': formValidated && userForm.username.$invalid }">
                                 <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
                                 <span class="error" ng-show="formValidated && userForm.username.$invalid">
-                                    <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
                                 </span>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                             <div class="controls" ng-class="{ 'error-control': formValidated && userForm.email.$invalid }">
                                 <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
                                 <span class="error" ng-show="formValidated && userForm.email.$invalid">
-                                    <label for="form1Amount" class="error">{t}This field is required.{/t}</label>
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
                                 </span>
                             </div>
                         </div>
