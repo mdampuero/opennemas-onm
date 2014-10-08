@@ -141,32 +141,33 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
         if (params.epp) {
             filters.epp = params.epp;
-            delete params.epp;
         }
+        delete params.epp;
 
         if (params.page) {
             filters.page = params.page
-            delete params.page
         }
+        delete params.page
 
         if (params.orderBy) {
-            filters.orderBy = {};
+            filters.orderBy = [];
 
-            if (params.order) {
-                filters.orderBy[params.orderBy] = params.order;
-                delete params.order;
-            } else {
-                filters.orderBy[params.orderBy] = 'asc';
-            }
+            var orders = params.orderBy.split(',');
 
-            delete params.orderBy;
+            for (var i = 0; i < orders.length; i++) {
+                var order = orders[i].split(':');
+
+                filters.orderBy.push({ name: order[0], value: order[1] });
+            };
+
         }
+        delete params.orderBy;
 
         var union = null;
         if (params.union) {
             union = params.union;
-            delete params.union;
         }
+        delete params.union;
 
         filters.criteria = {};
         var empty = 1;
@@ -204,7 +205,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @param integer union    The operator to join filters.
      */
     itemService.encodeFilters = function(criteria, orderBy, epp, page, union) {
+        var empty = true;
         for (var name in criteria) {
+            empty = false;
             for (var i in criteria[name]) {
                 if (criteria[name][i].value != '' && criteria[name][i].value != -1) {
                     $location.search(name + '_' + i, criteria[name][i].value);
@@ -214,10 +217,20 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             };
         }
 
-        for (var name in orderBy) {
-            $location.search('orderBy', name);
-            $location.search('order', orderBy[name]);
+        var order = null;
+        for (var i = 0; i < orderBy.length; i++) {
+            if (!order) {
+                order = [];
+            }
+
+            order.push(orderBy[i].name + ':' + orderBy[i].value);
+        };
+
+        if (order) {
+            order = order.join(',');
         }
+
+        $location.search('orderBy', order);
 
         if (epp) {
             $location.search('epp', epp);
@@ -227,7 +240,8 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             $location.search('page', page)
         }
 
-        if (union) {
+        $location.search('union', null);
+        if (!empty && union) {
             $location.search('union', union)
         }
     }

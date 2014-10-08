@@ -190,7 +190,7 @@ class AclUserController extends Controller
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } elseif (($data['avatar_img_id']) == 1) {
                 $data['avatar_img_id'] = $user->avatar_img_id;
@@ -272,7 +272,7 @@ class AclUserController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;

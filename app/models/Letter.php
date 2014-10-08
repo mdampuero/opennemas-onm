@@ -62,7 +62,7 @@ class Letter extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
-                        'category' => StringUtils::get_title($this->author),
+                        'category' => StringUtils::getTitle($this->author),
                     )
                 );
                 //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
@@ -70,7 +70,7 @@ class Letter extends Content
 
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'photo':

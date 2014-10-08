@@ -54,7 +54,7 @@
     {/block}
 
 </head>
-<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init()">
+<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')">
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -151,7 +151,7 @@
                     <li class="start" ng-class="{ 'active': false }">
                         <a href="#"><i class="fa fa-home"></i> <span class="title">{t}Dashboard{/t}</span></a>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="go();">
+                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list'))">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
                     </li>
                     <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
@@ -160,10 +160,10 @@
                             <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_framework_commands') }">
+                            <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands'))">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]"><i class="fa fa-code"></i> {t}Commands{/t}</a>
                             </li>
-                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }">
+                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status'))">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
                             </li>
                         </ul>
@@ -175,12 +175,12 @@
                             </span><span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_users_list') }">
+                            <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list'))">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
                                     <i class="fa fa-user"></i> {t}Users{/t}
                                 </a>
                             </li>
-                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }">
+                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list'))">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
                                     <i class="fa fa-users"></i> {t}User groups{/t}
                                 </a>

@@ -8,8 +8,8 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserCtrl', [
-    '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($filter, $location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * List of available users.
          *
@@ -32,6 +32,17 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
          * Creates a new user.
          */
         $scope.save = function() {
+            if ($scope.userForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.user.meta.paywall_time_limit) {
@@ -59,6 +70,17 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
          * Updates an user.
          */
         $scope.update = function() {
+            if ($scope.userForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.user.meta.paywall_time_limit) {

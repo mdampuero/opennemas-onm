@@ -49,7 +49,7 @@ class PollsController extends Controller
             $this->ccm = new \ContentCategoryManager();
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $this->category; // FOR WIDGETS
-            $category_real_name = $this->ccm->get_title($this->categoryName); //used in title
+            $category_real_name = $this->ccm->getTitle($this->categoryName); //used in title
 
         } else {
             $category_real_name = 'Portada';

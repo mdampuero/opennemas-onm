@@ -261,7 +261,7 @@ class NewStandController extends Controller
         //for widget_newsstand_dates
         //TODO: intelligent wigget
         $ki = new \Kiosko();
-        $months_kiosko = $ki->get_months_by_years();
+        $months_kiosko = $ki->getMonthsByYears();
         $this->view->assign('months_kiosko', $months_kiosko);
     }
 

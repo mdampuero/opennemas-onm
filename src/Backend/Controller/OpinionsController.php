@@ -414,7 +414,7 @@ class OpinionsController extends Controller
         if (is_null($opinion->id)) {
             m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
         } else {
-            $opinion->set_inhome($status, $_SESSION['userid']);
+            $opinion->setInHome($status, $_SESSION['userid']);
             m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
         }
 
@@ -698,7 +698,7 @@ class OpinionsController extends Controller
             );
 
             // Generate username and password from real name
-            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::getTitle($data['name'])));
             $data['password'] = md5($data['name']);
 
             $file = $request->files->get('avatar');
@@ -706,7 +706,7 @@ class OpinionsController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;
@@ -785,13 +785,13 @@ class OpinionsController extends Controller
 
         // Generate username and password from real name
         if (empty($data['username'])) {
-            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::getTitle($data['name'])));
         }
 
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } elseif (($data['avatar_img_id']) == 1) {
                 $data['avatar_img_id'] = $user->avatar_img_id;
@@ -858,7 +858,7 @@ class OpinionsController extends Controller
         $opinion->author = $author;
 
         // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-        $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
@@ -872,7 +872,7 @@ class OpinionsController extends Controller
             $element = new \Opinion($suggest['pk_content']);
             if (!empty($element->author)) {
                 $suggest['author_name'] = $element->author;
-                $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
+                $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
             } else {
                 $suggest['author_name_slug'] = "author";
             }

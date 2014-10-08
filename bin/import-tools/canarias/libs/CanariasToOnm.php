@@ -272,7 +272,7 @@ class CanariasToOnm
                 $photoName2 = $this->helper->clearImgTag($rs->fields['foto_noti_ampliada']);
                 $title = !empty($rs->fields['piedefoto']) ?$rs->fields['piedefoto']:$rs->fields['titulo'];
                 $title = $this->helper->convertToUtf8($title);
-                $slug = \StringUtils::get_title($title);
+                $slug = \StringUtils::getTitle($title);
 
                 if (!$photoName) {
                     $photoName = $this->helper->clearImgTag($rs->fields['foto_portada']);
@@ -303,7 +303,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => \StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -405,7 +405,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -457,7 +457,7 @@ class CanariasToOnm
 
                 $originalArticleID = $rs->fields['id'];
 
-                if ($this->helper->elementIsImported($originalArticleID, 'Fauna') ) {
+                if ($this->helper->elementIsImported($originalArticleID, 'Fauna')) {
                     echo "[{$current}/{$totalRows}] Article Fauna with id {$originalArticleID} already imported\n";
                 } else {
                     echo "\n [{$current}/{$totalRows}] Importing article Fauna with id {$originalArticleID} - ";
@@ -494,7 +494,7 @@ class CanariasToOnm
                         'fk_user' => USER_ID,
                         'fk_author' => USER_ID,
                         'slug' => $this->helper->getSlug($rs->fields['foto_texto']),
-                        'metadata' => \Onm\StringUtils::get_tags(
+                        'metadata' => \Onm\StringUtils::getTags(
                             'fauna',
                             $this->helper->convertToUtf8($rs->fields['foto_texto'])
                         ),
@@ -502,7 +502,7 @@ class CanariasToOnm
 
                     $articleID = $article->create($data);
 
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'Fauna');
 
                     } else {
@@ -558,7 +558,7 @@ class CanariasToOnm
 
                 $title = !empty($rs->fields['foto_texto']) ?$rs->fields['foto_texto']:$rs->fields['titulo'];
                 $title = $this->helper->convertToUtf8($title);
-                $slug = \StringUtils::get_title($title);
+                $slug = \StringUtils::getTitle($title);
 
                 if ($photoName) {
                     $imageID = $this->helper->imageIsImported($photoName, 'image');
@@ -578,7 +578,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
+                            'metadata' => StringUtils::getTags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -630,7 +630,7 @@ class CanariasToOnm
 
                 $originalArticleID = $rs->fields['id'];
 
-                if ($this->helper->elementIsImported($originalArticleID, 'TopSecret') ) {
+                if ($this->helper->elementIsImported($originalArticleID, 'TopSecret')) {
                     echo "[{$current}/{$totalRows}] Article TopSecret with id {$originalArticleID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing article TopSecret with id {$originalArticleID} - ";
@@ -645,7 +645,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'img1' =>$this->helper->imageIsImported(
@@ -672,7 +672,7 @@ class CanariasToOnm
 
                     $articleID = $article->create($data);
 
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'TopSecret');
 
                     } else {
@@ -715,7 +715,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
                 $title = $this->helper->convertToUtf8(strtolower($rs->fields['islas']));
                 $data = array();
-                $data['name'] = \StringUtils::normalize_name($title);
+                $data['name'] = \StringUtils::normalizeName($title);
                 $data['title'] = $title;
                 $data['inmenu']=1;
                 $data['subcategory'] =0;
@@ -755,7 +755,7 @@ class CanariasToOnm
                 $isla = \Onm\StringUtils::setSeparator(strtolower($isla), '-');
 
                 $data = array();
-                $data['name'] = \StringUtils::normalize_name($title);
+                $data['name'] = \StringUtils::normalizeName($title);
                 $data['title'] = $title;
                 $data['inmenu']=1;
                 $data['subcategory'] = $this->categoriesMatches[$isla];
@@ -809,7 +809,7 @@ class CanariasToOnm
 
                 $originalArticleID = $rs->fields['noticia'];
 
-                if ($this->helper->elementIsImported($originalArticleID, 'Ayuntamientos') ) {
+                if ($this->helper->elementIsImported($originalArticleID, 'Ayuntamientos')) {
                     echo "[{$current}/{$totalRows}] Article Ayuntamientos with ".
                     "id {$originalArticleID} already imported\n";
                 } else {
@@ -824,7 +824,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' =>$this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
@@ -842,7 +842,7 @@ class CanariasToOnm
                     $articleID = $article->create($data);
                     echo "\n [{$current}/{$totalRows}] Importing article "
                         ."Ayuntamientos with id {$originalArticleID} - in {$seccion} ";
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'Ayuntamientos');
 
                     } else {
@@ -913,7 +913,7 @@ class CanariasToOnm
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'description' => substr($rs->fields['texto'], 0, 120 . '...'),
                         'content_status' =>1,
                         'available' => 1,
@@ -927,7 +927,7 @@ class CanariasToOnm
 
                     $articleID = $article->create($data);
 
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'articleOLDTop');
 
                     } else {
@@ -981,7 +981,7 @@ class CanariasToOnm
 
                 $originalArticleID = $rs->fields['id'];
 
-                if ($this->helper->elementIsImported($originalArticleID, 'articleOLD') ) {
+                if ($this->helper->elementIsImported($originalArticleID, 'articleOLD')) {
                     echo "[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n";
                 } elseif (!empty($title)) {
                     echo "[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ";
@@ -1011,7 +1011,7 @@ class CanariasToOnm
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'content_status' => 1,
                         'available' => 1,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1022,7 +1022,7 @@ class CanariasToOnm
 
                     $articleID = $article->create($data);
 
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'articleOLD');
 
                     } else {
@@ -1086,7 +1086,7 @@ class CanariasToOnm
                     $data = array(
                         'title' => $title,
                         'category' => $category,
-                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
+                        'metadata' => \StringUtils::getTags($title.', '.$category_name),
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
@@ -1115,7 +1115,7 @@ class CanariasToOnm
 
                     $articleID = $article->create($data);
 
-                    if (!empty($articleID) ) {
+                    if (!empty($articleID)) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'article');
 
                     } else {
@@ -1287,7 +1287,7 @@ class CanariasToOnm
                 $photoName = $this->helper->clearImgTag($rs->fields['foto']);
                 $authorID = $this->helper->authorIsImported($name);
 
-                if (!empty($photoName) && !empty($authorID) ) {
+                if (!empty($photoName) && !empty($authorID)) {
 
                     $photoID = $this->helper->imageIsImported($photoName, 'image');
 
@@ -1300,7 +1300,7 @@ class CanariasToOnm
                             'category'=> '7',
                             'title' =>$this->helper->convertToUtf8($rs->fields['autor']),
                             'category_name'=>'autor',
-                            'metadata' => StringUtils::get_tags($this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
+                            'metadata' => StringUtils::getTags($this->helper->convertToUtf8($rs->fields['autor'])).', opinion',
                             'description' => $this->helper->convertToUtf8($rs->fields['autor']),
                             'created' => $rs->fields['fecha'],
                             'starttime' => $rs->fields['fecha'],
@@ -1318,7 +1318,7 @@ class CanariasToOnm
                                     " VALUES ( ?, ?, ?)";
                         $values2 = array( $authorID, $photoID, $photoPath );
 
-                        if (!empty($authorID) && !empty($photoID) ) {
+                        if (!empty($authorID) && !empty($photoID)) {
                             $rs2 =$GLOBALS['application']->conn->Execute($sql2, $values2);
                             if (!$rs2) {
                                 echo($sql2.' '. $GLOBALS['application']->conn->ErrorMsg());
@@ -1361,9 +1361,9 @@ class CanariasToOnm
                 echo 'rs'.$rs->fields['id'];
                  $originalOpinionID = $rs->fields['id'];
 
-                if ($this->helper->elementIsImported($originalOpinionID, 'opinion') ) {
+                if ($this->helper->elementIsImported($originalOpinionID, 'opinion')) {
                     echo "[{$current}/{$totalRows}] Opinion with id {$originalOpinionID} already imported\n";
-                } elseif(!empty($rs->fields['titulo'])) {
+                } elseif (!empty($rs->fields['titulo'])) {
                     $name = $this->helper->getSlug($rs->fields['autor']);
 
                     $fkAuthor = 0;
@@ -1374,7 +1374,7 @@ class CanariasToOnm
                         $typeOpinion = 0;
                         $fkAuthor = 3;
                         $colab =  $this->helper->convertToUtf8($rs->fields['autor']);
-                    } elseif($typeOpinion == 0) {
+                    } elseif ($typeOpinion == 0) {
                         $fkAuthor = $this->helper->authorIsImported($name);
                     }
 
@@ -1388,7 +1388,7 @@ class CanariasToOnm
                             'category_name' => 'opinion',
                             'type_opinion' => $typeOpinion,
                             'body' => $this->helper->convertToUtf8($rs->fields['texto'])." <br> ".$colab,
-                            'metadata' => \StringUtils::get_tags($title.',  opinion', $colab),
+                            'metadata' => \StringUtils::getTags($title.',  opinion', $colab),
                             'description' => $this->helper->convertToUtf8('opinion '.strip_tags(substr($rs->fields['texto'], 0, 100))),
                             'fk_author' => $fkAuthor,
                             'available' => 1,
@@ -1399,7 +1399,7 @@ class CanariasToOnm
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'fk_user' => USER_ID,
                             'fk_publisher' => USER_ID,
-                            'slug' => \StringUtils::get_title($title),
+                            'slug' => \StringUtils::getTitle($title),
 
                         );
 
@@ -1474,7 +1474,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($photoName.', '.$category_name),
+                            'metadata' => StringUtils::getTags($photoName.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1523,9 +1523,9 @@ class CanariasToOnm
 
             while (!$rs->EOF) {
                 $originalLetterID = $rs->fields['id'];
-                $name = StringUtils::get_title($rs->fields['autor']);
+                $name = StringUtils::getTitle($rs->fields['autor']);
 
-                if ($this->helper->elementIsImported($originalLetterID, 'letter') ) {
+                if ($this->helper->elementIsImported($originalLetterID, 'letter')) {
                     echo "[{$current}/{$totalRows}] Letter with id {$originalLetterID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing Letter with id {$originalLetterID} - ";
@@ -1537,8 +1537,8 @@ class CanariasToOnm
                             'category_name' => 'letter',
                             'email' => '',
                             'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'metadata' => StringUtils::get_tags($rs->fields['autor'])
-                                .', '. StringUtils::get_tags($rs->fields['titulo']).', carta',
+                            'metadata' => StringUtils::getTags($rs->fields['autor'])
+                                .', '. StringUtils::getTags($rs->fields['titulo']).', carta',
                             'description' => 'opinion '.$rs->fields['autor']
                                 .' '.strip_tags(substr($this->helper->convertToUtf8($data['texto']), 0, 100)),
                             'author' => $rs->fields['autor'],
@@ -1551,7 +1551,7 @@ class CanariasToOnm
                             'changed' => $rs->fields['fecha'],
                             'fk_user' => USER_ID,
                             'fk_publisher' => USER_ID,
-                            'slug' => StringUtils::get_title($rs->fields['titulo']),
+                            'slug' => StringUtils::getTitle($rs->fields['titulo']),
                         );
 
                     $letter = new Letter();
@@ -1627,7 +1627,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($photoName.', '.$category_name),
+                            'metadata' => StringUtils::getTags($photoName.', '.$category_name),
                             'description' => $this->helper->convertToUtf8($rs->fields['piedefoto']),
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1674,7 +1674,7 @@ class CanariasToOnm
                     'name' => $name,
                     'category'=> $category,
                     'category_name'=>  $category_name,
-                    'metadata' => StringUtils::get_tags($title.','.$category_name),
+                    'metadata' => StringUtils::getTags($title.','.$category_name),
                     'description' => $title,
                     'created' => $fields['fecha'].' '.$fields['hora'],
                     'changed' => $fields['fecha'].' '.$fields['hora'],
@@ -1721,7 +1721,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
 
                 $originalAlbumID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalAlbumID, 'album') ) {
+                if ($this->helper->elementIsImported($originalAlbumID, 'album')) {
                     echo "[{$current}/{$totalRows}] Albums with id {$originalAlbumID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing album with id {$originalAlbumID}  \n";
@@ -1739,7 +1739,7 @@ class CanariasToOnm
                         'with_comment' => 0,
                         'content_status' => ($rs->fields['activar'] == 0)? 0:1,
                         'available' => ($rs->fields['activar'] == 0)? 0:1,
-                        'metadata' => \StringUtils::get_tags($rs->fields['title']),
+                        'metadata' => \StringUtils::getTags($rs->fields['title']),
                         'subtitle' => '',
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => '',
@@ -1751,7 +1751,7 @@ class CanariasToOnm
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'fk_user' => USER_ID,
                         'fk_author' => USER_ID,
-                        'slug' => \Onm\StringUtils::get_title($title),
+                        'slug' => \Onm\StringUtils::getTitle($title),
                         'album_photos_id' => $album_photos_id,
                         'album_photos_footer'=> $album_photos_footer,
                         'cover_id' => $album_photos_id[1],
@@ -1761,7 +1761,7 @@ class CanariasToOnm
 
                     $albumID = $album->create($data);
 
-                    if (!empty($albumID) ) {
+                    if (!empty($albumID)) {
                         $this->helper->insertRefactorID($originalAlbumID, $albumID->id, 'album');
                         $this->helper->updateCover($albumID->id, $album_photos_id[1]);
                     } else {
@@ -1811,7 +1811,7 @@ class CanariasToOnm
             $directoryDate =date("/Y/m/d/");
             $basePath = MEDIA_PATH.'/'.FILE_DIR.$directoryDate ;
              // Create folder if it doesn't exist
-            if (!file_exists($basePath) ) {
+            if (!file_exists($basePath)) {
                 mkdir($basePath, 0777, true);
             }
 
@@ -1821,7 +1821,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
 
                 $originalAdID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalAdID, 'attachment') ) {
+                if ($this->helper->elementIsImported($originalAdID, 'attachment')) {
                     echo "[{$current}/{$totalRows}] attachment with id {$originalAdID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing attachment with id {$originalAdID} - ";
@@ -1838,7 +1838,7 @@ class CanariasToOnm
                     $data['available'] = 1;
 
                     $data['description'] = $title;
-                    $data['metadata'] = StringUtils::get_tags($title.', '.$category_name);
+                    $data['metadata'] = StringUtils::getTags($title.', '.$category_name);
                     $data['fk_publisher'] = $_SESSION['userid'];
                     $data['fk_user'] =  USER_ID;
                     $data['fk_author'] = USER_ID;
@@ -1904,7 +1904,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
                 if (!empty($rs->fields['video'])) {
                     $originalAdID = $rs->fields['id'];
-                    if ($this->helper->elementIsImported($originalAdID, 'video') ) {
+                    if ($this->helper->elementIsImported($originalAdID, 'video')) {
                         echo "[{$current}/{$totalRows}] video with id {$originalAdID} already imported\n";
                     } else {
                         echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
@@ -1917,7 +1917,7 @@ class CanariasToOnm
                                 'name' => $rs->fields['video'],
                                 'available' =>1,
                                 'category'=> $category,
-                                'metadata' => StringUtils::get_tags($photoName),
+                                'metadata' => StringUtils::getTags($photoName),
                                 'description' => $rs->fields['texto'],
                                 'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                                 'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -2115,7 +2115,7 @@ class CanariasToOnm
                         'with_comment' => 0,
                         'content_status' => ($rs->fields['activar'] === 0)? 0:1,
                         'available' => ($rs->fields['activar'] === 0)? 0:1,
-                        'metadata' => \StringUtils::get_tags($title),
+                        'metadata' => \StringUtils::getTags($title),
                         'subtitle' => '',
                         'agency' => '',
                         'summary' => '',
@@ -2127,7 +2127,7 @@ class CanariasToOnm
                         'starttime' => $rs->fields['fecha'].' 00:00:00',
                         'fk_user' => USER_ID,
                         'fk_author' => USER_ID,
-                        'slug' => \Onm\StringUtils::get_title($title),
+                        'slug' => \Onm\StringUtils::getTitle($title),
                         'visualization' => 1,
                         );
 
@@ -2174,7 +2174,7 @@ class CanariasToOnm
                     }
 
 
-                    if (!empty($poll->id) ) {
+                    if (!empty($poll->id)) {
                         $this->helper->insertRefactorID($originalPollID, $poll->id, 'poll');
                         $this->helper->updatePolls($total_votes, $poll->id);
                         $this->helper->updatePollVotes($votes);
@@ -2217,7 +2217,7 @@ class CanariasToOnm
                     $sql = '';
                     $sqlContents = "UPDATE `contents` SET "
                         ."`title`='".addslashes($rs->fields['titulo'])."', "
-                        ."`metadata`='".StringUtils::get_tags($rs->fields['titulo'])."' "
+                        ."`metadata`='".StringUtils::getTags($rs->fields['titulo'])."' "
                         ." WHERE pk_content=".$id.";  \n";
 
                     $sqlAttach = "UPDATE `attachments` SET "
@@ -2299,7 +2299,7 @@ class CanariasToOnm
             while (!$rs->EOF) {
                 $title = $this->helper->convertToUtf8(strtolower($rs->fields['nombre']));
                 $data = array();
-                $data['name'] = \StringUtils::normalize_name($title);
+                $data['name'] = \StringUtils::normalizeName($title);
                 $data['title'] = $title;
                 $data['inmenu']=1;
                 $data['subcategory'] =0;
@@ -2323,7 +2323,7 @@ class CanariasToOnm
             foreach ($others as $nombre) {
                 $title = $this->helper->convertToUtf8(strtolower($nombre));
                 $data = array();
-                $data['name'] = \StringUtils::normalize_name($title);
+                $data['name'] = \StringUtils::normalizeName($title);
                 $data['title'] = ucfirst($title);
                 $data['inmenu']=1;
                 $data['subcategory'] =0;

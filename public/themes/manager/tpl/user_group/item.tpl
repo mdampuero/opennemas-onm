@@ -32,10 +32,10 @@
                 </span>
             </h3>
             <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving || groupForm.$invalid" ng-if="!group.id">
+                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!group.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving || groupForm.$invalid" ng-if="group.id">
+                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="group.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
             </div>
@@ -47,9 +47,11 @@
                         {t}Group name{/t}
                         <span ng-show="groupForm.name.$invalid">*</span>
                     </label>
-                    <div class="controls input-with-icon right" ng-class="{ 'error-control': groupForm.name.$dirty && groupForm.name.$invalid, 'success-control': groupForm.name.$dirty && groupForm.name.$valid }">
-                        <i class="fa" ng-class="{ 'fa-exclamation': groupForm.name.$dirty && groupForm.name.$invalid, 'fa-check': groupForm.name.$dirty && groupForm.name.$valid }"></i>
+                    <div class="controls" ng-class="{ 'error-control': formValidated && groupForm.name.$invalid }">
                         <input class="form-control" name="name" ng-model="group.name" required type="text">
+                        <span class="error" ng-show="formValidated && groupForm.name.$invalid">
+                            <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                        </span>
                     </div>
                 </div>
                 <h4>{t}Privileges{/t}</h4>
@@ -66,7 +68,7 @@
                 </div>
                 <div>
                     <div ng-repeat="section in sections">
-                        <h6>{t}[% section.title %]{/t}</h6>
+                        <h5>{t}[% section.title %]{/t}</h5>
                         <div class="row" ng-repeat="columns in section.rows">
                             <div class="col-sm-3" ng-repeat="name in columns">
                                 <div class="checkbox check-default check-title">

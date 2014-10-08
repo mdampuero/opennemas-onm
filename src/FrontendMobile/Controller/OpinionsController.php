@@ -74,7 +74,7 @@ class OpinionsController extends Controller
             }
 
             foreach ($opinions as &$opinion) {
-                $opinion['author_name_slug'] = \Onm\StringUtils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = \Onm\StringUtils::getTitle($opinion['name']);
             }
 
 

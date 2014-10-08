@@ -145,28 +145,6 @@ class ContentManager
     }
 
     /**
-     * Old function name of ContentManager::findAll()
-     *
-     * @param string $contentType the content type to search for
-     * @param string $filter the SQL WHERE sentence to filter down contents
-     * @param string $orderBy the ORDER BY sentence
-     * @param string $fields the list of fields to fetch
-     *
-     * @deprecated deprecated since version 1.0
-     * @see ContentManager::findAll()
-     *
-     * TODO: drop it
-     **/
-    public function find_all(
-        $contentType,
-        $filter = null,
-        $orderBy = 'ORDER BY 1',
-        $fields = '*'
-    ) {
-        return $this->findAll($contentType, $filter, $orderBy, $fields);
-    }
-
-    /**
      * Returns an array of objects for a given content type and filters
      *
      * @param string $contentType the content type to search for
@@ -1552,56 +1530,6 @@ class ContentManager
     }
 
     /**
-     * Returns a list of content objecst from a given category that matches a search criteria
-     *
-     * @param string $contentType the type of content to search for
-     * @param string $categoryName the name of the category where search for contents in
-     * @param string $filter the SQL WHERE sentence to filter the contents
-     * @param string $orderBy the ORDER BY sentence to sort the contents
-     *
-     * @return array a list of objects that matches the search criterias
-     **/
-    public function find_by_category_name(
-        $contentType,
-        $categoryName,
-        $filter = null,
-        $orderBy = 'ORDER BY 1'
-    ) {
-        // recupera el id de la categoria del array.
-        $this->init($contentType);
-
-        $ccm = ContentCategoryManager::get_instance();
-        $pk_fk_content_category = $ccm->get_id($categoryName);
-
-        $items  = array();
-        $_where = 'in_litter=0';
-
-        if (intval($pk_fk_content_category)<=0) {
-            return $items;
-        }
-        if (!is_null($filter)) {
-            // se busca desde la litter.php
-            if (preg_match('/in_litter=1/i', $filter)) {
-                $_where = $filter;
-            } else {
-                $_where = $filter.' AND in_litter=0';
-            }
-        }
-
-        $sql = 'SELECT * FROM contents_categories, contents,  '.$this->table.'  '
-             . 'WHERE '.$_where
-             . ' AND `contents_categories`.`pk_fk_content_category`='.$pk_fk_content_category
-             . '  AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.$this->content_type
-             . '` AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
-             .$orderBy;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->loadObject($rs, $contentType);
-
-        return $items;
-    }
-
-    /**
      * Returns title, catName and slugs of last headlines from subcategories of a given category
      *
      * @return array a list of content information (not the object itself)
@@ -1628,11 +1556,11 @@ class ContentManager
         while (!$rs->EOF) {
             $items[] = array(
                 'title'          => $rs->fields['title'],
-                'catName'        => $ccm->get_name($rs->fields['category_id']),
+                'catName'        => $ccm->getName($rs->fields['category_id']),
                 'slug'           => $rs->fields['slug'],
                 'created'        => $rs->fields['created'],
                 'category_title' =>
-                    $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                    $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
                 'id'             => $rs->fields['pk_content'],
 
                 /* to filter in getInTime() */
@@ -1683,10 +1611,10 @@ class ContentManager
             if ($rsAux->fields['num'] <= 0 || $frontIncluded) {
                 $items[] = array(
                     'title'          => $rs->fields['title'],
-                    'catName'        => $ccm->get_name($rs->fields['category_id']),
+                    'catName'        => $ccm->getName($rs->fields['category_id']),
                     'slug'           => $rs->fields['slug'],
                     'created'        => $rs->fields['created'],
-                    'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                    'category_title' => $ccm->getTitle($ccm->getName($rs->fields['category_id'])),
                     'id'             => $rs->fields['pk_content'],
                     'starttime'      => $rs->fields['starttime'],
                     'endtime'        => $rs->fields['endtime'],
@@ -2121,7 +2049,7 @@ class ContentManager
                 && $content->content_status == 1
                 && $content->in_litter == 0
             ) {
-                $content->category_name = $ccm->get_name($content->category);
+                $content->category_name = $ccm->getName($content->category);
                 $relatedContent[] = $content;
             }
             // }}}

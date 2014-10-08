@@ -150,7 +150,7 @@ class CacheManagerController extends Controller
         // Build information for frontpages
         $sections = array();
         foreach ($this->templateManager->cacheGroups as $cacheGroup) {
-            $categoryName = $ccm->get_title($cacheGroup);
+            $categoryName = $ccm->getTitle($cacheGroup);
             $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
         }
         foreach ($caches as &$cache) {

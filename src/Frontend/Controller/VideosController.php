@@ -50,7 +50,7 @@ class VideosController extends Controller
         if ($this->category_name != 'home') {
             $ccm = \ContentCategoryManager::get_instance();
             $this->category = $ccm->get_id($this->category_name);
-            $category_real_name = $ccm->get_title($this->category_name);
+            $category_real_name = $ccm->getTitle($this->category_name);
             $this->view->assign(
                 array(
                     'category'           => $this->category,

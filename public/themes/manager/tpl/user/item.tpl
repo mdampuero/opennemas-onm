@@ -27,10 +27,10 @@
                 [% user.name %]
             </h3>
             <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving || userForm.$invalid" ng-if="!user.id">
+                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving || userForm.$invalid" ng-if="user.id">
+                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
                     <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                 </button>
             </div>
@@ -44,9 +44,11 @@
                                 {t}Display name{/t}
                                 <span ng-show="userForm.name.$invalid">*</span>
                             </label>
-                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.name.$dirty && userForm.name.$invalid, 'success-control': userForm.name.$dirty && userForm.name.$valid }">
-                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.name.$dirty && userForm.name.$invalid, 'fa-check': userForm.name.$dirty && userForm.name.$valid }"></i>
+                            <div class="controls input-with-icon right" ng-class="{ 'error-control': formValidated && userForm.name.$invalid }">
                                 <input class="form-control" id="name" name="name" ng-model="user.name" ng-maxlength="50" required type="text"/>
+                                <span class="error" ng-show="formValidated && userForm.name.$invalid">
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -54,9 +56,11 @@
                                 {t}User name{/t}
                                 <span ng-show="userForm.username.$invalid">*</span>
                             </label>
-                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.username.$dirty && userForm.username.$invalid, 'success-control': userForm.username.$dirty && userForm.username.$valid }">
-                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.username.$dirty && userForm.username.$invalid, 'fa-check': userForm.username.$dirty && userForm.username.$valid }"></i>
+                            <div class="controls" ng-class="{ 'error-control': formValidated && userForm.username.$invalid }">
                                 <input class="form-control" id="username" name="username" ng-model="user.username"  ng-maxlength="20" required type="text"/>
+                                <span class="error" ng-show="formValidated && userForm.username.$invalid">
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -64,9 +68,11 @@
                                 {t}Email{/t}
                                 <span ng-show="userForm.email.$invalid">*</span>
                             </label>
-                            <div class="controls input-with-icon right" ng-class="{ 'error-control': userForm.email.$dirty && userForm.email.$invalid, 'success-control': userForm.email.$dirty && userForm.email.$valid }">
-                                <i class="fa" ng-class="{ 'fa-exclamation': userForm.email.$dirty && userForm.email.$invalid, 'fa-check': userForm.email.$dirty && userForm.email.$valid }"></i>
+                            <div class="controls" ng-class="{ 'error-control': formValidated && userForm.email.$invalid }">
                                 <input class="form-control" id="email" name="email" placeholder="test@example.com"  ng-model="user.email" required type="email">
+                                <span class="error" ng-show="formValidated && userForm.email.$invalid">
+                                    <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">

@@ -57,18 +57,21 @@
 <div class="wrapper">
     <h1 class="error-title">There was an error in onm</h1>
     <div class="error-trace">
-        <div class="title <?php if ($error->getCode() == 1) { echo "error"; } ?>">
+        <div class="title <?php
+                          if ($error->getCode() == 1) {
+                              echo "error";
+                          } ?>">
             <p>
                 ( ! ) Exception: <?php echo get_class($error);?> - <?php echo $error->getMessage(). $errorMessage ?> :  in
                 <?php echo $error->getFile() ?> on line <?php echo $error->getLine(); ?>
             </p>
         </div>
         <?php
-            $backtrace = $error->getTrace();
-            $backtrace = array_reverse($backtrace);
-            if (is_array($backtrace)
-                && count($backtrace) > 0
-            ) { ?>
+        $backtrace = $error->getTrace();
+        $backtrace = array_reverse($backtrace);
+        if (is_array($backtrace)
+            && count($backtrace) > 0
+        ) { ?>
             <div class="backtrace">
                 <div class="title"><span>Backtrace:</span> </div>
                 <table>
@@ -77,12 +80,14 @@
                             <th>File</th>
                             <th>Line</th>
                         </tr>
-                        <?php foreach ($backtrace as $trace_step) { ?>
+    <?php
+    foreach ($backtrace as $trace_step) { ?>
                         <tr>
                             <td>
                                 <a href="file://{$file}"> <?php echo $trace_step['file']; ?></a>
 
-                                <p>Class: <?php echo $trace_step['class']; ?>::<?php echo $trace_step['function']; ?>()</p>
+                                <p>Class: <?php echo $trace_step['class']; ?>::
+                                          <?php echo $trace_step['function']; ?>()</p>
                                 <p>
                                     Args:
                                     <?php echo print_r($trace_step['args']); ?>
@@ -92,11 +97,13 @@
                             <td>
                             </td>
                         </tr>
-                        <?php } ?>
+    <?php
+    }       ?>
                     </tbody>
                 </table>
             </div>
-        <?php } ?>
+        <?php
+        } ?>
     </div>
     </div>
 

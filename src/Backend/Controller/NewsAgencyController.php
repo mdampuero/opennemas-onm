@@ -906,7 +906,7 @@ class NewsAgencyController extends Controller
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => \Onm\StringUtils::get_tags($photo->title),
+                            'metadata'      => \Onm\StringUtils::getTags($photo->title),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );
@@ -944,7 +944,7 @@ class NewsAgencyController extends Controller
                 // Get author object,decode it and create new author
                 $authorObj = json_decode($element->getRightsOwner());
 
-                if(!is_null($authorObj)) {
+                if (!is_null($authorObj)) {
                     // Fetch author data
                     $authorArray = get_object_vars($authorObj);
 
@@ -1041,7 +1041,7 @@ class NewsAgencyController extends Controller
                         'category'       => $category,
                         'content_status' => 1,
                         'title'          => $video->title,
-                        'metadata'       => \Onm\StringUtils::get_tags($video->title),
+                        'metadata'       => \Onm\StringUtils::getTags($video->title),
                         'description'    => '',
                         'author_name'    => 'internal',
                     );
@@ -1068,7 +1068,7 @@ class NewsAgencyController extends Controller
             'frontpage'      => 0,
             'in_home'        => 0,
             'title_int'      => $element->title,
-            'metadata'       => \Onm\StringUtils::get_tags($element->title),
+            'metadata'       => \Onm\StringUtils::getTags($element->title),
             'subtitle'       => $element->pretitle,
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),

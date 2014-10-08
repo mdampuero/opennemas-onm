@@ -44,7 +44,7 @@ class Schedule extends Content
                 $item->bgcolor        = $rs->fields['bgcolor'];
                 $item->ensign         = $rs->fields['ensign'];
                 $item->position       = $rs->fields['position'];
-                $item->name           = \Onm\StringUtils::get_title($rs->fields['calendar_title']);
+                $item->name           = \Onm\StringUtils::getTitle($rs->fields['calendar_title']);
 
                 $calendars[]=$item;
                 $rs->MoveNext();

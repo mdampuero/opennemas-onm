@@ -349,7 +349,7 @@ class ImagesController extends Controller
                             'fk_category'       => $category,
                             'category'          => $category,
                             'category_name'     => $category_name,
-                            'metadata'          => \Onm\StringUtils::get_tags($tempName),
+                            'metadata'          => \Onm\StringUtils::getTags($tempName),
                         );
 
                         try {
@@ -403,7 +403,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => \Onm\StringUtils::get_tags($tempName),
+                        'metadata'          => \Onm\StringUtils::getTags($tempName),
                     );
 
                     try {
@@ -495,7 +495,7 @@ class ImagesController extends Controller
         }
 
         if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = \Onm\StringUtils::getTags($metadata);
             $tokens = explode(', ', $tokens);
 
             $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));

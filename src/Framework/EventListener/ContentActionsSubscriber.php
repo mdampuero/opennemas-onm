@@ -181,7 +181,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         if (isset($_REQUEST['category'])) {
             $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($_REQUEST['category']);
+            $categoryName = $ccm->getName($_REQUEST['category']);
             $tplManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
             );
@@ -213,7 +213,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 $categoryName = 'opinion';
                 $tplManager->delete($categoryName, 'opinion_frontpage.tpl');
             } else {
-                $categoryName = $ccm->get_name($category);
+                $categoryName = $ccm->getName($category);
             }
 
             $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);

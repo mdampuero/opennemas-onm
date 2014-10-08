@@ -117,7 +117,7 @@ class ContentCategory
     {
         if (!isset($data['name'])) {
             $data['name'] = strtolower($data['title']);
-            $data['name'] = StringUtils::normalize_name($data['name']);
+            $data['name'] = StringUtils::normalizeName($data['name']);
         }
         $data['logo_path'] =
             (isset($data['logo_path'])) ? $data['logo_path'] : '';

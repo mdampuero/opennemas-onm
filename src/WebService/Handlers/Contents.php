@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for contents.
+ *
+ * @package WebService
+ **/
 class Contents
 {
     public $restler;
@@ -11,7 +24,7 @@ class Contents
     {
         $this->validateInt($id);
 
-        $refactorID = Content::resolveID($id);
+        $refactorID = \Content::resolveID($id);
 
         return $refactorID;
     }
@@ -65,13 +78,13 @@ class Contents
     */
     public function loadCategoryName($id)
     {
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
 
         $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
 
         $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
-        return $ccm->get_name($rs);
+        return $ccm->getName($rs);
 
     }
 
@@ -80,13 +93,13 @@ class Contents
     */
     public function loadCategoryTitle($id)
     {
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
 
         $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
 
         $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
-        return $ccm->get_title($rs);
+        return $ccm->getTitle($rs);
     }
 
     /*
@@ -175,10 +188,10 @@ class Contents
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new RestException(400, 'parameter is not a number');
+            throw new \RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new RestException(400, 'parameter is not finite');
+            throw new \RestException(400, 'parameter is not finite');
         }
     }
 }

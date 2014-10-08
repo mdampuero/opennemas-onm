@@ -550,7 +550,7 @@ class ContentController extends Controller
         $content   = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
-            $content->set_available($status, $this->getUser()->id);
+            $content->setAvailable($status, $this->getUser()->id);
 
             $status = $content->content_status;
             $success[] = array(
@@ -621,7 +621,7 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->set_available(
+                        $content->setAvailable(
                             $available,
                             $this->getUser()->id
                         );
@@ -830,7 +830,7 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->set_in_home(
+                        $content->setInHome(
                             $inHome,
                             $this->getUser()->id
                         );

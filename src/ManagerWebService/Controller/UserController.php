@@ -54,7 +54,7 @@ class UserController extends Controller
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } else {
                 $data['avatar_img_id'] = 0;
@@ -211,8 +211,13 @@ class UserController extends Controller
         $criteria = $request->request->filter('criteria') ? : array();
         $orderBy  = $request->request->filter('orderBy') ? : array();
 
+        $order = array();
+        foreach ($orderBy as $value) {
+            $order[$value['name']] = $value['value'];
+        }
+
         $um    = $this->get('user_repository');
-        $users = $um->findBy($criteria, $orderBy, $epp, $page);
+        $users = $um->findBy($criteria, $order, $epp, $page);
         $total = $um->countBy($criteria);
 
         $userGroups = $this->get('usergroup_repository')->findBy();
@@ -442,7 +447,7 @@ class UserController extends Controller
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } elseif (($data['avatar_img_id']) == 1) {
                 $data['avatar_img_id'] = $user->avatar_img_id;

@@ -27,18 +27,23 @@
                                 <i class="fa fa-cube"></i>
                             </span>
                             <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text"/>
+                            <div class="input-group-btn">
+                                <select class="btn btn-white xmedium form-control" ng-model="epp">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                </select>
+                                <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                                <button class="btn btn-white" ng-click="refresh()">
+                                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-refresh': !loading }"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <select class="xsmall" ng-model="epp">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                        </select>
-                    </div>
-                    <i class="fa fa-circle-o-notch fa-lg fa-spin" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
                     <div class="form-group pagination-info">
@@ -101,104 +106,104 @@
                             </th>
                             <th class="pointer" style="width: 50px;" ng-click="sort('id')">
                                 {t}#{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.id == 'asc', 'fa fa-caret-down': orderBy.id == 'desc' }"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
                             </th>
                             <th class="pointer" ng-click="sort('name')" ng-show="columns.name">
                                 {t}Name{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.name == 'asc', 'fa fa-caret-down': orderBy.name == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                             </th>
                             <th class="pointer" ng-click="sort('domains')" ng-show="columns.domains">
                                 {t}Domains{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
                             </th>
                             <th class="pointer" ng-click="sort('domain_expire')" ng-show="columns.domain_expire">
                                 {t}Domain expire{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.domains == 'asc', 'fa fa-caret-down': orderBy.domains == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
                             </th>
                             <th class="pointer" ng-click="sort('contact_email')" ng-show="columns.contact_mail">
                                 {t}Contact{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.contact_mail == 'asc', 'fa fa-caret-down': orderBy.contact_mail == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contact_mail') == 'asc', 'fa fa-caret-down': isOrderedBy('contact_mail') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('last_login')" ng-show="columns.last_login">
                                 {t}Last access{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.last_login == 'asc', 'fa fa-caret-down': orderBy.last_login == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('last_login') == 'asc', 'fa fa-caret-down': isOrderedBy('last_login') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('created')" ng-show="columns.created">
                                 {t}Created{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.created == 'asc', 'fa fa-caret-down': orderBy.created == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('contents')" ng-show="columns.contents">
                                 <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.contents == 'asc', 'fa fa-caret-down': orderBy.contents == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('articles')" ng-show="columns.articles">
                                 {t}Articles{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.articles == 'asc', 'fa fa-caret-down': orderBy.articles == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('articles') == 'asc', 'fa fa-caret-down': isOrderedBy('articles') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('opinions')" ng-show="columns.opinions">
                                 {t}Opinions{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.opinions == 'asc', 'fa fa-caret-down': orderBy.opinions == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opinions') == 'asc', 'fa fa-caret-down': isOrderedBy('opinions') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="columns.advertisements">
                                 {t}Advertisements{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.advertisements == 'asc', 'fa fa-caret-down': orderBy.advertisements == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('advertisements') == 'asc', 'fa fa-caret-down': isOrderedBy('advertisements') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('albums')" ng-show="columns.albums">
                                 {t}Albums{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.albums == 'asc', 'fa fa-caret-down': orderBy.albums == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('albums') == 'asc', 'fa fa-caret-down': isOrderedBy('albums') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('photos')" ng-show="columns.photos">
                                 {t}Photos{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.photos == 'asc', 'fa fa-caret-down': orderBy.photos == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('photos') == 'asc', 'fa fa-caret-down': isOrderedBy('photos') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('videos')" ng-show="columns.videos">
                                 {t}Videos{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.videos == 'asc', 'fa fa-caret-down': orderBy.videos == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('videos') == 'asc', 'fa fa-caret-down': isOrderedBy('videos') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('widgets')" ng-show="columns.widgets">
                                 {t}Widgets{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.widgets == 'asc', 'fa fa-caret-down': orderBy.widgets == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('static_pages')" ng-show="columns.static_pages">
                                 {t}Static pages{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.static_pages == 'asc', 'fa fa-caret-down': orderBy.static_pages == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('static_pages') == 'asc', 'fa fa-caret-down': isOrderedBy('static_pages') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('attachments')" ng-show="columns.attachments">
                                 {t}Attachments{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.attachments == 'asc', 'fa fa-caret-down': orderBy.attachments == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('attachments') == 'asc', 'fa fa-caret-down': isOrderedBy('attachments') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('polls')" ng-show="columns.polls">
                                 {t}Polls{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.polls == 'asc', 'fa fa-caret-down': orderBy.polls == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('polls') == 'asc', 'fa fa-caret-down': isOrderedBy('polls') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('letters')" ng-show="columns.letters">
                                 {t}Letters{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.letters == 'asc', 'fa fa-caret-down': orderBy.letters == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('letters') == 'asc', 'fa fa-caret-down': isOrderedBy('letters') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('media_size')" ng-show="columns.media_size">
                                 {t}Media size{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.media_size == 'asc', 'fa fa-caret-down': orderBy.media_size == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('alexa')" ng-show="columns.alexa">
                                 {t}Alexa{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.alexa == 'asc', 'fa fa-caret-down': orderBy.alexa == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('alexa') == 'asc', 'fa fa-caret-down': isOrderedBy('alexa') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('page_views')" ng-show="columns.page_views">
                                 {t}Page views{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.page_views == 'asc', 'fa fa-caret-down': orderBy.page_views == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('users')" ng-show="columns.users">
                                 {t}Users{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.users == 'asc', 'fa fa-caret-down': orderBy.users == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('emails')" ng-show="columns.emails">
                                 {t}Emails{/t}
-                                <i ng-class="{ 'fa fa-caret-up': orderBy.emails == 'asc', 'fa fa-caret-down': orderBy.emails == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('activated')" ng-show="columns.activated" style="width: 60px">
                                 <span>
                                     <i class="fa fa-check"></i>
-                                    <i ng-class="{ 'fa fa-caret-up': orderBy.activated == 'asc', 'fa fa-caret-down': orderBy.activated == 'desc'}"></i>
+                                    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('activated') == 'asc', 'fa fa-caret-down': isOrderedBy('activated') == 'desc'}"></i>
                                 </span>
                             </th>
                             <th class="text-center" style="width: 10px">

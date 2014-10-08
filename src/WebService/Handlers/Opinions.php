@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for opinions.
+ *
+ * @package WebService
+ **/
 class Opinions
 {
     public $restler;
@@ -14,7 +27,7 @@ class Opinions
         $er = getService('entity_repository');
 
         // Resolve dirty Id
-        $opinionId = Content::resolveID($id);
+        $opinionId = \Content::resolveID($id);
 
         // Load opinion
         $opinion = $er->find('Opinion', $opinionId);
@@ -25,7 +38,7 @@ class Opinions
         $opinion->author = $author;
 
         // Get author name slug
-        $opinion->author_name_slug = StringUtils::get_title($opinion->name);
+        $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
 
         // Get machine related contents
         $opinion->machineRelated = $this->machineRelated($opinionId);
@@ -216,7 +229,7 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
 
         $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
 
@@ -237,7 +250,7 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
 
         $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
 
@@ -258,7 +271,7 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
 
         $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
 
@@ -403,7 +416,7 @@ class Opinions
             $element = $er->find('Opinion', $origElem['pk_content']);
             if (!empty($element->author)) {
                 $origElem['author_name'] = $element->author;
-                $origElem['author_name_slug'] = StringUtils::get_title($element->author);
+                $origElem['author_name_slug'] = \StringUtils::getTitle($element->author);
             } else {
                 $origElem['author_name_slug'] = "author";
             }
@@ -413,7 +426,7 @@ class Opinions
                     'id'       => $origElem['pk_content'],
                     'date'     => date('YmdHis', strtotime($origElem['created'])),
                     'category' => $origElem['author_name_slug'],
-                    'slug'     => StringUtils::get_title($origElem['title']),
+                    'slug'     => StringUtils::getTitle($origElem['title']),
                 )
             );
         }
@@ -424,10 +437,10 @@ class Opinions
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new RestException(400, 'parameter is not a number');
+            throw new \RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new RestException(400, 'parameter is not finite');
+            throw new \RestException(400, 'parameter is not finite');
         }
     }
 }
