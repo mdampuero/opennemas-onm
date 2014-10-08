@@ -53,6 +53,8 @@ EOF
         // Get database connection
         $databaseConnection = getService('db_conn');
         $databaseConnection->selectDatabase($databaseName);
+        $conn = getService('dbal_connection');
+        $conn->selectDatabase($databaseName);
 
         // Load application and initialize Database
         \Application::load();
