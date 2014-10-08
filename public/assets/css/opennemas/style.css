@@ -130,6 +130,10 @@ a:hover {
     .top-menu-toggle-dark {
         display: none;
     }
+
+    .form-filter .form-group {
+        width: 80%;
+    }
 }
 
 .pointer {
