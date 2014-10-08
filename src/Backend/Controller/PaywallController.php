@@ -91,8 +91,7 @@ class PaywallController extends Controller
         $time = $time->format('Y-m-d H:i:s');
 
         $purchasesLastMonth = \Order::count(
-            "type='paywall' AND created > '$time'",
-            array()
+            "type='paywall' AND created > '$time'"
         );
 
         return $this->render(

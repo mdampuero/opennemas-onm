@@ -82,7 +82,6 @@ class Attachment extends Content
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-                //media/nuevatribuna/files/2013/03/06/reiniciar-la-democracia-para-salir-de-la-crisis.pdf
 
                 $uri = "media".DS.INSTANCE_UNIQUE_NAME.DS.FILE_DIR . $this->path;
 
@@ -111,10 +110,9 @@ class Attachment extends Content
      */
     public function create($data)
     {
-        $dir_date = date("/Y/m/d/");
-        //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
+        $dirDate = date("/Y/m/d/");
 
-        if ($this->exists($data['path'], $data['category'])) {
+        if ($this->exists($data['path'])) {
             return false;
         }
 
@@ -141,14 +139,11 @@ class Attachment extends Content
 
         // Check if exist thumbnail for this PDF
         if (preg_match('/\.pdf$/', $data['path'])) {
-            $dir_date = date("/Y/m/d/");
-            $media_path =
-                $this->file_path.DIRECTORY_SEPARATOR.FILE_DIR.$dir_date;
+            $media_path = $this->file_path.DS.FILE_DIR.$dirDate;
+            $imageName  = basename($data['path'], ".pdf") . '.jpg';
 
-            $imageName   = basename($data['path'], ".pdf") . '.jpg';
-
+            // Remove existent thumbnail for PDF
             if (file_exists($media_path . '/' . $imageName)) {
-                // Remove existent thumbnail for PDF
                 unlink($media_path . '/' . $imageName);
             }
         }
@@ -164,7 +159,7 @@ class Attachment extends Content
      *
      * @return boolean
     */
-    public function exists($path, $category)
+    public function exists($path)
     {
         $sql = 'SELECT count(*) AS total FROM attachments WHERE `path`=? ';
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($path));

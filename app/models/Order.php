@@ -169,22 +169,20 @@ class Order
      *
      * @return array
      **/
-    public static function count($filter = '', $config = array())
+    public static function count($filter = '')
     {
         $where = '';
-
         if (!empty($filter)) {
             $where = 'WHERE '.$filter;
         }
+
         $sql = "SELECT count(id) as count FROM orders $where";
-
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
         if (!$rs) {
             return 0;
         }
-
 
         return $rs->fields['count'];
     }
