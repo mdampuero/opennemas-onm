@@ -92,10 +92,10 @@
                         </label>
                         <span class="help">{t}(Human readable name){/t}</span>
                         <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.name.$invalid }">
-                            <input class="form-control" name="name" ng-model="instance.name" required type="text">
+                            <input class="form-control" id="name" name="name" ng-model="instance.name" required type="text">
                         </div>
                         <span class="error" ng-show="formValidated && instanceForm.name.$invalid">
-                            <label for="form1Amount" class="error">{t}This field is required{/t}</label>
+                            <label for="name" class="error">{t}This field is required{/t}</label>
                         </span>
                     </div>
                     <div class="form-group">
@@ -154,14 +154,14 @@
                     <div class="form-group">
                         <div class="controls">
                             <div class="input-group new-domain" ng-class="{ 'error-control': formValidated && instance.domains.length == 0 }">
-                                <input class="form-control " ng-model="new_domain" type="text">
+                                <input class="form-control " name="new-domain" ng-model="new_domain" type="text">
                                 <div class="input-group-btn">
                                     <button class="btn btn-default" ng-click="addDomain();" type="button">{t}Add{/t}</button>
                                 </div>
                             </div>
                             <div class="new-domain">
                                 <span class="error" ng-show="formValidated && instance.domains.length == 0">
-                                    <label for="form1Amount" class="error">{t}Instance domains cannot be empty.{/t}</label>
+                                    <label for="new-domain" class="error">{t}Instance domains cannot be empty.{/t}</label>
                                 </span>
                             </div>
                         </div>
@@ -231,15 +231,21 @@
                     <div class="form-group">
                         <label class="form-label">{t}Internal name{/t}</label>
                         <span class="help">{t}Alphanumeric, without spaces{/t}</span>
-                        <div class="controls">
-                            <input class="form-control" ng-model="instance.internal_name" type="text">
+                        <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.internal_name.$invalid }">
+                            <input class="form-control" id="internal_name" name="internal_name" ng-model="instance.internal_name" ng-required="instance.id" type="text">
                         </div>
+                        <span class="error" ng-show="formValidated && instanceForm.internal_name.$invalid">
+                            <label for="internal_name" class="error">{t}This field is required{/t}</label>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Database{/t}</label>
-                        <div class="controls">
-                            <input class="form-control" ng-model="instance.settings.BD_DATABASE" type="text">
+                        <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.database.$invalid }">
+                            <input class="form-control" id="database" name="database" ng-model="instance.settings.BD_DATABASE" ng-required="instance.id" type="text">
                         </div>
+                        <span class="error" ng-show="formValidated && instanceForm.database.$invalid">
+                            <label for="database" class="error">{t}This field is required{/t}</label>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="template">{t}Minimum password level{/t}</label>
