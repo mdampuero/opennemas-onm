@@ -6,13 +6,13 @@
  * @param Object fosJsRouting The fosJsRouting service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
-    '$http', '$location', '$modal', '$rootScope', '$scope', '$window',
-    'vcRecaptchaService', 'httpInterceptor', 'authService', 'fosJsRouting',
-    'history', 'messenger',
+    '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
+    '$translate', '$window', 'vcRecaptchaService', 'httpInterceptor',
+    'authService', 'fosJsRouting', 'history', 'messenger', 'paginationConfig',
     function (
-        $http, $location, $modal, $rootScope, $scope, $window,
-        vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
-        history, messenger
+        $filter, $http, $location, $modal, $rootScope, $scope, $translate,
+        $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
+        history, messenger, paginationConfig
     ) {
         /**
          * The fosJsRouting service.
@@ -40,10 +40,23 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
+         * Clears the last value for the current path.
+         */
+        $scope.clear = function(url) {
+            history.clear(url);
+        }
+
+        /**
          * Removes a class from body and checks if user is authenticated.
          */
-        $scope.init = function() {
+        $scope.init = function(language) {
             $('body').removeClass('application-loading');
+
+            console.log(language);
+            $translate.use(language);
+
+            paginationConfig.nextText     = $filter('translate')('Next');
+            paginationConfig.previousText = $filter('translate')('Previous');
 
             $scope.isAuthenticated();
         }

@@ -1,7 +1,7 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
-    '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($filter, $location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * The instance object.
          *
@@ -107,6 +107,17 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          * Creates a new instance.
          */
         $scope.save = function() {
+            if ($scope.instanceForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
@@ -157,6 +168,17 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          * Updates an instance.
          */
         $scope.update = function() {
+            if ($scope.instanceForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: 'There are errors in the form.',
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             if ($scope.instance.domain_expire && angular.isObject($scope.instance.domain_expire)) {
@@ -178,9 +200,17 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 });
         };
 
-        // Initialize instance
         if (data.instance) {
+            // Initialize instance
             $scope.instance = data.instance;
+        } else {
+            // Select Base plan as default
+            for (var i = 0; i < data.template.available_modules.length; i++) {
+                if (data.template.available_modules[i].plan == 'Base') {
+                    $scope.instance.external.activated_modules.push(
+                        data.template.available_modules[i].id);
+                }
+            };
         }
 
         $scope.$on('$destroy', function() {

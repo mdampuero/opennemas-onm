@@ -166,7 +166,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         }
 
         // Count users
-        $sql = 'SELECT COUNT(id) FROM users WHERE type = 0';
+        $sql = "SELECT COUNT(id) FROM users WHERE type = 0 and activated = 1 and
+            fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
         $rs  = $this->im->getConnection()->fetchArray($sql);
 
         if ($rs !== false && !empty($rs)) {
