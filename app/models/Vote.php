@@ -208,7 +208,7 @@ class Vote
 
             // Render links
             for ($i = 1; $i <= 2; $i++) {
-                $results.= $this->renderLink($i, $this->pk_vote, $value);
+                $results.= $this->renderLink($i, $this->pk_vote);
             }
             $outputHTML.= "  <div class=\"CVotos\">";
             $outputHTML.= $results;
@@ -306,7 +306,7 @@ class Vote
      * @return string the HTML for the vote link
      *
      **/
-    private function renderLink($i, $votePK, $value)
+    private function renderLink($i, $votePK)
     {
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC

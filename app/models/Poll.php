@@ -361,15 +361,12 @@ class Poll extends Content
      * Renders the poll
      *
      * @param arrray $params parameters for rendering the content
-     * @param Template $smarty the Template object instance
      *
      * @return string the generated HTML
      **/
-    public function render($params, $smarty)
+    public function render($params)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = new Template(TEMPLATE_USER);
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
