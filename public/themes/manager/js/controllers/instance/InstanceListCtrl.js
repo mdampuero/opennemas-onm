@@ -14,8 +14,8 @@
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$anchorScroll', '$location', '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
-    function ($anchorScroll, $location, $modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
+    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -69,9 +69,12 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          *
          * @type Object
          */
-        $scope.orderBy = {
-            'last_login': 'desc'
-        }
+        $scope.orderBy = [ { name: 'last_login', value: 'desc' } ];
+
+        /**
+         * The listing order for UI
+         */
+        $scope.orderUI = {};
 
         /**
          * The current page
@@ -98,6 +101,28 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * Variable to store the current search.
          */
         var search;
+
+        /**
+         * Checks if the listing is ordered by the given field name.
+         *
+         * @param string name The field name.
+         *
+         * @return mixed The order value, if the order exists. Otherwise,
+         *               returns false.
+         */
+        $scope.isOrderedBy = function(name) {
+            var i = 0;
+            while (i < $scope.orderBy.length
+                    && $scope.orderBy[i].name != name) {
+                i++;
+            }
+
+            if (i < $scope.orderBy.length) {
+                return $scope.orderBy[i].value;
+            }
+
+            return false;
+        }
 
         /**
          * Checks if an instance is selected
@@ -195,6 +220,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         };
 
         /**
+         * Reloads the listing.
+         */
+        $scope.refresh = function() {
+            search = list();
+        }
+
+        /**
          * Reloads the list on keypress.
          *
          * @param  Object event The even object.
@@ -289,19 +321,19 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @param string name Field name.
          */
         $scope.sort = function(name) {
-            if ($scope.orderBy[name]) {
-                if ($scope.orderBy[name] == 'asc') {
-                    $scope.orderBy[name] = 'desc';
-                } else {
-                    $scope.orderBy[name] = 'asc';
-                }
-            } else {
-                $scope.orderBy = {};
-                $scope.orderBy[name] = 'asc';
+            var i = 0;
+            while (i < $scope.orderBy.length && $scope.orderBy[i].name != name) {
+                i++;
             }
 
-            if (!$scope.orderBy.last_login) {
-                $scope.orderBy.last_login = 'desc';
+            if (i >= $scope.orderBy.length) {
+                $scope.orderBy.push({ name: name, value: 'asc' });
+            } else {
+                if ($scope.orderBy[i].value == 'asc') {
+                    $scope.orderBy[i].value = 'desc';
+                } else {
+                    $scope.orderBy.splice(i, 1);
+                }
             }
 
             $scope.page = 1;
@@ -377,8 +409,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
                         $scope.loading = 0;
 
-                        $location.hash('manager');
-                        $anchorScroll();
+                        // Scroll top
+                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
                     }
                 );
             }, 500);

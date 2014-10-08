@@ -177,8 +177,13 @@ class UserGroupController extends Controller
         $criteria = $request->request->filter('criteria') ? : array();
         $orderBy  = $request->request->filter('sort_by') ? : array();
 
+        $order = array();
+        foreach ($orderBy as $value) {
+            $order[$value['name']] = $value['value'];
+        }
+
         $um     = $this->get('usergroup_repository');
-        $groups = $um->findBy($criteria, $orderBy, $epp, $page);
+        $groups = $um->findBy($criteria, $order, $epp, $page);
         $total  = $um->countBy($criteria);
 
         return new JsonResponse(

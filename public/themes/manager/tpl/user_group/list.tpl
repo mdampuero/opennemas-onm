@@ -28,18 +28,23 @@
                                 <i class="fa fa-users"></i>
                             </span>
                             <input class="form-control" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name" type="text">
+                            <div class="input-group-btn">
+                                <select class="btn btn-white xsmall form-control" ng-model="epp">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                </select>
+                                <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; epp = 25; refresh()">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                                <button class="btn btn-white" ng-click="refresh()">
+                                    <i class="fa fa-refresh"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <select class="xsmall" ng-model="epp">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                        </select>
-                    </div>
-                    <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="loading"></i>
                 </div>
                 <div class="action-buttons">
                     <div class="form-group" ng-if="selected.groups.length > 0">
@@ -75,7 +80,10 @@
                                 <label for="select-all"></label>
                             </div>
                         </th>
-                        <th class="pointer" ng-click="sort('name')">{t}Group name{/t}</th>
+                        <th class="pointer" ng-click="sort('name')">
+                            {t}Group name{/t}
+                            <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>

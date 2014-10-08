@@ -8,8 +8,8 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
-    '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($location, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($filter, $location, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * List of available groups.
          *
@@ -123,6 +123,17 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * Creates a new user group.
          */
         $scope.save = function() {
+            if ($scope.groupForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             itemService.save('manager_ws_user_group_create', $scope.group)
@@ -209,6 +220,17 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
          * Updates an user group.
          */
         $scope.update = function() {
+            if ($scope.groupForm.$invalid) {
+                $scope.formValidated = 1;
+
+                messenger.post({
+                    message: $filter('translate')('FormErrors'),
+                    type:    'error'
+                });
+
+                return false;
+            }
+
             $scope.saving = 1;
 
             itemService.update('manager_ws_user_group_update', $scope.group.id,
