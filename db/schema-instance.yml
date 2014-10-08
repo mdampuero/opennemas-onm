@@ -1060,6 +1060,9 @@ settings:
         value:
             type: text
             options: { default: null, length: 65532 }
+        autoload:
+            type: boolean
+            options: { default: '0' }
     index:
         -
             name: PRIMARY
