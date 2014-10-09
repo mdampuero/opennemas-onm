@@ -18,7 +18,7 @@ namespace Onm\Import\DataSource\Format\NewsMLG1Component;
  *
  * @package Onm_Import_DataSource_Format_NewsMLG1Component
  **/
-abstract class ResourceAbstract
+class MultimediaResource
 {
     /**
      * Instantiates the Photo DOM data from an SimpleXML object
@@ -70,7 +70,7 @@ abstract class ResourceAbstract
                     ->NewsComponent[1]->ContentItem->DataContent
                     ->nitf->body->{'body.content'}->p;
 
-                return $contentTitle;
+                return (string) $contentTitle;
 
                 break;
             case 'name':
@@ -82,12 +82,12 @@ abstract class ResourceAbstract
                 if (stripos($content[0]->attributes()->FormalName, 'EFE') !== false) {
                     foreach ($content as $key => $image) {
                         if ($key % 4 == 1) {
-                            $imageName[] = (string) $image->attributes()->Value;
+                            $imageName = (string) $image->attributes()->Value;
                         }
                     }
                 } else {
                     foreach ($content as $image) {
-                        $imageName[] = (string) $image->attributes()->Value;
+                        $imageName = (string) $image->attributes()->Value;
                     }
                 }
 
@@ -147,5 +147,23 @@ abstract class ResourceAbstract
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function toArray()
+    {
+        return [
+            'id'           => $this->id,
+            'name'         => $this->name,
+            'title'        => $this->title,
+            'created_time' => $this->created_time->format(\DateTime::RFC2822),
+            'file_type'    => $this->file_type,
+            'file_path'    => $this->file_path,
+        ];
     }
 }

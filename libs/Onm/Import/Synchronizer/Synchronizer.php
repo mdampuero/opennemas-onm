@@ -22,7 +22,6 @@ use Onm\Import\Synchronizer\LockException;
  **/
 class Synchronizer
 {
-
     /**
      * The path where to save the downloaded files
      *
@@ -30,13 +29,12 @@ class Synchronizer
      **/
     public $syncPath = '';
 
-
     /**
      * File path used for locking purposes
      *
      * @var string
      **/
-    protected $lockFile = '';
+    protected $lockFilePath = '';
 
     /**
      * Initializes the object and initializes configuration
@@ -47,13 +45,10 @@ class Synchronizer
      */
     public function __construct($config = array())
     {
-        $this->syncPath = implode(
-            DIRECTORY_SEPARATOR,
-            array($config['cache_path'], 'importers')
-        );
-        $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
+        $this->syncPath     = $config['cache_path']. "/importers";
 
-        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
+        $this->syncFilePath = $this->syncPath."/.sync";
+        $this->lockFilePath = $this->syncPath."/.lock";
     }
 
     /**
@@ -64,9 +59,8 @@ class Synchronizer
     public function lockSync()
     {
         try {
-            touch($this->lockFile);
+            touch($this->lockFilePath);
         } catch (\Exception $e) {
-
             return;
         }
     }
@@ -78,8 +72,8 @@ class Synchronizer
      */
     public function unlockSync()
     {
-        if (file_exists($this->lockFile)) {
-            unlink($this->lockFile);
+        if (file_exists($this->lockFilePath)) {
+            unlink($this->lockFilePath);
         }
     }
 
@@ -256,12 +250,6 @@ class Synchronizer
             $this->setupSyncEnvironment();
         }
 
-        // if (file_exists($this->lockFile)) {
-        //     throw new LockException(
-        //         sprintf(_("Seems that other user is syncing the news."))
-        //     );
-        // }
-
         $serverSyncPath = $this->syncPath.DIRECTORY_SEPARATOR.$params['id'];
 
         if (!is_dir($serverSyncPath)) {
@@ -276,7 +264,7 @@ class Synchronizer
         $params['excluded_files'] = $excludedFiles;
         // Needs an abstraction
 
-        $synchronizer = \Onm\Import\Synchronizer\ServerFactory::get($params);
+        $synchronizer = \Onm\Import\SourceServer\ServerFactory::get($params);
 
         if (is_null($synchronizer)) {
             throw new \Exception(

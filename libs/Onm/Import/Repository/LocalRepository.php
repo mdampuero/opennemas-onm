@@ -39,9 +39,6 @@ class LocalRepository
             DIRECTORY_SEPARATOR,
             array(CACHE_PATH, 'importers')
         );
-        $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
-
-        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
     }
 
     /**
@@ -68,6 +65,78 @@ class LocalRepository
             if (@filesize($filePath) <= 0) {
                 continue;
             }
+            try {
+                $element = DataSourceFactory::get($filePath);
+            } catch (\Exception $e) {
+                continue;
+            }
+
+            if (is_null($element)) {
+                continue;
+            }
+
+            if ($params['title'] != '*'
+                && !($element->hasContent($params['title']))
+            ) {
+                continue;
+            }
+
+            if ($params['title'] == '*'
+                && array_key_exists('limit', $params)
+                && ($elementsCount <= $params['limit'])
+            ) {
+                break;
+            }
+
+            $element->source_id = $sourceId;
+
+            $elements []= $element;
+        }
+
+        $counTotalElements = count($elements);
+        if (array_key_exists('items_page', $params)
+            && array_key_exists('page', $params)
+        ) {
+            $files = array_slice(
+                $elements,
+                $params['items_page'] * ($params['page']-1),
+                $params['items_page']
+            );
+        } else {
+            $files = $elements;
+        }
+
+        return array($counTotalElements, $files);
+    }
+
+    /**
+     * Gets an array of news from Efe
+     *
+     * @return array, the array of objects with news from Efe
+     */
+    public function findAllFromCompile($params = array())
+    {
+        $fileListing = glob($this->syncPath.'/*/serversync.php');
+
+        $elements = array();
+        foreach ($fileListing as $serverFile) {
+            $elements = array_merge($elements, json_decode(file_get_contents($serverFile)));
+        }
+
+        $params['source_id'] = 0;
+        foreach ($elements as $element) {
+            $sourceId = (int) $element->source_id;
+            if ($params['source'] != '*'
+                && $sourceId != $params['source']
+            ) {
+                continue;
+            }
+
+            $filePath = $this->syncPath.DIRECTORY_SEPARATOR.$sourceId.'/'.$element->xmlFile;
+            if (@filesize($filePath) <= 0) {
+                continue;
+            }
+
             try {
                 $element = DataSourceFactory::get($filePath);
             } catch (\Exception $e) {

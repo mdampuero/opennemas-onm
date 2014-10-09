@@ -157,9 +157,6 @@ class NewsAgencyController extends Controller
             }
         }
 
-        // Get LocalRepository instance
-        $repository = new \Onm\Import\Repository\LocalRepository();
-
         // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
         if (!is_array($servers)) {
@@ -178,15 +175,14 @@ class NewsAgencyController extends Controller
 
         $sources = array_unique($sources);
 
-        // Fetch filter params
-        $findParams = array(
+        // Get LocalRepository instance
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        list($countTotalElements, $elements) = $repository->findAll(array(
             'source'     => $filterSource,
             'title'      => $filterTitle,
             'page'       => $page,
             'items_page' => $elementsPerPage,
-        );
-
-        list($countTotalElements, $elements) = $repository->findAll($findParams);
+        ));
 
         $urns = array();
         foreach ($elements as $element) {
@@ -199,26 +195,29 @@ class NewsAgencyController extends Controller
         }
 
         foreach ($elements as &$element) {
-            $element->load();
-            $element->source_name = $servers[$element->source_id]['name'];
-            $element->source_color = $servers[$element->source_id]['color'];
-            $element->import_url = $this->generateUrl(
-                'admin_news_agency_pickcategory',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->view_url = $this->generateUrl(
-                'admin_news_agency_show',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->id = $element->source_id . ',' . $element->id . '.xml';
+            $sourceId = $element->source_id;
+            $element  = $element->toArray();
 
-            $element->already_imported = in_array($element->urn, $alreadyImported);
+            $element['source_id']    = $sourceId;
+            $element['source_name']  = $servers[$sourceId]['name'];
+            $element['source_color'] = $servers[$sourceId]['color'];
+            $element['import_url']   = $this->generateUrl(
+                'admin_news_agency_pickcategory',
+                [
+                    'source_id' => $sourceId,
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            $element['view_url'] = $this->generateUrl(
+                'admin_news_agency_show',
+                [
+                    'source_id' => $sourceId,
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            // $element->id = $element->source_id . ',' . $element->id . '.xml';
+
+            $element['already_imported'] = in_array($element['urn'], $alreadyImported);
         }
 
         return new JsonResponse(

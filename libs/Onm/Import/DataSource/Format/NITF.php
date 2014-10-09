@@ -10,13 +10,14 @@
 namespace Onm\Import\DataSource\Format;
 
 use Onm\Import\DataSource\FormatInterface;
+use Onm\Import\DataSource\FormatAbstract;
 
 /**
  * Handles all the operations for NITF data
  *
  * @package Onm_Import
  **/
-class NITF extends NewsMLG1
+class NITF extends FormatAbstract implements FormatInterface
 {
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
@@ -75,8 +76,8 @@ class NITF extends NewsMLG1
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
-        $this->audios       = $this->getAudios();
-        $this->files        = $this->getFiles();
+        // $this->audios       = $this->getAudios();
+        // $this->files        = $this->getFiles();
     }
 
     /**
@@ -287,9 +288,7 @@ class NITF extends NewsMLG1
      **/
     public function getCreatedTime()
     {
-        $attributes =
-            (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
-
+        $attributes = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
 
         // '20130315T150100+0000'
         return \DateTime::createFromFormat(

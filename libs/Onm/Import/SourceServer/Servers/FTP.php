@@ -10,10 +10,10 @@
  *
  * @package Onm_Import
  **/
-namespace Onm\Import\Synchronizer\Servers;
+namespace Onm\Import\SourceServer\Servers;
 
-use \Onm\Import\Synchronizer\ServerAbstract;
-use \Onm\Import\Synchronizer\ServerInterface;
+use \Onm\Import\SourceServer\ServerAbstract;
+use \Onm\Import\SourceServer\ServerInterface;
 
 /**
  * Class to synchronize local folders with an external FTP folder.
@@ -38,6 +38,7 @@ class FTP extends ServerAbstract implements ServerInterface
         $this->serverUrl = parse_url($params['url']);
 
         $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
+
         // test if the connection was successful
         if (!$this->ftpConnection) {
             throw new \Exception(
@@ -67,7 +68,6 @@ class FTP extends ServerAbstract implements ServerInterface
                     sprintf(_('Can\'t login into server %s'), $params['server'])
                 );
             }
-
             if (isset($this->serverUrl['path'])) {
                 if (!@ftp_chdir($this->ftpConnection, $this->serverUrl['path'])) {
                     throw new \Exception(
@@ -98,6 +98,7 @@ class FTP extends ServerAbstract implements ServerInterface
      */
     public function downloadFilesToCacheDir($params)
     {
+        ftp_pasv($this->ftpConnection, true);
         $files = ftp_rawlist(
             $this->ftpConnection,
             ftp_pwd($this->ftpConnection),
@@ -135,6 +136,7 @@ class FTP extends ServerAbstract implements ServerInterface
                         $localFilePath =
                             $params['sync_path'].DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
                         if (!file_exists($localFilePath)) {
+                            ftp_pasv($this->ftpConnection, true);
                             @ftp_get(
                                 $this->ftpConnection,
                                 $localFilePath,
