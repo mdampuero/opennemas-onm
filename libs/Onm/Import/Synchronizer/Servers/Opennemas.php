@@ -66,7 +66,7 @@ class Opennemas extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@http://(.*)/ws/agency@', $params['url'], $matches);
+        $res = preg_match('@http://(.*)/ws/agency@', $params['url']);
 
         if ($res == 0) {
             throw new \Exception(

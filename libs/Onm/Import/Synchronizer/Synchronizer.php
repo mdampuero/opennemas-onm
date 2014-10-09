@@ -107,9 +107,9 @@ class Synchronizer
      *
      * @return integer minutes from last synchronization of elements
      */
-    public function minutesFromLastSync($params = array())
+    public function minutesFromLastSync()
     {
-        $params    = $this->getSyncParams();
+        $params   = $this->getSyncParams();
 
         $toTime   = strtotime(date('c'));
         $fromTime = strtotime($params['lastimport']);
@@ -136,7 +136,7 @@ class Synchronizer
      *
      * @param array $params the parameters to manipulate the behavior of this function
      */
-    public function setupSyncEnvironment($params = array())
+    public function setupSyncEnvironment()
     {
         if (!file_exists($this->syncPath)) {
             mkdir($this->syncPath);

@@ -91,7 +91,7 @@ class ImporterIdeal
                         // Algunos son nodos inferiores
                         if (count($eleto->children())>0) {
                             foreach ($eleto->children() as $node) {
-                                foreach ($node->attributes() as $c => $d) {
+                                foreach ($node->attributes() as $d) {
                                     $field = self::checkLabel($d);
                                     if (!empty($field)
                                         && empty($data[$field])

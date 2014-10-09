@@ -45,9 +45,9 @@ class ModuleManager
     /**
      * Initilizes the object.
      *
-     * @param array $params parameters for initilizing the module manager.
+     * @param array $params parameters for initializing the module manager.
      */
-    public function __construct($params = array())
+    public function __construct()
     {
         self::getActivatedModules();
     }

@@ -26,7 +26,7 @@ class Redis extends AbstractCache
      *
      * @return void
      **/
-    public function __construct($options)
+    public function __construct()//$options
     {
         // Check if Predis library is installed
         if (!class_exists('\Predis\Client')) {

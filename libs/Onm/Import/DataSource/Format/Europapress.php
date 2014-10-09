@@ -512,6 +512,8 @@ class Europapress implements FormatInterface
      **/
     public function getOpennemasData($property)
     {
-        return null;
+        // Dummy action
+        $property = null;
+        return $property;
     }
 }

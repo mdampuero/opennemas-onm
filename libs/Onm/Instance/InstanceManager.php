@@ -139,8 +139,6 @@ class InstanceManager extends BaseManager
      */
     public function countBy($criteria)
     {
-        $instances = array();
-
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
 
@@ -205,8 +203,6 @@ class InstanceManager extends BaseManager
      */
     public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $instances = array();
-
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
 
@@ -376,11 +372,6 @@ class InstanceManager extends BaseManager
      */
     public function update($data)
     {
-        $instance = $this->findBy(
-            array('internal_name' => array(array('value' => $data['internal_name']))),
-            array('id' => 'asc')
-        );
-
         if (is_array($data['domains'])) {
             $data['domains'] = implode(',', $data['domains']);
         }
@@ -637,7 +628,7 @@ class InstanceManager extends BaseManager
 
         $instance->external['site_agency'] = $instance->internal_name . '.opennemas.com';
 
-        foreach ($instance->external as $key => $value) {
+        foreach (array_keys($instance->external) as $key) {
             $this->sm->invalidate($key);
 
             if (!$this->sm->set($key, $instance->external[$key])) {

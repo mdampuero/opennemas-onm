@@ -26,7 +26,7 @@ class ZendData extends AbstractCache
      *
      * @return void
      **/
-    public function __construct($options)
+    public function __construct()
     {
         // zend data cache format for namespaces ends in ::
         $this->setNamespace('base::');

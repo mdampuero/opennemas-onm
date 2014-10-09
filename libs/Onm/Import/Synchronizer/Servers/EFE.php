@@ -87,7 +87,7 @@ class EFE extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@efeservicios@', $params['url'], $matches);
+        $res = preg_match('@efeservicios@', $params['url']);
         if ($res) {
             return true;
         }

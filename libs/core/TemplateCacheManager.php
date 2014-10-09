@@ -190,7 +190,7 @@ class TemplateCacheManager
         $_smarty_tpl = $this;
         $no_render = true;
 
-        $output = include($filename);
+        include($filename);
 
         unset($no_render);
 
