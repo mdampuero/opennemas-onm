@@ -15,7 +15,7 @@ services:
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
-        arguments: [ @setting_repository ]
+        arguments: [ @service_container, @setting_repository ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -161,6 +161,7 @@ services:
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ @service_container ]
+
     view:
         alias: onm_templating
 
