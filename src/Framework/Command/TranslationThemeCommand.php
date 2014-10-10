@@ -141,7 +141,7 @@ EOF
             }
             $command = "msgmerge -U ".$targetFile. " {$this->translationsDir}/{$this->translationsDomain}.pot 2>&1";
 
-            $commandOutput = shell_exec($command);
+            shell_exec($command);
         }
     }
 

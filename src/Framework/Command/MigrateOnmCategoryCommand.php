@@ -49,8 +49,6 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = APPLICATION_PATH;
-        $phpBinPath = exec('which php');
-
         chdir($basePath);
 
         $originDatabase = $input->getArgument('originDB');
@@ -60,13 +58,7 @@ EOF
 
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $validator = function ($value) {
-            if (trim($value) == '') {
-                throw new \Exception('The password can not be empty');
-            }
-        };
-
-        $dataBasePass = $password = $dialog->askHiddenResponse(
+        $dialog->askHiddenResponse(
             $output,
             'What is the database user password?',
             false
@@ -175,7 +167,7 @@ EOF
                         $this->insertRefactorID($rs->fields['pk_content'], $articleID, 'article');
                         $output->writeln('-'. $articleID. ' article ok');
                     } else {
-                        $output->writeln('Problem inserting article '.$originalArticleID.' - '.$title .'\n');
+                        $output->writeln('Problem inserting article '.$originalArticleID.' - '.$data['title'] .'\n');
                     }
                 }
                 $current++;

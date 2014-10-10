@@ -155,7 +155,6 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
 
         foreach ($input as $table => $definition) {
             $table = $schema->createTable($table);
-            $columns = array();
 
             // Populate column definitions
             foreach ($definition['columns'] as $field => $value) {
@@ -186,52 +185,52 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
      *
      * @param string $database Database name.
      */
-    private function dumpSchema($database)
-    {
-        $schema = array();
+    // private function dumpSchema($database)
+    // {
+    //     $schema = array();
 
-        $conn = getService('dbal_connection');
-        $conn = $conn->selectDatabase($database);
+    //     $conn = getService('dbal_connection');
+    //     $conn = $conn->selectDatabase($database);
 
-        $sm = $conn->getSchemaManager();
+    //     $sm = $conn->getSchemaManager();
 
-        foreach ($sm->listTables() as $table) {
-            $name = $table->getName();
-            $columns = array();
-            foreach ($table->getColumns() as $column) {
-                $options = $this->cleanOptions($column->toArray());
+    //     foreach ($sm->listTables() as $table) {
+    //         $name = $table->getName();
+    //         $columns = array();
+    //         foreach ($table->getColumns() as $column) {
+    //             $options = $this->cleanOptions($column->toArray());
 
-                $columns[$column->getName()] = array(
-                    'type'    => $column->getType()->getName(),
-                    'options' => $options
-                );
-            }
+    //             $columns[$column->getName()] = array(
+    //                 'type'    => $column->getType()->getName(),
+    //                 'options' => $options
+    //             );
+    //         }
 
-            $indexes = array();
-            foreach ($sm->listTableIndexes($name) as $index) {
-                $newIndex = array(
-                    'name'    => $index->getName(),
-                    'columns' => $index->getColumns(),
-                    'primary' => $index->isPrimary(),
-                    'unique'  => $index->isUnique(),
-                    'flags'   => array()
-                );
-                if ($index->hasFlag('fulltext')) {
-                    $newIndex['flags']['fulltext'] = true;
-                }
+    //         $indexes = array();
+    //         foreach ($sm->listTableIndexes($name) as $index) {
+    //             $newIndex = array(
+    //                 'name'    => $index->getName(),
+    //                 'columns' => $index->getColumns(),
+    //                 'primary' => $index->isPrimary(),
+    //                 'unique'  => $index->isUnique(),
+    //                 'flags'   => array()
+    //             );
+    //             if ($index->hasFlag('fulltext')) {
+    //                 $newIndex['flags']['fulltext'] = true;
+    //             }
 
-                $indexes[] = $newIndex;
-            }
+    //             $indexes[] = $newIndex;
+    //         }
 
-            $schema[$name] = array(
-                'columns' => $columns,
-                'index'   => $indexes
-            );
-        }
+    //         $schema[$name] = array(
+    //             'columns' => $columns,
+    //             'index'   => $indexes
+    //         );
+    //     }
 
-        $yml = Yaml::dump($schema, 4);
-        file_put_contents($this->path, $yml);
-    }
+    //     $yml = Yaml::dump($schema, 4);
+    //     file_put_contents($this->path, $yml);
+    // }
 
     /**
      * Gets the schema for the given database.
@@ -241,8 +240,6 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
      */
     private function getSchema($database)
     {
-        $schema = array();
-
         $conn = getService('dbal_connection');
         $conn = $conn->selectDatabase($database);
 

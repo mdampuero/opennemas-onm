@@ -127,7 +127,7 @@ EOF
                 touch($targetFile);
             }
             $command = "msgmerge -U ".$targetFile. " ".APP_PATH.$this->localeFolder."/opennemas.pot 2>&1";
-            $commandOutput = shell_exec($command);
+            shell_exec($command);
         }
     }
 

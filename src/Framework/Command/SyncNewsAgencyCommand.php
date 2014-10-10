@@ -42,7 +42,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fileSystem = $this->getContainer()->get('filesystem');
         $logger     = $this->getContainer()->get('logger');
         $dbConn     = $this->getContainer()->get('db_conn');
         $instanceManager = $this->getContainer()->get('instance_manager');

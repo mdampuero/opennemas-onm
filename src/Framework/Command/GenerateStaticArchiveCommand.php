@@ -68,7 +68,6 @@ EOF
      **/
     protected function generateStatics($input, $output)
     {
-
         $request = Request::createFromGlobals();
         $request->setTrustedProxies(array('127.0.0.1'));
 
@@ -147,7 +146,7 @@ EOF
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
             $newFile = $basePath.$category_name.".html";
-            $result  = file_put_contents($newFile, $htmlOut);
+            file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);
         }
