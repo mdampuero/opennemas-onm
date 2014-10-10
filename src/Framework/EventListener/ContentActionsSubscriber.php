@@ -153,16 +153,15 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $content = $event->getArgument('content');
-
         $instanceName = getService('instance_manager')->current_instance->internal_name;
 
-
-        $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        $kernel->getContainer()->get('varnish_ban_message_exchanger')
             ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
 
+        // $content = $event->getArgument('content');
+
         // $baseRequest = "obj.http.x-instance ~ {$instanceName} && ";
-        // $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        // $kernel->getContainer()->get('varnish_ban_message_exchanger')
         //     ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
         //     ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
         //     ->addBanMessage('obj.http.x-tags ~ rss')
@@ -176,8 +175,6 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     public function refreshFrontpage(Event $event)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        $content = $event->getArgument('content');
 
         if (isset($_REQUEST['category'])) {
             $ccm = \ContentCategoryManager::get_instance();

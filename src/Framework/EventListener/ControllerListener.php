@@ -38,8 +38,6 @@ class ControllerListener implements EventSubscriberInterface
         }
 
         $controller = $event->getController();
-        $controllerName = get_class($controller[0]);
-
         if (method_exists($controller[0], 'init')) {
             $controller[0]->init();
         }

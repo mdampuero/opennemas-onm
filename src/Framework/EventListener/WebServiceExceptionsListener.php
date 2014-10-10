@@ -45,7 +45,6 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         $handling = true;
 
         $exception = $event->getException();
-        $request   = $event->getRequest();
 
         $uri = $event->getRequest()->getRequestUri();
 

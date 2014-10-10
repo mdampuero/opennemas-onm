@@ -58,6 +58,6 @@ class EstrellaDigitalProvider extends JsonProvider
     {
         $sql = "ALTER TABLE  `translation_ids` CHANGE  `pk_content_old` "
             . " `pk_content_old` VARCHAR( 255 ) NOT NULL";
-        $rss = $this->targetConnection->Execute($sql);
+        $this->targetConnection->Execute($sql);
     }
 }
