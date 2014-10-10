@@ -213,7 +213,7 @@ class ImagesController extends Controller
 
         $ids = array();
         $photosSaved = 0;
-        foreach ($photosRAW as $id => $value) {
+        foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'          => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'       => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
@@ -322,7 +322,7 @@ class ImagesController extends Controller
 
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
-                    foreach ($upload['tmp_name'] as $index => $value) {
+                    foreach (array_keys($upload['tmp_name']) as $index) {
 
                         if (empty($upload['tmp_name'][$index])) {
                             $info [] = array(

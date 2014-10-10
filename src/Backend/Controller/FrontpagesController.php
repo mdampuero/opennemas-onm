@@ -260,7 +260,7 @@ class FrontpagesController extends Controller
             }
 
             // Restore old frontpage
-            $restore = \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+            \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
 
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");

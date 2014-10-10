@@ -153,29 +153,6 @@ class SearchController extends Controller
     }
 
     /**
-     * Returns a list of content type definitions taking in place the modules activated
-     * and those selected by user
-     *
-     * @param array $selected array of content types selected
-     *
-     * @return  string string with all the content types comma separated.
-     */
-    private function getCheckedContentTypes($selected)
-    {
-        $contentTypes = self::getContentTypesFiltered();
-
-        $contentTypesChecked =  array();
-        foreach ($contentTypes as $contentTypeId => $contentTypeName) {
-            if (in_array($contentTypeId, $selected)
-            ) {
-                $contentTypesChecked []= $contentTypeId;
-            }
-        }
-
-        return $contentTypesChecked;
-    }
-
-    /**
      * Returns the list of content types for the modules activated
      *
      * @return array the list of content types

@@ -103,9 +103,6 @@ class ImporterXmlfileController extends Controller
 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
-                    $check = !isset($_REQUEST['check_pendientes'][$i])
-                        ? 0 : $_REQUEST['check_pendientes'][$i];
-
                     if ($extension == "zip") {
                         $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);
 

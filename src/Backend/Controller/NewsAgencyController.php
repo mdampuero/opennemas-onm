@@ -59,9 +59,7 @@ class NewsAgencyController extends Controller
         ini_set('set_time_limit', '0');
 
         // Check if module is configured, if not redirect to configuration form
-        if (is_null(s::get('news_agency_config'))
-            && $action != 'config'
-        ) {
+        if (is_null(s::get('news_agency_config'))) {
             m::add(_('Please provide your source server configuration to start to use your Importer module'));
             $this->redirect($this->generateUrl('admin_importer_efe_config'));
         }
@@ -242,8 +240,8 @@ class NewsAgencyController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $request->query->getDigits('source_id');
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
@@ -258,7 +256,7 @@ class NewsAgencyController extends Controller
             // Redirect the user to the list of articles and show  an error message
             m::add(sprintf(_('Unable to find an element with the id "%d"'), $id), m::ERROR);
 
-            $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+            $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
             return $this->redirect(
                 $this->generateUrl('admin_news_agency', array('page' => $page))
@@ -329,8 +327,7 @@ class NewsAgencyController extends Controller
      **/
     public function batchImportAction(Request $request)
     {
-        $ids      = array();
-        $selected = $this->request->request->get('ids', null);
+        $selected = $request->request->get('ids', null);
         $updated  = array();
 
 
@@ -371,9 +368,9 @@ class NewsAgencyController extends Controller
      **/
     public function selectCategoryWhereToImportAction(Request $request)
     {
-        $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $sourceId = $request->query->getDigits('source_id');
 
         if (empty($id)) {
             m::add(_('The article you want to import doesn\'t exists.'), m::ERROR);
@@ -456,10 +453,10 @@ class NewsAgencyController extends Controller
      **/
     public function showAttachmentAction(Request $request)
     {
-        $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $index        = $this->request->query->getDigits('index');
-        $sourceId     = $this->request->query->getDigits('source_id');
-        $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
+        $id           = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $index        = $request->query->getDigits('index');
+        $sourceId     = $request->query->getDigits('source_id');
+        $attachmentId = $request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
         $repository = new \Onm\Import\Repository\LocalRepository();
         $element    = $repository->findById($sourceId, $id);
@@ -516,7 +513,7 @@ class NewsAgencyController extends Controller
         $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
-        $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
+        $page = $request->query->filter('page', null, FILTER_VALIDATE_INT);
 
         return $this->redirect(
             $this->generateUrl('admin_news_agency', array('page' => $page))
@@ -534,7 +531,7 @@ class NewsAgencyController extends Controller
      **/
     public function syncAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $servers = s::get('news_agency_config');
 
