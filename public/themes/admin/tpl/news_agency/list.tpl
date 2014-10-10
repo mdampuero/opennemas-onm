@@ -95,7 +95,6 @@
             <thead>
                 <tr>
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th class="center">{t}Origin{/t}</th>
                     <th class="center" style='width:10px !important;'>{t}Date{/t}</th>
@@ -116,20 +115,21 @@
                     <td>
                         <checkbox index="[% content.id %]">
                     </td>
-                    <td  class="right">
-                        <span ng-if="content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>
-                        <span ng-if="content.priority == 2" class="badge badge-warning">{t}Important{/t}</span>
-                        <span ng-if="content.priority == 3" class="badge badge-info">{t}Normal{/t}</span>
-                        <span ng-if="content.priority < 1 || content.priority > 3" class="badge">{t}Basic{/t}</span>
-                    </td>
                     <td >
                         <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
                         <small>
                             <div class="tags">
                                 <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
                             </div>
+                            <span class="priority">
+                                <!--{t}Priority{/t}-->
+                                <span ng-if="content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>
+                                <span ng-if="content.priority == 2" class="badge badge-warning">{t}Important{/t}</span>
+                                <span ng-if="content.priority == 3" class="badge badge-info">{t}Normal{/t}</span>
+                                <span ng-if="content.priority < 1 || content.priority > 3" class="badge">{t}Basic{/t}</span>
+                            </span>
                             <span ng-if="content.photos.length > 0 || content.videos.length > 0">
-                                {t}Attachments{/t}:
+                                <!--{t}Attachments{/t}:-->
                                 <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
                                 <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
                             </span>

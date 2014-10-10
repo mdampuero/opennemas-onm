@@ -44,7 +44,7 @@ abstract class FormatAbstract {
             'title'        => $this->getTitle(),
             'priority'     => $this->getPriority(),
             'tags'         => $this->getTags(),
-            'created_time' => $this->getCreatedTime()->format(\DateTime::RFC2822),
+            'created_time' => $this->getCreatedTime()->format(\DateTime::ISO8601),
             'body'         => $this->getBody(),
             'category'     => $this->getCategory(),
             'agency_name'  => $this->getServiceName(),
