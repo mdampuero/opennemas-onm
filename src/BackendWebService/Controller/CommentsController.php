@@ -76,7 +76,6 @@ class CommentsController extends ContentController
      * Updates contents status property.
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
     public function batchToggleStatusAction(Request $request)
