@@ -34,7 +34,6 @@ class AuthenticationController extends Controller
     public function loginAction(Request $request)
     {
         $error   = null;
-        $route   = $request->get('_route');
         $referer = $this->generateUrl('admin_welcome');
         $session = $request->getSession();
         $token   = $request->get('token');

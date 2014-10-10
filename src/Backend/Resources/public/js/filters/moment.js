@@ -33,9 +33,6 @@ angular.module('BackendApp.filters').filter('moment', function() {
 
         moment.lang(lang);
 
-        var t = input.split(/[. \/ : -]/);
-        var date = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-
-        return moment(date).tz(tmz).format(fmt);
+        return moment(input).tz(tmz).format(fmt);
     };
 });

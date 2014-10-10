@@ -166,7 +166,7 @@ class SimpleMenu
      *
      * @return string the generated HTML
      */
-    private function renderElement($element, $value, $last)
+    private function renderElement($element, $value)
     {
         $output =  array();
         switch ($element) {
@@ -199,7 +199,7 @@ class SimpleMenu
         $this->nestingLevel++;
         $hasSubmenu = false;
         foreach ($value as $element => $submenuContent) {
-            $element = $this->renderElement($element, $submenuContent, false);
+            $element = $this->renderElement($element, $submenuContent);
             if (!empty($element)) {
                 $hasSubmenu = true;
                 $output []= $element;
@@ -280,7 +280,7 @@ class SimpleMenu
 
         $output = '';
         foreach ($this->menu as $element => $value) {
-            $output []= $this->renderElement($element, $value, false);
+            $output []= $this->renderElement($element, $value);
         }
 
         $menu = "<ul id='menu' class='nav'>"

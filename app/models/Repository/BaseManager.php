@@ -293,7 +293,7 @@ abstract class BaseManager
             if (strtoupper($operator) == 'LIKE') {
                 $parsed[] = '\'%' . $value . '%\'';
             } else {
-                $parsed[] = $item;
+                $parsed[] = $value;
             }
         }
 

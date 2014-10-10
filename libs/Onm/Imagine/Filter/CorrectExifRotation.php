@@ -28,11 +28,6 @@ class CorrectExifRotation implements FilterInterface
     private $color = null;
 
     /**
-     * @var Array
-     */
-    private $exifData = array();
-
-    /**
      * Constructs the rotation class
      * Takes optionally a ColorInterface instance, which will be used
      * as background to rotate on

@@ -64,7 +64,7 @@ class SystemSettingsController extends Controller
     {
         $configurations = array();
 
-        foreach ($this->configurationsKeys as $key => $value) {
+        foreach ($this->configurationsKeys as $value) {
             $configurations[$value] = s::get($value);
         }
 

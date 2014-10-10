@@ -939,7 +939,7 @@ class ContentManager
      */
     public function getMostVotedContent(
         $contentType,
-        $not_empty = false,
+        $notEmpty = false,
         $category = 0,
         $author = 0,
         $days = 2,
@@ -982,7 +982,7 @@ class ContentManager
              . $_order_by . $_limit;
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        if ($rs->_numOfRows<=($num-3) && $not_empty) {
+        if ($rs->_numOfRows<=($num-3) && $notEmpty) {
             $sql = 'SELECT ' . $_fields
                  . ' FROM ' . $_tables
                  . ' WHERE ' . $_where . $_tables_relations
@@ -1077,205 +1077,6 @@ class ContentManager
         }
 
         return $contents;
-    }
-
-     /**
-     * This function returns an array of objects all types of the most voted in
-     * the last few days indicated.
-     * Objects only have covered the fields pk_content, title, and total_value
-     * total_votes
-     *
-     * @param boolean $notEmpty If there are no results regarding the days
-     *                           indicated, the query is performed on the entire
-     *                           bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value
-     *                           is 0, then does not filter by categories.
-     *                           For default is 0.
-     * @param integer $days Interval of days on which the consultation
-     *                           takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns.
-     *                           For default is 8.
-     * @param boolean $all Get all the content regardless of content
-     *                           status.
-     * @return array of objects
-     */
-    public function getAllMostVoted(
-        $notEmpty = false,
-        $category = 0,
-        $days = 2,
-        $num = 6,
-        $all = false
-    ) {
-        $items = array();
-
-        $_tables = '`contents`, `ratings` ';
-        $_fields = '*';
-        $_where = '`contents`.in_litter=0 ';
-        if (!$all) {
-            $_where .= 'AND `contents`.`content_status`=1 ';
-        }
-        $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
-        $_order_by = 'ORDER BY `ratings`.total_votes DESC ';
-        $_limit = 'LIMIT 0 , '.$num;
-
-        if (intval($category)>0) {
-            $_tables .= ', `contents_categories` ';
-            $_tables_relations .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content ' .
-                                  'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
-        }
-
-        $sql = 'SELECT ' . $_fields
-             . ' FROM ' . $_tables
-             . ' WHERE ' . $_where .$_days.$_tables_relations
-             . $_order_by
-             . $_limit;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs->_numOfRows<=$num && $notEmpty) {
-            while ($rs->_numOfRows<$num && $days<30) {
-                  $days+=2;
-
-                $sql = 'SELECT ' . $_fields . ' FROM ' . $_tables
-                     . ' WHERE ' . $_where . $_tables_relations
-                     . $_order_by . $_limit;
-                $rs = $GLOBALS['application']->conn->Execute($sql);
-            }
-        }
-
-        $items = $this->loadObject($rs, 'content');
-
-        return $this->getInTime($items);
-    }
-
-    /**
-     * This function returns an array of objects $content_type of the most
-     * commented in the last few days indicated.
-     *
-     * @param boolean $notEmpty If there are no results regarding the days indicated,
-     *                          the query is performed on the entire bd. (default  false)
-     * @param integer $category pk_content_category ok the contents.
-     *                          If value is 0, then does not filter by categories. (default  0)
-     * @param integer $days Interval of days on which the consultation takes place. (default  2)
-     * @param integer $num Number of objects that the function returns. (default 8)
-     * @param boolean $all Get all the content regardless of content status and endtime.
-     *
-     * @return array
-     */
-    public function getAllMostComented(
-        $notEmpty = false,
-        $category = 0,
-        $days = 2,
-        $num = 6,
-        $all = false
-    ) {
-        $items = array();
-
-        $_where_slave = '';
-        $_days = 'starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
-        if (!$all) {
-            $_where_slave = ' content_status=1 ';
-            $_days = 'AND starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
-        }
-
-        $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
-        $_order_by = 'ORDER BY starttime DESC';
-
-        $_where= $_where_slave.$_days.$_comented;
-        if (intval($category)>0) {
-            $sql = 'SELECT * FROM contents_categories, contents '
-                 . 'WHERE '.$_where
-                 . ' AND `contents_categories`.`pk_fk_content_category`=' .$category
-                 . ' AND `contents_categories`.`pk_fk_content`=`contents`.`pk_content` '
-                 . $_order_by;
-        } else {
-             $sql = 'SELECT * FROM   contents '.
-               'WHERE '.$_where.'  ' . $_order_by;
-        }
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $pks = $this->loadObject($rs, 'content');
-
-        if (!$all) {
-            $pks = $this->getInTime($pks);
-        }
-
-        if (count($pks) < 6 && $notEmpty) {
-            // En caso de que existan menos de 6 contenidos, lo hace
-            // referente a los 200 últimos contenidos
-            $sql = 'SELECT * FROM   contents '.
-               'WHERE '.$_where_slave.$_comented.'  ' . $_order_by;
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-            $pks = $this->loadObject($rs, 'content');
-            $pks = $this->getInTime($pks);
-
-            if (!$all) {
-                $pks = $this->getInTime($pks);
-            }
-        }
-
-        $pk_list = '';
-        foreach ($pks as $pk) {
-            $pk_list .= ' '.$pk->id.',';
-        }
-        if (strlen($pk_list)==0) {
-            return array();
-        }
-        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-        $sql = 'SELECT fk_content, count(pk_comment) AS num '
-             . 'FROM   contents, comments '
-             . 'WHERE content_status=1 AND fk_content IN ('.$pk_list.') '
-             . 'GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $comments = $this->loadObject($rs, 'Comment');
-
-        $pk_list = '';
-        foreach ($comments as $comment) {
-            $pk_list .= ' '.$comment->fk_content.',';
-        }
-        if (strlen($pk_list)==0) {
-            return array();
-        }
-        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-
-        $sql = 'SELECT `contents`.`pk_content`, '
-             . '`contents`.`title`, `contents`.`slug` '
-             . 'FROM contents, comments '
-             . 'WHERE content_status=1 AND pk_content IN ('.$pk_list.')';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        $items = $this->loadObject($rs, 'content');
-        if (empty($items)) {
-            return array();
-        }
-        foreach ($items as $item) {
-            $articles[$item->pk_content] = array(
-                'pk_content' => $item->pk_content,
-                'num'        => 0,
-                'title'      => $item->title,
-                'slug'       => $item->slug
-            );
-        }
-        foreach ($comments as $comment) {
-            if (array_key_exists($comment->fk_content, $articles)) {
-                $articles[$comment->fk_content]['num'] = $comment->num;
-            }
-        }
-
-        uasort(
-            $articles,
-            function (
-                $a,
-                $b
-            ) {
-                if ($a['num'] == $b['num']) {
-                    return 0;
-                }
-
-                return ($a['num'] > $b['num']) ? -1 : 1;
-            }
-        );
-
-        return $articles;
     }
 
     /**
@@ -2182,7 +1983,6 @@ class ContentManager
 
         while (!$rs->EOF) {
             $content = new \Article();
-            $pk_content = $rs->fields['pk_content'];
             $content->load($rs->fields);
             $content->comment        =  $rs->fields['comment_body'];
             $content->pk_comment     =  $rs->fields['comment_id'];

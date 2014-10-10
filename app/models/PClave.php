@@ -253,18 +253,6 @@ class PClave
     }
 
     /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function cbUrl($name, $value)
-    {
-
-        return "<a href='$value' title='\\2'>\\2</a>";
-    }
-
-    /**
      * Returns the available keyword types
      *
      * @return array the list of types

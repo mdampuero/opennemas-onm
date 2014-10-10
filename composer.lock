@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f980252f89e56a3e027b1e2f0ff1daa2",
+    "hash": "6360004ded25e5e898614f039b2e0403",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1938,11 +1938,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.19",
+            "version": "v3.1.20",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.19/@4880"
+                "reference": "/tags/v3.1.20/@4884"
             },
             "require": {
                 "php": ">=5.2"
@@ -1978,7 +1978,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-02 17:56:59"
+            "time": "2014-10-09 23:12:20"
         },
         {
             "name": "swiftmailer/swiftmailer",

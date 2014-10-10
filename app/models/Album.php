@@ -356,11 +356,9 @@ class Album extends Content
      *
      * @return string the generated HTML
      **/
-    public function render($params, $smarty)
+    public function render($params)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = new Template(TEMPLATE_USER);
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
@@ -369,6 +367,7 @@ class Album extends Content
         if ($params['custom'] == 1) {
             $template = $params['tpl'];
         }
+
         try {
             $html = $tpl->fetch($template);
         } catch (\Exception $e) {

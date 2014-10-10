@@ -102,9 +102,9 @@ class AlbumsController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
+        if ('POST' == $request->getMethod()) {
             $album = new \Album();
-            $album->create($_POST);
+            $album->create($request->request->all());
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Album created successfully')
@@ -112,7 +112,7 @@ class AlbumsController extends Controller
 
             // Get category name
             $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->getName($category);
+            $categoryName = $ccm->getName($request->request->get('category'));
 
             // Clean cache album home and frontpage for category
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);

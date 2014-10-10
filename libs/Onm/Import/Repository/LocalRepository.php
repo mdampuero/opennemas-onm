@@ -83,7 +83,6 @@ class LocalRepository
 
             if ($params['title'] == '*'
                 && array_key_exists('limit', $params)
-                && ($elementsCount <= $params['limit'])
             ) {
                 break;
             }

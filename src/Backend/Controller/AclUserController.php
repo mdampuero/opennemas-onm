@@ -416,7 +416,7 @@ class AclUserController extends Controller
     {
         $user = new \User($_SESSION['userid']);
 
-        foreach ($request->query as $key => $value) {
+        foreach (array_keys($request->query) as $key) {
             if (!preg_match('@^_@', $key)) {
                 $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
             }

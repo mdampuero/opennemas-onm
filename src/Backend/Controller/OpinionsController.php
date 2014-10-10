@@ -544,14 +544,12 @@ class OpinionsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
         $filters = array(
             'content_type_name' => array(array('value' => 'opinion')),
             'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
 
+        $em            = $this->get('entity_repository');
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
@@ -839,7 +837,7 @@ class OpinionsController extends Controller
         $opinionContents = $request->request->filter('contents');
 
         // Fetch all opinion properties and generate a new object
-        foreach ($opinionContents as $key => $value) {
+        foreach ($opinionContents as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
                 $opinion->$value['name'] = $value['value'];
             }
@@ -899,7 +897,7 @@ class OpinionsController extends Controller
 
         $otherOpinions = $cm->find(
             'Opinion',
-            $where.' AND `pk_opinion` <>' .$opinionID.' AND content_status=1',
+            $where.' AND `pk_opinion` <>' .$opinion->id.' AND content_status=1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 

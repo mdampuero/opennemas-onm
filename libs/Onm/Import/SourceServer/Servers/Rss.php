@@ -82,14 +82,13 @@ class Rss extends ServerAbstract implements ServerInterface
         $deletedFiles = 0;
 
         $files = array();
-        $imagesName = array();
         $serverFiles = array();
 
         foreach ($this->contentList->channel->item as $content) {
             $id = urlencode($content->guid);
             $files[] = $id.'.xml';
 
-            if ($this->buildContentAndSave($id, $content, $params)) {
+            if ($this->buildContentAndSave($id, $content)) {
                 $downloadedFiles++;
             }
         }
@@ -123,7 +122,7 @@ class Rss extends ServerAbstract implements ServerInterface
      * @return void
      * @author
      **/
-    public function buildContentAndSave($id, $content, $params)
+    public function buildContentAndSave($id, $content)
     {
         $article = new \Article();
 
@@ -163,7 +162,7 @@ class Rss extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@rss|feed@', $params['url'], $matches);
+        $res = preg_match('@rss|feed@', $params['url']);
         if ($res) {
             return true;
         }

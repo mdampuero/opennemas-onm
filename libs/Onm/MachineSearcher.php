@@ -57,9 +57,6 @@ class MachineSearcher
         if (!is_array($result)) {
             $filter = (empty($filter) ? "" : " AND ".$filter);
 
-            // Generate content type table name
-            $contentTable = tableize($contentTypeName);
-
             // Generate where clause for filtering fk_content_type
             $selectedContentTypesSQL = $this->parseTypes($contentTypeName);
 

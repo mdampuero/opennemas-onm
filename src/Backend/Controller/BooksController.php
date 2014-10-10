@@ -174,7 +174,7 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->getInt('id');
+        $id = $request->query->getInt('id');
 
         $book = new \Book($id);
 
