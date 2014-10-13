@@ -484,7 +484,7 @@ class InstanceController extends Controller
                 );
             }
         } else {
-            $messages = array(
+            $message = array(
                 'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
                 'type' => 'error'
             );
@@ -595,7 +595,6 @@ class InstanceController extends Controller
         $message = array();
 
         $im = $this->get('instance_manager');
-        $sm = $this->get('setting_repository');
 
         $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
         $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);

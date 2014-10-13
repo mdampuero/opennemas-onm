@@ -215,7 +215,7 @@ class WebServiceController extends Controller
                 );
 
         // Send message
-        $sent = $this->get('mailer')->send($message, $failures);
+        $this->get('mailer')->send($message);
         $this->get('logger')->notice("Sending mail to company {$companyMail['info_mail']}- new instance - {$data['name']}");
     }
 
@@ -241,9 +241,7 @@ class WebServiceController extends Controller
                 );
 
         // Send message
-        $mailer = $this->get('mailer');
-        $mailer->send($message);
-
+        $this->get('mailer')->send($message);
         $this->get('logger')->notice("Sending mail to user - new instance - {$data['name']}");
     }
 
