@@ -503,7 +503,7 @@ jQuery(function($) {
                 url:url,
                 type:'POST',
                 dataType: 'json',
-                data: { 'id': elementID, 'properties' : properties}
+                data: { 'id': elementID, 'properties' : properties, 'category': $('#frontpagemanager').data('category')}
             }).done(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
                     element.data('bg', 'background-color:'+bgcolor);
