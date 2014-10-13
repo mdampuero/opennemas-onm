@@ -382,7 +382,7 @@ class VideosController extends Controller
         $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
         $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
         if (empty($this->category)) {
-            $this->category = $this->request->query->getDigits('category', 0);
+            $this->category = $request->query->getDigits('category', 0);
         }
 
         $order = array('created' => 'DESC');

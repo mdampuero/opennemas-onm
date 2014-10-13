@@ -324,7 +324,7 @@ class AlbumsController extends Controller
         $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
 
         if (empty($this->category)) {
-            $this->category = $this->request->query->getDigits('category', 0);
+            $this->category = $request->query->getDigits('category', 0);
         }
 
         $order = array('created' => 'DESC');
