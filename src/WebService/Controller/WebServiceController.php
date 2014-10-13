@@ -26,7 +26,7 @@ class WebServiceController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         require_once SITE_LIBS_PATH.'/Restler/restler.php';
         require_once SITE_LIBS_PATH.'/Restler/xmlformat.php';
