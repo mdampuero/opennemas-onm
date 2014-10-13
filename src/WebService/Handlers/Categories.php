@@ -97,19 +97,6 @@ class Categories
     }
 
     /*
-    * @url GET /categories/layout/:category_id
-    */
-    public function layout($actualCategory)
-    {
-        $ccm = new \ContentCategoryManager();
-        $actualCategoryId = $ccm->get_id($actualCategory);
-
-        $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
-
-        return $layout;
-    }
-
-    /*
     * @url GET /categories/lists
     */
     public function lists()
