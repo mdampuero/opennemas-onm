@@ -27,7 +27,7 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
      */
     public function __construct($xmlFile)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->xml_file = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | Europapress';

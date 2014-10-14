@@ -26,7 +26,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function __construct($xmlFile)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->xml_file = basename($xmlFile);
 
         if (file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
