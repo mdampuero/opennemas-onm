@@ -160,7 +160,7 @@ class FTP extends ServerAbstract implements ServerInterface
                 }
             }
         } else {
-            throw new Exception(
+            throw new \Exception(
                 sprintf(_('Directory %s is not writable.'), $params['sync_path'])
             );
         }
