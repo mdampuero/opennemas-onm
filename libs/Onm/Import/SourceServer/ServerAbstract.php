@@ -12,6 +12,8 @@
  **/
 namespace Onm\Import\SourceServer;
 
+use Onm\Import\DataSource\DataSourceFactory;
+
 /**
  * Handles all the common methods in the servers
  *
@@ -95,7 +97,7 @@ abstract class ServerAbstract
         if (!file_exists($localFilePath)) {
             @file_put_contents($localFilePath, $content);
 
-            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+            $element = DataSourceFactory::get($localFilePath);
             if (is_object($element)) {
                 // Check for photos
                 if ($element->hasPhotos()) {
@@ -147,7 +149,7 @@ abstract class ServerAbstract
         $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
         if (file_exists($localFilePath)) {
             $imagesName = array();
-            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+            $element = DataSourceFactory::get($localFilePath);
             if (is_object($element)) {
                 if ($element->hasPhotos()) {
                     $photos = $element->getPhotos();
