@@ -224,10 +224,6 @@ class Synchronizer
      */
     public function sync($params = array())
     {
-        // Check if the folder where store elements is ready and writable
-        if (!$this->isSyncEnvironmetReady()) {
-            $this->setupSyncEnvironment();
-        }
 
         $serverSyncPath = $this->syncPath.DIRECTORY_SEPARATOR.$params['id'];
 
@@ -263,6 +259,11 @@ class Synchronizer
      **/
     public function syncMultiple($servers)
     {
+        // Check if the folder where store elements is ready and writable
+        if (!$this->isSyncEnvironmetReady()) {
+            $this->setupSyncEnvironment();
+        }
+
         $this->lockSync();
 
         $messages = array();

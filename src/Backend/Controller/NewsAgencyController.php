@@ -456,39 +456,38 @@ class NewsAgencyController extends Controller
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $element    = $repository->findByFileName($sourceId, $id);
+            $element    = $repository->findById($sourceId, $id);
         } catch (\Exception $e) {
             $element = null;
         }
 
         $content = null;
-        if (count($element['photos']) > 0) {
-            foreach ($element['photos'] as $photo) {
+        if ($element->hasPhotos()) {
+            foreach ($element->getPhotos() as $photo) {
 
-                if ($photo['id'] == $attachmentId) {
+                if ($photo->getId() == $attachmentId) {
 
                     $filePath = null;
-                    if (strpos('http', $photo['file_path'])) {
-                        $filePath = $photo['file_path'];
+                    if (strpos('http', $photo->getFilePath())) {
+                        $filePath = $photo->getFilePath();
                     }
 
                     // Get image from FTP
                     if (!$filePath) {
-                        $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo['file_path']);
+                        $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
                     }
 
                     // If no image from FTP check HTTP
                     if (!$filePath) {
-                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo['name'];
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
 
                     $content = @file_get_contents($filePath);
-                    var_dump($content, $filePath);die();
 
                     $response = new Response(
                         $content,
                         200,
-                        array('content-type' => $photo['file_type'])
+                        array('content-type' => $photo->getFileType())
                     );
                 }
             }

@@ -45,7 +45,7 @@ abstract class ServerAbstract
                 $downloadedFiles++;
             }
             // Fetch all images name
-            $imagesName[] = $this->getImagesNameFromLocalContent($id);
+            $imagesName = array_merge($imagesName, $this->getImagesNameFromLocalContent($id));
         }
 
         // Add all xml files name on serverFiles array
@@ -54,15 +54,12 @@ abstract class ServerAbstract
                 'filename' => $file,
             );
         }
-
         // Add all images name on serverFiles array
-        foreach ($imagesName as $names) {
-            if (!empty($names)) {
-                foreach ($names as $name) {
-                    $serverFiles[] = array(
-                        'filename' => $name,
-                    );
-                }
+        foreach ($imagesName as $name) {
+            if (!empty($name)) {
+                $serverFiles[] = array(
+                    'filename' => $name,
+                );
             }
         }
 
@@ -101,30 +98,26 @@ abstract class ServerAbstract
             if (is_object($element)) {
                 // Check for photos
                 if ($element->hasPhotos()) {
-                    $photos = $element->getPhotos();
-                    $i = 0;
-                    foreach ($photos as $photo) {
-                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
-                        $localImagePath = $this->params['sync_path'].DS.$photo->name[$i];
+                    foreach ($element->getPhotos() as $photo) {
+                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
                         if (file_exists($localImagePath)) {
                             unlink($localImagePath);
                         }
+                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
                         @file_put_contents($localImagePath, $rawImage);
-                        $i++;
                     }
                 }
 
                 // Check for videos
                 if ($element->hasVideos()) {
-                    $videos = $element->getVideos();
-                    foreach ($videos as $video) {
-                        $rawVideo = $this->getContentFromUrlWithDigestAuth($video->file_path);
-                        $localVideoPath = $this->params['sync_path'].DS.$video->name[$i];
+                    foreach ($element->getVideos() as $video) {
+                        $localVideoPath = $this->params['sync_path'].DS.$video->name;
                         if (file_exists($localVideoPath)) {
                             unlink($localVideoPath);
                         }
+
+                        $rawVideo = $this->getContentFromUrlWithDigestAuth($video->file_path);
                         @file_put_contents($localVideoPath, $rawVideo);
-                        $i++;
                     }
                 }
 
@@ -153,17 +146,16 @@ abstract class ServerAbstract
             if (is_object($element)) {
                 if ($element->hasPhotos()) {
                     $photos = $element->getPhotos();
-                    $i = 0;
                     foreach ($photos as $photo) {
-                        $imagesName[] = $photo->name[$i];
-                        $i++;
+                        if (!in_array($photo->name, $imagesName)) {
+                            $imagesName[] = $photo->name;
+                        }
                     }
                 }
             }
 
             return $imagesName;
         }
-
     }
 
     /**
