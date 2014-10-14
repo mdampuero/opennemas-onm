@@ -213,7 +213,7 @@ class LocalRepository
         }
 
         if (is_null($element)) {
-            throw new SynchronizerException();
+            throw new \Exception();
         } else {
             $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
         }
@@ -246,7 +246,7 @@ class LocalRepository
      **/
     public function matchContent($element, $filter)
     {
-        $needle   = strtolower(\Onm\StringUtils::normalize($needle));
+        $needle   = strtolower(\Onm\StringUtils::normalize($filter));
         $title    = strtolower(\Onm\StringUtils::normalize($element['title']));
 
         if (preg_match("@".$needle."@i", $title)) {
