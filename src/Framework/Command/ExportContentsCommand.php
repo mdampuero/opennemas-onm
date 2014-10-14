@@ -63,7 +63,6 @@ EOF
 
         // Initialize application
         $basePath = APPLICATION_PATH;
-        $phpBinPath = exec('which php');
 
         chdir($basePath);
 
@@ -322,7 +321,7 @@ EOF
                     $photos = $content->_getAttachedPhotos($content->id);
 
                     $content->all_photos = array();
-                    foreach ($photos as $key => $value) {
+                    foreach ($photos as $value) {
                         // Add DateTime with format Y-m-d H:i:s
                         $value['photo']->created_datetime =
                             \DateTime::createFromFormat(

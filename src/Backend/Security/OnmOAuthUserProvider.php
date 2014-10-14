@@ -84,7 +84,6 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         // Data from Google response
-        $avatar   = $response->getProfilePicture();
         $email    = $response->getEmail();
         $userId   = $response->getUsername();
         $realname = $response->getRealName();

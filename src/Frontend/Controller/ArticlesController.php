@@ -31,7 +31,7 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Displays the article given its id or slug
+     * Displays the article given its id
      *
      * @param Request $request the request object
      *
@@ -178,7 +178,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Displays the external article given its id or slug
+     * Displays the external article given its id
      *
      * @param Request $request the request object
      *
@@ -189,7 +189,6 @@ class ArticlesController extends Controller
         // Fetch HTTP variables
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);

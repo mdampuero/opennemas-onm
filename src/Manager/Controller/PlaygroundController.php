@@ -45,7 +45,7 @@ class PlaygroundController extends Controller
      *
      * @param Request $request The request object.
      */
-    public function play(Request $request)
+    public function play()
     {
         // Your code here...
     }

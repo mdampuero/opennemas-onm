@@ -83,7 +83,7 @@ class CommandController extends Controller
 
         $application = $this->getApplication();
         try {
-            $command = $application->find($commandName);
+            $application->find($commandName);
         } catch (\InvalidArgumentException $e) {
             $output = $e->getMessage();
         }

@@ -77,9 +77,6 @@ EOF
         \Application::load();
         \Application::initDatabase($databaseInstanceConnection);
 
-        // multi handle
-        $curlHandler = curl_multi_init();
-
         $urlBase = "http://www.cronicasdelaemigracion.es/seccion/";
 
         $date          = new \DateTime();

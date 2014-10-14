@@ -422,7 +422,6 @@ class PaywallController extends Controller
         }
 
         // Some transaction data
-        $payerId         = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
         $payerName       = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->FirstName;
         $payerLastName   = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->LastName;
         $currencyID      = $paywallSettings['money_unit'];

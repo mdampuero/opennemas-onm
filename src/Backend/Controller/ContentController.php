@@ -318,7 +318,8 @@ class ContentController extends Controller
 
         if ($id > 0) {
             $content = new \Content($id);
-            $properties = $request->request->get('properties', null);
+
+            $properties   = $request->request->get('properties', null);
 
             if ($content->id != null && $properties != null) {
                 foreach ($properties as $name => $value) {
@@ -328,6 +329,19 @@ class ContentController extends Controller
                         $content->clearProperty($name);
                     }
                 }
+
+                // Fetch category to delete cache
+                $categoryId = $request->request->get('category', null);
+                if ($categoryId == 0) {
+                    $categoryName = 'home';
+                } else {
+                    $ccm = \ContentCategoryManager::get_instance();
+                    $categoryName  = $ccm->get_name($categoryId);
+                }
+
+                // Delete custom css cache for this category
+                $this->get('cache')->delete('custom_css|'.$categoryName);
+
                 $code = 200;
                 $message = "Done {$id}:". serialize($properties)." \n";
             } else {

@@ -42,7 +42,6 @@ class NewsAgencyCronActionSubscriber implements EventSubscriberInterface
     public function updateNewsAgency(Event $event)
     {
         $output = $event->output;
-        $input  = $event->input;
         $sc     = $event->container;
 
         $output->writeln(' - Executing news agency actions');

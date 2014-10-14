@@ -63,13 +63,12 @@ class ErrorController extends Controller
 
         switch ($exceptionName) {
             case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
-                $trace = $error->getTrace();
-                $path = $request->getRequestUri();
 
+                $path = $request->getRequestUri();
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
                 error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'error/404.tpl',

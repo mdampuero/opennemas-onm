@@ -55,8 +55,6 @@ class RedirectorsController extends Controller
             $newContentID = \Content::resolveID($newContentID);
         }
 
-        $er = $this->get('entity_repository');
-
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = $this->get('entity_repository')->find('Article', $newContentID);
 

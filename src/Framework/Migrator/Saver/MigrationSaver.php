@@ -1188,7 +1188,7 @@ class MigrationSaver
                 case 'merge':
                     if (is_array($field) && count($field) > 0) {
                         $value = '';
-                        foreach ($field as $key => $v) {
+                        foreach ($field as $v) {
                             $value .= $v . ',';
                         }
                         $field = rtrim($value, ',');
@@ -1282,7 +1282,7 @@ class MigrationSaver
         $values = array($photo, $album);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1300,7 +1300,7 @@ class MigrationSaver
         $values = array($photo, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1318,7 +1318,7 @@ class MigrationSaver
         $values = array($photo, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1336,7 +1336,7 @@ class MigrationSaver
         $values = array($video, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1506,7 +1506,7 @@ class MigrationSaver
         return $values;
     }
 
-    private function clearTags($body)
+/*    private function clearTags($body)
     {
         $result = array();
 
@@ -1598,5 +1598,5 @@ class MigrationSaver
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }
+    }*/
 }

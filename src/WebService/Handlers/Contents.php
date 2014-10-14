@@ -51,7 +51,7 @@ class Contents
 
         $returnValue = \ContentManager::getContentTypeNameFromId($contentID, true);
 
-        return $return_value;
+        return $returnValue;
     }
 
     /*
