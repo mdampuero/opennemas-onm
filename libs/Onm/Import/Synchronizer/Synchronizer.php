@@ -14,6 +14,7 @@
 namespace Onm\Import\Synchronizer;
 
 use Onm\Import\Synchronizer\LockException;
+use Onm\Import\DataSource\DataSourceFactory;
 
 /**
  * Handles all the common methods in the importers
@@ -87,10 +88,9 @@ class Synchronizer
         if (file_exists($this->syncFilePath)) {
             return unserialize(file_get_contents($this->syncFilePath));
         } else {
-            return array(
-                'lastimport'        => '',
-                'imported_elements' => array(),
-            );
+            return [
+                'lastimport' => '',
+            ];
         }
     }
 
@@ -148,34 +148,13 @@ class Synchronizer
      *
      * @param array $importedElements ids of new imported elements
      *
-     * @return array array('lastimport' => Date, 'imported_elements' => array())
+     * @return array array('lastimport' => Date)
      */
-    public function updateSyncFile($importedElements = array())
+    public function updateSyncFile()
     {
-        $syncParams = $this->getSyncParams();
-
-        if (is_string($importedElements)) {
-            $importedElements = array($importedElements);
-        }
-
-        // Clean previously imported files that are not present in local cache
-        $localElements  = $this->getLocalFileList($this->syncPath);
-        $previousImportedElements      = $syncParams['imported_elements'];
-        $previousImportedElementsCount = count($previousImportedElements);
-        $elements = array();
-        for ($i=0; $i < $previousImportedElementsCount; $i++) {
-            if (in_array($previousImportedElements[$i], $localElements)) {
-                $elements []= $previousImportedElements[$i];
-            }
-        }
-
-        // Include new importedElements with old ones
-        $newImportedelements = array_merge($importedElements, $elements);
-
-        $newSyncParams = array(
-            'lastimport'        => date('c'),
-            'imported_elements' => $newImportedelements,
-        );
+        $newSyncParams = [
+            'lastimport' => date('c'),
+        ];
 
         file_put_contents($this->syncFilePath, serialize($newSyncParams));
 
@@ -260,7 +239,7 @@ class Synchronizer
 
         $excludedFiles = self::getLocalFileListForSource($this->syncPath, $params['id'], '*');
 
-        $params['sync_path'] = $serverSyncPath;
+        $params['sync_path']      = $serverSyncPath;
         $params['excluded_files'] = $excludedFiles;
         // Needs an abstraction
 
@@ -315,6 +294,8 @@ class Synchronizer
         }
         $this->updateSyncFile();
 
+        $this->compileServerContents($servers);
+
         return $messages;
     }
 
@@ -334,5 +315,55 @@ class Synchronizer
             return \FilesManager::deleteDirectoryRecursively($path);
         }
         return false;
+    }
+
+    /**
+     * Creates a "binary" file containing the list of news from all the source servers
+     *
+     * @param  array $servers list of server data to build from
+     **/
+    public function compileServerContents($servers)
+    {
+        $elements = [];
+        foreach ($servers as $server) {
+            $files = $this->getLocalFileListForSource($this->syncPath, $server['id']);
+            foreach ($files as $file) {
+                $element = DataSourceFactory::get($this->syncPath.'/'.$file);
+
+                if (is_object($element)) {
+                    $element = $element->toArray();
+                    $element['source_id']    = $server['id'];
+                    $element['created_time'] = \DateTime::createFromFormat(\DateTime::ISO8601, $element['created_time']);
+                    $elements []= $element;
+                }
+            }
+        }
+
+        usort($elements, function($a, $b) {
+            return ($a['created_time'] < $b['created_time']) ? 1 : -1;
+        });
+
+        foreach ($elements as &$element) {
+            $element['created_time'] = $element['created_time']->format(\DateTime::ISO8601);
+        }
+
+        $this->cleanOldCompiledServerContents();
+
+        $now = time();
+        $syncFile = $this->syncPath.'/serversync.'.$now.'.php';
+        file_put_contents($syncFile, serialize($elements));
+    }
+
+    /**
+     * Removes old compiled news files
+     **/
+    public function cleanOldCompiledServerContents()
+    {
+        $syncFile = $this->syncPath.'/serversync.*.php';
+        $files = glob($syncFile);
+
+        foreach ($files as $file) {
+            unlink($file);
+        }
     }
 }

@@ -132,8 +132,14 @@ class MultimediaResource
                 $originalDate =
                     (string) $this->getData()
                     ->DescriptiveMetadata->DateLineDate;
+
+                $date = \DateTime::createFromFormat('Ymd\THisP', $originalDate);
+                if (is_object($date)) {
+                    return $date;
+                }
+
                 // ISO 8601 doesn't match this date 20111211T103900+0000
-                $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                $originalDate = preg_replace('@(\+(\d){4})$@', '', $originalDate);
 
                 return \DateTime::createFromFormat('Ymd\THis', $originalDate);
 
@@ -161,7 +167,7 @@ class MultimediaResource
             'id'           => $this->id,
             'name'         => $this->name,
             'title'        => $this->title,
-            'created_time' => $this->created_time->format(\DateTime::RFC2822),
+            'created_time' => $this->created_time->format(\DateTime::ISO8601),
             'file_type'    => $this->file_type,
             'file_path'    => $this->file_path,
         ];

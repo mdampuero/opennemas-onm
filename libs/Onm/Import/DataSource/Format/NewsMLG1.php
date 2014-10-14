@@ -542,6 +542,18 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
     }
 
     /**
+     * Returns the opennemas generated metadata
+     *
+     * @return array the list of metadata
+     **/
+    public function getMetadata()
+    {
+        return [
+            'category' => $this->getOpennemasData('category')
+        ];
+    }
+
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()

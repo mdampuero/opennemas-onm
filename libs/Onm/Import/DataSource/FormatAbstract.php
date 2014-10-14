@@ -38,10 +38,12 @@ abstract class FormatAbstract {
 
         return [
             'id'           => $this->getId(),
-            'xml_file'     => $this->xmlFile,
+            'xml_file'     => $this->xml_file,
+            'source_id'    => $this->source_id,
             'urn'          => $this->getUrn(),
             'pretitle'     => $this->getPretitle(),
             'title'        => $this->getTitle(),
+            'summary'      => $this->getSummary(),
             'priority'     => $this->getPriority(),
             'tags'         => $this->getTags(),
             'created_time' => $this->getCreatedTime()->format(\DateTime::ISO8601),
@@ -51,6 +53,7 @@ abstract class FormatAbstract {
             'body'         => $this->getBody(),
             'photos'       => $photos,
             'videos'       => $videos,
+            'opennemas'    => $this->getMetadata(),
         ];
     }
 
@@ -92,6 +95,16 @@ abstract class FormatAbstract {
     public function getVideos()
     {
         return [];
+    }
+
+    /**
+     * Returns the element internal metadata
+     *
+     * @return array the element internal metadata
+     **/
+    public function getMetaData()
+    {
+        return array();
     }
 
     /**
