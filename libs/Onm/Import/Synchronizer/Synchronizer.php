@@ -235,8 +235,6 @@ class Synchronizer
             mkdir($serverSyncPath);
         }
 
-        $this->lockSync();
-
         $excludedFiles = self::getLocalFileListForSource($this->syncPath, $params['id'], '*');
 
         $params['sync_path']      = $serverSyncPath;
@@ -253,8 +251,6 @@ class Synchronizer
 
         $report = $synchronizer->downloadFilesToCacheDir($params);
 
-        $this->unlockSync();
-
         return $report;
     }
 
@@ -267,6 +263,8 @@ class Synchronizer
      **/
     public function syncMultiple($servers)
     {
+        $this->lockSync();
+
         $messages = array();
         foreach ($servers as $server) {
             try {
@@ -287,14 +285,13 @@ class Synchronizer
 
             } catch (\Exception $e) {
                 $messages []= $e->getMessage();
-                $this->unlockSync();
-
-                throw $e;
             }
         }
         $this->updateSyncFile();
 
         $this->compileServerContents($servers);
+
+        $this->unlockSync();
 
         return $messages;
     }
