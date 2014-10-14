@@ -10,6 +10,7 @@
 namespace Onm\Import\DataSource\Format;
 
 use Onm\Import\DataSource\FormatInterface;
+use Onm\Import\DataSource\FormatAbstract;
 use Onm\Settings as s;
 
 /**
@@ -17,7 +18,7 @@ use Onm\Settings as s;
  *
  * @package Onm_Import_DataSource
  **/
-class Europapress implements FormatInterface
+class Europapress extends FormatAbstract implements FormatInterface
 {
     private $data = null;
     /**
@@ -82,8 +83,8 @@ class Europapress implements FormatInterface
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
-        $this->audios       = $this->getAudios();
-        $this->files        = $this->getFiles();
+        // $this->audios       = $this->getAudios();
+        // $this->files        = $this->getFiles();
     }
 
     /*

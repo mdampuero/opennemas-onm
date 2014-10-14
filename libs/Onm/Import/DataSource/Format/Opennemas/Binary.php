@@ -7,54 +7,47 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Format;
+namespace Onm\Import\DataSource\Format\Opennemas;
 
 use Onm\Import\DataSource\FormatInterface;
 use Onm\Import\DataSource\FormatAbstract;
 
 /**
- * Handles all the operations for NITF data
+ * Handles all the operations for Binary data
  *
  * @package Onm_Import
  **/
-class NITF extends FormatAbstract implements FormatInterface
+class Binary extends FormatAbstract implements FormatInterface
 {
+    /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    private $data;
+
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
      *
      * @return void
      **/
-    public function __construct($xmlFile)
+    public function __construct($data)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->data = $data;
+        $this->data['created_time'] = \DateTime::createFromFormat(\DateTime::ISO8601, $this->data['created_time']);
 
-        if (file_exists($xmlFile)) {
-            if (filesize($xmlFile) < 2) {
-                throw new \Exception(
-                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
-                );
+        if (array_key_exists('photos', $this->data)) {
+            foreach ($this->data['photos'] as &$photo) {
+                $photo = new Component\MultimediaResource($photo);
             }
-
-            $this->data = simplexml_load_file(
-                $xmlFile,
-                null,
-                LIBXML_NOERROR | LIBXML_NOWARNING
-            );
-
-            if (!$this->data) {
-                throw new \Exception(
-                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
-                );
+        }
+        if (array_key_exists('videos', $this->data)) {
+            foreach ($this->data['videos'] as &$photo) {
+                $photo = new Component\MultimediaResource($photo);
             }
-
-            $this->checkFormat($this->data, $xmlFile);
-        } else {
-            throw new \Exception(
-                sprintf(_("File '%d' doesn't exists."), $xmlFile)
-            );
         }
 
-        return $this;
+        $this->load($data);
     }
 
     /**
@@ -73,11 +66,10 @@ class NITF extends FormatAbstract implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
-        $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
-        // $this->audios       = $this->getAudios();
-        // $this->files        = $this->getFiles();
+        $this->source_id    = $this->getSourceId();
+        $this->xml_file      = $this->getXmlFile();
     }
 
     /**
@@ -151,9 +143,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getServiceName()
     {
-        $docId = $this->getData()->body->{'body.head'}->rights->{'rights.owner'};
-
-        return (string) $docId;
+        return $this->getData()['agency_name'];
     }
 
     /**
@@ -163,11 +153,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getId()
     {
-        $docId = $this->getData()->head->docdata->xpath('//doc-id');
-        $docId = $docId[0];
-        $attributtes = $docId->attributes();
-
-        return (string) $attributtes->{'id-string'};
+        return $this->getData()['id'];
     }
 
     /**
@@ -177,9 +163,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getTitle()
     {
-        $title = (string) $this->getData()->head->title;
-
-        return iconv(mb_detect_encoding($title), "UTF-8", $title);
+        return $this->getData()['title'];
     }
 
     /**
@@ -189,7 +173,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getPreTitle()
     {
-        return '';
+        return $this->getData()['pretitle'];
     }
 
     /**
@@ -199,7 +183,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getSummary()
     {
-        return '';
+        return $this->getData()['summary'];
     }
 
     /**
@@ -209,15 +193,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getBody()
     {
-        $bodies = $this->getData()->xpath(
-            "//nitf/body/body.content"
-        );
-        $body = "";
-        foreach ($bodies[0]->children() as $child) {
-            $body .= "<p>".sprintf("%s", $child)."</p>\n";
-        }
-
-        return iconv(mb_detect_encoding($body), "UTF-8", $body);
+        return $this->getData()['body'];
     }
 
     /**
@@ -227,9 +203,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getUrn()
     {
-        $date = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
-        $id = $this->getId();
-        return 'urn:newsml:multimedia.efeservicios.com:'.$date.':'.$id.':2';
+        return $this->getData()['urn'];
     }
 
     /**
@@ -239,26 +213,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getPriority()
     {
-        $priority = $this->getData()->xpath('//head/meta[@name="prioridad"]');
-        $priority = $priority[0]->attributes();
-        $priority = (string) $priority->content;
-
-        $priorities = array(
-            '10' => 1,
-            '20' => 2,
-            '25' => 3,
-            '30' => 4,
-            // From Pandora
-            'U'  => 4,
-            'R'  => 3,
-            'B'  => 2,
-        );
-
-        if (array_key_exists($priority, $priorities)) {
-            return $priorities[$priority];
-        } else {
-            return 1;
-        }
+        return $this->getData()['priority'];
     }
 
     /**
@@ -268,7 +223,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getTags()
     {
-        return array();
+        return $this->getData()['tags'];
     }
 
     /**
@@ -278,7 +233,7 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getCategory()
     {
-        return '';
+        return $this->getData()['category'];
     }
 
     /**
@@ -288,27 +243,96 @@ class NITF extends FormatAbstract implements FormatInterface
      **/
     public function getCreatedTime()
     {
-        $attributes = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
+        return $this->getData()['created_time'];
+    }
 
-        // '20130315T150100+0000'
-        return \DateTime::createFromFormat(
-            'Ymd\THisP',
-            $attributes
-        );
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getPhotos()
+    {
+        return $this->getData()['photos'];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function hasPhotos()
+    {
+        return count($this->getPhotos()) > 0;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getVideos()
+    {
+        return $this->getData()['videos'];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function hasVideos()
+    {
+        return count($this->getVideos()) > 0;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getMetaData()
+    {
+        return $this->getData()['opennemas'];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getSourceId()
+    {
+        return $this->getData()['source_id'];
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getXmlFile()
+    {
+        return $this->getData()['xml_file'];
     }
 
     /**
      * Checks if the data provided could be handled by the class
      *
+     * @param SimpleXMLElement $data the XML data
+     * @param string $xmlFile the file path
+     *
      * @return string
      **/
     public static function checkFormat($data, $xmlFile)
     {
-        $node = $data->xpath("/nitf");
-
-        if (!is_array($node) || empty($node)) {
-            throw new \Exception(sprintf(_('Not a valid NITF file')));
-        }
-        return true;
+        return false;
     }
 }

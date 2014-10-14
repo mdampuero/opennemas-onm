@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import\Synchronizer\Servers;
+namespace Onm\Import\SourceServer\Servers;
 
-use \Onm\Import\Synchronizer\ServerAbstract;
-use \Onm\Import\Synchronizer\ServerInterface;
+use \Onm\Import\SourceServer\ServerAbstract;
+use \Onm\Import\SourceServer\ServerInterface;
 
 /**
  * Class to synchronize local folders with an HTTP Onm server.

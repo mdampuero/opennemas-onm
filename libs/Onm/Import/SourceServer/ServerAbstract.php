@@ -10,7 +10,7 @@
  *
  * @package Onm_Importer
  **/
-namespace Onm\Import\Synchronizer;
+namespace Onm\Import\SourceServer;
 
 /**
  * Handles all the common methods in the servers

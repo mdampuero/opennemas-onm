@@ -14,6 +14,8 @@
 namespace Onm\Import\Repository;
 
 use \Onm\Import\DataSource\DataSourceFactory;
+use \Onm\Import\Synchronizer\Synchronizer;
+use \Onm\Import\Synchronizer\Exception as SynchronizerException;
 
 /**
  * Class to import news from any news Agency FTP / HTTP
@@ -22,8 +24,6 @@ use \Onm\Import\DataSource\DataSourceFactory;
  */
 class LocalRepository
 {
-    private $config = array();
-
     public $syncPath = '';
 
     /**
@@ -39,9 +39,6 @@ class LocalRepository
             DIRECTORY_SEPARATOR,
             array(CACHE_PATH, 'importers')
         );
-        $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
-
-        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
     }
 
     /**
@@ -51,7 +48,7 @@ class LocalRepository
      */
     public function findAll($params = array())
     {
-        $filesSynced = \Onm\Import\Synchronizer\Synchronizer::getLocalFileList($this->syncPath);
+        $filesSynced = Synchronizer::getLocalFileList($this->syncPath);
 
         $elements = array();
         foreach ($filesSynced as $file) {
@@ -112,40 +109,114 @@ class LocalRepository
     }
 
     /**
-     * Fetches a DataSource\NewsMLG1 object from id
+     * Gets an array of news from Efe
      *
-     * @param $id
+     * @return array, the array of objects with news from Efe
+     */
+    public function findAllFromCompile($params = array())
+    {
+        $sourceElements = $this->getElementsFromCompileFile();
+
+        $elements = [];
+        foreach ($sourceElements as $element) {
+            $sourceId = (int) $element['source_id'];
+            if ($params['source'] != '*'
+                && $sourceId != $params['source']
+            ) {
+                continue;
+            }
+
+            if (!is_array($element)) {
+                continue;
+            }
+
+            if ($params['title'] != '*'
+                && !($this->matchContent($element, $params['title']))
+            ) {
+                continue;
+            }
+
+            if ($params['title'] == '*'
+                && array_key_exists('limit', $params)
+                && ($elementsCount <= $params['limit'])
+            ) {
+                break;
+            }
+
+            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+            $elements []= $element;
+        }
+
+        $counTotalElements = count($elements);
+        if (array_key_exists('items_page', $params)
+            && array_key_exists('page', $params)
+        ) {
+            $files = array_slice(
+                $elements,
+                $params['items_page'] * ($params['page']-1),
+                $params['items_page']
+            );
+        } else {
+            $files = $elements;
+        }
+
+        return array($counTotalElements, $files);
+    }
+
+    /**
+     * Fetches a Onm\Import\DataSource\FormatInterface compatible object from id
      *
-     * @return DataSource\Efe the article object
+     * @param string $sourceId the source id to search in
+     * @param string $xmlFile  the element id
+     *
+     * @return \Onm\Import\DataSource\FormatInterface the article object
      */
     public function findByID($sourceId, $id)
     {
-        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$id.'.xml';
+        $sourceElements = $this->getElementsFromCompileFile();
 
-        if (!realpath($file)) {
-            throw new \Exception();
+        $element = null;
+        foreach ($sourceElements as $sourceElement) {
+            if ($sourceElement['source_id'] == $sourceId && $sourceElement['id'] == $id) {
+                $element = $sourceElement;
+                break;
+            }
         }
-        $element = DataSourceFactory::get($file);
+
+        if (is_null($element)) {
+            throw new \Exception();
+        } else {
+            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+        }
 
         return  $element;
     }
 
     /**
-     * Fetches a DataSource\NewsMLG1 object from file name
+     * Fetches a  Onm\Import\DataSource\FormatInterface object from file name
      *
-     * @param $fileName
+     * @param string $sourceId the source id to search in
+     * @param string $xmlFile  the element file name
      *
-     * @return DataSource\NewsMLG1 the article object
+     * @return  Onm\Import\DataSource\FormatInterface the article object
      */
-    public function findByFileName($sourceId, $id)
+    public function findByFileName($sourceId, $xmlFile)
     {
-        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$id;
+        $sourceElements = $this->getElementsFromCompileFile();
 
-        if (!realpath($file)) {
-            throw new \Exception();
+        $element = null;
+        foreach ($sourceElements as $sourceElement) {
+            if ($sourceElement['source_id'] == $sourceId && $sourceElement['xml_file'] == $xmlFile) {
+                $element = $sourceElement;
+                break;
+            }
         }
 
-        $element = DataSourceFactory::get($file);
+        if (is_null($element)) {
+            throw new SynchronizerException();
+        } else {
+            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+        }
 
         return  $element;
     }
@@ -164,5 +235,47 @@ class LocalRepository
             return \FilesManager::deleteDirectoryRecursively($path);
         }
         return false;
+    }
+
+    /**
+     * Matches the element contents against a filter
+     *
+     * @param array $element the source element information
+     * @param array $filter the filter to use
+     * @return boolean true if the element matches the filter
+     **/
+    public function matchContent($element, $filter)
+    {
+        $needle   = strtolower(\Onm\StringUtils::normalize($needle));
+        $title    = strtolower(\Onm\StringUtils::normalize($element['title']));
+
+        if (preg_match("@".$needle."@i", $title)) {
+            return true;
+        }
+
+        $pretitle = strtolower(\Onm\StringUtils::normalize($element['pretitle']));
+        if (preg_match("@".$needle."@i", $pretitle)) {
+            return true;
+        }
+
+        $body = strtolower(\Onm\StringUtils::normalize($element['body']));
+        if (preg_match("@".$needle."@i", $body)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getElementsFromCompileFile()
+    {
+        $fileListing = glob($this->syncPath.'/serversync.*.php');
+        $serverFile = $fileListing[0];
+        return unserialize(file_get_contents($serverFile));
     }
 }

@@ -185,7 +185,6 @@ class InstanceCreator
             APPLICATION_PATH . DS . 'db' . DS . 'instance-default.sql'
         );
 
-
         $this->restoreDatabase($source, $database);
     }
 

@@ -95,7 +95,8 @@ EOF
             $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
             $synchronizer->unlockSync();
         } catch (\Exception $e) {
-            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>");
+            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
+            print_r($e->getTrace()[0]['args']);die();
         }
 
 

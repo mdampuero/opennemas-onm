@@ -155,9 +155,6 @@ class NewsAgencyController extends Controller
             }
         }
 
-        // Get LocalRepository instance
-        $repository = new \Onm\Import\Repository\LocalRepository();
-
         // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
         if (!is_array($servers)) {
@@ -176,19 +173,19 @@ class NewsAgencyController extends Controller
 
         $sources = array_unique($sources);
 
-        // Fetch filter params
-        $findParams = array(
+        // Get LocalRepository instance
+        $repository = new \Onm\Import\Repository\LocalRepository();
+
+        list($countTotalElements, $elements) = $repository->findAllFromCompile(array(
             'source'     => $filterSource,
             'title'      => $filterTitle,
             'page'       => $page,
             'items_page' => $elementsPerPage,
-        );
-
-        list($countTotalElements, $elements) = $repository->findAll($findParams);
+        ));
 
         $urns = array();
         foreach ($elements as $element) {
-            $urns []= $element->urn;
+            $urns []= $element->getUrn();
         }
         $alreadyImported = \Content::findByUrn($urns);
 
@@ -197,26 +194,27 @@ class NewsAgencyController extends Controller
         }
 
         foreach ($elements as &$element) {
-            $element->load();
-            $element->source_name = $servers[$element->source_id]['name'];
-            $element->source_color = $servers[$element->source_id]['color'];
-            $element->import_url = $this->generateUrl(
-                'admin_news_agency_pickcategory',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->view_url = $this->generateUrl(
-                'admin_news_agency_show',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->id = $element->source_id . ',' . $element->id . '.xml';
+            $element = $element->toArray();
 
-            $element->already_imported = in_array($element->urn, $alreadyImported);
+            $element['source_name']  = $servers[$element['source_id']]['name'];
+            $element['source_color'] = $servers[$element['source_id']]['color'];
+            $element['import_url']   = $this->generateUrl(
+                'admin_news_agency_pickcategory',
+                [
+                    'source_id' => $element['source_id'],
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            $element['view_url'] = $this->generateUrl(
+                'admin_news_agency_show',
+                [
+                    'source_id' => $element['source_id'],
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            // $element->id = $element->source_id . ',' . $element->id . '.xml';
+
+            $element['already_imported'] = in_array($element['urn'], $alreadyImported);
         }
 
         return new JsonResponse(
@@ -246,11 +244,9 @@ class NewsAgencyController extends Controller
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
             $element = $repository->findByFileName($sourceId, $id);
-            $element->source_id = $sourceId;
-
             $alreadyImported = false;
             if (!is_null($element)) {
-                $alreadyImported = (count(\Content::findByUrn($element->urn)) > 0);
+                $alreadyImported = (count(\Content::findByUrn($element->getUrn())) > 0);
             }
         } catch (\Exception $e) {
             // Redirect the user to the list of articles and show  an error message
@@ -420,7 +416,7 @@ class NewsAgencyController extends Controller
      **/
     public function getSimilarCategoryIdForElement($element)
     {
-        $originalCategory     = utf8_decode($element->getOpennemasData('category'));
+        $originalCategory     = utf8_decode($element->getMetaData()['category']);
         $originalCategoryTemp = strtolower($originalCategory);
 
         $ccm        = \ContentCategoryManager::get_instance();
@@ -458,38 +454,47 @@ class NewsAgencyController extends Controller
         $sourceId     = $request->query->getDigits('source_id');
         $attachmentId = $request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $element    = $repository->findById($sourceId, $id);
-        $content = null;
-        if ($element->hasPhotos()) {
-            $photos = $element->getPhotos();
-            foreach ($photos as $photo) {
+        try {
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element    = $repository->findByFileName($sourceId, $id);
+        } catch (\Exception $e) {
+            $element = null;
+        }
 
-                if ($photo->id == $attachmentId) {
+        $content = null;
+        if (count($element['photos']) > 0) {
+            foreach ($element['photos'] as $photo) {
+
+                if ($photo['id'] == $attachmentId) {
+
+                    $filePath = null;
+                    if (strpos('http', $photo['file_path'])) {
+                        $filePath = $photo['file_path'];
+                    }
 
                     // Get image from FTP
-                    $filePath = realpath(
-                        $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                    );
+                    if (!$filePath) {
+                        $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo['file_path']);
+                    }
 
                     // If no image from FTP check HTTP
                     if (!$filePath) {
-                        $filePath = $repository->syncPath.DS.
-                            $sourceId.DS.$photo->name[$index];
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo['name'];
                     }
+
                     $content = @file_get_contents($filePath);
+                    var_dump($content, $filePath);die();
 
                     $response = new Response(
                         $content,
                         200,
-                        array('content-type' => $photo->file_type)
+                        array('content-type' => $photo['file_type'])
                     );
                 }
             }
             if (empty($content)) {
                 $response = new Response('Image not found', 404);
             }
-
         } else {
             $response = new Response('Image not found', 404);
         }
@@ -876,34 +881,33 @@ class NewsAgencyController extends Controller
         $server = $servers[$sourceId];
 
         // If the new has photos import them
-        if ($element->hasPhotos()) {
-            $photos = $element->getPhotos();
+        if (count($element->getPhotos()) > 0) {
             $i = 0;
             $importedPhotos = array();
 
-            foreach ($photos as $photo) {
+            foreach ($element->getPhotos() as $photo) {
                 // Get image from FTP
-                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->file_path);
-                $fileName = $photo->file_path;
+                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+                $fileName = $photo->getFilePath();
 
                 // If no image from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->name[$i];
-                    $fileName = $photo->name[$i];
+                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
+                    $fileName = $photo->getName();
                 }
 
                 // Check if the file cache exists(keys)
                 if (file_exists($filePath)) {
                     // If the image is already imported use its id
-                    if (!array_key_exists($photo->id, $importedPhotos)) {
+                    if (!array_key_exists($photo->getId(), $importedPhotos)) {
                         $data = array(
                             'title'         => $fileName,
-                            'description'   => $photo->title,
+                            'description'   => $photo->getTitle(),
                             'local_file'    => $filePath,
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => \Onm\StringUtils::getTags($photo->title),
+                            'metadata'      => \Onm\StringUtils::getTags($photo->getTitle()),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );
@@ -911,13 +915,13 @@ class NewsAgencyController extends Controller
                         $newphoto = new \Photo();
                         $photoId = $newphoto->createFromLocalFile($data);
 
-                        $importedPhotos[$photo->id] = $photoId;
+                        $importedPhotos[$photo->getId()] = $photoId;
                     } else {
-                        $photoId = $importedPhotos[$photo->id];
+                        $photoId = $importedPhotos[$photo->getId()];
                     }
 
                     // Check if sync is from Opennemas instances
-                    if ($element->getServicePartyName() == 'Opennemas') {
+                    if ($element->getServiceName() == 'Opennemas') {
                         // If this article has more than one photo take the first one to front
                         if (!isset($frontPhoto)) {
                             $frontPhoto = new \Photo($photoId);
@@ -934,7 +938,7 @@ class NewsAgencyController extends Controller
         }
 
         // Check if sync is from Opennemas instances for importing author
-        if ($element->getServicePartyName() == 'Opennemas') {
+        if ($element->getServiceName() == 'Opennemas') {
             // Check if allow to import authors
             if (isset($server['author']) && $server['author'] == '1') {
 
@@ -1016,29 +1020,27 @@ class NewsAgencyController extends Controller
 
         // If the new has videos import them
         if ($element->hasVideos()) {
-            $videos = $element->getVideos();
-            foreach ($videos as $video) {
+            foreach ($element->getVideos() as $video) {
                 $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$video->file_path
+                    $repository->syncPath.DS.$sourceId.DS.$video->getFilePath()
                 );
 
                 // If no video from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$video->name[$i];
-                    $fileName = $video->name[$i];
+                    $filePath = $repository->syncPath.DS.$sourceId.DS.$video->getName();
+                    $fileName = $video['name'];
                 }
 
 
                 // Check if the file exists
                 if ($filePath) {
                     $videoFileData = array(
-                        'file_type'      => $video->file_type,
+                        'file_type'      => $video->getFileType(),
                         'file_path'      => $filePath,
                         'category'       => $category,
                         'content_status' => 1,
-                        'title'          => $video->title,
-                        'metadata'       => \Onm\StringUtils::getTags($video->title),
+                        'title'          => $video->getTitle(),
+                        'metadata'       => \Onm\StringUtils::getTags($video->getTitle()),
                         'description'    => '',
                         'author_name'    => 'internal',
                     );
@@ -1058,19 +1060,19 @@ class NewsAgencyController extends Controller
         $commentsConfig = s::get('comments_config');
 
         $values = array(
-            'title'          => $element->title,
+            'title'          => $element->getTitle(),
             'category'       => $category,
             'with_comment'   => (array_key_exists('with_comments', $commentsConfig) ? $commentsConfig['with_comments'] : 1),
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,
-            'title_int'      => $element->title,
-            'metadata'       => \Onm\StringUtils::getTags($element->title),
-            'subtitle'       => $element->pretitle,
+            'title_int'      => $element->getTitle(),
+            'metadata'       => \Onm\StringUtils::getTags($element->getTitle()),
+            'subtitle'       => $element->getPretitle(),
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),
-            'summary'        => $element->summary,
-            'body'           => $element->body,
+            'summary'        => $element->getSummary(),
+            'body'           => $element->getBody(),
             'posic'          => 0,
             'id'             => 0,
             'fk_publisher'   => $_SESSION['userid'],
@@ -1083,7 +1085,7 @@ class NewsAgencyController extends Controller
             'footer_video2'  => (isset($innerVideo) ? $innerVideo->title : ''),
             'ordenArti'      => '',
             'ordenArtiInt'   => '',
-            'urn_source'     => $element->urn,
+            'urn_source'     => $element->getUrn(),
         );
 
         $article           = new \Article();
