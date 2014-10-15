@@ -14,7 +14,8 @@ use Onm\Import\DataSource\FormatInterface;
 use Onm\Import\DataSource\Format\NewsMLG1Component\Video;
 use Onm\Import\DataSource\Format\NewsMLG1Component\Photo;
 
-abstract class FormatAbstract {
+abstract class FormatAbstract
+{
 
     /**
      * undocumented function

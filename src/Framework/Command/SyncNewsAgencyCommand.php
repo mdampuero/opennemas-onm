@@ -96,7 +96,6 @@ EOF
             $synchronizer->unlockSync();
         } catch (\Exception $e) {
             $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
-            print_r($e->getTrace()[0]['args']);die();
         }
 
 

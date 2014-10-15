@@ -337,7 +337,7 @@ class Synchronizer
             }
         }
 
-        usort($elements, function($a, $b) {
+        usort($elements, function ($a, $b) {
             return ($a['created_time'] < $b['created_time']) ? 1 : -1;
         });
 
