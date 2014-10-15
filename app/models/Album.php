@@ -352,11 +352,11 @@ class Album extends Content
      * Renders the album
      *
      * @param arrray $params parameters for rendering the content
-     * @param Template $smarty the Template object instance
+     * @param Template $tpl the Template object instance
      *
      * @return string the generated HTML
      **/
-    public function render($params)
+    public function render($params, $tpl = null)
     {
         $tpl = new Template(TEMPLATE_USER);
 

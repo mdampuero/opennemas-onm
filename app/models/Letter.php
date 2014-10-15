@@ -252,7 +252,7 @@ class Letter extends Content
      *
      * @return string the generated HTML
      **/
-    public function render($params)
+    public function render($params, $tpl = null)
     {
         $tpl = new Template(TEMPLATE_USER);
 
