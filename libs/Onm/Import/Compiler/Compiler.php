@@ -14,6 +14,7 @@
 namespace Onm\Import\Compiler;
 
 use Onm\Import\DataSource\DataSourceFactory;
+use Onm\Import\Synchronizer\Synchronizer;
 
 /**
  * Handles all the common methods in the importers
@@ -51,7 +52,7 @@ class Compiler
     {
         $elements = [];
         foreach ($servers as $server) {
-            $files = Onm\Import\Synchronizer\Synchronizer::getLocalFileListForSource($this->syncPath, $server['id']);
+            $files = Synchronizer::getLocalFileListForSource($this->syncPath, $server['id']);
             foreach ($files as $file) {
                 $element = DataSourceFactory::get($this->syncPath.'/'.$file);
 
