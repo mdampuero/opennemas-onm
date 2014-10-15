@@ -373,8 +373,8 @@ class NewsAgencyController extends Controller
             $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
-        $repository       = new \Onm\Import\Repository\LocalRepository();
-        $element          = $repository->findByFileName($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element    = $repository->findByFileName($sourceId, $id);
 
         $ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu();
@@ -775,7 +775,8 @@ class NewsAgencyController extends Controller
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $repository->deleteFilesForSource($id);
+            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
+            $compiler->cleanCompileForSourceID($id, $servers);
 
             unset($servers[$id]);
 
@@ -819,7 +820,8 @@ class NewsAgencyController extends Controller
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $repository->deleteFilesForSource($id);
+            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
+            $compiler->cleanCompileForSourceID($id, $servers);
 
             m::add(sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']), m::SUCCESS);
         } catch (\Exception $e) {

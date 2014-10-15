@@ -115,7 +115,8 @@ class LocalRepository
      */
     public function findAllFromCompile($params = array())
     {
-        $sourceElements = $this->getElementsFromCompileFile();
+        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $sourceElements = $compiler->getElementsFromCompileFile();
 
         $elements = [];
         foreach ($sourceElements as $element) {
@@ -173,7 +174,8 @@ class LocalRepository
      */
     public function findByID($sourceId, $id)
     {
-        $sourceElements = $this->getElementsFromCompileFile();
+        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $sourceElements = $compiler->getElementsFromCompileFile();
 
         $element = null;
         foreach ($sourceElements as $sourceElement) {
@@ -202,7 +204,8 @@ class LocalRepository
      */
     public function findByFileName($sourceId, $xmlFile)
     {
-        $sourceElements = $this->getElementsFromCompileFile();
+        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $sourceElements = $compiler->getElementsFromCompileFile();
 
         $element = null;
         foreach ($sourceElements as $sourceElement) {
@@ -219,22 +222,6 @@ class LocalRepository
         }
 
         return  $element;
-    }
-
-    /**
-     * Removes the local files for a given source id
-     *
-     * @return boolean true if the files were deleted
-     * @throws Exception If the files weren't deleted
-     **/
-    public function deleteFilesForSource($id)
-    {
-        $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$id);
-
-        if (!empty($path)) {
-            return \FilesManager::deleteDirectoryRecursively($path);
-        }
-        return false;
     }
 
     /**
@@ -264,18 +251,5 @@ class LocalRepository
         }
 
         return false;
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function getElementsFromCompileFile()
-    {
-        $fileListing = glob($this->syncPath.'/serversync.*.php');
-        $serverFile = $fileListing[0];
-        return unserialize(file_get_contents($serverFile));
     }
 }
