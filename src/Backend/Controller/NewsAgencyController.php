@@ -244,6 +244,7 @@ class NewsAgencyController extends Controller
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
             $element = $repository->findByFileName($sourceId, $id);
+
             $alreadyImported = false;
             if (!is_null($element)) {
                 $alreadyImported = (count(\Content::findByUrn($element->getUrn())) > 0);

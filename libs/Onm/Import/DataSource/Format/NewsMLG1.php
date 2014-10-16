@@ -175,7 +175,7 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
             "//nitf/body/body.head/rights/rights.owner"
         );
 
-        return $owner[0];
+        return (count($owner) > 0) ? json_decode((string) $owner[0]) : [];
     }
     /**
      * Returns the name of the rights.owner.photo
@@ -188,7 +188,7 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
             "//nitf/body/body.head/rights/rights.owner.photo"
         );
 
-        return $owner[0];
+        return (count($owner) > 0) ? ((string) $owner[0]) : null;
     }
 
     /**

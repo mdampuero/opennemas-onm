@@ -13,9 +13,11 @@
  **/
 namespace Onm\Import\Repository;
 
-use \Onm\Import\DataSource\DataSourceFactory;
-use \Onm\Import\Synchronizer\Synchronizer;
-use \Onm\Import\Synchronizer\Exception as SynchronizerException;
+use Onm\Import\DataSource\DataSourceFactory;
+use Onm\Import\DataSource\Format\Opennemas\Binary;
+use Onm\Import\Synchronizer\Synchronizer;
+use Onm\Import\Synchronizer\Exception as SynchronizerException;
+use Onm\Import\Compiler\Compiler;
 
 /**
  * Class to import news from any news Agency FTP / HTTP
@@ -115,7 +117,7 @@ class LocalRepository
      */
     public function findAllFromCompile($params = array())
     {
-        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $compiler = new Compiler($this->syncPath);
         $sourceElements = $compiler->getElementsFromCompileFile();
 
         $elements = [];
@@ -144,7 +146,7 @@ class LocalRepository
                 break;
             }
 
-            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+            $element = new Binary($element);
             $elements []= $element;
         }
 
@@ -174,7 +176,7 @@ class LocalRepository
      */
     public function findByID($sourceId, $id)
     {
-        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $compiler = new Compiler($this->syncPath);
         $sourceElements = $compiler->getElementsFromCompileFile();
 
         $element = null;
@@ -188,7 +190,7 @@ class LocalRepository
         if (is_null($element)) {
             throw new \Exception();
         } else {
-            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+            $element = new Binary($element);
         }
 
         return  $element;
@@ -204,7 +206,7 @@ class LocalRepository
      */
     public function findByFileName($sourceId, $xmlFile)
     {
-        $compiler = new \Onm\Import\Compiler\Compiler($this->syncPath);
+        $compiler = new Compiler($this->syncPath);
         $sourceElements = $compiler->getElementsFromCompileFile();
 
         $element = null;
@@ -218,7 +220,7 @@ class LocalRepository
         if (is_null($element)) {
             throw new \Exception();
         } else {
-            $element = new \Onm\Import\DataSource\Format\Opennemas\Binary($element);
+            $element = new Binary($element);
         }
 
         return  $element;

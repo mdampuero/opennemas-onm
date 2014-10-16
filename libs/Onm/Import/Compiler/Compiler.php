@@ -30,7 +30,6 @@ class Compiler
      **/
     public $syncPath = '';
 
-
     /**
      * Initializes the object
      *
@@ -131,6 +130,7 @@ class Compiler
     {
         $fileListing = glob($this->syncPath.'/serversync.*.php');
         $serverFile = $fileListing[0];
+
         return unserialize(file_get_contents($serverFile));
     }
 }

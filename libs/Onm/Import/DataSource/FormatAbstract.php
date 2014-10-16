@@ -51,7 +51,7 @@ abstract class FormatAbstract
             'body'         => $this->getBody(),
             'category'     => $this->getCategory(),
             'agency_name'  => $this->getServiceName(),
-            'author'       => $this->getRightsOwner(),
+            'author'       => json_encode($this->getRightsOwner()),
             'author_img'   => $this->getRightsOwnerPhoto(),
             'body'         => $this->getBody(),
             'photos'       => $photos,
@@ -106,6 +106,26 @@ abstract class FormatAbstract
      * @return array the element internal metadata
      **/
     public function getMetaData()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the author internal metadata
+     *
+     * @return array the author info
+     **/
+    public function getRightsOwner()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the internal author photo
+     *
+     * @return array the author photo url
+     **/
+    public function getRightsOwnerPhoto()
     {
         return array();
     }

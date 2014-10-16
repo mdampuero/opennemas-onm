@@ -35,6 +35,7 @@ class Binary extends FormatAbstract implements FormatInterface
     {
         $this->data = $data;
         $this->data['created_time'] = \DateTime::createFromFormat(\DateTime::ISO8601, $this->data['created_time']);
+        $this->data['author'] = json_decode($this->data['author']);
 
         if (array_key_exists('photos', $this->data)) {
             foreach ($this->data['photos'] as &$photo) {
@@ -46,7 +47,6 @@ class Binary extends FormatAbstract implements FormatInterface
                 $photo = new Component\MultimediaResource($photo);
             }
         }
-
         $this->load($data);
     }
 
