@@ -67,9 +67,11 @@ class Binary extends FormatAbstract implements FormatInterface
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
         $this->photos       = $this->getPhotos();
+        $this->author       = $this->getRightsOwner();
+        $this->author_img   = $this->getRightsOwnerPhoto();
         $this->videos       = $this->getVideos();
         $this->source_id    = $this->getSourceId();
-        $this->xml_file      = $this->getXmlFile();
+        $this->xml_file     = $this->getXmlFile();
     }
 
     /**
@@ -110,6 +112,14 @@ class Binary extends FormatAbstract implements FormatInterface
                 break;
             case 'body':
                 return $this->getBody();
+
+                break;
+            case 'author':
+                return $this->getRightsOwner();
+
+                break;
+            case 'author_img':
+                return $this->getRightsOwnerPhoto();
 
                 break;
             case 'agency_name':
@@ -244,6 +254,26 @@ class Binary extends FormatAbstract implements FormatInterface
     public function getCreatedTime()
     {
         return $this->getData()['created_time'];
+    }
+
+    /**
+     * Returns the created time for this NITF resource
+     *
+     * @return \DateTime the created time
+     **/
+    public function getRightsOwner()
+    {
+        return $this->getData()['author'];
+    }
+
+    /**
+     * Returns the created time for this NITF resource
+     *
+     * @return \DateTime the created time
+     **/
+    public function getRightsOwnerPhoto()
+    {
+        return $this->getData()['author_img'];
     }
 
     /**
