@@ -88,8 +88,8 @@ class PClave
 
         $values = array(
             $data['pclave'],
-            $data['tipo'],
             $data['value'],
+            $data['tipo'],
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
