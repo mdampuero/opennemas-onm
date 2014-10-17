@@ -92,6 +92,8 @@ class RedirectorsController extends Controller
             $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
         } else {
             list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            // Unused var $type
+            unset($type);
         }
 
         $category = new \ContentCategory($newContentID);

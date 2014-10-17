@@ -542,11 +542,9 @@ class PaywallController extends Controller
     /**
      * Cancel the active recurring payment for paywall subscription
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function cancelRecurringPaymentAction(Request $request)
+    public function cancelRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
         $user = new \User($_SESSION['userid']);
@@ -606,11 +604,9 @@ class PaywallController extends Controller
     /**
      * Activate the canceled recurring payment for paywall subscription
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function activateRecurringPaymentAction(Request $request)
+    public function activateRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
         $user = new \User($_SESSION['userid']);
@@ -775,11 +771,9 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function returnCancelPaymentAction(Request $request)
+    public function returnCancelPaymentAction()
     {
         $paywallSettings = s::get('paywall_settings');
 
@@ -794,11 +788,9 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ipnPaymentAction(Request $request)
+    public function ipnPaymentAction()
     {
         return $this->redirect($this->generateUrl(''));
     }

@@ -91,11 +91,9 @@ class AlbumsController extends Controller
     /**
      * Renders the album frontpage.
      *
-     * @param  Request  $request The request object.
-     *
      * @return Response          The response object.
      */
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');

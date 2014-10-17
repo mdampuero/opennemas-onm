@@ -164,11 +164,9 @@ class LetterController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function showFormAction(Request $request)
+    public function showFormAction()
     {
         $this->view = new \Template(TEMPLATE_USER);
         $ads = $this->getAds();

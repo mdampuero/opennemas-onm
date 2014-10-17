@@ -31,11 +31,9 @@ class SubscriptionsController extends Controller
     /**
      * Shows the subscription form
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         $ads = $this->getAds();
 

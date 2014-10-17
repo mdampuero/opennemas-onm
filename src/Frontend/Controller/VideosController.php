@@ -71,11 +71,9 @@ class VideosController extends Controller
     /**
      * Renders the video frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
@@ -284,11 +282,9 @@ class VideosController extends Controller
     /**
      * Return via ajax more videos of a category
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ajaxMoreAction(Request $request)
+    public function ajaxMoreAction()
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
@@ -327,11 +323,9 @@ class VideosController extends Controller
     /**
      * Return via ajax videos of a category
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ajaxInCategoryAction(Request $request)
+    public function ajaxInCategoryAction()
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');

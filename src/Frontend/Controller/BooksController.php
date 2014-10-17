@@ -63,12 +63,11 @@ class BooksController extends Controller
         // Setting up available categories for menu.
         $contentManager  = new \ContentManager();
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
-            $this->ccm->getArraysMenu('', $contentType);
+        $parentCategories = $this->ccm->getArraysMenu('', $contentType);
 
         $bookCategories = array();
         $i = 0;
-        foreach ($parentCategories as $cat) {
+        foreach ($parentCategories[0] as $cat) {
             // get only books categories
             if ($cat->internal_category == $contentType) {
                 $bookCategories[$i] = new \stdClass();

@@ -30,11 +30,9 @@ class UserController extends Controller
     /**
      * Shows the user information
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         if (is_array($_SESSION)
             && array_key_exists('userid', $_SESSION)
@@ -236,11 +234,9 @@ class UserController extends Controller
     /**
      * Shows the user box
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function userBoxAction(Request $request)
+    public function userBoxAction()
     {
         $this->view = new \Template(TEMPLATE_USER);
 

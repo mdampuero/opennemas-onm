@@ -76,11 +76,9 @@ class PollsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
             throw new ResourceNotFoundException();

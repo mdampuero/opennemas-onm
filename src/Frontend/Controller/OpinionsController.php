@@ -47,11 +47,9 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $filters = array('content_status' => array(array('value' => 1)));
         $em      = $this->get('opinion_repository');
@@ -274,11 +272,9 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function extFrontpageAction(Request $request)
+    public function extFrontpageAction()
     {
         if ($this->page == 1) {
             $where = '';
