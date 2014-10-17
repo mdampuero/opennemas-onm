@@ -38,7 +38,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $categoryName = 'opinion';
 

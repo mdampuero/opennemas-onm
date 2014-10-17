@@ -38,11 +38,9 @@ class WelcomeController extends Controller
     /**
      * Shows the welcome page of the manager
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      */
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         return $this->render('base/base.tpl');
     }
