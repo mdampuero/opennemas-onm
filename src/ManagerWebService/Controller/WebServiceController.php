@@ -249,6 +249,8 @@ class WebServiceController extends Controller
     {
         $this->sendMailToUser($data, $companyMail, $domain);
         $this->sendMailToCompany($data, $companyMail, $domain, $plan);
+        // Unused var $language
+        unset($language);
     }
 
     /**
