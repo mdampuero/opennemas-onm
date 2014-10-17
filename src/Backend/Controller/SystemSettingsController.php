@@ -54,13 +54,11 @@ class SystemSettingsController extends Controller
     /**
      * Gets all the settings and displays the form
      *
-     * @param Request $request the resquest object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('ONM_SETTINGS')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $configurations = array();
 

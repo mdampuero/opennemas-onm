@@ -41,13 +41,11 @@ class InstanceSyncController extends Controller
     /**
      * Lists all the instances synced
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $allSites = $colors = array();
 

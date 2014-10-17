@@ -67,12 +67,11 @@ class FilesController extends Controller
     /**
      * Lists the files for a given category.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('files/list.tpl');
     }
@@ -80,12 +79,11 @@ class FilesController extends Controller
     /**
      * Shows the files in the widget.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         return $this->render(
             'files/list.tpl',
@@ -98,12 +96,11 @@ class FilesController extends Controller
     /**
      * Shows the file usage statistics.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function statisticsAction(Request $request)
+    public function statisticsAction()
     {
         $cm               = new \ContentManager();
         $total_num_photos = 0;

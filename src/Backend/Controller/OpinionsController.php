@@ -57,12 +57,12 @@ class OpinionsController extends Controller
     /**
      * Lists all the opinions.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @param  $blog      Blog flag for listing
+     * @return Response   The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
      */
-    public function listAction(Request $request, $blog)
+    public function listAction($blog)
     {
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
@@ -540,7 +540,6 @@ class OpinionsController extends Controller
      */
     public function contentProviderRelatedAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
@@ -623,12 +622,11 @@ class OpinionsController extends Controller
     /**
      * Show a list of opinion authors.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('AUTHOR_ADMIN')")
      */
-    public function listAuthorAction(Request $request)
+    public function listAuthorAction()
     {
         return $this->render('opinion/author_list.tpl');
     }
@@ -933,12 +931,11 @@ class OpinionsController extends Controller
     /**
      * Description of this action.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return Response  The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
      */
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
 

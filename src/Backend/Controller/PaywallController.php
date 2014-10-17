@@ -54,13 +54,11 @@ class PaywallController extends Controller
     /**
      * Shows a list of purchases for the paywall module
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $settings = s::get('paywall_settings');
 
@@ -417,13 +415,11 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function settingsAction(Request $request)
+    public function settingsAction()
     {
         $settings = s::get('paywall_settings');
 

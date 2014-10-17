@@ -64,12 +64,11 @@ class AlbumsController extends Controller
     /**
      * Lists all albums.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('album/list.tpl');
     }
@@ -77,12 +76,11 @@ class AlbumsController extends Controller
     /**
      * Lists all the albums for the widget.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         return $this->render(
             'album/list.tpl',

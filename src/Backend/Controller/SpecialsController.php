@@ -63,13 +63,11 @@ class SpecialsController extends Controller
     /**
      * List all the specials in a category
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('SPECIAL_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('special/list.tpl');
     }
@@ -77,13 +75,11 @@ class SpecialsController extends Controller
     /**
      * List all the specials selected for the widget
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('SPECIAL_ADMIN')")
      **/
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])

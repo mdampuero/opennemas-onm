@@ -50,13 +50,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         // Select between comments system
         $commentSystem = s::get('comment_system');
@@ -126,13 +124,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultDisqusAction(Request $request)
+    public function defaultDisqusAction()
     {
         $disqusShortName = s::get('disqus_shortname');
         $disqusSecretKey = s::get('disqus_secret_key');
@@ -194,13 +190,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultFacebookAction(Request $request)
+    public function defaultFacebookAction()
     {
         $fbSettings = s::get('facebook');
 
@@ -255,13 +249,11 @@ class CommentsController extends Controller
     /**
      * Lists comments
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render(
             'comment/list.tpl',

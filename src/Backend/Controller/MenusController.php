@@ -63,13 +63,11 @@ class MenusController extends Controller
     /**
      * Lists all the available menus
      *
-     * @param Request $request the resquest object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('MENU_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $menues = \Menu::find();
 
@@ -93,6 +91,9 @@ class MenusController extends Controller
         $cm = new \ContentManager();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        // Unused var  $categoryData
+        unset($categoryData);
+
         foreach ($subcat as $subcategory) {
             $parentCategories = array_merge($parentCategories, $subcategory);
         }
@@ -201,6 +202,9 @@ class MenusController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+            // Unused var  $categoryData
+            unset($categoryData);
+
             foreach ($subcat as $subcategory) {
                 $parentCategories = array_merge($parentCategories, $subcategory);
             }

@@ -42,13 +42,11 @@ class SearchController extends Controller
     /**
      * Handles the search form and shows the search contents
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('SEARCH_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $contentTypesAvailable = $this->getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);

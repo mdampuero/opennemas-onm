@@ -64,12 +64,11 @@ class ImagesController extends Controller
     /**
      * Lists images from an specific category.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('image/list.tpl');
     }
@@ -119,12 +118,11 @@ class ImagesController extends Controller
     /**
      * Show the page for upload new images.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));

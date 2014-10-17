@@ -64,12 +64,11 @@ class PollsController extends Controller
     /**
      * Lists all the available polls.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('poll/list.tpl');
     }
@@ -77,12 +76,11 @@ class PollsController extends Controller
     /**
      * Lists all the polls in the widget.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('poll_settings');
         if (array_key_exists('total_widget', $configurations)) {

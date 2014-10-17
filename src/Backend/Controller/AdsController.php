@@ -62,12 +62,11 @@ class AdsController extends Controller
     /**
      * Lists all the available ads.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         // Get ads positions
         $positionManager = $this->container->get('instance_manager')

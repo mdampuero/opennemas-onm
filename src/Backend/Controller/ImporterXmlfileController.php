@@ -48,13 +48,11 @@ class ImporterXmlfileController extends Controller
     /**
      * Shows the upload form for importing XML files
      *
-     * @param Request $request the request object
-     *
      * @return void
      *
      * @Security("has_role('IMPORT_XML')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         return $this->render('agency_importer/xml-file/list.tpl');
     }
