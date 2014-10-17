@@ -20,10 +20,9 @@ class CommentsController extends ContentController
      * Deletes multiple comments at once give them ids
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request, $contentType = null)
+    public function batchDeleteAction(Request $request)
     {
         $em = $this->get('comment_repository');
         $errors  = array();
@@ -133,10 +132,9 @@ class CommentsController extends ContentController
      * Deletes a comment.
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function deleteAction($id, $contentType = null)
+    public function deleteAction($id)
     {
         $em       = $this->get('comment_repository');
         $messages = array();
