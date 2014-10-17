@@ -51,6 +51,7 @@ abstract class FormatAbstract
             'body'         => $this->getBody(),
             'category'     => $this->getCategory(),
             'agency_name'  => $this->getServiceName(),
+            'service_name' => $this->getServicePartyName(),
             'author'       => json_encode($this->getRightsOwner()),
             'author_img'   => $this->getRightsOwnerPhoto(),
             'body'         => $this->getBody(),

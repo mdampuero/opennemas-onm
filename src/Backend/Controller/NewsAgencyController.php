@@ -937,12 +937,12 @@ class NewsAgencyController extends Controller
         }
 
         // Check if sync is from Opennemas instances for importing author
-        if ($element->getServiceName() == 'Opennemas') {
+        if ($element->getServicePartyName() == 'Opennemas') {
             // Check if allow to import authors
             if (isset($server['author']) && $server['author'] == '1') {
 
                 // Get author object,decode it and create new author
-                $authorObj = json_decode($element->getRightsOwner());
+                $authorObj = $element->getRightsOwner();
 
                 if (!is_null($authorObj)) {
                     // Fetch author data
@@ -950,6 +950,7 @@ class NewsAgencyController extends Controller
 
                     // Create author
                     $user = new \User();
+
                     if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
                         // Create new user
                         $user->create($authorArray);

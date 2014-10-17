@@ -66,6 +66,7 @@ class Binary extends FormatAbstract implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->photos       = $this->getPhotos();
         $this->author       = $this->getRightsOwner();
         $this->author_img   = $this->getRightsOwnerPhoto();
@@ -126,6 +127,10 @@ class Binary extends FormatAbstract implements FormatInterface
                 return $this->getServiceName();
 
                 break;
+            case 'service_name':
+                return $this->getServicePartyName();
+
+                break;
             case 'texts':
             case 'photos':
             case 'videos':
@@ -154,6 +159,16 @@ class Binary extends FormatAbstract implements FormatInterface
     public function getServiceName()
     {
         return $this->getData()['agency_name'];
+    }
+
+    /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        return $this->getData()['service_name'];
     }
 
     /**
