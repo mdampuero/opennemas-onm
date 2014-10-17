@@ -263,6 +263,8 @@ class InstanceManager extends BaseManager
                 $instances[] = $instance;
             }
         }
+        // Unused var $prefix
+        unset($prefix);
 
         $ordered = array();
         foreach ($keys as $id) {

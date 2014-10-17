@@ -234,6 +234,9 @@ class FilesManager
 
         exec($command, $output, $outputCode);
 
+        // Unused var $output
+        unset($output);
+
         if ($outputCode != 0) {
             return false;
         }
@@ -253,6 +256,9 @@ class FilesManager
     {
         $command = "tar xpfz $compressFile -C $destination";
         exec($command, $output, $return_var);
+
+        // Unused var $output
+        unset($output);
 
         if ($return_var != 0) {
             return false;

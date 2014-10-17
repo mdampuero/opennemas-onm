@@ -28,7 +28,7 @@ class Validator
     /**
      * class constructor
      */
-    public function __construct ($data, $instanceManager)
+    public function __construct($data, $instanceManager)
     {
         $this->data = $data;
         $this->instanceManager = $instanceManager;
