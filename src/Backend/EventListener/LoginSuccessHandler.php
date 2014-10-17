@@ -71,7 +71,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         TokenInterface $token
     ) {
         $user       = $token->getUser();
-        $userGroups = $user->id_user_group;
         $valid      = true;
 
         if ($request->get('recaptcha_challenge_field')) {

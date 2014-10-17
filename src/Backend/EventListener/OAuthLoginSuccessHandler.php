@@ -70,7 +70,6 @@ class OAuthLoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     ) {
         $referer    = $this->router->generate('admin_welcome');
         $user       = $token->getUser();
-        $userGroups = $user->id_user_group;
         $valid      = true;
 
         // Set session array
