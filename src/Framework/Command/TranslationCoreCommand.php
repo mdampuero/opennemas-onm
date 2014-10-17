@@ -52,10 +52,10 @@ EOF
 
         // Update onm-core
         if (!$onlyCompile) {
-            $this->extractTrans($input, $output);
-            $this->updateTrans($input, $output);
+            $this->extractTrans($output);
+            $this->updateTrans($output);
         }
-        $this->compileTrans($input, $output);
+        $this->compileTrans($output);
     }
 
     /**
@@ -63,7 +63,7 @@ EOF
      *
      * @return void
      **/
-    private function extractTrans($input, $output)
+    private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
         $tplFolders = array(
@@ -110,7 +110,7 @@ EOF
      *
      * @return void
      **/
-    private function updateTrans($input, $output)
+    private function updateTrans($output)
     {
         $output->writeln(" * Updating translation files");
 
@@ -136,7 +136,7 @@ EOF
      *
      * @return void
      **/
-    private function compileTrans($input, $output)
+    private function compileTrans($output)
     {
         $output->writeln(" * Compiling translation databases");
 

@@ -93,55 +93,55 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
         }
     }
 
-    /**
-     * Cleans column options.
-     *
-     * @param  array $options Column options.
-     * @return array          Cleaned column options.
-     */
-    private function cleanOptions($options)
-    {
-        unset($options['name']);
-        unset($options['type']);
+    // /**
+    //  * Cleans column options.
+    //  *
+    //  * @param  array $options Column options.
+    //  * @return array          Cleaned column options.
+    //  */
+    // private function cleanOptions($options)
+    // {
+    //     unset($options['name']);
+    //     unset($options['type']);
 
-        if ($options['length'] == null) {
-            unset($options['length']);
-        }
+    //     if ($options['length'] == null) {
+    //         unset($options['length']);
+    //     }
 
-        if ($options['notnull'] == true) {
-            unset($options['notnull']);
-        }
+    //     if ($options['notnull'] == true) {
+    //         unset($options['notnull']);
+    //     }
 
-        if ($options['precision'] == 10) {
-            unset($options['precision']);
-        }
+    //     if ($options['precision'] == 10) {
+    //         unset($options['precision']);
+    //     }
 
-        if ($options['scale'] == 0) {
-            unset($options['scale']);
-        }
+    //     if ($options['scale'] == 0) {
+    //         unset($options['scale']);
+    //     }
 
-        if ($options['fixed'] == false) {
-            unset($options['fixed']);
-        }
+    //     if ($options['fixed'] == false) {
+    //         unset($options['fixed']);
+    //     }
 
-        if ($options['unsigned'] == false) {
-            unset($options['unsigned']);
-        }
+    //     if ($options['unsigned'] == false) {
+    //         unset($options['unsigned']);
+    //     }
 
-        if ($options['autoincrement'] == false) {
-            unset($options['autoincrement']);
-        }
+    //     if ($options['autoincrement'] == false) {
+    //         unset($options['autoincrement']);
+    //     }
 
-        if ($options['columnDefinition'] == null) {
-            unset($options['columnDefinition']);
-        }
+    //     if ($options['columnDefinition'] == null) {
+    //         unset($options['columnDefinition']);
+    //     }
 
-        if ($options['comment'] == '') {
-            unset($options['comment']);
-        }
+    //     if ($options['comment'] == '') {
+    //         unset($options['comment']);
+    //     }
 
-        return $options;
-    }
+    //     return $options;
+    // }
 
     /**
      * Creates a Schema from the master schema file.

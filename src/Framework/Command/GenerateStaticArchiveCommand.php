@@ -54,7 +54,7 @@ EOF
         $_SERVER['REQUEST_URI']   = '/';
 
 
-        $this->generateStatics($input, $output);
+        $this->generateStatics($output);
 
         $output->writeln(
             "\n\t<fg=yellow;bg=white>Migration finished for Database: ".$serverName."</fg=yellow;bg=white>"
@@ -66,7 +66,7 @@ EOF
      *
      * @return void
      **/
-    protected function generateStatics($input, $output)
+    protected function generateStatics($output)
     {
         $request = Request::createFromGlobals();
         $request->setTrustedProxies(array('127.0.0.1'));
