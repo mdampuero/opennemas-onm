@@ -157,8 +157,9 @@ class UserGroupManager extends BaseManager
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
             $group = $this->find($contentId);
             $groups[] = $group;
-
         }
+        // Unused var $contentType
+        unset($contentType);
 
         $ordered = array();
         foreach ($keys as $id) {
