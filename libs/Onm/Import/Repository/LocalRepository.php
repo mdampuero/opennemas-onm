@@ -83,12 +83,6 @@ class LocalRepository
                 continue;
             }
 
-            if ($params['title'] == '*'
-                && array_key_exists('limit', $params)
-            ) {
-                break;
-            }
-
             $element->source_id = $sourceId;
 
             $elements []= $element;
@@ -137,12 +131,6 @@ class LocalRepository
                 && !($this->matchContent($element, $params['title']))
             ) {
                 continue;
-            }
-
-            if ($params['title'] == '*'
-                && array_key_exists('limit', $params)
-            ) {
-                break;
             }
 
             $element = new Binary($element);
