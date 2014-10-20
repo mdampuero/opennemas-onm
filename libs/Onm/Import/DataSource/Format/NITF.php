@@ -73,6 +73,7 @@ class NITF extends FormatAbstract implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
@@ -154,6 +155,16 @@ class NITF extends FormatAbstract implements FormatInterface
         $docId = $this->getData()->body->{'body.head'}->rights->{'rights.owner'};
 
         return (string) $docId;
+    }
+
+    /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        return $this->getServiceName();
     }
 
     /**

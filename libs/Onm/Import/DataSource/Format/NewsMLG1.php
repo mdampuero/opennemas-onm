@@ -76,6 +76,7 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
@@ -133,6 +134,10 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
                 $this->getServiceName();
 
                 break;
+            case 'service_name':
+                $this->getServicePartyName();
+
+                break;
             case 'texts':
             case 'photos':
             case 'videos':
@@ -177,6 +182,7 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
 
         return (count($owner) > 0) ? json_decode((string) $owner[0]) : [];
     }
+
     /**
      * Returns the name of the rights.owner.photo
      *
