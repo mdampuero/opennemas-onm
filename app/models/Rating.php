@@ -162,7 +162,7 @@ class Rating
      **/
     public function update($vote_value, $ip)
     {
-        $this->ips_count_rating = $this->add_count(
+        $this->ips_count_rating = $this->addCount(
             $this->ips_count_rating,
             $ip
         );
@@ -197,7 +197,7 @@ class Rating
      *
      * @return array the new array of IPs with the new one
      **/
-    public function add_count($ipsCount, $ip)
+    public function addCount($ipsCount, $ip)
     {
         $ips = array();
         foreach ($ipsCount as $ipArray) {

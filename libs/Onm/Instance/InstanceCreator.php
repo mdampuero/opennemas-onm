@@ -96,7 +96,7 @@ class InstanceCreator
         exec($dump, $output, $result);
 
         if ($result != 0) {
-            throw new BackupException($dump);
+            throw new BackupException($output);
         }
     }
 
@@ -119,10 +119,13 @@ class InstanceCreator
             );
         }
 
+        // Manager database
+        $database = 'onm-instances';
+
         $dump = "mysqldump -u" . $this->conn->connectionParams['user']
             . " -p" . $this->conn->connectionParams['password']
             . " --no-create-info --where 'id=" . $id . "' "
-            . " onm-instances instances > " . $path . DS . "instance.sql";
+            . " ".$database." instances > " . $path . DS . "instance.sql";
 
         exec($dump, $output, $result);
 
@@ -181,7 +184,6 @@ class InstanceCreator
         $source = realpath(
             APPLICATION_PATH . DS . 'db' . DS . 'instance-default.sql'
         );
-
 
         $this->restoreDatabase($source, $database);
     }
@@ -279,7 +281,7 @@ class InstanceCreator
 
         if ($result != 0) {
             throw new DatabaseNotRestoredException(
-                'Could not import the default database for the instance'
+                'Could not import the default database for the instance '.$output
             );
         }
     }
@@ -302,9 +304,8 @@ class InstanceCreator
 
         if ($result!=0) {
             throw new InstanceNotRestoredException(
-                "The instance could not be restored"
+                "The instance could not be restored ".$output
             );
-
         }
     }
 }

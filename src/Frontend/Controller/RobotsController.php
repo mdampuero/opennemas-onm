@@ -30,11 +30,9 @@ class RobotsController extends Controller
     /**
      * Displays a prebuilt robots.txt file
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $content = "User-Agent: *
 Disallow: /admin/

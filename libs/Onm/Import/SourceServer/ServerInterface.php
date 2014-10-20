@@ -10,7 +10,7 @@
  *
  * @package Onm_Import
  **/
-namespace Onm\Import\Synchronizer;
+namespace Onm\Import\SourceServer;
 
 /**
  * Defines the common methods that must implement the servers providers
@@ -19,6 +19,15 @@ namespace Onm\Import\Synchronizer;
  **/
 interface ServerInterface
 {
+    /**
+     * Downloads files from a HTTP server to a $cacheDir.
+     *
+     * @param string $cacheDir Path to the directory where save files to.
+     *
+     * @return array counts of deleted and downloaded files
+     **/
+    public function downloadFilesToCacheDir($params);
+
     /**
      * Check if this server class can handle the http service
      *

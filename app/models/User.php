@@ -1323,7 +1323,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      *
      * @return void
      **/
-    public static function getUsersOnlyRegistered($config = array())
+    public static function getUsersOnlyRegistered()
     {
         $sql = 'SELECT id FROM `users` WHERE type=1 ORDER BY name';
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1381,7 +1381,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      *
      * @return void
      **/
-    public static function countUsersWithSubscription($limit = array())
+    public static function countUsersWithSubscription()
     {
         $currentTime = new \DateTime();
         $currentTime->setTimezone(new \DateTimeZone('UTC'));

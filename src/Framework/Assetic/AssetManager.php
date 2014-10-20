@@ -73,6 +73,13 @@ abstract class AssetManager
     protected $themePath;
 
     /**
+     * Real site path.
+     *
+     * @var string
+     */
+    protected $sitePath;
+
+    /**
      * Parses the assetic configuration and initializes the manager.
      *
      * @param string $environment The current environment.
@@ -84,8 +91,10 @@ abstract class AssetManager
         $this->env       = $container->get('kernel')->getEnvironment();
         $this->config    = $config;
 
+        $this->sitePath = realpath(SITE_PATH) . DS;
+
         // Get current instance theme path
-        $this->themePath = SITE_PATH . 'themes' . DS .
+        $this->themePath = $this->sitePath . 'themes' . DS .
             $container->get('instance_manager')->current_instance
             ->settings['TEMPLATE_USER'];
 
@@ -136,7 +145,7 @@ abstract class AssetManager
             if ($pos == strlen($asset) - 1) {
                 foreach (glob($asset) as $asset) {
                     if (!is_dir($asset)) {
-                        $this->assets[] = str_replace(SITE_PATH, '', $asset);
+                        $this->assets[] = str_replace($this->sitePath, '', $asset);
                     } else {
                         $this->initAssets(glob($asset . '/*'), true);
                     }
@@ -260,7 +269,7 @@ abstract class AssetManager
             }
 
             if (!$this->debug()) {
-                $src = SITE_PATH . $src;
+                $src = $this->sitePath . $src;
             }
         }
 

@@ -32,11 +32,9 @@ class FormController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
             throw new ResourceNotFoundException();

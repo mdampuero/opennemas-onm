@@ -47,7 +47,7 @@ class BlogsController extends Controller
      */
     public function frontpageAction(Request $request)
     {
-        $page = $this->request->query->getDigits('page', 1);
+        $page = $request->query->getDigits('page', 1);
 
         // Index frontpage
         $this->view = new \Template(TEMPLATE_USER);

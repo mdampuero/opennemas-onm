@@ -10,13 +10,14 @@
 namespace Onm\Import\DataSource\Format;
 
 use Onm\Import\DataSource\FormatInterface;
+use Onm\Import\DataSource\FormatAbstract;
 
 /**
  * Handles all the operations for NITF data
  *
  * @package Onm_Import
  **/
-class NITF extends NewsMLG1
+class NITF extends FormatAbstract implements FormatInterface
 {
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
@@ -25,7 +26,7 @@ class NITF extends NewsMLG1
      **/
     public function __construct($xmlFile)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->xml_file = basename($xmlFile);
 
         if (file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
@@ -72,11 +73,12 @@ class NITF extends NewsMLG1
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
-        $this->audios       = $this->getAudios();
-        $this->files        = $this->getFiles();
+        // $this->audios       = $this->getAudios();
+        // $this->files        = $this->getFiles();
     }
 
     /**
@@ -153,6 +155,16 @@ class NITF extends NewsMLG1
         $docId = $this->getData()->body->{'body.head'}->rights->{'rights.owner'};
 
         return (string) $docId;
+    }
+
+    /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        return $this->getServiceName();
     }
 
     /**
@@ -287,9 +299,7 @@ class NITF extends NewsMLG1
      **/
     public function getCreatedTime()
     {
-        $attributes =
-            (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
-
+        $attributes = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
 
         // '20130315T150100+0000'
         return \DateTime::createFromFormat(

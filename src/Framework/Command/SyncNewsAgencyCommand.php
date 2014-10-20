@@ -42,7 +42,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fileSystem = $this->getContainer()->get('filesystem');
         $logger     = $this->getContainer()->get('logger');
         $dbConn     = $this->getContainer()->get('db_conn');
         $instanceManager = $this->getContainer()->get('instance_manager');
@@ -96,7 +95,7 @@ EOF
             $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
             $synchronizer->unlockSync();
         } catch (\Exception $e) {
-            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>");
+            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>{}");
         }
 
 

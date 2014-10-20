@@ -45,13 +45,11 @@ class StaticPagesController extends Controller
     /**
      * Shows a list of the static pages
      *
-     * @param Request $request the request object
-     *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return void
      *
      * @Security("has_role('STATIC_PAGE_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('static_pages/list.tpl');
     }
@@ -118,7 +116,7 @@ class StaticPagesController extends Controller
                 $data,
                 array(
                     'slug'     => $staticPage->buildSlug($data['slug'], $data['id'], $data['title']),
-                    'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                    'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                 )
             );
 
@@ -174,7 +172,7 @@ class StaticPagesController extends Controller
                     $data,
                     array(
                         'slug'     => $staticPage->buildSlug($data['slug'], 0, $data['title']),
-                        'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                        'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                     )
                 );
 
@@ -231,7 +229,7 @@ class StaticPagesController extends Controller
         // If the action is an Ajax request handle it, if not redirect to list
         if ($request->isXmlHttpRequest()) {
             try {
-                $output  = StringUtils::normalize_metadata($metadata);
+                $output  = StringUtils::normalizeMetadata($metadata);
             } catch (\Exception $e) {
                 $output = _("Can't get static page metadata.");
             }

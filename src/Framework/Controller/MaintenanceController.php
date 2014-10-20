@@ -34,7 +34,7 @@ class MaintenanceController extends Controller
         $availableLanguages = $kernel->getContainer()->getParameter('available_languages');
 
         $locale = '';
-        foreach ($availableLanguages as $lang => $name) {
+        foreach (array_keys($availableLanguages) as $lang) {
             if (strpos($lang, $preferedLanguage) === 0) {
                 $locale = $lang.'.UTF-8';
                 break;

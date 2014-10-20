@@ -68,13 +68,11 @@ class CoversController extends Controller
     /**
      * Shows the list of the
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render(
             'covers/list.tpl',
@@ -85,13 +83,11 @@ class CoversController extends Controller
     /**
      * Show the list of the covers with favorite flag enabled
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
      **/
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $category = 'widget';
 

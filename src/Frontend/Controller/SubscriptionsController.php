@@ -31,11 +31,9 @@ class SubscriptionsController extends Controller
     /**
      * Shows the subscription form
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         $ads = $this->getAds();
 
@@ -185,7 +183,7 @@ class SubscriptionsController extends Controller
                             break;
                         case 'create_subscriptor':
                             if ($data['subscription'] == 'alta') {
-                                if ($user->exists_email($data['email'])) {
+                                if ($user->existsEmail($data['email'])) {
                                     $message = _("Sorry, that email is already subscribed to our newsletter");
                                     $class = 'error';
                                 } else {
@@ -206,7 +204,7 @@ class SubscriptionsController extends Controller
                                     }
                                 }
                             } else {
-                                if ($user->exists_email($data['email'])) {
+                                if ($user->existsEmail($data['email'])) {
                                     $data['subscription'] = 0;
                                     $data['status'] = 3;
 

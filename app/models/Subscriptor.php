@@ -316,7 +316,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor status property was changed
      **/
-    public function set_status($id, $status)
+    public function setStatus($id, $status)
     {
         $sql = 'UPDATE ' . $this->tableName
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
@@ -335,7 +335,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor is already registered
      **/
-    public function exists_email($email)
+    public function existsEmail($email)
     {
         $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($email));

@@ -330,7 +330,7 @@ class JoomlaImporter
                     'frontpage' => 0,
                     'in_home' => 0,
                     'title_int' => ImportHelper::convertoUTF8($originalContents->fields['title']),
-                    'metadata' => StringUtils::get_tags(ImportHelper::convertoUTF8($originalContents->fields['title'])),
+                    'metadata' => StringUtils::getTags(ImportHelper::convertoUTF8($originalContents->fields['title'])),
                     'subtitle' => '',
                     'img1' => $data['img1'],
                     'img2' => $data['img2'],
@@ -347,7 +347,7 @@ class JoomlaImporter
                     'fk_user' => self::$configuration['data']['userId'],
                     'fk_publisher' => self::$configuration['data']['userId'],
                     'description' => substr(ImportHelper::convertoUTF8($data['introtext']), 0, 120),
-                    'slug' => \StringUtils::get_title(ImportHelper::convertoUTF8($rs->fields['title'])),
+                    'slug' => \StringUtils::getTitle(ImportHelper::convertoUTF8($rs->fields['title'])),
                 );
 
 

@@ -89,7 +89,7 @@ class Special extends Content
 
                 break;
             case 'slug':
-                return String_Utils::get_title($this->title);
+                return String_Utils::getTitle($this->title);
 
                 break;
             case 'content_type_name':

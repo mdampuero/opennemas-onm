@@ -34,11 +34,11 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::normalize_name
+     * @covers Onm\StringUtils::normalizeName
      */
     public function testNormalizeName()
     {
-        $this->assertEquals('the-great-boy', $this->object->normalize_name('The great boy'));
+        $this->assertEquals('the-great-boy', $this->object->normalizeName('The great boy'));
     }
 
     /**
@@ -88,20 +88,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_title
+     * @covers Onm\StringUtils::getTitle
      */
     public function testGetTitle()
     {
         $this->assertEquals(
             'es-por-tu-bien',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '"Es por tu bien..."'
             )
         );
 
         $this->assertEquals(
             'es-por-tu-bien',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '"Es por tu bien…"'
             )
         );
@@ -109,7 +109,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
             'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->get_title(
+            $this->object->getTitle(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
@@ -119,7 +119,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
             'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->get_title(
+            $this->object->getTitle(
                 'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
@@ -127,59 +127,59 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '¡El cambio de look de Mariana Antoniale!'
             )
         );
 
         $this->assertEquals(
             '0001-cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '0001 ¡El cambio de look de Mariana Antoniale!'
             )
         );
 
         $this->assertEquals(
             '0001-cambio-look-mariana-antoniale',
-            $this->object->get_title(
+            $this->object->getTitle(
                 '0001 ¡El cambio de look de Mariana Antoniale!'
             )
         );
     }
 
     /**
-     * @covers Onm\StringUtils::get_title
+     * @covers Onm\StringUtils::getTitle
      */
     public function testGetTitleReturnsTheSameString()
     {
         $this->assertEquals(
             '',
-            $this->object->get_title(
+            $this->object->getTitle(
                 ''
             )
         );
     }
 
     /**
-     * @covers Onm\StringUtils::normalize_metadata
+     * @covers Onm\StringUtils::normalizeMetadata
      */
     public function testNormalizeMetadata()
     {
         $this->assertEquals(
             'a,list,of,comma,separated,tags',
-            $this->object->normalize_metadata('a , list, of,comma, separated, tags')
+            $this->object->normalizeMetadata('a , list, of,comma, separated, tags')
         );
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTags()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing'.
                 ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
@@ -187,14 +187,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTagsReturnsStringWithUniqueElements()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. '.
                 'Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
@@ -202,14 +202,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_tags
+     * @covers Onm\StringUtils::getTags
      */
     public function testGetTagsRemovesUnnecesaryWords()
     {
         $this->assertEquals(
             'lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, cras, '.
             'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->get_tags(
+            $this->object->getTags(
                 'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.'.
                 ' Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
             )
@@ -228,46 +228,46 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStop()
     {
         $this->assertEquals(
             'Example phrase to test...',
-            $this->object->str_stop('Example phrase to test str_stop method')
+            $this->object->strStop('Example phrase to test strStop method')
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopWithLimit()
     {
         $this->assertEquals(
             'Example phrase to...',
-            $this->object->str_stop('Example phrase to test str_stop method', 20)
+            $this->object->strStop('Example phrase to test strStop method', 20)
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopWithPhraseWithoutSpaces()
     {
         $this->assertEquals(
             'Examplephrasetotests...',
-            $this->object->str_stop('Examplephrasetoteststr_stopmethod', 20)
+            $this->object->strStop('ExamplephrasetoteststrStopmethod', 20)
         );
     }
 
     /**
-     * @covers Onm\StringUtils::str_stop
+     * @covers Onm\StringUtils::strStop
      */
     public function testStrStopReturnsOriginalStringIfLongerThanLimit()
     {
         $this->assertEquals(
-            'Example phrase to test str_stop method',
-            $this->object->str_stop('Example phrase to test str_stop method', 100)
+            'Example phrase to test strStop method',
+            $this->object->strStop('Example phrase to test strStop method', 100)
         );
     }
 
@@ -284,10 +284,10 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     // }
 
     // /**
-    //  * @covers Onm\StringUtils::disabled_magic_quotes
-    //  * @todo   Implement testDisabled_magic_quotes().
+    //  * @covers Onm\StringUtils::disabledMagicQuotes
+    //  * @todo   Implement testdisabledMagicQuotes().
     //  */
-    // public function testDisabled_magic_quotes()
+    // public function testdisabledMagicQuotes()
     // {
     //     // Remove the following lines when you implement this test.
     //     $this->markTestIncomplete(
@@ -306,14 +306,14 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::get_num_words
-     * @todo   Implement testGet_num_words().
+     * @covers Onm\StringUtils::getNumWords
+     * @todo   Implement testgetNumWords().
      */
     public function testGetNumWords()
     {
         $this->assertEquals(
             'Some example text longer...',
-            $this->object->get_num_words(
+            $this->object->getNumWords(
                 'Some example text longer than four words',
                 4
             )

@@ -159,6 +159,8 @@ class MenuManager extends BaseManager
             $menu = $this->find($contentId);
             $menus[] = $menu;
         }
+        // Unused var $contentType
+        unset($contentType);
 
         $ordered = array();
         foreach ($keys as $id) {

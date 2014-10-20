@@ -30,11 +30,9 @@ class UserController extends Controller
     /**
      * Shows the user information
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         if (is_array($_SESSION)
             && array_key_exists('userid', $_SESSION)
@@ -236,11 +234,9 @@ class UserController extends Controller
     /**
      * Shows the user box
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function userBoxAction(Request $request)
+    public function userBoxAction()
     {
         $this->view = new \Template(TEMPLATE_USER);
 
@@ -544,11 +540,10 @@ class UserController extends Controller
     /**
      * Generates the HTML for the user menu by ajax
      *
-     * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function getUserMenuAction(Request $request)
+    public function getUserMenuAction()
     {
         $login     = $this->generateUrl('frontend_auth_login');
         $logout    = $this->generateUrl('frontend_auth_logout');
@@ -783,10 +778,10 @@ class UserController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category = 'home')
+    public static function getInnerAds($category = 0)
     {
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

@@ -47,11 +47,9 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $filters = array('content_status' => array(array('value' => 1)));
         $em      = $this->get('opinion_repository');
@@ -227,7 +225,7 @@ class OpinionsController extends Controller
                 ) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
-                    $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+                    $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                     $item = new \Content();
                     $item->loadAllContentProperties($opinion->pk_content);
                     $opinion->summary = $item->summary;
@@ -274,11 +272,9 @@ class OpinionsController extends Controller
     /**
      * Renders the opinion frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function extFrontpageAction(Request $request)
+    public function extFrontpageAction()
     {
         if ($this->page == 1) {
             $where = '';
@@ -352,7 +348,7 @@ class OpinionsController extends Controller
                 }
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+                $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
                 $opinion->author->uri = $this->generateUrl(
                     'frontend_opinion_external_author_frontpage',
                     array(
@@ -456,7 +452,7 @@ class OpinionsController extends Controller
             } else {
                 // Regular authors
                 $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
-                $author->slug = \Onm\StringUtils::get_title($author->name);
+                $author->slug = \Onm\StringUtils::getTitle($author->name);
                 $this->view->assign('actual_category', 'opinion');
             }
 
@@ -770,7 +766,7 @@ class OpinionsController extends Controller
             }
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-            $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+            $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
             // Machine suggested contents code -----------------------------
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
@@ -784,7 +780,7 @@ class OpinionsController extends Controller
                 $element = $er->find('Opinion', $suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
-                    $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
+                    $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
                 } else {
                     $suggest['author_name_slug'] = "author";
                 }
@@ -803,12 +799,12 @@ class OpinionsController extends Controller
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
-                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
                 $this->view->assign('actual_category', 'editorial');
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
-                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                $opinion->author_name_slug = \StringUtils::getTitle($opinion->name);
             } else {
                 $where =' opinions.fk_author='.($opinion->fk_author);
             }

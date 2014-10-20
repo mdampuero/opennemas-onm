@@ -482,7 +482,7 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
-                $categoryName = StringUtils::normalize_name(
+                $categoryName = StringUtils::normalizeName(
                     strtolower($values['name'])
                 );
 
@@ -1009,7 +1009,7 @@ class MigrationSaver
      */
     protected function convertToMetadata($string)
     {
-        return \Onm\StringUtils::get_tags($string);
+        return \Onm\StringUtils::getTags($string);
     }
 
     /**
@@ -1019,7 +1019,7 @@ class MigrationSaver
      */
     protected function convertToSlug($string)
     {
-        return \Onm\StringUtils::get_title($string);
+        return \Onm\StringUtils::getTitle($string);
     }
 
     /**
@@ -1183,12 +1183,12 @@ class MigrationSaver
                     $field = $this->convertToMap($field, $params['map']);
                     break;
                 case 'metadata':
-                    $field = \Onm\StringUtils::get_tags($field);
+                    $field = \Onm\StringUtils::getTags($field);
                     break;
                 case 'merge':
                     if (is_array($field) && count($field) > 0) {
                         $value = '';
-                        foreach ($field as $key => $v) {
+                        foreach ($field as $v) {
                             $value .= $v . ',';
                         }
                         $field = rtrim($value, ',');
@@ -1242,7 +1242,7 @@ class MigrationSaver
                     );
                     break;
                 case 'username':
-                    $field = \Onm\StringUtils::get_title(
+                    $field = \Onm\StringUtils::getTitle(
                         $field,
                         true,
                         $params['separator']
@@ -1282,7 +1282,7 @@ class MigrationSaver
         $values = array($photo, $album);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1300,7 +1300,7 @@ class MigrationSaver
         $values = array($photo, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1318,7 +1318,7 @@ class MigrationSaver
         $values = array($photo, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1336,7 +1336,7 @@ class MigrationSaver
         $values = array($video, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
-        $rss  = $this->targetConnection->Execute($stmt, $values);
+        $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1506,7 +1506,7 @@ class MigrationSaver
         return $values;
     }
 
-    private function clearTags($body)
+/*    private function clearTags($body)
     {
         $result = array();
 
@@ -1553,8 +1553,8 @@ class MigrationSaver
                         'content_status'      => 1,
                         'frontpage'           => 0,
                         'in_home'             => 0,
-                        'metadata'            => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
-                        'description'         => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'metadata'            => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
+                        'description'         => \Onm\StringUtils::getTags($this->convertoUTF8($guid)),
                         'id'                  => 0,
                         'created'             => $rs->fields['post_date_gmt'],
                         'starttime'           => $rs->fields['post_date_gmt'],
@@ -1598,5 +1598,5 @@ class MigrationSaver
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }
+    }*/
 }

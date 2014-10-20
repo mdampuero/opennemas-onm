@@ -44,7 +44,7 @@ EOF
             $count = count($files);
 
             if ($count > 0) {
-                $out = exec('rm '.$fullLogsFolderPath);
+                exec('rm '.$fullLogsFolderPath);
                 $output->writeln($count.' files [REMOVED]');
             } else {
                 $output->writeln('0 files [REMOVED]');

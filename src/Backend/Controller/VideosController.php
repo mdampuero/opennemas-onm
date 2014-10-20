@@ -71,12 +71,11 @@ class VideosController extends Controller
     /**
      * List videos.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('video/list.tpl');
     }
@@ -84,12 +83,11 @@ class VideosController extends Controller
     /**
      * List videos available for widget.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
@@ -694,7 +692,7 @@ class VideosController extends Controller
         }
 
         if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = \Onm\StringUtils::getTags($metadata);
             $tokens = explode(', ', $tokens);
 
             $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));

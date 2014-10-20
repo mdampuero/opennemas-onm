@@ -42,11 +42,9 @@ class CommandsController extends Controller
     /**
      * Lists all the available framework commands
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $application = $this->getApplication();
         $commands = $application->all();

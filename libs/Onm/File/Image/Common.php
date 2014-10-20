@@ -62,7 +62,8 @@ abstract class Common
                     break;
                 default:
                     throw new \Exception(
-                        sprintf('No valid operation (%s) for image transform. All operation string is %s',
+                        sprintf(
+                            'No valid operation (%s) for image transform. All operation string is %s',
                             $function,
                             implode(',', $params)
                         )

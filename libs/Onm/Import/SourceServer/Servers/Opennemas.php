@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import\Synchronizer\Servers;
+namespace Onm\Import\SourceServer\Servers;
 
-use \Onm\Import\Synchronizer\ServerAbstract;
-use \Onm\Import\Synchronizer\ServerInterface;
+use \Onm\Import\SourceServer\ServerAbstract;
+use \Onm\Import\SourceServer\ServerInterface;
 
 /**
  * Class to synchronize local folders with an HTTP Onm server.
@@ -66,7 +66,7 @@ class Opennemas extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@http://(.*)/ws/agency@', $params['url'], $matches);
+        $res = preg_match('@http://(.*)/ws/agency@', $params['url']);
 
         if ($res == 0) {
             throw new \Exception(

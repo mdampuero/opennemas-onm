@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for authors.
+ *
+ * @package WebService
+ **/
 class Authors
 {
     public $restler;
@@ -42,10 +55,10 @@ class Authors
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new RestException(400, 'parameter is not a number');
+            throw new \RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new RestException(400, 'parameter is not finite');
+            throw new \RestException(400, 'parameter is not finite');
         }
     }
 }

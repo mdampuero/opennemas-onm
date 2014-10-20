@@ -40,7 +40,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phpBinPath = exec('which php');
         chdir(APPLICATION_PATH);
 
         // Get instance name from prompt
@@ -288,7 +287,7 @@ EOF
             $body = preg_replace('@<a .*?href=".+?".*?><img .*?><\/a>@', '', $body);
             $body = preg_replace('@<img .*?>@', '', $body);
 
-            $summary = \StringUtils::get_num_words(html_entity_decode($body), 20);
+            $summary = \StringUtils::getNumWords(html_entity_decode($body), 20);
 
             // Set sql's for updating articles body
             $sql = 'UPDATE `contents` SET `body` = \''.$body.'\',
@@ -349,7 +348,7 @@ EOF
      */
     public function processArticles($articles, $field)
     {
-        foreach ($articles as $key => $article) {
+        foreach ($articles as $article) {
             // Get images src from article
             $dom = new \domDocument;
             @$dom->loadHTML($article->{$field}, LIBXML_NOBLANKS | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -359,7 +358,7 @@ EOF
             foreach ($images as $image) {
                 $imageSrc = $image->getAttribute('src');
                 // Do not process some images
-                if (preg_match("/(c:|C:|file:|oir|oir2)/", $imageSrc, $matches) != 1) {
+                if (preg_match("/(c:|C:|file:|oir|oir2)/", $imageSrc) != 1) {
                     // Create image in onm
                     $imageId = $this->processImage(
                         $imageSrc,
@@ -444,7 +443,7 @@ EOF
             'fk_category'       => $category,
             'category_name'     => $category,
             'category'          => $category,
-            'metadata'          => \Onm\StringUtils::get_tags($filePath['filename']),
+            'metadata'          => \Onm\StringUtils::getTags($filePath['filename']),
             'author_name'       => '&copy; '.INSTANCE_UNIQUE_NAME.' '.date('Y'),
             'original_filename' => $filePath['basename'],
         );

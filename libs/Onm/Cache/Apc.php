@@ -24,9 +24,9 @@ class Apc extends AbstractCache
      *
      * @param $options
      */
-    public function __construct($options = array())
+    public function __construct()
     {
-        $this->initialize($options);
+        $this->initialize();
     }
 
     /**
@@ -36,7 +36,7 @@ class Apc extends AbstractCache
      *
      * @return void
      */
-    public function initialize($options = array())
+    public function initialize()
     {
         if (!function_exists('apc_store') || !ini_get('apc.enabled')) {
             throw new \Exception(

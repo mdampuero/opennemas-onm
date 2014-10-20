@@ -145,7 +145,7 @@ class Poll extends Content
         if ($data['item']) {
             foreach ($data['item'] as $item) {
                 $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = StringUtils::get_tags($item);
+                $tags   = StringUtils::getTags($item);
                 $values = array($this->id,$item, $tags);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);
@@ -295,7 +295,7 @@ class Poll extends Content
      **/
     public function vote($pkItem, $ip)
     {
-        $this->used_ips = $this->add_count($this->used_ips, $ip);
+        $this->used_ips = $this->addCount($this->used_ips, $ip);
         if (!$this->used_ips) {
             return false;
         }
@@ -333,7 +333,7 @@ class Poll extends Content
      *
      * @return array
      **/
-    public function add_count($ips_count, $ip)
+    public function addCount($ips_count, $ip)
     {
         $ips = array();
         if ($ips_count) {
@@ -361,15 +361,12 @@ class Poll extends Content
      * Renders the poll
      *
      * @param arrray $params parameters for rendering the content
-     * @param Template $smarty the Template object instance
      *
      * @return string the generated HTML
      **/
-    public function render($params, $smarty)
+    public function render($params)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = new Template(TEMPLATE_USER);
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);

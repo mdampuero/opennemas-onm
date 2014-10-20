@@ -91,7 +91,7 @@ class ImporterIdeal
                         // Algunos son nodos inferiores
                         if (count($eleto->children())>0) {
                             foreach ($eleto->children() as $node) {
-                                foreach ($node->attributes() as $c => $d) {
+                                foreach ($node->attributes() as $d) {
                                     $field = self::checkLabel($d);
                                     if (!empty($field)
                                         && empty($data[$field])
@@ -133,7 +133,7 @@ class ImporterIdeal
         $data['ordenArti']       = "";
         $data['ordenArtiInt']    = "";
 
-        $metadata = '';//StringUtils::get_title($data['title']);
+        $metadata = '';//StringUtils::getTitle($data['title']);
         $data['metadata'] = str_replace('-', ',', $metadata);
 
         $data['content_status'] = 0;

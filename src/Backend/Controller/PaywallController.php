@@ -54,13 +54,11 @@ class PaywallController extends Controller
     /**
      * Shows a list of purchases for the paywall module
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $settings = s::get('paywall_settings');
 
@@ -91,8 +89,7 @@ class PaywallController extends Controller
         $time = $time->format('Y-m-d H:i:s');
 
         $purchasesLastMonth = \Order::count(
-            "type='paywall' AND created > '$time'",
-            array()
+            "type='paywall' AND created > '$time'"
         );
 
         return $this->render(
@@ -119,10 +116,10 @@ class PaywallController extends Controller
      **/
     public function usersAction(Request $request)
     {
-        $page  = $this->request->query->getDigits('page', 1);
-        $type  = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
-        $order = $this->request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+        $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
 
@@ -212,9 +209,9 @@ class PaywallController extends Controller
      **/
     public function userListExportAction(Request $request)
     {
-        $type = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
-        $order  = $this->request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
-        $name = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $users = array();
         if ($type === '0') {
@@ -284,8 +281,8 @@ class PaywallController extends Controller
      **/
     public function purchasesListExportAction(Request $request)
     {
-        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
         $purchases = \Order::find(
@@ -348,9 +345,9 @@ class PaywallController extends Controller
      **/
     public function purchasesAction(Request $request)
     {
-        $page  = $this->request->query->getDigits('page', 1);
-        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+        $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
         $purchases = \Order::find(
@@ -418,13 +415,11 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function settingsAction(Request $request)
+    public function settingsAction()
     {
         $settings = s::get('paywall_settings');
 

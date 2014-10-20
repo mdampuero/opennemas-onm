@@ -36,7 +36,6 @@ class MaintenanceModeListener implements EventSubscriberInterface
         }
 
         $request    = $event->getRequest();
-        $requestUri = $request->getRequestUri();
 
         if (strpos($request->getRequestUri(), '/admin') === 0) {
             $maintenanceFile = APP_PATH.'/../.maintenance';
@@ -62,7 +61,7 @@ class MaintenanceModeListener implements EventSubscriberInterface
                     // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
 
                     // set handling to false otherwise it wont be able to handle further more
-                    $handling = false;
+                    // $handling = false;
 
                     // re-throw the exception from within HttpKernel as this is a catch-all
                     return;

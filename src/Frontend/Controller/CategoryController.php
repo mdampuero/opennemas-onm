@@ -76,8 +76,7 @@ class CategoryController extends Controller
 
             $order = array('starttime' => 'DESC');
 
-            $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countArticles = $em->countBy($filters);
+            $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
@@ -209,7 +208,7 @@ class CategoryController extends Controller
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                     'actual_category'       => $categoryName
                 )
             );

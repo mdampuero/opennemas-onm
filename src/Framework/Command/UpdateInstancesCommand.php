@@ -86,7 +86,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
         $instances = $this->im->findBy(null, array('id', 'asc'));
 
         foreach ($instances as $instance) {
-            $counters = $this->getInstanceInfo($instance, $alexa, $views, $created);
+            $this->getInstanceInfo($instance, $alexa, $views, $created);
             $this->im->persist($instance);
         }
     }

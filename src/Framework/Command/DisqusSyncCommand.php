@@ -40,7 +40,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phpBinPath = exec('which php');
         chdir(APPLICATION_PATH);
 
         // Initialize internal constants

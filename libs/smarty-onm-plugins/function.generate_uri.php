@@ -9,7 +9,7 @@ function smarty_function_generate_uri($params, &$smarty) {
     if (isset($params['slug'])) {
         $slug = $params['slug'];
     } elseif ( isset($params['title']) ) {
-        $slug = StringUtils::get_title($params['title']);
+        $slug = StringUtils::getTitle($params['title']);
     }
 
     $output = Uri::generate( $params['content_type'],

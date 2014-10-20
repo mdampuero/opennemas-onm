@@ -50,7 +50,7 @@ class VideosController extends Controller
         if ($this->category_name != 'home') {
             $ccm = \ContentCategoryManager::get_instance();
             $this->category = $ccm->get_id($this->category_name);
-            $category_real_name = $ccm->get_title($this->category_name);
+            $category_real_name = $ccm->getTitle($this->category_name);
             $this->view->assign(
                 array(
                     'category'           => $this->category,
@@ -71,11 +71,9 @@ class VideosController extends Controller
     /**
      * Renders the video frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
@@ -284,11 +282,9 @@ class VideosController extends Controller
     /**
      * Return via ajax more videos of a category
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ajaxMoreAction(Request $request)
+    public function ajaxMoreAction()
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
@@ -327,11 +323,9 @@ class VideosController extends Controller
     /**
      * Return via ajax videos of a category
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ajaxInCategoryAction(Request $request)
+    public function ajaxInCategoryAction()
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
@@ -382,7 +376,7 @@ class VideosController extends Controller
         $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
         $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
         if (empty($this->category)) {
-            $this->category = $this->request->query->getDigits('category', 0);
+            $this->category = $request->query->getDigits('category', 0);
         }
 
         $order = array('created' => 'DESC');

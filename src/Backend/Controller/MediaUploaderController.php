@@ -42,7 +42,7 @@ class MediaUploaderController extends Controller
      *
      * @return Response the object response
      **/
-    public function getMonthsAction(Request $request)
+    public function getMonthsAction()
     {
         $years = array();
 

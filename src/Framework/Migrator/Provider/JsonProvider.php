@@ -221,7 +221,7 @@ class JsonProvider extends MigrationProvider
                         } else {
                             // Join
                             $joined = array();
-                            foreach ($value as $k => $v) {
+                            foreach ($value as $v) {
                                 $toJoin = $this->itemToFlat($v, $schema);
 
                                 // Join fields to elements in parsed

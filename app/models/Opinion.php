@@ -105,7 +105,7 @@ class Opinion extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
-                        'category' => StringUtils::get_title($authorName),
+                        'category' => StringUtils::getTitle($authorName),
                     )
                 );
 
@@ -113,7 +113,7 @@ class Opinion extends Content
 
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -354,7 +354,7 @@ class Opinion extends Content
         } else {
 
             $author = new \User($this->fk_author);
-            $this->name = StringUtils::get_title($author->name);
+            $this->name = StringUtils::getTitle($author->name);
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {

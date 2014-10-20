@@ -163,7 +163,7 @@ class Vote
      **/
     public function update($vote, $ip)
     {
-        $this->ips_count_vote = $this->add_count($this->ips_count_vote, $ip);
+        $this->ips_count_vote = $this->addCount($this->ips_count_vote, $ip);
 
         if (!$this->ips_count_vote) {
             return false;
@@ -208,7 +208,7 @@ class Vote
 
             // Render links
             for ($i = 1; $i <= 2; $i++) {
-                $results.= $this->renderLink($i, $this->pk_vote, $value);
+                $results.= $this->renderLink($i, $this->pk_vote);
             }
             $outputHTML.= "  <div class=\"CVotos\">";
             $outputHTML.= $results;
@@ -243,7 +243,7 @@ class Vote
      *
      * @return array the new list of ips and vote counts
      **/
-    public function add_count($countIPs, $ip)
+    public function addCount($countIPs, $ip)
     {
         $ips = array();
         foreach ($countIPs as $ip_array) {
@@ -306,7 +306,7 @@ class Vote
      * @return string the HTML for the vote link
      *
      **/
-    private function renderLink($i, $votePK, $value)
+    private function renderLink($i, $votePK)
     {
         $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC

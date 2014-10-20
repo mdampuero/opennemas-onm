@@ -11,10 +11,10 @@ namespace Onm\Import\DataSource\Format;
 
 use Onm\Settings as s;
 use Onm\Import\DataSource\FormatInterface;
-use Onm\Import\DataSource\Format\NewsMLG1Component\Video;
-use Onm\Import\DataSource\Format\NewsMLG1Component\Photo;
+use Onm\Import\DataSource\FormatAbstract;
+use Onm\Import\DataSource\Format\NewsMLG1Component\MultimediaResource;
 
-class NewsMLG1 implements FormatInterface
+class NewsMLG1 extends FormatAbstract implements FormatInterface
 {
     private $data = null;
 
@@ -27,7 +27,7 @@ class NewsMLG1 implements FormatInterface
      */
     public function __construct($xmlFile)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->xml_file = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | Europapress';
@@ -76,6 +76,7 @@ class NewsMLG1 implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
@@ -133,6 +134,10 @@ class NewsMLG1 implements FormatInterface
                 $this->getServiceName();
 
                 break;
+            case 'service_name':
+                $this->getServicePartyName();
+
+                break;
             case 'texts':
             case 'photos':
             case 'videos':
@@ -175,8 +180,9 @@ class NewsMLG1 implements FormatInterface
             "//nitf/body/body.head/rights/rights.owner"
         );
 
-        return $owner[0];
+        return (count($owner) > 0) ? json_decode((string) $owner[0]) : [];
     }
+
     /**
      * Returns the name of the rights.owner.photo
      *
@@ -188,7 +194,7 @@ class NewsMLG1 implements FormatInterface
             "//nitf/body/body.head/rights/rights.owner.photo"
         );
 
-        return $owner[0];
+        return (count($owner) > 0) ? ((string) $owner[0]) : null;
     }
 
     /**
@@ -426,7 +432,7 @@ class NewsMLG1 implements FormatInterface
                 $this->photos = array();
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
-                        $photoComponent = new Photo($component);
+                        $photoComponent = new MultimediaResource($component);
                         $this->photos[] = $photoComponent;
                     }
                 }
@@ -436,16 +442,6 @@ class NewsMLG1 implements FormatInterface
         }
 
         return $this->photos;
-    }
-
-    /**
-     * Checks if this news component has photos
-     *
-     * @return boolean
-     **/
-    public function hasPhotos()
-    {
-        return count($this->getPhotos()) > 0;
     }
 
     /**
@@ -465,7 +461,7 @@ class NewsMLG1 implements FormatInterface
                 $this->videos = array();
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
-                        $videoComponent = new Video($component);
+                        $videoComponent = new MultimediaResource($component);
                         $this->videos[$videoComponent->id] = $videoComponent;
                     }
                 }
@@ -475,16 +471,6 @@ class NewsMLG1 implements FormatInterface
         }
 
         return $this->videos;
-    }
-
-    /**
-     * Checks if this news component has photos
-     *
-     * @return boolean
-     **/
-    public function hasVideos()
-    {
-        return count($this->getVideos()) > 0;
     }
 
     /**
@@ -562,31 +548,22 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the opennemas generated metadata
+     *
+     * @return array the list of metadata
+     **/
+    public function getMetadata()
+    {
+        return [
+            'category' => $this->getOpennemasData('category')
+        ];
+    }
+
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * Finds a regexp inside the title and content
-     *
-     * @return boolean
-     **/
-    public function hasContent($needle)
-    {
-        $needle = strtolower(\Onm\StringUtils::normalize($needle));
-        $title = strtolower(\Onm\StringUtils::normalize($this->title));
-
-        if (preg_match("@".$needle."@", $title)) {
-            return true;
-        }
-        $body = strtolower(\Onm\StringUtils::normalize($this->body));
-        if (preg_match("@".$needle."@", $body)) {
-            return true;
-        }
-
-        return false;
     }
 }

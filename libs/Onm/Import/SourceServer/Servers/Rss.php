@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\Synchronizer\Servers;
+namespace Onm\Import\SourceServer\Servers;
 
-use \Onm\Import\Synchronizer\ServerAbstract;
-use \Onm\Import\Synchronizer\ServerInterface;
+use \Onm\Import\SourceServer\ServerAbstract;
+use \Onm\Import\SourceServer\ServerInterface;
 
 /**
  * Class to synchronize local folders with an HTTP Efe server.
@@ -82,14 +82,13 @@ class Rss extends ServerAbstract implements ServerInterface
         $deletedFiles = 0;
 
         $files = array();
-        $imagesName = array();
         $serverFiles = array();
 
         foreach ($this->contentList->channel->item as $content) {
-            $id = $content->guid;
+            $id = urlencode($content->guid);
             $files[] = $id.'.xml';
 
-            if ($this->buildContentAndSave($id, $content, $params)) {
+            if ($this->buildContentAndSave($id, $content)) {
                 $downloadedFiles++;
             }
         }
@@ -123,7 +122,7 @@ class Rss extends ServerAbstract implements ServerInterface
      * @return void
      * @author
      **/
-    public function buildContentAndSave($id, $content, $params)
+    public function buildContentAndSave($id, $content)
     {
         $article = new \Article();
 
@@ -163,7 +162,7 @@ class Rss extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@rss@', $params['url'], $matches);
+        $res = preg_match('@rss|feed@', $params['url']);
         if ($res) {
             return true;
         }
@@ -174,6 +173,5 @@ class Rss extends ServerAbstract implements ServerInterface
                 $params['name']
             )
         );
-
     }
 }

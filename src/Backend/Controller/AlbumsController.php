@@ -64,12 +64,11 @@ class AlbumsController extends Controller
     /**
      * Lists all albums.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('album/list.tpl');
     }
@@ -77,12 +76,11 @@ class AlbumsController extends Controller
     /**
      * Lists all the albums for the widget.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         return $this->render(
             'album/list.tpl',
@@ -102,9 +100,9 @@ class AlbumsController extends Controller
      */
     public function createAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
+        if ('POST' == $request->getMethod()) {
             $album = new \Album();
-            $album->create($_POST);
+            $album->create($request->request->all());
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Album created successfully')
@@ -112,7 +110,7 @@ class AlbumsController extends Controller
 
             // Get category name
             $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($category);
+            $categoryName = $ccm->getName($request->request->get('category'));
 
             // Clean cache album home and frontpage for category
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);

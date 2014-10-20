@@ -83,7 +83,7 @@ class FrontpagesController extends Controller
             $this->view->assign(
                 array(
                     'actual_category_id'    => $actualCategoryId,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                     'category_data'         => $categoryData,
                     'time'                  => time(),
                 )
@@ -197,7 +197,7 @@ class FrontpagesController extends Controller
                     'category_name'         => $categoryName,
                     'actual_category'       => $actualCategory,
                     'actual_category_id'    => $wsActualCategoryId,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                 )
             );
 

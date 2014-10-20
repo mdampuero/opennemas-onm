@@ -10,6 +10,7 @@
 namespace Onm\Import\DataSource\Format;
 
 use Onm\Import\DataSource\FormatInterface;
+use Onm\Import\DataSource\FormatAbstract;
 use Onm\Settings as s;
 
 /**
@@ -17,7 +18,7 @@ use Onm\Settings as s;
  *
  * @package Onm_Import_DataSource
  **/
-class Europapress implements FormatInterface
+class Europapress extends FormatAbstract implements FormatInterface
 {
     private $data = null;
     /**
@@ -29,7 +30,7 @@ class Europapress implements FormatInterface
      */
     public function __construct($xmlFile)
     {
-        $this->xmlFile = basename($xmlFile);
+        $this->xml_file = basename($xmlFile);
 
         $baseAgency       = s::get('site_agency');
         $this->agencyName = $baseAgency.' | Europapress';
@@ -79,11 +80,12 @@ class Europapress implements FormatInterface
         $this->created_time = $this->getCreatedTime();
         $this->body         = $this->getBody();
         $this->agency_name  = $this->getServiceName();
+        $this->service_name = $this->getServicePartyName();
         $this->texts        = $this->getTexts();
         $this->photos       = $this->getPhotos();
         $this->videos       = $this->getVideos();
-        $this->audios       = $this->getAudios();
-        $this->files        = $this->getFiles();
+        // $this->audios       = $this->getAudios();
+        // $this->files        = $this->getFiles();
     }
 
     /*
@@ -512,6 +514,8 @@ class Europapress implements FormatInterface
      **/
     public function getOpennemasData($property)
     {
-        return null;
+        // Dummy action
+        $property = null;
+        return $property;
     }
 }

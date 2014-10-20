@@ -120,9 +120,9 @@ class StaticPage extends Content
     public function buildSlug($slug, $id, $title = null)
     {
         if (empty($slug) && !empty($title)) {
-            $slug = StringUtils::get_title($title, $useStopList = false);
+            $slug = StringUtils::getTitle($title, $useStopList = false);
         }
-        $slug = StringUtils::get_title($slug, $useStopList = false);
+        $slug = StringUtils::getTitle($slug, $useStopList = false);
 
         // Get titles to check unique value
         $slugs = $this->getSlugs('pk_static_page<>"' . $id . '"');

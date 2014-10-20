@@ -153,16 +153,15 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $content = $event->getArgument('content');
-
         $instanceName = getService('instance_manager')->current_instance->internal_name;
 
-
-        $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        $kernel->getContainer()->get('varnish_ban_message_exchanger')
             ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
 
+        // $content = $event->getArgument('content');
+
         // $baseRequest = "obj.http.x-instance ~ {$instanceName} && ";
-        // $response = $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        // $kernel->getContainer()->get('varnish_ban_message_exchanger')
         //     ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
         //     ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
         //     ->addBanMessage('obj.http.x-tags ~ rss')
@@ -177,11 +176,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
 
-        $content = $event->getArgument('content');
-
         if (isset($_REQUEST['category'])) {
             $ccm = \ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($_REQUEST['category']);
+            $categoryName = $ccm->getName($_REQUEST['category']);
             $tplManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
             );
@@ -213,7 +210,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 $categoryName = 'opinion';
                 $tplManager->delete($categoryName, 'opinion_frontpage.tpl');
             } else {
-                $categoryName = $ccm->get_name($category);
+                $categoryName = $ccm->getName($category);
             }
 
             $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);

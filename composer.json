@@ -23,26 +23,28 @@
         "libs"
     ],
     "autoload": {
-        "psr-0": { "": "src/" },
+        "psr-0": { "": "src/", "SymfonyStandard": "app/" },
         "files": [
             "libs/functions.php",
             "libs/adodb5/adodb.inc.php",
             "libs/Pager/Pager.php"
         ]
     },
+    "require-dev": {
+        "sensio/generator-bundle": "~2.3"
+    },
 
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.5.0",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "symfony/symfony": "2.5.5",
+        "doctrine/orm": ">=2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~2.3",
+        "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
-        "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
 
         "doctrine/doctrine-migrations-bundle": "dev-master",
@@ -51,16 +53,19 @@
         "drexarj/disqus-php": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
         "friendsofsymfony/jsrouting-bundle": "@stable",
-        "imagine/imagine": "dev-develop",
+        "imagine/imagine": "0.6.*",
         "paypal/sdk-core-php": "v1.4.2",
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php": "v2.4.103",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
         "hwi/oauth-bundle": "0.3.*@dev",
-        "smarty/smarty" : "3.1.14",
+        "smarty/smarty" : "3.1.21",
         "smarty-gettext/smarty-gettext": "@stable"
     },
     "scripts": {
+        "post-root-package-install": [
+            "SymfonyStandard\\Composer::hookRootPackageInstall"
+        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
@@ -88,7 +93,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.4-dev"
+            "dev-master": "2.5-dev"
         }
     }
 }

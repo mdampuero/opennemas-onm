@@ -70,9 +70,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $group      = array();
         $user       = $token->getUser();
-        $userGroups = $user->id_user_group;
         $valid      = true;
 
         $attempts = 1;

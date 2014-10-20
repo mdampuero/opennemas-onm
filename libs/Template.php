@@ -145,8 +145,8 @@ class Template extends Smarty
      **/
     public function setPluginLoadPaths()
     {
-        $this->addPluginsDir(realpath($this->templateBaseDir.'/plugins/'));
-        $this->addPluginsDir(realpath(SITE_LIBS_PATH.'/smarty-onm-plugins/'));
+        $this->addPluginsDir($this->templateBaseDir.'/plugins/');
+        $this->addPluginsDir(SITE_LIBS_PATH.'/smarty-onm-plugins/');
     }
 
     /**

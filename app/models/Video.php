@@ -76,7 +76,7 @@ class Video extends Content
                 return $this->getUri();
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -424,7 +424,7 @@ class Video extends Content
         ));
         $video = $ffmpeg->open($flvPath);
 
-        foreach ($sizes as $name => $sizeValues) {
+        foreach (array_keys($sizes) as $name) {
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail
             $flvFileInfo = pathinfo($flvPath);

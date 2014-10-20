@@ -48,13 +48,11 @@ class ImporterXmlfileController extends Controller
     /**
      * Shows the upload form for importing XML files
      *
-     * @param Request $request the request object
-     *
      * @return void
      *
      * @Security("has_role('IMPORT_XML')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         return $this->render('agency_importer/xml-file/list.tpl');
     }
@@ -102,9 +100,6 @@ class ImporterXmlfileController extends Controller
                 $name      = date("YmdHis").$micro.".".$extension;
 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
-
-                    $check = !isset($_REQUEST['check_pendientes'][$i])
-                        ? 0 : $_REQUEST['check_pendientes'][$i];
 
                     if ($extension == "zip") {
                         $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);

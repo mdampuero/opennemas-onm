@@ -88,8 +88,8 @@ class PClave
 
         $values = array(
             $data['pclave'],
-            $data['tipo'],
             $data['value'],
+            $data['tipo'],
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -234,34 +234,45 @@ class PClave
         );
 
         foreach ($terms as $term) {
-            $method = 'cb'.ucfirst($term->tipo);
-            if (method_exists($this, $method)) {
-                $replacement = $this->$method($term->pclave, $term->value);
+            // Select keyword type
+            switch ($term->tipo) {
+                case 'url':
 
-                // WARNING: utf8
-                $regexp = '(\W)(' . preg_quote($term->pclave) . '|' .
-                preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT))
-                .')(?!(</a>|&|"))(\W)';
+                    $replacement = "<a href='".$term->value."'
+                                       title='".$term->pclave."'>".
+                                       $term->pclave."</a>";
 
-                $regexp = '@' . preg_replace('@/@', '\/', $regexp).'@i';
+                    break;
 
-                $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
+                case 'email':
+
+                    $replacement = "<a href='mailto:".$term->value."'
+                                       target='_blank'>".$term->pclave."</a>";
+
+                    break;
+
+                case 'intsearch':
+
+                    $replacement = "<a href='".SITE_URL."tag/".$term->value."'
+                                       target='_blank'>".$term->pclave."</a>";
+
+                    break;
+
+                default:
+                    break;
             }
+
+            // WARNING: utf8
+            $regexp = '(\W)(' . preg_quote($term->pclave) . '|' .
+            preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT))
+            .')(?!(</a>|&|"))(\W)';
+
+            $regexp = '@' . preg_replace('@/@', '\/', $regexp).'@i';
+
+            $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
         }
 
         return trim($text);
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function cbUrl($name, $value)
-    {
-
-        return "<a href='$value' title='\\2'>\\2</a>";
     }
 
     /**

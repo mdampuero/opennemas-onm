@@ -80,7 +80,7 @@ class Album extends Content
 
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -352,15 +352,13 @@ class Album extends Content
      * Renders the album
      *
      * @param arrray $params parameters for rendering the content
-     * @param Template $smarty the Template object instance
+     * @param Template $tpl the Template object instance
      *
      * @return string the generated HTML
      **/
-    public function render($params, $smarty)
+    public function render($params, $tpl = null)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = new Template(TEMPLATE_USER);
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
@@ -369,6 +367,7 @@ class Album extends Content
         if ($params['custom'] == 1) {
             $template = $params['tpl'];
         }
+
         try {
             $html = $tpl->fetch($template);
         } catch (\Exception $e) {

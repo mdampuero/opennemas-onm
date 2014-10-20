@@ -89,7 +89,7 @@ class DbalWrapper
      */
     private function replaceKeyInArray($callback, $array, $databaseName)
     {
-        foreach ($array as $key => $value) {
+        foreach (array_keys($array) as $key) {
             if (is_array($array[$key])) {
                 $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $databaseName);
             } else {

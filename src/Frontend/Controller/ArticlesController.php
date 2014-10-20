@@ -31,7 +31,7 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Displays the article given its id or slug
+     * Displays the article given its id
      *
      * @param Request $request the request object
      *
@@ -84,7 +84,7 @@ class ArticlesController extends Controller
                 // TODO: Seems that this is rubbish, evaluate its removal
                 $actualCategory      = $categoryName;
                 $actualCategoryId    = $this->ccm->get_id($actualCategory);
-                $actualCategoryTitle = $this->ccm->get_title($actualCategory);
+                $actualCategoryTitle = $this->ccm->getTitle($actualCategory);
                 $categoryData        = null;
                 if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
                     $categoryData = $this->ccm->categories[$actualCategoryId];
@@ -130,7 +130,7 @@ class ArticlesController extends Controller
 
                     // Add category name
                     foreach ($relatedContents as $key => &$content) {
-                        $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
                         if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
                             $content->photo = $er->find('Photo', $content->img1);
                         }
@@ -178,7 +178,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Displays the external article given its id or slug
+     * Displays the external article given its id
      *
      * @param Request $request the request object
      *
@@ -189,7 +189,6 @@ class ArticlesController extends Controller
         // Fetch HTTP variables
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);

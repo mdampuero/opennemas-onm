@@ -26,7 +26,7 @@ class WebServiceController extends Controller
      *
      * @return Response the response object
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         require_once SITE_LIBS_PATH.'/Restler/restler.php';
         require_once SITE_LIBS_PATH.'/Restler/xmlformat.php';
@@ -42,18 +42,18 @@ class WebServiceController extends Controller
         $r = new \Restler();
         $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
-        $r->addAPIClass('Ads');
-        $r->addAPIClass('Agency');
-        $r->addAPIClass('Articles');
-        $r->addAPIClass('Authors');
-        $r->addAPIClass('Categories');
-        $r->addAPIClass('Comments');
-        $r->addAPIClass('Contents');
-        $r->addAPIClass('Frontpages');
-        $r->addAPIClass('Images');
-        $r->addAPIClass('Instances');
-        $r->addAPIClass('Opinions');
-        $r->addAPIClass('Videos');
+        $r->addAPIClass('WebService\Handlers\Ads');
+        $r->addAPIClass('WebService\Handlers\Agency');
+        $r->addAPIClass('WebService\Handlers\Articles');
+        $r->addAPIClass('WebService\Handlers\Authors');
+        $r->addAPIClass('WebService\Handlers\Categories');
+        $r->addAPIClass('WebService\Handlers\Comments');
+        $r->addAPIClass('WebService\Handlers\Contents');
+        $r->addAPIClass('WebService\Handlers\Frontpages');
+        $r->addAPIClass('WebService\Handlers\Images');
+        $r->addAPIClass('WebService\Handlers\Instances');
+        $r->addAPIClass('WebService\Handlers\Opinions');
+        $r->addAPIClass('WebService\Handlers\Videos');
 
         $r->addAuthenticationClass('OnmAuth');
 

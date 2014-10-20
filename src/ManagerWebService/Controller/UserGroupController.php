@@ -28,7 +28,6 @@ class UserGroupController extends Controller
     public function createAction(Request $request)
     {
         $userGroup = new \UserGroup();
-        $privilege = new \Privilege();
 
         $data = array(
             'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
@@ -116,7 +115,7 @@ class UserGroupController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $messages = array();
+        $message = array();
         $success  = false;
         $updated  = 0;
 
@@ -147,7 +146,7 @@ class UserGroupController extends Controller
             $success = true;
 
             array_unshift(
-                $messages,
+                $message,
                 array(
                     'text' => sprintf(_('%s user groups deleted successfully.'), count($updated)),
                     'type' => 'success'
@@ -157,8 +156,8 @@ class UserGroupController extends Controller
 
         return new JsonResponse(
             array(
-                'success'  => $success,
-                'messages' => $messages
+                'success' => $success,
+                'message' => $message
             )
         );
     }
@@ -203,8 +202,6 @@ class UserGroupController extends Controller
      */
     public function newAction()
     {
-        $privilege = new \Privilege();
-
         return new JsonResponse(
             array(
                 'group'     => null,

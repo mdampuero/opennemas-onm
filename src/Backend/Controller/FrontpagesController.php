@@ -51,7 +51,7 @@ class FrontpagesController extends Controller
          * Getting categories
         */
         $ccm = \ContentCategoryManager::get_instance();
-        $section = $ccm->get_name($category);
+        $section = $ccm->getName($category);
         $section = (empty($section))? 'home': $section;
         $categoryID = ($category == 'home') ? 0 : $category;
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
@@ -69,7 +69,7 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         } elseif (!Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
-            $section = $ccm->get_name($categoryID);
+            $section = $ccm->getName($categoryID);
             $_REQUEST['category'] = $categoryID;
             list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 
@@ -260,7 +260,7 @@ class FrontpagesController extends Controller
             }
 
             // Restore old frontpage
-            $restore = \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+            \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
 
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
@@ -447,13 +447,11 @@ class FrontpagesController extends Controller
     /**
      * Description of this action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
         $content = $session->get('last_preview');

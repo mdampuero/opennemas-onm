@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for frontpages.
+ *
+ * @package WebService
+ **/
 class Frontpages
 {
     public $restler;
@@ -12,7 +25,7 @@ class Frontpages
         /**
          * Init the Content and Database object
         */
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
 
         // Check if category exists and initialize contents var
         $existsCategory = $ccm->exists($category);
@@ -20,16 +33,16 @@ class Frontpages
 
         if (!$existsCategory) {
             // throw RestException bad category
-            throw new RestException(404, 'parameter is not valid');
+            throw new \RestException(404, 'parameter is not valid');
         } else {
             // Run entire logic
-            $actualCategoryId = $actual_category_id = $ccm->get_id($category);
+            $actualCategoryId = $ccm->get_id($category);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
             }
 
-            $cm = new ContentManager;
+            $cm = new \ContentManager;
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
             // Filter articles if some of them has time scheduling and sort them by position
             $contentsInHomepage = $cm->getInTime($contentsInHomepage);
@@ -101,7 +114,7 @@ class Frontpages
                         $basePath = INSTANCE_MEDIA;
 
                         // Get file path for attachments
-                        $filePath = ContentManager::getFilePathFromId($item->id);
+                        $filePath = \ContentManager::getFilePathFromId($item->id);
 
                         // Compose the full url to the file
                         $item->fullFilePath = $basePath.FILE_DIR.$filePath;

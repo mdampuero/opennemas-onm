@@ -163,6 +163,8 @@ class CommentManager extends BaseManager
                 $comments[] = $comment;
             }
         }
+        // Unused var $contentType
+        unset($contentType);
 
         $ordered = array();
         foreach ($keys as $id) {
