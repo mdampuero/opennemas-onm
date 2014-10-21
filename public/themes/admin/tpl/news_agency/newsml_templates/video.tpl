@@ -55,7 +55,7 @@
             <NewsComponent Duid="video_{$video->id}.video.text">
                 <Role FormalName="Caption" />
                 <ContentItem>
-                    <ContentItem Href="{$video->uri}" />
+                    <ContentItem Href="{$video->uri}"  Url="{$video->video_url}"/>
                     <MediaType FormalName="Text" />
                     <Format FormalName="NITF" />
                     <MimeType FormalName="text/vnd.IPTC.NITF" />
