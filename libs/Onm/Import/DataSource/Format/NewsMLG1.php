@@ -380,12 +380,16 @@ class NewsMLG1 extends FormatAbstract implements FormatInterface
             "//NewsItem/NewsComponent/NewsComponent[@Duid]"
         );
 
+        $isEfe = count($data->xpath(
+            "//NewsEnvelope/SentFrom/Party/Property[@Value=\"Agencia EFE\"]"
+        )) > 0;
+
         if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
         }
         $title = (string) $data->NewsItem->NewsComponent->NewsLines->HeadLine;
 
-        if (!(string) $data->NewsEnvelope || empty($title)) {
+        if (!(string) $data->NewsEnvelope || empty($title) || $isEfe) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLG1 file'), $xmlFile));
         }
 

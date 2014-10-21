@@ -18,10 +18,8 @@ class NewsMLG1EFE extends NewsMLG1
      **/
     public function getTexts()
     {
-        $contents = $this->getData()->xpath(
-            "//NewsItem/NewsComponent"
-            ."[@Duid=\"text_".$this->id.".text\"]"
-        );
+        $xpathExpresion = "//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]";
+        $contents = $this->getData()->xpath($xpathExpresion);
 
         $texts = null;
         if (isset($contents[0]) && $contents[0]->ContentItem) {
@@ -31,6 +29,25 @@ class NewsMLG1EFE extends NewsMLG1
         }
 
         return $texts;
+    }
+
+    /**
+     * Returns the creation datetime of this element
+     *
+     * @return DateTime the datetime of the element
+     **/
+    public function getCreatedTime()
+    {
+        $originalDate = (string) $this->getData()
+                                    ->NewsItem->NewsManagement
+                                    ->FirstCreated;
+        $newDate = str_replace('+0000', '', $originalDate);
+
+        return \DateTime::createFromFormat(
+            'Ymd\THis',
+            $newDate,
+            new \DateTimeZone('Europe/Madrid')
+        );
     }
 
     /**
@@ -44,10 +61,8 @@ class NewsMLG1EFE extends NewsMLG1
     public static function checkFormat($data = null, $xmlFile = null)
     {
         preg_match('@/([0-9a-zA-Z]+).xml@', $xmlFile, $id);
-        $contents = $data->xpath(
-            "//NewsItem/NewsComponent"
-            ."[@Duid=\"text_".$id[1].".text\"]"
-        );
+        $xpathExpresion = "//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$id[1].".multimedia.texts\"]";
+        $contents = $data->xpath($xpathExpresion);
 
         if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEFE file'), $xmlFile));
