@@ -116,7 +116,8 @@ class BooksController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $book = $this->get('entity_repository')->find('Book', $id);
+        $er = $this->get('entity_repository');
+        $book = $er->find('Book', $id);
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-inner');
@@ -136,8 +137,8 @@ class BooksController extends Controller
             );
 
             // Get books cover image
-            foreach ($books as &$book) {
-                $book->cover_img = new \Photo($book->cover_id);
+            foreach ($books as $key => $value) {
+                $books[$key]->cover_img = $er->find('Photo', $value->cover_id);
             }
 
             $this->view->assign(
