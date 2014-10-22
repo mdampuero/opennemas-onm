@@ -61,10 +61,12 @@ class NewsMLG1EFE extends NewsMLG1
     public static function checkFormat($data = null, $xmlFile = null)
     {
         preg_match('@/([0-9a-zA-Z]+).xml@', $xmlFile, $id);
-        $xpathExpresion = "//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$id[1].".multimedia.texts\"]";
-        $contents = $data->xpath($xpathExpresion);
 
-        if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
+        $isEfe = count($data->xpath(
+            "//NewsEnvelope/SentFrom/Party/Property[@Value=\"Agencia EFE\"]"
+        )) > 0;
+
+        if (!$isEfe) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEFE file'), $xmlFile));
         }
 

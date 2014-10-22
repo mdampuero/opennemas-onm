@@ -920,7 +920,7 @@ class NewsAgencyController extends Controller
                     }
 
                     // Check if sync is from Opennemas instances
-                    if ($element->getServiceName() == 'Opennemas') {
+                    if ($element->getServicePartyName() == 'Opennemas') {
                         // If this article has more than one photo take the first one to front
                         if (!isset($frontPhoto)) {
                             $frontPhoto = new \Photo($photoId);
