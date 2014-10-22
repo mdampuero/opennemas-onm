@@ -805,7 +805,6 @@ class ContentManager
             ),
             'content_type_name' => array(array('value' => $contentType)),
             'in_litter'         => array(array('value' => 0)),
-            'created'           => array(array('value' => $date, 'operator' => '>=')),
             'starttime'         => array(array('value' => $date, 'operator' => '>=')),
             'endtime'           => array(
                 'union' => 'OR',
@@ -838,7 +837,6 @@ class ContentManager
 
         // Repeat without 'created' filter
         if (count($contents) == 0) {
-            unset($criteria['created']);
             unset($criteria['starttime']);
             unset($criteria['endtime']);
             $contents = $em->findBy($criteria, $order, $num, 1);
@@ -881,9 +879,9 @@ class ContentManager
                 WHERE contents.pk_content = comments.content_id
                 AND contents.pk_content = articles.pk_article
                 AND contents.content_status=1
-                AND created >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
+                AND starttime >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
                 GROUP BY contents.pk_content
-                ORDER BY num_comments DESC, contents.created DESC
+                ORDER BY num_comments DESC, contents.starttime DESC
                 LIMIT ?";
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -956,7 +954,7 @@ class ContentManager
             $_where .= ' AND `contents`.`content_status`=1 ';
         }
 
-        $_days = 'AND  `contents`.created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `contents`.pk_content=`' . $this->table . '`.pk_' . strtolower($contentType) .
                              ' AND `ratings`.pk_rating=`contents`.pk_content ';
         $_order_by = 'ORDER BY `contents`.`content_status` DESC, `ratings`.total_votes DESC ';
@@ -1041,7 +1039,6 @@ class ContentManager
             ),
             'fk_content_type' => array(array('value' => array(1,3,4,7,9,11), 'operator' => 'IN')),
             'in_litter'       => array(array('value' => 0)),
-            'created'         => array(array('value' => $date, 'operator' => '>=')),
             'starttime'       => array(array('value' => $date, 'operator' => '>=')),
             'endtime'         => array(
                 'union' => 'OR',
@@ -1070,7 +1067,6 @@ class ContentManager
 
         // Repeat without 'created' filter
         if (count($contents) == 0) {
-            unset($criteria['created']);
             unset($criteria['starttime']);
             unset($criteria['endtime']);
             $contents = $em->findBy($criteria, $order, $num, 1);
