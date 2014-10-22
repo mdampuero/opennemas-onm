@@ -212,16 +212,16 @@ class PollsController extends Controller
         $valid = (int) $request->query->getDigits('valid', 3);
         if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
-                $message = _('Thanks for participating.');
+                $message = _('<span class="thanks">Thanks for participating.</span>');
             } elseif ($voted == 1 && $valid === 0) {
-                $message = _('Please select a valid poll answer.');
+                $message = _('<span class="wrong">Please select a valid poll answer.</span>');
             }
         } elseif (isset($cookie)) {
             $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
+            $message = _('<span class="ok">You have voted this poll previously.</span>');
         } elseif (($valid === 0) && ($voted == 0)) {
             $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
+            $message = _('<span class="ok">You have voted this poll previously.</span>');
         }
 
         $ads = $this->getAds('inner');
