@@ -26,8 +26,8 @@ class NewsMLG1EFE extends NewsMLG1
         $textContents = $this->getData()->xpath($xpathExpresion);
 
         $texts = null;
-        if (isset($multimediaContents[0]) && $multimediaContents[0]->ContentItem) {
-            $component = $multimediaContents[0]->ContentItem->DataContent;
+        if (isset($multimediaContents[0]) && $multimediaContents[0]->NewsComponent->ContentItem) {
+            $component = $multimediaContents[0]->NewsComponent->ContentItem->DataContent;
             $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
             $texts []= $nitf;
         } elseif (isset($textContents[0]) && $textContents[0]->ContentItem) {
