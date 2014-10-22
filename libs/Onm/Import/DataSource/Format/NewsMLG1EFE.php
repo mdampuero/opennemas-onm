@@ -18,12 +18,20 @@ class NewsMLG1EFE extends NewsMLG1
      **/
     public function getTexts()
     {
+        // Multimedia contents
         $xpathExpresion = "//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]";
-        $contents = $this->getData()->xpath($xpathExpresion);
+        $multimediaContents = $this->getData()->xpath($xpathExpresion);
+        // Only text contents
+        $xpathExpresion = "//NewsItem/NewsComponent[@Duid=\"text_".$this->id.".text\"]";
+        $textContents = $this->getData()->xpath($xpathExpresion);
 
         $texts = null;
-        if (isset($contents[0]) && $contents[0]->ContentItem) {
-            $component = $contents[0]->ContentItem->DataContent;
+        if (isset($multimediaContents[0]) && $multimediaContents[0]->ContentItem) {
+            $component = $multimediaContents[0]->ContentItem->DataContent;
+            $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
+            $texts []= $nitf;
+        } elseif (isset($textContents[0]) && $textContents[0]->ContentItem) {
+            $component = $textContents[0]->ContentItem->DataContent;
             $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
             $texts []= $nitf;
         }
