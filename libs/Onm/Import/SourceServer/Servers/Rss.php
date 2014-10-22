@@ -85,7 +85,7 @@ class Rss extends ServerAbstract implements ServerInterface
         $serverFiles = array();
 
         foreach ($this->contentList->channel->item as $content) {
-            $id = urlencode($content->guid);
+            $id = md5(urlencode($content->guid));
             $files[] = $id.'.xml';
 
             if ($this->buildContentAndSave($id, $content)) {
@@ -128,7 +128,7 @@ class Rss extends ServerAbstract implements ServerInterface
 
         $article->id               = (string) $content->guid;
         $article->title            = (string) $content->title;
-        $article->body             = (string) $content->description;
+        $article->body             = (string) htmlentities($content->description);
         $article->created_datetime = new \DateTime($content->pubDate);
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_name    = (string) $content->category;
