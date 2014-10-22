@@ -54,7 +54,6 @@ abstract class FormatAbstract
             'service_name' => $this->getServicePartyName(),
             'author'       => json_encode($this->getRightsOwner()),
             'author_img'   => $this->getRightsOwnerPhoto(),
-            'body'         => $this->getBody(),
             'photos'       => $photos,
             'videos'       => $videos,
             'opennemas'    => $this->getMetadata(),
