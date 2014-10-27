@@ -30,11 +30,9 @@ class PaypalNotificationsController extends Controller
     /**
      * Handles IPN notifications for paywall recurring payments
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function paywallAction(Request $request)
+    public function paywallAction()
     {
         // Get paypal developer mode settings
         $databaseSettings = s::get('paywall_settings');

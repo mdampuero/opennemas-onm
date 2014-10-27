@@ -314,10 +314,12 @@ class ContentController extends Controller
      **/
     public function updatePropertyAction(Request $request)
     {
-        $id = (int) $request->request->getDigits('id', null);
+        $id          = $request->request->getDigits('id', null);
+        $contentType = $request->request->filter('content_type', null, FILTER_SANITIZE_STRING);
 
         if ($id > 0) {
-            $content = new \Content($id);
+            $em         = $this->get('entity_repository');
+            $content    = $em->find($contentType, $id);
             $properties = $request->request->get('properties', null);
 
             if ($content->id != null && $properties != null) {
@@ -328,6 +330,7 @@ class ContentController extends Controller
                         $content->clearProperty($name);
                     }
                 }
+
                 $code = 200;
                 $message = "Done {$id}:". serialize($properties)." \n";
             } else {

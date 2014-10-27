@@ -210,7 +210,7 @@ class Frontpage extends Content
      * @return boolean
      */
 
-    public function getFrontpage($date, $category = 0, $version = null)
+    public function getFrontpage($date, $category = 0)
     {
         // if category = 0 => home
         if (is_null($category)

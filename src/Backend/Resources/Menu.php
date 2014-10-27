@@ -30,6 +30,13 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_widgets').'"
         />
         <node
+            module_name="SIDEBAR_MANAGER"
+            privilege="SIDEBAR_ADMIN"
+            title="'.htmlspecialchars(_("Sidebars"), ENT_QUOTES).'"
+            id="sidebar_manager"
+            link="'.url('admin_sidebars').'"
+        />
+        <node
             module_name="MENU_MANAGER"
             privilege="MENU_ADMIN"
             title="'.htmlspecialchars(_("Menus"), ENT_QUOTES).'"

@@ -260,7 +260,7 @@ class FrontpagesController extends Controller
             }
 
             // Restore old frontpage
-            $restore = \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+            \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
 
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
@@ -447,13 +447,11 @@ class FrontpagesController extends Controller
     /**
      * Description of this action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
         $content = $session->get('last_preview');

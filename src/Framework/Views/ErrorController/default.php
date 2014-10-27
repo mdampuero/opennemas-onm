@@ -81,7 +81,7 @@
                             <th>Line</th>
                         </tr>
     <?php
-    foreach ($backtrace as $trace_step) { ?>
+        foreach ($backtrace as $trace_step) { ?>
                         <tr>
                             <td>
                                 <a href="file://{$file}"> <?php echo $trace_step['file']; ?></a>
@@ -98,7 +98,7 @@
                             </td>
                         </tr>
     <?php
-    }       ?>
+        }       ?>
                     </tbody>
                 </table>
             </div>

@@ -50,11 +50,9 @@ class PlaygroundController extends Controller
     /**
      * Tests for session in container
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function session(Request $request)
+    public function session()
     {
         $this->get('session')->getFlashBag()->add(
             'notice',

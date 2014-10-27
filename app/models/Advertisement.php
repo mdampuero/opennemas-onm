@@ -427,7 +427,7 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public static function findForPositionIdsAndCategory($types = array(), $category = 'home', $wsUrl = null)
+    public static function findForPositionIdsAndCategory($types = array(), $category = 'home')
     {
         $banners = array();
         $finalBanners = array();
@@ -554,7 +554,7 @@ class Advertisement extends Content
      *
      * @return string the final html for the ad
      **/
-    public function render($params, $tpl = null)
+    public function render($params)
     {
         $output = '';
 

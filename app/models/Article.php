@@ -198,6 +198,10 @@ class Article extends Content
 
         parent::create($data);
 
+        if (empty($this->id)) {
+            return false;
+        }
+
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
                             `summary`, `img1`, `img1_footer`,
                             `img2`, `img2_footer`, `fk_video`, `fk_video2`,

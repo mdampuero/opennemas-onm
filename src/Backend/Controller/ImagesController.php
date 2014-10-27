@@ -64,12 +64,11 @@ class ImagesController extends Controller
     /**
      * Lists images from an specific category.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('image/list.tpl');
     }
@@ -119,12 +118,11 @@ class ImagesController extends Controller
     /**
      * Show the page for upload new images.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));
@@ -213,7 +211,7 @@ class ImagesController extends Controller
 
         $ids = array();
         $photosSaved = 0;
-        foreach ($photosRAW as $id => $value) {
+        foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'          => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'       => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
@@ -322,7 +320,7 @@ class ImagesController extends Controller
 
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
-                    foreach ($upload['tmp_name'] as $index => $value) {
+                    foreach (array_keys($upload['tmp_name']) as $index) {
 
                         if (empty($upload['tmp_name'][$index])) {
                             $info [] = array(

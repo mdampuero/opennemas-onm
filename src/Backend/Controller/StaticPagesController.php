@@ -45,13 +45,11 @@ class StaticPagesController extends Controller
     /**
      * Shows a list of the static pages
      *
-     * @param Request $request the request object
-     *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return void
      *
      * @Security("has_role('STATIC_PAGE_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('static_pages/list.tpl');
     }

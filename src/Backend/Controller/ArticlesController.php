@@ -64,13 +64,11 @@ class ArticlesController extends Controller
     /**
      * Lists articles in the system
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_PENDINGS') and has_role('ARTICLE_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
@@ -891,13 +889,11 @@ class ArticlesController extends Controller
     /**
      * Description of this action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_ADMIN')")
      **/
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
 

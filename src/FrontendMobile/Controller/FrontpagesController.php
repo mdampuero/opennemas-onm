@@ -144,7 +144,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function latestNewsAction(Request $request)
+    public function latestNewsAction()
     {
         $this->view->setConfig('frontpage-mobile');
 
@@ -235,7 +235,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function redirectCompleteWebAction(Request $request)
+    public function redirectCompleteWebAction()
     {
         setcookie("confirm_mobile", "1", time()+3600, '/');
 

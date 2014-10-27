@@ -18,19 +18,44 @@ class NewsMLG1EFE extends NewsMLG1
      **/
     public function getTexts()
     {
-        $contents = $this->getData()->xpath(
-            "//NewsItem/NewsComponent"
-            ."[@Duid=\"text_".$this->id.".text\"]"
-        );
+        // Multimedia contents
+        $xpathExpresion = "//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]";
+        $multimediaContents = $this->getData()->xpath($xpathExpresion);
+        // Only text contents
+        $xpathExpresion = "//NewsItem/NewsComponent[@Duid=\"text_".$this->id.".text\"]";
+        $textContents = $this->getData()->xpath($xpathExpresion);
 
         $texts = null;
-        if (isset($contents[0]) && $contents[0]->ContentItem) {
-            $component = $contents[0]->ContentItem->DataContent;
+        if (isset($multimediaContents[0]) && $multimediaContents[0]->NewsComponent->ContentItem) {
+            $component = $multimediaContents[0]->NewsComponent->ContentItem->DataContent;
+            $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
+            $texts []= $nitf;
+        } elseif (isset($textContents[0]) && $textContents[0]->ContentItem) {
+            $component = $textContents[0]->ContentItem->DataContent;
             $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
             $texts []= $nitf;
         }
 
         return $texts;
+    }
+
+    /**
+     * Returns the creation datetime of this element
+     *
+     * @return DateTime the datetime of the element
+     **/
+    public function getCreatedTime()
+    {
+        $originalDate = (string) $this->getData()
+                                    ->NewsItem->NewsManagement
+                                    ->FirstCreated;
+        $newDate = str_replace('+0000', '', $originalDate);
+
+        return \DateTime::createFromFormat(
+            'Ymd\THis',
+            $newDate,
+            new \DateTimeZone('Europe/Madrid')
+        );
     }
 
     /**
@@ -44,12 +69,12 @@ class NewsMLG1EFE extends NewsMLG1
     public static function checkFormat($data = null, $xmlFile = null)
     {
         preg_match('@/([0-9a-zA-Z]+).xml@', $xmlFile, $id);
-        $contents = $data->xpath(
-            "//NewsItem/NewsComponent"
-            ."[@Duid=\"text_".$id[1].".text\"]"
-        );
 
-        if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
+        $isEfe = count($data->xpath(
+            "//NewsEnvelope/SentFrom/Party/Property[@Value=\"Agencia EFE\"]"
+        )) > 0;
+
+        if (!$isEfe) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEFE file'), $xmlFile));
         }
 

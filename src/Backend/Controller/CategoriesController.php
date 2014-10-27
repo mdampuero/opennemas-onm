@@ -42,13 +42,11 @@ class CategoriesController extends Controller
     /**
      * Lists all the available categories
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $ccm = \ContentCategoryManager::get_instance();
 

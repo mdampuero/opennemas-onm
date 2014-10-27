@@ -63,12 +63,11 @@ class BooksController extends Controller
         // Setting up available categories for menu.
         $contentManager  = new \ContentManager();
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
-            $this->ccm->getArraysMenu('', $contentType);
+        $parentCategories = $this->ccm->getArraysMenu('', $contentType);
 
         $bookCategories = array();
         $i = 0;
-        foreach ($parentCategories as $cat) {
+        foreach ($parentCategories[0] as $cat) {
             // get only books categories
             if ($cat->internal_category == $contentType) {
                 $bookCategories[$i] = new \stdClass();
@@ -117,7 +116,8 @@ class BooksController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $book = $this->get('entity_repository')->find('Book', $id);
+        $er = $this->get('entity_repository');
+        $book = $er->find('Book', $id);
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-inner');
@@ -137,8 +137,8 @@ class BooksController extends Controller
             );
 
             // Get books cover image
-            foreach ($books as &$book) {
-                $book->cover_img = new \Photo($book->cover_id);
+            foreach ($books as $key => $value) {
+                $books[$key]->cover_img = $er->find('Photo', $value->cover_id);
             }
 
             $this->view->assign(

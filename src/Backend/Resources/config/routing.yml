@@ -104,6 +104,10 @@ admin_widget_update:
 admin_widgets_content_provider:
     path:     /widget/content-provider
     defaults: { _controller  : BackendBundle:Widgets:contentProvider }
+# Sidebar manager routes
+admin_sidebars:
+    path:     /sidebars
+    defaults: { _controller  : BackendBundle:Sidebars:list }
 
 # Menu manager routes
 admin_menus:

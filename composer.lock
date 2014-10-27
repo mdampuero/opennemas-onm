@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f980252f89e56a3e027b1e2f0ff1daa2",
+    "hash": "71cb5d4e7545d6b00da31725d198bf66",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1938,16 +1938,27 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.19",
+            "version": "v3.1.21",
             "source": {
-                "type": "svn",
-                "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.19/@4880"
+                "type": "git",
+                "url": "https://github.com/uwetews/smarty3-dist.git",
+                "reference": "1441f32fce8494a0b153551fe2b659f5ce8e7eed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uwetews/smarty3-dist/zipball/1441f32fce8494a0b153551fe2b659f5ce8e7eed",
+                "reference": "1441f32fce8494a0b153551fe2b659f5ce8e7eed",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "libs/Smarty.class.php",
@@ -1978,7 +1989,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-02 17:56:59"
+            "time": "2014-10-17 23:19:29"
         },
         {
             "name": "swiftmailer/swiftmailer",

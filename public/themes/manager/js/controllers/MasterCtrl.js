@@ -253,12 +253,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * Empties ng-view.
          */
         function refreshApp() {
-            var host = document.getElementById('view');
-            if(host) {
-                var mainDiv = $("#view");
-                mainDiv.empty();
-                angular.element(host).empty();
-            }
+            // var host = document.getElementById('view');
+            // if (host) {
+            //     var mainDiv = $("#view");
+            //     mainDiv.empty();
+            //     angular.element(host).empty();
+            // }
         }
 
         /**

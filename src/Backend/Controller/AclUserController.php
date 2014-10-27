@@ -34,15 +34,12 @@ class AclUserController extends Controller
     /**
      * Show a paginated list of backend users
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('USER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
-
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 
@@ -416,7 +413,7 @@ class AclUserController extends Controller
     {
         $user = new \User($_SESSION['userid']);
 
-        foreach ($request->query as $key => $value) {
+        foreach (array_keys($request->query) as $key) {
             if (!preg_match('@^_@', $key)) {
                 $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
             }
@@ -748,9 +745,9 @@ class AclUserController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The user's id.
-     * @return Response          The response object.
+     * @return void
      */
-    public function disconnectAction(Request $request, $id, $resource)
+    public function disconnectAction($id, $resource)
     {
         $user = $this->get('user_repository')->find($id);
 

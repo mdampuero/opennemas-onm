@@ -15,10 +15,11 @@ class OnmPasswordEncoder implements PasswordEncoderInterface
      */
     public function encodePassword($raw, $salt)
     {
-        if (strpos($raw, 'md5:') === false) {
+        $salt = 'md5:';
+        if (strpos($raw, $salt) === false) {
             return md5($raw);
         } else {
-            return substr($raw, strpos($raw, 'md5:') + 4);
+            return substr($raw, strpos($raw, $salt) + 4);
         }
     }
 

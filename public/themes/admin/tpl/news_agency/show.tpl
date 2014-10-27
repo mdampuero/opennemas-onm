@@ -27,7 +27,7 @@
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile}" title="{t}Import{/t}">
+                <a href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xml_file}" title="{t}Import{/t}">
                 <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
@@ -63,7 +63,7 @@
             <div style="float:left; margin-right: 20px">
                 {foreach from=$element->photos item=photo}
                 <div class="photo" style="width:220px;display:block;">
-                    <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title[$photo@index+1]}" class="thumbnail">
+                    <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail">
                     <div>
                         <p>{$photo->title}</p>
                     </div>
@@ -95,7 +95,7 @@
                         {$element->summary}
                     {/if}
 
-                    <p>{$element->body}</p>
+                    <p>{$element->body|html_entity_decode}</p>
                 </fieldset>
             </fieldset>
         </div>
@@ -103,7 +103,7 @@
         <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
             <div class="photo">
-                <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title[$photo@index+1]}" class="thumbnail">
+                <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title}" class="thumbnail">
                 <div>
                     <strong>{t}Description{/t}:</strong>
                     <p>{$photo->title}</p>

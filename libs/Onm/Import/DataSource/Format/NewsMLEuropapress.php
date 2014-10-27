@@ -20,18 +20,6 @@ namespace Onm\Import\DataSource\Format;
 class NewsMLEuropapress extends NewsMLG1
 {
     /**
-     * Magic method for translate properties into XML elements
-     *
-     * @param string $name the name of the property to get
-     *
-     * @return mixed the property value
-     */
-    public function __get($name)
-    {
-        return parent::__get($name);
-    }
-
-    /**
      * Returns the title of the element
      *
      * @return string the title

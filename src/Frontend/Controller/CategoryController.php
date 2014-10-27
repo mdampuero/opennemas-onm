@@ -76,8 +76,7 @@ class CategoryController extends Controller
 
             $order = array('starttime' => 'DESC');
 
-            $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countArticles = $em->countBy($filters);
+            $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
 
             $imageIdsList = array();
             foreach ($articles as $content) {

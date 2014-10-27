@@ -10,7 +10,7 @@
  *
  * @package Onm_Import
  **/
-namespace Onm\Import\Synchronizer;
+namespace Onm\Import\SourceServer;
 
 /**
  * Class for initialize a Server class handler

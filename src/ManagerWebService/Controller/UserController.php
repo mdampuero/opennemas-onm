@@ -293,7 +293,7 @@ class UserController extends Controller
                 );
             }
         } else {
-            $messages = array(
+            $message = array(
                 'text' => sprintf(_('Unable to find the user with id "%s"'), $id),
                 'type' => 'error'
             );

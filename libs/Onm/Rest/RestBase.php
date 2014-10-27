@@ -19,7 +19,7 @@ use Luracast\Restler\RestException;
  *
  * @package Onm_Rest
  **/
-class RestBase
+abstract class RestBase
 {
     /**
      * Validates a finite number

@@ -16,7 +16,6 @@ namespace WebService\Handlers;
 class Instances
 {
     public $restler;
-    private $mailer;
 
     /**
      * @url GET /instances/name/

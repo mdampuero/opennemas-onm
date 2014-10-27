@@ -169,7 +169,7 @@ class Instances extends \Onm\Rest\RestBase
 
         // Send the email
         $mailer = $this->restler->mailer;
-        $sent = $mailer->send($message, $failures);
+        $mailer->send($message);
     }
 
     /**

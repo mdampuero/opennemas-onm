@@ -91,11 +91,9 @@ class AlbumsController extends Controller
     /**
      * Renders the album frontpage.
      *
-     * @param  Request  $request The request object.
-     *
      * @return Response          The response object.
      */
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
@@ -324,7 +322,7 @@ class AlbumsController extends Controller
         $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
 
         if (empty($this->category)) {
-            $this->category = $this->request->query->getDigits('category', 0);
+            $this->category = $request->query->getDigits('category', 0);
         }
 
         $order = array('created' => 'DESC');

@@ -70,14 +70,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $group      = array();
         $user       = $token->getUser();
-        $userGroups = $user->id_user_group;
         $valid      = true;
-
-        foreach ($userGroups as $group) {
-            $groups[] = \UserGroup::getGroupName($group);
-        }
 
         if ($request->get('recaptcha_challenge_field')) {
             // Get reCaptcha validate response

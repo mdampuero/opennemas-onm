@@ -40,7 +40,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phpBinPath = exec('which php');
         chdir(APPLICATION_PATH);
 
         // Get instance name from prompt
@@ -349,7 +348,7 @@ EOF
      */
     public function processArticles($articles, $field)
     {
-        foreach ($articles as $key => $article) {
+        foreach ($articles as $article) {
             // Get images src from article
             $dom = new \domDocument;
             @$dom->loadHTML($article->{$field}, LIBXML_NOBLANKS | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -359,7 +358,7 @@ EOF
             foreach ($images as $image) {
                 $imageSrc = $image->getAttribute('src');
                 // Do not process some images
-                if (preg_match("/(c:|C:|file:|oir|oir2)/", $imageSrc, $matches) != 1) {
+                if (preg_match("/(c:|C:|file:|oir|oir2)/", $imageSrc) != 1) {
                     // Create image in onm
                     $imageId = $this->processImage(
                         $imageSrc,

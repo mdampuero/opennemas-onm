@@ -162,7 +162,7 @@ class StringUtils
      *
      * @return string the cleaned metadata string
      **/
-    public static function normalizeMetadata($metadata, $separator = ',')
+    public static function normalizeMetadata($metadata)
     {
         $items = explode(',', $metadata);
 

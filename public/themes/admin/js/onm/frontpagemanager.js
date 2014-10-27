@@ -441,8 +441,8 @@ jQuery(function($) {
     $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
 
         var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
-        var element = $('[data-content-id='+elementID+']');
-        var url = frontpage_urls.customize_content;
+        var element   = $('[data-content-id='+elementID+']');
+        var url       = frontpage_urls.customize_content;
 
         var titleValues = new Object();
 
@@ -503,7 +503,7 @@ jQuery(function($) {
                 url:url,
                 type:'POST',
                 dataType: 'json',
-                data: { 'id': elementID, 'properties' : properties}
+                data: { 'id': elementID, 'properties' : properties, 'content_type': element.data('class')}
             }).done(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
                     element.data('bg', 'background-color:'+bgcolor);

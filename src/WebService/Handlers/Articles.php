@@ -37,7 +37,6 @@ class Articles
     {
         $this->validateInt($id);
 
-        $machineSearcher = getService('automatic_contents');
         $er              = getService('entity_repository');
         $ccm             = \ContentCategoryManager::get_instance();
 

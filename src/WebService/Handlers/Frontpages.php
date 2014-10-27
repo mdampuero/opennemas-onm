@@ -36,7 +36,7 @@ class Frontpages
             throw new \RestException(404, 'parameter is not valid');
         } else {
             // Run entire logic
-            $actualCategoryId = $actual_category_id = $ccm->get_id($category);
+            $actualCategoryId = $ccm->get_id($category);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];

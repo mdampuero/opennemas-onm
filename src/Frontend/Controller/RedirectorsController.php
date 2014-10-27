@@ -55,8 +55,6 @@ class RedirectorsController extends Controller
             $newContentID = \Content::resolveID($newContentID);
         }
 
-        $er = $this->get('entity_repository');
-
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = $this->get('entity_repository')->find('Article', $newContentID);
 
@@ -94,6 +92,8 @@ class RedirectorsController extends Controller
             $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
         } else {
             list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            // Unused var $type
+            unset($type);
         }
 
         $category = new \ContentCategory($newContentID);

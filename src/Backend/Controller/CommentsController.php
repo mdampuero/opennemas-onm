@@ -50,13 +50,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         // Select between comments system
         $commentSystem = s::get('comment_system');
@@ -126,13 +124,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultDisqusAction(Request $request)
+    public function defaultDisqusAction()
     {
         $disqusShortName = s::get('disqus_shortname');
         $disqusSecretKey = s::get('disqus_secret_key');
@@ -164,7 +160,7 @@ class CommentsController extends Controller
      **/
     public function configDisqusAction(Request $request)
     {
-        if ($this->request->getMethod() != 'POST') {
+        if ($request->getMethod() != 'POST') {
             $disqusShortName = s::get('disqus_shortname');
             $disqusSecretKey = s::get('disqus_secret_key');
 
@@ -176,8 +172,8 @@ class CommentsController extends Controller
                 )
             );
         } else {
-            $shortname = $this->request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
-            $secretKey = $this->request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
+            $shortname = $request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
+            $secretKey = $request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
 
             if (s::set('disqus_shortname', $shortname) && s::set('disqus_secret_key', $secretKey)) {
                 s::set('comment_system', 'disqus');
@@ -194,13 +190,11 @@ class CommentsController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function defaultFacebookAction(Request $request)
+    public function defaultFacebookAction()
     {
         $fbSettings = s::get('facebook');
 
@@ -226,7 +220,7 @@ class CommentsController extends Controller
     {
         $fbSettings = s::get('facebook');
 
-        if ($this->request->getMethod() != 'POST') {
+        if ($request->getMethod() != 'POST') {
 
             $fbAppId = $fbSettings['api_key'];
 
@@ -237,7 +231,7 @@ class CommentsController extends Controller
                 )
             );
         } else {
-            $fbAppId    = $this->request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
+            $fbAppId    = $request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
             $fbSettings = array_merge($fbSettings, $fbAppId);
 
             if (s::set('facebook', $fbSettings)) {
@@ -255,13 +249,11 @@ class CommentsController extends Controller
     /**
      * Lists comments
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render(
             'comment/list.tpl',
@@ -350,8 +342,8 @@ class CommentsController extends Controller
      **/
     public function configAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
-            $configs = $this->request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
+        if ('POST' == $request->getMethod()) {
+            $configs = $request->request->filter('configs', array(), FILTER_SANITIZE_STRING);
 
             $defaultConfigs = array(
                 'moderation'      => false,

@@ -100,6 +100,8 @@ class CategoryManager extends BaseManager
                 $categories[] = $category;
             }
         }
+        // Unused var $contentType
+        unset($contentType);
 
         $ordered = array();
         foreach ($keys as $id) {

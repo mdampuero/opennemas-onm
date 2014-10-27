@@ -72,13 +72,11 @@ class BooksController extends Controller
     /**
      * Lists all the
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
@@ -93,13 +91,11 @@ class BooksController extends Controller
     /**
      * List books favorites for widget
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
@@ -174,7 +170,7 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->getInt('id');
+        $id = $request->query->getInt('id');
 
         $book = new \Book($id);
 

@@ -428,7 +428,7 @@ class Photo extends Content
 
                     $exif = array();
                     if (isset($info)) {
-                        foreach ($info as $key => $val) {
+                        foreach (array_keys($info) as $key) {
                             if ($key != 'APP1') {
                                 $exifData = @read_exif_data($image, 0, true);
                                 break;

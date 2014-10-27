@@ -62,12 +62,11 @@ class AdsController extends Controller
     /**
      * Lists all the available ads.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         // Get ads positions
         $positionManager = $this->container->get('instance_manager')
@@ -335,14 +334,12 @@ class AdsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $em  = $this->get('advertisement_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
-
         $filters = array(
             'content_type_name'  => array(array('value' => 'advertisement')),
             'type_advertisement' => array(array('value' => 37)),
         );
 
+        $em       = $this->get('advertisement_repository');
         $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countAds = $em->countBy($filters);
 

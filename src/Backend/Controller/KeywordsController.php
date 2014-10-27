@@ -49,8 +49,8 @@ class KeywordsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $name = $this->request->query->filter('name', null, FILTER_SANITIZE_STRING);
-        $page   = $this->request->query->getDigits('page', 1);
+        $name = $request->query->filter('name', null, FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
 
         $filter = '';
         if (!empty($name)) {
@@ -95,7 +95,7 @@ class KeywordsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         $keyword = new \PClave();
         $keyword->read($id);
@@ -120,7 +120,7 @@ class KeywordsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
+        if ('POST' == $request->getMethod()) {
             $data = array(
                 'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
                 'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
@@ -190,7 +190,7 @@ class KeywordsController extends Controller
      **/
     public function deleteAction(Request $request)
     {
-        $id = $this->request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         $keyword = new \PClave();
         $keyword->delete($id);

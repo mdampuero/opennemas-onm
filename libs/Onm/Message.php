@@ -120,7 +120,7 @@ class Message
      *
      * @return string the HTMLgenerated for all the messages registered
      */
-    public static function getHTMLforAll($priority = null)
+    public static function getHTMLforAll()
     {
         $notices = self::getAll(self::NOTICE);
         $errors  = self::getAll(self::ERROR);

@@ -79,7 +79,8 @@ function smarty_function_renderTypeRelated($params, &$smarty)
 
         $html =' <a title="Relacionado: '.$title_cleaned.'" href="'.$content->uri .'"';
     } else {
-        $html =' <a title="Relacionado: '.$title_cleaned.'" href="'. SITE_URL . $uri .'"';
+        $siteUrl = str_replace("https://", "http://", SITE_URL);
+        $html =' <a title="Relacionado: '.$title_cleaned.'" href="'. $siteUrl . $uri .'"';
     }
 
     if ($content->fk_content_type==3) {

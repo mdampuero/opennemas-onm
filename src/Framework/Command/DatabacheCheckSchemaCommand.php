@@ -93,55 +93,55 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
         }
     }
 
-    /**
-     * Cleans column options.
-     *
-     * @param  array $options Column options.
-     * @return array          Cleaned column options.
-     */
-    private function cleanOptions($options)
-    {
-        unset($options['name']);
-        unset($options['type']);
+    // /**
+    //  * Cleans column options.
+    //  *
+    //  * @param  array $options Column options.
+    //  * @return array          Cleaned column options.
+    //  */
+    // private function cleanOptions($options)
+    // {
+    //     unset($options['name']);
+    //     unset($options['type']);
 
-        if ($options['length'] == null) {
-            unset($options['length']);
-        }
+    //     if ($options['length'] == null) {
+    //         unset($options['length']);
+    //     }
 
-        if ($options['notnull'] == true) {
-            unset($options['notnull']);
-        }
+    //     if ($options['notnull'] == true) {
+    //         unset($options['notnull']);
+    //     }
 
-        if ($options['precision'] == 10) {
-            unset($options['precision']);
-        }
+    //     if ($options['precision'] == 10) {
+    //         unset($options['precision']);
+    //     }
 
-        if ($options['scale'] == 0) {
-            unset($options['scale']);
-        }
+    //     if ($options['scale'] == 0) {
+    //         unset($options['scale']);
+    //     }
 
-        if ($options['fixed'] == false) {
-            unset($options['fixed']);
-        }
+    //     if ($options['fixed'] == false) {
+    //         unset($options['fixed']);
+    //     }
 
-        if ($options['unsigned'] == false) {
-            unset($options['unsigned']);
-        }
+    //     if ($options['unsigned'] == false) {
+    //         unset($options['unsigned']);
+    //     }
 
-        if ($options['autoincrement'] == false) {
-            unset($options['autoincrement']);
-        }
+    //     if ($options['autoincrement'] == false) {
+    //         unset($options['autoincrement']);
+    //     }
 
-        if ($options['columnDefinition'] == null) {
-            unset($options['columnDefinition']);
-        }
+    //     if ($options['columnDefinition'] == null) {
+    //         unset($options['columnDefinition']);
+    //     }
 
-        if ($options['comment'] == '') {
-            unset($options['comment']);
-        }
+    //     if ($options['comment'] == '') {
+    //         unset($options['comment']);
+    //     }
 
-        return $options;
-    }
+    //     return $options;
+    // }
 
     /**
      * Creates a Schema from the master schema file.
@@ -155,7 +155,6 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
 
         foreach ($input as $table => $definition) {
             $table = $schema->createTable($table);
-            $columns = array();
 
             // Populate column definitions
             foreach ($definition['columns'] as $field => $value) {
@@ -186,52 +185,52 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
      *
      * @param string $database Database name.
      */
-    private function dumpSchema($database)
-    {
-        $schema = array();
+    // private function dumpSchema($database)
+    // {
+    //     $schema = array();
 
-        $conn = getService('dbal_connection');
-        $conn = $conn->selectDatabase($database);
+    //     $conn = getService('dbal_connection');
+    //     $conn = $conn->selectDatabase($database);
 
-        $sm = $conn->getSchemaManager();
+    //     $sm = $conn->getSchemaManager();
 
-        foreach ($sm->listTables() as $table) {
-            $name = $table->getName();
-            $columns = array();
-            foreach ($table->getColumns() as $column) {
-                $options = $this->cleanOptions($column->toArray());
+    //     foreach ($sm->listTables() as $table) {
+    //         $name = $table->getName();
+    //         $columns = array();
+    //         foreach ($table->getColumns() as $column) {
+    //             $options = $this->cleanOptions($column->toArray());
 
-                $columns[$column->getName()] = array(
-                    'type'    => $column->getType()->getName(),
-                    'options' => $options
-                );
-            }
+    //             $columns[$column->getName()] = array(
+    //                 'type'    => $column->getType()->getName(),
+    //                 'options' => $options
+    //             );
+    //         }
 
-            $indexes = array();
-            foreach ($sm->listTableIndexes($name) as $index) {
-                $newIndex = array(
-                    'name'    => $index->getName(),
-                    'columns' => $index->getColumns(),
-                    'primary' => $index->isPrimary(),
-                    'unique'  => $index->isUnique(),
-                    'flags'   => array()
-                );
-                if ($index->hasFlag('fulltext')) {
-                    $newIndex['flags']['fulltext'] = true;
-                }
+    //         $indexes = array();
+    //         foreach ($sm->listTableIndexes($name) as $index) {
+    //             $newIndex = array(
+    //                 'name'    => $index->getName(),
+    //                 'columns' => $index->getColumns(),
+    //                 'primary' => $index->isPrimary(),
+    //                 'unique'  => $index->isUnique(),
+    //                 'flags'   => array()
+    //             );
+    //             if ($index->hasFlag('fulltext')) {
+    //                 $newIndex['flags']['fulltext'] = true;
+    //             }
 
-                $indexes[] = $newIndex;
-            }
+    //             $indexes[] = $newIndex;
+    //         }
 
-            $schema[$name] = array(
-                'columns' => $columns,
-                'index'   => $indexes
-            );
-        }
+    //         $schema[$name] = array(
+    //             'columns' => $columns,
+    //             'index'   => $indexes
+    //         );
+    //     }
 
-        $yml = Yaml::dump($schema, 4);
-        file_put_contents($this->path, $yml);
-    }
+    //     $yml = Yaml::dump($schema, 4);
+    //     file_put_contents($this->path, $yml);
+    // }
 
     /**
      * Gets the schema for the given database.
@@ -241,8 +240,6 @@ class DatabacheCheckSchemaCommand extends ContainerAwareCommand
      */
     private function getSchema($database)
     {
-        $schema = array();
-
         $conn = getService('dbal_connection');
         $conn = $conn->selectDatabase($database);
 

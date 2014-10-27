@@ -75,8 +75,6 @@ EOF
             $this->cleanCache();
         }
 
-        $currentTimestamp = time();
-
         $this->generateDeployFile();
 
         $this->cleanOpCodeCache();
@@ -109,7 +107,7 @@ EOF
         );
 
         $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 
     /**
@@ -145,7 +143,7 @@ EOF
         );
 
         $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 
     /**
@@ -180,7 +178,7 @@ EOF
             );
 
             $input = new ArrayInput($arguments);
-            $returnCode = $command->run($input, $this->output);
+            $command->run($input, $this->output);
         } catch (\Exception $e) {
 
         }
@@ -198,7 +196,7 @@ EOF
         );
 
         $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 
     /**
@@ -214,7 +212,7 @@ EOF
         );
 
         $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 
     /**
@@ -229,7 +227,7 @@ EOF
         $process = new Process($processLine);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
-                $output->write("\t<error>".$buffer. "<error>");
+                $output->write("\t<error>".$buffer. "</error>");
             } else {
                 $output->write("\t".$buffer);
             }
@@ -248,6 +246,6 @@ EOF
         );
 
         $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+        $command->run($input, $this->output);
     }
 }

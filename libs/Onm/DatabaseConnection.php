@@ -191,7 +191,7 @@ class DatabaseConnection
      */
     private function replaceKeyInArray($callback, $array, $replacement)
     {
-        foreach ($array as $key => $value) {
+        foreach (array_keys($array) as $key) {
             if (is_array($array[$key])) {
                 $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $replacement);
             } else {

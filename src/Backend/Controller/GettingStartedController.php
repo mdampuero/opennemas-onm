@@ -84,10 +84,9 @@ class GettingStartedController extends Controller
     /**
      * Finish the wizard and deletes the user's token.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      */
-    public function finishWizardAction(Request $request)
+    public function finishWizardAction()
     {
         $user = $this->getUser();
         $user->updateUserToken($user->id, null);
