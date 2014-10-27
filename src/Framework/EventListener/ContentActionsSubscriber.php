@@ -52,8 +52,8 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 array('refreshFrontpage', 10),
             ),
             'author.update' => array(
+                array('deleteUserCache', 10),
                 array('deleteAllAuthorsCaches', 5),
-                array('deleteUsersCache', 10),
             ),
             'opinion.update' => array(
                 array('deleteOpinionUpdateCaches', 5),
