@@ -55,6 +55,7 @@ class MultimediaResource
         $this->name         = $this->getName();
         $this->file_type    = $this->getFileType();
         $this->file_path    = $this->getFilePath();
+        $this->media_type   = $this->getMediaType();
 
         return $this;
     }
@@ -120,6 +121,16 @@ class MultimediaResource
     }
 
     /**
+     * Returns the element media type
+     *
+     * @return string the media type
+     **/
+    public function getMediaType()
+    {
+        return $this->getData()['media_type'];
+    }
+
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get
@@ -146,6 +157,10 @@ class MultimediaResource
                 break;
             case 'file_path':
                 return $this->getData()->getFilePath();
+
+                break;
+            case 'media_type':
+                return $this->getData()->getMediaType();
 
                 break;
             case 'created_time':
@@ -178,6 +193,7 @@ class MultimediaResource
             'created_time' => $this->created_time->format(\DateTime::ISO8601),
             'file_type'    => $this->file_type,
             'file_path'    => $this->file_path,
+            'media_type'   => $this->media_type,
         ];
     }
 }
