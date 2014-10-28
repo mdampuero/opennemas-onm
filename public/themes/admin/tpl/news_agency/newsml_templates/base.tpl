@@ -127,7 +127,7 @@
               {else}
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
               {/if}
-                <MediaType FormalName="Photo" />
+                <MediaType FormalName="PhotoFront" />
                 {*<MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photo->size*1024}</SizeInBytes>
@@ -196,7 +196,7 @@
               {else}
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
               {/if}
-                <MediaType FormalName="Photo" />
+                <MediaType FormalName="PhotoInner" />
                 {*<MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
