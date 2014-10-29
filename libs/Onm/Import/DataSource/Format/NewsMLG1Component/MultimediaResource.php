@@ -47,6 +47,7 @@ class MultimediaResource
         $this->created_time = $this->created_time;
         $this->file_type    = $this->file_type;
         $this->file_path    = $this->file_path;
+        $this->media_type   = $this->media_type;
     }
 
     /**
@@ -74,21 +75,12 @@ class MultimediaResource
 
                 break;
             case 'name':
-                $content =
-                    $this->getData()
-                    ->NewsComponent->ContentItem->Characteristics
-                    ->xpath("//Property[contains(@FormalName,'Filename')]");
+                $content = $this->getData()->NewsComponent->ContentItem;
 
-                if (stripos($content[0]->attributes()->FormalName, 'EFE') !== false) {
-                    foreach ($content as $key => $image) {
-                        if ($key % 4 == 1) {
-                            $imageName = (string) $image->attributes()->Value;
-                        }
-                    }
+                if (stripos($content->attributes()->FormalName, 'EFE') !== false) {
+                    $imageName = (string) $content[1]->Characteristics->Property->attributes()->Value;
                 } else {
-                    foreach ($content as $image) {
-                        $imageName = (string) $image->attributes()->Value;
-                    }
+                    $imageName = (string) $content->Characteristics->Property->attributes()->Value;
                 }
 
                 return $imageName;
@@ -144,6 +136,16 @@ class MultimediaResource
                 return \DateTime::createFromFormat('Ymd\THis', $originalDate);
 
                 break;
+
+            case 'media_type':
+
+                $mediaType = $this->getData()->NewsComponent->ContentItem
+                            ->MediaType->attributes()->FormalName;
+
+
+                return (string) $mediaType;
+
+                break;
         }
     }
 
@@ -170,6 +172,7 @@ class MultimediaResource
             'created_time' => $this->created_time->format(\DateTime::ISO8601),
             'file_type'    => $this->file_type,
             'file_path'    => $this->file_path,
+            'media_type'   => $this->media_type,
         ];
     }
 }
