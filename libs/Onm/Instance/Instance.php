@@ -91,6 +91,13 @@ class Instance
     public $activated = 0;
 
     /**
+     * The activated modules of the current instance.
+     *
+     * @var array
+     */
+    public $activated_modules = array();
+
+    /**
      * The array of settings.
      *
      * @var array
