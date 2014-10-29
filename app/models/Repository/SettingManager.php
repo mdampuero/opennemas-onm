@@ -94,7 +94,7 @@ class SettingManager extends BaseManager
         $settingValue = $default;
 
         if (count($this->autoloaded) < count($this->toAutoload)) {
-            $this->fetchAutoloadedProperties();
+            $this->autoloadSettings();
         }
 
         $searched = $name;
@@ -103,25 +103,23 @@ class SettingManager extends BaseManager
         }
 
         $results = array();
-        $missed  = array();
-        foreach ($searched as $setting) {
-            if (in_array($setting, array_keys($this->autoloaded))) {
-                // Get from autoload
-                $results[] = $this->autoloaded[$setting];
-            } else {
-                // Get from cache
-                $value = $this->cache->fetch($setting);
 
-                // Check if the cache result is not a possible "missed" value
-                if ($value !== false) {
-                    $results[] = $value;
-                } else {
-                    $missed[] = $setting;
-                }
-            }
-        }
+        $missed = array_diff($searched, $this->toAutoload);
+        $fromAutoload = array_diff($searched, $missed);
 
-        // Get missed settings from database
+        // Load settings from autoload
+        $results = array_intersect_key(
+            $this->autoloaded,
+            array_flip($fromAutoload)
+        );
+
+        // Load settings from cache
+        $results = array_merge($results, $this->cache->fetch($missed));
+
+        // Check the settings to fetch from database
+        $missed = array_diff($searched, array_keys($results));
+
+        // Load the settings from database
         if (!empty($missed)) {
             $sql = "SELECT name, value FROM `settings` WHERE name IN ('"
                 . implode("', '", $missed) . "')";
@@ -206,25 +204,25 @@ class SettingManager extends BaseManager
     }
 
     /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function fetchAutoloadedProperties()
+     * Load all settings in toAutoload array.
+     */
+    public function autoloadSettings()
     {
         // Build autoload
         if (empty($this->autoloaded)) {
-
             // First search from cache
-            $caches = $this->cache->get($this->toAutoload);
+            $this->autoloaded = $this->cache->fetch($this->toAutoload);
 
             // Check for missed properties
+            $missed = array_diff(
+                $this->toAutoload,
+                array_keys($this->autoloaded)
+            );
 
             // Second search in database
             $rs = $this->conn->fetchAll(
                 "SELECT * FROM `settings` WHERE name IN ('"
-                . implode("', '", $this->toAutoload) . "')"
+                . implode("', '", $missed) . "')"
             );
 
             $names = array();
