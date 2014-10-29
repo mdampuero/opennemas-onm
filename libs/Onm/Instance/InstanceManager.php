@@ -468,8 +468,6 @@ class InstanceManager extends BaseManager
             $this->cache->delete($domain, 'instance');
         }
 
-        $this->cache->delete('activated_modules', $instance->internal_name);
-
         // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
 
