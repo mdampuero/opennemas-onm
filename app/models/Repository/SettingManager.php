@@ -32,9 +32,16 @@ class SettingManager extends BaseManager
      *
      * @var array
      */
-    protected $toAutoload = array('site_color', 'site_description',
-        'site_footer', 'site_keywords', 'site_language', 'site_logo',
-        'site_title', 'time_zone');
+    protected $toAutoload = [
+        'site_color',
+        'site_description',
+        'site_footer',
+        'site_keywords',
+        'site_language',
+        'site_logo',
+        'site_title',
+        'time_zone'
+    ];
 
     /*
      * Initializes the InstanceManager.
@@ -86,21 +93,8 @@ class SettingManager extends BaseManager
 
         $settingValue = $default;
 
-        // Build autoload
-        if (empty($this->autoloaded)) {
-            $rs = $this->conn->fetchAll(
-                "SELECT * FROM `settings` WHERE name IN ('"
-                . implode("', '", $this->toAutoload) . "')"
-            );
-
-            $names = array();
-            foreach ($rs as $setting) {
-                $value = unserialize($setting['value']);
-                $names[] = $setting['name'];
-
-                $this->autoloaded[$setting['name']] = $value;
-                $this->cache->save($setting['name'], $value);
-            }
+        if (count($this->autoloaded) < count($this->toAutoload)) {
+            $this->fetchAutoloadedProperties();
         }
 
         $searched = $name;
@@ -118,7 +112,8 @@ class SettingManager extends BaseManager
                 // Get from cache
                 $value = $this->cache->fetch($setting);
 
-                if (!empty($value)) {
+                // Check if the cache result is not a possible "missed" value
+                if ($value !== false) {
                     $results[] = $value;
                 } else {
                     $missed[] = $setting;
@@ -166,17 +161,14 @@ class SettingManager extends BaseManager
             return false;
         }
 
-        $autoload = 0;
         if (in_array($name, $this->toAutoload)) {
-            $autoload = 1;
             $this->autoloaded[$name] = $value;
         }
 
         $serialized = serialize($value);
-        $sql = "INSERT INTO settings (name,value,autoload) "
-                ."VALUES ('$name', '$serialized', '$autoload') "
-                ."ON DUPLICATE KEY UPDATE value = '$serialized', "
-                . "autoload = '$autoload'";
+        $sql = "INSERT INTO settings (name,value) "
+                ."VALUES ('$name', '$serialized') "
+                ."ON DUPLICATE KEY UPDATE value = '$serialized'";
 
         $rs = $this->conn->executeQuery($sql);
 
@@ -211,5 +203,40 @@ class SettingManager extends BaseManager
         $this->cache->delete($settingName, $cachePrefix);
 
         return true;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function fetchAutoloadedProperties()
+    {
+        // Build autoload
+        if (empty($this->autoloaded)) {
+
+            // First search from cache
+            $caches = $this->cache->get($this->toAutoload);
+
+            // Check for missed properties
+
+            // Second search in database
+            $rs = $this->conn->fetchAll(
+                "SELECT * FROM `settings` WHERE name IN ('"
+                . implode("', '", $this->toAutoload) . "')"
+            );
+
+            $names = array();
+            foreach ($rs as $setting) {
+                $value = unserialize($setting['value']);
+                $names[] = $setting['name'];
+
+                $this->autoloaded[$setting['name']] = $value;
+                $this->cache->save($setting['name'], $value);
+            }
+        }
+
+        return $this;
     }
 }
