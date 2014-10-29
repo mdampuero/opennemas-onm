@@ -126,9 +126,12 @@ class Rss extends ServerAbstract implements ServerInterface
     {
         $article = new \Article();
 
+        $fullBody = (string) htmlentities($content->description).'<br>'.
+                             htmlentities($content->children('content', true));
+
         $article->id               = (string) $content->guid;
         $article->title            = (string) $content->title;
-        $article->body             = (string) htmlentities($content->description);
+        $article->body             = $fullBody;
         $article->created_datetime = new \DateTime($content->pubDate);
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_name    = (string) $content->category;
