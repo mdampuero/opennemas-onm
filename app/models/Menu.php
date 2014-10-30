@@ -145,6 +145,8 @@ class Menu
 
         $this->setMenuElements($id, $data['items']);
 
+        dispatchEventWithParams('menu.create', array('menu' => $this));
+
         return true;
     }
 
@@ -199,7 +201,11 @@ class Menu
             return false;
         }
 
-        return $this->setMenuElements($this->pk_menu, $data['items']);
+        $saved = $this->setMenuElements($this->pk_menu, $data['items']);
+
+        dispatchEventWithParams('menu.update', array('menu' => $this));
+
+        return $saved;
     }
 
     /**
@@ -223,6 +229,8 @@ class Menu
 
         /* Notice log of this action */
         // logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('menu.delete', array('menu' => $this));
 
         return true;
     }
@@ -362,7 +370,7 @@ class Menu
             return $menuItems;
         }
 
-        $i         =0;
+        $i = 0;
         while (!$rs->EOF) {
             $menuItems[$rs->fields['pk_item']] = new stdClass();
             $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];

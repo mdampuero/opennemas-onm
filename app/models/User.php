@@ -220,6 +220,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        dispatchEventWithParams('user.create', array('user' => $this));
+
         return true;
     }
 
@@ -365,6 +367,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -386,6 +390,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if (!$this->deleteMeta($id)) {
             return false;
         }
+
+        dispatchEventWithParams('user.delete', array('user' => $this));
 
         return true;
     }
@@ -483,6 +489,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $cache = getService('cache');
         $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -507,6 +515,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
         $this->accesscategories = self::readAccessCategories($idUser);
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -571,6 +581,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         }
 
         $cache->delete(CACHE_PREFIX . "categories_for_user_".$this->id);
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1022,7 +1034,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1038,7 +1051,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1098,7 +1112,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1118,7 +1133,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1137,7 +1153,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1157,7 +1173,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1216,6 +1232,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1235,6 +1253,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }

@@ -128,6 +128,8 @@ class Subscriptor
 
         $this->id = $GLOBALS['application']->conn->Insert_ID();
 
+        dispatchEventWithParams('newsletter_subscriptor.create', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -223,6 +225,8 @@ class Subscriptor
             return false;
         }
 
+        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -305,6 +309,8 @@ class Subscriptor
             return false;
         }
 
+        dispatchEventWithParams('newsletter_subscriptor.delete', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -324,6 +330,8 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             return false;
         }
+
+        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
 
         return true;
     }
@@ -370,6 +378,8 @@ class Subscriptor
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $data);
         }
+
+        // dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
 
         if (!$rs) {
             return false;
