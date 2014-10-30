@@ -45,39 +45,39 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // Author hooks
             'author.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'author.update' => [
                 ['deleteAllAuthorsCaches', 5],
                 ['deleteUsersCache', 10],
             ],
             'author.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Category hooks
             'category.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'category.update' => [
                 ['deleteCustomCss', 5],
                 ['deleteCategoryCache', 5]
             ],
             'category.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Comment hooks
             'comment.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'comment.update' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'comment.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Content hooks
             'content.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'content.update' => [
                 ['deleteEntityRepositoryCache', 10],
@@ -86,7 +86,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['sendVarnishRequestCleaner', 5],
             ],
             'content.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'content.set_positions' => [
                 ['refreshFrontpage', 10],
@@ -98,27 +98,27 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['cleanFrontpageObjectCache', 5]
             ],
             'frontpage.pick_layout' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Menu hooks
             'menu.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'menu.update' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'menu.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Newsletter subscriptor
             'newsletter_subscriptor.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'newsletter_subscriptor.update' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'newsletter_subscriptor.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // Opinion hooks
             'opinion.update' => [
@@ -129,35 +129,45 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // Setting hooks
             'setting.update' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // User hooks
             'user.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'user.update' => [
                 ['deleteUserCache', 10],
             ],
             'user.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'user.social.connect' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'user.social.disconnect' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             // UserGroup hooks
             'usergroup.create' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'usergroup.update' => [
-                [0],
+                ['mockHookAction', 0],
             ],
             'usergroup.delete' => [
-                [0],
+                ['mockHookAction', 0],
             ],
         ];
+    }
+
+    /**
+     * Mock action for hook events
+     *
+     * @param Event $event The event to handle.
+     */
+    public function mockHookAction(Event $event)
+    {
+        return true;
     }
 
     /**
@@ -461,8 +471,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function deleteUserCache(Event $event)
     {
-        $id = $event->getArgument('id');
+        $user = $event->getArgument('user');
 
-        $this->cacheHandler->delete('user-' . $id);
+        $this->cacheHandler->delete('user-' . $user->id);
     }
 }
