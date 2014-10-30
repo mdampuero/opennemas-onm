@@ -45,8 +45,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
 
-    kernel.listener.content_subscriber:
-        class: Framework\EventListener\ContentActionsSubscriber
+    kernel.listener.hooks_subscriber:
+        class: Framework\EventListener\HooksSubscriber
         arguments: [ @cache, @logger ]
         tags:
             - { name: kernel.event_subscriber }

@@ -236,6 +236,8 @@ class Comment
         $data['id'] = $GLOBALS['application']->conn->Insert_ID();
         $this->load($data);
 
+        dispatchEventWithParams('comment.create', array('comment' => $this));
+
         return $this;
     }
 
@@ -304,6 +306,8 @@ class Comment
         // Load new data
         $this->load($data);
 
+        dispatchEventWithParams('comment.update', array('comment' => $this));
+
         return $this;
     }
 
@@ -329,6 +333,8 @@ class Comment
             throw new \Exception(_('Database error.'));
         }
 
+        dispatchEventWithParams('comment.delete', array('comment' => $this));
+
         return true;
     }
 
@@ -344,6 +350,8 @@ class Comment
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('comment.delete', array('comment' => $this));
 
         return true;
     }
@@ -466,6 +474,8 @@ class Comment
             return false;
         }
 
+        dispatchEventWithParams('comment.update', array('comment' => $this));
+
         return true;
     }
 
@@ -488,6 +498,8 @@ class Comment
         if (is_null($rs->fields['max'])) {
             return false;
         }
+
+        dispatchEventWithParams('comment.update', array('comment' => $this));
 
         return $rs->fields['max'];
     }

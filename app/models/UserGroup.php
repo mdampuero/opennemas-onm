@@ -79,6 +79,8 @@ class UserGroup
             return $this->insertPrivileges($data['privileges']);
         }
 
+        dispatchEventWithParams('usergroup.create', array('usergroup' => $this));
+
         return true;
     }
 
@@ -152,6 +154,8 @@ class UserGroup
                 return $this->insertPrivileges($data['privileges']);
             }
 
+            dispatchEventWithParams('usergroup.update', array('usergroup' => $this));
+
             return true;
         }
 
@@ -175,7 +179,11 @@ class UserGroup
             return false;
         }
 
-        return $this->deletePrivileges($id);
+        $isDeleted = $this->deletePrivileges($id);
+
+        dispatchEventWithParams('usergroup.delete', array('usergroup' => $this));
+
+        return $isDeleted;
     }
 
     /**
