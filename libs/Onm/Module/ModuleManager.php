@@ -60,7 +60,9 @@ class ModuleManager
     public static function getActivatedModules()
     {
         //global $activatedModules;
-        $activatedModules = \Onm\Settings::get('activated_modules');
+
+        $activatedModules = getService('instance_manager')->current_instance
+            ->activated_modules;
 
         if (is_null(self::$activatedModules)) {
 
@@ -383,7 +385,9 @@ class ModuleManager
      */
     public static function checkAllModulesActivated()
     {
-        $activatedModules = \Onm\Settings::get('activated_modules');
+        $activatedModules = getService('instance_manager')->current_instance
+            ->activated_modules;
+
         if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
         }
