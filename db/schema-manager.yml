@@ -27,6 +27,9 @@ instances:
         settings:
             type: text
             options: { default: null, length: 65532, notnull: false }
+        activated_modules:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         activated:
             type: boolean
             options: { default: null }
