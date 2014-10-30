@@ -683,6 +683,7 @@ class Content
         logContentEvent(__METHOD__, $this);
 
         dispatchEventWithParams('content.update', array('content' => $this));
+        dispatchEventWithParams('content.delete', array('content' => $this));
     }
 
     /**
