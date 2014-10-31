@@ -97,20 +97,33 @@ class SettingManager extends BaseManager
             $this->autoloadSettings();
         }
 
+        $results = array();
+
         $searched = $name;
         if (!is_array($name)) {
+            // $name like setting
             $searched = array($name);
-        }
 
-        $results = array();
+            if ($default != null) {
+                $default = array($default);
+                $results = array_combine($searched, $default);
+            }
+        } else {
+            // $name like [ setting1 => default1, setting2 => default2 ]
+            $searched = array_keys($name);
+            $results = $name;
+        }
 
         $missed = array_diff($searched, $this->toAutoload);
         $fromAutoload = array_diff($searched, $missed);
 
         // Load settings from autoload
-        $results = array_intersect_key(
-            $this->autoloaded,
-            array_flip($fromAutoload)
+        $results = array_merge(
+            $results,
+            array_intersect_key(
+                $this->autoloaded,
+                array_flip($fromAutoload)
+            )
         );
 
         // Load settings from cache
