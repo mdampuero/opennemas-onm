@@ -126,10 +126,6 @@ class SettingManager extends BaseManager
 
             $rs = $this->conn->fetchAll($sql);
 
-            if (!$rs) {
-                return false;
-            }
-
             foreach ($rs as $setting) {
                 $value = unserialize($setting['value']);
                 $results[$setting['name']] = $value;
