@@ -65,16 +65,13 @@ class L10nSystemListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        $settings = $this->sm->get(array('time_zone', 'site_language'));
+        $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));
 
-        $timezone = array_key_exists('time_zone', $settings) ?
-            $settings['time_zone'] : 335;
-        $language = array_key_exists('site_language', $settings) ?
-            $settings['site_language'] : 'en';
+        $language = $settings['site_language'];
 
-        if (isset($timezone)) {
+        if (isset($settings['time_zone'])) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
+            date_default_timezone_set($availableTimezones[$settings['time_zone']]);
         }
 
         $availableLanguages = $this->container->getParameter('available_languages');
