@@ -108,7 +108,7 @@ class SettingManager extends BaseManager
                 $default = array($default);
                 $results = array_combine($searched, $default);
             }
-        } else {
+        } elseif (array_keys($name) !== range(0, count($name) - 1)) {
             // $name like [ setting1 => default1, setting2 => default2 ]
             $searched = array_keys($name);
             $results = $name;
