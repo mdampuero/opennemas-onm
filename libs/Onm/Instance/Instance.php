@@ -91,6 +91,13 @@ class Instance
     public $activated = 0;
 
     /**
+     * The activated modules of the current instance.
+     *
+     * @var array
+     */
+    public $activated_modules = array();
+
+    /**
      * The array of settings.
      *
      * @var array
@@ -216,30 +223,6 @@ class Instance
      * @var integer
      */
     public $emails = 0;
-
-    /**
-     * Array of deltas for counters.
-     *
-     * @var array
-     */
-    public $deltas = array(
-        'contents'       => 0,
-        'articles'       => 0,
-        'opinions'       => 0,
-        'advertisements' => 0,
-        'attachments'    => 0,
-        'albums'         => 0,
-        'photos'         => 0,
-        'videos'         => 0,
-        'widgets'        => 0,
-        'static_pages'   => 0,
-        'letters'        => 0,
-        'media_size'     => 0,
-        'alexa'          => 0,
-        'page_views'     => 0,
-        'users'          => 0,
-        'emails'         => 0
-    );
 
     /**
      * Initializes all the application values for the instance.

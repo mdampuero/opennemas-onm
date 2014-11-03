@@ -25,13 +25,29 @@ use Onm\Settings as s;
 class L10nSystemListener implements EventSubscriberInterface
 {
     /**
+     * The service container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * The settings manager.
+     *
+     * @var SettingManager
+     */
+    protected $sm;
+
+    /**
      * Initializes the l10system.
      *
-     * @param SettingManager $sr The settings manager.
+     * @param Container      $container The settings manager.
+     * @param SettingManager $sm        The settings manager.
      */
-    public function __construct($sr)
+    public function __construct($container, $sm)
     {
-        $this->sr = $sr;
+        $this->container = $container;
+        $this->sm = $sm;
     }
 
     /**
@@ -46,21 +62,19 @@ class L10nSystemListener implements EventSubscriberInterface
             return;
         }
 
-        global $kernel;
-        $container = $kernel->getContainer();
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        $settings = $this->sr->get(array('time_zone', 'site_language'));
-        $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 335;
-        $language = array_key_exists('site_language', $settings) ? $settings['site_language'] : 'en';
+        $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));
 
-        if (isset($timezone)) {
+        $language = $settings['site_language'];
+
+        if (isset($settings['time_zone'])) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
+            date_default_timezone_set($availableTimezones[$settings['time_zone']]);
         }
 
-        $availableLanguages = $container->getParameter('available_languages');
+        $availableLanguages = $this->container->getParameter('available_languages');
         $forceLanguage = $request->query->filter('language', null, FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null
@@ -68,11 +82,7 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            if (isset($session) && $session->get('user_language')) {
-                $userLanguage = $session->get('user_language') ?: 'default';
-            } else {
-                $userLanguage = 'default';
-            }
+            $userLanguage = $session->get('user_language', 'default');
 
             if ($userLanguage != 'default') {
                 $language = $userLanguage;

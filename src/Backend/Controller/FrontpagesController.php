@@ -307,6 +307,8 @@ class FrontpagesController extends Controller
         ) {
             $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
 
+            $this->dispatchEvent('frontpage.pick_layout', array('category' => $category));
+
             m::add(sprintf(_('Layout %s seleted.'), $layout), m::SUCCESS);
         } else {
             m::add(_('Layout or category not valid.'), m::ERROR);

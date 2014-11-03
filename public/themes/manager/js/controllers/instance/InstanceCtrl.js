@@ -9,11 +9,11 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          */
         $scope.instance = {
             domains: [],
+            activated_modules: [],
             settings: {
                 TEMPLATE_USER: 'base'
             },
             external: {
-                activated_modules: [],
                 site_language: 'es_ES',
                 pass_level:    -1,
                 max_mailing:   0,
@@ -48,12 +48,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 module = $scope.template.available_modules[module]
                 if (module.plan == plan) {
                     if ($scope.selected.plan[plan]) {
-                        if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
-                            $scope.instance.external.activated_modules.push(module.id);
+                        if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
+                            $scope.instance.activated_modules.push(module.id);
                         }
                     } else {
-                        $scope.instance.external.activated_modules.splice(
-                            $scope.instance.external.activated_modules.indexOf(module.id),
+                        $scope.instance.activated_modules.splice(
+                            $scope.instance.activated_modules.indexOf(module.id),
                             1
                         );
                     }
@@ -73,7 +73,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             for (var module in $scope.template.available_modules) {
                 module = $scope.template.available_modules[module]
                 if (module.plan == plan) {
-                    if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
+                    if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
                         return false;
                     }
                 }
@@ -154,13 +154,13 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 for (var module in $scope.template.available_modules) {
                     module = $scope.template.available_modules[module];
 
-                    if ($scope.instance.external.activated_modules.indexOf(module.id) === -1) {
-                        $scope.instance.external.activated_modules.push(module.id);
+                    if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
+                        $scope.instance.activated_modules.push(module.id);
                     }
                 }
             } else {
                 $scope.selected.all = false;
-                $scope.instance.external.activated_modules = [];
+                $scope.instance.activated_modules = [];
             }
         };
 
@@ -207,7 +207,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             // Select Base plan as default
             for (var i = 0; i < data.template.available_modules.length; i++) {
                 if (data.template.available_modules[i].plan == 'Base') {
-                    $scope.instance.external.activated_modules.push(
+                    $scope.instance.activated_modules.push(
                         data.template.available_modules[i].id);
                 }
             };

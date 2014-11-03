@@ -727,6 +727,8 @@ class AclUserController extends Controller
             $resourceName = 'Twitter';
         }
 
+        $this->dispatchEvent('social.disconnect', array('user' => $user));
+
         return $this->render(
             'acl/user/social.tpl',
             array(
@@ -759,6 +761,8 @@ class AclUserController extends Controller
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_email');
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
+
+        $this->dispatchEvent('social.connect', array('user' => $user));
 
         return $this->redirect(
             $this->generateUrl(

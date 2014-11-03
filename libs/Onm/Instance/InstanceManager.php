@@ -468,8 +468,6 @@ class InstanceManager extends BaseManager
             $this->cache->delete($domain, 'instance');
         }
 
-        $this->cache->delete('activated_modules', $instance->internal_name);
-
         // Delete instance from cache
         $this->cache->delete('instance' . $this->cacheSeparator . $instance->id);
 
@@ -655,16 +653,12 @@ class InstanceManager extends BaseManager
         $this->cache->setNamespace($instance->internal_name);
         $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
 
-        $settings = array('activated_modules', 'pass_level', 'piwik', 'max_mailing');
+        $settings = array('pass_level', 'piwik', 'max_mailing');
 
         foreach ($settings as $key) {
             $this->sm->invalidate($key);
 
             $value = '';
-            if ($key == 'activated_modules') {
-                $value = array();
-            }
-
             if (array_key_exists($key, $instance->external)) {
                 $value = $instance->external[$key];
             }

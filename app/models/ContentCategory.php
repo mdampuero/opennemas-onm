@@ -157,6 +157,8 @@ class ContentCategory
 
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
 
+        dispatchEventWithParams('category.create', array('category' => $this));
+
         return true;
     }
 
@@ -252,6 +254,7 @@ class ContentCategory
             }
 
             dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.delete', array('category' => $this));
 
             return true;
         } else {

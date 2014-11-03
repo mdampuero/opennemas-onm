@@ -212,7 +212,7 @@
                         </label>
                     </div>
                     <div class="checkbox check-default col-sm-4" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
-                        <input id="checkbox-[% module.id %]" checklist-model="instance.external.activated_modules" checklist-value="module.id" type="checkbox">
+                        <input id="checkbox-[% module.id %]" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
                         <label for="checkbox-[% module.id %]">
                             [% module.name %]
                         </label>
