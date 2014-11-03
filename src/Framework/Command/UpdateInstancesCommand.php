@@ -157,11 +157,10 @@ class UpdateInstancesCommand extends ContainerAwareCommand
                 }
 
                 $type = $value['type'] . 's';
-                $i->deltas[$type] = $value['total'] - $i->{$type};
                 $i->{$type} = $value['total'];
                 $contents += $value['total'];
             }
-            $i->deltas['contents'] = $contents - $i->contents;
+
             $i->contents = $contents;
         }
 

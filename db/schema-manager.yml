@@ -87,9 +87,6 @@ instances:
         users:
             type: integer
             options: { default: 0, unsigned: true }
-        deltas:
-            type: text
-            options: { default: null, length: 65532 }
     index:
         -
             name: PRIMARY
