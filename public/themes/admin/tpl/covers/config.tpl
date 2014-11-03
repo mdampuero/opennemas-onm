@@ -32,11 +32,11 @@
                     <select name="kiosko_settings[orderFrontpage]" id="kiosko_settings[orderFrontpage]" class="required">
                         <option value="sections" {if $configs['kiosko_settings']['orderFrontpage'] eq "sections"} selected {/if}>{t}Sections{/t}</option>
                         <option value="dates" {if $configs['kiosko_settings']['orderFrontpage'] eq "dates"} selected {/if}>{t}Dates{/t}</option>
-                        <option value="grouped" {if $configs['kiosko_settings']['orderFrontpage'] eq "grouped"} selected {/if}>{t}Dates grouped{/t}</option>
+                        <option value="grouped" {if $configs['kiosko_settings']['orderFrontpage'] eq "grouped"} selected {/if}>{t}Grouped by date{/t}</option>
                     </select>
                     <div class="help-block">
                         {t}Select if order newsstand's frontpage by dates or by section.{/t} <br>
-                        {t}Dates grouped is recommended for weekly newspapers.{/t}
+                        {t}Grouped by date is recommended for weekly newspapers.{/t}
                     </div>
                 </div>
             </div>

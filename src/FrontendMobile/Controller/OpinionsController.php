@@ -38,7 +38,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $categoryName = 'opinion';
 
@@ -74,7 +74,7 @@ class OpinionsController extends Controller
             }
 
             foreach ($opinions as &$opinion) {
-                $opinion['author_name_slug'] = \Onm\StringUtils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = \Onm\StringUtils::getTitle($opinion['name']);
             }
 
 

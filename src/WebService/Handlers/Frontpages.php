@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
+/**
+ * Handles REST actions for frontpages.
+ *
+ * @package WebService
+ **/
 class Frontpages
 {
     public $restler;
@@ -12,7 +25,7 @@ class Frontpages
         /**
          * Init the Content and Database object
         */
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
 
         // Check if category exists and initialize contents var
         $existsCategory = $ccm->exists($category);
@@ -20,16 +33,16 @@ class Frontpages
 
         if (!$existsCategory) {
             // throw RestException bad category
-            throw new RestException(404, 'parameter is not valid');
+            throw new \RestException(404, 'parameter is not valid');
         } else {
             // Run entire logic
-            $actualCategoryId = $actual_category_id = $ccm->get_id($category);
+            $actualCategoryId = $ccm->get_id($category);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
             }
 
-            $cm = new ContentManager;
+            $cm = new \ContentManager;
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
             // Filter articles if some of them has time scheduling and sort them by position
             $contentsInHomepage = $cm->getInTime($contentsInHomepage);
@@ -56,7 +69,7 @@ class Frontpages
             }
 
             foreach ($imageList as &$img) {
-                $img->media_url = MEDIA_IMG_PATH_WEB;
+                $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
             }
 
             $ur = getService('user_repository');
@@ -78,9 +91,18 @@ class Frontpages
                         ->loadRelatedContents($category);
 
                 //Change uri for href links except widgets
-                if ($content->content_type != 'Widget') {
+                if ($content->content_type_name != 'widget') {
                     $content->uri = "ext".$content->uri;
+
+                    // Overload floating ads with external url's
+                    if ($content->content_type_name == 'advertisement') {
+                        $content->extWsUrl = SITE_URL;
+                        $content->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($content->created))
+                            .sprintf('%06d', $content->pk_advertisement).'.html';
+                        $content->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+                    }
                 }
+
 
                 // Generate uri for related content
                 foreach ($content->related_contents as &$item) {
@@ -92,7 +114,7 @@ class Frontpages
                         $basePath = INSTANCE_MEDIA;
 
                         // Get file path for attachments
-                        $filePath = ContentManager::getFilePathFromId($item->id);
+                        $filePath = \ContentManager::getFilePathFromId($item->id);
 
                         // Compose the full url to the file
                         $item->fullFilePath = $basePath.FILE_DIR.$filePath;
@@ -101,6 +123,7 @@ class Frontpages
                     }
                 }
             }
+
             // Use htmlspecialchars to avoid utf-8 erros with json_encode
             return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
         }
@@ -157,7 +180,7 @@ class Frontpages
         }
 
         foreach ($imageList as &$img) {
-            $img->media_url = MEDIA_IMG_PATH_WEB;
+            $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
         }
 
         $ur = getService('user_repository');
@@ -170,7 +193,7 @@ class Frontpages
             $content->author         = $ur->find($content->fk_author);
             if (!is_null($content->author)) {
                 $content->author->photo  = $content->author->getPhoto();
-                $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
+                $content->author->photo->media_url  = MEDIA_IMG_ABSOLUTE_URL;
                 $content->author->external = 1;
             }
 

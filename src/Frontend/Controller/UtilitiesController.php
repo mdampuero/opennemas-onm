@@ -28,21 +28,6 @@ use Onm\Settings as s;
 class UtilitiesController extends Controller
 {
     /**
-     * Displays an advertisement given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function acceptCookiesAction(Request $request)
-    {
-        $response = new Response('ok');
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('cookieoverlay_accepted', true, 0));
-
-        return $response;
-    }
-
-    /**
      * Integrates the sharrre jQuery plugin into ONM
      *
      * @return Response the response object

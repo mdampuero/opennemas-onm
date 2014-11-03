@@ -42,13 +42,11 @@ class CategoriesController extends Controller
     /**
      * Lists all the available categories
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $ccm = \ContentCategoryManager::get_instance();
 
@@ -156,17 +154,12 @@ class CategoriesController extends Controller
                 m::add(_("Category created successfully."), m::SUCCESS);
             }
 
-            $continue = $request->request->getDigits('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_category_show',
-                        array('id' => $category->pk_content_category)
-                    )
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_categories'));
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_category_show',
+                    array('id' => $category->pk_content_category)
+                )
+            );
         } else {
             $allcategorys  = $ccm->categories;
             $categories = array();

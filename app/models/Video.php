@@ -76,7 +76,7 @@ class Video extends Content
                 return $this->getUri();
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -302,9 +302,8 @@ class Video extends Content
             throw new Exception(
                 sprintf(
                     _(
-                        'Seems that the server limits file uploads up to %s Mb. '
-                        .'Try to upload files smaller than that size or '
-                        .'contact with your administrator'
+                        'The server limits file uploads up to %s Mb. '
+                        .'Try to upload files smaller than that size.'
                     ),
                     (int) ini_get('upload_max_filesize')
                 )
@@ -376,12 +375,7 @@ class Video extends Content
                 exec($shellCommand, $outputExec, $returnExec);
                 unset($outputExec);
                 if ($returnExec !== 0) {
-                    throw new \Exception(
-                        _(
-                            'There was a problem while converting your video. '
-                            .'Please contact with your administrator.'
-                        )
-                    );
+                    throw new \Exception(_('There was a problem while converting your video. '));
                 };
 
                 break;
@@ -430,7 +424,7 @@ class Video extends Content
         ));
         $video = $ffmpeg->open($flvPath);
 
-        foreach ($sizes as $name => $sizeValues) {
+        foreach (array_keys($sizes) as $name) {
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail
             $flvFileInfo = pathinfo($flvPath);

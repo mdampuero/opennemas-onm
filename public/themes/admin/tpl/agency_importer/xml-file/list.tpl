@@ -4,7 +4,6 @@
 {/block}
 
 {block name="header-js" prepend}
-     {script_tag src="/addFiles.js" language="javascript"}
 {/block}
 
 {block name="content"}

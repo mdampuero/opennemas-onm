@@ -7,7 +7,7 @@
         <select class="select2" ng-model="shvs.search.blog" data-label="{t}Type{/t}">
             <option value="-1">-- All --</option>
             <option value="0">Opinion</option>
-            <option value="1">Blog</option>
+            {is_module_activated name="BLOG_MANAGER"}<option value="1">Blog</option>{/is_module_activated}
         </select>
         &nbsp;&nbsp;
         <select class="select2" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
@@ -66,7 +66,7 @@
                         [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                 <td class="center">
-                    [% content.views %]
+                    [% shvs.extra.views[content.id] %]
                 </td>
                 <td class="center">
                     {acl isAllowed="OPINION_HOME"}

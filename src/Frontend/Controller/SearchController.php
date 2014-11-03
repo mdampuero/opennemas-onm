@@ -55,7 +55,7 @@ class SearchController extends Controller
      *
      * @return Response the response object
      **/
-    public function internalAction($request)
+    public function internalAction()
     {
         // TODO: Implement
         return new Response('Not implemented', 501);

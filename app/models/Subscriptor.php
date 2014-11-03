@@ -128,6 +128,8 @@ class Subscriptor
 
         $this->id = $GLOBALS['application']->conn->Insert_ID();
 
+        dispatchEventWithParams('newsletter_subscriptor.create', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -223,6 +225,8 @@ class Subscriptor
             return false;
         }
 
+        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -305,6 +309,8 @@ class Subscriptor
             return false;
         }
 
+        dispatchEventWithParams('newsletter_subscriptor.delete', array('subscriptor' => $this));
+
         return true;
     }
 
@@ -316,7 +322,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor status property was changed
      **/
-    public function set_status($id, $status)
+    public function setStatus($id, $status)
     {
         $sql = 'UPDATE ' . $this->tableName
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
@@ -324,6 +330,8 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             return false;
         }
+
+        dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
 
         return true;
     }
@@ -335,7 +343,7 @@ class Subscriptor
      *
      * @return boolean true if the subscriptor is already registered
      **/
-    public function exists_email($email)
+    public function existsEmail($email)
     {
         $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
@@ -370,6 +378,8 @@ class Subscriptor
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $data);
         }
+
+        // dispatchEventWithParams('newsletter_subscriptor.update', array('subscriptor' => $this));
 
         if (!$rs) {
             return false;

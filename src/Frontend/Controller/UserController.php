@@ -30,11 +30,9 @@ class UserController extends Controller
     /**
      * Shows the user information
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         if (is_array($_SESSION)
             && array_key_exists('userid', $_SESSION)
@@ -218,11 +216,11 @@ class UserController extends Controller
         if ($user->id > 0) {
             if ($user->update($data)) {
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $data['id']));
+                $this->dispatchEvent('author.update', array('id' => $data['id']));
 
                 m::add(_('Data updated successfully'), m::SUCCESS);
             } else {
-                m::add(_('There was an error while updating the user data.'), m::ERROR);
+                m::add(_('Unable to update the user.'), m::ERROR);
             }
         } else {
             m::add(_('The user does not exists.'), m::ERROR);
@@ -236,11 +234,9 @@ class UserController extends Controller
     /**
      * Shows the user box
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function userBoxAction(Request $request)
+    public function userBoxAction()
     {
         $this->view = new \Template(TEMPLATE_USER);
 
@@ -331,12 +327,12 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                m::add(_('Unable to send your welcome email. Please try it later.'), m::ERROR);
+                m::add(_('Unable to send your welcome email.'), m::ERROR);
             }
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
-            m::add(_('There was an error while creating your user account. Please try again'), m::ERROR);
+            m::add(_('There was an error while creating your user account.'), m::ERROR);
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
@@ -544,11 +540,10 @@ class UserController extends Controller
     /**
      * Generates the HTML for the user menu by ajax
      *
-     * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function getUserMenuAction(Request $request)
+    public function getUserMenuAction()
     {
         $login     = $this->generateUrl('frontend_auth_login');
         $logout    = $this->generateUrl('frontend_auth_logout');
@@ -606,12 +601,16 @@ class UserController extends Controller
                 $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
                 $user->getMeta();
 
-                $searchCriteria = "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                    ."AND content_status=1 AND in_litter=0";
+                $criteria = array(
+                    'fk_author'       => array(array('value' => $user->id)),
+                    'fk_content_type' => array(array('value' => array(1, 4, 7, 9), 'operator' => 'IN')),
+                    'content_status'  => array(array('value' => 1)),
+                    'in_litter'       => array(array('value' => 0)),
+                );
 
                 $er = $this->get('entity_repository');
-                $contentsCount  = $er->countBy($searchCriteria);
-                $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+                $contentsCount  = $er->countBy($criteria);
+                $contents = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
                 foreach ($contents as &$item) {
                     $item = $item->get($item->id);
@@ -779,10 +778,10 @@ class UserController extends Controller
      *
      * @return void
      **/
-    public static function getInnerAds($category = 'home')
+    public static function getInnerAds($category = 0)
     {
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

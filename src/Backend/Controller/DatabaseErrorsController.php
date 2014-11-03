@@ -96,13 +96,11 @@ class DatabaseErrorsController extends Controller
     /**
      * Performs the action of saving the configuration settings
      *
-     * @param Request $request the request object
-     *
      * @return string the response
      *
      * @Security("has_role('ROLE_MASTER')")
      **/
-    public function purgeAction(Request $request)
+    public function purgeAction()
     {
         if (!Acl::isMaster()) {
             m::add("You don't have permissions");

@@ -40,7 +40,7 @@ class AclUserController extends Controller
      *
      * @Security("has_role('USER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
@@ -177,7 +177,7 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("User data sent not valid."), m::ERROR);
+            m::add(_("The data send by the user is not valid."), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }
@@ -203,7 +203,7 @@ class AclUserController extends Controller
 
         $file = $request->files->get('avatar');
 
-        // Get max users from settings
+	// Get max users from settings
         $maxUsers = s::get('max_users');
         // Check total activated users remaining before updating
         $updateEnabled = true;
@@ -211,63 +211,59 @@ class AclUserController extends Controller
             $updateEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
         }
 
-        if ($updateEnabled) {
-            try {
-                // Upload user avatar if exists
-                if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
-                    $data['avatar_img_id'] = $photoId;
-                } elseif (($data['avatar_img_id']) == 1) {
-                    $data['avatar_img_id'] = $user->avatar_img_id;
-                }
-
-                // Process data
-                if ($user->update($data)) {
-                    // Set all usermeta information (twitter, rss, language)
-                    $meta = $request->request->get('meta');
-                    foreach ($meta as $key => $value) {
-                        $user->setMeta(array($key => $value));
-                    }
-
-                    // Set usermeta paywall time limit
-                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                    if (!empty($paywallTimeLimit)) {
-                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                        $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                    }
-
-                    // Clear caches
-                    $this->dispatchEvent('author.update', array('authorId' => $userId));
-                   
-                    if ($user->id == $_SESSION['userid']) {
-                        $_SESSION['user_language'] = $meta['user_language'];
-                    }
-                    // Check if is an author and delete caches
-                    if (in_array('3', $data['id_user_group'])) {
-                        // Clear caches
-                        $this->dispatchEvent('author.update', array('authorId' => $userId));
-                    } else {
-                        // Clear caches
-                        $this->dispatchEvent('user.update', array('authorId' => $userId));
-                    }
-
-                    $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
-                } else {
-                    $request->getSession()->getFlashBag()->add(
-                        'error',
-                        _('Unable to update the user with that information')
-                    );
-                }
-            } catch (\Exception $e) {
-                $request->getSession()->getFlashBag()->add('error', $e->getMessage());
-            }
-        } else {
-            $request->getSession()->getFlashBag()->add(
+	if (!$updateEnabled) {
+	    $request->getSession()->getFlashBag()->add(
                 'error',
                 _('Unable to change user backend access. You have reached the max number of users.')
             );
+
+	    return $this->redirect(
+	        $this->generateUrl('admin_acl_user_show', array('id' => $userId))
+	    );
+	}
+
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
+
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
+
+                if ($user->id == $_SESSION['userid']) {
+                    $_SESSION['user_language'] = $meta['user_language'];
+                }
+
+                // Clear caches
+                $this->dispatchEvent('author.update', array('id' => $userId));
+
+                $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
+            } else {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the user with the submitted information.')
+                );
+            }
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect(
@@ -328,7 +324,7 @@ class AclUserController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;
@@ -472,7 +468,7 @@ class AclUserController extends Controller
     {
         $user = new \User($_SESSION['userid']);
 
-        foreach ($request->query as $key => $value) {
+        foreach (array_keys($request->query) as $key) {
             if (!preg_match('@^_@', $key)) {
                 $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
             }
@@ -677,7 +673,7 @@ class AclUserController extends Controller
 
                     $request->getSession()->getFlashBag()->add(
                         'error',
-                        _('Unable to send your recover username email. Please try it later.')
+                        _('Unable to send the email to recover your username. Please try it later.')
                     );
                 }
 
@@ -780,6 +776,14 @@ class AclUserController extends Controller
             $connected = true;
         }
 
+        if ($resource == 'facebook') {
+            $resourceName = 'Facebook';
+        } else {
+            $resourceName = 'Twitter';
+        }
+
+        $this->dispatchEvent('social.disconnect', array('user' => $user));
+
         return $this->render(
             'acl/user/social.tpl',
             array(
@@ -787,6 +791,7 @@ class AclUserController extends Controller
                 'connected'       => $connected,
                 'resource_id'     => $resourceId,
                 'resource'        => $resource,
+                'resource_name'   => $resourceName,
                 'user'            => $user,
             )
         );
@@ -799,7 +804,7 @@ class AclUserController extends Controller
      * @param  integer  $id      The user's id.
      * @return Response          The response object.
      */
-    public function disconnectAction(Request $request, $id, $resource)
+    public function disconnectAction($id, $resource)
     {
         $user = $this->get('user_repository')->find($id);
 
@@ -812,14 +817,12 @@ class AclUserController extends Controller
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
 
-        return $this->render(
-            'acl/user/social.tpl',
-            array(
-                'current_user_id' => $this->getUser()->id,
-                'connected'       => false,
-                'resource_id'     => null,
-                'resource'        => $resource,
-                'user'            => $user,
+        $this->dispatchEvent('social.connect', array('user' => $user));
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_acl_user_social',
+                array('id' => $id, 'resource' => $resource)
             )
         );
     }

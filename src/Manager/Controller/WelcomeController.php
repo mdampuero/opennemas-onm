@@ -29,7 +29,7 @@ class WelcomeController extends Controller
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
@@ -38,12 +38,10 @@ class WelcomeController extends Controller
     /**
      * Shows the welcome page of the manager
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function defaultAction(Request $request)
+     * @return void
+     */
+    public function defaultAction()
     {
-        return $this->render('index/index.tpl');
+        return $this->render('base/base.tpl');
     }
 }

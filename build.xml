@@ -15,8 +15,8 @@
         <pathelement path="${basedir}/src/ManagerWebService" />
         <pathelement path="${basedir}/src/WebService" />
         <pathelement path="${basedir}/app/models" />
-        <pathelement path="${basedir}/vendor/Onm" />
-        <pathelement path="${basedir}/vendor/core" />
+        <pathelement path="${basedir}/libs/Onm" />
+        <pathelement path="${basedir}/libs/core" />
         <!-- Take a look at lint target should be updated -->
     </path>
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>

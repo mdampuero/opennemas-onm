@@ -27,22 +27,23 @@ class UserGroupManager extends BaseManager
     /**
      * Initializes the entity manager.
      *
-     * @param DbalWrapper    $dbConn      The custom DBAL wrapper.
+     * @param DbalWrapper    $conn        The custom DBAL wrapper.
      * @param CacheInterface $cache       The cache instance.
      * @param string         $cachePrefix The cache prefix.
      */
-    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    public function __construct(DbalWrapper $conn, CacheInterface $cache, $cachePrefix)
     {
-        $this->dbConn      = $dbConn;
+        $this->conn        = $conn;
         $this->cache       = $cache;
         $this->cachePrefix = $cachePrefix;
     }
 
     /**
-     * Counts searched users given a criteria
+     * Counts searched users given a criteria.
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param array $criteria The criteria used to search the comments.
+     *
+     * @return integer The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -52,8 +53,8 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT COUNT(pk_user_group) FROM `user_groups` WHERE $whereSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchArray($sql);
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchArray($sql);
 
         if (!$rs) {
             return 0;
@@ -65,8 +66,9 @@ class UserGroupManager extends BaseManager
     /**
      * Finds one usergroup from the given a user id.
      *
-     * @param  integer   $id User group id.
-     * @return UserGroup
+     * @param integer $id User group id.
+     *
+     * @return UserGroup The matched user group.
      */
     public function find($id)
     {
@@ -91,13 +93,14 @@ class UserGroupManager extends BaseManager
     /**
      * Searches for users given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @param  array $order           the order applied in the search.
-     * @param  int   $elementsPerPage the max number of elements to return.
-     * @param  int   $page            the offset to start with.
-     * @return array                  the matched elements.
+     * @param array   $criteria        The criteria used to search the comments.
+     * @param array   $order           The order applied in the search.
+     * @param integer $elementsPerPage The max number of elements to return.
+     * @param integer $page            The offset to start with.
+     *
+     * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    public function findBy($criteria = array(), $order = array(), $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
         $whereSQL = $this->getFilterSQL($criteria);
@@ -111,8 +114,8 @@ class UserGroupManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT pk_user_group FROM `user_groups` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->fetchAll($sql);
+        $this->conn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->fetchAll($sql);
 
         $ids = array();
         foreach ($rs as $resultElement) {
@@ -125,10 +128,11 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Find multiple users from a given array of content ids.
+     * Find multiple users from a given array of user groups ids.
      *
-     * @param  array $data Array of preprocessed content ids.
-     * @return array       Array of contents.
+     * @param array $data Array of preprocessed user groups ids.
+     *
+     * @return array Array of user groups.
      */
     public function findMulti(array $data)
     {
@@ -153,8 +157,9 @@ class UserGroupManager extends BaseManager
             list($contentType, $contentId) = explode($this->cacheSeparator, $content);
             $group = $this->find($contentId);
             $groups[] = $group;
-
         }
+        // Unused var $contentType
+        unset($contentType);
 
         $ordered = array();
         foreach ($keys as $id) {
@@ -172,16 +177,26 @@ class UserGroupManager extends BaseManager
     }
 
     /**
-     * Deletes a usergroup
+     * Deletes a usergroup from database and cache.
      *
      * @param integer $id User id.
      */
     public function delete($id)
     {
-        $this->dbConn->transactional(function ($em) use ($id) {
+        $this->conn->transactional(function ($em) use ($id) {
             $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
         });
 
+        $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
+    }
+
+    /**
+     * Deletes an user group from cache.
+     *
+     * @param integer $id The user group id.
+     */
+    public function deleteCache($id)
+    {
         $this->cache->delete('usergroup' . $this->cacheSeparator . $id);
     }
 }

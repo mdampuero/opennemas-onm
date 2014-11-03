@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TranslationCoreCommand extends Command
 {
-    public $supportedLanguages = array('es_ES', 'gl_ES', 'pt_BR');
+    public $supportedLanguages = array('es_ES', 'gl_ES'/*, 'pt_BR'*/);
 
     public $localeFolder = 'Resources/locale';
 
@@ -52,10 +52,10 @@ EOF
 
         // Update onm-core
         if (!$onlyCompile) {
-            $this->extractTrans($input, $output);
-            $this->updateTrans($input, $output);
+            $this->extractTrans($output);
+            $this->updateTrans($output);
         }
-        $this->compileTrans($input, $output);
+        $this->compileTrans($output);
     }
 
     /**
@@ -63,7 +63,7 @@ EOF
      *
      * @return void
      **/
-    private function extractTrans($input, $output)
+    private function extractTrans($output)
     {
         $output->writeln(" * Extracting strings");
         $tplFolders = array(
@@ -73,29 +73,34 @@ EOF
 
         $output->writeln("\t- From admin/manager templates");
         $command =
-            "tsmarty2c "
-            .implode(' ', $tplFolders)
-            ." > ".APP_PATH.$this->localeFolder."/extracted_strings.c 2>&1";
+            APPLICATION_PATH."/bin/tsmarty2c.php "
+            ."-o ".APP_PATH.$this->localeFolder."/opennemas_template_strings.pot "
+            .implode(' ', $tplFolders);
 
         echo(exec($command));
 
         $output->writeln("\t- From PHP files");
 
         $phpFiles = array(
-            SRC_PATH.'*/Controller/*.php',
-            SRC_PATH.'*/Resources/Menu.php',
-            SITE_VENDOR_PATH.'core/*.php',
-            SITE_VENDOR_PATH.'Onm/**/**/*.php',
             APP_PATH.'models/*.php',
-            SITE_VENDOR_PATH.'Onm/*/*.php',
-            SITE_VENDOR_PATH.'smarty/onm-plugins/*.php',
-            APP_PATH.$this->localeFolder.'/extracted_strings.c'
+            SRC_PATH.'*/*/*.php',
+            SRC_PATH.'*/Resources/Menu.php',
+            SITE_LIBS_PATH.'core/*.php',
+            SITE_LIBS_PATH.'Onm/**/**/*.php',
+            SITE_LIBS_PATH.'Onm/*/*.php',
+            SITE_LIBS_PATH.'smarty-onm-plugins/*.php',
         );
 
         $command =
             "xgettext "
             .implode(' ', $phpFiles)
-            ." -o ".APP_PATH.$this->localeFolder."/opennemas.pot  --from-code=UTF-8 2>&1";
+            ." -o ".APP_PATH.$this->localeFolder."/opennemas_code_strings.pot --no-location  --from-code=UTF-8 2>&1";
+
+        $commandOutput = shell_exec($command);
+
+        $command = "msgcat -o ".APP_PATH.$this->localeFolder."/opennemas.pot "
+            .APP_PATH.$this->localeFolder."/opennemas_code_strings.pot "
+            .APP_PATH.$this->localeFolder."/opennemas_template_strings.pot";
 
         $commandOutput = shell_exec($command);
     }
@@ -105,7 +110,7 @@ EOF
      *
      * @return void
      **/
-    private function updateTrans($input, $output)
+    private function updateTrans($output)
     {
         $output->writeln(" * Updating translation files");
 
@@ -122,7 +127,7 @@ EOF
                 touch($targetFile);
             }
             $command = "msgmerge -U ".$targetFile. " ".APP_PATH.$this->localeFolder."/opennemas.pot 2>&1";
-            $commandOutput = shell_exec($command);
+            shell_exec($command);
         }
     }
 
@@ -131,7 +136,7 @@ EOF
      *
      * @return void
      **/
-    private function compileTrans($input, $output)
+    private function compileTrans($output)
     {
         $output->writeln(" * Compiling translation databases");
 

@@ -57,7 +57,13 @@ EOF
         $positions = file_get_contents($input->getOption('file'));
         $positions = json_decode($positions, true);
 
-        \ContentManager::saveContentPositionsForHomePage($category, $positions);
+        $done = \ContentManager::saveContentPositionsForHomePage($category, $positions);
+
+        if ($done) {
+            $output->writeln('[DONE]');
+        } else {
+            $output->writeln('[FAILED]');
+        }
 
         return false;
     }

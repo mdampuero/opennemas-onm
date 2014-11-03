@@ -71,12 +71,11 @@ class VideosController extends Controller
     /**
      * List videos.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('video/list.tpl');
     }
@@ -84,12 +83,11 @@ class VideosController extends Controller
     /**
      * List videos available for widget.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
@@ -240,7 +238,11 @@ class VideosController extends Controller
 
                 return $this->render(
                     'video/new.tpl',
-                    array('type' => $type, 'authors' => $authors)
+                    array(
+                        'type'           => $type,
+                        'authors'        => $authors,
+                        'commentsConfig' => s::get('comments_config'),
+                    )
                 );
             }
         }
@@ -348,7 +350,7 @@ class VideosController extends Controller
 
             m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
         } else {
-            m::add(_('You must give an id for delete the video.'), m::ERROR);
+            m::add(_('You must give an id to delete the video.'), m::ERROR);
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -403,9 +405,10 @@ class VideosController extends Controller
         return $this->render(
             'video/new.tpl',
             array(
-                'information' => $video->information,
-                'video'       => $video,
-                'authors'     => $authors,
+                'information'    => $video->information,
+                'video'          => $video,
+                'authors'        => $authors,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }
@@ -497,7 +500,7 @@ class VideosController extends Controller
         $relations = \RelatedContent::getContentRelations($id);
 
         if (!empty($relations)) {
-            $msg = sprintf(_("<br>The video has some relations"));
+            $msg = sprintf(_("The video has some relations"));
             $cm  = new \ContentManager();
             $relat = $cm->getContents($relations);
             foreach ($relat as $contents) {
@@ -689,7 +692,7 @@ class VideosController extends Controller
         }
 
         if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = \Onm\StringUtils::getTags($metadata);
             $tokens = explode(', ', $tokens);
 
             $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));

@@ -43,13 +43,11 @@ class AclUserGroupsController extends Controller
     /**
      * List all the user groups
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('GROUP_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('acl/user_group/list.tpl');
     }

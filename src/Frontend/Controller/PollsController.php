@@ -49,7 +49,7 @@ class PollsController extends Controller
             $this->ccm = new \ContentCategoryManager();
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $this->category; // FOR WIDGETS
-            $category_real_name = $this->ccm->get_title($this->categoryName); //used in title
+            $category_real_name = $this->ccm->getTitle($this->categoryName); //used in title
 
         } else {
             $category_real_name = 'Portada';
@@ -76,11 +76,9 @@ class PollsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
@@ -214,16 +212,16 @@ class PollsController extends Controller
         $valid = (int) $request->query->getDigits('valid', 3);
         if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
-                $message = _('Thanks for participating.');
+                $message = "<span class='thanks'>"._('Thanks for participating.')."</span>";
             } elseif ($voted == 1 && $valid === 0) {
-                $message = _('Please select a valid poll answer.');
+                $message = "<span class='wrong'>"._('Please select a valid poll answer.')."</span>";
             }
         } elseif (isset($cookie)) {
             $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
+            $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
         } elseif (($valid === 0) && ($voted == 0)) {
             $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
+            $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
         }
 
         $ads = $this->getAds('inner');
@@ -280,7 +278,9 @@ class PollsController extends Controller
 
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
+            // Clear all caches
             $this->cleanCache($poll->category_name, $pollId);
+            dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;
             $voted = 1;

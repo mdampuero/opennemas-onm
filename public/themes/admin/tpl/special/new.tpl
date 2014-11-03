@@ -1,7 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="/parts/specials.css"}
+    {stylesheets src="@AdminTheme/css/parts/specials.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
     <style>
     .thumbnails>li {
         margin:0;
@@ -13,7 +15,9 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/onm/content-provider.js"}
+    {javascripts src="@AdminTheme/js/onm/content-provider.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script>
     jQuery(document).ready(function($){
         $("#formulario").on("submit", function(e, ui) {

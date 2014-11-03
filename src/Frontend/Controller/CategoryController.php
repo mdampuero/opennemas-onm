@@ -76,8 +76,7 @@ class CategoryController extends Controller
 
             $order = array('starttime' => 'DESC');
 
-            $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countArticles = $em->countBy($filters);
+            $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
@@ -182,11 +181,11 @@ class CategoryController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+        $cm = new \ContentManager();
         $cacheId = "sync|category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $ccm = \ContentCategoryManager::get_instance();
             // Get category object
-            $cm = new \ContentManager();
             $category = unserialize(
                 $cm->getUrlContent(
                     $wsUrl.'/ws/categories/object/'.$categoryName,
@@ -209,7 +208,7 @@ class CategoryController extends Controller
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                     'actual_category'       => $categoryName
                 )
             );

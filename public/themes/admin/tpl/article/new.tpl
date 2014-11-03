@@ -1,11 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/swfobject.js"}
+    {javascripts src="@AdminTheme/js/swfobject.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {/block}
 
 {block name="header-css" append}
-{css_tag href="/jquery/colorbox.css" media="screen"}
+    {stylesheets src="@AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen">
+    {/stylesheets}
 <style type="text/css">
     div#content-provider .content-provider-block .content-provider-element {
         margin: 5px;
@@ -22,13 +26,15 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-    {script_tag src="/jquery/jquery.colorbox-min.js"}
-    {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/onm/article.js"}
-    {script_tag src="/onm/content-provider.js"}
-    {script_tag src="/jquery-onm/jquery.inputlength.js"}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
+        @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @AdminTheme/js/jquery/jquery.colorbox-min.js,
+        @AdminTheme/js/onm/article.js,
+        @AdminTheme/js/onm/content-provider.js,
+        @AdminTheme/js/jquery-onm/jquery.inputlength.js,
+        @Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script>
         var article_urls = {
             preview : '{url name=admin_article_preview}',
@@ -102,7 +108,7 @@
                 {if isset($article->id)}
                     {acl isAllowed="ARTICLE_UPDATE"}
                     <li>
-                        <button type="submit" name="continue" value="1">
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Update{/t}
                         </button>
                     </li>
@@ -110,8 +116,7 @@
                 {else}
                     {acl isAllowed="ARTICLE_CREATE"}
                     <li>
-                        <button type="submit" name="continue" {acl isAllowed="ARTICLE_UPDATE"}value="1"{/acl}
-                                                              {acl isNotAllowed="ARTICLE_UPDATE"}value="0"{/acl}>
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                     </li>
@@ -196,7 +201,7 @@
                                     <br/>
                                 {/acl}
                                 {is_module_activated name="COMMENT_MANAGER"}
-                                <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
+                                <input type="checkbox" name="with_comment" id="with_comment"  {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
                                 <label for="with_comment">{t}Allow coments{/t}</label>
                                 <br/>
                                 {/is_module_activated}
@@ -241,8 +246,13 @@
                                         {html_options options=$authors selected=$article->fk_author}
                                     </select>
                                 {aclelse}
-                                    {if !isset($article->author->name)}{t}No author assigned{/t}{else}{$article->author->name}{/if}
-                                    <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                    {if !isset($article->fk_author)}
+                                        {$smarty.session.realname}
+                                        <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                                    {else}
+                                        {$authors[$article->fk_author]}
+                                        <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                    {/if}
                                 {/acl}
                             </div>
                         </div>

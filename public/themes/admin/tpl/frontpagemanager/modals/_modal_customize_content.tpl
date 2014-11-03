@@ -88,9 +88,9 @@
             <div class="control-group">
                 <label for="font-style" class="control-label">{t}Title font style{/t}</label>
                 <div class="controls">
-                  {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
+                  {assign var='availableStyle'  value=','|explode:"Italic,Oblique,Normal"}
                   <select id="font-style" name="font-style">
-                      {html_options values=$availableStyle output=$availableStyle selected=Auto}
+                      {html_options values=$availableStyle output=$availableStyle selected=Normal}
                   </select>
               </div>
             </div>
@@ -164,8 +164,13 @@
       </div>
 </div>
 
-{css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
-{script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+{stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}">
+{/stylesheets}
+
+{javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+    <script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 
 <script>
 

@@ -52,7 +52,7 @@
         </td>
         <td>
             <label>
-                 Banner Top Right(I) (728X90)
+                 Banner Top Right(I) (234X90)
                 <input type="radio" name="type_advertisement" value="102" {if $advertisement->type_advertisement == 102}checked="checked" {/if}/>
             </label>
         </td>

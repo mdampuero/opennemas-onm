@@ -53,7 +53,7 @@ class ErrorController extends Controller
                 $page = new \stdClass();
 
                 // Dummy content while testing this feature
-                $page->title   = _('No hemos podido encontrar la página que buscas.');
+                $page->title   = _('Unable to find the page you are looking for.');
                 $page->content = 'Whoups!';
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);

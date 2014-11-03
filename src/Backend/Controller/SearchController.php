@@ -42,13 +42,11 @@ class SearchController extends Controller
     /**
      * Handles the search form and shows the search contents
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('SEARCH_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $contentTypesAvailable = $this->getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);
@@ -77,7 +75,7 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
-            $tokens = \Onm\StringUtils::get_tags($searchString);
+            $tokens = \Onm\StringUtils::getTags($searchString);
             $tokens = explode(', ', $tokens);
 
             $szWhere = '';
@@ -150,29 +148,6 @@ class SearchController extends Controller
                 return $this->render('search_advanced/content-provider.tpl');
             }
         }
-    }
-
-    /**
-     * Returns a list of content type definitions taking in place the modules activated
-     * and those selected by user
-     *
-     * @param array $selected array of content types selected
-     *
-     * @return  string string with all the content types comma separated.
-     */
-    private function getCheckedContentTypes($selected)
-    {
-        $contentTypes = self::getContentTypesFiltered();
-
-        $contentTypesChecked =  array();
-        foreach ($contentTypes as $contentTypeId => $contentTypeName) {
-            if (in_array($contentTypeId, $selected)
-            ) {
-                $contentTypesChecked []= $contentTypeId;
-            }
-        }
-
-        return $contentTypesChecked;
     }
 
     /**

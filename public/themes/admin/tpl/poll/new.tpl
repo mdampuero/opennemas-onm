@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function ($){
         var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
@@ -103,7 +105,7 @@
                         <hr class="divisor">
 
                         {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if $poll->with_comment eq 1}checked="checked"{/if} value="1" />
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
                         <label for="with_comment">{t}Allow comments{/t}</label>
                         <br>
                         {/is_module_activated}

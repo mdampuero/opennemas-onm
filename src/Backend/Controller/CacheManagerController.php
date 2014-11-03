@@ -28,7 +28,6 @@ use Onm\Message as m;
  **/
 class CacheManagerController extends Controller
 {
-
     /**
      * Common code for all the actions
      *
@@ -150,7 +149,7 @@ class CacheManagerController extends Controller
         // Build information for frontpages
         $sections = array();
         foreach ($this->templateManager->cacheGroups as $cacheGroup) {
-            $categoryName = $ccm->get_title($cacheGroup);
+            $categoryName = $ccm->getTitle($cacheGroup);
             $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
         }
         foreach ($caches as &$cache) {
@@ -224,13 +223,11 @@ class CacheManagerController extends Controller
      * Deletes all the frontend cache files
      * DANGER: this action has really CPU expensive
      *
-     * @param Request $request the request object
-     *
      * @return string the result string
      *
      * @Security("has_role('CACHE_TPL_ADMIN')")
      **/
-    public function deleteAllAction(Request $request)
+    public function deleteAllAction()
     {
         $this->frontpageTemplate->clearAllCache();
 

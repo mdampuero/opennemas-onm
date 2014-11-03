@@ -14,6 +14,7 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,12 +32,14 @@ class FormController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
+        if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         return $this->render(
@@ -96,7 +99,7 @@ class FormController extends Controller
                         "Sorry, we were unable to complete your request.\n"
                         ."Check the form and try again"
                     );
-                    $message = _("Email is required but will not be published");
+                    $message = _("Email is required but it will not be published");
                     $class = 'error';
                 } else {
                     // Correct CAPTCHA, correct mail and name not empty

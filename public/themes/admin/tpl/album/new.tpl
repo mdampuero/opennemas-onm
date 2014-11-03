@@ -1,7 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 {include file="media_uploader/media_uploader.tpl"}
 <script>
     var mediapicker = $('#media-uploader').mediaPicker({
@@ -131,13 +133,13 @@
                 <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit" id="form-send-button"  name="continue" value="true">
+                        <button type="submit">
                             <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y continuar" ><br />{t}Save{/t}
                         </button>
                         {/acl}
@@ -189,9 +191,13 @@
                 <div class="contentbox">
                     <h3 class="title">{t}Attributes{/t}</h3>
                     <div class="content">
-                        <label for="content_status" >{t}Available{/t}</label>
-                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
+                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}> <label for="content_status" >{t}Available{/t}</label>
                         <br/>
+                        {is_module_activated name="COMMENT_MANAGER"}
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
+                        <label for="with_comment">{t}Allow comments{/t}</label>
+                        <hr class="divisor">
+                        {/is_module_activated}
 
                         <h4>{t}Category{/t}</h4>
                         {include file="common/selector_categories.tpl" name="category" item=$album}
@@ -204,8 +210,13 @@
                                 {html_options options=$authors selected=$album->fk_author}
                             </select>
                         {aclelse}
-                            {if !isset($album->author->name)}{t}No author assigned{/t}{else}{$album->author->name}{/if}
-                            <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                            {if !isset($album->fk_author)}
+                                {$smarty.session.realname}
+                                <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                            {else}
+                                {$authors[$album->fk_author]}
+                                <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                            {/if}
                         {/acl}
                     </div>
                 </div>
@@ -221,7 +232,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="contentform-main">
 

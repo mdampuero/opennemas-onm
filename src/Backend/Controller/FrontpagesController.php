@@ -51,7 +51,7 @@ class FrontpagesController extends Controller
          * Getting categories
         */
         $ccm = \ContentCategoryManager::get_instance();
-        $section = $ccm->get_name($category);
+        $section = $ccm->getName($category);
         $section = (empty($section))? 'home': $section;
         $categoryID = ($category == 'home') ? 0 : $category;
         list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
@@ -69,7 +69,7 @@ class FrontpagesController extends Controller
             throw new AccessDeniedException();
         } elseif (!Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
-            $section = $ccm->get_name($categoryID);
+            $section = $ccm->getName($categoryID);
             $_REQUEST['category'] = $categoryID;
             list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 
@@ -169,9 +169,13 @@ class FrontpagesController extends Controller
 
             $categoryID = ($category == 'home') ? 0 : $category;
 
+            // Fetch old contents
+            $cm = new \ContentManager();
+            $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
+
             // Check if data send by user is valid
             $validReceivedData = is_array($contentsPositions)
-                                 && !empty($contentsPositions)
+                                 && count($contentsPositions) > 0
                                  && !is_null($categoryID)
                                  && !is_null($lastVersion)
                                  && count($contentsPositions) === (int) $numberOfContents;
@@ -191,6 +195,7 @@ class FrontpagesController extends Controller
                 }
             }
 
+            // Get application logger
             $logger = $this->get('application.log');
 
             if ($validReceivedData) {
@@ -242,6 +247,21 @@ class FrontpagesController extends Controller
             );
             $response = new Response(json_encode($responseData));
         } else {
+            // Iterate over each element and fetch its parameters to save.
+            $oldItems = array();
+            foreach ($oldContents as $item) {
+                $oldItems[] = array(
+                    'id'           => $item->id,
+                    'category'     => $categoryID,
+                    'placeholder'  => $item->placeholder,
+                    'position'     => $item->position,
+                    'content_type' => ucfirst($item->content_type_name),
+                );
+            }
+
+            // Restore old frontpage
+            \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
+
             if ($validReceivedData == false) {
                 $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
             } else {
@@ -286,6 +306,8 @@ class FrontpagesController extends Controller
             && $layoutValid
         ) {
             $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
+
+            $this->dispatchEvent('frontpage.pick_layout', array('category' => $category));
 
             m::add(sprintf(_('Layout %s seleted.'), $layout), m::SUCCESS);
         } else {
@@ -427,13 +449,11 @@ class FrontpagesController extends Controller
     /**
      * Description of this action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
         $content = $session->get('last_preview');

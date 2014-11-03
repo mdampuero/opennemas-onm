@@ -254,7 +254,12 @@ class Advertisement extends Content
         $this->category = self::ADVERTISEMENT_CATEGORY;
         parent::load($properties);
 
-        $this->script = base64_decode($this->script);
+        // Decode base64 if isn't decoded yet
+        $isBase64 = base64_decode($this->script);
+        if ($isBase64) {
+            $this->script = $isBase64;
+        }
+
         // FIXME: revisar que non se utilice ->img
         $this->img = $this->path;
 
@@ -422,7 +427,7 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public static function findForPositionIdsAndCategory($types = array(), $category = 'home', $wsUrl = null)
+    public static function findForPositionIdsAndCategory($types = array(), $category = 'home')
     {
         $banners = array();
         $finalBanners = array();
@@ -549,7 +554,7 @@ class Advertisement extends Content
      *
      * @return string the final html for the ad
      **/
-    public function render($params, $tpl = null)
+    public function render($params)
     {
         $output = '';
 

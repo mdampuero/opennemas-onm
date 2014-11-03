@@ -82,7 +82,7 @@ class FrontpagesController extends Controller
                     ) {
                         // If the content is an opinion fetch its authors slug's
                         if ($content->content_type == 4) {
-                            $content->author_name_slug = \Onm\StringUtils::get_title($content->author);
+                            $content->author_name_slug = \Onm\StringUtils::getTitle($content->author);
                         }
 
                         if (isset($content->img1) && !empty($content->img1)) {
@@ -144,7 +144,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function latestNewsAction(Request $request)
+    public function latestNewsAction()
     {
         $this->view->setConfig('frontpage-mobile');
 
@@ -235,7 +235,7 @@ class FrontpagesController extends Controller
      *
      * @return Response the response object
      **/
-    public function redirectCompleteWebAction(Request $request)
+    public function redirectCompleteWebAction()
     {
         setcookie("confirm_mobile", "1", time()+3600, '/');
 

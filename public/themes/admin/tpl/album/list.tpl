@@ -193,7 +193,7 @@
                 <td class="center nowrap">
                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
-                <td class="center">[% content.views %]</td>
+                <td class="center">[% shvs.extra.views[content.id] %]</td>
 
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <td class="center">

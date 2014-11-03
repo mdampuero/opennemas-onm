@@ -14,13 +14,14 @@
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
  * User
  *
  * @package    Model
  **/
-class User extends OAuthUser implements AdvancedUserInterface
+class User extends OAuthUser implements AdvancedUserInterface, EquatableInterface
 {
     /**
      * The user id
@@ -219,6 +220,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        dispatchEventWithParams('user.create', array('user' => $this));
+
         return true;
     }
 
@@ -269,7 +272,11 @@ class User extends OAuthUser implements AdvancedUserInterface
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
         $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
-        $this->accesscategories = $this->readAccessCategories();
+
+        $database = $GLOBALS['application']->conn->connectionParams['dbname'];
+        if ($database != 'onm-instances') {
+            $this->accesscategories = $this->readAccessCategories();
+        }
 
         // Get user meta information
         $this->meta = $this->getMeta();
@@ -362,6 +369,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -383,6 +392,8 @@ class User extends OAuthUser implements AdvancedUserInterface
         if (!$this->deleteMeta($id)) {
             return false;
         }
+
+        dispatchEventWithParams('user.delete', array('user' => $this));
 
         return true;
     }
@@ -480,6 +491,8 @@ class User extends OAuthUser implements AdvancedUserInterface
         $cache = getService('cache');
         $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -504,6 +517,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
         $this->accesscategories = self::readAccessCategories($idUser);
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -568,6 +583,8 @@ class User extends OAuthUser implements AdvancedUserInterface
         }
 
         $cache->delete(CACHE_PREFIX . "categories_for_user_".$this->id);
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1019,7 +1036,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1035,7 +1053,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1095,7 +1114,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1115,7 +1135,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        dispatchEventWithParams('user.update', array('id' => $this->id));
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1134,9 +1155,7 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        // Delete user cache
-        $cache = getService('cache');
-        $cache->delete('user_' . $id);
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1156,9 +1175,7 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
-        // Delete user cache
-        $cache = getService('cache');
-        $cache->delete('user_' . $id);
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1217,6 +1234,8 @@ class User extends OAuthUser implements AdvancedUserInterface
             return false;
         }
 
+        dispatchEventWithParams('user.update', array('user' => $this));
+
         return true;
     }
 
@@ -1236,6 +1255,8 @@ class User extends OAuthUser implements AdvancedUserInterface
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
     }
@@ -1324,7 +1345,7 @@ class User extends OAuthUser implements AdvancedUserInterface
      *
      * @return void
      **/
-    public static function getUsersOnlyRegistered($config = array())
+    public static function getUsersOnlyRegistered()
     {
         $sql = 'SELECT id FROM `users` WHERE type=1 ORDER BY name';
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1440,7 +1461,7 @@ class User extends OAuthUser implements AdvancedUserInterface
      *
      * @return void
      **/
-    public static function countUsersWithSubscription($limit = array())
+    public static function countUsersWithSubscription()
     {
         $currentTime = new \DateTime();
         $currentTime->setTimezone(new \DateTimeZone('UTC'));
@@ -1746,6 +1767,33 @@ class User extends OAuthUser implements AdvancedUserInterface
     public function isEnabled()
     {
         return $this->activated;
+    }
+
+    /**
+     * The equality comparison should neither be done by referential equality
+     * nor by comparing identities (i.e. getId() === getId()).
+     *
+     * However, you do not need to compare every attribute, but only those that
+     * are relevant for assessing whether re-authentication is required.
+     *
+     * @param  UserInterface $user
+     * @return boolean
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if ($user instanceof User
+            && $this->getUsername() === $this->getUsername()
+        ) {
+            $isEqual = count($this->getRoles()) == count($user->getRoles());
+            if ($isEqual) {
+                foreach ($this->getRoles() as $role) {
+                    $isEqual = $isEqual && in_array($role, $user->getRoles());
+                }
+            }
+            return $isEqual;
+        }
+
+        return false;
     }
 
     /**

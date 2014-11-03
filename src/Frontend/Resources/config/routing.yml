@@ -1,7 +1,3 @@
-accept_cookies:
-    path: /accepted_cookies
-    defaults: { _controller: FrontendBundle:Utilities:acceptCookies }
-
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
@@ -196,6 +192,18 @@ frontend_sitemapnews:
 frontend_sitemapweb:
     path: /sitemapweb.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:web, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapimage:
+    path: /sitemapimage.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:image, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapvideo:
+    path: /sitemapvideo.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:video, _format:xml }
     requirements:
         _format: "xml|xml.gz"
 

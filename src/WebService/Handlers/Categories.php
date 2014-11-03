@@ -1,7 +1,20 @@
 <?php
+/**
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
+namespace WebService\Handlers;
 
 use Onm\Settings as s;
 
+/**
+ * Handles REST actions for categories.
+ *
+ * @package WebService
+ **/
 class Categories
 {
     public $restler;
@@ -13,7 +26,7 @@ class Categories
     {
         $this->validateInt(func_get_args());
 
-        $cm = new ContentManager();
+        $cm = new \ContentManager();
         $categoryContents = $cm->getContentsForHomepageOfCategory($n1);
 
         return $categoryContents;
@@ -24,7 +37,7 @@ class Categories
     */
     public function id($actualCategory)
     {
-        $ccm = new ContentCategoryManager();
+        $ccm = new \ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
 
         return (int) $actualCategoryId;
@@ -35,7 +48,7 @@ class Categories
     */
     public function exist($actualCategory)
     {
-        $ccm = new ContentCategoryManager();
+        $ccm = new \ContentCategoryManager();
 
         return $ccm->exists($actualCategory);
     }
@@ -45,9 +58,9 @@ class Categories
     */
     public function title($actualCategory)
     {
-        $ccm = new ContentCategoryManager();
+        $ccm = new \ContentCategoryManager();
 
-        return $ccm->get_title($actualCategory);
+        return $ccm->getTitle($actualCategory);
     }
 
     /*
@@ -63,7 +76,7 @@ class Categories
         );
 
         if (empty($category)) {
-            throw new RestException(404, 'category not found');
+            throw new \RestException(404, 'category not found');
         }
         $category = $category[0];
 
@@ -75,8 +88,9 @@ class Categories
     */
     public function layout($actualCategory)
     {
-        $ccm = new ContentCategoryManager();
+        $ccm = new \ContentCategoryManager();
         $actualCategoryId = $ccm->get_id($actualCategory);
+
         $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
 
         return $layout;
@@ -87,7 +101,7 @@ class Categories
     */
     public function lists()
     {
-        $menu = new Menu();
+        $menu = new \Menu();
         $menuCategories = $menu->getMenu('frontpage');
 
         $categories = array();
@@ -115,10 +129,10 @@ class Categories
     {
         foreach ($number as $value) {
             if (!is_numeric($value)) {
-                throw new RestException(400, 'parameter is not a number');
+                throw new \RestException(400, 'parameter is not a number');
             }
             if (is_infinite($value)) {
-                throw new RestException(400, 'parameter is not finite');
+                throw new \RestException(400, 'parameter is not finite');
             }
         }
     }

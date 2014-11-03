@@ -15,22 +15,18 @@ var BackendAuthentication = {
 $(document).ready(function() {
 
     // Encode password in md5 on backend login
-    $('#submit-button').on('click', function(e, ui) {
-        e.preventDefault();
-
+    $('#loginform').on('submit', function(e, ui) {
         var form = $('#loginform');
-        var time = form.find('input[name="time"]').val();
-        var password;
 
         if (form.find('input[name="_password"]').length > 0) {
-            password = form.find('input[name="_password"]');
-            password.val('md5:' + hex_md5(password.val()));
-        } else {
-            password = form.find('input[name="password"]');
-            password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
-        }
+            var password = form.find('input[name="_password"]').val();
 
-        form.submit();
+            if (password.indexOf('md5:') === -1) {
+                password = 'md5:' + hex_md5(password);
+            }
+
+            form.find('input[name="_password"]').val(password);
+        }
     });
 
     $('.social-network-connect').on('click', function(e) {

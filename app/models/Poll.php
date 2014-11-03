@@ -123,7 +123,6 @@ class Poll extends Content
         $this->pk_poll       = $rs->fields['pk_poll'];
         $this->subtitle      = $rs->fields['subtitle'];
         $this->total_votes   = $rs->fields['total_votes'];
-        $this->with_comment  = $rs->fields['with_comment'];
         $this->visualization = $rs->fields['visualization'];
         $this->used_ips      = unserialize($rs->fields['used_ips']);
 
@@ -146,20 +145,19 @@ class Poll extends Content
         if ($data['item']) {
             foreach ($data['item'] as $item) {
                 $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = StringUtils::get_tags($item);
+                $tags   = StringUtils::getTags($item);
                 $values = array($this->id,$item, $tags);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);
             }
         }
-        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
-                VALUES (?,?,?,?,?)';
+        $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`)
+                VALUES (?,?,?,?)';
         $values = array(
             $this->id,
             $data['subtitle'],
             0,
-            $data['visualization'],
-            $data['with_comment']
+            $data['visualization']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -199,14 +197,13 @@ class Poll extends Content
 
         }
 
-        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?, `with_comment`=?
+        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?
                         WHERE pk_poll= ?";
 
         $values = array(
             $data['subtitle'],
             $data['visualization'],
             $total,
-            $data['with_comment'],
             $data['id']
         );
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -298,7 +295,7 @@ class Poll extends Content
      **/
     public function vote($pkItem, $ip)
     {
-        $this->used_ips = $this->add_count($this->used_ips, $ip);
+        $this->used_ips = $this->addCount($this->used_ips, $ip);
         if (!$this->used_ips) {
             return false;
         }
@@ -336,7 +333,7 @@ class Poll extends Content
      *
      * @return array
      **/
-    public function add_count($ips_count, $ip)
+    public function addCount($ips_count, $ip)
     {
         $ips = array();
         if ($ips_count) {
@@ -364,15 +361,12 @@ class Poll extends Content
      * Renders the poll
      *
      * @param arrray $params parameters for rendering the content
-     * @param Template $smarty the Template object instance
      *
      * @return string the generated HTML
      **/
-    public function render($params, $smarty)
+    public function render($params)
     {
-        //  if (!isset($tpl)) {
-            $tpl = new Template(TEMPLATE_USER);
-        //}
+        $tpl = new Template(TEMPLATE_USER);
 
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);

@@ -112,7 +112,7 @@
                         [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td >
-                        <img ng-if="content.image" ng-src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
+                        <img ng-if="content.image" ng-src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
                     </td>
                     <td class="center">
                         {acl isAllowed="LETTER_AVAILABLE"}

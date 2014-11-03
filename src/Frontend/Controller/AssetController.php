@@ -80,7 +80,7 @@ class AssetController extends Controller
             } elseif ($method == 'zoomcrop') {
                 $width         = $parameters[0];
                 $height        = $parameters[1];
-                $verticalPos   = $parameters[2];
+                // $verticalPos   = $parameters[2];
                 // $horizontalPos = $parameters[3];
                 $mode = ImageInterface::THUMBNAIL_OUTBOUND;
 
@@ -145,7 +145,7 @@ class AssetController extends Controller
      **/
     public function customCssAction(Request $request)
     {
-        $categoryName       = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $cache = $this->get('cache');
         $output = $cache->fetch('custom_css|' . $categoryName);

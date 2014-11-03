@@ -40,12 +40,11 @@ class LettersController extends Controller
     /**
      * Lists all the letters.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('letter/list.tpl');
     }

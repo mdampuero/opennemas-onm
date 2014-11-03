@@ -67,12 +67,11 @@ class FilesController extends Controller
     /**
      * Lists the files for a given category.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('files/list.tpl');
     }
@@ -80,12 +79,11 @@ class FilesController extends Controller
     /**
      * Shows the files in the widget.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         return $this->render(
             'files/list.tpl',
@@ -98,17 +96,16 @@ class FilesController extends Controller
     /**
      * Shows the file usage statistics.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
      */
-    public function statisticsAction(Request $request)
+    public function statisticsAction()
     {
         $cm               = new \ContentManager();
         $total_num_photos = 0;
         $files            = $size = $sub_size = $num_photos = array();
-        $fullcat          = $this->ccm->order_by_posmenu($this->ccm->categories);
+        $fullcat          = $this->ccm->orderByPosmenu($this->ccm->categories);
 
         $num_sub_photos = array();
         $sub_files = array();
@@ -119,7 +116,7 @@ class FilesController extends Controller
                 $this->ccm->countContentByType($v->pk_content_category, $this->contentType);
             $total_num_photos += $num_photos[$k];
 
-            $files[$v->pk_content_category] = $cm->find_all(
+            $files[$v->pk_content_category] = $cm->findAll(
                 'Attachment',
                 'fk_content_type = 3 AND category = '.$v->pk_content_category,
                 'ORDER BY created DESC'
@@ -133,7 +130,7 @@ class FilesController extends Controller
                         $total_num_photos +=
                             $num_sub_photos[$k][$child->pk_content_category];
                         $sub_files[$child->pk_content_category][] =
-                            $cm->find_all(
+                            $cm->findAll(
                                 'Attachment',
                                 'fk_content_type = 3 AND category = '.$child->pk_content_category,
                                 'ORDER BY created DESC'
@@ -168,8 +165,8 @@ class FilesController extends Controller
                 foreach ($aux_categories as $ind) {
                     if (!empty ($sub_files[$ind][0])) {
                         foreach ($sub_files[$ind][0] as $value) {
-                            if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
-                                if ($ccm->get_id($ccm->get_father($value->catName))) {
+                            if ($v->pk_content_category == $ccm->get_id($ccm->getFather($value->catName))) {
+                                if ($ccm->get_id($ccm->getFather($value->catName))) {
                                     $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
                                 }
                             }
@@ -248,8 +245,7 @@ class FilesController extends Controller
                 } else {
                     m::add(
                         _(
-                            'There was an error while uploading the file. <br />'
-                            .'Please, contact your system administrator.'
+                            'There was an error while uploading the file.'
                         ),
                         m::ERROR
                     );
@@ -260,7 +256,7 @@ class FilesController extends Controller
                 );
 
             } else {
-                m::add(_('Please select a file before send the form'), m::ERROR);
+                m::add(_('You must pick a file before submitting the form'), m::ERROR);
             }
         }
     }
@@ -323,7 +319,7 @@ class FilesController extends Controller
 
         if ($file->update($data)) {
             dispatchEventWithParams('content.update', array('content' => $file));
-            m::add(sprintf(_('File information updated successfully.')), m::SUCCESS);
+            m::add(sprintf(_('File successfully updated.')), m::SUCCESS);
         } else {
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
         }

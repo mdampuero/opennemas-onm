@@ -1,7 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/css/colorpicker.css" basepath="/js/jquery/jquery_colorpicker/"}
+    {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
+
     <style type="text/css">
     input[type="text"],
     input[type="password"] {
@@ -15,7 +18,10 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             $('#connect').on('click',function(e){

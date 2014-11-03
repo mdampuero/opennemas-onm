@@ -15,11 +15,11 @@
             <tbody>
                 <tr valign="top">
                     <td class="center">
-                        Here you can manage global settings about this onm-multiinstance.
+                        {t}Here you can manage global settings about this onm-multiinstance.{/t}
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-</form> 
+</form>
 {/block}

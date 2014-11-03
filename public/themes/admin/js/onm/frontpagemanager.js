@@ -394,7 +394,7 @@ jQuery(function($) {
         if (title['font-style'] !== undefined) {
             modal.find('.modal-body #font-style').val(title['font-style']);
         } else {
-            modal.find('.modal-body #font-style').val('Auto');
+            modal.find('.modal-body #font-style').val('Normal');
         }
         if (title['font-weight'] !== undefined) {
             modal.find('.modal-body #font-weight').val(title['font-weight']);
@@ -441,8 +441,8 @@ jQuery(function($) {
     $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
 
         var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
-        var element = $('[data-content-id='+elementID+']');
-        var url = frontpage_urls.customize_content;
+        var element   = $('[data-content-id='+elementID+']');
+        var url       = frontpage_urls.customize_content;
 
         var titleValues = new Object();
 
@@ -460,7 +460,7 @@ jQuery(function($) {
             titleValues["font-size"] = fontSizeValue+'px';
             keys[1] = "font-size";
         }
-        if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
+        if(fontStyleValue.length>0 && fontStyleValue!='Normal') {
             titleValues["font-style"] = fontStyleValue;
             keys[2] = "font-style";
         }
@@ -498,13 +498,12 @@ jQuery(function($) {
             properties[vformat] = '';
         }
 
-
         if (elementID) {
             $.ajax({
                 url:url,
                 type:'POST',
                 dataType: 'json',
-                data: { 'id': elementID, 'properties' : properties}
+                data: { 'id': elementID, 'properties' : properties, 'content_type': element.data('class')}
             }).done(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
                     element.data('bg', 'background-color:'+bgcolor);
@@ -526,7 +525,7 @@ jQuery(function($) {
 
         modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
         modal.find('.modal-body #font-family').val('Auto');
-        modal.find('.modal-body #font-style').val('Auto');
+        modal.find('.modal-body #font-style').val('Normal');
         modal.find('.modal-body #font-weight').val('Auto');
         modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
         modal.find('.modal-body #font-color').val('#000000');

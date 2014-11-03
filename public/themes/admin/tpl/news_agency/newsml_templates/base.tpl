@@ -56,7 +56,7 @@
             <Property FormalName="Tesauro" Value="CAT:{$article->category_name|upper}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
-          <ContentItem>
+          <ContentItem Href="{$article->uri}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -74,10 +74,14 @@
                       <hl1><![CDATA[{$article->title}]]></hl1>
                       <hl2><![CDATA[{$article->subtitle}]]></hl2>
                     </hedline>
+                    {if $article->author neq 'null'}
                     <rights>
                       <rights.owner>{$article->author|htmlspecialchars}</rights.owner>
+                      {if $smarty.const.SITE neq 'console'}
                       <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
+                      {/if}
                     </rights>
+                    {/if}
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
                         <text>{$article->created_datetime->format('Ymd\THisP')}</text>
@@ -118,8 +122,12 @@
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
               <Role FormalName="Main" />
               <!-- The link to download image -->
+              {if $smarty.const.SITE eq 'console'}
+              <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+              {else}
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
-                <MediaType FormalName="Photo" />
+              {/if}
+                <MediaType FormalName="PhotoFront" />
                 {*<MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photo->size*1024}</SizeInBytes>
@@ -183,8 +191,12 @@
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
               <Role FormalName="Main" />
               <!-- The link to download image -->
+              {if $smarty.const.SITE eq 'console'}
+              <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
+              {else}
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
-                <MediaType FormalName="Photo" />
+              {/if}
+                <MediaType FormalName="PhotoInner" />
                 {*<MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
@@ -230,6 +242,83 @@
             </NewsComponent>
           </NewsComponent>
         {/if}
+      </NewsComponent>
+      {/if}
+      {if isset($article->all_photos) && !empty($article->all_photos)}
+      <!--Photo collection.-->
+      <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
+        <Role FormalName="Content list" />
+        {foreach $article->all_photos as $photo}
+        {if $photo->id}
+        <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+          <NewsLines>
+            <HeadLine><![CDATA[{$article->title}]]></HeadLine>
+          </NewsLines>
+          <AdministrativeMetadata>
+            <Provider>
+              <Party FormalName="{setting name=site_name}" />
+            </Provider>
+          </AdministrativeMetadata>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>{$photo->created_datetime->format('Ymd\THisP')}</DateLineDate>
+            <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
+          </DescriptiveMetadata>
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
+            <Role FormalName="Main" />
+            <!-- The link to download image -->
+            {if $smarty.const.SITE eq 'console'}
+            <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+            {else}
+            <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+            {/if}
+              <MediaType FormalName="Photo" />
+              {*<MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />*}
+              <Characteristics>
+                <SizeInBytes>{$photo->size*1024}</SizeInBytes>
+                <Property FormalName="Onm_Filename" Value="{$photo->name}" />
+                <Property FormalName="Height" Value="{$photo->height}" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="{$photo->width}" />
+              </Characteristics>
+            </ContentItem>
+          </NewsComponent>
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
+            <Role FormalName="Caption" />
+            <ContentItem>
+              <MediaType FormalName="Text" />
+              <Format FormalName="NITF" />
+              <MimeType FormalName="text/vnd.IPTC.NITF" />
+              <DataContent>
+                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                  <head>
+                    <title><![CDATA[{$article->title}]]></title>
+                    <docdata management-status="usable">
+                      <doc-id id-string="{$photo->id}" />
+                    </docdata>
+                  </head>
+                  <body>
+                    <body.head>
+                      <hedline>
+                        <hl1><![CDATA[{$article->title}]]></hl1>
+                      </hedline>
+                      <dateline>
+                        <story.date norm="{$photo->created_datetime->format('Ymd\THisP')}">
+                          {$photo->created_datetime->format('Ymd\THisP')}
+                        </story.date>
+                      </dateline>
+                    </body.head>
+                    <body.content>
+                      <p><![CDATA[{$photo->description|htmlspecialchars_decode|trim}]]></p>
+                    </body.content>
+                  </body>
+                </nitf>
+              </DataContent>
+            </ContentItem>
+          </NewsComponent>
+        </NewsComponent>
+        {/if}
+        {/foreach}
       </NewsComponent>
       {/if}
     </NewsComponent>

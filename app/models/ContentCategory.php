@@ -117,7 +117,7 @@ class ContentCategory
     {
         if (!isset($data['name'])) {
             $data['name'] = strtolower($data['title']);
-            $data['name'] = StringUtils::normalize_name($data['name']);
+            $data['name'] = StringUtils::normalizeName($data['name']);
         }
         $data['logo_path'] =
             (isset($data['logo_path'])) ? $data['logo_path'] : '';
@@ -156,6 +156,8 @@ class ContentCategory
         }
 
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
+
+        dispatchEventWithParams('category.create', array('category' => $this));
 
         return true;
     }
@@ -252,6 +254,7 @@ class ContentCategory
             }
 
             dispatchEventWithParams('category.update', array('category' => $this));
+            dispatchEventWithParams('category.delete', array('category' => $this));
 
             return true;
         } else {

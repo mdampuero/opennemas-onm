@@ -1,0 +1,11 @@
+manager_ws_commands_list:
+    path:     /commands/list
+    defaults: { _controller: ManagerWebServiceBundle:Command:list }
+    options:
+        expose: true
+
+manager_ws_command_execute:
+    path: /commands/execute
+    defaults: { _controller:  ManagerWebServiceBundle:Command:executeCommand }
+    options:
+        expose: true

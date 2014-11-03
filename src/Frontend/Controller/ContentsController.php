@@ -147,7 +147,19 @@ class ContentsController extends Controller
 
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
-            if (false && $ext == 1) {
+            $ext       = $request->request->getDigits('ext', 0);
+            if ($ext == 1) {
+                // Getting Synchronize setting params
+                $categoryName = $request->request->get('category_name', null);
+                $wsUrl = '';
+                $syncParams = s::get('sync_params');
+                foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                    foreach ($categoriesToSync as $value) {
+                        if (preg_match('/'.$categoryName.'/i', $value)) {
+                            $wsUrl = $siteUrl;
+                        }
+                    }
+                }
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
@@ -238,22 +250,41 @@ class ContentsController extends Controller
 
             return new Response($content, $httpCode);
         } else {
-            $contentId = $request->query->getDigits('content_id', null);
+            $contentID    = $request->query->getDigits('content_id', null);
+            $ext          = $request->query->getDigits('ext', 0);
 
             $session = $this->get('session');
 
             $token = md5(uniqid('sendform'));
             $session->set('sendformtoken', $token);
 
-            $content = new \Content($contentId);
+            if ($ext == 1) {
+                // Getting Synchronize setting params
+                $categoryName = $request->query->get('category_name', null);
+                $wsUrl = '';
+                $syncParams = s::get('sync_params');
+                foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                    foreach ($categoriesToSync as $value) {
+                        if (preg_match('/'.$categoryName.'/i', $value)) {
+                            $wsUrl = $siteUrl;
+                        }
+                    }
+                }
+                $cm = new \ContentManager();
+                $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+                $content = unserialize($content);
+            } else {
+                $content = new \Content($contentID);
+            }
 
             $this->view = new \Template(TEMPLATE_USER);
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(
                     'content'    => $content,
-                    'content_id' => $contentId,
+                    'content_id' => $contentID,
                     'token'      => $token,
+                    'ext'        => $ext,
                 )
             );
         }

@@ -31,13 +31,11 @@ class TrashController extends Controller
     /**
      * Lists all the trashed elements
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('TRASH_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('TRASH_MANAGER');

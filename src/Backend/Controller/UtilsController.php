@@ -38,7 +38,7 @@ class UtilsController extends Controller
     {
         $tags = $request->query->filter('data', '', FILTER_SANITIZE_STRING);
 
-        $tags = StringUtils::get_tags($tags);
+        $tags = StringUtils::getTags($tags);
         $tags = str_replace(', ', ',', $tags);
 
         return new Response($tags, 200);

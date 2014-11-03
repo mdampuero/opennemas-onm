@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -6,7 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Repository;
 
 use Repository\BaseManager;
@@ -14,14 +16,35 @@ use Onm\Database\DbalWrapper;
 use Onm\Cache\CacheInterface;
 
 /**
- * Handles common actions in Menus
- *
- * @package Repository
- **/
+ * Handles common actions in Menus.
+ */
 class SettingManager extends BaseManager
 {
+    /**
+     * Array of auto-loaded settings.
+     *
+     * @var array
+     */
+    protected $autoloaded = array();
+
+    /**
+     * Array of names of settings to auto-load.
+     *
+     * @var array
+     */
+    protected $toAutoload = [
+        'site_color',
+        'site_description',
+        'site_footer',
+        'site_keywords',
+        'site_language',
+        'site_logo',
+        'site_title',
+        'time_zone'
+    ];
+
     /*
-     * Initializes the InstanceManager
+     * Initializes the InstanceManager.
      *
      * @param DbalWrapper    $dbConn The custom DBAL wrapper.
      * @param CacheInterface $cache  The cache instance.
@@ -34,98 +57,134 @@ class SettingManager extends BaseManager
     }
 
     /**
+     * Sets a new database name and cache prefix to use in the service.
+     *
+     * @return boolean
+     */
+    public function setConfig($config)
+    {
+        if (array_key_exists('database', $config)) {
+            $this->conn->selectDatabase($config['database']);
+        }
+
+        if (array_key_exists('cache_prefix', $config)) {
+            $this->cachePrefix = $config['cache_prefix'];
+            $this->cache->setNamespace($config['cache_prefix']);
+        }
+
+        return true;
+    }
+
+    /**
      * Fetches a setting from its name.
      *
-     * @param string $settingName the name of the setting.
-     * @param array  $default     the default value to return if not available
+     * @param string $name    The name of the setting.
+     * @param array  $default The default value to return if not available.
      *
-     * @return string the value of the setting
-     * @return array  if was provided an array of names this function returns an array of name/values
-     * @return false  if the key doesn't exists or is not setted
+     * @return string The value of the setting if $name is a string.
+     * @return array  An array of values if $name is an array of strings.
+     * @return false  If the key doesn't exists or is not set.
      */
-    public function get($settingName, $default = null)
+    public function get($name, $default = null)
     {
-        // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) {
+        if (!isset($name) || empty($name)) {
             return false;
         }
 
-        if (!is_array($settingName)) {
-            // Try to fetch the setting from cache first
-            $settingValue = $this->cache->fetch($settingName);
+        $settingValue = $default;
 
-            // If was not fetched from cache now is turn of DB
-            if (!$settingValue) {
-                $rs = $this->conn->fetchArray(
-                    "SELECT value FROM `settings` WHERE name = ?",
-                    array($settingName)
-                );
+        if (count($this->autoloaded) < count($this->toAutoload)) {
+            $this->autoloadSettings();
+        }
 
-                if ($rs === false) {
-                    return false;
-                }
+        $results = array();
 
-                if ($rs === null && empty($rs) && !is_null($default)) {
-                    $settingValue = $default;
-                } else {
-                    $settingValue = unserialize($rs[0]);
-                }
+        $searched = $name;
+        if (!is_array($name)) {
+            // $name like setting
+            $searched = array($name);
 
-                $this->cache->save($settingName, $settingValue);
+            if ($default != null) {
+                $default = array($default);
             }
-        } else {
-            // Try to fetch each setting from cache first
-            $settingValue = $this->cache->fetch($settingName);
+        } elseif (array_keys($name) !== range(0, count($name) - 1)) {
+            // $name like [ setting1 => default1, setting2 => default2 ]
+            $searched = array_keys($name);
+            $results = $name;
+        }
 
-            // If all the keys were not fetched from cache now is turn of DB
-            if (is_null($settingValue) || empty($settingValue)) {
-                $settings = implode("', '", $settingName);
-                $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
-                $rs       = $this->conn->executeQuery($sql);
+        $missed = array_diff($searched, $this->toAutoload);
+        $fromAutoload = array_diff($searched, $missed);
 
-                if (!$rs) {
-                    return false;
-                }
+        // Load settings from autoload
+        $results = array_merge(
+            $results,
+            array_intersect_key(
+                $this->autoloaded,
+                array_flip($fromAutoload)
+            )
+        );
 
-                $settingValue = array();
-                foreach ($rs as $option) {
-                    $settingValue[$option['name']] = unserialize($option['value']);
-                }
+        // Load settings from cache
+        $results = array_merge($results, $this->cache->fetch($missed));
 
-                $this->cache->save($settingValue, '');
+        // Check the settings to fetch from database
+        $missed = array_diff($searched, array_keys($results));
+
+        // Load the settings from database
+        if (!empty($missed)) {
+            $sql = "SELECT name, value FROM `settings` WHERE name IN ('"
+                . implode("', '", $missed) . "')";
+
+            $rs = $this->conn->fetchAll($sql);
+            foreach ($rs as $setting) {
+                $value = unserialize($setting['value']);
+                $results[$setting['name']] = $value;
+
+                $this->cache->save($setting['name'], $value);
             }
         }
 
-        return $settingValue;
+        if (is_array($default)) {
+            $results = array_merge($default, $results);
+        }
+
+        if (!is_array($name)) {
+            return array_pop($results);
+        }
+
+        return $results;
     }
 
     /**
      * Stores a setting in DB and updates cache entry for it.
      *
-     * @param string $settingName  the name of the setting.
-     * @param string $settingValue the value of the setting.
+     * @param string $name  The name of the setting.
+     * @param string $value The value of the setting.
      *
-     * @return boolean true if the setting was stored.
+     * @return boolean True if the setting was stored. Otherwise, returns false.
      */
-    public function set($settingName, $settingValue)
+    public function set($name, $value)
     {
-        // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) {
+        if (!isset($name) || empty($name)) {
             return false;
         }
 
-        $settingValueSerialized = serialize($settingValue);
+        if (in_array($name, $this->toAutoload)) {
+            $this->autoloaded[$name] = $value;
+        }
 
+        $serialized = serialize($value);
         $sql = "INSERT INTO settings (name,value) "
-                ."VALUES ('{$settingName}','{$settingValueSerialized}')"
-                ."ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
+                ."VALUES ('$name', '$serialized') "
+                ."ON DUPLICATE KEY UPDATE value = '$serialized'";
 
         $rs = $this->conn->executeQuery($sql);
 
         if (!$rs) {
             return false;
         }
-        $this->cache->save($settingName, $settingValue);
+        $this->cache->save($name, $value);
 
         return true;
     }
@@ -133,10 +192,11 @@ class SettingManager extends BaseManager
     /**
      * Invalidates the cache for a setting from its name.
      *
-     * @param string $settingName  the name of the setting.
-     * @param string $cachePrefix the name of the instance.
+     * @param string $settingName The name of the setting.
+     * @param string $cachePrefix The name of the instance.
      *
-     * @return boolean true if the setting cache was invalidated.
+     * @return boolean True if the setting cache was invalidated. Otherwise,
+     *                 returns false
      */
     public function invalidate($settingName, $cachePrefix = null)
     {
@@ -152,5 +212,40 @@ class SettingManager extends BaseManager
         $this->cache->delete($settingName, $cachePrefix);
 
         return true;
+    }
+
+    /**
+     * Load all settings in toAutoload array.
+     */
+    public function autoloadSettings()
+    {
+        // Build autoload
+        if (empty($this->autoloaded)) {
+            // First search from cache
+            $this->autoloaded = $this->cache->fetch($this->toAutoload);
+
+            // Check for missed properties
+            $missed = array_diff(
+                $this->toAutoload,
+                array_keys($this->autoloaded)
+            );
+
+            // Second search in database
+            $rs = $this->conn->fetchAll(
+                "SELECT * FROM `settings` WHERE name IN ('"
+                . implode("', '", $missed) . "')"
+            );
+
+            $names = array();
+            foreach ($rs as $setting) {
+                $value = unserialize($setting['value']);
+                $names[] = $setting['name'];
+
+                $this->autoloaded[$setting['name']] = $value;
+                $this->cache->save($setting['name'], $value);
+            }
+        }
+
+        return $this;
     }
 }

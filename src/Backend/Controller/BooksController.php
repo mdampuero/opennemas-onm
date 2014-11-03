@@ -67,28 +67,16 @@ class BooksController extends Controller
                 'timezone'     => $timezone->getName()
             )
         );
-        // ---------------------------------------------------------------------
-
-        // Optimize  this crap  ---------------------------------------
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        // Create folder if it doesn't exist
-        if (!file_exists($bookSavePath)) {
-            \FilesManager::createDirectory($bookSavePath);
-        }
-        // ---------------------------------------------------------------------
     }
 
     /**
      * Lists all the
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
@@ -103,13 +91,11 @@ class BooksController extends Controller
     /**
      * List books favorites for widget
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
@@ -143,14 +129,11 @@ class BooksController extends Controller
             return $this->render('book/new.tpl');
 
         } else {
-            $bookSavePath       = INSTANCE_MEDIA_PATH.'/books/';
-            $imageName          = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'file_img'    => $imageName,
+                'cover_id'    => $request->request->filter('cover_id', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -160,17 +143,16 @@ class BooksController extends Controller
             );
 
             $book = new \Book();
-            $id   =$book->create($data);
-
+            $id   = $book->create($data);
 
             if (!empty($id)) {
 
                 $book = $book->read($id);
 
-                return $this->render('book/new.tpl', array( 'book' => $book, ));
+                return $this->render('book/new.tpl', array('book' => $book));
 
             } else {
-                m::add(sprintf(_("Sorry, file can't created book.")));
+                m::add(sprintf(_("Unable to create the new book.")));
             }
 
             return $this->render('book/new.tpl');
@@ -188,7 +170,7 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->getInt('id');
+        $id = $request->query->getInt('id');
 
         $book = new \Book($id);
 
@@ -241,21 +223,12 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
         }
 
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        if (!empty($_FILES['file_img']['name'])) {
-            $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
-        } else {
-            $imageName = $book->file_img;
-        }
-
         $data = array(
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'file_img'       => $imageName,
+            'cover_id'       => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -345,44 +318,5 @@ class BooksController extends Controller
         }
 
         return new Response($msg);
-    }
-
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('BOOK_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('new_status', 0);
-
-        $selected = $request->query->get('selected_fld', null);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $book = new \Book($id);
-                $book->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $book->set_favorite($status, $_SESSION['userid']);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $this->category,
-                    'page'     => $page,
-                )
-            )
-        );
     }
 }

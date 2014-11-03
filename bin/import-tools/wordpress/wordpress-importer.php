@@ -37,7 +37,7 @@ set_include_path(implode(PATH_SEPARATOR, array( __DIR__.'/libs/',
 /**
  * Initializing essential classes
 */
-require SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
+require SITE_LIBS_PATH.'/adodb5/adodb.inc.php';
 
 require SITE_PATH.'../app/autoload.php';
 Application::initAutoloader();

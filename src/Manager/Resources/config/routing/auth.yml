@@ -1,0 +1,11 @@
+manager_login_form:
+    path: /login
+    defaults: { _controller:  ManagerBundle:Authentication:login }
+
+manager_login_processform:
+    path: /login/process
+    defaults: { _controller:  ManagerBundle:Authentication:check }
+
+manager_logout:
+    path: /logout
+    defaults: { _controller:  ManagerBundle:Authentication:logout }
