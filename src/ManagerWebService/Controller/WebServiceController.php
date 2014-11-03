@@ -62,11 +62,27 @@ class WebServiceController extends Controller
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
 
-        $instance->domains     = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
-        $instance->main_domain = 1;
-        $instance->activated   = 1;
-        $instance->plan        = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
-        $instance->price       = 0;
+        $instance->domains           = array($instance->internal_name . '.' . $instanceCreator['base_domain']);
+        $instance->main_domain       = 1;
+        $instance->activated         = 1;
+        $instance->plan              = $request->request->filter('plan', 'basic', FILTER_SANITIZE_STRING);
+        $instance->price             = 0;
+        $instance->activated_modules = [
+            'ADVANCED_SEARCH',
+            'ARTICLE_MANAGER',
+            'CATEGORY_MANAGER',
+            'COMMENT_MANAGER',
+            'FILE_MANAGER',
+            'FRONTPAGE_MANAGER',
+            'IMAGE_MANAGER',
+            'MENU_MANAGER',
+            'OPINION_MANAGER',
+            'SETTINGS_MANAGER',
+            'STATIC_PAGES_MANAGER',
+            'TRASH_MANAGER',
+            'USERVOICE_SUPPORT',
+            'WIDGET_MANAGER'
+        ];
 
         $date = new \DateTime();
         $date->setTimezone(new \DateTimeZone("UTC"));
