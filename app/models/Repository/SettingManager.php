@@ -106,7 +106,6 @@ class SettingManager extends BaseManager
 
             if ($default != null) {
                 $default = array($default);
-                $results = array_combine($searched, $default);
             }
         } elseif (array_keys($name) !== range(0, count($name) - 1)) {
             // $name like [ setting1 => default1, setting2 => default2 ]
@@ -138,13 +137,16 @@ class SettingManager extends BaseManager
                 . implode("', '", $missed) . "')";
 
             $rs = $this->conn->fetchAll($sql);
-
             foreach ($rs as $setting) {
                 $value = unserialize($setting['value']);
                 $results[$setting['name']] = $value;
 
                 $this->cache->save($setting['name'], $value);
             }
+        }
+
+        if (is_array($default)) {
+            $results = array_merge($default, $results);
         }
 
         if (!is_array($name)) {
