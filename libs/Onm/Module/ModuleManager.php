@@ -237,7 +237,7 @@ class ModuleManager
                 ],
                 [
                     'id'   => 'KEYWORD_MANAGER',
-                    'plan' => 'Other',
+                    'plan' => 'Base',
                     'name' => _('Keywords'),
                 ],
                 [

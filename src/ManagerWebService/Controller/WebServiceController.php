@@ -75,6 +75,7 @@ class WebServiceController extends Controller
             'FILE_MANAGER',
             'FRONTPAGE_MANAGER',
             'IMAGE_MANAGER',
+            'KEYWORD_MANAGER',
             'MENU_MANAGER',
             'OPINION_MANAGER',
             'SETTINGS_MANAGER',
