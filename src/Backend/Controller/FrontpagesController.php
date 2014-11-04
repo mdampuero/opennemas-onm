@@ -159,6 +159,10 @@ class FrontpagesController extends Controller
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
+        // Fetch old contents
+        $cm = new \ContentManager();
+        $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
+
         if ($category !== null && $category !== '') {
             $category = (int) $category;
 
@@ -168,10 +172,6 @@ class FrontpagesController extends Controller
             $lastVersion       = $request->request->get('last_version', null);
 
             $categoryID = ($category == 'home') ? 0 : $category;
-
-            // Fetch old contents
-            $cm = new \ContentManager();
-            $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
 
             // Check if data send by user is valid
             $validReceivedData = is_array($contentsPositions)
