@@ -32,7 +32,6 @@
             @Common/plugins/webarch/css/responsive.css,
             @Common/plugins/webarch/css/custom-icon-set.css,
             @Common/plugins/webarch/css/magic_space.css,
-            @Common/plugins/webarch/css/tiles_responsive.css,
 
             @Common/plugins/angular-quickdate/css/ng-quick-date.css,
             @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
@@ -292,9 +291,10 @@
             @Common/plugins/jquery/jquery.min.js,
             @Common/plugins/jquery-ui/jquery-ui.min.js,
             @Common/plugins/bootstrap/js/bootstrap.min.js,
-            @Common/plugins/breakpoints.js,
+            @Common/plugins/breakpoints/breakpoints.min.js,
+            @Common/plugins/jquery-scrollbar/jquery.scrollbar.min.js,
             @Common/plugins/jquery-unveil/jquery.unveil.min.js,
-            @Common/plugins/jquery-block-ui/jqueryblockui.js,
+            @Common/plugins/jquery-block-ui/jquery.blockui.min.js,
             @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
 
             @Common/plugins/jquery-slider/jquery.sidr.min.js,
