@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is Only DEMO Purposes 
+-----------------------------------------------------------------*/	
 $(document).ready(function() {		
 
 	var d2 = [ [1, 30],

@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes 
+-----------------------------------------------------------------*/	
 $(document).ready(function() {	
 	var graph;
 	var rick;

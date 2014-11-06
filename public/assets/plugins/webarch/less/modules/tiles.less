@@ -1,6 +1,6 @@
 .tiles-container {
-    margin-left: 0px;
-    margin-right: 0px;
+    .margin-left(0px);
+    .margin-right(0px);
 }
 .tiles {
     background-color: #bcbcbc;
@@ -13,17 +13,17 @@
         height: 100%;
     }
     &.added-margin {
-        margin-right: -10px;
+        .margin-right(-10px);
     }
     &.no-margin {
-        margin-right: 0;
+        .margin-right(0);
     }
     &.margin-reset {
-        margin-left: 37px;
+        .margin-left(37px);
     }
     .tiles-title {
         font-size: 10.5px;
-        font-family: @base-font-family;
+        font-family: @base-font-family-two;
         letter-spacing: 0.5px;
         font-weight: 600;
     }
@@ -33,7 +33,7 @@
     .controller {
         position: relative;
         display: inline-block;
-        float: right;
+        .float(right);
         a {
             position: relative;
             background: url('../img/icon/portlet-tray.png') no-repeat;
@@ -191,7 +191,7 @@
     .heading {
         font-size: 25px;
         display: block;
-        font-family: @base-font-family;
+        font-family: @base-font-family-two;
         font-weight: 600;
         margin: 4px 0px;
         .icon-grid {
@@ -249,32 +249,32 @@
         color:  @color-white ;
     }
     &.red {
-        background-color: #f35958;
+        background-color: @color-red;
         .button {
             background: #bf3938;
             color: #f7bebe;
         }
     }
     &.purple {
-        background-color: #736086;
+        background-color: @color-purple;
         .button {
             background: #736086;
             color: #d7d5d7;
         }
     }
     &.blue {
-        background-color: #0090d9;
+        background-color: @color-blue;
     }
     &.green {
         background-color: @color-green;
     }
     &.black {
-        background-color: #22262e;
+        background-color: @sidebar-inner-ul-list-background;
         .blend {
             color: #8b91a0;
         }
         input {
-            background-color: #0d0f12;
+            background-color: rgba(0,0,0,0.35);
             border: 0;
         }
     }
@@ -288,7 +288,7 @@
         background-color: #f96773;
     }
     &.grey {
-        background-color: #f2f4f6;
+        background-color: @base-light-four;
     }
     &.gradient-grey {
         background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(131,131,131,0.65) 100%);
@@ -375,17 +375,16 @@
         height: auto;
     }
     &.green {
-        background-color: @color-green;
-        .opacity(0.8);
+        background-color: rgba(red(@color-green), green(@color-green), blue(@color-green), 0.8);
     }
     &.blue {
-        background-color: rgba(0,144,217,0.8);
+        background-color: rgba(red(@color-blue), green(@color-blue), blue(@color-blue), 0.8);
     }
 }
 .widget-item {
     position: relative;
     &.narrow-margin {
-        margin-right: -10px;
+        .margin-right(-10px);
     }
     .controller {
         position: absolute;
@@ -475,7 +474,7 @@
 }
 .widget {
     display: block;
-    margin-right: -10px;
+    .margin-right(-10px);
     .widget-title {
         display: block;
         padding: 10px;
@@ -536,7 +535,7 @@
         display: inline-block;
         float: right;
         top: 6px;
-        margin-right: 8px;
+        .margin-right(8px);
         a {
             position: relative;
             background: url('../img/icon/portlet-tray.png') no-repeat;
@@ -631,6 +630,9 @@
         border-right: 1px solid #363a41;
         margin-right: 7px;
         padding-right: 7px;
+        &.transparent{
+            border-right: 1px solid rgba(0,0,0,0.2);
+        }   
         &.last {
             border: 0;
         }
@@ -643,5 +645,60 @@
         color:  @color-white ;
         display: block;
         font-weight: bold;
+    }
+}
+.market-share-widget-innerscroller{
+    height: calc(~'100% - 110px');
+}
+//SALES GRAPH //
+.sales-graph-heading{
+    padding-left: 45px;
+    padding-top:35px;
+}
+
+/* Metro JS */
+.live-tile, .list-tile, .copy-tile{
+    height: 100%;
+}
+.live-tile, .list-tile, .copy-tile, .tile-strip .flip-list > li{
+    margin: 0;
+    width:100%;
+}
+.live-tile p, .list-tile p, .copy-tile p{
+    padding: 0;
+}
+
+h4.custom-line-height {
+    line-height: 25px;
+}
+
+.hover-effect-img {
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.tiles:hover .hover-effect-img {
+    -moz-transform: scale(1.1,1.1);
+    -ms-transform: scale(1.1,1.1);
+    -o-transform: scale(1.1,1.1);
+    -webkit-transform: scale(1.1,1.1);
+    transform: scale(1.1,1.1);
+    filter: contrast(130%);
+    -webkit-filter: contrast(130%);
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .tiles.adjust-text p {
+        font-size: 10px;
+    }
+
+    .tiles.adjust-text h3 {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    .tiles.adjust-text p {
+        font-size: 14px;
     }
 }

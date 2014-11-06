@@ -1,6 +1,6 @@
+/* Webarch Admin Dashboard 
+-----------------------------------------------------------------*/	
 	$(document).ready(function() {
-	
-	
 		/* initialize the external events
 		-----------------------------------------------------------------*/
 	
@@ -86,9 +86,10 @@
 		$('#change-view-month').click(function(){
 			$('#calendar').fullCalendar('changeView', 'month');
 		});
+        
 		$('#change-view-week').click(function(){
-			 $('#calendar').fullCalendar( 'changeView', 'agendaWeek');
-		});
+             $('#calendar').fullCalendar( 'changeView','agendaWeek');
+        });
 		$('#change-view-day').click(function(){
 			$('#calendar').fullCalendar( 'changeView','agendaDay');
 		});
