@@ -427,7 +427,7 @@
                             <td class="text-center" ng-show="columns.last_login">
                                 [% instance.last_login %]
                             </td>
-                            <td class="nowrap" ng-show="columns.created">
+                            <td class="text-center" ng-show="columns.created">
                                 [% instance.created %]
                             </td>
                             <td class="text-center" ng-show="columns.contents">
