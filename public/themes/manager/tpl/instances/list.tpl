@@ -1,98 +1,263 @@
-<div class="content">
-    <div class="page-title">
-        <h3 class="pull-left">
-            <i class="fa fa-cubes"></i> {t}Instances{/t}
-        </h3>
-        <ul class="breadcrumb pull-right">
-            <li>
-                <p>{t}YOU ARE HERE{/t}</p>
-            </li>
-            <li>
-                <a href="#">{t}Dashboard{/t}</a>
-            </li>
-            <li>
-                <a href="#/instances" class="active">{t}Instances{/t}</a>
-            </li>
-        </ul>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-cubes fa-lg"></i>
+                        {t}Instances{/t}
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                            <i class="fa fa-download fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-link">
+                            <i class="fa fa-plus fa-lg"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.instances.length == 0 }">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                            <i class="fa fa-download fa-lg"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="setEnabledSelected(0)">
+                            <i class="fa fa-times fa-lg"></i>
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="setEnabledSelected(1)">
+                            <i class="fa fa-check fa-lg"></i>
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="deleteSelected()">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="grid simple">
-	   <div class="grid-title clearfix">
-            <div class="form-inline">
-                <div class="form-filter">
-                    <div class="hidden-sm hidden-md hidden-lg filter">{t}Filter:{/t}</div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon primary">
-                                <span class="arrow"></span>
-                                <i class="fa fa-cube"></i>
-                            </span>
-                            <input ng-keyup="searchByKeypress($event)" class="form-control" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text"/>
-                            <div class="input-group-btn">
-                                <select class="btn btn-white xmedium form-control" ng-model="epp">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="500">500</option>
-                                </select>
-                                <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                                <button class="btn btn-white" ng-click="refresh()">
-                                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-refresh': !loading }"></i>
-                                </button>
-                            </div>
+</div>
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-form no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-cube fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text" style="width:250px;"/>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <select class="xmedium" ng-model="epp">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                    </select>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
+                        <i class="fa fa-trash-o fa-lg"></i>
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="refresh()">
+                        <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+                    </button>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks dropdown">
+                    <div class="btn btn-link dropdown-toggle" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
+                        <i class="fa fa-columns"></i>
+                    </div>
+                    <div class="dropdown-menu container pull-right" role="menu">
+                        <div class="pull-left">
+                            <ul class="no-style">
+                                <li ng-click="columns.name = !columns.name;">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.name, 'fa-blank': !columns.name }"></i>
+                                        {t}Name{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.domains = !columns.domains">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.domains, 'fa-blank': !columns.domains }"></i>
+                                        {t}Domains{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.domain_expire = !columns.domain_expire;">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.domain_expire, 'fa-blank': !columns.domain_expire }"></i>
+                                        {t}Doman expire{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.contact_mail = !columns.contact_mail">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.contact_mail, 'fa-blank': !columns.contact_mail }"></i>
+                                        {t}Contact{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.last_login = !columns.last_login">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.last_login, 'fa-blank': !columns.last_login }"></i>
+                                        {t}Last access{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.created = !columns.created">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.created, 'fa-blank': !columns.created }"></i>
+                                        {t}Created{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.contents = !columns.contents">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.contents, 'fa-blank': !columns.contents }"></i>
+                                        {t}Contents{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.articles = !columns.articles">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.articles, 'fa-blank': !columns.articles }"></i>
+                                        {t}Articles{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.opinions = !columns.opinions">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.opinions, 'fa-blank': !columns.opinions }"></i>
+                                        {t}Opinions{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.advertisements = !columns.advertisements">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.advertisements, 'fa-blank': !columns.advertisements }"></i>
+                                        {t}Advertisements{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.albums = !columns.albums">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.albums, 'fa-blank': !columns.albums }"></i>
+                                        {t}Albums{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.photos = !columns.photos">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.photos, 'fa-blank': !columns.photos }"></i>
+                                        {t}Photos{/t}
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <div class="form-group pagination-info">
-                        {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li>
-                                    <a href="{url name=manager_ws_instances_list_export}?search=[% criteria.name_like[0].value %]">
-                                        <i class="fa fa-download"></i> {t}Export current list{/t}
-                                    </a>
-                                </li>
-                                <li ng-if="selected.instances.length > 0">
-                                    <a ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
-                                        <i class="fa fa-download"></i> {t}Export selection{/t}
-                                    </a>
-                                </li>
-                                <li class="divider" ng-if="selected.instances.length > 0"></li>
-                                <li ng-if="selected.instances.length > 0">
-                                    <span class="a" ng-click="setEnabledSelected(1)">
-                                        <i class="fa fa-check"></i> {t}Enable{/t}
+                        <div class="pull-right">
+                            <ul class="no-style">
+                                <li ng-click="columns.videos = !columns.videos">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.videos, 'fa-blank': !columns.videos }"></i>
+                                        {t}Videos{/t}
                                     </span>
                                 </li>
-                                <li ng-if="selected.instances.length > 0">
-                                    <span class="a" ng-click="setEnabledSelected(0)">
-                                        <i class="fa fa-times"></i> {t}Disable{/t}
+                                <li ng-click="columns.widgets = !columns.widgets">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.widgets, 'fa-blank': !columns.widgets }"></i>
+                                        {t}Widgets{/t}
                                     </span>
                                 </li>
-                                <li class="divider" ng-if="selected.instances.length > 0"></li>
-                                <li ng-if="selected.instances.length > 0">
-                                    <span class="a" ng-click="deleteSelected()">
-                                        <i class="fa fa-trash-o"></i> {t}Delete{/t}
+                                <li ng-click="columns.static_pages = !columns.static_pages">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.static_pages, 'fa-blank': !columns.static_pages }"></i>
+                                        {t}Static pages{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.attachments = !columns.attachments">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.attachments, 'fa-blank': !columns.attachments }"></i>
+                                        {t}Attachments{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.polls = !columns.polls">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.polls, 'fa-blank': !columns.polls }"></i>
+                                        {t}Polls{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.letters = !columns.letters">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.letters, 'fa-blank': !columns.letters }"></i>
+                                        {t}Letters{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.media_size = !columns.media_size">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.media_size, 'fa-blank': !columns.media_size }"></i>
+                                        {t}Media size{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.alexa = !columns.alexa">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.alexa, 'fa-blank': !columns.alexa }"></i>
+                                        {t}Alexa{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.page_views = !columns.page_views">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.page_views, 'fa-blank': !columns.page_views }"></i>
+                                        {t}Page views{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.users = !columns.users">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.users, 'fa-blank': !columns.users }"></i>
+                                        {t}Users{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.emails = !columns.emails;">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.emails, 'fa-blank': !columns.emails }"></i>
+                                        {t}Emails{/t}
+                                    </span>
+                                </li>
+                                <li ng-click="columns.activated = !columns.activated;">
+                                    <span class="a">
+                                        <i class="fa" ng-class="{ 'fa-eye': columns.activated, 'fa-blank': !columns.activated }"></i>
+                                        {t}Enabled{/t}
                                     </span>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
-                            <i class="fa fa-plus"></i> {t}Create{/t}
-                        </a>
-                    </div>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
+    </div>
+</div>
+<div class="content">
+    <div class="grid simple">
         <div class="grid-body no-padding">
                 <div class="grid-overlay" ng-if="loading"></div>
                 <table class="table table-hover no-margin">
@@ -205,167 +370,6 @@
                                     <i class="fa fa-check"></i>
                                     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('activated') == 'asc', 'fa fa-caret-down': isOrderedBy('activated') == 'desc'}"></i>
                                 </span>
-                            </th>
-                            <th class="text-center" style="width: 10px">
-                                <div class="dropdown pointer">
-                                    <div class="dropdown-toggle">
-                                        <i class="fa fa-columns" tooltip-html-unsafe="{t}Columns{/t}"></i>
-                                    </div>
-                                    <div class="dropdown-menu container pull-right" role="menu">
-                                        <div class="pull-left">
-                                            <ul class="no-style">
-                                                <li ng-click="columns.name = !columns.name;">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.name, 'fa-blank': !columns.name }"></i>
-                                                        {t}Name{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.domains = !columns.domains">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.domains, 'fa-blank': !columns.domains }"></i>
-                                                        {t}Domains{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.domain_expire = !columns.domain_expire;">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.domain_expire, 'fa-blank': !columns.domain_expire }"></i>
-                                                        {t}Doman expire{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.contact_mail = !columns.contact_mail">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.contact_mail, 'fa-blank': !columns.contact_mail }"></i>
-                                                        {t}Contact{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.last_login = !columns.last_login">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.last_login, 'fa-blank': !columns.last_login }"></i>
-                                                        {t}Last access{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.created = !columns.created">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.created, 'fa-blank': !columns.created }"></i>
-                                                        {t}Created{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.contents = !columns.contents">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.contents, 'fa-blank': !columns.contents }"></i>
-                                                        {t}Contents{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.articles = !columns.articles">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.articles, 'fa-blank': !columns.articles }"></i>
-                                                        {t}Articles{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.opinions = !columns.opinions">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.opinions, 'fa-blank': !columns.opinions }"></i>
-                                                        {t}Opinions{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.advertisements = !columns.advertisements">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.advertisements, 'fa-blank': !columns.advertisements }"></i>
-                                                        {t}Advertisements{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.albums = !columns.albums">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.albums, 'fa-blank': !columns.albums }"></i>
-                                                        {t}Albums{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.photos = !columns.photos">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.photos, 'fa-blank': !columns.photos }"></i>
-                                                        {t}Photos{/t}
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="pull-right">
-                                            <ul class="no-style">
-                                                <li ng-click="columns.videos = !columns.videos">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.videos, 'fa-blank': !columns.videos }"></i>
-                                                        {t}Videos{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.widgets = !columns.widgets">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.widgets, 'fa-blank': !columns.widgets }"></i>
-                                                        {t}Widgets{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.static_pages = !columns.static_pages">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.static_pages, 'fa-blank': !columns.static_pages }"></i>
-                                                        {t}Static pages{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.attachments = !columns.attachments">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.attachments, 'fa-blank': !columns.attachments }"></i>
-                                                        {t}Attachments{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.polls = !columns.polls">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.polls, 'fa-blank': !columns.polls }"></i>
-                                                        {t}Polls{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.letters = !columns.letters">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.letters, 'fa-blank': !columns.letters }"></i>
-                                                        {t}Letters{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.media_size = !columns.media_size">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.media_size, 'fa-blank': !columns.media_size }"></i>
-                                                        {t}Media size{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.alexa = !columns.alexa">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.alexa, 'fa-blank': !columns.alexa }"></i>
-                                                        {t}Alexa{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.page_views = !columns.page_views">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.page_views, 'fa-blank': !columns.page_views }"></i>
-                                                        {t}Page views{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.users = !columns.users">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.users, 'fa-blank': !columns.users }"></i>
-                                                        {t}Users{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.emails = !columns.emails;">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.emails, 'fa-blank': !columns.emails }"></i>
-                                                        {t}Emails{/t}
-                                                    </span>
-                                                </li>
-                                                <li ng-click="columns.activated = !columns.activated;">
-                                                    <span class="a">
-                                                        <i class="fa" ng-class="{ 'fa-eye': columns.activated, 'fa-blank': !columns.activated }"></i>
-                                                        {t}Enabled{/t}
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -501,7 +505,6 @@
                                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': instance.loading, 'fa-check text-success' : !instance.loading &&instance.activated == '1', 'fa-times text-error': !instance.loading && instance.activated == '0' }"></i>
                                 </button>
                             </td>
-                            <td></td>
                         </tr>
                     </tbody>
                     <tfoot ng-if="instances.length > 0">
@@ -511,7 +514,7 @@
                                     {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
                                 </div>
                                 <div class="pull-right" ng-if="instances.length > 0">
-                                    <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="pages"></pagination>
+                                    <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="$parent.$parent.pages"></pagination>
                                 </div>
                             </td>
                         </tr>

@@ -1,3 +1,7 @@
+.header {
+  width: auto;
+}
+
 .header .header-seperation  {
   overflow: hidden;
   width:210px
@@ -74,8 +78,8 @@
 }
 
 @media (max-width: 768px) {
-  .layout-collapse {
-    display: block;
+  .header {
+    width: 100%;
   }
 
   .header-logo {
@@ -83,6 +87,10 @@
   }
 
   .header-static-logo {
+    display: block;
+  }
+
+  .layout-collapse {
     display: block;
   }
 }
