@@ -337,6 +337,7 @@ class AdsController extends Controller
         $filters = array(
             'content_type_name'  => array(array('value' => 'advertisement')),
             'type_advertisement' => array(array('value' => 37)),
+            'in_litter'          => array(array('value' => 1, 'operator' => '!='))
         );
 
         $em       = $this->get('advertisement_repository');
