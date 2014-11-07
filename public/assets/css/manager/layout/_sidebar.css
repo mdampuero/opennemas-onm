@@ -69,6 +69,7 @@
   padding: 0;
   width: 210px;
   display: block !important;
+  overflow: hidden;
 
   -webkit-transition: width .25s;
   -moz-transition: width .25s;
