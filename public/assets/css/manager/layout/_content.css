@@ -17,8 +17,13 @@
 }
 
 .page-content .content {
-  padding: 14px;
+  padding: 6px;
+  margin-top: 50px;
+}
+
+.page-content .filters-navbar + .content {
   margin-top: 100px;
+  padding-top: 0;
 }
 
 .page-sidebar.collapsed + .page-container .page-content .page-navbar,
@@ -70,9 +75,26 @@
 }
 
 .page-navbar .quick-section {
-  margin: 7px 10px;
+  margin: 6px 10px;
   display: inline-block;
   float: left;
+}
+
+.page-navbar.filters-navbar .quick-section {
+  margin: 7px;
+}
+
+.page-navbar.filters-navbar .quick-section .add-on {
+  left: 0;
+  border-radius: 2px 0 2px 0;
+  padding: 4px 8px;
+  height: 36px;
+}
+
+.page-navbar.filters-navbar .quick-section .add-on + input {
+  border-radius: 0 2px 2px 0;
+  line-height: 14px;
+  min-height: 36px !important;
 }
 
 .page-navbar .selected-actions .quick-section {
