@@ -26,7 +26,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          *
          * @type integer
          */
-        $scope.mini = 0;
+        $scope.sidebar = {
+            wanted: 0,
+            current: 0,
+            forced: 0
+        };
 
         /**
          * Flag to show modal window for login only once.
@@ -52,7 +56,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.init = function(language) {
             $('body').removeClass('application-loading');
 
-            console.log(language);
             $translate.use(language);
 
             paginationConfig.nextText     = $filter('translate')('Next');
@@ -299,6 +302,22 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 type: 'error',
                 message: args.data.text
             });
+        });
+
+        /**
+         * Updates sidebar status when window width changes.
+         *
+         * @param integer nv New width value.
+         * @param integer ov Old width value.
+         */
+        $scope.$watch('windowWidth', function(nv, ov) {
+            if (nv <= 1024)  {
+                $scope.sidebar.forced  = 1;
+                $scope.sidebar.current = 1;
+            } else {
+                $scope.sidebar.forced = 0;
+                $scope.sidebar.current = $scope.sidebar.wanted;
+            }
         });
     }
 ]);
