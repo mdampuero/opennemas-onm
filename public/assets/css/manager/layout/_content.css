@@ -1,0 +1,39 @@
+.page-container {
+  height: auto;
+  margin: 0;
+  overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.page-content {
+  margin: 0;
+  padding-left: 210px;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+}
+
+.page-content .content {
+  padding-top: 0;
+}
+
+.page-sidebar.collapsed + .page-container .page-content {
+    padding-left: 50px;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .page-sidebar.collapsed + .page-container .page-content {
+    left: 0;
+    padding-left: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-sidebar.collapsed + .page-container .page-content {
+    left: 0;
+    padding: 0;
+  }
+}
+

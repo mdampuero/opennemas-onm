@@ -40,7 +40,9 @@
             @Common/plugins/jquery-notifications/css/messenger.css,
             @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
 
-            @Common/css/opennemas/style.css"
+            @Common/css/manager/base/*,
+            @Common/css/manager/layout/*,
+            @Common/css/manager/main.css"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
@@ -53,147 +55,128 @@
     {/block}
 
 </head>
-<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')">
+<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
-            <div class="header-seperation" ng-hide="mini">
-                <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper">
-                    <li class="dropdown">
-                        <a id="main-menu-toggle" href="#main-menu">
-                            <div class="iconset top-menu-toggle-white"></div>
-                        </a>
-                    </li>
-                </ul>
-                <!-- BEGIN LOGO -->
-                <a href="{url name=manager_welcome}">
-                    {image_tag src="/logos/logo-opennemas-small-white.png" class="logo" alt=""  data-src="/assets/images/logos/logo-opennemas-small-white.png" data-src-retina="/assets/images/logos/logo-opennemas-small-white.png" width="112" height="19" common=1}
-                </a>
-                <!-- END LOGO -->
-                <ul class="nav pull-right notifcation-center">
-                    <li class="dropdown" id="header_task_bar">
-                        <a href="{url name=manager_welcome}" class="dropdown-toggle active" data-toggle="">
-                            <div class="iconset top-home"></div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="header-quick-nav">
-                <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="pull-left">
-                    <ul class="nav quick-section quick-section-logo">
-                        <li class="mini-logo">
-                            <a href="{url name=manager_welcome}">
-                                {image_tag src="/logos/logo-opennemas-small-black.png" class="logo" alt=""  data-src="/assets/images/logos/logo-opennemas-small-black.png" data-src-retina="/assets/images/logos/logo-opennemas-small-black.png" width="112" height="19" common=1}
-                            </a>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="a" id="layout-condensed-toggle" ng-click="toggle(!mini);">
-                                <div class="iconset top-menu-toggle-dark"></div>
-                            </span>
-                        </li>
-                    </ul>
-                    <!-- <ul class="nav quick-section">
-                        <li class="m-r-10 input-prepend inside search-form no-boarder">
-                            <span class="add-on">
-                                <span class="iconset top-search"></span>
-                            </span>
-                            <input name="" type="text"  class="no-boarder " placeholder="{t}Search Dashboard{/t}" style="width:250px;">
-                        </li>
-                    </ul> -->
-                </div>
-                <!-- END TOP NAVIGATION MENU -->
-                <!-- BEGIN CHAT TOGGLER -->
-                <div class="pull-right">
-                    <div class="chat-toggler">
-                      <ul class="nav quick-section">
-                          <li class="quicklinks">
-                              <span class="a dropdown-toggle pull-right" data-placement="bottom" data-toggle="dropdown">
-                                  <div class="profile-pic">
-                                      <img class="gravatar" email="[% user.email %]" image="1" size="35" >
-                                  </div>
-
-                                  <div class="user-details">
-                                      <div class="username">
-                                          <span class="badge badge-important hidden">3</span> [% user.name %]
-                                      </div>
-                                  </div>
-                                  <div class="iconset top-down-arrow"></div>
-                              </span>
-                              <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="user-options">
-                                  <li>
-                                      <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]"> {t}My Account{/t}</a>
-                                  </li>
-                                  <li class="divider"></li>
-                                  <li>
-                                      <span class="a" ng-click="logout();">
-                                        <i class="fa fa-power-off"></i>&nbsp;&nbsp;{t}Log Out{/t}
-                                      </span>
-                                  </li>
-                              </ul>
-                          </li>
-                      </ul>
+            <div class="header-seperation" ng-class="{ 'collapsed': sidebar.current }">
+                <div class="layout-collapse pull-left">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                        <i class="fa fa-bars fa-lg"></i>
                     </div>
                 </div>
-                <!-- END CHAT TOGGLER -->
+                <a class="header-static-logo" href="{url name=manager_welcome}">
+                    <h1>
+                        open<strong>nemas</strong>
+                    </h1>
+                </a>
+                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                    <div class="overlay"></div>
+                    <a class="header-logo" href="{url name=manager_welcome}">
+                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                            <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
+                        </h1>
+                    </a>
+                </div>
             </div>
         <!-- END TOP NAVIGATION MENU -->
         </div>
       <!-- END TOP NAVIGATION BAR -->
     </header>
-    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
-        <!-- BEGIN SIDEBAR -->
-        <div class="page-sidebar" id="main-menu" ng-class="{ 'mini': mini }">
-            <div class="page-sidebar-wrapper" id="main-menu-wrapper">
-                <!-- BEGIN SIDEBAR MENU -->
-                <ul>
-                    <li class="start" ng-class="{ 'active': false }">
-                        <a href="#"><i class="fa fa-home"></i> <span class="title">{t}Dashboard{/t}</span></a>
-                    </li>
-                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list'))">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]"><i class="fa fa-cubes"></i> <span class="title">{t}Instances{/t}</span></a>
-                    </li>
-                    <li ng-class="{ 'active': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
-                        <a href="#">
-                            <i class="fa fa-flask"></i> <span class="title"> {t}Framework{/t}</span>
-                            <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands'))">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]"><i class="fa fa-code"></i> {t}Commands{/t}</a>
-                            </li>
-                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status'))">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]"><i class="fa fa-database"></i> {t}OPCache Status{/t}</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li ng-class="{ 'active': isActive('manager_users_list') || isActive('manager_user_groups_list'),  'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
-                        <a href="#">
-                            <i class="fa fa-gears"></i>
-                            <span class="title">{t}Settings{/t}
-                            </span><span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list'))">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
-                                    <i class="fa fa-user"></i> {t}Users{/t}
-                                </a>
-                            </li>
-                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list'))">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
-                                    <i class="fa fa-users"></i> {t}User groups{/t}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="clearfix"></div>
-                <!-- END SIDEBAR MENU -->
-            </div>
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()">
+        <div class="overlay"></div>
+        <div class="page-sidebar-wrapper" id="main-menu-wrapper">
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul>
+                <li class="start" ng-class="{ 'active': false }" ng-click="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                    <a href="#">
+                        <i class="fa fa-home"></i>
+                        <span class="title">{t}Dashboard{/t}</span>
+                    </a>
+                </li>
+                <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                    <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
+                        <i class="fa fa-cubes"></i>
+                        <span class="title">{t}Instances{/t}</span>
+                    </a>
+                </li>
+                <li ng-class="{ 'active open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
+                    <a href="#">
+                        <i class="fa fa-flask"></i>
+                        <span class="title"> {t}Framework{/t}</span>
+                        <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted;">
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
+                                <i class="fa fa-code"></i>
+                                <span class="title">{t}Commands{/t}</span>
+                            </a>
+                        </li>
+                        <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]">
+                                <i class="fa fa-database"></i>
+                                <span class="title">{t}OPCache Status{/t}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-class="{ 'active open': isActive('manager_users_list') || isActive('manager_user_groups_list'),  'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
+                    <a href="#">
+                        <i class="fa fa-gears"></i>
+                        <span class="title">{t}Settings{/t}</span>
+                        <span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
+                                <i class="fa fa-user"></i>
+                                <span class="title">{t}Users{/t}</span>
+                            </a>
+                        </li>
+                        <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                                <i class="fa fa-users"></i>
+                                <span class="title">{t}User groups{/t}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            <!-- END SIDEBAR MENU -->
         </div>
-        <!-- END SIDEBAR -->
+        <div class="footer-widget">
+            <ul>
+                <li class="profile-info">
+                    <div class="profile-pic">
+                        <img class="gravatar" email="[% user.email %]" image="1" size="32" >
+                    </div>
+                    <div class="username">[% user.name %]</div>
+                </li>
+                <li class="profile-actions">
+                    <ul>
+                        <li ng-click="logout();">
+                            <i class="fa fa-power-off"></i>
+                        </li>
+                        <li>
+                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]">
+                                <i class="fa fa-user"></i>
+                            </a>
+                        </li>
+                        <li ng-click="sidebar.wanted = !sidebar.wanted;">
+                            <i class="fa fa-thumb-tack" ng-class="{ 'fa-rotate-90': !sidebar.wanted }"></i>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END SIDEBAR -->
+    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
-            <div class="page-content" ng-class="{ 'condensed': mini }">
+            <div class="page-content">
                 <div id="view" ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
@@ -319,6 +302,7 @@
             @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-checklist-model/checklist-model.js,
             @Common/plugins/angular-route/angular-route.min.js,
+            @Common/plugins/angular-swipe/angular-swipe.min.js,
             @Common/plugins/angular-recaptcha/module.js,
             @Common/plugins/angular-recaptcha/directive.js,
             @Common/plugins/angular-recaptcha/service.js,

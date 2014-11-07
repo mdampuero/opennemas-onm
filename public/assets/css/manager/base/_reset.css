@@ -1,0 +1,99 @@
+.header {
+    height: 50px;
+    min-height: 50px;
+}
+
+.header .header-seperation {
+    display: block !important;
+    width: 210px;
+    height: 50px;
+    min-height: 50px;
+}
+
+.header .chat-toggler {
+    top: 4px;
+}
+
+.header .header-quick-nav {
+    height: 50px;
+}
+
+.header .quick-section {
+    margin-top: 12px;
+}
+
+.page-sidebar {
+    background-color: #1b1e24 !important;
+    width: 210px;
+    margin-top: 50px;
+    position: fixed;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > a {
+    padding: 15px !important;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
+    padding: 15px 30px !important;
+
+    -webkit-transition: padding .25s;
+    -moz-transition:  padding .25s !important;
+    transition:  padding .25s !important;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li.open > a,
+.page-sidebar .page-sidebar-wrapper > ul > li:hover > a,
+.page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+    background: none;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul li span.title {
+    display: inline-block;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul li span.arrow {
+    display: inline;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul {
+    width: 210px;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu {
+    padding: 0;
+    position: relative;
+    margin: 0;
+}
+
+.page-sidebar.collapsed .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
+    padding: 15px !important;
+}
+
+.page-sidebar .page-sidebar-wrapper ul li a,
+.page-sidebar .page-sidebar-wrapper ul li a i,
+.page-sidebar .page-sidebar-wrapper ul > li.open > a i,
+.page-sidebar .page-sidebar-wrapper > ul > li.open > a i,
+.page-sidebar.collapsed .page-sidebar-wrapper ul li a i,
+.page-sidebar.collapsed .page-sidebar-wrapper ul li a {
+    color: #8b91a0 !important;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul li:hover > a,
+.page-sidebar .page-sidebar-wrapper > ul li:hover > a i,
+.page-sidebar .page-sidebar-wrapper > ul li.active > a,
+.page-sidebar .page-sidebar-wrapper > ul li.active > a i
+{
+    color: #fff !important;
+}
+
+.page-content {
+    margin: 0;
+    padding: 0;
+    left: 0;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .page-sidebar .page-sidebar-wrapper > ul {
+        padding-top: 0;
+    }
+}

@@ -1,0 +1,197 @@
+.collapsed .overlay {
+  width: 50px;
+}
+
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 0;
+  z-index: 220;
+
+  -webkit-transition:width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.page-sidebar {
+  z-index: 200;
+}
+
+.page-sidebar,
+.page-sidebar .page-sidebar-wrapper {
+  overflow: hidden;
+
+}
+
+.page-sidebar,
+.page-sidebar .page-sidebar-wrapper,
+.page-sidebar .page-sidebar-wrapper ul {
+  width: 210px;
+
+  -webkit-transition:width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.page-sidebar.collapsed,
+.page-sidebar.collapsed .page-sidebar-wrapper {
+  width: 50px;
+}
+
+.page-sidebar ul > li > a > .arrow:before {
+  content: "\f105";
+}
+
+.page-sidebar .title {
+  display: inline-block;
+  height: 20px;
+  overflow: hidden;
+  position: absolute;
+  width: 120px;
+
+  -webkit-transition: width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.page-sidebar.collapsed .title {
+    width: 0;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu
+.page-sidebar .page-sidebar-wrapper > ul > li:hover > ul.sub-menu
+.page-sidebar .page-sidebar-wrapper > ul > li.active > ul.sub-menu
+.page-sidebar .page-sidebar-wrapper > ul > li.open > ul.sub-menu {
+  display: block;
+}
+
+.page-sidebar .footer-widget {
+  padding: 0;
+  width: 210px;
+  display: block !important;
+
+  -webkit-transition: width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.page-sidebar.collapsed .footer-widget {
+  width: 50px;
+}
+
+.page-sidebar .user-details {
+  margin-left: 7px;
+}
+
+.page-sidebar .username {
+  height: 20px;
+  overflow: hidden;
+  position: absolute;
+  margin: 6px;
+  width: 120px;
+  white-space: nowrap;
+
+  -webkit-transition: width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.page-sidebar.collapsed .username {
+  width: 0;
+}
+
+.page-sidebar .profile-pic,
+.page-sidebar .username {
+  display: inline-block;
+}
+
+.page-sidebar .profile-actions,
+.page-sidebar .profile-info {
+  height: 32px;
+}
+
+.page-sidebar .footer-widget ul {
+  margin: 0;
+  padding: 0;
+  width: 210px;
+}
+
+.footer-widget ul li {
+  list-style: none;
+  padding: 9px;
+}
+
+.page-sidebar .footer-widget > ul > li {
+  height: 50px;
+}
+
+.page-sidebar .profile-actions ul {
+  width: 100%;
+}
+
+.page-sidebar .profile-actions ul li {
+  background-color: #1b1e24;
+  border-radius: 100%;
+  cursor: pointer;
+  float: left;
+  height: 32px;
+  line-height: 2.4em;
+  margin-right: 32px;
+  padding: 0;
+  width: 32px;
+  text-align: center;
+}
+
+.page-sidebar .footer-widget .profile-actions ul li:hover i {
+  color: #fff;
+}
+
+.page-sidebar .profile-info .profile-pic {
+  border-radius: 100%;
+  height: 32px;
+  overflow: hidden;
+  width: 32px;
+}
+
+.page-sidebar .profile-actions {
+  overflow: hidden;
+
+  -webkit-transition: height .25s, padding .25s;
+  -moz-transition: height .25s, padding .25s;
+  transition: height .25s, padding .25s;
+}
+
+.page-sidebar .profile-actions .fa-power-off {
+  color: #f35958;
+}
+
+.page-sidebar .profile-actions .fa-user {
+  color: #0090d9;
+}
+
+.page-sidebar .profile-actions .fa-thumb-tack.fa-rotate-90 {
+  color: #0aa699;
+}
+
+.page-sidebar.collapsed .profile-actions {
+  height: 0;
+  padding: 0 9px;
+}
+
+@media (max-width: 768px) {
+  .page-sidebar.collapsed {
+    width: 0px;
+  }
+
+  .overlay {
+    display: none;
+  }
+
+  .page-sidebar {
+    display: block;
+    width: 210px;
+    z-index: 100;
+    opacity: 1;
+    visibility: visible;
+  }
+}
