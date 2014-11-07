@@ -98,7 +98,7 @@ $(document).ready(function () {
 //            name: 'sidr',
 //            side: 'right',
 //            complete: function () {}
-//        });        
+//        });
 //    }
     $(".simple-chat-popup").click(function () {
         $(this).addClass('hide');
@@ -117,47 +117,34 @@ $(document).ready(function () {
         $('.simple-chat-popup').addClass('animated fadeOut');
     }, 8000);
 
-    //*********************************** END CHAT POPUP*****************************	
+    //*********************************** END CHAT POPUP*****************************
 
     //**********************************BEGIN MAIN MENU********************************
     jQuery('.page-sidebar li > a').on('click', function (e) {
+        var item = $(this).parent();
+        var visible = item.hasClass('open');
+        var submenu = $(this).next();
+
+        // Close all opened menus
+        item.parent().find('li.open .arrow.open').removeClass('open');
+        item.parent().find('li.open .sub-menu').slideUp(200);
+        item.parent().find('li.open .sub-menu').removeClass('open');
+        item.parent().find('li.open').removeClass('open');
+
         if ($(this).next().hasClass('sub-menu') === false) {
             return;
         }
-        var parent = $(this).parent().parent();
 
-
-        parent.children('li.open').children('a').children('.arrow').removeClass('open');
-        parent.children('li.open').children('a').children('.arrow').removeClass('active');
-        parent.children('li.open').children('.sub-menu').slideUp(200);
-        parent.children('li').removeClass('open');
-        //  parent.children('li').removeClass('active');
-
-        var sub = jQuery(this).next();
-        if (sub.is(":visible")) {
-            jQuery('.arrow', jQuery(this)).removeClass("open");
-            jQuery(this).parent().removeClass("active");
-            sub.slideUp(200, function () {
-                handleSidenarAndContentHeight();
-            });
-        } else {
-            jQuery('.arrow', jQuery(this)).addClass("open");
-            jQuery(this).parent().addClass("open");
-            sub.slideDown(200, function () {
-                handleSidenarAndContentHeight();
-            });
+        if (!visible) {
+            // Open sub-menu
+            item.addClass('open');
+            item.find('.arrow').addClass('open');
+            item.find('.arrow').addClass('active');
+            submenu.slideDown(200);
         }
 
         e.preventDefault();
     });
-    //Auto close open menus in Condensed menu
-    if ($('.page-sidebar').hasClass('mini')) {
-        var elem = jQuery('.page-sidebar ul');
-        elem.children('li.open').children('a').children('.arrow').removeClass('open');
-        elem.children('li.open').children('a').children('.arrow').removeClass('active');
-        elem.children('li.open').children('.sub-menu').slideUp(200);
-        elem.children('li').removeClass('open');
-    }
     //**********************************END MAIN MENU********************************
     //**** Element Background and height ********************************************
 
@@ -199,12 +186,10 @@ $(document).ready(function () {
         });
 
     });
-    $('#main-menu-wrapper').scrollbar();
+    // $('#main-menu-wrapper').scrollbar();
    // initMainMenu();
     //***********************************BEGIN Fixed Menu*****************************
     function initMainMenu() {
-
-        
     }
     initExtendedLayoutMenuScroll();
     function initExtendedLayoutMenuScroll(){
@@ -223,13 +208,13 @@ $(document).ready(function () {
         });
      }
     //***********************************END Horinzontal Menu*****************************
-    //***********************************BEGIN Lazyload images*****************************	
+    //***********************************BEGIN Lazyload images*****************************
     if ($.fn.lazyload) {
         $("img.lazy").lazyload({
             effect: "fadeIn"
         });
     }
-    //***********************************BEGIN Grids*****************************		
+    //***********************************BEGIN Grids*****************************
     $('.grid .tools a.remove').on('click', function () {
         var removable = jQuery(this).parents(".grid");
         if (removable.next().hasClass('grid') || removable.prev().hasClass('grid')) {
@@ -261,7 +246,7 @@ $(document).ready(function () {
     $('.user-info .collapse').on('click', function () {
         jQuery(this).parents(".user-info ").stop().slideToggle(400, "swing");
     });
-    //***********************************END Grids*****************************				
+    //***********************************END Grids*****************************
     var handleSidenarAndContentHeight = function () {
         var content = $('.page-content');
         var sidebar = $('.page-sidebar');
@@ -284,7 +269,7 @@ $(document).ready(function () {
         // $(e.target).prev('.accordion-heading').find('.accordion-toggle').removeClass('collapsed');
     });
 
-    //***********************************BEGIN Layout Readjust *****************************		
+    //***********************************BEGIN Layout Readjust *****************************
 
     $(window).setBreakpoints({
         distinct: true,
@@ -294,7 +279,7 @@ $(document).ready(function () {
         768,
         1024]
     });
-    //Break point entry 
+    //Break point entry
     $(window).bind('enterBreakpoint320', function () {
         $('#main-menu-toggle-wrapper').show();
         $('#portrait-chat-toggler').show();
@@ -328,8 +313,8 @@ $(document).ready(function () {
         }
 
     });
-    
-    
+
+
     $(window).bind('enterBreakpoint1024', function () {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var elem = jQuery('.page-sidebar ul');
@@ -363,9 +348,9 @@ $(document).ready(function () {
         closeAndRestSider();
     });
 
-    //***********************************END Layout Readjust *****************************	
+    //***********************************END Layout Readjust *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     function closeAndRestSider() {
         if ($('#main-menu').attr('data-inner-menu') == '1') {
             $('#main-menu').addClass("mini");
@@ -387,9 +372,9 @@ $(document).ready(function () {
     function rebuildSider() {
 
     }
-    //***********************************END Function calls *****************************	
+    //***********************************END Function calls *****************************
 
-    //***********************************BEGIN Main Menu Toggle *****************************	
+    //***********************************BEGIN Main Menu Toggle *****************************
     $('#layout-condensed-toggle').click(function () {
         if ($('#main-menu').attr('data-inner-menu') == '1') {
             //Do nothing
@@ -422,9 +407,9 @@ $(document).ready(function () {
             $('.bar').slideToggle(200, "linear");
         }
     });
-    //***********************************END Main Menu Toggle *****************************	
-    
-    //***********************************BEGIN Slimscroller *****************************		
+    //***********************************END Main Menu Toggle *****************************
+
+    //***********************************BEGIN Slimscroller *****************************
     $('.scroller').each(function () {
         var h = $(this).attr('data-height');
         $(this).scrollbar({
@@ -437,36 +422,36 @@ $(document).ready(function () {
                 $(this).css('max-height',h);
         }
     });
-    //***********************************END Slimscroller *****************************	
+    //***********************************END Slimscroller *****************************
 
-    //***********************************BEGIN dropdow menu *****************************		
+    //***********************************BEGIN dropdow menu *****************************
     $('.dropdown-toggle').click(function () {
         $("img").trigger("unveil");
     });
-    //***********************************END dropdow menu *****************************	
+    //***********************************END dropdow menu *****************************
 
-    //***********************************BEGIN Global sparkline chart  *****************************	   
+    //***********************************BEGIN Global sparkline chart  *****************************
     if ($.fn.sparkline) {
         $('.sparklines').sparkline('html', {
             enableTagOptions: true
         });
     }
-    //***********************************END Global sparkline chart  *****************************	
+    //***********************************END Global sparkline chart  *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     $('table th .checkall').on('click', function () {
         if ($(this).is(':checked')) {
             $(this).closest('table').find(':checkbox').attr('checked', true);
             $(this).closest('table').find('tr').addClass('row_selected');
-            //$(this).parent().parent().parent().toggleClass('row_selected');	
+            //$(this).parent().parent().parent().toggleClass('row_selected');
         } else {
             $(this).closest('table').find(':checkbox').attr('checked', false);
             $(this).closest('table').find('tr').removeClass('row_selected');
         }
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
     $('.animate-number').each(function () {
         $(this).animateNumbers($(this).attr("data-value"), true, parseInt($(this).attr("data-animation-duration"), 10));
     });
@@ -474,9 +459,9 @@ $(document).ready(function () {
         $(this).css('width', $(this).attr("data-percentage"));
 
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Tiles Controller Options *****************************		
+    //***********************************BEGIN Tiles Controller Options *****************************
 
 
     $('.widget-item > .controller .reload').click(function () {
@@ -523,9 +508,9 @@ $(document).ready(function () {
         forcePlaceholderSize: true,
         tolerance: 'pointer'
     });
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
-    //***********************************BEGIN Function calls *****************************	
+    //***********************************BEGIN Function calls *****************************
 
     $(window).resize(function () {
         calculateHeight();
@@ -538,7 +523,7 @@ $(document).ready(function () {
             $('.scrollup').fadeOut();
         }
     });
-    //***********************************BEGIN Function calls *****************************		
+    //***********************************BEGIN Function calls *****************************
     $('.scrollup').click(function () {
         $("html, body").animate({
             scrollTop: 0
@@ -548,13 +533,13 @@ $(document).ready(function () {
     $("img").unveil();
 });
 $(window).resize(function () {
-   
+
 });
 
 function calculateHeight() {
     var contentHeight = parseInt($('.page-content').height(), 10);
 }
-    
+
 function toggleMainMenu(){
     var timer;
     if($('body').hasClass('open-menu-left')){
@@ -562,7 +547,7 @@ function toggleMainMenu(){
         timer= setTimeout(function(){
             $('.page-sidebar').removeClass('visible');
         }, 300);
-        
+
     }
     else{
         clearTimeout(timer);
@@ -570,7 +555,7 @@ function toggleMainMenu(){
         setTimeout(function(){
              $('body').addClass('open-menu-left');
         }, 50);
-       
+
     }
 }
 function toggleChat(){
@@ -580,13 +565,13 @@ function toggleChat(){
             timer= setTimeout(function(){
                 $('.chat-window-wrapper').removeClass('visible');
             }, 300);
-           
+
         }
-        else{ 
+        else{
             clearTimeout(timer);
             $('.chat-window-wrapper').addClass('visible');
             $('body').addClass('open-menu-right');
-        } 
+        }
 }
 
 $('body.open-menu-left .page-content').on('touchstart', function (e) {
@@ -633,7 +618,7 @@ $('body.open-menu-left .page-content').on('touchstart', function (e) {
         $(this).removeClass('hide-top-content-header');
         if(!$('body').hasClass('extended-layout'))
         $(this).find('#main-menu').removeClass('mini');
-    };    
+    };
 
 })(jQuery);
 
