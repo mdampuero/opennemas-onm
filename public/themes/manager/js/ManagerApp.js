@@ -1,5 +1,5 @@
 
-angular.module('ManagerApp', [ 'ngRoute', 'swipe', 'ui.bootstrap', 'ui.select2',
+angular.module('ManagerApp', [ 'ngRoute', 'ngTouch', 'ui.bootstrap', 'ui.select2',
         'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
         'http-interceptor', 'googlechart', 'vcRecaptcha',
         'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth','onm.gravatar',

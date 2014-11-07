@@ -302,7 +302,7 @@
             @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-checklist-model/checklist-model.js,
             @Common/plugins/angular-route/angular-route.min.js,
-            @Common/plugins/angular-swipe/angular-swipe.min.js,
+            @Common/plugins/angular-touch/angular-touch.min.js,
             @Common/plugins/angular-recaptcha/module.js,
             @Common/plugins/angular-recaptcha/directive.js,
             @Common/plugins/angular-recaptcha/service.js,
