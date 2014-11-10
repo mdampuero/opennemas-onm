@@ -136,7 +136,7 @@
                                 </a>
                             {/acl}
                             {acl isAllowed="COMMENT_DELETE"}
-                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_comment_delete', $index)" type="button">
+                                <button class="btn btn-danger" ng-click="open('modal-remove-permanently', 'backend_ws_comment_delete', $index)" type="button">
                                    <i class="icon-trash icon-white"></i>
                                 </button>
                             {/acl}
@@ -164,8 +164,8 @@
             </tfoot>
         </table>
     </script>
-    <script type="text/ng-template" id="modal-delete">
-        {include file="common/modals/_modalDelete.tpl"}
+    <script type="text/ng-template" id="modal-remove-permanently">
+        {include file="common/modals/_modalRemovePermanently.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
         {include file="common/modals/_modalBatchDelete.tpl"}
