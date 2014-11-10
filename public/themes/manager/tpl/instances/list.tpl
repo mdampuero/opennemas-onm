@@ -95,16 +95,16 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks form-inline">
+                    <li class="quicklinks form-inline pagination-links">
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button class="btn btn-white">
+                                <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1">
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
                             </div>
-                            <input class="form-control small" type="text" value="[% (((page - 1) * epp > 0) ? (page - 1) * epp : 1) + '-' + ((page * epp) < total ? page * epp : total) + ' / ' + (total|number) %]" readonly>
+                            <input class="form-control" type="text" value="[% page + '/' + pages %]" readonly>
                             <div class="input-group-btn">
-                                <button class="btn btn-white">
+                                <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
                                     <i class="fa fa-chevron-right"></i>
                                 </button>
                             </div>
