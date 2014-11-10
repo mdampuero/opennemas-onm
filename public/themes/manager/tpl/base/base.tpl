@@ -85,7 +85,7 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()">
+    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status">
         <div class="overlay"></div>
         <scrollable>
             <div class="page-sidebar-wrapper">
@@ -145,18 +145,10 @@
                         </ul>
                     </li>
                 </ul>
-                <div class="clearfix"></div>
             </div>
         </scrollable>
         <div class="footer-widget">
             <ul>
-                <li class="profile-actions">
-                    <ul>
-                        <li ng-click="sidebar.wanted = !sidebar.wanted;">
-                            <i class="fa fa-thumb-tack" ng-class="{ 'fa-rotate-90': sidebar.wanted }"></i>
-                        </li>
-                    </ul>
-                </li>
                 <li class="profile-info">
                     <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]">
                         <div class="profile-pic">
@@ -173,6 +165,7 @@
             </ul>
         </div>
     </div>
+    <div class="layout-collapse-border" ng-click="sidebar.wanted = !sidebar.wanted;sidebar.current = sidebar.wanted"></div>
     <!-- END SIDEBAR -->
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->

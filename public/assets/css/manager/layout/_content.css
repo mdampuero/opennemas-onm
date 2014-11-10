@@ -17,7 +17,7 @@
 }
 
 .page-content .content {
-  padding: 6px;
+  padding: 15px;
   margin-top: 50px;
 }
 
@@ -26,8 +26,8 @@
   padding-top: 0;
 }
 
-.page-sidebar.collapsed + .page-container .page-content .page-navbar,
-.page-sidebar.collapsed + .page-container .page-content {
+.page-sidebar.collapsed ~ .page-container .page-content .page-navbar,
+.page-sidebar.collapsed ~ .page-container .page-content {
     padding-left: 50px;
 }
 
@@ -39,7 +39,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 400;
 
   -webkit-transition: all .25s;
   -moz-transition: all .25s;
@@ -54,9 +54,24 @@
   line-height: 14px
 }
 
+.page-navbar .navbar h4 a {
+  color: #505458;
+}
+
+.page-navbar .navbar h4 a:hover {
+  color: #000;
+}
+
+.page-navbar .navbar h5 {
+  margin: 0;
+  padding: 11px 12px 8px;
+}
+
 .page-navbar.filters-navbar {
   background-color: #e5e9ec;
-  top: 50px;
+  padding-left: 0;
+  position: relative;
+  z-index: 0;
 }
 
 .page-navbar select {
@@ -75,7 +90,7 @@
 }
 
 .page-navbar .quick-section {
-  margin: 6px 10px;
+  margin: 6px;
   display: inline-block;
   float: left;
 }
@@ -125,11 +140,16 @@
   margin-left: 0;
 }
 
-.page-navbar .quick-section a {
-  padding: 9px 12px;
+.page-navbar .all-actions .quick-section .btn-primary,
+.page-navbar .all-actions .quick-section .btn-primary:hover {
+  color: #fff;
 }
 
-.page-navbar .nav .h-seperate {
+.page-navbar .quick-section a {
+  padding: 8px 12px;
+}
+
+.quicklinks .h-seperate {
   height: 20px;
   width: 2px;
   margin: 0px 10px 0px 10px;
@@ -137,6 +157,10 @@
   display: inline-block;
   position: relative;
   top: 8px;
+}
+
+.quicklinks.seperate .h-seperate {
+  margin: 0;
 }
 
 .page-navbar .btn-link:active,
@@ -152,7 +176,7 @@
 }
 
 @media (max-width: 1024px) and (min-width: 768px){
-  .page-sidebar.collapsed + .page-container .page-content {
+  .page-sidebar.collapsed ~ .page-container .page-content {
     left: 0;
     padding-left: 50px;
   }
@@ -208,7 +232,7 @@
 }
 
 @media (max-width: 768px) {
-  .page-sidebar.collapsed + .page-container .page-content {
+  .page-sidebar.collapsed ~ .page-container .page-content {
     left: 0;
     padding: 0;
   }
