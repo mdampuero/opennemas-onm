@@ -31,13 +31,9 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.columns = {
-            name:       1,
-            domains:    1,
-            last_login: 1,
-            created:    1,
-            articles:   1,
-            alexa:      1,
-            activated:  1
+            collapsed: 1,
+            selected: [ 'name', 'domains', 'last_login', 'created', 'articles',
+                'alexa', 'activated' ]
         }
 
         /**
@@ -103,6 +99,15 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         var search;
 
         /**
+         * Checks if a columns is selected.
+         *
+         * @param string id The columns name.
+         */
+        $scope.isEnabled = function(id) {
+            return $scope.columns.selected.indexOf(id) != -1
+        }
+
+        /**
          * Checks if the listing is ordered by the given field name.
          *
          * @param string name The field name.
@@ -125,7 +130,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         }
 
         /**
-         * Checks if an instance is selected
+         * Checks if an instance is selected.
          *
          * @param string id The group id.
          */

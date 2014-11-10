@@ -1,3 +1,25 @@
+.column-filters {
+  height: 205px;
+  margin: 7px 0;
+  overflow: hidden;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+}
+
+.column-filters.collapsed {
+  height: 0;
+}
+
+.column-filters .column {
+  padding: 7px 31px;
+}
+
+.column-filters .title {
+  padding: 0px 30px;
+}
+
 .page-container {
   height: auto;
   margin: 0;
@@ -26,7 +48,7 @@
   padding-top: 0;
 }
 
-.page-sidebar.collapsed ~ .page-container .page-content .page-navbar,
+.page-sidebar.collapsed ~ .page-container .page-content .actions-navbar,
 .page-sidebar.collapsed ~ .page-container .page-content {
     padding-left: 50px;
 }
@@ -96,7 +118,15 @@
 }
 
 .page-navbar.filters-navbar .quick-section {
-  margin: 7px;
+  margin: 6px;
+}
+
+.page-navbar.filters-navbar .quick-section:first-child {
+  margin-left: 0;
+}
+
+.page-navbar.filters-navbar .quick-section:last-child {
+  margin-right: 0;
 }
 
 .page-navbar.filters-navbar .quick-section .add-on {
@@ -169,13 +199,21 @@
   color: #22262e;
 }
 
+.page-navbar .btn-link.active {
+  color: #000;
+}
+
 .page-navbar .dropdown-menu {
   width: 380px;
   height: auto;
   margin-right: 3px !important;
 }
 
-@media (max-width: 1024px) and (min-width: 768px){
+@media (max-width: 992px) and (min-width: 768px){
+  .column-filters {
+    height: 375px;
+  }
+
   .page-sidebar.collapsed ~ .page-container .page-content {
     left: 0;
     padding-left: 50px;
@@ -232,6 +270,10 @@
 }
 
 @media (max-width: 768px) {
+  .column-filters {
+    height: 715px;
+  }
+
   .page-sidebar.collapsed ~ .page-container .page-content {
     left: 0;
     padding: 0;
@@ -243,10 +285,10 @@
   }
 
   .page-content .content {
-    margin-top: 150px;
+    margin-top: 100px;
   }
 
   .page-navbar.filters-navbar {
-    top: 100px;
+    top: 0;
   }
 }
