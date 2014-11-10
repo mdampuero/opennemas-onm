@@ -268,6 +268,7 @@
             @Common/plugins/jquery-ui/jquery-ui.min.js,
             @Common/plugins/bootstrap/js/bootstrap.min.js,
             @Common/plugins/breakpoints/breakpoints.min.js,
+            @Common/plugins/fastclick/fastclick.js,
             @Common/plugins/jquery-unveil/jquery.unveil.min.js,
             @Common/plugins/jquery-block-ui/jquery.blockui.min.js,
             @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,

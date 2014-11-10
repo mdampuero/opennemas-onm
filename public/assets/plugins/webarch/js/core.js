@@ -145,6 +145,8 @@ $(document).ready(function () {
 
         e.preventDefault();
     });
+
+    FastClick.attach(document.body);
     //**********************************END MAIN MENU********************************
     //**** Element Background and height ********************************************
 
