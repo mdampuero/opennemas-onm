@@ -22,6 +22,10 @@
     margin-top: 12px;
 }
 
+.nano > .nano-content:focus {
+    outline: none;
+}
+
 .page-sidebar {
     background-color: #1b1e24 !important;
     width: 210px;

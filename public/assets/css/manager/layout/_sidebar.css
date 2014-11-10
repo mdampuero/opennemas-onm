@@ -20,7 +20,10 @@
 .page-sidebar,
 .page-sidebar .page-sidebar-wrapper {
   overflow: hidden;
+}
 
+.page-sidebar .page-sidebar-wrapper {
+  height: auto;
 }
 
 .page-sidebar,
@@ -32,6 +35,15 @@
   -moz-transition: width .25s;
   transition: width .25s;
 }
+
+.page-sidebar .page-sidebar-wrapper ul > li > ul.sub-menu > li > a {
+  padding: 10px 30px !important;
+}
+
+.page-sidebar .page-sidebar-wrapper ul > li > ul.sub-menu > li > a:hover {
+  background: none !important;
+}
+
 
 .page-sidebar.collapsed,
 .page-sidebar.collapsed .page-sidebar-wrapper {
@@ -97,18 +109,37 @@
   transition: width .25s;
 }
 
+.page-sidebar .profile-info a:hover {
+  color: #fff;
+}
+
+.page-sidebar.collapsed .logout,
 .page-sidebar.collapsed .username {
   width: 0;
 }
 
+.page-sidebar .logout,
 .page-sidebar .profile-pic,
 .page-sidebar .username {
   display: inline-block;
 }
 
-.page-sidebar .profile-actions,
-.page-sidebar .profile-info {
+.page-sidebar .logout {
+  background-color: #1b1e24;
+  border-radius: 100%;
+  cursor: pointer;
   height: 32px;
+  line-height: 32px;
+  margin: 0px 9px;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 32px;
+
+  -webkit-transition: width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
 }
 
 .page-sidebar .footer-widget ul {
@@ -120,9 +151,6 @@
 .footer-widget ul li {
   list-style: none;
   padding: 9px;
-}
-
-.page-sidebar .footer-widget > ul > li {
   height: 50px;
 }
 
@@ -138,10 +166,22 @@
   height: 32px;
   line-height: 2.4em;
   margin-right: 32px;
+  overflow: hidden;
   padding: 0;
   width: 32px;
   text-align: center;
 }
+
+.page-sidebar .profile-actions {
+  height: 0px;
+  padding: 0 9px;
+}
+
+.page-sidebar .footer-widget:hover .profile-actions {
+  height: 50px;
+  padding: 9px;
+}
+
 
 .page-sidebar .footer-widget .profile-actions ul li:hover i {
   color: #fff;
@@ -162,16 +202,20 @@
   transition: height .25s, padding .25s;
 }
 
-.page-sidebar .profile-actions .fa-power-off {
+.page-sidebar .profile-info .fa-power-off {
   color: #f35958;
 }
 
-.page-sidebar .profile-actions .fa-user {
-  color: #0090d9;
+.page-sidebar .logout:hover .fa-power-off {
+  color: #fff;
+}
+
+.page-sidebar .profile-actions .fa-thumb-tack {
+  color: #0aa699;
 }
 
 .page-sidebar .profile-actions .fa-thumb-tack.fa-rotate-90 {
-  color: #0aa699;
+  color: #0090d9;
 }
 
 .page-sidebar.collapsed .profile-actions {
