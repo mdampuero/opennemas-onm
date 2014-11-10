@@ -1,45 +1,50 @@
-<div class="content">
-    <div class="page-title clearfix">
-        <h3 class="pull-left">
-            <i class="fa fa-cubes"></i>
-            <span ng-if="!group.id">{t}New user group{/t}</span>
-            <span ng-if="group.id">{t}Edit user group{/t}</span>
-        </h3>
-        <ul class="breadcrumb pull-right">
-            <li>
-                <p>{t}YOU ARE HERE{/t}</p>
-            </li>
-            <li>
-                <a href="#">{t}Dashboard{/t}</a>
-            </li>
-            <li>
-                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">{t}User groups{/t}</a>
-            </li>
-            <li>
-                <span class="active" ng-if="!group.id">{t}New user group{/t}</span>
-                <span class="active" ng-if="group.id">{t}Edit user group{/t}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="grid simple">
-        <div class="grid-title clearfix">
-            <h3 class="pull-left">
-                <span class="semi-bold" ng-if="group.id">
-                    [% group.name %]
-                </span>
-                <span class="semi-bold" ng-if="!group.id">
-                    {t}New user group{/t}
-                </span>
-            </h3>
-            <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!group.id">
-                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="group.id">
-                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                            <i class="fa fa-users fa-lg"></i>
+                            {t}User Groups{/t}
+                        </a>
+                    </h4>
+                </li>
+                <li class="quicklinks seperate">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        <span ng-if="!group.id">{t}New user group{/t}</span>
+                        <span ng-if="group.id">{t}Edit user group{/t}</span>
+                    </h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!group.id">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                        <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="group.id">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
+</div>
+<div class="content">
+    <div class="grid simple">
         <div class="grid-body clearfix">
             <form name="groupForm" novalidate>
                 <div class="form-group">

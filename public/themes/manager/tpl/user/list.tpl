@@ -1,21 +1,31 @@
-<div class="content">
-	<div class="page-title">
-        <h3 class="pull-left">
-        	<i class="fa fa-user"></i>
-        	{t}Users{/t}
-        </h3>
-		<ul class="breadcrumb pull-right">
-	        <li>
-	            <p>{t}YOU ARE HERE{/t}</p>
-	        </li>
-	        <li>
-	            <a href="#">{t}Dashboard{/t}</a>
-	        </li>
-	        <li>
-	            <a href="#/users" class="active">{t}Users{/t}</a>
-	        </li>
-	    </ul>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
+                            <i class="fa fa-user fa-lg"></i>
+                            {t}Users{/t}
+                        </a>
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_create') %]">
+                            <i class="fa fa-plus"></i>
+                            {t}Create{/t}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="content">
 	<div class="grid simple">
 		<div class="grid-title">
 			<div class="form-inline clearfix">
@@ -75,10 +85,6 @@
                             </ul>
                         </div>
                     </div>
-					<a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_create') %]">
-						<i class="fa fa-plus"></i>
-						{t}Create{/t}
-					</a>
 				</div>
 			</div>
 		</div>

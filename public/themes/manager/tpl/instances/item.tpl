@@ -23,6 +23,14 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
+                        <a class="btn btn-link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
                         <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
                             <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
                         </button>

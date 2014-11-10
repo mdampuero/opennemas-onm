@@ -26,6 +26,14 @@
     padding-left: 50px;
 }
 
+.page-navbar.actions-navbar .navbar-inner {
+  padding:0 10px;
+}
+
+.page-navbar.actions-navbar .navbar-inner .quicklinks h4 .fa {
+  margin-right:10px;
+}
+
 @media (max-width: 992px) and (min-width: 768px){
   .page-sidebar.collapsed ~ .page-container .page-content,
   .page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
@@ -38,7 +46,6 @@
     left: 210px;
     padding-left: 0;
   }
-
 /*  .page-navbar .selected-actions {
     overflow: hidden;
     height: auto;
