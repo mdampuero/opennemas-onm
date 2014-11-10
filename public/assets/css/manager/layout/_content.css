@@ -136,6 +136,11 @@
   height: 36px;
 }
 
+.page-navbar.filters-navbar .quick-section .input-group .form-control.small {
+  border-color: #d1dade;
+  width: 80px !important;
+}
+
 .page-navbar.filters-navbar .quick-section .add-on + input {
   border-radius: 0 2px 2px 0;
   line-height: 14px;

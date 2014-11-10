@@ -95,6 +95,26 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks form-inline">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button class="btn btn-white">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                            </div>
+                            <input class="form-control small" type="text" value="[% (((page - 1) * epp > 0) ? (page - 1) * epp : 1) + '-' + ((page * epp) < total ? page * epp : total) + ' / ' + (total|number) %]" readonly>
+                            <div class="input-group-btn">
+                                <button class="btn btn-white">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="quicklinks">
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     <li class="quicklinks">
                         <div class="btn btn-link dropdown-toggle" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
                             <i class="fa fa-columns"></i>
