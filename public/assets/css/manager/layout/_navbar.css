@@ -1,0 +1,185 @@
+.page-navbar {
+  background: #fff;
+  min-height: 50px;
+  padding-left: 210px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 400;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+}
+
+.page-navbar .btn-link:active,
+.page-navbar .btn-link:focus,
+.page-navbar .btn-link:hover {
+  color: #22262e;
+}
+
+.page-navbar .btn-primary,
+.page-navbar .btn-primary:hover {
+  color: #fff;
+}
+
+.page-navbar .navbar {
+  margin: 0;
+}
+
+.page-navbar .quick-section {
+  margin: 6px;
+  display: inline-block;
+  float: left;
+}
+
+.page-navbar .quick-section > li{
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  display: inline-block;
+  float: left;
+}
+
+.page-navbar .quick-section > li a {
+  padding: 8px 12px;
+}
+
+.page-navbar .quick-section > li > h4 {
+  line-height: 14px;
+}
+
+.page-navbar .quick-section > li > h4 a {
+  padding: 8px 0;
+  color: #505458;
+}
+
+.page-navbar .quick-section > li > h4 a:hover {
+  color: #000;
+}
+
+.page-navbar .quick-section > li > h5 {
+  margin: 0;
+  padding: 11px 0 8px;
+}
+
+.page-navbar .quick-section select {
+  border: 0;
+  width: 100%;
+  padding: 4px 10px;
+
+  -webkit-transition: background 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  -o-transition: background 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  transition: background 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+.page-navbar .quick-section .h-seperate {
+  height: 20px;
+  width: 2px;
+  margin: 0px 10px 0px 10px;
+  border-left: 1px solid #e1e1e1;
+  display: inline-block;
+  position: relative;
+  top: 8px;
+}
+
+.page-navbar .selected-actions {
+  overflow: hidden;
+  width: 170px;
+
+  -webkit-transition: all .25s ease-out;
+  -moz-transition: all .25s ease-out;
+  transition: all .25s ease-out;
+}
+
+.page-navbar .selected-actions.collapsed {
+  width: 0;
+
+  -webkit-transition: all .25s ease-in;
+  -moz-transition: all .25s ease-in;
+  transition: all .25s ease-in;
+}
+
+.page-navbar .selected-actions .quick-section {
+  width: 170px;
+}
+
+.filters-navbar {
+  background-color: #e5e9ec;
+  padding-left: 0;
+  position: relative;
+  z-index: 0;
+}
+
+.filters-navbar .pagination-links {
+  width: 150px;
+}
+
+.filters-navbar .pagination-links .form-control {
+  border-color: #d1dade;
+  text-align: center;
+}
+
+.filters-navbar .quick-section {
+  margin: 6px;
+}
+
+.filters-navbar .quick-section:first-child {
+  margin-left: 0;
+}
+
+.filters-navbar .quick-section:last-child {
+  margin-right: 0;
+}
+
+.filters-navbar .quick-section .add-on {
+  left: 0;
+  border-radius: 2px 0 2px 0;
+  padding: 4px 8px;
+  height: 36px;
+}
+
+.filters-navbar .quick-section .add-on + input {
+  border-radius: 0 2px 2px 0;
+  line-height: 14px;
+  min-height: 36px !important;
+}
+
+.column-filters {
+  height: 205px;
+  margin: 7px 0;
+  overflow: hidden;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+}
+
+.column-filters.collapsed {
+  height: 0;
+}
+
+.column-filters .column {
+  padding: 7px 31px;
+}
+
+.column-filters .title {
+  padding: 0px 30px;
+}
+
+@media (max-width: 992px) and (min-width: 768px){
+  .column-filters {
+    height: 375px;
+  }
+}
+
+@media (max-width: 768px) {
+  .column-filters {
+    height: 715px;
+  }
+
+  .actions-navbar {
+    top: 50px;
+  }
+}
