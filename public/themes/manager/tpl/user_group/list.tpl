@@ -13,16 +13,27 @@
             </ul>
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
-                    <li ng-if="selected.groups.length > 0">
-                        <a class="btn btn-link" ng-click="deleteSelected()">
-                            <i class="fa fa-trash-o"></i>
-                            {t}Delete{/t}
-                        </a>
-                    </li>
                     <li class="quicklinks">
                         <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_create') %]">
                             <i class="fa fa-plus"></i>
                             {t}Create{/t}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.groups.length == 0 }">
+                <ul class="nav quick-section pull-left">
+                    <li class="quicklinks">
+                        <h4>
+                            [% selected.groups.length %] items selected
+                        </h4>
+                    </li>
+                </ul>
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-link" ng-click="deleteSelected()">
+                            <i class="fa fa-trash-o"></i>
+                            {t}Delete{/t}
                         </a>
                     </li>
                 </ul>

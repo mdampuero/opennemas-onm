@@ -22,6 +22,13 @@
                 </ul>
             </div>
             <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.users.length == 0 }">
+                <ul class="nav quick-section pull-left">
+                    <li class="quicklinks">
+                        <h4>
+                            [% selected.users.length %] items selected
+                        </h4>
+                    </li>
+                </ul>
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <button class="btn btn-link" ng-click="setEnabledSelected(0)" tooltip="{t}Disable{/t}" tooltip-placement="bottom">
