@@ -27,7 +27,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.instances.length == 0 }">
+            <div class="selected-actions" ng-class="{ 'collapsed': selected.instances.length == 0 }">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                         <h4>
@@ -35,7 +35,7 @@
                         </h4>
                     </li>
                 </ul>
-                <ul class="nav quick-section">
+                <ul class="nav quick-section pull-right">
                     <li class="quicklinks">
                         <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
                             <i class="fa fa-download fa-lg"></i>

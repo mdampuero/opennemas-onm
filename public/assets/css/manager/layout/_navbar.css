@@ -95,11 +95,10 @@
 }
 
 .page-navbar .selected-actions {
-  background: #4d90fe;
+  background: #428bca;
   color: #ffffff;
   height: 100%;
-  line-height: 42px;
-  min-width: 980px;
+  line-height: 33px;
   position: absolute;
   text-align: right;
   text-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 0px;
