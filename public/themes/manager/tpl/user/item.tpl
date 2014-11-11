@@ -45,6 +45,19 @@
 </div>
 <div class="content">
     <div class="grid simple">
+        <div class="grid-title clearfix">
+            <h3 class="pull-left">
+                <span class="semi-bold" ng-if="user.id">
+                    [% user.name %]
+                </span>
+                <span class="semi-bold" ng-if="!user.id">
+                    {t}New user{/t}
+                </span>
+            </h3>
+            <div class="pull-right">
+
+            </div>
+        </div>
         <div class="grid-body no-padding">
             <form name="userForm" novalidate>
                 <tabset class="tab-form clearfix">

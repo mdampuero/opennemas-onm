@@ -13,6 +13,12 @@
             </ul>
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
+                    <li ng-if="selected.groups.length > 0">
+                        <a class="btn btn-link" ng-click="deleteSelected()">
+                            <i class="fa fa-trash-o"></i>
+                            {t}Delete{/t}
+                        </a>
+                    </li>
                     <li class="quicklinks">
                         <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_create') %]">
                             <i class="fa fa-plus"></i>
@@ -25,54 +31,63 @@
     </div>
 </div>
 <div class="content">
-    <div class="grid simple">
-        <div class="grid-title">
-            <div class="form-inline clearfix">
-                <div class="form-filter">
-                    <div class="hidden-md hidden-lg filter">{t}Filter:{/t}</div>
-                    <div class="form-group">
+    <div class="page-navbar filters-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="m-r-10 input-prepend inside search-form no-boarder">
+                        <span class="add-on">
+                            <span class="fa fa-search fa-lg"></span>
+                        </span>
+                        <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name" type="text" style="width:250px;"/>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <select class="xmedium" ng-model="epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                        </select>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; epp = 25; refresh()">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="refresh()">
+                            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+                        </button>
+                    </li>
+                </ul>
+                <ul class="nav quick-section pull-right">
+                    <li class="quicklinks form-inline pagination-links">
                         <div class="input-group">
-                            <span class="input-group-addon primary">
-                                <span class="arrow"></span>
-                                <i class="fa fa-users"></i>
-                            </span>
-                            <input class="form-control" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name" type="text">
                             <div class="input-group-btn">
-                                <select class="btn btn-white xsmall form-control" ng-model="epp">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="500">500</option>
-                                </select>
-                                <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ] }; orderBy = [ { name: 'name', value: 'asc' } ]; page = 1; epp = 25; refresh()">
-                                    <i class="fa fa-trash-o"></i>
+                                <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1">
+                                    <i class="fa fa-chevron-left"></i>
                                 </button>
-                                <button class="btn btn-white" ng-click="refresh()">
-                                    <i class="fa fa-refresh"></i>
+                            </div>
+                            <input class="form-control" type="text" value="[% page + '/' + pages %]" readonly>
+                            <div class="input-group-btn">
+                                <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
+                                    <i class="fa fa-chevron-right"></i>
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <div class="form-group" ng-if="selected.groups.length > 0">
-                        <div class="btn-group">
-                            <button class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-edit"></i> {t}Actions{/t} <i class="fa fa-caret-down"></i>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li>
-                                    <span class="a" ng-click="deleteSelected()">
-                                        <i class="fa fa-trash-o"></i> {t}Delete{/t}
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
+    </div>
+    <div class="grid simple">
         <div class="grid-body no-padding">
             <div class="grid-overlay" ng-if="loading"></div>
             <table class="table no-margin">

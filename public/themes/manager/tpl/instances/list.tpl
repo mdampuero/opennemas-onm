@@ -12,9 +12,6 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
                         <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
                             <i class="fa fa-download fa-lg"></i>
                         </a>
@@ -33,22 +30,22 @@
             <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.instances.length == 0 }">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
                             <i class="fa fa-download fa-lg"></i>
                         </a>
                     </li>
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="setEnabledSelected(0)">
+                        <button class="btn btn-link" ng-click="setEnabledSelected(0)" tooltip="{t}Disable{/t}" tooltip-placement="bottom">
                             <i class="fa fa-times fa-lg"></i>
                         </button>
                     </li>
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="setEnabledSelected(1)">
+                        <button class="btn btn-link" ng-click="setEnabledSelected(1)" tooltip="{t}Enable{/t}" tooltip-placement="bottom">
                             <i class="fa fa-check fa-lg"></i>
                         </button>
                     </li>
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deleteSelected()">
+                        <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete all{/t}" tooltip-placement="bottom">
                             <i class="fa fa-trash-o fa-lg"></i>
                         </button>
                     </li>
@@ -126,7 +123,7 @@
         <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
             <div class="row">
                 <div class="col-xs-12 title">
-                    <h5>Columns</h5>
+                    <h5>{t}Columns{/t}</h5>
                 </div>
             </div>
             <div class="row">
