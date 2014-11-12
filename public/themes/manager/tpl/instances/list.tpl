@@ -99,6 +99,14 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <div class="btn btn-link toggle-columns" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
+                            <i class="fa fa-columns"></i>
+                        </div>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="input-group">
                             <div class="input-group-btn">
@@ -106,7 +114,7 @@
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
                             </div>
-                            <input class="form-control" type="text" value="[% page + '/' + pages %]" readonly>
+                            <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly>
                             <div class="input-group-btn">
                                 <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
                                     <i class="fa fa-chevron-right"></i>
@@ -114,175 +122,167 @@
                             </div>
                         </div>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <div class="btn btn-link dropdown-toggle" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
-                            <i class="fa fa-columns"></i>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </div>
-        <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
-            <div class="row">
-                <div class="col-xs-12 title">
-                    <h5>{t}Columns{/t}</h5>
+    </div>
+    <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
+        <div class="row">
+            <div class="col-xs-12 title">
+                <h5>{t}Columns{/t}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-3 column">
+                <div class="checkbox check-default">
+                    <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
+                    <label for="checkbox-name">
+                        {t}Name{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'domains'" type="checkbox">
+                    <label for="checkbox-domains">
+                        {t}Domains{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
+                    <label for="checkbox-domain-expire">
+                        {t}Domain expire{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
+                    <label for="checkbox-contact">
+                        {t}Contact{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'last_login'" type="checkbox">
+                    <label for="checkbox-last-access">
+                        {t}Last access{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
+                    <label for="checkbox-created">
+                        {t}Created{/t}
+                    </label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-3 column">
-                    <div class="checkbox check-default">
-                        <input id="checkbox-name" checklist-model="columns.selected" checklist-value="'name'" type="checkbox">
-                        <label for="checkbox-name">
-                            {t}Name{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'domains'" type="checkbox">
-                        <label for="checkbox-domains">
-                            {t}Domains{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-domain-expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
-                        <label for="checkbox-domain-expire">
-                            {t}Domain expire{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
-                        <label for="checkbox-contact">
-                            {t}Contact{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-last-access" checklist-model="columns.selected" checklist-value="'last_login'" type="checkbox">
-                        <label for="checkbox-last-access">
-                            {t}Last access{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-created" checklist-model="columns.selected" checklist-value="'created'" type="checkbox">
-                        <label for="checkbox-created">
-                            {t}Created{/t}
-                        </label>
-                    </div>
+            <div class="col-sm-6 col-md-3 column">
+                <div class="checkbox check-default">
+                    <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
+                    <label for="checkbox-contents">
+                        {t}Contents{/t}
+                    </label>
                 </div>
-                <div class="col-sm-6 col-md-3 column">
-                    <div class="checkbox check-default">
-                        <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
-                        <label for="checkbox-contents">
-                            {t}Contents{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
-                        <label for="checkbox-articles">
-                            {t}Articles{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-opinions" checklist-model="columns.selected" checklist-value="'opinions'" type="checkbox">
-                        <label for="checkbox-opinions">
-                            {t}Opinions{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-advertisements" checklist-model="columns.selected" checklist-value="'advertisements'" type="checkbox">
-                        <label for="checkbox-advertisements">
-                            {t}Advertisements{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-albumns" checklist-model="columns.selected" checklist-value="'albumns'" type="checkbox">
-                        <label for="checkbox-albumns">
-                            {t}Albums{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
-                        <label for="checkbox-photos">
-                            {t}Name{/t}
-                        </label>
-                    </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
+                    <label for="checkbox-articles">
+                        {t}Articles{/t}
+                    </label>
                 </div>
-                <div class="col-sm-6 col-md-3 column">
-                    <div class="checkbox check-default">
-                        <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
-                        <label for="checkbox-videos">
-                            {t}Videos{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-widgets" checklist-model="columns.selected" checklist-value="'widgets'" type="checkbox">
-                        <label for="checkbox-widgets">
-                            {t}Widgets{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-static-pages" checklist-model="columns.selected" checklist-value="'static_pages'" type="checkbox">
-                        <label for="checkbox-static-pages">
-                            {t}Static pages{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-attachments" checklist-model="columns.selected" checklist-value="'attachments'" type="checkbox">
-                        <label for="checkbox-attachments">
-                            {t}Attachments{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-polls" checklist-model="columns.selected" checklist-value="'polls'" type="checkbox">
-                        <label for="checkbox-polls">
-                            {t}Polls{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-letters" checklist-model="columns.selected" checklist-value="'letters'" type="checkbox">
-                        <label for="checkbox-letters">
-                            {t}Letters{/t}
-                        </label>
-                    </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-opinions" checklist-model="columns.selected" checklist-value="'opinions'" type="checkbox">
+                    <label for="checkbox-opinions">
+                        {t}Opinions{/t}
+                    </label>
                 </div>
-                <div class="col-sm-6 col-md-3 column">
-                    <div class="checkbox check-default">
-                        <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
-                        <label for="checkbox-media-size">
-                            {t}Media size{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-alexa" checklist-model="columns.selected" checklist-value="'alexa'" type="checkbox">
-                        <label for="checkbox-alexa">
-                            {t}Alexa{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
-                        <label for="checkbox-page-views">
-                            {t}Page views{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
-                        <label for="checkbox-users">
-                            {t}Users{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
-                        <label for="checkbox-emails">
-                            {t}Emails{/t}
-                        </label>
-                    </div>
-                    <div class="checkbox check-default">
-                        <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
-                        <label for="checkbox-enabled">
-                            {t}Enabled{/t}
-                        </label>
-                    </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-advertisements" checklist-model="columns.selected" checklist-value="'advertisements'" type="checkbox">
+                    <label for="checkbox-advertisements">
+                        {t}Advertisements{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-albumns" checklist-model="columns.selected" checklist-value="'albumns'" type="checkbox">
+                    <label for="checkbox-albumns">
+                        {t}Albums{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
+                    <label for="checkbox-photos">
+                        {t}Name{/t}
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 column">
+                <div class="checkbox check-default">
+                    <input id="checkbox-videos" checklist-model="columns.selected" checklist-value="'videos'" type="checkbox">
+                    <label for="checkbox-videos">
+                        {t}Videos{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-widgets" checklist-model="columns.selected" checklist-value="'widgets'" type="checkbox">
+                    <label for="checkbox-widgets">
+                        {t}Widgets{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-static-pages" checklist-model="columns.selected" checklist-value="'static_pages'" type="checkbox">
+                    <label for="checkbox-static-pages">
+                        {t}Static pages{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-attachments" checklist-model="columns.selected" checklist-value="'attachments'" type="checkbox">
+                    <label for="checkbox-attachments">
+                        {t}Attachments{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-polls" checklist-model="columns.selected" checklist-value="'polls'" type="checkbox">
+                    <label for="checkbox-polls">
+                        {t}Polls{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-letters" checklist-model="columns.selected" checklist-value="'letters'" type="checkbox">
+                    <label for="checkbox-letters">
+                        {t}Letters{/t}
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 column">
+                <div class="checkbox check-default">
+                    <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
+                    <label for="checkbox-media-size">
+                        {t}Media size{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-alexa" checklist-model="columns.selected" checklist-value="'alexa'" type="checkbox">
+                    <label for="checkbox-alexa">
+                        {t}Alexa{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
+                    <label for="checkbox-page-views">
+                        {t}Page views{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
+                    <label for="checkbox-users">
+                        {t}Users{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
+                    <label for="checkbox-emails">
+                        {t}Emails{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+                    <label for="checkbox-enabled">
+                        {t}Enabled{/t}
+                    </label>
                 </div>
             </div>
         </div>

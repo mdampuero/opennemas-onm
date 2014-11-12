@@ -314,7 +314,8 @@
 
             @ManagerTheme/js/controllers/*,
 
-            @Common/plugins/webarch/js/core.js
+            @Common/plugins/webarch/js/core.js,
+            @Common/js/manager.js
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
