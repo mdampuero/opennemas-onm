@@ -55,6 +55,12 @@
 }
 
 @media (max-width: 992px) and (min-width: 768px){
+  .page-content .content [class^=col-],
+  .page-content .content [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
   .page-sidebar.collapsed ~ .page-container .page-content,
   .page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
     left: 0;
@@ -75,6 +81,12 @@
 @media (max-width: 768px) {
   .page-content {
     padding-top: 50px;
+  }
+
+  .page-content .content [class^=col-],
+  .page-content .content [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   .page-sidebar.collapsed ~ .page-container .page-content,
