@@ -422,8 +422,14 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 /* =============================================================================
     Listing tables
    ========================================================================== */
+.grid.simple .grid-body,
 .grid.simple .grid-title {
     padding: 15px;
+}
+
+.grid.simple .grid-title h4 {
+    overflow: initial;
+    margin: 0;
 }
 
 .table tr.row_selected td {
