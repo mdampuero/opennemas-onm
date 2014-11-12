@@ -7,10 +7,10 @@
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
-    '$translate', '$window', 'vcRecaptchaService', 'httpInterceptor',
+    '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'fosJsRouting', 'history', 'messenger', 'paginationConfig',
     function (
-        $filter, $http, $location, $modal, $rootScope, $scope, $translate,
+        $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
         history, messenger, paginationConfig
     ) {
@@ -312,17 +312,15 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * Updates the content margin-top basing on the filters-navbar height.
          */
         $scope.checkFiltersBar = function checkFiltersBar() {
-            if ($('.filters-navbar').length == 0) {
-                return false;
-            }
+            $timeout(function() {
+                if ($('.filters-navbar').length == 0) {
+                    return false;
+                }
 
-            var margin = 50 + $('.filters-navbar').height() - 15;
+                var margin = 50 + $('.filters-navbar').height() - 15;
 
-            if ($(window).width() <= 768) {
-                margin = 50 + $('.filters-navbar').height();
-            }
-
-            $('.content').css('margin-top', margin + 'px');
+                $('.content').css('margin-top', margin + 'px');
+            }, 100);
         }
     }
 ]);
