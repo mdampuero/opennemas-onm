@@ -44,24 +44,21 @@
     </div>
 </div>
 <div class="content">
-    <div class="grid simple">
-        <div class="grid-title clearfix">
-            <h3 class="pull-left">
-                <span class="semi-bold" ng-if="user.id">
-                    [% user.name %]
-                </span>
-                <span class="semi-bold" ng-if="!user.id">
-                    {t}New user{/t}
-                </span>
-            </h3>
-            <div class="pull-right">
-
-            </div>
-        </div>
-        <div class="grid-body no-padding">
-            <form name="userForm" novalidate>
-                <tabset class="tab-form clearfix">
-                    <tab heading="{t}User info{/t}">
+    <form name="userForm" novalidate>
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>
+                            <span class="semi-bold" ng-if="user.id">
+                                [% user.name %]
+                            </span>
+                            <span class="semi-bold" ng-if="!user.id">
+                                {t}New user{/t}
+                            </span>
+                        </h4>
+                    </div>
+                    <div class="grid-body">
                         <div class="form-group">
                             <label class="control-label" for="name">
                                 {t}Display name{/t}
@@ -128,8 +125,42 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
-                    <tab heading="{t}Settings{/t}">
+                     </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                {is_module_activated name="PAYWALL"}
+                    <div class="grid simple">
+                        <div class="grid-title">
+                            <h4>{t}Paywall{/t}</h4>
+                        </div>
+                        <div class="grid-body">
+                            <div class="form-group">
+                                <label for="time-limit">{t}Paywall time limit:{/t}</label>
+                                <quick-datepicker icon-class="fa fa-clock-o" id="time-limit" name="time_limit" ng-model="user.meta.paywall_time_limit" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                {/is_module_activated}
+                {acl isAllowed="GROUP_CHANGE"}
+                    <div class="grid simple">
+                        <div class="grid-title">
+                            <h4>{t}Privileges{/t}</h4>
+                        </div>
+                        <div class="grid-body">
+                            <div class="form-group">
+                                <label for="id-user-group">{t}User group{/t}</label>
+                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
+                            </div>
+                        </div>
+                    </div>
+                {/acl}
+
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Settings{/t}</h4>
+                    </div>
+                    <div class="grid-body">
                         <div class="form-group">
                             <label for="user-type">{t}User type{/t}</label>
                             <select id="user-type" ng-model="user.type">
@@ -142,25 +173,9 @@
                             <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
-                    </tab>
-                    <tab heading="{t}Privileges{/t}">
-                        {acl isAllowed="GROUP_CHANGE"}
-                            <div class="form-group">
-                                <label for="id-user-group">{t}User group{/t}</label>
-                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
-                            </div>
-                        {/acl}
-                    </tab>
-                    {is_module_activated name="PAYWALL"}
-                        <tab heading="{t}Paywall{/t}">
-                            <div class="form-group">
-                                <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                                <quick-datepicker icon-class="fa fa-clock-o" id="time-limit" name="time_limit" ng-model="user.meta.paywall_time_limit" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                            </div>
-                        </tab>
-                    {/is_module_activated}
-                </tabset>
-            </form>
-         </div>
-    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div><!-- .content -->

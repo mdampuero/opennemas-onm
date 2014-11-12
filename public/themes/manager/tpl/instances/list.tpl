@@ -61,71 +61,71 @@
         </div>
     </div>
 </div>
-<div class="content">
-    <div class="page-navbar filters-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav quick-section">
-                    <li class="m-r-10 input-prepend inside search-form no-boarder">
-                        <span class="add-on">
-                            <span class="fa fa-search fa-lg"></span>
-                        </span>
-                        <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text" style="width:250px;"/>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <select class="xmedium" ng-model="epp">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="500">500</option>
-                        </select>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="refresh()">
-                            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <div class="btn btn-link toggle-columns" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
-                            <i class="fa fa-columns"></i>
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-form no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-search fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name, domain or contact{/t}" ng-model="criteria.name_like[0].value" type="text" style="width:250px;"/>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <select class="xmedium" ng-model="epp">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                    </select>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
+                        <i class="fa fa-trash-o fa-lg"></i>
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="refresh()">
+                        <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+                    </button>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks toggle-columns">
+                    <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
+                        <i class="fa fa-columns"></i>
+                    </div>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
                         </div>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks form-inline pagination-links">
-                        <div class="input-group">
-                            <div class="input-group-btn">
-                                <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                            </div>
-                            <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly>
-                            <div class="input-group-btn">
-                                <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
+                        <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly>
+                        <div class="input-group-btn">
+                            <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
+<div class="content">
     <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
         <div class="row">
             <div class="col-xs-12 title">

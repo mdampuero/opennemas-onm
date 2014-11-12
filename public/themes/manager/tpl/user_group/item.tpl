@@ -44,9 +44,14 @@
     </div>
 </div>
 <div class="content">
-    <div class="grid simple">
-        <div class="grid-body clearfix">
-            <form name="groupForm" novalidate>
+    <form name="groupForm" novalidate>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4>
+                    <span class="semi-bold">[% group.name %]</span>
+                </h4>
+            </div>
+            <div class="grid-body">
                 <div class="form-group">
                     <label class="form-label">
                         {t}Group name{/t}
@@ -59,7 +64,13 @@
                         </span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="grid simple">
+            <div class="grid-title">
                 <h4>{t}Privileges{/t}</h4>
+            </div>
+            <div class="grid-body">
                 <div class="form-group">
                     <label class="form-label">{t}Selected privileges{/t}</label>
                     <select id="modules" multiple ui-select2 ng-model="group.privileges">
@@ -92,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
