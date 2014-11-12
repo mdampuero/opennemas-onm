@@ -24,6 +24,11 @@
 }
 
 .page-navbar.qr .toggle-columns {
+  height: 36px;
+  min-width: 36px;
+}
+
+.page-navbar.qr .toggle-columns .btn {
   display: none;
 }
 
