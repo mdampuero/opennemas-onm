@@ -253,26 +253,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
-         * Empties ng-view.
-         */
-        function refreshApp() {
-            // var host = document.getElementById('view');
-            // if (host) {
-            //     var mainDiv = $("#view");
-            //     mainDiv.empty();
-            //     angular.element(host).empty();
-            // }
-        }
-
-        /**
          * Empties ng-view when route changes.
          *
          * @param Object event The event object.
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            refreshApp();
-
             history.restore($location.path());
             history.push($location.path(), $location.search());
         });
@@ -318,6 +304,25 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $scope.sidebar.forced = 0;
                 $scope.sidebar.current = $scope.sidebar.wanted;
             }
+
+            $scope.checkFiltersBar();
         });
+
+        /**
+         * Updates the content margin-top basing on the filters-navbar height.
+         */
+        $scope.checkFiltersBar = function checkFiltersBar() {
+            if ($('.filters-navbar').length == 0) {
+                return false;
+            }
+
+            var margin = 50 + $('.filters-navbar').height() - 15;
+
+            if ($(window).width() <= 768) {
+                margin = 50 + $('.filters-navbar').height();
+            }
+
+            $('.content').css('margin-top', margin + 'px');
+        }
     }
 ]);

@@ -171,7 +171,7 @@
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
-                <div id="view" ng-view autoscroll="true"></div>
+                <div id="view" ng-view autoscroll="true" onload="checkFiltersBar()"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>

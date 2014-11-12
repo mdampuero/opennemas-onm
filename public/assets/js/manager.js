@@ -13,9 +13,4 @@ $(document).ready(function() {
             $('.filters-navbar').removeClass("qr");
         }
     });
-
-    $(window).resize(function () {
-        var margin = 50 + $('.filters-navbar').height() - 15;
-        $('.content').css('margin-top', margin + 'px');
-    });
 });
