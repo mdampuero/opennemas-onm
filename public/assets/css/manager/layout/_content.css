@@ -22,7 +22,7 @@
 
 .page-content .content {
   padding: 15px;
-  margin-top: 50px;
+  margin-top: 85px;
 }
 
 .page-content .content [class^=col-],
@@ -46,6 +46,10 @@
     padding-left: 50px;
 }
 
+.page-sidebar.collapsed ~ .page-container .page-content .filters-navbar {
+    padding-left: 65px;
+}
+
 @media (max-width: 992px) and (min-width: 768px){
   .page-sidebar.collapsed ~ .page-container .page-content,
   .page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
@@ -58,49 +62,10 @@
     left: 210px;
     padding-left: 0;
   }
-/*  .page-navbar .selected-actions {
-    overflow: hidden;
-    height: auto;
-    width: 40px;
 
-    -webkit-transition: all .25s ease-out;
-    -moz-transition: all .25s ease-out;
-    transition: all .25s ease-out;
+  .page-sidebar ~ .page-container .page-content .filters-navbar {
+    padding-left: 15px;
   }
-
-  .page-navbar .selected-actions.collapsed {
-    overflow: hidden;
-    height: 0;
-    width: 40px;
-
-    -webkit-transition: all .25s ease-in;
-    -moz-transition: all .25s ease-in;
-    transition: all .25s ease-in;
-  }
-
-  .page-navbar .selected-actions .quick-section {
-    background: #22262e;
-    overflow: hidden;
-    height: 146px;
-    position: absolute;
-    width: 40px;
-
-    -webkit-transition: all .25s ease-out;
-    -moz-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-  }
-
-  .page-navbar .selected-actions.collapsed .quick-section {
-    height: 0;
-
-    -webkit-transition: all .25s ease-in;
-    -moz-transition: all .25s ease-in;
-    transition: all .25s ease-in;
-  }
-
-  .page-navbar .selected-actions .btn-link {
-    color: #8b91a0;
-  }*/
 }
 
 @media (max-width: 768px) {
@@ -118,5 +83,9 @@
   .page-sidebar ~ .page-container .page-content .actions-navbar {
     left: 210px;
     padding-left: 0;
+  }
+
+  .page-sidebar.collapsed ~ .page-container .page-content .filters-navbar {
+    padding-left: 15px;
   }
 }
