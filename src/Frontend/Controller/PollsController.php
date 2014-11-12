@@ -232,6 +232,7 @@ class PollsController extends Controller
             array(
                 'cache_id'      => $cacheID,
                 'msg'           => $message,
+                'poll'          => $poll,
                 'already_voted' => $alreadyVoted,
             )
         );
