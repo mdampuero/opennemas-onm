@@ -1,3 +1,7 @@
+.grid {
+  margin-bottom: 15px;
+}
+
 .page-container {
   height: auto;
   margin: 0;
@@ -19,6 +23,22 @@
 .page-content .content {
   padding: 15px;
   margin-top: 50px;
+}
+
+.page-content .content [class^=col-],
+.page-content .content [class*= col-] {
+  padding-left: 8px;
+  padding-right: 7px;
+}
+
+.page-content .content [class^=col-]:first-child,
+.page-content .content [class*= col-]:first-child {
+  padding-left: 15px;
+}
+
+.page-content .content [class^=col-]:last-child,
+.page-content .content [class*= col-]:last-child {
+  padding-right: 15px;
 }
 
 .page-sidebar.collapsed ~ .page-container .page-content,
