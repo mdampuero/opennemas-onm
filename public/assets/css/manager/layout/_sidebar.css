@@ -37,6 +37,7 @@
 }
 
 .page-sidebar {
+  padding-bottom: 100px;
   z-index: 200;
 }
 
@@ -90,6 +91,10 @@
 
 .page-sidebar.collapsed .title {
     width: 0;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul {
+  padding-top: 0;
 }
 
 .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu
