@@ -8,6 +8,7 @@
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#eee">
 
     {block name="meta"}
     <title>OpenNeMaS - Manager</title>
@@ -56,7 +57,7 @@
     {/block}
 
 </head>
-<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
+<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -85,7 +86,7 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status">
+    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
         <div class="overlay"></div>
         <scrollable>
             <div class="page-sidebar-wrapper">
