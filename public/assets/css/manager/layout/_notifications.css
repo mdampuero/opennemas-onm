@@ -1,0 +1,115 @@
+ul.messenger.messenger-fixed.messenger-on-top,
+ul.messenger.messenger-fixed.messenger-on-bottom {
+  border-radius: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding-left: 210px;
+  width: 100%;
+  z-index: 100;
+}
+
+ul .messenger-message {
+  border: 0;
+  border-radius: 0;
+  padding: 15px;
+  margin: 0;
+
+}
+
+.messenger-message-slot {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: relative;
+
+  -webkit-transition: all ease-in-out .25s;
+  -o-transition: all ease-in-out .25s;
+  transition: all ease-in-out .25s;
+}
+
+.messenger-message-slot.messenger-shown {
+  height: 50px;
+  opacity: 1;
+
+  -webkit-animation: slide-up .25s;
+  -moz-webkit-animation: slide-up .25s;
+  -0-webkit-animation: slide-up .25s;
+  animation: slide-up .25s;
+}
+
+@-webkit-keyframes slide-up {
+    from { height: 0; opacity: 0; }
+    to { height: 50px; opacity: 1; }
+}
+
+@mox-keyframes slide-up {
+    from { height: 0; opacity: 0; }
+    to { height: 50px; opacity: 1; }
+}
+
+@-o-keyframes slide-up {
+    from { height: 0; opacity: 0; }
+    to { height: 50px; opacity: 1; }
+}
+
+@keyframes slide-up {
+    from { height: 0; overflow: hidden; opacity: 0; }
+    to { height: 50px; opacity: 1; }
+}
+
+ul .messenger-message .messenger-message-inner:before {
+  font-family: 'FontAwesome';
+  font-size: 120%;
+  left: 17px;
+  display: inline-block;
+  content: "\f00c";
+  top: 50%;
+  margin: -8px 10px 0 0;
+  height: 13px;
+  width: 13px;
+  z-index: 20;
+}
+
+ul .messenger-message .messenger-close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: #fff;
+  opacity: 1;
+  font-weight: bold;
+  display: block;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 8px 10px 7px 7px;
+  margin: 8px 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+ul.messenger.messenger-empty,
+ul.messenger .messenger-message.messenger-hidden {
+  display: block;
+}
+
+.alert-info {
+  background-color: #0090d9;
+  color: #fff;
+}
+
+.alert-error {
+  background-color: #f35958;
+  color: #fff;
+}
+
+.alert-success {
+  background-color: #0aa699;
+  color: #fff;
+}
+
+.alert-warning {
+  background-color: #fbb05e;
+  color: #fff;
+}
