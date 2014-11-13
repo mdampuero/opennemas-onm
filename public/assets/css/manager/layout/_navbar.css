@@ -167,6 +167,10 @@
   border: 0 none;
 }
 
+.page-navbar.selected-navbar .quick-section .h-seperate {
+  border-left: 1px solid rgba(255, 255, 255, 0.175);
+}
+
 .page-navbar.selected-navbar {
   background: #0090d9;
   color: #ffffff;
@@ -227,6 +231,10 @@ div[ng-view].ng-leave-active .selected-navbar,
   border-radius: 0 2px 2px 0;
   line-height: 14px;
   min-height: 36px !important;
+}
+
+.page-navbar.filters-navbar .input-prepend.inside .add-on:first-child, .input-prepend .btn:first-child {
+  left:0;
 }
 
 .column-filters {
