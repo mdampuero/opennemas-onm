@@ -68,20 +68,20 @@ div[ng-view].ng-leave-active .content {
 }
 
 @-webkit-keyframes actions-navbar-enter {
-  0%   { top: -15px; opacity: 0; }
-  100% { top: 0; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @-moz-keyframes actions-navbar-enter {
-  0%   { top: -15px; opacity: 0; }
-  100% { top: 0; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @-o-keyframes actions-navbar-enter {
-  0%   { top: -15px; opacity: 0; }
-  100% { top: 0; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @keyframes actions-navbar-enter {
-  0%   { top: -15px; opacity: 0; }
-  100% { top: 0; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @-webkit-keyframes filters-navbar-enter {
