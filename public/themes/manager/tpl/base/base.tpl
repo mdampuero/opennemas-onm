@@ -64,9 +64,9 @@
 <body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
-            <h1>Opennemas</h1>
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
-            <h3>{t}Loading{/t}...</h3>
+            <h3>{t}Initializing{/t}</h3>
+            <h4>{$loading_message}</h4>
         </div>
     </div>
     <div class="nocss hidden">

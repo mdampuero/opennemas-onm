@@ -42,6 +42,18 @@ class WelcomeController extends Controller
      */
     public function defaultAction()
     {
-        return $this->render('base/base.tpl');
+        $messages = [
+            _("Locating the required gigapixels to render..."),
+            _("Spinning up the hamster..."),
+            _("Shovelling coal into the server..."),
+            _("Programming the flux capacitor..."),
+            _("Loading humorous message..."),
+        ];
+        $loadingMessage = $messages[array_rand($messages)];
+
+        return $this->render(
+            'base/base.tpl',
+            ['loading_message' => $loadingMessage,]
+        );
     }
 }
