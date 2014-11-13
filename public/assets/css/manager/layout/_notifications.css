@@ -7,6 +7,15 @@ ul.messenger.messenger-fixed.messenger-on-bottom {
   padding-left: 210px;
   width: 100%;
   z-index: 100;
+
+  -webkit-transition: all .25s;
+  -o-transition: all .25s;
+  transition: all .25s;
+}
+
+.collapsed ul.messenger.messenger-fixed.messenger-on-top,
+.collapsed ul.messenger.messenger-fixed.messenger-on-bottom {
+  padding-left: 50px;
 }
 
 ul .messenger-message {
@@ -15,47 +24,6 @@ ul .messenger-message {
   padding: 15px;
   margin: 0;
 
-}
-
-.messenger-message-slot {
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
-  position: relative;
-
-  -webkit-transition: all ease-in-out .25s;
-  -o-transition: all ease-in-out .25s;
-  transition: all ease-in-out .25s;
-}
-
-.messenger-message-slot.messenger-shown {
-  height: 50px;
-  opacity: 1;
-
-  -webkit-animation: slide-up .25s;
-  -moz-webkit-animation: slide-up .25s;
-  -0-webkit-animation: slide-up .25s;
-  animation: slide-up .25s;
-}
-
-@-webkit-keyframes slide-up {
-    from { height: 0; opacity: 0; }
-    to { height: 50px; opacity: 1; }
-}
-
-@mox-keyframes slide-up {
-    from { height: 0; opacity: 0; }
-    to { height: 50px; opacity: 1; }
-}
-
-@-o-keyframes slide-up {
-    from { height: 0; opacity: 0; }
-    to { height: 50px; opacity: 1; }
-}
-
-@keyframes slide-up {
-    from { height: 0; overflow: hidden; opacity: 0; }
-    to { height: 50px; opacity: 1; }
 }
 
 ul .messenger-message .messenger-message-inner:before {
@@ -89,11 +57,6 @@ ul .messenger-message .messenger-close {
   -webkit-appearance: none;
 }
 
-ul.messenger.messenger-empty,
-ul.messenger .messenger-message.messenger-hidden {
-  display: block;
-}
-
 .alert-info {
   background-color: #0090d9;
   color: #fff;
@@ -112,4 +75,11 @@ ul.messenger .messenger-message.messenger-hidden {
 .alert-warning {
   background-color: #fbb05e;
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .collapsed ul.messenger.messenger-fixed.messenger-on-top,
+  .collapsed ul.messenger.messenger-fixed.messenger-on-bottom {
+    padding-left: 0;
+  }
 }
