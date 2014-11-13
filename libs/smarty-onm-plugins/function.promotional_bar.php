@@ -8,7 +8,7 @@ function smarty_function_promotional_bar($params, &$smarty)
 
     $enabled = \Onm\Module\ModuleManager::isActivated('PROMOTIONAL_BAR');
 
-    if (!$enabled) {
+    if ($enabled) {
         $createNew = _('Create free newspaper');
         $goToWeb   = _('Opennemas homepage');
         $help      = _('Help Desk');
@@ -16,7 +16,8 @@ function smarty_function_promotional_bar($params, &$smarty)
         $onmText   = _('The best Internet service for your online digital newspaper');
 
         // Html promotional bar with sidebar like paper.li
-        $html = '<script src="/assets/plugins/jquery-slider/jquery.sidr.min.js"></script>
+        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
+                <script src="/assets/plugins/jquery-slider/jquery.sidr.min.js"></script>
                 <link rel="stylesheet" type="text/css" href="/assets/plugins/jquery-slider/css/jquery.sidr.dark.css" >
                 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
                 <div id="promotional-bar">
@@ -108,14 +109,15 @@ function smarty_function_promotional_bar($params, &$smarty)
                     });
                 </script>';
 
+        // Simple html promotional bar
         $htm  = '<link rel="stylesheet" type="text/css" href="/assets/css/promotional_bar.css">
                 <div id="onm-bar">
                     <div class="content">
-                        <div class="text">
-                            '.$onmText.'
-                        </div>
                         <div class="logo">
                             open<strong>nemas</strong>
+                        </div>
+                        <div class="text">
+                            '.$onmText.'
                         </div>
                         <div class="sign-up">
                             <a href="http://www.opennemas.com" target="_blank">

@@ -29,19 +29,23 @@
 #sidr .fa {width: 15px;}
 
 #onm-bar {cursor: pointer;height: 45px;background: rgba(245, 245, 245, 0.75);display:inline-block;left: 0;top: 0;color: #888;width: 100%;font-size: 15px;border-bottom: 1px solid #eaeaea;}
-#onm-bar .logo {position: absolute;right: 0;left: 0; margin: 0 auto;padding: 5px 10px;font-size: 36px;font-family: 'Open Sans';}
-#onm-bar .text {float: left;padding: 5px 10px;font-family: 'Open Sans', sans-serif;text-align: left;font-weight: bold;}
+#onm-bar .logo {float:left; display: inline-block;padding: 5px 10px;font-size: 20px;font-family: 'Open Sans';}
+#onm-bar .text {float: left;padding: 8px 0px;font-family: 'Open Sans', sans-serif;text-align: left;font-size: 12px;}
 #onm-bar .content {text-align: center;padding-top: 5px;}
 #onm-bar .sign-up {float: right;padding: 0 10px;}
 #onm-bar .sign-up a {
     color: #fff;
-    padding: 8px;
+    padding: 8px 10px;
     display: inline-block;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 12px;
     text-decoration: none;
     font-family: 'Open Sans', sans-serif;
     background-color: #47a447;
+}
+
+@media (max-width: 767px) {
+    #onm-bar .text {display: none;}
 }
