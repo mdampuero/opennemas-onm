@@ -14,13 +14,63 @@
   transition: all .25s;
 }
 
-.page-navbar.qr {
+.page-navbar.show-qr {
   padding-left: 225px;
   padding-right: 15px;
   position: fixed;
   margin-top: 50px;
-  z-index: 400;
   box-shadow: 0px 1px 3px #e5e9ec;
+
+  -webkit-transition: all .25s;
+   -o-transition: all .25s;
+   transition: all .25s;
+
+  -webkit-animation: slide-down .25s;
+  -o-animation: slide-down .25s;
+  animation: slide-down .25s;
+}
+
+.page-navbar.hide-qr {
+  margin-top: 0;
+  opacity: 0;
+
+  -webkit-animation: slide-up .25s;
+  -o-animation: slide-up .25s;
+  animation: slide-up .25s;
+}
+
+@-webkit-keyframes slide-down {
+  0%   { opacity: 0; margin-top: 0; }
+  100% { opacity: 1;}
+}
+@-moz-keyframes slide-down {
+  0%   { opacity: 0; margin-top: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes slide-down {
+  0%   { opacity: 0; margin-top: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slide-down {
+  0%   { opacity: 0; margin-top: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes slide-up {
+  0%   { opacity: 1; margin-top: 50; }
+  100% { opacity: 0; margin-top: 0; }
+}
+@-moz-keyframes slide-up {
+  0%   { opacity: 1; margin-top: 50; }
+  100% { opacity: 0; margin-top: 0; }
+}
+@-o-keyframes slide-up {
+  0% { opacity: 1; }
+  100% { opacity: 0; margin-top: 0; }
+}
+@keyframes slide-up {
+  0%   { opacity: 1; margin-top: 50; }
+  100% { opacity: 0; margin-top: 0; }
 }
 
 .page-navbar.qr .toggle-columns {
