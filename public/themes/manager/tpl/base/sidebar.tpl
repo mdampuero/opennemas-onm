@@ -65,7 +65,7 @@
             <li class="profile-info">
                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]">
                     <div class="profile-pic">
-                        <img class="gravatar" email="[% user.email %]" image="1" size="32" >
+                        <img class="gravatar" email="[% user.email %]" image="1" size="32" width=32 height=32 >
                     </div>
                     <div class="username">
                         [% user.name %]

@@ -65,8 +65,8 @@
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
-            <h3>{t}Initializing{/t}</h3>
-            <h4>{$loading_message}</h4>
+            <h2>{t}Initializing{/t}</h2>
+            <h5>{$loading_message}</h5>
         </div>
     </div>
     <div class="nocss hidden">
