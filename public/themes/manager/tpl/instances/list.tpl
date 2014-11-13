@@ -27,37 +27,49 @@
                     </li>
                 </ul>
             </div>
-            <div class="selected-actions" ng-class="{ 'collapsed': selected.instances.length == 0 }">
-                <ul class="nav quick-section pull-left">
-                    <li class="quicklinks">
-                        <h4>
-                            [% selected.instances.length %] items selected
-                        </h4>
-                    </li>
-                </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-download fa-lg"></i>
-                        </a>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="setEnabledSelected(0)" tooltip="{t}Disable{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-times fa-lg"></i>
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="setEnabledSelected(1)" tooltip="{t}Enable{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-check fa-lg"></i>
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete all{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
+        </div>
+    </div>
+</div>
+<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.instances.length == 0 }">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section pull-left">
+                <li class="quicklinks">
+                    <h4>
+                        [% selected.instances.length %] items selected
+                    </h4>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+                        <i class="fa fa-download fa-lg"></i>
+                    </a>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="setEnabledSelected(0)" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="setEnabledSelected(1)" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                        <i class="fa fa-trash-o fa-lg"></i>
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="selected.instances = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                      <i class="fa fa-check-square-o fa-lg"></i>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

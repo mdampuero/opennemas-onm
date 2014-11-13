@@ -46,7 +46,8 @@
 }
 
 .collapsed .page-container .page-content,
-.collapsed .page-container .page-content .actions-navbar {
+.collapsed .page-container .page-content .actions-navbar,
+.collapsed .page-container .page-content .selected-navbar {
     padding-left: 50px;
 }
 
@@ -62,13 +63,15 @@
   }
 
   .collapsed .page-container .page-content,
-  .collapsed .page-container .page-content .actions-navbar {
+  .collapsed .page-container .page-content .actions-navbar,
+  .collapsed .page-container .page-content .selected-navbar {
     left: 0;
     padding-left: 50px;
   }
 
   .page-container .page-content,
-  .page-container .page-content .actions-navbar {
+  .page-container .page-content .actions-navbar,
+  .page-container .page-content .selected-navbar {
     left: 210px;
     padding-left: 0;
   }
@@ -90,13 +93,15 @@
   }
 
   .collapsed .page-container .page-content,
-  .collapsed .page-container .page-content .actions-navbar {
+  .collapsed .page-container .page-content .actions-navbar,
+  .collapsed .page-container .page-content .selected-navbar {
     left: 0;
     padding-left: 0;
   }
 
   .page-container .page-content,
-  .page-container .page-content .actions-navbar {
+  .page-container .page-content .actions-navbar,
+  .page-container .page-content .selected-navbar {
     left: 210px;
     padding-left: 0;
   }

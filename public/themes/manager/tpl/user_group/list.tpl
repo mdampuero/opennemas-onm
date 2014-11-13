@@ -21,23 +21,34 @@
                     </li>
                 </ul>
             </div>
-            <div class="selected-actions pull-right" ng-class="{ 'collapsed': selected.groups.length == 0 }">
-                <ul class="nav quick-section pull-left">
-                    <li class="quicklinks">
-                        <h4>
-                            [% selected.groups.length %] items selected
-                        </h4>
-                    </li>
-                </ul>
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <a class="btn btn-link" ng-click="deleteSelected()">
-                            <i class="fa fa-trash-o"></i>
-                            {t}Delete{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        </div>
+    </div>
+</div>
+<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.groups.length == 0 }">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section pull-left">
+                <li class="quicklinks">
+                    <h4>
+                        [% selected.groups.length %] items selected
+                    </h4>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <a class="btn btn-link" ng-click="deleteSelected()"  tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="selected.groups = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                      <i class="fa fa-check-square-o fa-lg"></i>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

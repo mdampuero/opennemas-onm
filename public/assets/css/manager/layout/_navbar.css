@@ -93,10 +93,6 @@
   color: #fff;
 }
 
-.page-navbar.actions-navbar .h-seperate {
-  margin:0 20px 0 10px;
-}
-
 .page-navbar .navbar {
   margin: 0;
 }
@@ -159,7 +155,7 @@
 .page-navbar .quick-section .h-seperate {
   height: 24px;
   width: 2px;
-  margin: 8px 10px 0;
+  margin: 6px 10px 0;
   border-left: 1px solid rgba(0, 0, 0, 0.175);
   display: inline-block;
   position: relative;
@@ -169,47 +165,27 @@
 .page-navbar.filters-navbar .quick-section .h-seperate {
   width: 0;
   border: 0 none;
-  margin: 0px 10px;
 }
 
-.page-navbar .selected-actions {
+.page-navbar.selected-navbar {
   background: #0090d9;
   color: #ffffff;
-  height: 100%;
-  line-height: 33px;
-  position: absolute;
-  text-align: right;
   text-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 0px;
-  top: 0;
-  left:0;
-  transition: all 300ms ease-in-out;
-  -webkit-user-select: none;
-  user-select: none;
-  vertical-align: middle;
-  width: 100%;
-  z-index: 2147483643;
-
-  opacity: 1;
-  -webkit-transform: translateY(0);
-  padding-right:10px;
-  z-index:2;
+  z-index: 450;
 }
 
-.page-navbar .selected-actions.collapsed {
+div[ng-view].ng-leave-active .selected-navbar,
+.page-navbar.selected-navbar.collapsed {
   opacity: 0;
   top: -50px;
 }
 
-.page-navbar .selected-actions h4 {
-  color:White;
+.page-navbar.selected-navbar h4 {
+  color: #fff;
   padding-left:10px;
 }
 
-.page-navbar .selected-actions .quick-section > li,
-.page-navbar .selected-actions .quick-section {
-  float:none;
-}
-.page-navbar .selected-actions .btn {
+.page-navbar.selected-navbar .quicklinks .btn {
   color: #fff;
 }
 
@@ -221,10 +197,6 @@
   padding-right: 15px;
   position: absolute;
   z-index: 350;
-}
-
-.filters-navbar .pagination-links {
-  /*width: 150px;*/
 }
 
 .filters-navbar .pagination-links .form-control {
@@ -291,8 +263,15 @@
     height: 715px;
   }
 
-  .actions-navbar {
+  .page-navbar.actions-navbar,
+  .page-navbar.selected-navbar {
     top: 50px;
+  }
+
+  div[ng-view].ng-leave-active .selected-navbar,
+  .page-navbar.selected-navbar.collapsed {
+    opacity: 0;
+    top: 0px;
   }
 
   .filters-navbar {
