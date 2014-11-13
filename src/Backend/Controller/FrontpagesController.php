@@ -161,7 +161,7 @@ class FrontpagesController extends Controller
 
         // Fetch old contents
         $cm = new \ContentManager();
-        $oldContents = $cm->getContentsForHomepageOfCategory($categoryID);
+        $oldContents = $cm->getContentsForHomepageOfCategory($category);
 
         if ($category !== null && $category !== '') {
             $category = (int) $category;
