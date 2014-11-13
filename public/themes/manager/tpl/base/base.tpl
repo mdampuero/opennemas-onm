@@ -60,11 +60,11 @@
     {/block}
 
 </head>
-<body id="manager" class="application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-class="{ 'error-body': true }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+<body id="manager" class="error-body application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
     <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
-            <div class="header-seperation" ng-class="{ 'collapsed': sidebar.current }">
+            <div class="header-seperation">
                 <div class="layout-collapse pull-left">
                     <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
                         <i class="fa fa-bars fa-lg"></i>
@@ -89,7 +89,7 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <div class="page-sidebar" id="main-menu" ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
+    <div class="page-sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
         <div class="overlay"></div>
         <scrollable>
             <div class="page-sidebar-wrapper">

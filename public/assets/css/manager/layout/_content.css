@@ -45,12 +45,12 @@
   padding-right: 15px;
 }
 
-.page-sidebar.collapsed ~ .page-container .page-content,
-.page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
+.collapsed .page-container .page-content,
+.collapsed .page-container .page-content .actions-navbar {
     padding-left: 50px;
 }
 
-.page-sidebar.collapsed ~ .page-container .page-content .filters-navbar {
+.collapsed .page-container .page-content .filters-navbar {
     padding-left: 65px;
 }
 
@@ -61,19 +61,19 @@
     padding-right: 15px;
   }
 
-  .page-sidebar.collapsed ~ .page-container .page-content,
-  .page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
+  .collapsed .page-container .page-content,
+  .collapsed .page-container .page-content .actions-navbar {
     left: 0;
     padding-left: 50px;
   }
 
-  .page-sidebar ~ .page-container .page-content,
-  .page-sidebar ~ .page-container .page-content .actions-navbar {
+  .page-container .page-content,
+  .page-container .page-content .actions-navbar {
     left: 210px;
     padding-left: 0;
   }
 
-  .page-sidebar ~ .page-container .page-content .filters-navbar {
+  .page-container .page-content .filters-navbar {
     padding-left: 15px;
   }
 }
@@ -89,19 +89,19 @@
     padding-right: 15px;
   }
 
-  .page-sidebar.collapsed ~ .page-container .page-content,
-  .page-sidebar.collapsed ~ .page-container .page-content .actions-navbar {
+  .collapsed .page-container .page-content,
+  .collapsed .page-container .page-content .actions-navbar {
     left: 0;
     padding-left: 0;
   }
 
-  .page-sidebar ~ .page-container .page-content,
-  .page-sidebar ~ .page-container .page-content .actions-navbar {
+  .page-container .page-content,
+  .page-container .page-content .actions-navbar {
     left: 210px;
     padding-left: 0;
   }
 
-  .page-sidebar.collapsed ~ .page-container .page-content .filters-navbar {
+  .collapsed .page-container .page-content .filters-navbar {
     padding-left: 15px;
   }
 }
