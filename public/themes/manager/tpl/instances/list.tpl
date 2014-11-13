@@ -107,18 +107,14 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks form-inline pagination-links">
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1">
-                                <i class="fa fa-chevron-left"></i>
-                            </button>
-                        </div>
-                        <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly>
-                        <div class="input-group-btn">
-                            <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages">
-                                <i class="fa fa-chevron-right"></i>
-                            </button>
-                        </div>
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <!-- <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly> -->
+                        <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
                     </div>
                 </li>
             </ul>
