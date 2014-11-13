@@ -1,9 +1,9 @@
 
-angular.module('ManagerApp', [ 'ngRoute', 'ngTouch', 'ui.bootstrap', 'ui.select2',
-        'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
-        'http-interceptor', 'googlechart', 'vcRecaptcha', 'sun.scrollable',
-        'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth','onm.gravatar',
-        'onm.form-autofill-fix', 'onm.history', 'onm.resizable',
+angular.module('ManagerApp', [ 'ngAnimate', 'ngRoute', 'ngTouch', 'ui.bootstrap',
+        'ui.select2', 'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput',
+        'checklist-model', 'http-interceptor', 'googlechart', 'vcRecaptcha',
+        'sun.scrollable', 'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth',
+        'onm.gravatar', 'onm.form-autofill-fix', 'onm.history', 'onm.resizable',
         'ManagerApp.controllers'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');

@@ -313,14 +313,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.checkFiltersBar = function checkFiltersBar() {
             $timeout(function() {
-                if ($('.filters-navbar').length == 0) {
+                if ($('.filters-navbar').length != 1) {
                     return false;
                 }
 
                 var margin = 50 + $('.filters-navbar').height() - 15;
 
                 $('.content').css('margin-top', margin + 'px');
-            }, 100);
+            }, 1000);
         }
     }
 ]);

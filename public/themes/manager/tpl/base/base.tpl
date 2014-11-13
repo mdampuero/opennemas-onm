@@ -296,6 +296,7 @@
             @FosJsRoutingBundle/js/router.js,
             @Common/js/routes.js,
             @Common/plugins/angular/angular.min.js,
+            @Common/plugins/angular-animate/angular-animate.min.js,
             @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-checklist-model/checklist-model.js,
             @Common/plugins/angular-nanoscroller/scrollable.js,
