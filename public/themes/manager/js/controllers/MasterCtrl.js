@@ -264,6 +264,17 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         });
 
         /**
+         * Restart the loading status for sidebar and check the top margin.
+         *
+         * @param Object event The event object.
+         * @param array  args  The list of arguments.
+         */
+        $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
+            $scope.changing = {};
+            checkFiltersBar();
+        });
+
+        /**
          * Shows a modal to force page reload.
          *
          * @param Object event The event object.

@@ -38,6 +38,7 @@
             @Common/plugins/webarch/css/magic_space.css,
 
             @Common/plugins/jquery-nanoscroller/nanoscroller.css,
+            @Common/plugins/angular-loading-bar/loading-bar.min.css,
             @Common/plugins/angular-quickdate/css/ng-quick-date.css,
             @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
             @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
@@ -94,15 +95,15 @@
         <scrollable>
             <div class="page-sidebar-wrapper">
                 <ul>
-                    <li class="start" ng-class="{ 'active': false }" ng-click="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                    <li class="start" ng-class="{ 'active': false }" ng-click="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.dashboard = 1">
                         <a href="#">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard }"></i>
                             <span class="title">{t}Dashboard{/t}</span>
                         </a>
                     </li>
-                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.instances = 1">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
-                            <i class="fa fa-cubes"></i>
+                            <i class="fa fa-cubes" ng-class="{ 'fa-circle-o-notch fa-spin': changing.instances }"></i>
                             <span class="title">{t}Instances{/t}</span>
                         </a>
                     </li>
@@ -113,15 +114,15 @@
                             <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted;">
+                            <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.commands = 1">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
-                                    <i class="fa fa-code"></i>
+                                    <i class="fa fa-code" ng-class="{ 'fa-circle-o-notch fa-spin': changing.commands }"></i>
                                     <span class="title">{t}Commands{/t}</span>
                                 </a>
                             </li>
-                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.cache = 1">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]">
-                                    <i class="fa fa-database"></i>
+                                    <i class="fa fa-database" ng-class="{ 'fa-circle-o-notch fa-spin': changing.cache }"></i>
                                     <span class="title">{t}OPCache Status{/t}</span>
                                 </a>
                             </li>
@@ -134,15 +135,15 @@
                             <span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
                         </a>
                         <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.users = 1">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
-                                    <i class="fa fa-user"></i>
+                                    <i class="fa fa-user" ng-class="{ 'fa-circle-o-notch fa-spin': changing.users }"></i>
                                     <span class="title">{t}Users{/t}</span>
                                 </a>
                             </li>
-                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted">
+                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.groups = 1">
                                 <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
-                                    <i class="fa fa-users"></i>
+                                    <i class="fa fa-users" ng-class="{ 'fa-circle-o-notch fa-spin': changing.groups }"></i>
                                     <span class="title">{t}User groups{/t}</span>
                                 </a>
                             </li>
@@ -174,7 +175,7 @@
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
-                <div id="view" ng-view autoscroll="true" onload="checkFiltersBar()"></div>
+                <div id="view" ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
@@ -282,8 +283,6 @@
             @Common/plugins/jquery-notifications/js/messenger.min.js,
             @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
 
-
-            @Common/plugins/pace/pace.min.js,
             @Common/js/onm/scripts.js,
 
             @Common/js/jquery/select2/select2.min.js,
@@ -292,22 +291,22 @@
             @Common/js/onm/scripts.js,
             @Common/js/onm/jquery.onm-editor.js,
 
-
             @FosJsRoutingBundle/js/router.js,
             @Common/js/routes.js,
             @Common/plugins/angular/angular.min.js,
             @Common/plugins/angular-animate/angular-animate.min.js,
-            @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-nanoscroller/scrollable.js,
-            @Common/plugins/angular-route/angular-route.min.js,
-            @Common/plugins/angular-touch/angular-touch.min.js,
+            @Common/plugins/angular-loading-bar/loading-bar.min.js,
+            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
             @Common/plugins/angular-recaptcha/module.js,
             @Common/plugins/angular-recaptcha/directive.js,
             @Common/plugins/angular-recaptcha/service.js,
-            @Common/plugins/angular-translate/angular-translate.min.js,
-            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+            @Common/plugins/angular-route/angular-route.min.js,
             @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+            @Common/plugins/angular-touch/angular-touch.min.js,
+            @Common/plugins/angular-translate/angular-translate.min.js,
             @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
             @Common/plugins/angular-ui/select2.js,
 
