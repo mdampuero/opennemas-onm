@@ -115,7 +115,7 @@
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
-                <div id="view" ng-view autoscroll="true"></div>
+                <div class="view" id="view" ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>

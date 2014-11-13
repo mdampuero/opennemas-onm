@@ -12,16 +12,24 @@ $(document).ready(function() {
 
         positions.splice(0, 1);
 
+        if (current == 0) {
+            $(this).removeClass('show-qr').removeClass('hide-qr');
+            return true;
+        }
+
         if (!$('.filters-navbar').hasClass('show-qr') && current > 0
                 && current < positions[7]) {
             $('.filters-navbar').stop(true, true).addClass('show-qr');
-        } else if ($('.filters-navbar').hasClass('show-qr')
+            return true;
+        }
+
+        if ($('.filters-navbar').hasClass('show-qr')
                 && current > positions[7]) {
             $('.filters-navbar').stop(true, true).addClass('hide-qr').delay(250).queue(function() {
                 $(this).removeClass('show-qr').removeClass('hide-qr').dequeue();
             });
-        } else {
-            $(this).removeClass('show-qr').removeClass('hide-qr');
+
+            return true;
         }
     });
 });

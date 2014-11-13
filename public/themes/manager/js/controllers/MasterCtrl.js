@@ -328,7 +328,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.checkFiltersBar = function checkFiltersBar() {
             $timeout(function() {
-                if ($('.filters-navbar').length != 1) {
+                if ($('.view:not(.ng-leave-active) .filters-navbar').length != 1) {
                     return false;
                 }
 
