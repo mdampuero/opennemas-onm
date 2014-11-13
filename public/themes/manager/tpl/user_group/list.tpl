@@ -30,23 +30,24 @@
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
                     <h4>
+                        <i class="fa fa-check"></i>
                         [% selected.groups.length %] items selected
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks">
-                    <a class="btn btn-link" ng-click="deleteSelected()"  tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                        <i class="fa fa-trash-o"></i>
-                    </a>
+                    <button class="btn btn-link" ng-click="selected.groups = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                      {t}Clear{/t}
+                    </button>
                 </li>
                 <li class="quicklinks">
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="selected.groups = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      <i class="fa fa-check-square-o fa-lg"></i>
-                    </button>
+                    <a class="btn btn-link" ng-click="deleteSelected()"  tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
                 </li>
             </ul>
         </div>
