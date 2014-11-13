@@ -279,7 +279,7 @@ div[ng-view].ng-leave-active .selected-navbar,
     margin-top: 100px;
   }
 
-  .page-navbar.qr {
+  .page-navbar.show-qr {
     padding-right: 15px;
     position: fixed;
     margin-top: 100px;
