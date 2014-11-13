@@ -61,8 +61,27 @@
     {/block}
 
 </head>
-<body id="manager" class="error-body application-loading" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
-    <header class="header navbar navbar-inverse" ng-show="auth.status || (!auth.status && auth.modal)">
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+    <div class="application-loading" ng-hide="loaded">
+        <div class="loading-message">
+            <h1>Opennemas</h1>
+            <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+            <h3>{t}Loading{/t}...</h3>
+        </div>
+    </div>
+    <div class="nocss hidden">
+        {t}Your browser was unable to load all of Opennemas's resources. They may have been blocked by your firewall, proxy or browser configuration.{/t}
+        <br>
+        {t}Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again.{/t}
+        <hr>
+    </div>
+    <div class="nojs" ng-hide="true">
+        <noscript class="big-message text-center">
+            <h1>Opennemas</h1>
+            <p>To use Opennemas, please enable JavaScript.</p>
+        </noscript>
+    </div>
+    <header class="header navbar navbar-inverse ng-cloak" ng-show="(loaded && auth.status) || (!auth.status && auth.modal)">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation">
@@ -90,108 +109,17 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <div class="page-sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
-        <div class="overlay"></div>
-        <scrollable>
-            <div class="page-sidebar-wrapper">
-                <ul>
-                    <li class="start" ng-class="{ 'active': false }" ng-click="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.dashboard = 1">
-                        <a href="#">
-                            <i class="fa fa-home" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard }"></i>
-                            <span class="title">{t}Dashboard{/t}</span>
-                        </a>
-                    </li>
-                    <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.instances = 1">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
-                            <i class="fa fa-cubes" ng-class="{ 'fa-circle-o-notch fa-spin': changing.instances }"></i>
-                            <span class="title">{t}Instances{/t}</span>
-                        </a>
-                    </li>
-                    <li ng-class="{ 'active open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
-                        <a href="#">
-                            <i class="fa fa-flask"></i>
-                            <span class="title"> {t}Framework{/t}</span>
-                            <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.commands = 1">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
-                                    <i class="fa fa-code" ng-class="{ 'fa-circle-o-notch fa-spin': changing.commands }"></i>
-                                    <span class="title">{t}Commands{/t}</span>
-                                </a>
-                            </li>
-                            <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.cache = 1">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]">
-                                    <i class="fa fa-database" ng-class="{ 'fa-circle-o-notch fa-spin': changing.cache }"></i>
-                                    <span class="title">{t}OPCache Status{/t}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li ng-class="{ 'active open': isActive('manager_users_list') || isActive('manager_user_groups_list'),  'active': isActive('manager_users_list') || isActive('manager_user_groups_list') }">
-                        <a href="#">
-                            <i class="fa fa-gears"></i>
-                            <span class="title">{t}Settings{/t}</span>
-                            <span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
-                        </a>
-                        <ul class="sub-menu">
-                            <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.users = 1">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
-                                    <i class="fa fa-user" ng-class="{ 'fa-circle-o-notch fa-spin': changing.users }"></i>
-                                    <span class="title">{t}Users{/t}</span>
-                                </a>
-                            </li>
-                            <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.groups = 1">
-                                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
-                                    <i class="fa fa-users" ng-class="{ 'fa-circle-o-notch fa-spin': changing.groups }"></i>
-                                    <span class="title">{t}User groups{/t}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </scrollable>
-        <div class="footer-widget">
-            <ul>
-                <li class="profile-info">
-                    <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]">
-                        <div class="profile-pic">
-                            <img class="gravatar" email="[% user.email %]" image="1" size="32" >
-                        </div>
-                        <div class="username">
-                            [% user.name %]
-                        </div>
-                    </a>
-                    <div class="logout" ng-click="logout();">
-                        <i class="fa fa-power-off"></i>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="layout-collapse-border" ng-click="sidebar.wanted = !sidebar.wanted;sidebar.current = sidebar.wanted"></div>
+    {include file="base/sidebar.tpl"}
+    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted;sidebar.current = sidebar.wanted"></div>
     <!-- END SIDEBAR -->
-    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
+    <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
                 <div id="view" ng-view autoscroll="true"></div>
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
-    <script type="text/ng-template" id="modal-login">
-        {include file="login/modal_login.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-confirm">
-        {include file="common/modal_confirm.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-upgrade">
-        {include file="common/modal_application_upgrade.tpl"}
-    </script>
-    <script type="text/ng-template" id="error">
-        {include file="error/ws_404.tpl"}
-    </script>
-    <div class="container login-container-wrapper" ng-show="!auth.status && !auth.modal">
+    <div class="container login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
         <div class="row login-container column-seperation">
             <div class="col-md-5 col-md-offset-1">
                 <h2>{t}Opennemas manager{/t}</h2>
@@ -210,7 +138,7 @@
             <div class="col-md-5 "><br>
                 <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
                     <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                    <iframe id="fake-login" src="/managerws/template/login:fake_form.tpl"></iframe>
+                    <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
                     <div class="row">
                         <div class="form-group col-md-10">
                             <label class="form-label">{t}Username{/t}</label>
@@ -261,6 +189,18 @@
             </div>
         </div>
     </div>
+    <script type="text/ng-template" id="modal-login">
+        {include file="login/modal_login.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-confirm">
+        {include file="common/modal_confirm.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-upgrade">
+        {include file="common/modal_application_upgrade.tpl"}
+    </script>
+    <script type="text/ng-template" id="error">
+        {include file="error/ws_404.tpl"}
+    </script>
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>

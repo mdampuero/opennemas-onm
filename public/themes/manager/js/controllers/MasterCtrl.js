@@ -9,10 +9,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'fosJsRouting', 'history', 'messenger', 'paginationConfig',
+    'cfpLoadingBar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
-        history, messenger, paginationConfig
+        history, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
          * The fosJsRouting service.
@@ -29,7 +30,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.sidebar = {
             wanted: 0,
             current: 0,
-            forced: 0
+            forced: 0,
         };
 
         /**
@@ -54,8 +55,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function(language) {
-            $('body').removeClass('application-loading');
-
             $translate.use(language);
 
             paginationConfig.nextText     = $filter('translate')('Next');
@@ -87,6 +86,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         $scope.auth.status = true;
                         $scope.auth.modal  = false;
                     }
+
+                    $scope.loaded = true;
                 });
         }
 
@@ -196,6 +197,9 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.$on('auth-login-required', function (event, args) {
             $scope.auth.status = false;
 
+            $scope.loaded = true;
+            cfpLoadingBar.complete();
+
             if (!$scope.auth.inprogress) {
                 $scope.auth.inprogress = true;
 
@@ -271,7 +275,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
             $scope.changing = {};
-            checkFiltersBar();
+            $scope.checkFiltersBar();
         });
 
         /**
