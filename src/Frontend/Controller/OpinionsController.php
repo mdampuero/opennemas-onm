@@ -488,6 +488,8 @@ class OpinionsController extends Controller
                     $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $opinion['img1'] = $this->get('entity_repository')->find('Photo', $item->img1);
+                    } elseif (isset($item->img2) && ($item->img2 > 0)) {
+                        $opinion['img1'] = $this->get('entity_repository')->find('Photo', $item->img2);
                     }
 
                     // Generate opinion uri
