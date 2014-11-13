@@ -8,7 +8,7 @@ div[ng-view].ng-enter-active .content {
   animation: content-enter .5s;
 }
 
-div[ng-view].ng-enter-active .actions-navbar {
+div[ng-view].ng-enter-active .actions-navbar .navbar {
   -webkit-animation: actions-navbar-enter .5s;
   -o-animation: actions-navbar-enter .5s;
   animation: actions-navbar-enter .5s;
@@ -68,20 +68,20 @@ div[ng-view].ng-leave-active .content {
 }
 
 @-webkit-keyframes actions-navbar-enter {
-  0%   { left: 25px; opacity: 0; }
-  100% { left: 0; opacity: 1; }
+  0%   { top: -15px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
 }
 @-moz-keyframes actions-navbar-enter {
-  0%   { left: 25px; opacity: 0; }
-  100% { left: 0; opacity: 1; }
+  0%   { top: -15px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
 }
 @-o-keyframes actions-navbar-enter {
-  0%   { left: 25px; opacity: 0; }
-  100% { left: 0; opacity: 1; }
+  0%   { top: -15px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
 }
 @keyframes actions-navbar-enter {
-  0%   { left: 25px; opacity: 0; }
-  100% { left: 0; opacity: 1; }
+  0%   { top: -15px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
 }
 
 @-webkit-keyframes filters-navbar-enter {
