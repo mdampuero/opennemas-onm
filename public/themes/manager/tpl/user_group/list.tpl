@@ -31,14 +31,14 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-check"></i>
-                        [% selected.groups.length %] items selected
+                        [% selected.groups.length %] {t}items selected{/t}
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks">
                     <button class="btn btn-link" ng-click="selected.groups = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      {t}Clear{/t}
+                      {t}Deselect{/t}
                     </button>
                 </li>
                 <li class="quicklinks">
@@ -125,7 +125,9 @@
                 </thead>
                 <tbody>
                     <tr ng-if="groups.length == 0">
-                        <td class="text-center" colspan="10">{t}There is no available groups yet{/t}</td>
+                        <td class="text-center" colspan="10">
+                            {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
+                        </td>
                     </tr>
                     <tr ng-repeat="group in groups" ng-class="{ row_selected: isSelected(group.id) }">
                         <td>

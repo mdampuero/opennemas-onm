@@ -22,7 +22,7 @@
                     <li class="quicklinks">
                         <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
                             <i class="fa fa-plus fa-lg"></i>
-                            Create
+                            {t}Create{/t}
                         </a>
                     </li>
                 </ul>
@@ -37,14 +37,14 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-check"></i>
-                        [% selected.instances.length %] items selected
+                        [% selected.instances.length %] {t}items selected{/t}
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks">
                     <button class="btn btn-link" ng-click="selected.instances = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      {t}Clear{/t}
+                      {t}Deselect{/t}
                     </button>
                 </li>
                 <li class="quicklinks">
@@ -432,10 +432,10 @@
                             </a>
                             <div class="listing-inline-actions">
                                 <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
-                                    <i class="fa fa-pencil"></i>Editar
+                                    <i class="fa fa-pencil"></i>{t}Edit{/t}
                                 </a>
                                 <button class="link link-danger" ng-click="delete(instance)" type="button">
-                                    <i class="fa fa-trash-o"></i>Eliminar
+                                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
                                 </button>
                             </div>
                         </td>

@@ -31,14 +31,14 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-check"></i>
-                        [% selected.users.length %] items selected
+                        [% selected.users.length %] {t}items selected{/t}
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks">
                     <button class="btn btn-link" ng-click="selected.users = []; selected.all = 0" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      {t}Clear{/t}
+                      {t}Deselect{/t}
                     </button>
                 </li>
                 <li class="quicklinks">
