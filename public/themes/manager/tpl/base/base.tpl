@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#22262e">
     <link rel="manifest" href="manager_manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="/assets/images/launcher-icons/IOS-60@2x.png">
+    <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
 
     {block name="meta"}
     <title>OpenNeMaS - Manager</title>
