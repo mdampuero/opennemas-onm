@@ -137,6 +137,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         $scope.token    = response.data.token;
                         $scope.attempts = response.data.attempts;
                         $scope.message  = response.data.message;
+
+                        $scope.loginForm.$setPristine();
                     }
 
                     $scope.loading = 0;

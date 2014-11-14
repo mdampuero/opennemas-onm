@@ -171,7 +171,7 @@
                     </div>
                     <div class="row">
                       <div class="form-group col-md-10">
-                          <div class="alert alert-[% message.type %]" ng-show="message">
+                          <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
                               [% message.text %]
                           </div>
                       </div>
