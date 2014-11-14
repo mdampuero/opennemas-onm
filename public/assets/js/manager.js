@@ -13,7 +13,7 @@ $(document).ready(function() {
         positions.splice(0, 1);
 
         if (current == 0) {
-            $(this).removeClass('show-qr').removeClass('hide-qr');
+            $('.filters-navbar').removeClass('show-qr').removeClass('hide-qr');
             return true;
         }
 

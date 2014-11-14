@@ -15,11 +15,12 @@
 }
 
 .page-navbar.show-qr {
+  box-shadow: 0px 1px 3px #e5e9ec;
   padding-left: 225px;
   padding-right: 15px;
   position: fixed;
   margin-top: 50px;
-  box-shadow: 0px 1px 3px #e5e9ec;
+  z-index: 350;
 
   -webkit-transition: all .25s;
    -o-transition: all .25s;
@@ -291,7 +292,6 @@ div[ng-view].ng-leave-active .selected-navbar,
     padding-right: 15px;
     position: fixed;
     margin-top: 100px;
-    z-index: 400;
     box-shadow: 0px 1px 3px #e5e9ec;
   }
 }
