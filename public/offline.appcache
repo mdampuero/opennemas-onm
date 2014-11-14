@@ -3,9 +3,10 @@ CACHE MANIFEST
 
 CACHE:
 /assets/plugins/bootstrap/css/bootstrap.min.css
-
-FALLBACK:
-/manager /offline.html
+/offline.html
 
 NETWORK:
 *
+
+FALLBACK:
+/manager /offline.html

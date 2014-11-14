@@ -2,7 +2,7 @@
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" manifest="/offline.appcache"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta name="author"    content="OpenHost,SL">
@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
 
     {block name="meta"}
-    <title>OpenNeMaS - Manager</title>
+    <title>opennemas - Manager</title>
     {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
