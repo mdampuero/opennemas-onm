@@ -204,3 +204,6 @@
 		</div>
 	</div>
 </div>
+<script type="text/ng-template" id="modal-confirm">
+    {include file="common/modal_confirm.tpl"}
+</script>

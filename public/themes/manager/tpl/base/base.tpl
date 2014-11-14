@@ -192,9 +192,6 @@
     <script type="text/ng-template" id="modal-login">
         {include file="login/modal_login.tpl"}
     </script>
-    <script type="text/ng-template" id="modal-confirm">
-        {include file="common/modal_confirm.tpl"}
-    </script>
     <script type="text/ng-template" id="modal-upgrade">
         {include file="common/modal_application_upgrade.tpl"}
     </script>
