@@ -87,7 +87,7 @@
                 <li class="quicklinks">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <select class="xmedium" ng-model="epp">
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -96,7 +96,7 @@
                         <option value="500">500</option>
                     </select>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
