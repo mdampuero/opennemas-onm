@@ -345,6 +345,17 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         }
 
         /**
+         * Toggles column filters container.
+         */
+        $scope.toggleColumns = function () {
+            $scope.columns.collapsed = !$scope.columns.collapsed;
+
+            if (!$scope.columns.collapsed) {
+                $scope.scrollTop();
+            }
+        }
+
+        /**
          * Marks variables to delete for garbage collector;
          */
         $scope.$on('$destroy', function() {
@@ -414,8 +425,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
                         $scope.loading = 0;
 
-                        // Scroll top
-                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
+                        $scope.scrollTop();
                     }
                 );
             }, 500);

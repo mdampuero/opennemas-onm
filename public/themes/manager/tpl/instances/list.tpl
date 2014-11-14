@@ -112,7 +112,7 @@
             </ul>
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks toggle-columns">
-                    <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="columns.collapsed = !columns.collapsed" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
+                    <div class="btn btn-link" ng-class="{ 'active': !columns.collapsed }" ng-click="toggleColumns()" tooltip-html-unsafe="{t}Columns{/t}" tooltip-placement="left">
                         <i class="fa fa-columns"></i>
                     </div>
                 </li>

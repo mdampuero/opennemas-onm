@@ -191,6 +191,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         }
 
         /**
+         * Scrolls the page to top.
+         */
+        $scope.scrollTop = function() {
+            $("body").animate({ scrollTop: 0 }, 250);
+        }
+
+        /**
          * Shows the login form when login is required.
          *
          * @param Object event The event object.
