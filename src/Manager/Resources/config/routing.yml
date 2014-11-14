@@ -1,6 +1,8 @@
 manager_welcome:
     pattern:  /manager
     defaults: { _controller: ManagerBundle:Welcome:default }
+    options:
+        expose: true
 
 manager_playground:
     pattern:  /manager/playground/{action}
