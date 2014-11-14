@@ -43,11 +43,11 @@ class WelcomeController extends Controller
     public function defaultAction()
     {
         $messages = [
-            _("Locating the required gigapixels to render..."),
-            _("Spinning up the hamster..."),
-            _("Shovelling coal into the server..."),
-            _("Programming the flux capacitor..."),
-            _("Loading humorous message..."),
+            _("Printing your newspaper..."),
+            _("Cloning journalists..."),
+            _("Writing articles using Wikipedia..."),
+            _("Spinning up the rotary..."),
+            _("Reinventing Gutenberg machine..."),
         ];
         $loadingMessage = $messages[array_rand($messages)];
 
