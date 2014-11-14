@@ -352,7 +352,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param integer ov Old width value.
          */
         $scope.$watch('windowWidth', function(nv, ov) {
-            if (nv <= 1024)  {
+            if (nv < 992)  {
                 $scope.sidebar.forced  = 1;
                 $scope.sidebar.current = 1;
             } else {
