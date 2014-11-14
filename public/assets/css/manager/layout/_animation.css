@@ -40,20 +40,20 @@ div[ng-view].ng-leave-active .content {
 }
 
 @-webkit-keyframes content-enter {
-  0%   { padding-top: 30px; opacity: 0; }
-  100% { padding-top: 15px; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @-moz-keyframes content-enter {
-  0%   { padding-top: 30px; opacity: 0; }
-  100% { padding-top: 15px; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @-o-keyframes content-enter {
-  0%   { padding-top: 30px; opacity: 0; }
-  100% { padding-top: 15px; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 @keyframes content-enter {
-  0%   { padding-top: 30px; opacity: 0; }
-  100% { padding-top: 15px; opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @-webkit-keyframes content-leave {
