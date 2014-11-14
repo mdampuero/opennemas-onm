@@ -71,7 +71,7 @@
                     <span class="add-on">
                         <span class="fa fa-search fa-lg"></span>
                     </span>
-                    <input class="form-control" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name or username" type="text" style="width:250px;"/>
+                    <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter by name or username" type="text" style="width:250px;"/>
                 </li>
                 <li class="quicklinks">
                     <span class="h-seperate"></span>
