@@ -564,6 +564,13 @@ class ContentManager
 
             // Handling if there were some errors into the execution
             if (!$rs) {
+                /* Notice log of this action */
+                $logger = getService('logger');
+                $logger->notice(
+                    'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                    .') updated frontpage of category '.$categoryID.' with error message: '
+                    .$GLOBALS['application']->conn->ErrorMsg()
+                );
                 $returnValue = false;
             } else {
                 // Unset suggested flag if saving content positions in frontpage
@@ -633,6 +640,12 @@ class ContentManager
 
         // return the value and log if there were errors
         if (!$rs) {
+            $logger = getService('logger');
+            $logger->notice(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') clear contents frontpage of category '.$categoryID.
+                'with error message: '.$GLOBALS['application']->conn->ErrorMsg()
+            );
             $returnValue = false;
         } else {
             $returnValue = true;
