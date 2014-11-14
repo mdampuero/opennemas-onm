@@ -2,6 +2,10 @@ body {
     overflow-x: hidden;
 }
 
+i.ng-hide-add-active, .ng-hide-remove {
+    display: inline-block !important;
+}
+
 .application-loading {
     background: #e5e9ec;
     position: absolute;

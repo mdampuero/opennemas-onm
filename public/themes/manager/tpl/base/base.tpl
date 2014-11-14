@@ -61,8 +61,6 @@
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
         </script>
-
-        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     {/block}
 
 </head>
@@ -184,8 +182,8 @@
                     <input type="hidden" name="_referer" value="{$referer}">
                     <div class="row">
                         <div class="col-md-10">
-                            <button class="btn btn-primary btn-cons pull-right" ng-disabled="loading" type="submit">
-                              <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
+                            <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
+                              <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
                               {t}Login{/t}
                             </button>
                         </div>
@@ -209,6 +207,7 @@
     <![endif]-->
 
     {block name="footer-js"}
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
         {javascripts src="
             @Common/plugins/jquery/jquery.min.js,
