@@ -46,9 +46,26 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
         /**
          * Clears the last value for the current path.
+         *
+         * @param string route The route name.
          */
-        $scope.clear = function(url) {
+        $scope.clear = function(route) {
+            var url = fosJsRouting.ngGenerateShort('/manager', route);
             history.clear(url);
+        }
+
+        /**
+         * Updates sidebar status basing on the section.
+         *
+         * @param string route   The route name.
+         * @param string section The section to show.
+         */
+        $scope.goTo = function(route, section) {
+            $scope.clear(route);
+
+            if (!$scope.changing[section] && !$scope.isActive(route)) {
+                $scope.changing[section] = 1;
+            }
         }
 
         /**
@@ -195,6 +212,20 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.scrollTop = function() {
             $("body").animate({ scrollTop: 0 }, 250);
+        }
+
+        /**
+         * Expands/collapses the sidebar.
+         */
+        $scope.toggleSidebar = function() {
+            if ($scope.sidebar.forced) {
+                $scope.sidebar.current = 1;
+                return true;
+            }
+
+            $scope.sidebar.current = $scope.sidebar.wanted;
+
+            return $scope.sidebar.current;
         }
 
         /**

@@ -1,15 +1,15 @@
-<div class="page-sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-click="$event.stopPropagation()" ng-show="loaded && auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
+<div class="page-sidebar" id="main-menu" ng-mouseleave="toggleSidebar()" ng-mouseenter="sidebar.current = 0" ng-click="sidebar.current = 0;$event.stopPropagation()" ng-show="loaded && auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
     <div class="overlay"></div>
     <scrollable>
         <div class="page-sidebar-wrapper">
             <ul>
-                <li class="start" ng-class="{ 'active': false }" ng-click="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.dashboard = 1">
+                <li class="start" ng-class="{ 'active': false }" ng-click="goTo('manager_welcome', 'dashboard'); toggleSidebar();">
                     <a href="#">
                         <i class="fa fa-home" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard }"></i>
                         <span class="title">{t}Dashboard{/t}</span>
                     </a>
                 </li>
-                <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_instances_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.instances = 1">
+                <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="toggleSidebar(); goTo('manager_instances_list', 'instances')">
                     <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
                         <i class="fa fa-cubes" ng-class="{ 'fa-circle-o-notch fa-spin': changing.instances }"></i>
                         <span class="title">{t}Instances{/t}</span>
@@ -22,13 +22,13 @@
                         <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_commands')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.commands = 1">
+                        <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="goTo('manager_framework_commands', 'commands'); toggleSidebar();">
                             <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
                                 <i class="fa fa-code" ng-class="{ 'fa-circle-o-notch fa-spin': changing.commands }"></i>
                                 <span class="title">{t}Commands{/t}</span>
                             </a>
                         </li>
-                        <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_framework_opcache_status')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.cache = 1">
+                        <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="goTo('manager_framework_opcache_status', 'cache'); toggleSidebar();">
                             <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]">
                                 <i class="fa fa-database" ng-class="{ 'fa-circle-o-notch fa-spin': changing.cache }"></i>
                                 <span class="title">{t}OPCache Status{/t}</span>
@@ -43,13 +43,13 @@
                         <span class="arrow" ng-class="{ 'open': isActive('manager_users_list') || isActive('manager_user_groups_list') }"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_users_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.users = 1">
+                        <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="goTo('manager_users_list', 'users'); toggleSidebar();">
                             <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
                                 <i class="fa fa-user" ng-class="{ 'fa-circle-o-notch fa-spin': changing.users }"></i>
                                 <span class="title">{t}Users{/t}</span>
                             </a>
                         </li>
-                        <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="clear(fosJsRouting.ngGenerateShort('/manager', 'manager_user_groups_list')); sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted; changing.groups = 1">
+                        <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="goTo('manager_user_groups_list', 'groups'); toggleSidebar();">
                             <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
                                 <i class="fa fa-users" ng-class="{ 'fa-circle-o-notch fa-spin': changing.groups }"></i>
                                 <span class="title">{t}User groups{/t}</span>

@@ -90,7 +90,7 @@
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
                     <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
-                        <i class="fa fa-bars fa-lg"></i>
+                        <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
                     </div>
                 </div>
                 <a class="header-static-logo" href="{url name=manager_welcome}">
