@@ -267,7 +267,7 @@ div[ng-view].ng-leave-active .selected-navbar,
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .column-filters {
     height: 715px;
   }

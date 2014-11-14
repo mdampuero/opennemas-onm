@@ -81,7 +81,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .page-content {
     padding-top: 50px;
   }

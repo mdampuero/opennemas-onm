@@ -77,7 +77,7 @@ ul .messenger-message .messenger-close {
   color: #fff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .collapsed ul.messenger.messenger-fixed.messenger-on-top,
   .collapsed ul.messenger.messenger-fixed.messenger-on-bottom {
     padding-left: 0;
