@@ -288,8 +288,8 @@
                     </label>
                 </div>
                 <div class="checkbox check-default">
-                    <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
-                    <label for="checkbox-enabled">
+                    <input id="checkbox-activated" checklist-model="columns.selected" checklist-value="'activated'" type="checkbox">
+                    <label for="checkbox-activated">
                         {t}Enabled{/t}
                     </label>
                 </div>
