@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta name="author"    content="OpenHost,SL">
+    <meta name="author" content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#22262e">
@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
 
     {block name="meta"}
-    <title>opennemas - Manager</title>
+    <title>Opennemas - Manager</title>
     {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
