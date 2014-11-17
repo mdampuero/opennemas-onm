@@ -29,19 +29,19 @@
     margin-top: 85px;
 }
 
-.page-content .content [class^=col-],
-.page-content .content [class*= col-] {
+.page-content .content .row > [class^=col-],
+.page-content .content .row > [class*= col-] {
   padding-left: 8px;
   padding-right: 7px;
 }
 
-.page-content .content [class^=col-]:first-child,
-.page-content .content [class*= col-]:first-child {
+.page-content .content .row > [class^=col-]:first-child,
+.page-content .content .row > [class*= col-]:first-child {
   padding-left: 15px;
 }
 
-.page-content .content [class^=col-]:last-child,
-.page-content .content [class*= col-]:last-child {
+.page-content .content .row > [class^=col-]:last-child,
+.page-content .content .row > [class*= col-]:last-child {
   padding-right: 15px;
 }
 
@@ -56,8 +56,8 @@
 }
 
 @media (max-width: 992px) and (min-width: 768px){
-  .page-content .content [class^=col-],
-  .page-content .content [class*= col-] {
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -86,8 +86,8 @@
     padding-top: 50px;
   }
 
-  .page-content .content [class^=col-],
-  .page-content .content [class*= col-] {
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
     padding-left: 15px;
     padding-right: 15px;
   }
