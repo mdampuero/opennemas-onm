@@ -1,0 +1,112 @@
+.grid {
+  margin-bottom: 15px;
+}
+
+.page-container {
+  height: auto;
+  margin: 0;
+  overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.page-content {
+  margin: 0;
+  overflow: hidden;
+  padding-left: 210px;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+}
+
+.page-content .content {
+  padding: 15px 15px 0;
+  margin-top: 50px;
+}
+
+.page-content .filters-navbar ~ .content {
+    margin-top: 85px;
+}
+
+.page-content .content .row > [class^=col-],
+.page-content .content .row > [class*= col-] {
+  padding-left: 8px;
+  padding-right: 7px;
+}
+
+.page-content .content .row > [class^=col-]:first-child,
+.page-content .content .row > [class*= col-]:first-child {
+  padding-left: 15px;
+}
+
+.page-content .content .row > [class^=col-]:last-child,
+.page-content .content .row > [class*= col-]:last-child {
+  padding-right: 15px;
+}
+
+.collapsed .page-container .page-content,
+.collapsed .page-container .page-content .actions-navbar,
+.collapsed .page-container .page-content .selected-navbar {
+    padding-left: 50px;
+}
+
+.collapsed .page-container .page-content .filters-navbar {
+    padding-left: 65px;
+}
+
+@media (max-width: 992px) and (min-width: 768px){
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .collapsed .page-container .page-content,
+  .collapsed .page-container .page-content .actions-navbar,
+  .collapsed .page-container .page-content .selected-navbar {
+    left: 0;
+    padding-left: 50px;
+  }
+
+  .page-container .page-content,
+  .page-container .page-content .actions-navbar,
+  .page-container .page-content .selected-navbar {
+    left: 210px;
+    padding-left: 0;
+  }
+
+  .page-container .page-content .filters-navbar {
+    padding-left: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-content {
+    padding-top: 50px;
+  }
+
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .collapsed .page-container .page-content,
+  .collapsed .page-container .page-content .actions-navbar,
+  .collapsed .page-container .page-content .selected-navbar {
+    left: 0;
+    padding-left: 0;
+  }
+
+  .page-container .page-content,
+  .page-container .page-content .actions-navbar,
+  .page-container .page-content .selected-navbar {
+    left: 210px;
+    padding-left: 0;
+  }
+
+  .collapsed .page-container .page-content .filters-navbar {
+    padding-left: 15px;
+  }
+}

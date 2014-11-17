@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 			$(function(){
 				
 				// INSTANTIATE MIXITUP

@@ -1,12 +1,18 @@
-<div class="clearfix"></div>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-dashboard fa-lg"></i>
+                        {t}Dashboard{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="content">
-    <ul class="breadcrumb">
-        <li>
-            <p>{t}YOU ARE HERE{/t}</p>
-        </li>
-            <li><a href="#" class="active">{t}Dashboard{/t}</a>
-        </li>
-    </ul>
     <div class="page-title">
         <h2>{t}Welcome to OpenNeMas instance manager{/t}</h2>
     </div>

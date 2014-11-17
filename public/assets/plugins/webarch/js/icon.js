@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 $(document).ready(function() {				
 	    $('#icon-resize-slider').slider().on('slide', function(ev){
 			var value=$('#icon-resize-slider').val();

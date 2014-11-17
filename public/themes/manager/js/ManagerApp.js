@@ -1,9 +1,10 @@
 
-angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
-        'pascalprecht.translate', 'ngQuickDate', 'ngTagsInput', 'checklist-model',
-        'http-interceptor', 'googlechart', 'vcRecaptcha',
-        'onm.routing', 'onm.item', 'onm.messenger', 'onm.auth','onm.gravatar',
-        'onm.form-autofill-fix', 'onm.history', 'ManagerApp.controllers'
+angular.module('ManagerApp', [ 'ngAnimate', 'ngRoute', 'ngTouch', 'angular-loading-bar',
+        'ui.bootstrap', 'ui.select2', 'pascalprecht.translate', 'ngQuickDate',
+        'ngTagsInput', 'checklist-model', 'http-interceptor', 'googlechart',
+        'vcRecaptcha', 'sun.scrollable', 'onm.routing', 'onm.item',
+        'onm.messenger', 'onm.auth', 'onm.gravatar', 'onm.form-autofill-fix',
+        'onm.history', 'onm.resizable', 'ManagerApp.controllers'
     ]).config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
@@ -70,10 +71,10 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
     }).config(function ($routeProvider, fosJsRoutingProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: '/managerws/template/index:index.tpl'
+                templateUrl: '/managerws/template/index:index.' + appVersion + '.tpl'
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instances_list'), {
-                templateUrl: '/managerws/template/instances:list.tpl',
+                templateUrl: '/managerws/template/instances:list.' + appVersion + '.tpl',
                 controller:  'InstanceListCtrl',
                 resolve: {
                     data: function($routeParams, itemService) {
@@ -93,7 +94,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_create'), {
-                templateUrl: '/managerws/template/instances:item.tpl',
+                templateUrl: '/managerws/template/instances:item.' + appVersion + '.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -106,7 +107,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_instance_show', { id: '\:id' }), {
-                templateUrl: '/managerws/template/instances:item.tpl',
+                templateUrl: '/managerws/template/instances:item.' + appVersion + '.tpl',
                 controller:  'InstanceCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -119,7 +120,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_commands'), {
-                templateUrl: '/managerws/template/framework:commands:commands.tpl',
+                templateUrl: '/managerws/template/framework:commands:commands.' + appVersion + '.tpl',
                 controller:  'CommandListCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -132,7 +133,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_command_output'), {
-                templateUrl: '/managerws/template/framework:commands:output.tpl',
+                templateUrl: '/managerws/template/framework:commands:output.' + appVersion + '.tpl',
                 controller:  'CommandCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -145,7 +146,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_framework_opcache_status'), {
-                templateUrl: '/managerws/template/framework:opcache_status.tpl',
+                templateUrl: '/managerws/template/framework:opcache_status.' + appVersion + '.tpl',
                 controller: 'OpcacheCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -158,7 +159,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_users_list'), {
-                templateUrl: '/managerws/template/user:list.tpl',
+                templateUrl: '/managerws/template/user:list.' + appVersion + '.tpl',
                 controller:  'UserListCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -177,7 +178,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_create'), {
-                templateUrl: '/managerws/template/user:item.tpl',
+                templateUrl: '/managerws/template/user:item.' + appVersion + '.tpl',
                 controller:  'UserCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -190,7 +191,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_show', { id: '\:id' }), {
-                templateUrl: '/managerws/template/user:item.tpl',
+                templateUrl: '/managerws/template/user:item.' + appVersion + '.tpl',
                 controller:  'UserCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -203,7 +204,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_groups_list'), {
-                templateUrl: '/managerws/template/user_group:list.tpl',
+                templateUrl: '/managerws/template/user_group:list.' + appVersion + '.tpl',
                 controller:  'UserGroupListCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -222,7 +223,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 reloadOnSearch: false
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_create'), {
-                templateUrl: '/managerws/template/user_group:item.tpl',
+                templateUrl: '/managerws/template/user_group:item.' + appVersion + '.tpl',
                 controller:  'UserGroupCtrl',
                 resolve: {
                     data: function(itemService) {
@@ -235,7 +236,7 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
                 }
             })
             .when(fosJsRoutingProvider.ngGenerateShort('/manager', 'manager_user_group_show', { id: '\:id'}), {
-                templateUrl: '/managerws/template/user_group:item.tpl',
+                templateUrl: '/managerws/template/user_group:item.' + appVersion + '.tpl',
                 controller:  'UserGroupCtrl',
                 resolve: {
                     data: function($route, itemService) {
@@ -260,4 +261,6 @@ angular.module('ManagerApp', [ 'ngRoute', 'ui.bootstrap', 'ui.select2',
             packages: ['corechart'],
             language: 'fr'
         }
-    });
+    }).config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeSpinner = false;
+    }]);

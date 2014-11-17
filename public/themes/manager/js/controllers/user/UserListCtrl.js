@@ -79,7 +79,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.delete = function(user) {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {
@@ -116,7 +116,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.deleteSelected = function() {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {

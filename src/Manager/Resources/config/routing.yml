@@ -1,6 +1,8 @@
 manager_welcome:
     pattern:  /manager
     defaults: { _controller: ManagerBundle:Welcome:default }
+    options:
+        expose: true
 
 manager_playground:
     pattern:  /manager/playground/{action}
@@ -25,7 +27,3 @@ manager_user:
 manager_usergroup:
     prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/usergroup.yml
-
-manager_command:
-    prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/command.yml

@@ -1,4 +1,11 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 $(document).ready(function() {		
+$('#world-map').height($('.page-container').height());
+$( window ).resize(function() {
+    $('#world-map').height($('.page-container').height());
+});
 $('#world-map').vectorMap({
    map: 'world_mill_en',
     scaleColors: ['#C8EEFF', '#0071A4'],
