@@ -4,7 +4,7 @@
 
 .header .header-seperation  {
   overflow: hidden;
-  width:210px
+  width: 210px
 
   -webkit-transition:width .25s;
   -moz-transition: width .25s;
@@ -92,5 +92,16 @@
 
   .layout-collapse {
     display: block;
+  }
+}
+
+@media only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (orientation: portrait) {
+  .header-seperation {
+    width: 210px !important;
+    text-align: left;
+  }
+
+  .collapsed .header .header-seperation  {
+    width: 50px !important;
   }
 }

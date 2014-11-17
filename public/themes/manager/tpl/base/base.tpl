@@ -64,7 +64,7 @@
     {/block}
 
 </head>
-<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current || sidebar.force }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>

@@ -66,6 +66,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             if (!$scope.changing[section] && !$scope.isActive(route)) {
                 $scope.changing[section] = 1;
             }
+
+            if ($scope.sidebar.forced) {
+                $scope.sidebar.current = 1;
+            } else {
+                $scope.sidebar.current = $scope.sidebar.wanted;
+            }
         }
 
         /**
@@ -115,16 +121,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.toggle = function(status) {
             $scope.mini = status;
-        }
-
-        /**
-         * Closes the sidebar on click in small devices.
-         */
-        $scope.go = function() {
-            if (angular.element('body').hasClass('breakpoint-480')) {
-                $.sidr('close', 'main-menu');
-                $.sidr('close', 'sidr');
-            }
         }
 
         /**
@@ -212,20 +208,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.scrollTop = function() {
             $("body").animate({ scrollTop: 0 }, 250);
-        }
-
-        /**
-         * Expands/collapses the sidebar.
-         */
-        $scope.toggleSidebar = function() {
-            if ($scope.sidebar.forced) {
-                $scope.sidebar.current = 1;
-                return true;
-            }
-
-            $scope.sidebar.current = $scope.sidebar.wanted;
-
-            return $scope.sidebar.current;
         }
 
         /**
