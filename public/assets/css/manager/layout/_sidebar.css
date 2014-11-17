@@ -20,13 +20,14 @@
   -moz-transition: all .25s;
   transition: all .25s;
 }
+
 .layout-collapse-border:hover {
-  background-color:rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.collapsed .page-sidebar + .layout-collapse-border {
+.collapsed .layout-collapse-border {
   left: 50px;
-  cursor:e-resize;
+  cursor: e-resize;
 }
 
 .overlay {
@@ -218,9 +219,25 @@
   }
 }
 
-@media (max-width: 992px) {
+@media (min-width: 768px) and (max-width: 992px) {
   .layout-collapse-border {
     display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .layout-collapse-border {
+    background: none;
+    cursor: default;
+  }
+
+  .layout-collapse-border:hover {
+    background: none;
+    cursor: default;
+  }
+
+  .collapsed .layout-collapse-border {
+    left: 0;
   }
 }
 

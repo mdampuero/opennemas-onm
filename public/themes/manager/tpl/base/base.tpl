@@ -113,7 +113,7 @@
     </header>
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
-    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted;sidebar.current = sidebar.wanted"></div>
+    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
     <!-- END SIDEBAR -->
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
