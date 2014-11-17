@@ -1,4 +1,4 @@
-<div class="page-sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.current = 1 || sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-show="loaded && auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
+<div class="page-sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0" ng-show="loaded && auth.status" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1">
     <div class="overlay" ng-click="sidebar.current = 0"></div>
     <scrollable>
         <div class="page-sidebar-wrapper">
