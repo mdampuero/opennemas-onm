@@ -285,6 +285,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            if ($location.path().indexOf('framework') != -1) {
+                return false;
+            }
+
             history.restore($location.path());
             history.push($location.path(), $location.search());
         });
