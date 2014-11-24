@@ -60,13 +60,13 @@
                     </div>
                     <div class="grid-body instance-form">
                         <div class="row">
-                            <div ng-class="{ 'col-sm-3': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
+                            <div ng-class="{ 'col-sm-4': instance.id, 'col-sm-12': !instance.id }" ng-if="instance.id">
                                 <dl ng-if="instance.id">
                                     <dt>
                                         <h5><i class="fa fa-user"></i> {t}Owner email{/t}</h5>
                                     </dt>
                                     <dd>
-                                        [% instance.contact_mail %]
+                                        <a href="mailto:[% instance.contact_mail %]">[% instance.contact_mail %]</a>
                                     </dd>
                                     <dt>
                                         <h5><i class="fa fa-clock-o"></i> {t}Created at{/t}</h5>
@@ -101,7 +101,7 @@
                                     </dd>
                                 </dl>
                             </div>
-                            <div ng-class="{ 'col-sm-9': instance.id, 'col-sm-12': !instance.id }">
+                            <div ng-class="{ 'col-sm-8': instance.id, 'col-sm-12': !instance.id }">
                                 <div class="form-group">
                                     <label class="form-label">
                                         {t}Site name{/t}
@@ -119,6 +119,15 @@
                                     <label for="template" class="form-label">{t}Template{/t}</label>
                                     <div class="controls">
                                         <select id="template" ng-model="instance.settings.TEMPLATE_USER" ng-options="key as value.name for (key,value) in template.templates"></select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        {t}Contact mail{/t}
+                                    </label>
+                                    <div class="controls" ng-class="{ 'error-control': formValidated && instanceForm.contact_mail.$invalid }">
+                                        <input class="form-control" id="contact_mail" name="contact_mail" ng-model="instance.contact_mail" required type="text">
                                     </div>
                                 </div>
 
