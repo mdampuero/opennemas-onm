@@ -129,6 +129,10 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     private function getInstanceInfo(&$i, $alexa = false, $views = false, $created = false)
     {
+        if (empty($i->getDatabaseName())) {
+            return false;
+        }
+
         $this->im->getConnection()->selectDatabase($i->getDatabaseName());
 
         // Count contents

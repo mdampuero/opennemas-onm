@@ -299,7 +299,9 @@ class InstanceManager extends BaseManager
      */
     public function getExternalInformation(Instance &$instance)
     {
-        $database = $instance->getDatabaseName();
+        if (empty($instance->getDatabaseName())) {
+            return false;
+        }
 
         $cacheId = 'instance' . $this->cacheSeparator . $instance->id
             . $this->cacheSeparator . 'information';
@@ -307,7 +309,7 @@ class InstanceManager extends BaseManager
         $instance->external = $this->cache->fetch($cacheId);
 
         if (!$instance->external) {
-            $this->conn->selectDatabase($database);
+            $this->conn->selectDatabase($instance->getDatabaseName());
             $sql = "SELECT * FROM `settings`";
 
             $rs = $this->conn->executeQuery($sql);
@@ -439,7 +441,6 @@ class InstanceManager extends BaseManager
                 . implode(', ', array_keys($values)) . ') VALUES ('
                 . implode(', ', array_values($values)) .')';
         } else {
-
             $sql = 'UPDATE instances SET ';
 
             foreach ($values as $key => $value) {

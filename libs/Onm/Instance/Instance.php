@@ -308,7 +308,11 @@ class Instance
      */
     public function getDatabaseName()
     {
-        return $this->settings['BD_DATABASE'];
+        if (array_key_exists('BD_DATABASE', $this->settings)) {
+            return $this->settings['BD_DATABASE'];
+        }
+
+        return null;
     }
 
     /**
