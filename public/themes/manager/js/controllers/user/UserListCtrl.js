@@ -3,7 +3,6 @@
  *
  * @param  Object $modal       The modal service.
  * @param  Object $scope       The current scope.
- * @param  Object $timeout     The timeout service.
  * @param  Object itemService  The item service.
  * @param  Object fosJsRouting The fosJsRouting service.
  * @param  Object messenger    The messenger service.
@@ -12,8 +11,8 @@
  * @return Object The user list controller.
  */
 angular.module('ManagerApp.controllers').controller('UserListCtrl', [
-    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($modal, $scope, itemService, fosJsRouting, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -70,11 +69,6 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         $scope.users = data.results;
 
         /**
-         * Variable to store the current search.
-         */
-        var search;
-
-        /**
          * Confirm delete action.
          */
         $scope.delete = function(user) {
@@ -92,7 +86,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                         return function() {
                             return itemService.delete(
                                 'manager_ws_user_delete', user.id);
-                        }
+                        };
                     }
                 }
             });
@@ -104,7 +98,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                             message: response.data.message.text,
                             type:    response.data.message.type
                         });
-                    };
+                    }
 
                     list();
                 }
@@ -130,7 +124,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                             return itemService.deleteSelected(
                                 'manager_ws_users_delete',
                                 $scope.selected.users);
-                        }
+                        };
                     }
                 }
             });
@@ -142,7 +136,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                             message: response.data.messages[i].text,
                             type:    response.data.messages[i].type
                         });
-                    };
+                    }
 
                     list();
                 }
@@ -159,8 +153,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.isOrderedBy = function(name) {
             var i = 0;
-            while (i < $scope.orderBy.length
-                    && $scope.orderBy[i].name != name) {
+            while (i < $scope.orderBy.length && $scope.orderBy[i].name != name) {
                 i++;
             }
 
@@ -169,7 +162,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
             }
 
             return false;
-        }
+        };
 
         /**
          * Checks if a user is selected
@@ -177,15 +170,15 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          * @param string id The group id.
          */
         $scope.isSelected = function(id) {
-            return $scope.selected.users.indexOf(id) != -1
-        }
+            return $scope.selected.users.indexOf(id) != -1;
+        };
 
         /**
          * Reloads the listing.
          */
         $scope.refresh = function() {
             search = list();
-        }
+        };
 
         /**
          * Reloads the list on keypress.
@@ -194,15 +187,13 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                $scope.page = 1;
-
-                if (search) {
-                    $timeout.cancel(search);
+                if ($scope.page != 1) {
+                    $scope.page = 1;
+                } else {
+                    list();
                 }
-
-                search = list();
-            };
-        }
+            }
+        };
 
         /**
          * Selects/unselects all users.
@@ -238,7 +229,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                         type:    response.data.message.type
                     });
                 });
-        }
+        };
 
         /**
          * Enables/disables the selected users.
@@ -251,7 +242,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                 if ($scope.selected.users.indexOf(id) != -1) {
                     $scope.users[i].loading = 1;
                 }
-            };
+            }
 
             itemService.setEnabledSelected('manager_ws_users_set_enabled',
                 $scope.selected.users, enabled).then(function (response) {
@@ -262,7 +253,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                                 $scope.users[i].activated = enabled;
                                 delete $scope.users[i].loading;
                             }
-                        };
+                        }
                     }
 
                     for (var i = 0; i < response.data.messages.length; i++) {
@@ -272,9 +263,9 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                         };
 
                         messenger.post(params);
-                    };
+                    }
                 });
-        }
+        };
 
         /**
          * Changes the sort order.
@@ -321,11 +312,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.$watch('[criteria.fk_user_group, orderBy, epp, page]', function(newValues, oldValues) {
             if (newValues !== oldValues) {
-                if (search) {
-                    $timeout.cancel(search);
-                }
-
-                search = list();
+                list();
             }
         }, true);
 
@@ -335,40 +322,38 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          * @return Object The function to execute past 500 ms.
          */
         function list() {
-            return $timeout(function() {
-                $scope.loading = 1;
+            $scope.loading = 1;
 
-                var cleaned = itemService.cleanFilters($scope.criteria);
+            var cleaned = itemService.cleanFilters($scope.criteria);
 
-                // Search by name, domains and contact mail
-                if (cleaned.name) {
-                    cleaned.username = cleaned.name;
+            // Search by name, domains and contact mail
+            if (cleaned.name) {
+                cleaned.username = cleaned.name;
 
-                    // OR operator
-                    cleaned.union = 'OR';
+                // OR operator
+                cleaned.union = 'OR';
+            }
+
+            var data = {
+                criteria: cleaned,
+                orderBy: $scope.orderBy,
+                epp: $scope.epp,
+                page: $scope.page
+            };
+
+            itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                $scope.epp, $scope.page);
+
+            itemService.list('manager_ws_users_list', data).then(
+                function (response) {
+                    $scope.users   = response.data.results;
+                    $scope.total   = response.data.total;
+                    $scope.loading = 0;
+
+                    // Scroll top
+                    $(".page-content").animate({ scrollTop: "0px" }, 1000);
                 }
-
-                var data = {
-                    criteria: cleaned,
-                    orderBy: $scope.orderBy,
-                    epp: $scope.epp,
-                    page: $scope.page
-                };
-
-                itemService.encodeFilters($scope.criteria, $scope.orderBy,
-                    $scope.epp, $scope.page);
-
-                itemService.list('manager_ws_users_list', data).then(
-                    function (response) {
-                        $scope.users   = response.data.results;
-                        $scope.total   = response.data.total;
-                        $scope.loading = 0;
-
-                        // Scroll top
-                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
-                    }
-                );
-            }, 500);
+            );
         }
 
         // Initialize filters from URL

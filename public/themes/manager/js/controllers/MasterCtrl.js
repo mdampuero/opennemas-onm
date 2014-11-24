@@ -42,7 +42,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             status: true,
             modal: false,
             inprogress: false
-        }
+        };
 
         /**
          * Clears the last value for the current path.
@@ -52,7 +52,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.clear = function(route) {
             var url = fosJsRouting.ngGenerateShort('/manager', route);
             history.clear(url);
-        }
+        };
 
         /**
          * Updates sidebar status basing on the section.
@@ -72,7 +72,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             } else {
                 $scope.sidebar.current = $scope.sidebar.wanted;
             }
-        }
+        };
 
         /**
          * Removes a class from body and checks if user is authenticated.
@@ -84,7 +84,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             paginationConfig.previousText = $filter('translate')('Previous');
 
             $scope.isAuthenticated();
-        }
+        };
 
         /**
          * Checks if the section is active.
@@ -96,7 +96,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.isActive = function(route) {
             var url = fosJsRouting.ngGenerateShort('/manager', route);
             return $location.path() == url;
-        }
+        };
 
         /**
          * Checks and loads an user if it is authenticated in the system.
@@ -112,7 +112,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
                     $scope.loaded = true;
                 });
-        }
+        };
 
         /**
          * Toggles the sidebar.
@@ -121,7 +121,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.toggle = function(status) {
             $scope.mini = status;
-        }
+        };
 
         /**
          * Logs an user in.
@@ -133,7 +133,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 _username: $scope.username,
                 _password: $scope.password,
                 _token:    $scope.token,
-            }
+            };
 
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
@@ -157,7 +157,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                     $scope.loading = 0;
                 }
             );
-        }
+        };
 
         /**
          * Logs the user out.
@@ -175,7 +175,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                     success: function() {
                         return function() {
                             return authService.logout('manager_ws_auth_logout');
-                        }
+                        };
                     }
                 }
             });
@@ -192,7 +192,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                     $scope.attempts = response.data.attempts;
                 }
             });
-        }
+        };
 
         /**
          * Force page reload.
@@ -201,14 +201,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             $scope.loading = 1;
 
             $window.location.reload();
-        }
+        };
 
         /**
          * Scrolls the page to top.
          */
         $scope.scrollTop = function() {
             $("body").animate({ scrollTop: 0 }, 250);
-        }
+        };
 
         /**
          * Shows the login form when login is required.
@@ -362,6 +362,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
                 $('.content').css('margin-top', margin + 'px');
             }, 1000);
-        }
+        };
     }
 ]);
