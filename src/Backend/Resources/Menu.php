@@ -121,7 +121,7 @@ $menuXml = '<?xml version="1.0"?>
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
-            privilege="PHOTO_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
+            privilege="PHOTO_ADMIN,ATTACHMENT_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
             privilege="PHOTO_ADMIN"
@@ -131,7 +131,7 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="FILE_MANAGER"
-            privilege="FILE_ADMIN"
+            privilege="ATTACHMENT_ADMIN"
             title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'"
             id="file_manager"
             link="'.url('admin_files').'"
