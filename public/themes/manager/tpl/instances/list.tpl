@@ -323,7 +323,7 @@
                             </th>
                             <th class="pointer" ng-click="sort('domain_expire')" ng-show="isEnabled('domain_expire')">
                                 {t}Domain expire{/t}
-                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domain_expire') == 'asc', 'fa fa-caret-down': isOrderedBy('domain_expire') == 'desc'}"></i>
                             </th>
                             <th class="pointer" ng-click="sort('contact_email')" ng-show="isEnabled('contact_mail')">
                                 {t}Contact{/t}
