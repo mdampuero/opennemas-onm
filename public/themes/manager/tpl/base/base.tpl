@@ -237,6 +237,7 @@
             @Common/plugins/angular/angular.min.js,
             @Common/plugins/angular-animate/angular-animate.min.js,
             @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-webstorage/angular-webstorage.min.js,
             @Common/plugins/angular-google-chart/angular-google-chart.js,
             @Common/plugins/angular-nanoscroller/scrollable.js,
             @Common/plugins/angular-loading-bar/loading-bar.min.js,

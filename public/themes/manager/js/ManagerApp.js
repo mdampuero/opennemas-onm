@@ -1,5 +1,4 @@
-
-angular.module('ManagerApp', [ 'ngAnimate', 'ngRoute', 'ngTouch', 'angular-loading-bar',
+angular.module('ManagerApp', [ 'ngAnimate', 'webStorageModule', 'ngRoute', 'ngTouch', 'angular-loading-bar',
         'ui.bootstrap', 'ui.select2', 'pascalprecht.translate', 'ngQuickDate',
         'ngTagsInput', 'checklist-model', 'http-interceptor', 'googlechart',
         'vcRecaptcha', 'sun.scrollable', 'onm.routing', 'onm.item',
