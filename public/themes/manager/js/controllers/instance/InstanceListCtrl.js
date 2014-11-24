@@ -13,8 +13,8 @@
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'webStorage', 'data',
+    function ($modal, $scope, itemService, fosJsRouting, messenger, webStorage, data) {
         /**
          * The criteria to search.
          *
@@ -374,6 +374,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         }, true);
 
         /**
+         * Updates the columns stored in localStorage.
+         *
+         * @param Object newValues New values.
+         * @param Object oldValues Old values.
+         */
+        $scope.$watch('columns', function(newValues, oldValues) {
+            if (newValues != oldValues) {
+                webStorage.local.add('instances-columns', $scope.columns);
+            }
+        }, true);
+
+        /**
          * Searches instances given a criteria.
          *
          * @return Object The function to execute past 500 ms.
@@ -422,6 +434,11 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         var filters = itemService.decodeFilters();
         for (var name in filters) {
             $scope[name] = filters[name];
+        }
+
+        // Get enabled columns from localStorage
+        if (webStorage.local.get('instances-columns')) {
+            $scope.columns = webStorage.local.get('instances-columns');
         }
     }
 ]);
