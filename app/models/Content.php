@@ -1993,6 +1993,28 @@ class Content
         return $value;
     }
 
+    /**
+     * Returns a list of metaproperty values from a list of contents
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return boolean true if it is in the category
+     **/
+    public static function getMultipleProperties($propertyMap)
+    {
+        $map = $values = [];
+        foreach ($propertyMap as $property) {
+            $map []= '(fk_content=? AND `meta_name`=?)';
+            $values []= $property[0];
+            $values []= $property[1];
+        }
+
+        $sql = 'SELECT `fk_content`,    `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
+        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
+
+        return $value;
+    }
+
 
     /**
      * Sets a metaproperty for the actual content

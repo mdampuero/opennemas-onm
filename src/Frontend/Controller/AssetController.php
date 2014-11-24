@@ -147,10 +147,15 @@ class AssetController extends Controller
     {
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
-        $cache = $this->get('cache');
-        $output = $cache->fetch('custom_css|' . $categoryName);
+        $this->view = new \Template(TEMPLATE_USER);
+        // $this->view->setConfig('frontpages');
+        $this->view->caching = 0;
 
-        if ($output === false) {
+        $cacheID = 'custom_css|' . $categoryName;
+        if ($this->view->caching == 0
+            || !$this->view->isCached('base/custom_css.tpl', $cacheID)
+            || true
+        ) {
             $cm                 = new \ContentManager;
             $ccm                = \ContentCategoryManager::get_instance();
             $currentCategoryId  = $ccm->get_id($categoryName);
@@ -158,12 +163,29 @@ class AssetController extends Controller
 
             //content_id | title_catID | serialize(font-family:;font-size:;color:)
             if (is_array($contentsInHomepage)) {
-                foreach ($contentsInHomepage as &$content) {
-                    $content->bgcolor = $content->getProperty('bgcolor_'.$currentCategoryId);
+                $bgColor = 'bgcolor_'.$currentCategoryId;
+                $titleColor = "title_".$currentCategoryId;
 
-                    $content->title_props = $content->getProperty('title'."_".$currentCategoryId);
-                    if (!empty($content->title_props)) {
-                        $content->title_props = json_decode($content->title_props);
+                $properties = [];
+                foreach ($contentsInHomepage as &$content) {
+                    $properties []= [$content->id, $bgColor];
+                    $properties []= [$content->id, $titleColor];
+                }
+                $properties = \Content::getMultipleProperties($properties);
+
+                foreach ($contentsInHomepage as &$content) {
+                    foreach ($properties as $property) {
+                        if ($property['fk_content'] == $content->id) {
+                            if ($property['meta_name'] == $bgColor) {
+                                $content->bgcolor = $property['meta_value'];
+                            }
+                            if ($property['meta_name'] == $titleColor) {
+                                $content->title_props = $property['meta_value'];
+                                if (!empty($content->title_props)) {
+                                    $content->title_props = json_decode($content->title_props);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -180,7 +202,12 @@ class AssetController extends Controller
 
             $selectedCategories = array();
             foreach ($categories as &$category) {
-                if (in_array($category->name, array('photo', 'publicidad', 'album', 'opinion', 'comment', 'video', 'author', 'portada', 'unknown'))) {
+                $commonCategoryNames = [
+                    'photo', 'publicidad', 'album', 'opinion',
+                    'comment', 'video', 'author', 'portada', 'unknown'
+                ];
+
+                if (in_array($category->name, $commonCategoryNames)) {
                     continue;
                 }
                 if (empty($category->color)) {
@@ -194,6 +221,7 @@ class AssetController extends Controller
                 if ($currentCategory == $category->name) {
                     $currentCategoryColor = $category->color;
                 }
+
                 $selectedCategories []= $category;
             }
 
@@ -201,23 +229,22 @@ class AssetController extends Controller
                 $currentCategoryColor = $siteColor;
             }
 
-            $this->view = new \Template(TEMPLATE_USER);
-            $output = $this->renderView(
-                'base/custom_css.tpl',
-                array(
-                    'contents_frontpage'     => $contentsInHomepage,
-                    'categories'             => $selectedCategories,
-                    'current_category'       => $currentCategory,
-                    'site_color'             => $siteColor,
-                    'current_category_color' => $currentCategoryColor,
-                )
-            );
-
-            $cache->save('custom_css|' . $categoryName, $output);
+            $this->view->assign([
+                'contents_frontpage'     => $contentsInHomepage,
+                'categories'             => $selectedCategories,
+                'current_category'       => $currentCategory,
+                'site_color'             => $siteColor,
+                'current_category_color' => $currentCategoryColor,
+            ]);
         }
 
         return new Response(
-            $output,
+            $this->renderView(
+                'base/custom_css.tpl',
+                array(
+                    'cache_id' => $cacheID
+                )
+            ),
             200,
             array(
                 'Expire'       => new \DateTime("+5 min"),
