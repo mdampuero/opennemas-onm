@@ -146,21 +146,19 @@ class AssetController extends Controller
     public function customCssAction(Request $request)
     {
         $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $version      = $request->query->filter('cb', time(), FILTER_SANITIZE_STRING);
 
         $this->view = new \Template(TEMPLATE_USER);
-        // $this->view->setConfig('frontpages');
-        $this->view->caching = 0;
+        $this->view->setConfig('frontpages');
 
-        $cacheID = 'custom_css|' . $categoryName;
+        $cacheID = 'custom_css|' . $categoryName.'|'.$version;
         if ($this->view->caching == 0
             || !$this->view->isCached('base/custom_css.tpl', $cacheID)
-            || true
         ) {
             $cm                 = new \ContentManager;
             $ccm                = \ContentCategoryManager::get_instance();
             $currentCategoryId  = $ccm->get_id($categoryName);
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
-
             //content_id | title_catID | serialize(font-family:;font-size:;color:)
             if (is_array($contentsInHomepage)) {
                 $bgColor = 'bgcolor_'.$currentCategoryId;
