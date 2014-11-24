@@ -8,12 +8,12 @@
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
-    'authService', 'fosJsRouting', 'history', 'messenger', 'paginationConfig',
-    'cfpLoadingBar',
+    'authService', 'fosJsRouting', 'history', 'webStorage', 'messenger',
+    'paginationConfig', 'cfpLoadingBar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
-        history, messenger, paginationConfig, cfpLoadingBar
+        history, webStorage, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
          * The fosJsRouting service.
@@ -105,9 +105,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             authService.isAuthenticated('manager_ws_auth_check_user')
                 .then(function (response) {
                     if (response.data.success) {
-                        $scope.user        = response.data.user;
-                        $scope.auth.status = true;
-                        $scope.auth.modal  = false;
+                        $rootScope.$broadcast('auth-login-confirmed', response.data.user);
                     }
 
                     $scope.loaded = true;
@@ -138,13 +136,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
                     if (response.data.success) {
-                        $scope.auth.status     = true;
-                        $scope.auth.inprogress = false;
-                        $scope.auth.modal      = true;
-                        $scope.user            = response.data.user;
-
-                        httpInterceptor.loginConfirmed();
-
+                        httpInterceptor.loginConfirmed(response.data.user);
                         fakeLogin();
                     } else {
                         $scope.token    = response.data.token;
@@ -260,6 +252,21 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                     });
                 }
             }
+        });
+
+        /**
+         * Updates the user and the auth status on event.
+         *
+         * @param Object event The event object.
+         * @param Object args  The user object.
+         */
+        $scope.$on('auth-login-confirmed', function (event, args) {
+            $scope.user            = args;
+            $scope.auth.inprogress = false;
+            $scope.auth.modal      = false
+            $scope.auth.status     = true;
+
+            webStorage.prefix('ONM-' + $scope.user.username);
         });
 
         /**
