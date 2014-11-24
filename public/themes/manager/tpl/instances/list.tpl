@@ -533,8 +533,8 @@
                 </table>
             </div>
         </div>
-        <div class="grid-footer">
-            <div class="pagination-info" ng-if="instances.length > 0">
+        <div class="grid-footer clearfix">
+            <div class="pull-left pagination-info" ng-if="instances.length > 0">
                 {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
             </div>
             <div class="pull-right" ng-if="instances.length > 0">

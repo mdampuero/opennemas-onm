@@ -917,6 +917,9 @@ tr:hover .listing-inline-actions {
 .pagination-info {
     margin-right: 10px;
 }
+.pagination li {
+    padding: 0;
+}
 
 
 
