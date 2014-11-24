@@ -201,7 +201,7 @@ class Instance
      *
      * @var integer
      */
-    public $alexa = 0;
+    public $alexa = 100000000;
 
     /**
      * Number of page views.

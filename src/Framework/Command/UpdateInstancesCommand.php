@@ -99,7 +99,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     private function getAlexa($domain)
     {
-        $rank = 0;
+        $rank = 100000000;
         $url  = "http://data.alexa.com/data?cli=10&dat=snbamz&url=" . $domain;
 
         $ch = curl_init($url);
