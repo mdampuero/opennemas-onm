@@ -679,7 +679,7 @@ googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
                 $content = '<div style="width:'.$width.'px; height:'.$height.'px; margin: 0 auto;">'.$content.'</div>';
             } else {
                 // Image
-                $imageObject = '<img src="'. $mediaUrl.'" width="'.$width.'" height="'.$height.'" />';
+                $imageObject = '<img alt="'.$photo->category_name.'" src="'. $mediaUrl.'" width="'.$width.'" height="'.$height.'" />';
 
                 $content = '<a target="_blank" href="'.$url.'" rel="nofollow">'.$imageObject.'</a>';
             }
