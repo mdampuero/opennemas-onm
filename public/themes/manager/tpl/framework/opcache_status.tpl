@@ -1,7 +1,18 @@
-<div class="content">
-    <div class="title">
-        <h2>{t}Zend Opcache status{/t}</h2>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-database fa-lg"></i>
+                        {t}Zend Opcache status{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
     </div>
+</div>
+<div class="content">
 
     <div class="opcache-stats">
         <div class="alert alert-block alert-error fade in" ng-if="serverData.not_supported_message">

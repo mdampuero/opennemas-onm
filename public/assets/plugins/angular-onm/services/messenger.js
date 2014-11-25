@@ -17,10 +17,10 @@ angular.module('onm.messenger', []).factory('messenger',  function () {
     messenger.post = function(params) {
         Messenger.options = {
             extraClasses: 'messenger-fixed messenger-on-bottom',
-            theme: 'flat'
         };
 
         params.hideAfter = 5;
+        params.showCloseButton = true;
 
         if (!params.id) {
             params.id = new Date().getTime();

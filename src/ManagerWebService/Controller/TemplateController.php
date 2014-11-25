@@ -33,6 +33,8 @@ class TemplateController extends Controller
     public function renderAction($template)
     {
         $template = str_replace(':', '/', $template);
+        $template = preg_replace('/\.\d+\./', '.', $template);
+
         return $this->render($template);
     }
 }

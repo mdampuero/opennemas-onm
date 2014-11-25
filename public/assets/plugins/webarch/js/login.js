@@ -1,3 +1,5 @@
+/* Webarch Admin Dashboard 
+-----------------------------------------------------------------*/ 
 $(document).ready(function() {		
 	$('#login-form').validate({
 

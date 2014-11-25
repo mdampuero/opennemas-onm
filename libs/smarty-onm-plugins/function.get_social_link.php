@@ -77,7 +77,7 @@ function smarty_function_get_social_link($params, &$smarty)
 
             $youtubePage = s::get('youtube_page');
 
-            if (!empty($googlePage)) {
+            if (!empty($youtubePage)) {
                 $output =
                     '<li '.$style.'>
                         <a href="'.$youtubePage.'" target="_blank" title="Visita nuestra página en Youtube">

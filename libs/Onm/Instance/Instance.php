@@ -201,7 +201,7 @@ class Instance
      *
      * @var integer
      */
-    public $alexa = 0;
+    public $alexa = 100000000;
 
     /**
      * Number of page views.
@@ -308,7 +308,11 @@ class Instance
      */
     public function getDatabaseName()
     {
-        return $this->settings['BD_DATABASE'];
+        if (array_key_exists('BD_DATABASE', $this->settings)) {
+            return $this->settings['BD_DATABASE'];
+        }
+
+        return null;
     }
 
     /**

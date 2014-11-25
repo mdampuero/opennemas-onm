@@ -89,13 +89,12 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
 .m-uneditable-input:focus {
-    border-color: #e5e9ec;
-    background-color: #f4f5f7;
+    border-color: @input-active-bordrer-color;
+    background-color: @input-active-background-color;
     outline: 0 !important;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    background-color: #f4f5f7;
 }
 input[type="radio"],
 input[type="checkbox"] {
@@ -165,7 +164,7 @@ textarea[class*="span"] {
 }
 .input-sm {
     font-size: 13px !important;
-    min-height: 20px !important;
+    min-height: 29px !important;
 }
 .input-prepend,
 .input-append {
@@ -403,6 +402,7 @@ textarea[class*="span"] {
         color: #777a80;
         transition: border 0.2s linear 0s,color 0.2s linear 0s;
         margin-bottom: 10px;
+        direction: ltr;
         &:before {
             content: "";
             display: inline-block;
@@ -722,14 +722,14 @@ form legend,.form-view legend {
         padding: 0px !important;
     }
     .form-actions {
-        background-color: #f5f5f5 !important;
+        background-color: @base-light-five !important;
         margin-top: 0px !important;
         margin-top: 40px;
         padding-left: 190px;
     }
 }
 .form-actions {
-    background-color: #F2F4F6;
+    background-color: @base-light-five;
     border: 0px;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -853,7 +853,7 @@ form legend,.form-view legend {
             }
         }
         .step {
-            background-color: #D1DADE;
+            background-color: @color-primary-grey;
             border-radius: 32px 32px 32px 32px;
             color: @color-white;
             display: inline;
@@ -891,7 +891,7 @@ form legend,.form-view legend {
     text-decoration: none;
 }
 .wizard-steps li.active .step,.wizard-steps li.active.complete .step {
-    background-color: #0090D9;
+    background-color: @color-success;
     color: @color-white;
     font-weight: bold;
     padding: 10px 15px;
@@ -1092,7 +1092,7 @@ form legend,.form-view legend {
         }
     }
     .select2-highlighted {
-        background: @color-info;
+        background: @color-success;
         border-radius: 3px;
         .select2-result-label {
             color:  @color-white ;
@@ -1134,6 +1134,7 @@ form legend,.form-view legend {
             border-radius: 8px;
             margin: 8px -5px 7px 10px;
             padding: 4px 8px 4px 21px;
+            direction:ltr;
         }
     }
     &.select2-container-active {
@@ -1194,10 +1195,10 @@ form legend,.form-view legend {
 }
 .input-append .add-on, .input-prepend .add-on {
     position: absolute;
-    background-color: #D1DADE;
+    background-color: @color-primary-grey;
     color: #5E5E5E;
     text-shadow: none;
-    border: #D1DADE;
+    border: @color-primary-grey;
     border-radius: 0 2px 2px 0;
     height: 37px;
     min-width: 34px;
@@ -1211,7 +1212,7 @@ form legend,.form-view legend {
             background-color: transparent !important;
             position: absolute;
             left: -6px;
-            color: #D1DADE;
+            color: @color-primary-grey;
             z-index: 100;
             font-size: 26px;
             &:before {
@@ -1230,14 +1231,14 @@ form legend,.form-view legend {
     &.success {
         .add-on {
             .arrow {
-                color: @color-success - @dark;
+                color: @color-success ;
             }
         }
     }
     &.info {
         .add-on {
             .arrow {
-                color: @color-info - @dark;
+                color: @color-info ;
             }
         }
     }
@@ -1277,13 +1278,13 @@ form legend,.form-view legend {
     color:  @color-white ;
 }
 .input-append.success .add-on, .input-prepend .add-on {
-    background-color: @color-success - @dark;
+    background-color: @color-success ;
     color:  @color-white ;
     display: inline-block;
     float: left;
 }
 .input-append.info .add-on, .input-prepend .add-on {
-    background-color: @color-info - @dark;
+    background-color: @color-info;
     color:  @color-white ;
 }
 .input-append.warning .add-on, .input-prepend .add-on {
@@ -1367,10 +1368,10 @@ form legend,.form-view legend {
         }
     }
     &.success {
-        background-color: #0090d9;
+        background-color: @color-success;
         color:  @color-white ;
         .arrow {
-            color: #0090d9;
+            color: @color-success;
         }
     }
     &.info {
@@ -1399,7 +1400,7 @@ form legend,.form-view legend {
     .arrow {
         position: relative;
         right: -6px;
-        color: #D1DADE;
+        color: @color-primary-grey;
         z-index: 100;
         &:before {
             font-family: 'FontAwesome';
@@ -1426,18 +1427,25 @@ form legend,.form-view legend {
         }
     }
 }
+.input-group .form-control:last-child,
+.input-group-addon:last-child,
+.input-group-btn:last-child > .btn,
+.input-group-btn:last-child > .btn-group > .btn,
+.input-group-btn:last-child > .dropdown-toggle,
+.input-group-btn:first-child > .btn:not(:first-child),
+.input-group-btn:first-child > .btn-group:not(:first-child) > .btn {
+  border-left: 0;
+}
+
 .transparent {
     .input-group-addon {
         background-color:  @color-white ;
         padding: 8px 1px 10px 9px;
     }
-    input {
-        border-left: 0px;
-    }
 }
 .transparent.input-group .form-control:first-child, .transparent .input-group-addon:first-child, .transparent .input-group-btn:first-child>.btn, .transparent .input-group-btn:first-child>.dropdown-toggle, .transparent .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
-    border-right: 0px;
-    border-left: 1px solid #e5e9ec;
+    .border-right(0px);
+    .border-left(1px solid #e5e9ec);
 }
 .transparent .input-group .form-control:last-child, .transparent .input-group-addon:last-child, .transparent .input-group-btn:last-child>.btn, .transparent .input-group-btn:last-child>.dropdown-toggle, .transparent .input-group-btn:first-child>.btn:not(:first-child) {
     padding: 6px 10px;
@@ -1453,29 +1461,29 @@ form legend,.form-view legend {
                 font-size: 13px;
             }
             .prev {
-                color: #0090d9;
+                color: @color-success;
                 content: '';
                 font-size: 0px;
                 &:before {
-                    color: #0090d9;
+                    color: @color-success;
                     font-family: 'FontAwesome';
                     content: "\f053";
                     font-size: 13px;
                 }
             }
             .next {
-                color: #0090d9;
+                color: @color-success;
                 content: '';
                 font-size: 0px;
                 &:before {
-                    color: #0090d9;
+                    color: @color-success;
                     font-family: 'FontAwesome';
                     content: "\f054";
                     font-size: 13px;
                 }
             }
             .dow {
-                color: #0090d9;
+                color: @color-success;
                 text-transform: uppercase;
                 font-size: 11px;
             }
@@ -1521,7 +1529,7 @@ form legend,.form-view legend {
     color:  @color-white ;
 }
 .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active.active:hover, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled.disabled:hover, .datepicker table tr td.active[disabled], .datepicker table tr td.active[disabled]:hover, .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled[disabled]:hover {
-    background-color: #0090d9;
+    background-color: @color-success;
 }
 .datepicker table tr td span.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover {
     background-image: none;
@@ -1529,7 +1537,7 @@ form legend,.form-view legend {
     text-shadow: none;
 }
 .datepicker table tr td span.active:hover, .datepicker table tr td span.active:hover:hover, .datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active.disabled:hover:hover, .datepicker table tr td span.active:active, .datepicker table tr td span.active:hover:active, .datepicker table tr td span.active.disabled:active, .datepicker table tr td span.active.disabled:hover:active, .datepicker table tr td span.active.active, .datepicker table tr td span.active.active:hover, .datepicker table tr td span.active.disabled.active, .datepicker table tr td span.active.disabled.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active.disabled.disabled, .datepicker table tr td span.active.disabled.disabled:hover, .datepicker table tr td span.active[disabled], .datepicker table tr td span.active[disabled]:hover, .datepicker table tr td span.active.disabled[disabled], .datepicker table tr td span.active.disabled[disabled]:hover {
-    background-color: #0090d9;
+    background-color: @color-success;
 }
 .datepicker-inline {
     width: auto;
@@ -1544,6 +1552,39 @@ form legend,.form-view legend {
     input {
         border: 1px solid @color-danger;
     }
+    select{
+        border: 1px solid @color-danger;
+    }
+    textarea{
+        border: 1px solid @color-danger;
+    }
+    
+    .select2-container .select2-choice{
+        border: 1px solid @color-danger;
+    }
+    &.input-with-icon{
+        .select2-container{ 
+            .select2-choice {
+                .select2-arrow b:before{
+                    content: "\f12a";
+                    color: @color-danger;
+                }
+            }
+        }   
+    }
+    &.input-with-icon{
+        .select2-container{ 
+            .select2-choice {
+                .select2-arrow b{
+                      -webkit-transform: scale(1, 1);
+                      -moz-transform: scale(1, 1);
+                      -ms-transform: scale(1, 1);
+                      -o-transform: scale(1, 1);
+                      transform: scale(1, 1);
+                }
+            }
+        }  
+    } 
     i {
         color: @color-danger;
     }
@@ -1552,7 +1593,43 @@ form legend,.form-view legend {
     input {
         border: 1px solid @color-green;
     }
+    select{
+        border: 1px solid @color-green;
+    }
+    textarea{
+        border: 1px solid @color-green;
+    }
+    .select2-container .select2-choice{
+        border: 1px solid @color-green;
+    }
+    &.input-with-icon{
+        .select2-container{ 
+            .select2-choice {
+                .select2-arrow b:before{
+                    content: "\f00c";
+                    color: @color-green;
+                }
+            }
+        }   
+    }
+    &.input-with-icon{
+        .select2-container{ 
+            .select2-choice {
+                .select2-arrow b{
+                      -webkit-transform: scale(1, 1);
+                      -moz-transform: scale(1, 1);
+                      -ms-transform: scale(1, 1);
+                      -o-transform: scale(1, 1);
+                      transform: scale(1, 1);
+                }
+            }
+        }   
+    }
     i {
         color: @color-green;
     }
+}
+
+.clockpicker-popover{
+    z-index: 10;
 }

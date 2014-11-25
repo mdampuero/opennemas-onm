@@ -212,24 +212,27 @@ class RssController extends Controller
     public function authorRSSAction(Request $request)
     {
         $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 50;
+        $page         = 1;
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('rss');
 
-        $cacheID = $this->view->generateCacheId('authorRSS-'.$slug, '', $page);
+        $cacheID = $this->view->generateCacheId('rss|author', '', $slug);
 
         if (($this->view->caching == 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
             $ur = $this->get('user_repository');
-            $filters['username'] = array(array('value' => $slug));
-            $user = $ur->findBy($filters, '');
+            $user = $ur->findBy(
+                [ 'username' => [['value' => $slug]] ],
+                ''
+            );
             $user = $user[0];
+
             if (!empty($user)) {
-                $rssTitle   = 'RSS de «'.$user->name.'»';
+                $rssTitle   = sprintf('RSS de «%s»', $user->name);
                 // Get entity repository
                 $er = $this->get('entity_repository');
                 $user->photo = $er->find('Photo', $user->avatar_img_id);
@@ -237,10 +240,10 @@ class RssController extends Controller
 
                 // Fetch author contents
                 $searchCriteria =  array(
-                    'fk_author'       => array(array('value' => $user->id)),
-                    'fk_content_type' => array(array('value' => array(1, 4, 7), 'operator' => 'IN')),
-                    'content_status'  => array(array('value' => 1)),
-                    'in_litter'       => array(array('value' => 0)),
+                    'fk_author'       => [['value' => $user->id]],
+                    'fk_content_type' => [['value' => [1, 4, 7], 'operator' => 'IN']],
+                    'content_status'  => [['value' => 1]],
+                    'in_litter'       => [['value' => 0]],
                 );
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
 

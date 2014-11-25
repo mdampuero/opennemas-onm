@@ -1,6 +1,8 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/ 
 $(document).ready(function() {				
 	$(".select2").select2();
-			 
 	//Traditional form validation sample
 	$('#form_traditional_validation').validate({
                 focusInvalid: false, 
@@ -17,6 +19,9 @@ $(document).ready(function() {
                     form1CardNumber: {
                         required: true,
                         creditcard: true
+                    },
+                    cardType:{
+                        required: true
                     }
                 },
 
@@ -48,7 +53,10 @@ $(document).ready(function() {
                 
                 }
             });	
-	
+
+            $('.select2', "#form_traditional_validation").change(function () {
+                $('#form_traditional_validation').validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
 	//Iconic form validation sample	
 	   $('#form_iconic_validation').validate({
                 errorElement: 'span', 
@@ -67,6 +75,9 @@ $(document).ready(function() {
                     form1Url: {
                         required: true,
                         url: true
+                    },
+                    gendericonic:{
+                        required: true
                     }
                 },
 
@@ -100,6 +111,10 @@ $(document).ready(function() {
                 submitHandler: function (form) {
                 
                 }
+           
+            });
+             $('.select2', "#form_iconic_validation").change(function () {
+                $('#form_iconic_validation').validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
             });
 	//Form Condensed Validation
 	$('#form-condensed').validate({
