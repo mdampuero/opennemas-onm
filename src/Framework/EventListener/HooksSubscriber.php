@@ -95,7 +95,8 @@ class HooksSubscriber implements EventSubscriberInterface
             'frontpage.save_position' => [
                 ['cleanFrontpage', 5],
                 ['deleteCustomCss', 5],
-                ['cleanFrontpageObjectCache', 5]
+                ['cleanFrontpageObjectCache', 5],
+                ['sendVarnishRequestCleaner', 5],
             ],
             'frontpage.pick_layout' => [
                 ['mockHookAction', 0],
