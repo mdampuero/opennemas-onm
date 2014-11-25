@@ -472,7 +472,7 @@ class UserController extends Controller
                     $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                 }
 
-                $this->dispatchEvent('user.update', array('id' => $id));
+                $this->dispatchEvent('user.update', array('user' => $user));
 
                 if ($id == $this->getUser()->id) {
                     $request->getSession()->set('user_language', $user->getMeta('user_language'));
