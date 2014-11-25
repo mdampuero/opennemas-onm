@@ -214,7 +214,7 @@
                 <div class="checkbox check-default">
                     <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
                     <label for="checkbox-photos">
-                        {t}Name{/t}
+                        {t}Photo{/t}
                     </label>
                 </div>
             </div>
