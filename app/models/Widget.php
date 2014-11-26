@@ -210,7 +210,8 @@ class Widget extends Content
         }
         $id = $rs->fields['pk_widget'];
         parent::read($id);
-        $this->id = array($id);
+
+        $this->id = $id;
         $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
         $values   = array($id);
         $this->loadAllContentProperties();
@@ -220,7 +221,6 @@ class Widget extends Content
             return null;
         }
         $this->load($rs->fields);
-        $this->id = array($id);
     }
 
     /**
