@@ -79,6 +79,12 @@ EOF
 
         echo(exec($command));
 
+        $command = "msgattrib --no-location "
+            ."-o ".APP_PATH.$this->localeFolder."/opennemas_template_strings.pot "
+            .APP_PATH.$this->localeFolder."/opennemas_template_strings.pot ";
+
+        echo(exec($command));
+
         $output->writeln("\t- From PHP files");
 
         $phpFiles = array(
