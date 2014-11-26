@@ -346,44 +346,6 @@ function microtime_float()
 }
 
 /**
- * Detect a mobile device and redirect to mobile version
- *
- * @param  boolean $autoRedirect
- *
- * @return boolean True if it's a mobile device and $autoRedirect is false
- */
-function mobileRouter($autoRedirect = true)
-{
-    $isMobileDevice = false;
-    $showDesktop = filter_input(INPUT_GET, 'show_desktop', FILTER_DEFAULT);
-    if ($showDesktop) {
-        $autoRedirect = false;
-        $_COOKIE['confirm_mobile'] = 1;
-    }
-
-    // Browscap library
-    require APPLICATION_PATH .DS.'libs'.DS.'Browscap.php';
-
-    // Creates a new Browscap object (loads or creates the cache)
-    $bc = new \Browscap(APPLICATION_PATH .DS.'tmp'.DS.'cache');
-    $browser = $bc->getBrowser(); //isBanned
-
-    if (!empty($browser->isMobileDevice)
-        && ($browser->isMobileDevice == true)
-        && !(isset($_COOKIE['confirm_mobile']))
-    ) {
-        if ($autoRedirect) {
-            header("Location: ".'/mobile' . $_SERVER['REQUEST_URI']);
-            exit(0);
-        } else {
-            $isMobileDevice = true;
-        }
-    }
-
-    return $isMobileDevice;
-}
-
-/**
 * Perform a permanently redirection (301)
 *
 * Use the header PHP function to redirect browser to another page
@@ -553,32 +515,6 @@ function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnecti
 
     $logger = getService('logger');
     $logger->error('[Database Error] '.$s);
-}
-
-/**
- * Sets the PHP environment given an environmen
- * name 'production', 'development'
- *
- * @param string $environment The current environment
- *
- * @return void
- **/
-function initEnvironment($environment = 'production')
-{
-    if ($environment == 'development') {
-        ini_set('expose_php', 'On');
-        ini_set('error_reporting', E_ALL | E_STRICT);
-        ini_set('display_errors', 'On');
-        ini_set('display_startup_errors', 'On');
-        ini_set('html_errors', 'On');
-    } else {
-        ini_set('expose_php', 'Off');
-        ini_set('error_reporting', E_ALL | E_STRICT);
-        ini_set('display_errors', 'Off');
-        ini_set('display_startup_errors', 'Off');
-        ini_set('html_errors', 'Off');
-    }
-    ini_set('apc.slam_defense', '0');
 }
 
 /**
