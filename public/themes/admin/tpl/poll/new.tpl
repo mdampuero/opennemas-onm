@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+    {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
+        @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @Common/js/jquery/jquery.tagsinput.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script type="text/javascript">
@@ -11,6 +13,13 @@
             if (tags_input.val().length == 0) {
                 fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
             }
+        });
+        jQuery('#closetime').datetimepicker({
+            hourGrid: 4,
+            showAnim: 'fadeIn',
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'hh:mm:ss',
+            minuteGrid: 10,
         });
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -101,6 +110,13 @@
                     <div class="content">
                         <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
                         <label for="content_status">{t}Available{/t}</label>
+
+                        <div class="control-group">
+                            <label for="endtime" class="control-label">{t}Publication closed date{/t}</label>
+                            <div class="controls">
+                                <input type="datetime" id="closetime" name="params[closetime]" value="{$poll->params['closetime']}">
+                            </div>
+                        </div>
 
                         <hr class="divisor">
 

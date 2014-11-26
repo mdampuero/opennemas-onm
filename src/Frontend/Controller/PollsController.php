@@ -122,6 +122,16 @@ class PollsController extends Controller
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->getItems($poll->id);
                     $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d', $poll->id);
+                    $poll->status  = 'opened';
+                    if (is_string($poll->params)) {
+                        $poll->params = unserialize($poll->params);
+                    }
+                    if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+                        && (!empty($poll->params['closetime']))
+                        && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
+                            $poll->status = 'closed';
+                    }
                 }
             }
 
@@ -181,6 +191,17 @@ class PollsController extends Controller
             ) {
                 $items         = $poll->items;
                 $poll->dirtyId = $dirtyID;
+
+                $poll->status  = 'opened';
+                if (is_string($poll->params)) {
+                    $poll->params = unserialize($poll->params);
+                }
+                if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+                    && (!empty($poll->params['closetime']))
+                    && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+                    && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
+                        $poll->status = 'closed';
+                }
 
                 $otherPolls = $this->cm->find(
                     'Poll',

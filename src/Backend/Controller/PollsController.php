@@ -122,6 +122,7 @@ class PollsController extends Controller
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'item'           => $request->request->get('item'),
+                'params'         => $request->request->get('params'),
             );
             $poll = $poll->create($data);
 
@@ -168,7 +169,9 @@ class PollsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_polls'));
         }
-
+        if (is_string($poll->params)) {
+            $poll->params = unserialize($poll->params);
+        }
 
         return $this->render(
             'poll/new.tpl',
@@ -215,6 +218,7 @@ class PollsController extends Controller
                 'available'     => $request->request->getDigits('available', 0),
                 'item'          => $request->request->get('item'),
                 'votes'         => $request->request->get('votes'),
+                'params'        => $request->request->get('params'),
             );
             if ($poll->update($data)) {
                 m::add(_('Poll successfully updated.'), m::SUCCESS);
