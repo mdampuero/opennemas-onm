@@ -98,9 +98,6 @@ class AlbumsController extends Controller
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
         // Don't execute the action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
@@ -163,7 +160,9 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album_frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'       => $cacheID,
+                'advertisements' => $this->getAds(),
+                'x-tags'         => "album-frontpage,{$this->page}"
             )
         );
     }
@@ -190,10 +189,6 @@ class AlbumsController extends Controller
         }
 
         $this->view->setConfig('gallery-inner');
-
-        // Load advertisement for this action
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -258,8 +253,10 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album.tpl',
             array(
-                'cache_id'  => $cacheID,
-                'contentId' => $albumID
+                'cache_id'       => $cacheID,
+                'contentId'      => $albumID,
+                'advertisements' => $this->getAds('inner');
+                'x-tags'         => "album,$albumID"
             )
         );
     }

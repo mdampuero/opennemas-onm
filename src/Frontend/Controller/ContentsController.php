@@ -31,16 +31,6 @@ use Onm\Settings as s;
 class ContentsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
      * Description of the action
      *
      * @param Request $request the request object
@@ -75,7 +65,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -107,6 +98,7 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
@@ -124,7 +116,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -358,20 +351,10 @@ class ContentsController extends Controller
         }
 
         $userAgent = $request->headers->get('User-Agent');
-        $bots = array(
-            "archiver", "bot", "crawl", "curl", "eventbox", "facebookexternal",
-            "google", "msnbot", "monitor", "mechanize", "nambu", "perl",
-            "python", "sphere", "spider", "PEAR", "java", "radian", "twitter",
-            "wordpress", "yahoo", "yandex"
-        );
-
-        $i = 0;
-        while ($i < count($bots) && stristr($userAgent, $bots[$i]) != false) {
-            $i++;
-        }
+        $isBot     = isBot($userAgent);
 
         // Increment view only if the request is performed with an AJAX request
-        if ($i >= count($bots)) {
+        if ($isBot) {
             $httpCode = 400;
             $content = "Bot detected";
         } elseif ($request->isXmlHttpRequest()) {
