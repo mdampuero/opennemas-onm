@@ -192,17 +192,6 @@ class PollsController extends Controller
                 $items         = $poll->items;
                 $poll->dirtyId = $dirtyID;
 
-                $poll->status  = 'opened';
-                if (is_string($poll->params)) {
-                    $poll->params = unserialize($poll->params);
-                }
-                if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
-                    && (!empty($poll->params['closetime']))
-                    && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
-                    && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
-                        $poll->status = 'closed';
-                }
-
                 $otherPolls = $this->cm->find(
                     'Poll',
                     'content_status=1 ',
@@ -229,20 +218,24 @@ class PollsController extends Controller
 
         $message = null;
         $alreadyVoted = false;
-        $voted = (int) $request->query->getDigits('voted', 0);
-        $valid = (int) $request->query->getDigits('valid', 3);
-        if ($voted == 1) {
-            if ($voted == 1 && $valid === 1) {
-                $message = "<span class='thanks'>"._('Thanks for participating.')."</span>";
-            } elseif ($voted == 1 && $valid === 0) {
-                $message = "<span class='wrong'>"._('Please select a valid poll answer.')."</span>";
+        if ($poll->status != 'closed') {
+            $voted = (int) $request->query->getDigits('voted', 0);
+            $valid = (int) $request->query->getDigits('valid', 3);
+            if ($voted == 1) {
+                if ($voted == 1 && $valid === 1) {
+                    $message = "<span class='thanks'>"._('Thanks for participating.')."</span>";
+                } elseif ($voted == 1 && $valid === 0) {
+                    $message = "<span class='wrong'>"._('Please select a valid poll answer.')."</span>";
+                }
+            } elseif (isset($cookie)) {
+                $alreadyVoted = true;
+                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
+            } elseif (($valid === 0) && ($voted == 0)) {
+                $alreadyVoted = true;
+                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
             }
-        } elseif (isset($cookie)) {
-            $alreadyVoted = true;
-            $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
-        } elseif (($valid === 0) && ($voted == 0)) {
-            $alreadyVoted = true;
-            $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
+        } else {
+            $message = "<span class='closed'>"._('You can\'t vote this poll, it is closed.')."</span>";
         }
 
         $ads = $this->getAds('inner');
@@ -286,13 +279,14 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+
         $cookieName = "poll-".$pollId;
         $cookie = $request->cookies->get($cookieName);
 
         $valid = 0;
         $voted = 0;
 
-        if (!empty($answer) && !isset($cookie)) {
+        if (!empty($answer) && !isset($cookie) && ($poll->status != 'closed')) {
             $ip = getRealIp();
             $voted = $poll->vote($answer, $ip);
 
@@ -302,6 +296,7 @@ class PollsController extends Controller
 
             // Clear all caches
             $this->cleanCache($poll->category_name, $pollId);
+            $this->cleanCache('home', $pollId);
             dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;

@@ -128,6 +128,17 @@ class Poll extends Content
 
         $this->items         = $this->getItems($this->id);
 
+        $this->status = 'opened';
+        if (is_string($this->params)) {
+            $this->params = unserialize($this->params);
+        }
+        if (is_array($this->params) && array_key_exists('closetime', $this->params)
+            && (!empty($this->params['closetime']))
+            && ($this->params['closetime'] != date('00-00-00 00:00:00'))
+            && ($this->params['closetime'] < date('Y-m-d H:i:s'))) {
+                $this->status = 'closed';
+        }
+
         return $this;
     }
 
