@@ -255,7 +255,7 @@ class AlbumsController extends Controller
             array(
                 'cache_id'       => $cacheID,
                 'contentId'      => $albumID,
-                'advertisements' => $this->getAds('inner');
+                'advertisements' => $this->getAds('inner'),
                 'x-tags'         => "album,$albumID"
             )
         );
