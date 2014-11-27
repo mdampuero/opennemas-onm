@@ -37,18 +37,38 @@ class MenusController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
 
-        $this->pages = array(
-            'frontpage'  => 1,
-            'opinion'    => 4,
-            'album'      => 7,
-            'video'      => 9,
-            'poll'       => 11,
-            'letter'     => 17,
-            'kiosko'     => 14,
-            'boletin'    => 13,
-            'participa'  => 18,
-            'hemeroteca' => 19,
-        );
+        $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
+
+        if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Opinion"),'link'=>"opinion/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Bloggers"),'link'=>"blog/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Album"),'link'=>"album/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Video"),'link'=>"video/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Poll"),'link'=>"poll/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Letters to the Editor"),'link'=>"cartas-al-director/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('KIOSKO_MANAGER')) {
+            array_push($this->pages, array('title'=>_("News Stand"),'link'=>"portadas-papel/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Form"),'link'=>"participa/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('NEWSLETTER_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Newsletter"),'link'=>"newsletter/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('LIBRARY_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
+        }
 
         $this->menuPositions = array('' => _('Without position'));
 
@@ -100,11 +120,11 @@ class MenusController extends Controller
 
         $albumCategories = $videoCategories = $pollCategories = array();
         foreach ($ccm->categories as $category) {
-            if ($category->internal_category == $this->pages['album']) {
+            if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
                 $albumCategories[] = $category;
-            } elseif ($category->internal_category == $this->pages['video']) {
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
                 $videoCategories[] = $category;
-            } elseif ($category->internal_category == $this->pages['poll']) {
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
                 $pollCategories[] = $category;
             }
         }
@@ -210,11 +230,11 @@ class MenusController extends Controller
             }
             $albumCategories = $videoCategories = $pollCategories = array();
             foreach ($ccm->categories as $category) {
-                if ($category->internal_category == $this->pages['album']) {
+                if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
                     $albumCategories[] = $category;
-                } elseif ($category->internal_category == $this->pages['video']) {
+                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
                     $videoCategories[] = $category;
-                } elseif ($category->internal_category == $this->pages['poll']) {
+                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
                     $pollCategories[] = $category;
                 }
             }
