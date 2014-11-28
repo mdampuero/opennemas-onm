@@ -458,11 +458,9 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function deleteCategoryCache(Event $event)
     {
-        $id = $event->getArgument('category')->pk_content_category;
-        $this->cacheHandler->delete('category_' . $id);
+        $category = $event->getArgument('category');
 
-        $name = $event->getArgument('category')->name;
-        $this->cacheHandler->delete('category_' . $name);
+        $this->cacheHandler->delete('category-' . $category->id);
     }
 
     /**
