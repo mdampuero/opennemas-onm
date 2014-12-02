@@ -9,7 +9,7 @@
     <bootstrap />
 
     <!-- A phpDox project to process, you can have multiple projects in one config file -->
-    <project name="Opennemas" source="${basedir}/../src" workdir="${basedir}/phpdox">
+    <project name="Opennemas" source="${basedir}/../src" workdir="${basedir}/phpdox/xml">
         <!--  @name    - The name of the project -->
         <!--  @source  - The source directory of the application to process -->
         <!--  @workdir - The directory to store the xml data files in -->
@@ -55,12 +55,12 @@
         </collector>
 
         <!--  Configuration of generation process -->
-        <generator output="${basedir}/">
+        <generator output="${basedir}">
             <!-- @output - (Base-)Directory to store output data in -->
 
             <!-- A generation process consists of one or more build tasks and of (optional) enrich sources -->
 
-            <enrich base="${basedir}/">
+            <enrich base="${basedir}/logs">
                 <!-- @base - (Base-)Directory of datafiles used for enrich process -->
 
                 <!-- add build information - this should always be enabled -->
@@ -68,7 +68,7 @@
 
                 <!-- add phploc output -->
                 <source type="phploc">
-                    <file name="logs/phploc.xml" />
+                    <file name="phploc.xml" />
                 </source>
 
                 <!-- add git vcs information -->
@@ -79,17 +79,17 @@
 
                 <!-- PHPUnit -->
                 <source type="phpunit">
-                    <file name="logs/junit.xml" />
+                    <file name="junit.xml" />
                 </source>
 
                 <!-- PHPCs -->
                 <source type="phpcs">
-                    <file name="logs/checkstyle.xml" />
+                    <file name="checkstyle.xml" />
                 </source>
 
                 <!-- PHPMessDetector -->
                 <source type="pmd">
-                    <file name="logs/pmd.xml" />
+                    <file name="pmd.xml" />
                 </source>
 
                 <!-- CheckStyle -->
@@ -117,7 +117,7 @@
             <!-- An engine and thus build node can have additional configuration child nodes, please check the documentation for the engine to find out more -->
 
             <!--  default engine "html" -->
-            <build engine="html" enabled="true" output="${basedir}/api">
+            <build engine="html" enabled="true" output="api">
                 <template dir="${phpDox.home}/templates/html" />
                 <file extension="xhtml" />
             </build>
