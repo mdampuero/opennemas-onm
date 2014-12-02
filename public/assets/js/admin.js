@@ -28,23 +28,4 @@ $(document).ready(function() {
             form.find('input[name="_password"]').val(password);
         }
     });
-
-    $('.social-network-connect').on('click', function(e) {
-        var btn = $(this);
-        var win = window.open(
-            $(this).data('url'),
-            $(this).attr('id'),
-            'height=400, width=400'
-        );
-
-        var interval = window.setInterval(function() {
-            if (win == null || win.closed) {
-                window.clearInterval(interval);
-
-                if (win.success) {
-                    window.location.reload();
-                }
-            }
-        }, 1000);
-    });
 });
