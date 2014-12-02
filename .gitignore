@@ -26,10 +26,11 @@ bin/import-tools/onmToOnm/libs/onm-config.inc.php
 bin/import-tools/onmToOnm/log/log.txt
 
 # build
-!build/phpmd.xml
-!build/phpdox.xml
-!build/phpdoc.xml
 build/*
+!build/phpmd.xml
+!build/phpdox.dist.xml
+!build/phpdoc.dist.xml
+!build/phpcs.xml
 
 # misc
 backups/*

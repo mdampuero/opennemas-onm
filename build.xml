@@ -27,10 +27,10 @@
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="4">
-            <!-- <sequential> -->
+            <sequential>
                 <antcall target="pdepend"/>
                 <antcall target="phpmd-ci"/>
-            <!-- </sequential> -->
+            </sequential>
             <antcall target="phploc-ci"/>
             <antcall target="phpcs-ci"/>
             <antcall target="phpcpd"/>
@@ -44,6 +44,7 @@
         <delete dir="${basedir}/build/code-browser"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
+        <delete dir="${basedir}/build/phpdox"/>
     </target>
 
     <!-- <target name="prepare" depends="clean,phpab" -->
@@ -53,6 +54,7 @@
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
+        <mkdir dir="${basedir}/build/phpdox"/>
         <antcall target="composer" />
     </target>
 
