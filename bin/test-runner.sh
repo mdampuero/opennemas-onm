@@ -29,7 +29,7 @@ done
 
 while true; do
     ant phpunit$CI;
-    inotifywait -qq -r -e modify $SCRIPTPATH/../app/ @$SCRIPTPATH/../app/cache $SCRIPTPATH/../src/ $SCRIPTPATH/../vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
+    inotifywait -qq -r -e modify $SCRIPTPATH/../app/ @$SCRIPTPATH/../app/cache $SCRIPTPATH/../src/ $SCRIPTPATH/../libs/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
     clear &&
     ant phpunit$CI;
 done
