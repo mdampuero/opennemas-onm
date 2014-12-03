@@ -85,6 +85,19 @@ class ModuleManager
     }
 
     /**
+     * Returns changes in modules.
+     *
+     * @return array array of changes in modules
+     */
+    public static function getChangesInModules()
+    {
+        $changesInModules = getService('instance_manager')->current_instance
+            ->changes_in_modules;
+
+        return $changesInModules;
+    }
+
+    /**
      * Returns the list of available modules in Onm instance.
      *
      * @return array the list of available modules
@@ -126,6 +139,12 @@ class ModuleManager
                 'SPECIAL_MANAGER'           => _('Specials'),
                 'STATIC_LIBRARY'            => _('Static library'),
                 'STATIC_PAGES_MANAGER'      => _('Static pages'),
+                'SUPPORT_NONE'              => _('No Support'),
+                'SUPPORT_PRO'               => _('Profesional Support'),
+                'SUPPORT_2'                 => _('Support 2'),
+                'SUPPORT_4'                 => _('Support 4'),
+                'SUPPORT_8'                 => _('Support 8'),
+                'SUPPORT_8_PLUS'            => _('Support 8+'),
                 'SYNC_MANAGER'              => _('Instance synchronization'),
                 'TRASH_MANAGER'             => _('Trash'),
                 'USER_GROUP_MANAGER'        => _('User groups'),
@@ -357,8 +376,43 @@ class ModuleManager
                 ],
                 [
                     'id'   => 'PAYWALL',
-                    'plan' => 'Others',
+                    'plan' => 'Other',
                     'name' => _('Paywall'),
+                ],                [
+                    'id' => 'SUPPORT_NONE',
+                    'plan' => 'Support',
+                    'name' => _('No support'),
+                    'description' => ''
+                ],
+                [
+                    'id' => 'SUPPORT_PRO',
+                    'plan' => 'Support',
+                    'name' => _('Profesional Support'),
+                    'description' => '10 hours/month'
+                ],
+                [
+                    'id' => 'SUPPORT_2',
+                    'plan' => 'Support',
+                    'name' => _('Support 2'),
+                    'description' => '40 hours/month'
+                ],
+                [
+                    'id' => 'SUPPORT_4',
+                    'plan' => 'Support',
+                    'name' => _('Support 4'),
+                    'description' => '80 hours/month'
+                ],
+                [
+                    'id' => 'SUPPORT_8',
+                    'plan' => 'Support',
+                    'name' => _('Support 8'),
+                    'description' => '160 hours/month'
+                ],
+                [
+                    'id' => 'SUPPORT_8_PLUS',
+                    'plan' => 'Support',
+                    'name' => _('Support 8+'),
+                    'description' => '240 hours/month'
                 ]
             ];
         }
