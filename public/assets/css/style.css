@@ -3605,12 +3605,13 @@ border-bottom-left-radius: 2px;
     Client information and stats page
    ========================================================================== */
 #info-page {margin-bottom: 30px;}
-#info-page .modules {display: inline-block;padding:15px 0;border: 1px solid #ddd;border-radius: 10px;background-color: #f6f6f6;margin-bottom: 10px;width: 100%}
+#info-page .modules {display: inline-block;padding:15px 0;background-color: #fff;margin-bottom: 10px;}
 #info-page .modules h4 {margin: 0 0 10px 15px;}
 #info-page .modules span.plan-title {vertical-align: text-top;}
 #info-page .modules span.pending {display: none;color: red;}
 #info-page .modules .span4.element {width: 455px;}
 #info-page .marketing i {padding-right: 10px;}
+#info-page .tabbable {min-height:450px;background-color: #fff;border-radius: 10px;padding: 10px;}
 #info-page label {cursor: default;}
 @media (max-width: 767px) {
     #info-page .modules > div { margin-left: 20px;}

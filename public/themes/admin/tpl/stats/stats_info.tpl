@@ -48,60 +48,75 @@
                 <p class="lead">{t}Here you can see a list of activated modules by plan{/t}</p>
 
                 <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
-                    <div class="basic modules">
-                        <h4><i class="icon-check"></i> {t}Basic{/t}</h4>
-                        {foreach $available_modules as $module}
-                            {if $module['plan'] eq Base}
-                            <div class="span4 element">
-                                <label class="inline">
-                                    {if in_array($module['id'], $instance->activated_modules)}
-                                        <i class="icon-check"></i>
-                                        <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                                    {else}
-                                        <i class="icon-check-empty"></i>
-                                        <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                                    {/if}
-                                    {$module['name']}
-                                </label>
-                            </div>
-                            {/if}
+                <div class="tabbable tabs-left">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab" data-toggle="tab">{t}Basic{/t}</a></li>
+                        {foreach $plans as $plan => $total}
+                            <li>
+                                <a href="#tab{$total@index}" data-toggle="tab">{t}{$plan}{/t} ({$total})</a>
+                            </li>
                         {/foreach}
-                    </div>
-
-                    {foreach $plans as $plan}
-                    <div class="modules">
-                        <label class="inline">
-                            <h4>
-                                <input type="checkbox" id="select_{$plan@index}">
-                                <span class="plan-title" id="{$plan}">{$plan}</span>
-                            </h4>
-                        </label>
-                        {foreach $available_modules as $module}
-                            {if $module['plan'] eq $plan}
-                            <div class="span4 element">
-                                <label class="inline">
-                                    <input type="checkbox" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}"
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab">
+                            <div class="basic modules">
+                                <h4><i class="icon-check"></i> {t}Basic{/t}</h4>
+                                {foreach $available_modules as $module}
+                                {if $module['plan'] eq Base}
+                                <div class="span4 element">
+                                    <label class="inline">
                                         {if in_array($module['id'], $instance->activated_modules)}
-                                        checked> {$module['name']} <span class="pending"
-                                            {if in_array($module['id'], $instance->changes_in_modules['upgrade'])}
-                                                style="display:inline;">({t}pending activation{/t})</span>
-                                            {else}
-                                                >({t}pending deactivation{/t})</span>
-                                            {/if}
+                                            <i class="icon-check"></i>
+                                            <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
                                         {else}
-                                        > {$module['name']} <span class="pending"
-                                            {if in_array($module['id'], $instance->changes_in_modules['downgrade'])}
-                                                style="display:inline;">({t}pending deactivation{/t})</span>
-                                            {else}
-                                                >({t}pending activation{/t})</span>
-                                            {/if}
+                                            <i class="icon-check-empty"></i>
+                                            <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
                                         {/if}
-                                </label>
+                                        {$module['name']}
+                                    </label>
+                                </div>
+                                {/if}
+                                {/foreach}
                             </div>
-                            {/if}
+                        </div>
+                        {foreach $plans as $plan => $total}
+                        <div class="tab-pane" id="tab{$total@index}">
+                            <div class="modules">
+                                <label class="inline">
+                                    <h4>
+                                        <input type="checkbox" id="select_{$total@index}">
+                                        <span class="plan-title" id="{$plan}">{$plan}</span>
+                                    </h4>
+                                </label>
+                                {foreach $available_modules as $module}
+                                    {if $module['plan'] eq $plan}
+                                    <div class="span4 element">
+                                        <label class="inline">
+                                            <input type="checkbox" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}"
+                                                {if in_array($module['id'], $instance->activated_modules)}
+                                                checked> {$module['name']} <span class="pending"
+                                                    {if is_array($instance->changes_in_modules['upgrade']) && in_array($module['id'], $instance->changes_in_modules['upgrade'])}
+                                                        style="display:inline;">({t}pending activation{/t})</span>
+                                                    {else}
+                                                        >({t}pending deactivation{/t})</span>
+                                                    {/if}
+                                                {else}
+                                                > {$module['name']} <span class="pending"
+                                                    {if is_array($instance->changes_in_modules['downgrade']) && in_array($module['id'], $instance->changes_in_modules['downgrade'])}
+                                                        style="display:inline;">({t}pending deactivation{/t})</span>
+                                                    {else}
+                                                        >({t}pending activation{/t})</span>
+                                                    {/if}
+                                                {/if}
+                                        </label>
+                                    </div>
+                                    {/if}
+                                {/foreach}
+                            </div>
+                        </div>
                         {/foreach}
                     </div>
-                    {/foreach}
+                </div>
                 </form>
                 <div class="upgrade right">
                     <button class="btn btn-large btn-success" type="submit" form="upgrade-form"

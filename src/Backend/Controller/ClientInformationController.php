@@ -56,6 +56,26 @@ class ClientInformationController extends Controller
                 ),
                 array_values($instance->changes_in_modules['downgrade'])
             );
+        } else {
+            $instance->changes_in_modules = array();
+        }
+
+        // Calculate total modules activated by plans
+        $plans = [
+            'Profesional' => 0,
+            'Silver'      => 0,
+            'Gold'        => 0,
+            'Other'       => 0
+        ];
+
+        foreach ($plans as $plan => &$total) {
+            foreach ($availableModules as $module) {
+                if ($module['plan'] == $plan &&
+                    in_array($module['id'], $instance->activated_modules)
+                ) {
+                    $total++;
+                }
+            }
         }
 
         // Set support plan name
@@ -66,7 +86,7 @@ class ClientInformationController extends Controller
             array(
                 'instance' => $instance,
                 'available_modules' => $availableModules,
-                'plans' => ['Profesional', 'Silver', 'Gold', 'Other'],
+                'plans' => $plans,
                 'has_changes' => $hasChanges,
             )
         );
