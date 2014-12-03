@@ -30,6 +30,9 @@ instances:
         activated_modules:
             type: text
             options: { default: null, length: 65532, notnull: false }
+        changes_in_modules:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         activated:
             type: boolean
             options: { default: null }
@@ -87,6 +90,9 @@ instances:
         users:
             type: integer
             options: { default: 0, unsigned: true }
+        support_plan:
+            type: string
+            options: { default: 0, length: 100 }
     index:
         -
             name: PRIMARY
