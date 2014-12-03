@@ -775,7 +775,8 @@ div.utilities-conf input[type="text"]{
 .notification-messages a {
   position:relative;
 }
-.global-nav .help a {
+.global-nav .help a,
+.global-nav .instance-stats a {
   color:White !important;
 }
 .notification-messages .icon {
@@ -3599,3 +3600,31 @@ border-bottom-left-radius: 2px;
         font-size:1.4em;
         margin:0 10px;
     }
+
+/* =============================================================================
+    Client information and stats page
+   ========================================================================== */
+#info-page {margin-bottom: 30px;}
+#info-page .modules {display: inline-block;padding:15px 0;border: 1px solid #ddd;border-radius: 10px;background-color: #f6f6f6;margin-bottom: 10px;width: 100%}
+#info-page .modules h4 {margin: 0 0 10px 15px;}
+#info-page .modules span.plan-title {vertical-align: text-top;}
+#info-page .modules span.pending {display: none;color: red;}
+#info-page .modules .span4.element {width: 455px;}
+#info-page .marketing i {padding-right: 10px;}
+#info-page label {cursor: default;}
+@media (max-width: 767px) {
+    #info-page .modules > div { margin-left: 20px;}
+}
+
+.awesome-circles {font-size:40px;border-radius:50%;height:100px;width:100px;line-height:100px;display:inline-block;color:white;background:black;text-align:center;margin-left:auto;margin-right:auto;-webkit-transition:all 0.2s linear;}
+.awesome-circles .icon {color:#ae0000;}
+.awesome-circles:hover {color:black;}
+.awesome-background-black {color:black;}
+.awesome-background-green {background:#27ae60;}
+.awesome-background-green:hover {color: #27ae60;background: rgba(39, 174, 96, 0.2);}
+.awesome-background-red {background:#e74c3c;}
+.awesome-background-red:hover {color: #e74c3c;background: rgba(231, 76, 60, 0.12);}
+.awesome-background-purple {background:#9b59b6;}
+.awesome-background-purple:hover {color: #9b59b6;background: rgba(155, 89, 182, 0.2);}
+.awesome-background-leaf-green {background:#3498db;}
+.awesome-background-leaf-green:hover {color: #3498db;background: rgba(52, 152, 219, 0.2);}

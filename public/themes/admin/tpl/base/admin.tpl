@@ -85,6 +85,11 @@
                         </li>
                         {/if}
                         {/if}
+                        <li class="instance-stats">
+                            <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                                <span class="icon-large icon-dashboard"></span> {t}Stats{/t}
+                            </a>
+                        </li>
                         <li class="help dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="icon-large icon-question-sign"></span> {t}Help{/t}
