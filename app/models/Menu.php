@@ -411,7 +411,7 @@ class Menu
         $translations = array();
 
         // Check if id and $items are not empty
-        if (empty($id)) {
+        if (empty($id) || empty($items)) {
             return false;
         }
 
