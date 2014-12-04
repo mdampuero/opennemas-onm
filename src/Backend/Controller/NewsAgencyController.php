@@ -1057,7 +1057,7 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $commentsConfig = s::get('comments_config');
+        $commentsConfig = (s::get('comments_config')) ? s::get('comments_config') : array();
 
         $values = array(
             'title'          => $element->getTitle(),
