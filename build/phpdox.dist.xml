@@ -78,9 +78,9 @@
                 </source>
 
                 <!-- PHPUnit -->
-                <source type="phpunit">
+                <!-- <source type="phpunit">
                     <file name="junit.xml" />
-                </source>
+                </source> -->
 
                 <!-- PHPCs -->
                 <source type="phpcs">

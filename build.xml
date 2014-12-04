@@ -20,10 +20,10 @@
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
     <pathconvert pathsep="," property="project.paths.php.comma-separated" refid="project.paths.php"/>
 
-    <target name="build" depends="prepare,composer,lint,phpunit-ci,tools-parallel"/>
+    <target name="build" depends="prepare,lint,phpunit-ci,tools-parallel"/>
 
     <target name="build-sequential"
-            depends="prepare,composer,lint,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
+            depends="prepare,lint,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="4">
@@ -185,8 +185,8 @@
             <arg value="${basedir}/app/phpunit.xml.dist" />
             <arg line="--coverage-html" />
             <arg value="${basedir}/build/coverage" />
-            <arg line="--coverage-xml" />
-            <arg value="${basedir}/build/logs/coverage/xml" />
+            <!-- <arg line="\-\-coverage-xml" /> -->
+            <!-- <arg value="${basedir}/build/logs/coverage/xml" /> -->
             <arg line="--coverage-clover" />
             <arg value="${basedir}/build/logs/clover.xml" />
 
