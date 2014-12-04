@@ -222,15 +222,14 @@
                     <h3 href="#frontpages">{t}Modules{/t}</h3>
                     <div id="frontpages">
                         <ul id='availablePages' class="elementsContainer">
-                            {foreach $pages as $key=>$value}
-                                <li id="page_{$value[link]}"
-                                    data-item-id="{$value[link]}"
 
-                                    data-title="{$value[title]}"
-                                    data-link="{$value[link]}/"
+                            {foreach $pages as $key=>$value}
+                                <li id="page_{$value['link']}"
+                                    data-item-id="{$value['link']}"
+                                    data-title="{$value['title']}"
+                                    data-link="{$value['link']}"
                                     class="drag-category"
                                     data-type="internal"
-
                                     pk_menu="">
                                     <div>
                                         <span class="type">{t}Module{/t}:</span>
