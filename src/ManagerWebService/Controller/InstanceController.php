@@ -490,6 +490,10 @@ class InstanceController extends Controller
             );
         }
 
+        if (!$activated) {
+            dispatchEventWithParams('instance.disable', array('instance' => $instance->internal_name));
+        }
+
         return new JsonResponse(
             array(
                 'success'   => $success,
