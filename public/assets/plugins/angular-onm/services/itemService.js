@@ -287,6 +287,18 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             data.criteria[name] = filters.criteria[name];
         }
 
+        // Merge data with filters from URL
+        if (filters.orderBy) {
+            data.orderBy = filters.orderBy;
+        }
+
+        if (filters.page) {
+            data.page = filters.page;
+        }
+
+        if (filters.epp) {
+            data.epp = filters.epp;
+        }
 
         return $http.post(url, data).success(function (response) {
             return response;

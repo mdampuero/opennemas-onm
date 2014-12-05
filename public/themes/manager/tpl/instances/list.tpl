@@ -88,7 +88,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks hidden-xs">
-                    <select class="xmedium" ng-model="epp">
+                    <select class="xmedium" ng-model="pagination.epp">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -100,7 +100,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; page = 1; epp = 25; refresh()">
+                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
                         <i class="fa fa-trash-o fa-lg"></i>
                     </button>
                 </li>
@@ -121,11 +121,10 @@
                 </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
-                        <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1" type="button">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <!-- <input class="form-control hidden" type="text" value="[% page + '/' + pages %]" readonly> -->
-                        <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages" type="button">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
                             <i class="fa fa-chevron-right"></i>
                         </button>
                     </div>
@@ -535,10 +534,10 @@
         </div>
         <div class="grid-footer clearfix">
             <div class="pull-left pagination-info" ng-if="instances.length > 0">
-                {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
+                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
             </div>
             <div class="pull-right" ng-if="instances.length > 0">
-                <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="$parent.$parent.pages"></pagination>
+                <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" num-pages="pagination.pages"></pagination>
             </div>
         </div>
     </div>
