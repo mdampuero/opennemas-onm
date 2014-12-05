@@ -22,12 +22,14 @@ class HooksSubscriber implements EventSubscriberInterface
     /**
      * Initializes the object
      *
-     * @param AbstractCache   $cache  The cache service.
-     * @param LoggerInterface $logger The logger service.
+     * @param Container       $container The service container.
+     * @param AbstractCache   $cache     The cache service.
+     * @param LoggerInterface $logger    The logger service.
      */
-    public function __construct($cache, $logger)
+    public function __construct($container, $cache, $logger)
     {
         $this->cacheHandler = $cache;
+        $this->container    = $container;
         $this->logger       = $logger;
     }
 
@@ -100,6 +102,10 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'frontpage.pick_layout' => [
                 ['mockHookAction', 0],
+            ],
+            // Instance hooks
+            'instance.disable' => [
+                ['sendVarnishRequestCleanerWithInternalName', 5],
             ],
             // Menu hooks
             'menu.create' => [
@@ -242,15 +248,13 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function sendVarnishRequestCleaner(Event $event)
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-        if (!$container->hasParameter('varnish')) {
+        if (!$this->container->hasParameter('varnish')) {
             return false;
         }
 
-        $instanceName = getService('instance_manager')->current_instance->internal_name;
+        $instanceName = $this->container->get('instance_manager')->current_instance->internal_name;
 
-        $kernel->getContainer()->get('varnish_ban_message_exchanger')
+        $this->container->get('varnish_ban_message_exchanger')
             ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
 
         // $content = $event->getArgument('content');
@@ -260,6 +264,23 @@ class HooksSubscriber implements EventSubscriberInterface
         //     ->addBanMessage($baseRequest."obj.http.x-tags ~ {$content->id}")
         //     ->addBanMessage($baseRequest.'obj.http.x-tags ~ sitemap')
         //     ->addBanMessage('obj.http.x-tags ~ rss')
+    }
+
+    /**
+     * Queues a varnish ban request.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function sendVarnishRequestCleanerWithInternalName(Event $event)
+    {
+        if (!$this->container->hasParameter('varnish')) {
+            return false;
+        }
+
+        $instanceName = $event->getArgument('instance');
+
+        $this->container->get('varnish_ban_message_exchanger')
+            ->addBanMessage("obj.http.x-instance ~ {$instanceName}");
     }
 
     /**
@@ -424,7 +445,7 @@ class HooksSubscriber implements EventSubscriberInterface
             } elseif ($category == 'opinion') {
                 $categoryName = 'opinion';
             } else {
-                $categoryManager = getService('category_repository');
+                $categoryManager = $this->container->get('category_repository');
 
                 if (is_object($category)) {
                     $categoryName = $category->name;
