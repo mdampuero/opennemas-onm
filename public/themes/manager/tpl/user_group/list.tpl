@@ -92,10 +92,10 @@
             <ul class="nav quick-section pull-right">
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
-                        <button class="btn btn-white" ng-click="page = page - 1" ng-disabled="page - 1 < 1" type="button">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <button class="btn btn-white" ng-click="page = page + 1" ng-disabled="page == pages" type="button">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
                             <i class="fa fa-chevron-right"></i>
                         </button>
                     </div>
@@ -108,60 +108,59 @@
     <div class="grid simple">
         <div class="grid-body no-padding">
             <div class="grid-overlay" ng-if="loading"></div>
-            <table class="table no-margin">
-                <thead>
-                    <tr>
-                        <th style="width:15px;">
-                            <div class="checkbox checkbox-default">
-                                <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
-                                <label for="select-all"></label>
-                            </div>
-                        </th>
-                        <th class="pointer" ng-click="sort('name')">
-                            {t}Group name{/t}
-                            <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-if="groups.length == 0">
-                        <td class="text-center" colspan="10">
-                            {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
-                        </td>
-                    </tr>
-                    <tr ng-repeat="group in groups" ng-class="{ row_selected: isSelected(group.id) }">
-                        <td>
-                            <div class="checkbox check-default">
-                                <input id="checkbox[%$index%]" checklist-model="selected.groups" checklist-value="group.id" type="checkbox">
-                                <label for="checkbox[%$index%]"></label>
-                            </div>
-                        </td>
-                        <td>
-                            [% group.name %]
-                            <div class="listing-inline-actions">
-                                <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
-                                    <i class="fa fa-pencil"></i>{t}Edit{/t}
-                                </a>
-                                <button class="link link-danger" ng-click="delete(group)" type="button">
-                                    <i class="fa fa-trash-o"></i>{t}Delete{/t}
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot ng-if="groups.length > 0">
-                    <tr>
-                        <td colspan="3">
-                            <div class="pagination-info pull-left" ng-if="groups.length > 0">
-                                {t}Showing{/t} [% ((page - 1) * epp > 0) ? (page - 1) * epp : 1 %]-[% (page * epp) < total ? page * epp : total %] {t}of{/t} [% total|number %]
-                            </div>
-                            <div class="pull-right" ng-if="groups.length > 0">
-                                <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="$parent.$parent.epp" ng-model="$parent.$parent.page" total-items="$parent.$parent.total" num-pages="$parent.$parent.pages"></pagination>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                <div class="table-wrapper">
+                    <table class="table table-hover no-margin">
+                        <thead>
+                            <tr>
+                                <th style="width:15px;">
+                                    <div class="checkbox checkbox-default">
+                                        <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                        <label for="select-all"></label>
+                                    </div>
+                                </th>
+                                <th class="pointer" ng-click="sort('name')">
+                                    {t}Group name{/t}
+                                    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="groups.length == 0">
+                                <td class="text-center" colspan="10">
+                                    {t escape=off}There is no available groups yet or <br/>your search don't match your criteria{/t}
+                                </td>
+                            </tr>
+                            <tr ng-repeat="group in groups" ng-class="{ row_selected: isSelected(group.id) }">
+                                <td>
+                                    <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.groups" checklist-value="group.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    [% group.name %]
+                                    <div class="listing-inline-actions">
+                                        <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
+                                            <i class="fa fa-pencil"></i>{t}Edit{/t}
+                                        </a>
+                                        <button class="link link-danger" ng-click="delete(group)" type="button">
+                                            <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="grid-footer clearfix">
+                <div class="pull-left pagination-info" ng-if="groups.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
+                </div>
+                <div class="pull-right" ng-if="groups.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+                </div>
+            </div>
         </div>
     </div>
 </div>

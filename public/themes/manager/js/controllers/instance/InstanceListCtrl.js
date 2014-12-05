@@ -36,13 +36,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         };
 
         /**
-         * The number of elements per page
-         *
-         * @type integer
-         */
-        $scope.epp  = 25;
-
-        /**
          * The list of elements.
          *
          * @type Object
@@ -72,18 +65,15 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.orderUI = {};
 
         /**
-         * The current page
+         * The current pagination status.
          *
-         * @type integer
+         * @type Object
          */
-        $scope.page = 1;
-
-        /**
-         * The number of total items.
-         *
-         * @type integer
-         */
-        $scope.total = data.total;
+        $scope.pagination = {
+            epp:   data.epp ? parseInt(data.epp) : 25,
+            page:  data.page ? parseInt(data.page) : 1,
+            total: data.total
+        }
 
         /**
          * Default join operator for filters.
@@ -231,8 +221,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                if ($scope.page != 1) {
-                    $scope.page = 1;
+                if ($scope.pagination.page != 1) {
+                    $scope.pagination.page = 1;
                 } else {
                     list();
                 }
@@ -333,7 +323,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            $scope.page = 1;
+            $scope.pagination.page = 1;
         };
 
         /**
@@ -351,14 +341,14 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * Marks variables to delete for garbage collector;
          */
         $scope.$on('$destroy', function() {
-            $scope.criteria  = null;
-            $scope.columns   = null;
-            $scope.epp       = null;
-            $scope.instances = null;
-            $scope.selected  = null;
-            $scope.orderBy   = null;
-            $scope.page      = null;
-            $scope.total     = null;
+            $scope.criteria         = null;
+            $scope.columns          = null;
+            $scope.pagination.epp   = null;
+            $scope.instances        = null;
+            $scope.selected         = null;
+            $scope.orderBy          = null;
+            $scope.pagination.page  = null;
+            $scope.pagination.total = null;
         });
 
         /**
@@ -367,7 +357,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @param array newValues The new values
          * @param array oldValues The old values
          */
-        $scope.$watch('[orderBy, epp, page]', function(newValues, oldValues) {
+        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
+            console.log(newValues, oldValues)
             if (newValues !== oldValues) {
                 list();
             }
@@ -409,18 +400,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
             var data = {
                 criteria: cleaned,
-                orderBy: $scope.orderBy,
-                epp: $scope.epp,
-                page: $scope.page
+                orderBy:  $scope.orderBy,
+                epp:      $scope.pagination.epp,
+                page:     $scope.pagination.page
             };
 
             itemService.encodeFilters($scope.criteria, $scope.orderBy,
-                $scope.epp, $scope.page, $scope.union);
+                $scope.pagination.epp, $scope.pagination.page, $scope.union);
 
             itemService.list('manager_ws_instances_list', data).then(
                 function (response) {
-                    $scope.instances = response.data.results;
-                    $scope.total = response.data.total;
+                    $scope.instances        = response.data.results;
+                    $scope.pagination.total = response.data.total;
 
                     $scope.loading = 0;
 
