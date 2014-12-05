@@ -38,13 +38,14 @@ class ClientInformationController extends Controller
     {
         // Fetch instance information
         $instance = $this->container->get('instance_manager')->current_instance;
-
         // Get all modules
         $availableModules = mm::getAvailableModulesGrouped();
 
         // Process activated modules with changes
         $hasChanges = false;
-        if (is_array($instance->changes_in_modules)) {
+        if (is_array($instance->changes_in_modules)
+            && !empty($instance->changes_in_modules)
+        ) {
             $hasChanges = (
                 count($instance->changes_in_modules['upgrade']) > 0 ||
                 count($instance->changes_in_modules['downgrade']) > 0
@@ -79,7 +80,9 @@ class ClientInformationController extends Controller
         }
 
         // Set support plan name
-        $instance->support_plan = mm::getAvailableModules()[$instance->support_plan];
+        if ($instance->support_plan) {
+            $instance->support_plan = mm::getAvailableModules()[$instance->support_plan];
+        }
 
         return $this->render(
             'stats/stats_info.tpl',
