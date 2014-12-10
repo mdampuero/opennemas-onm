@@ -455,7 +455,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 }
             }
 
-            $this->cacheHandler->delete('custom_css|' . $categoryName);
+            $this->cacheHandler->delete('css|global|' . $categoryName);
         }
     }
 
