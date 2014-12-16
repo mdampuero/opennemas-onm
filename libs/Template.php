@@ -21,13 +21,9 @@ class Template extends Smarty
     public $css_includes        = array( 'head' => array(), 'footer' => array() );
     public $metatags            = array();
     public $templateBaseDir;
-    public $allow_php_tag;
-    public $container           = null;
+    // public $container           = null;
     public $filters             = array();
     public $baseCachePath       = '';
-
-    public $relative_path = null;
-    static public $registry = array();
 
     /**
      * Initializes the Template class
@@ -109,8 +105,8 @@ class Template extends Smarty
             mkdir($this->baseCachePath.'/smarty', 0775, true);
         }
 
-        $cachePath = $this->baseCachePath.'/smarty/config/';
-        $cacheFilePath = $cachePath.'cache.conf';
+        $cachePath          = $this->baseCachePath.'/smarty/config/';
+        $cacheFilePath      = $cachePath.'cache.conf';
         $templateConfigPath = $this->templateBaseDir.'/config';
 
         // If config dir exists copy it to cache directory to make instance aware.
@@ -123,7 +119,8 @@ class Template extends Smarty
             );
         }
 
-        $this->setConfigDir(realpath($this->baseCachePath.'/smarty/config'));
+
+        $this->setConfigDir(realpath($this->baseCachePath).'/smarty/config');
 
         $directory = COMMON_CACHE_PATH.'/smarty/compile-'.$this->themeName;
         if (!is_dir($directory)) {
@@ -172,7 +169,6 @@ class Template extends Smarty
         $this->common_asset_dir = SITE_URL.'assets/';
 
         $this->caching          = false;
-        $this->allow_php_tag    = true;
 
         $this->assign(
             'params',
