@@ -62,6 +62,7 @@
         "frandieguez/panorama-php": "1.0.*",
         "friendsofsymfony/jsrouting-bundle": "@stable",
         "imagine/imagine": "0.6.*",
+        "luracast/restler": "3.0.0",
         "paypal/adaptivepayments-sdk-php": "v3.8.107",
         "paypal/merchant-sdk-php": "v3.8.107",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",

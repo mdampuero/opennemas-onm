@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f2625ffd252c2f408ac85aa749caed92",
+    "hash": "2b7e9d6d3722b9a6c45fe8e506987b8c",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -47,7 +47,7 @@
                     "homepage": "http://www.lickmychip.com/"
                 },
                 {
-                    "name": "Nicolas Le Goff",
+                    "name": "nlegoff",
                     "email": "legoff.n@gmail.com"
                 },
                 {
@@ -1487,6 +1487,85 @@
             "time": "2014-09-15 12:42:36"
         },
         {
+            "name": "luracast/restler",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Luracast/Restler.git",
+                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "reference": "e2b0b8e1974f5584b37a567f4cc127578ce473c5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "conflict": {
+                "restler/framework": "3.*"
+            },
+            "require-dev": {
+                "behat/behat": "2.5.*@stable",
+                "bshaffer/oauth2-server-php": "v1.0",
+                "guzzle/guzzle": "~3.1.1",
+                "illuminate/view": "4.2.*",
+                "luracast/explorer": "*",
+                "mustache/mustache": "dev-master",
+                "rodneyrehm/plist": "dev-master",
+                "symfony/yaml": "*",
+                "twig/twig": "v1.13.0",
+                "zendframework/zendamf": "dev-master"
+            },
+            "suggest": {
+                "behat/behat": "Behaviour driven development testing framework (see require-dev for details)",
+                "bshaffer/oauth2-server-php": "Restler can provide OAuth2 authentication using this library (see require-dev for details)",
+                "guzzle/guzzle": "RESTful api HTTP client framework (see require-dev for details)",
+                "illuminate/view": "Restler can render HtmlView using laravel blade templates (see require-dev for details)",
+                "luracast/explorer": "Restler's very own api explorer (see require-dev for details)",
+                "mustache/mustache": "Restler can render HtmlView using mustache/handlebar templates (see require-dev for details)",
+                "rodneyrehm/plist": "Restler supports tho Apple plist xml format (see require-dev for details)",
+                "symfony/yaml": "Restler can produce content in yaml format as well (see require-dev for details)",
+                "twig/twig": "Restler can render HtmlView using twig templates (see require-dev for details)",
+                "zendframework/zendamf": "Support for the amf document format  (see require-dev for details)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "v3": "v3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Luracast\\Restler": "vendor/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Luracast",
+                    "email": "arul@luracast.com"
+                },
+                {
+                    "name": "Nick nickl- Lombard",
+                    "email": "github@jigsoft.co.za"
+                }
+            ],
+            "description": "Restler is a simple and effective multi-format Web API Server framework written in PHP. Just deal with your business logic in php, Restler will take care of the REST!",
+            "homepage": "http://luracast.com/products/restler/",
+            "keywords": [
+                "api",
+                "framework",
+                "rest",
+                "server"
+            ],
+            "time": "2014-12-08 14:29:26"
+        },
+        {
             "name": "monolog/monolog",
             "version": "1.11.0",
             "source": {
@@ -2213,6 +2292,55 @@
                 "minification"
             ],
             "time": "2014-10-15 12:03:38"
+        },
+        {
+            "name": "symfony/icu",
+            "version": "v1.2.2",
+            "target-dir": "Symfony/Component/Icu",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Icu.git",
+                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
+                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "lib-icu": ">=4.4",
+                "php": ">=5.3.3",
+                "symfony/intl": "~2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Icu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Bernhard Schussek",
+                    "email": "bschussek@gmail.com"
+                }
+            ],
+            "description": "Contains an excerpt of the ICU data and classes to load it.",
+            "homepage": "http://symfony.com",
+            "keywords": [
+                "icu",
+                "intl"
+            ],
+            "time": "2014-07-25 09:58:17"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -3724,158 +3852,6 @@
             "time": "2014-12-04 22:32:15"
         },
         {
-            "name": "symfony/config",
-            "version": "v2.5.8",
-            "target-dir": "Symfony/Component/Config",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Config.git",
-                "reference": "92f0b4c625b8c42d394b53f879d2795d84bb8c4f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/92f0b4c625b8c42d394b53f879d2795d84bb8c4f",
-                "reference": "92f0b4c625b8c42d394b53f879d2795d84bb8c4f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "symfony/filesystem": "~2.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Config\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Config Component",
-            "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:15:53"
-        },
-        {
-            "name": "symfony/dependency-injection",
-            "version": "v2.5.8",
-            "target-dir": "Symfony/Component/DependencyInjection",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "b4afda3c24867a17f93237ac1fcce917cc9d7695"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/b4afda3c24867a17f93237ac1fcce917cc9d7695",
-                "reference": "b4afda3c24867a17f93237ac1fcce917cc9d7695",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "symfony/config": "~2.2",
-                "symfony/expression-language": "~2.4",
-                "symfony/yaml": "~2.0"
-            },
-            "suggest": {
-                "symfony/config": "",
-                "symfony/proxy-manager-bridge": "Generate service proxies to lazy load them",
-                "symfony/yaml": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\DependencyInjection\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony DependencyInjection Component",
-            "homepage": "http://symfony.com",
-            "time": "2014-12-02 21:48:32"
-        },
-        {
-            "name": "symfony/filesystem",
-            "version": "v2.5.8",
-            "target-dir": "Symfony/Component/Filesystem",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "e5fc05a3a1dbb4ea0bed80fe7bd21ba3cab88c42"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/e5fc05a3a1dbb4ea0bed80fe7bd21ba3cab88c42",
-                "reference": "e5fc05a3a1dbb4ea0bed80fe7bd21ba3cab88c42",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Filesystem\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Filesystem Component",
-            "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:15:53"
-        },
-        {
             "name": "theseer/directoryscanner",
             "version": "1.3.1",
             "source": {
@@ -4071,6 +4047,7 @@
         "smarty-gettext/smarty-gettext": 0
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.5.9"
     },
