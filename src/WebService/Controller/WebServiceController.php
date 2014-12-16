@@ -9,10 +9,14 @@
  **/
 namespace WebService\Controller;
 
+use Luracast\Restler\Restler;
+use Luracast\Restler\Defaults;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
+use Restler\OnmAuth;
+
 
 /**
  * Handles the actions for the web service
@@ -28,10 +32,6 @@ class WebServiceController extends Controller
      **/
     public function defaultAction()
     {
-        require_once SITE_LIBS_PATH.'/Restler/restler.php';
-        require_once SITE_LIBS_PATH.'/Restler/xmlformat.php';
-        require_once SITE_LIBS_PATH.'/Restler/OnmAuth.php';
-
         // Change the request uri to trick Restler
         $_SERVER['REQUEST_URI'] = str_replace('/ws', '', $_SERVER['REQUEST_URI']);
 
@@ -39,7 +39,9 @@ class WebServiceController extends Controller
             $_SERVER['REQUEST_URI'] = '/';
         }
 
-        $r = new \Restler();
+        Defaults::$smartAutoRouting = false;
+
+        $r = new Restler();
         $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
         $r->addAPIClass('WebService\Handlers\Ads');
