@@ -281,7 +281,7 @@ class CategoriesController extends Controller
 
         /* Limpiar la cache de portada de todas las categorias */
         if ($data['inmenu'] == 1) {
-            \Content::refreshFrontpageForAllCategories();
+            dispatchEventWithParams('category.clean_all');
         }
 
         $continue = $request->request->getDigits('continue', 0);
@@ -394,8 +394,8 @@ class CategoriesController extends Controller
 
             getService('cache')->delete(CACHE_PREFIX.'_content_categories');
 
-            // Limpiar la cache de portada de todas las categorias
-            // $refresh = Content::refreshFrontpageForAllCategories();
+            // Clean cache for all category frontpages
+            // dispatchEventWithParams('category.clean_all');
 
             m::add(sprintf(_('Successfully changed availability for category with id "%d"'), $id), m::SUCCESS);
         }
