@@ -68,7 +68,8 @@
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
         "hwi/oauth-bundle": "0.3.*@dev",
         "smarty/smarty" : "3.1.21",
-        "smarty-gettext/smarty-gettext": "@stable"
+        "smarty-gettext/smarty-gettext": "@stable",
+        "lexik/jwt-authentication-bundle": "@stable"
     },
     "scripts": {
         "post-root-package-install": [
