@@ -122,73 +122,75 @@
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
-    <div class="container login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
-        <div class="row login-container column-seperation">
-            <div class="col-md-5 col-md-offset-1">
-                <h2>{t}Opennemas manager{/t}</h2>
-                <p>{t}Use manager account to sign in.{/t}<br>
-                <br>
-                <!--
-                <button class="btn btn-block btn-info col-md-8" type="button">
-                    <span class="pull-left"><i class="icon-facebook"></i></span>
-                    <span class="bold">Login with Facebook</span> </button>
-                <button class="btn btn-block btn-success col-md-8" type="button">
-                    <span class="pull-left"><i class="icon-twitter"></i></span>
-                    <span class="bold">Login with Twitter</span>
-                </button>
-                -->
-            </div>
-            <div class="col-md-5 "><br>
-                <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
-                    <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                    <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
-                    <div class="row">
-                        <div class="form-group col-md-10">
-                            <label class="form-label">{t}Username{/t}</label>
-                            <div class="controls">
-                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-10">
-                            <label class="form-label">{t}Password{/t}</label>
-                            <span class="help"></span>
-                            <div class="controls">
-                                <div class="input-with-icon right">
-                                    <i class=""></i>
-                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+    <div class="login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
+        <div class="container">
+            <div class="row login-container column-seperation">
+                <div class="col-md-5 col-md-offset-1">
+                    <h2>{t}Opennemas manager{/t}</h2>
+                    <p>{t}Use manager account to sign in.{/t}<br>
+                    <br>
+                    <!--
+                    <button class="btn btn-block btn-info col-md-8" type="button">
+                        <span class="pull-left"><i class="icon-facebook"></i></span>
+                        <span class="bold">Login with Facebook</span> </button>
+                    <button class="btn btn-block btn-success col-md-8" type="button">
+                        <span class="pull-left"><i class="icon-twitter"></i></span>
+                        <span class="bold">Login with Twitter</span>
+                    </button>
+                    -->
+                </div>
+                <div class="col-md-5 "><br>
+                    <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
+                        <!-- Hack to allow web browsers to remember credentials with AngularJS -->
+                        <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="form-label">{t}Username{/t}</label>
+                                <div class="controls">
+                                    <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" ng-if="attempts > 2">
-                        <div class="form-group col-md-10">
-                            <label class="form-label"></label>
-                            <div class="controls">
-                                <div class="control-group clearfix">
-                                    <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="form-label">{t}Password{/t}</label>
+                                <span class="help"></span>
+                                <div class="controls">
+                                    <div class="input-with-icon right">
+                                        <i class=""></i>
+                                        <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group col-md-10">
-                          <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
-                              [% message.text %]
+                        <div class="row" ng-if="attempts > 2">
+                            <div class="form-group col-md-10">
+                                <label class="form-label"></label>
+                                <div class="controls">
+                                    <div class="control-group clearfix">
+                                        <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-md-10">
+                              <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
+                                  [% message.text %]
+                              </div>
                           </div>
-                      </div>
-                    </div>
-                    <input type="hidden" name="_referer" value="{$referer}">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
-                              <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
-                              {t}Login{/t}
-                            </button>
                         </div>
-                    </div>
-                </form>
+                        <input type="hidden" name="_referer" value="{$referer}">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
+                                  <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
+                                  {t}Login{/t}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
