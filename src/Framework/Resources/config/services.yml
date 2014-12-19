@@ -175,3 +175,8 @@ services:
 
     authentication_entry_point:
         class: Framework\Security\AuthenticationEntryPoint
+
+    onm.event.authentication_success_listener:
+        class: Framework\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
