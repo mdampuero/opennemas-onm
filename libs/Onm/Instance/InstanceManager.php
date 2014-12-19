@@ -509,7 +509,11 @@ class InstanceManager extends BaseManager
                         $instance->domains[$k] = trim($v);
                     }
                 } else {
-                    $instance->{$key} = unserialize($value);
+                    $instance->{$key} = @unserialize($value);
+
+                    if (!$instance->{$key}) {
+                        $instance->{$key} = array();
+                    }
                 }
             } else {
                 $instance->{$key} = $value;
