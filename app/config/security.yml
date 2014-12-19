@@ -24,7 +24,7 @@ security:
             pattern:  ^/admin/(login$|connect)
             security: false
 
-        manager_login:
+        manager:
             pattern:  ^/manager$
             security: false
 
@@ -78,49 +78,24 @@ security:
                 oauth_user_provider:
                     service: onm_oauth_user_provider
 
-        # manager:
-        #     pattern:    ^/manager/*
-        #     form_login:
-        #         check_path:                     manager_login_processform
-        #         login_path:                     manager_login_form
-        #         always_use_default_target_path: false
-        #         default_target_path:            manager_welcome
-        #         target_path_parameter:          _referer
-        #         use_referer:                    true
-        #         success_handler:                login_success_handler
-        #     logout:
-        #         path:   manager_logout
-        #         target: manager_login_form
+        manager_ws_login:
+            pattern:  ^/managerws/(login|check)
+            stateless: true
+            anonymous: true
+            form_login:
+                check_path: /managerws/check
+                require_previous_session: false
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                provider: chain_provider
 
         manager_ws:
-            entry_point: authentication_entry_point
-            pattern:    ^/managerws/*
-            form_login:
-                check_path:                     manager_ws_auth_check
-                login_path:                     manager_ws_auth_login
-                always_use_default_target_path: false
-                default_target_path:            manager_ws_welcome
-                target_path_parameter:          _referer
-                use_referer:                    true
-                success_handler:                manager_ws_login_success_handler
-            logout:
-                path:   manager_ws_auth_logout
-                target: manager_ws_auth_login
-
-        manager_ws_check_user:
-            pattern:  ^/managerws/check-user$
-            anonymous: ~
-            form_login:
-                check_path:                     manager_ws_auth_check
-                login_path:                     manager_ws_auth_login
-                always_use_default_target_path: false
-                default_target_path:            manager_ws_welcome
-                target_path_parameter:          _referer
-                use_referer:                    true
-                success_handler:                manager_ws_login_success_handler
-            logout:
-                path:   manager_ws_auth_logout
-                target: manager_ws_auth_login
+            pattern:   ^/managerws
+            stateless: true
+            lexik_jwt:
+                authorization_header:
+                    enabled: true
+                    prefix:  Bearer
 
         frontend:
             pattern:    ^/*
@@ -140,6 +115,6 @@ security:
     access_control:
         - { path: ^/admin/(login$|connect), roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/*, roles: [ ROLE_BACKEND ] }
-        - { path: ^/managerws/check-user, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, ROLE_MASTER ] }
-        - { path: ^/managerws/*, roles: [ ROLE_MASTER ] }
+        - { path: ^/managerws/(login|check), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/managerws, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
