@@ -131,3 +131,9 @@ hwi_oauth:
             type:          twitter
             client_id:     %api.twitter.client_id%
             client_secret: %api.twitter.client_secret%
+
+lexik_jwt_authentication:
+    private_key_path: %kernel.root_dir%/jwt/private.pem   # ssh private key path
+    public_key_path:  %kernel.root_dir%/jwt/public.pem    # ssh public key path
+    pass_phrase:      %jwt.pass_phrase%
+    token_ttl:        %session.gc_maxlifetime%
