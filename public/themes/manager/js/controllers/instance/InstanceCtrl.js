@@ -192,8 +192,8 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             itemService.update('manager_ws_instance_update', $scope.instance.id,
                 $scope.instance).then(function (response) {
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
                     });
 
                     $scope.saving = 0;
@@ -203,7 +203,6 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         if (data.instance) {
             // Initialize instance
             $scope.instance = data.instance;
-            $scope.instance.activated = $scope.instance.activated.toString();
         } else {
             // Select Base plan as default
             for (var i = 0; i < data.template.available_modules.length; i++) {
