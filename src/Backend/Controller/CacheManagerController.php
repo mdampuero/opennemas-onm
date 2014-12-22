@@ -42,12 +42,10 @@ class CacheManagerController extends Controller
         $this->frontpageTemplate = new \Template(TEMPLATE_USER);
 
         // Initialization of the template cache manager
-        $this->templateManager = new \TemplateCacheManager(
-            $this->frontpageTemplate->templateBaseDir,
-            $this->frontpageTemplate
-        );
-
+        $this->cacheManager = $this->get('template_cache_manager');
+        $this->cacheManager->setSmarty($this->frontpageTemplate);
     }
+
     /**
      * Lists cache files and perform searches across them
      *
@@ -63,7 +61,7 @@ class CacheManagerController extends Controller
             $this->buildFilter($request);
 
         // Get available cache files
-        $caches = $this->templateManager->scan($this->filter);
+        $caches = $this->cacheManager->scan($this->filter);
         if (!is_array($caches)) {
             $caches = array();
         }
@@ -94,12 +92,12 @@ class CacheManagerController extends Controller
         $caches = array_slice($caches, ($this->page-1)*$this->itemsPerPage, $this->itemsPerPage);
 
         // Get all the information of the available cache files
-        $caches = $this->templateManager->parseList($caches);
+        $caches = $this->cacheManager->parseList($caches);
 
         // ContentCategoryManager manager to handle categories
         $ccm = \ContentCategoryManager::get_instance();
 
-        list($pkContents, $pkAuthors) = $this->templateManager->getResources($caches);
+        list($pkContents, $pkAuthors) = $this->cacheManager->getResources($caches);
 
         // Fetch all authors and generate associated array
         $allAuthors = \User::getAllUsersAuthors();
@@ -148,7 +146,7 @@ class CacheManagerController extends Controller
 
         // Build information for frontpages
         $sections = array();
-        foreach ($this->templateManager->cacheGroups as $cacheGroup) {
+        foreach ($this->cacheManager->cacheGroups as $cacheGroup) {
             $categoryName = $ccm->getTitle($cacheGroup);
             $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
         }
@@ -207,10 +205,10 @@ class CacheManagerController extends Controller
         // delete them if not delete only one
         if (count($itemsSelected) > 0) {
             foreach ($itemsSelected as $item) {
-                $result = $this->templateManager->delete($itemsCacheIds[$item], $itemsTemplate[$item]);
+                $result = $this->cacheManager->delete($itemsCacheIds[$item], $itemsTemplate[$item]);
             }
         } elseif (is_string($itemsCacheIds)) {
-            $result = $this->templateManager->delete($itemsCacheIds, $itemsTemplate);
+            $result = $this->cacheManager->delete($itemsCacheIds, $itemsTemplate);
         }
 
         if (!$this->request->isXmlHttpRequest()) {
@@ -245,6 +243,11 @@ class CacheManagerController extends Controller
      **/
     public function configAction(Request $request)
     {
+        $configDir = $this->frontpageTemplate ->config_dir[0];
+        $configManager = $this->container->get('template_cache_config_manager')->setConfigDir(
+            $configDir
+        );
+
         if ($this->request->getMethod() == 'POST') {
             $config = array();
 
@@ -261,14 +264,23 @@ class CacheManagerController extends Controller
                     'cache_lifetime' => $cache_lifetime,
                 );
             }
+            $saved = $configManager->save($config);
 
-            $this->templateManager->saveConfig($config);
-
-            m::add(_('Cache configuration saved successfully.'), m::SUCCESS);
+            if ($saved) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Cache configuration saved successfully.')
+                );
+            } else {
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to save the cache configuration.')
+                );
+            }
 
             return $this->redirect($this->generateUrl('admin_tpl_manager_config'));
         } else {
-            $config = $this->templateManager->dumpConfig();
+            $config = $configManager->load();
 
             return $this->render(
                 'tpl_manager/config.tpl',

@@ -162,6 +162,12 @@ services:
         class: Onm\Templating\Templating
         arguments: [ @service_container ]
 
+    template_cache_manager:
+        class: Onm\Templating\Cache\Manager
+
+    template_cache_config_manager:
+        class: Onm\Templating\Cache\Config
+
     view:
         alias: onm_templating
 

@@ -113,9 +113,10 @@ class AlbumsController extends Controller
             $categoryName = $ccm->getName($request->request->get('category'));
 
             // Clean cache album home and frontpage for category
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
-            $tplManager->delete('home|1');
+            $cacheManager = $this->get('template_cache_manager');
+            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
+            $cacheManager->delete('home|1');
 
             // Return user to list if has no update acl
             if (Acl::check('ALBUM_UPDATE')) {
@@ -302,9 +303,10 @@ class AlbumsController extends Controller
             _("Album updated successfully.")
         );
 
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
-        $tplManager->delete('home|1');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
+        $cacheManager->delete('home|1');
 
         return $this->redirect(
             $this->generateUrl('admin_album_show', array('id' => $album->id))

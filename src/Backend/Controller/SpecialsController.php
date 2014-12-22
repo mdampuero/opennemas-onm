@@ -316,8 +316,10 @@ class SpecialsController extends Controller
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
+
+            $cacheManager = $this->get('template_cache_manager');
+            $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete('home|0');
         }
 
         if (!empty($result) && $result == true) {

@@ -178,9 +178,11 @@ class VideosController extends Controller
 
                 try {
                     $video->create($videoData);
-                    $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-                    $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-                    $tplManager->delete('home|1');
+
+                    $cacheManager = $this->get('template_cache_manager');
+                    $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+                    $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+                    $cacheManager->delete('home|1');
                 } catch (\Exception $e) {
                     m::add($e->getMessage());
 
@@ -195,9 +197,13 @@ class VideosController extends Controller
                     $_POST['information'] = json_decode($_POST['information'], true);
                     try {
                         $video->create($_POST);
-                        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-                        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-                        $tplManager->delete('home|1');
+
+                        // Clean cache album home and frontpage for category
+                        $cacheManager = $this->get('template_cache_manager');
+                        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+                        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+                        $cacheManager->delete('home|1');
+
                     } catch (\Exception $e) {
                         m::add($e->getMessage());
 
@@ -300,9 +306,12 @@ class VideosController extends Controller
                 }
                 m::add(_("Video updated successfully."), m::SUCCESS);
             }
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
-            $tplManager->delete('home|1');
+
+            // Clean cache home and frontpage for category
+            $cacheManager = $this->get('template_cache_manager');
+            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+            $cacheManager->delete('home|1');
 
             if ($continue) {
                 return $this->redirect(
@@ -536,10 +545,10 @@ class VideosController extends Controller
                 $pos++;
             }
 
-            // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
+            $cacheManager = $this->get('template_cache_manager');
+            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete('home|1');
         }
 
         if ($msg) {

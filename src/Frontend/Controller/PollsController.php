@@ -341,14 +341,17 @@ class PollsController extends Controller
      **/
     protected function cleanCache($categoryName, $pollId)
     {
-        $tplManager = new \TemplateCacheManager($this->view->templateBaseDir);
-        $cacheID    = $this->view->generateCacheId($categoryName, '', $pollId);
-        $tplManager->delete($cacheID, 'poll.tpl');
 
-        $cacheID = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
 
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollId);
+        $cacheManager->delete($cacheID, 'poll.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }

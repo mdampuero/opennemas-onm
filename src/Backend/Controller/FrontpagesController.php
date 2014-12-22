@@ -321,9 +321,10 @@ class FrontpagesController extends Controller
             $section = $category;
         }
 
-        $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $tcacheManager->delete($section . '|RSS');
-        $tcacheManager->delete($section . '|0');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+        $cacheManager->delete($section . '|RSS');
+        $cacheManager->delete($section . '|0');
 
         return $this->redirect($this->generateUrl('admin_frontpage_list', array('category' => $category)));
     }

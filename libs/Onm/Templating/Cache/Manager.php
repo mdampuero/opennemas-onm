@@ -10,13 +10,14 @@
  *
  * @package Core
  */
+namespace Onm\Templating\Cache;
 
 /**
  * TemplateCacheManager class manage the smarty cache.
  *
  * @package Core
  */
-class TemplateCacheManager
+class Manager
 {
     /**
      * List of cache groups parsed
@@ -49,21 +50,32 @@ class TemplateCacheManager
     /**
      * Initializes the object instance, assigns the theme dir and smarty instance
      *
-     * @param string $themeDir Path to smarty theme
      * @param Smarty $smarty   Smarty class
      *
      * @return TemplateCacheManager the object initialized
      */
-    public function __construct($themeDir, $smarty = null)
+    public function __construct($smarty = null)
     {
         if (!is_null($smarty)) {
-            $this->smarty = $smarty;
-        } else {
-            $this->smarty = new Template($themeDir);
+            $this->setSmarty($smarty);
         }
-        $this->cacheDir = $this->smarty->cache_dir;
-
     }
+
+    /**
+     * Sets the smarty object instance in the class
+     *
+     * @return Manager the object instance
+     **/
+    public function setSmarty($smarty)
+    {
+        if (!($smarty instanceof \Smarty)) {
+            throw new \Exception('Please provide an Smarty object instance');
+        }
+        $this->smarty = $smarty;
+
+        $this->cacheDir = $this->smarty->cache_dir;
+    }
+
 
     /**
      * Scans the cache directory and returns an array with all cache files
@@ -77,7 +89,7 @@ class TemplateCacheManager
     {
         $caches  = array();
         $matches = array();
-        $dirIt   = new DirectoryIterator($this->cacheDir);
+        $dirIt   = new \DirectoryIterator($this->cacheDir);
         foreach ($dirIt as $item) {
             if ($item->isDot()) {
                 continue;
@@ -160,7 +172,6 @@ class TemplateCacheManager
      */
     public function decodeProperties($properties)
     {
-
         $this->has_nocache_code = $properties['has_nocache_code'];
         $this->properties['nocache_hash'] = $properties['nocache_hash'];
         if (isset($properties['cache_lifetime'])) {
@@ -276,7 +287,7 @@ class TemplateCacheManager
      */
     public function clearGroupCache($cacheGroup)
     {
-        $this->smarty->clear_cache(null, $cacheGroup);
+        $this->smarty->clearCache(null, $cacheGroup);
     }
 
     /**
@@ -328,41 +339,6 @@ class TemplateCacheManager
     }
 
     /**
-     * Fetches an uri to generate a cache
-     *
-     * @param string $uri URI to fetch
-     *
-     * @return boolean true if the request was successfull
-     */
-    public function fetch($uri)
-    {
-        // cURL Handle
-        $ch = curl_init();
-
-        // Options
-        curl_setopt($ch, CURLOPT_URL, $uri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        curl_setopt(
-            $ch,
-            CURLOPT_USERAGENT,
-            'Mozilla/5.0 (Windows; U; Windows NT 5.1; '
-            .'pl; rv:1.9) Gecko/2008052906 Firefox/3.0'
-        );
-        ob_start();
-
-        // Exec
-        curl_exec($ch);
-        ob_end_clean();
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        return $httpCode == 200;
-    }
-
-    /**
      * Returns the list of content and author ids that a list of cache files
      * are referencing
      *
@@ -399,41 +375,5 @@ class TemplateCacheManager
         }
 
         return true;
-    }
-
-    /**
-     * Returns the parsed cache configuration file
-     *
-     * @return array the smarty cache configuration
-     **/
-    public function dumpConfig()
-    {
-        $filename = $this->smarty->config_dir[0] . 'cache.conf';
-
-        return parse_ini_file($filename, true);
-    }
-
-    /**
-     * Saves the smarty configuration to the configuration file
-     *
-     * @param array $config the configuration to save
-     *
-     * @return void
-     **/
-    public function saveConfig($config)
-    {
-        $filename = $this->smarty->config_dir[0] . 'cache.conf';
-        $fp = @fopen($filename, 'w');
-
-        if ($fp !== false) {
-            foreach ($config as $section => $entry) {
-                fputs($fp, '[' . $section . ']' . "\n");
-                fputs($fp, 'caching = ' . $entry['caching'] . "\n");
-                fputs($fp, 'cache_lifetime = '.$entry['cache_lifetime']."\n\n");
-            }
-            fclose($fp);
-        } else {
-            throw new Exception('Error open file: ' . $filename);
-        }
     }
 }
