@@ -102,3 +102,4 @@ parameters:
 
     piwik.url:   http://piwik.openhost.es
     piwik.token: b4956f6e687b28851fa8a545b6ccd85b
+    jwt.pass_phrase: 'test'
