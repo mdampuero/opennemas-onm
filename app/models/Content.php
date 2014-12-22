@@ -1526,32 +1526,6 @@ class Content
         }
     }
 
-    // TODO: move to a Cache handler
-    /**
-     * Regenerate cache files for all categories homepages.
-     *
-     * @return string Explanation for which elements were deleted
-     **/
-    public static function refreshFrontpageForAllCategories()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        $ccm = ContentCategoryManager::get_instance();
-
-        $availableCategories = $ccm->categories;
-        $output ='';
-
-        foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned successfully.");
-            $output .= sprintf($message, $category->name);
-        }
-
-        return $output;
-
-    }
-
     /**
      * Removes element with $contentPK from homepage of category.
      *

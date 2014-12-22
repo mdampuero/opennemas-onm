@@ -125,6 +125,8 @@ hwi_oauth:
             client_id:     %api.facebook.client_id%
             client_secret: %api.facebook.client_secret%
             scope:         email
+            options:
+                display: popup #dialog is optimized for popup window
         twitter:
             type:          twitter
             client_id:     %api.twitter.client_id%
