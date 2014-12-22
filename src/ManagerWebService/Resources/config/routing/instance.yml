@@ -1,57 +1,75 @@
 manager_ws_instance_create:
-    path:     /instance/create
+    path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:create }
+    requirements:
+        _method: POST
     options:
         expose: true
 
 manager_ws_instance_delete:
-    path:     /instance/{id}/delete
+    path:     /instances/{id}/delete
     defaults: { _controller: ManagerWebServiceBundle:Instance:delete }
     options:
         expose: true
 
 manager_ws_instance_new:
-    path:     /instance/new
+    path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:new }
+    requirements:
+        _method: OPTIONS
     options:
         expose: true
 
 manager_ws_instance_set_enabled:
-    path:     /instance/{id}/set-enabled
+    path:     /instances/{id}/set-enabled
     defaults: { _controller: ManagerWebServiceBundle:Instance:setEnabled }
+    requirements:
+        _method: POST
     options:
         expose: true
 
 manager_ws_instance_show:
-    path:     /instance/{id}/show
+    path:     /instances/{id}/show
     defaults: { _controller: ManagerWebServiceBundle:Instance:show }
+    requirements:
+        _method: GET
     options:
         expose: true
 
 manager_ws_instance_update:
-    path:     /instance/{id}/update
+    path:     /instances/{id}/update
     defaults: { _controller: ManagerWebServiceBundle:Instance:update }
-    options:
-        expose: true
-
-manager_ws_instances_delete:
-    path:     /instances/delete
-    defaults: { _controller: ManagerWebServiceBundle:Instance:deleteSelected }
+    requirements:
+        _method: PUT
     options:
         expose: true
 
 manager_ws_instances_list:
-    path:     /instances/list
+    path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:list }
+    requirements:
+        _method: GET
     options:
         expose: true
 
-manager_ws_instances_list_export:
-    path: /instance/list-export.csv
+manager_ws_instances_csv:
+    path: /instances.csv
     defaults: { _controller:  ManagerWebServiceBundle:Instance:export }
+    requirements:
+        _method: GET
+
+manager_ws_instances_delete:
+    path:     /instances/delete
+    defaults: { _controller: ManagerWebServiceBundle:Instance:deleteSelected }
+    requirements:
+        _method: DELETE
+    options:
+        expose: true
 
 manager_ws_instances_set_enabled:
     path:     /instances/set-enabled
     defaults: { _controller: ManagerWebServiceBundle:Instance:setEnabledSelected }
+    requirements:
+        _method: POST
     options:
         expose: true
