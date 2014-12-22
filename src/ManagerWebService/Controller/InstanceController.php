@@ -427,10 +427,10 @@ class InstanceController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->request->getDigits('epp', 10);
-        $page     = $request->request->getDigits('page', 1);
-        $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('orderBy') ? : array();
+        $epp      = $request->query->getDigits('epp', 10);
+        $page     = $request->query->getDigits('page', 1);
+        $criteria = $request->query->filter('criteria') ? : array();
+        $orderBy  = $request->query->filter('orderBy') ? : array();
 
         $order = array();
         foreach ($orderBy as $value) {
@@ -453,58 +453,44 @@ class InstanceController extends Controller
     }
 
     /**
-     * Toggle the availability of an instance given its id.
+     * Updates some instance properties.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */
-    public function setEnabledAction(Request $request, $id)
+    public function patchAction(Request $request, $id)
     {
-        $success  = false;
-        $activated = $request->request->getDigits('enabled');
-        $im        = $this->get('instance_manager');
-        $message   = array();
+        $im = $this->get('instance_manager');
 
-        $instance     = $im->find($id);
-        $oldActivated = $instance->activated;
-        if ($instance) {
-            try {
-                $instance->activated = $activated;
-                $im->persist($instance);
+        try {
+            $instance = $im->find($id);
+            $oldActivated = $instance->activated;
 
-                if ($oldActivated != $activated) {
-                    dispatchEventWithParams(
-                        'instance.disable',
-                        array('instance' => $instance->internal_name)
-                    );
-                }
+            foreach ($request->request->all() as $key => $value) {
+                $instance->{$key} =
+                    $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+            }
 
-                $success = true;
-                $message = array(
-                    'text' => _('Instance updated successfully.'),
-                    'type' => 'success'
-                );
-            } catch (Exception $e) {
-                $message = array(
-                    'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                    'type' => 'error'
+            $this->get('onm.validator.instance')->validate($instance);
+            $im->persist($instance);
+
+            if ($oldActivated != $instance->activated) {
+                dispatchEventWithParams(
+                    'instance.disable',
+                    array('instance' => $instance->internal_name)
                 );
             }
-        } else {
-            $message = array(
-                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type' => 'error'
-            );
-        }
 
-        return new JsonResponse(
-            array(
-                'success'   => $success,
-                'activated' => $activated,
-                'message'   => $message
-            )
-        );
+            return new JsonResponse(_('Instance saved successfully'));
+        } catch (InstanceNotFoundException $e) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the instance with id "%s"'), $id),
+                404
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -514,58 +500,67 @@ class InstanceController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function setEnabledSelectedAction(Request $request)
+    public function patchSelectedAction(Request $request)
     {
-        $messages = array();
-        $success  = false;
-        $updated  = 0;
+        $messages   = [ 'errors' => [], 'success' => [] ];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
 
-        $selected  = $request->request->get('selected', null);
-        $activated = $request->request->getDigits('enabled', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $im = $this->get('instance_manager');
-
-            foreach ($selected as $id) {
-                $instance = $im->find($id);
-                if ($instance) {
-                    try {
-                        $instance->activated = $activated;
-                        $im->persist($instance);
-                        $updated++;
-                    } catch (Exception $e) {
-                        $messages[] = array(
-                            'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                            'type' => 'error'
-                        );
-                    }
-                } else {
-                    $messages[] = array(
-                        'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                        'type' => 'error'
-                    );
-                }
-            }
-        }
-
-        if ($updated > 0) {
-            $success = true;
-
-            array_unshift(
-                $messages,
-                array(
-                    'text' => sprintf(_('%s instances updated successfully.'), $updated),
-                    'type' => 'success'
-                )
+        if (is_array($selected) && count($selected) == 0) {
+            return new JsonResponse(
+                _('Unable to find the instances for the given criteria'),
+                404
             );
         }
 
-        return new JsonResponse(
-            array(
-                'success'  => $success,
-                'messages' => $messages
-            )
-        );
+        $im = $this->get('instance_manager');
+
+        $criteria = [
+            'id' => [
+                [ 'value' => $selected, 'operator' => 'IN']
+            ]
+        ];
+
+        $instances = $im->findBy($criteria);
+
+        foreach ($instances as $instance) {
+            try {
+                $oldActivated = $instance->activated;
+
+                foreach ($request->request->all() as $key => $value) {
+                    $instance->{$key} =
+                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+                }
+
+                $this->get('onm.validator.instance')->validate($instance);
+                $im->persist($instance);
+                $updated[] = $instance->id;
+
+                if ($oldActivated != $instance->activated) {
+                    dispatchEventWithParams(
+                        'instance.disable',
+                        array('instance' => $instance->internal_name)
+                    );
+                }
+            } catch (\Exception $e) {
+                $messages['errors'][] = [
+                    'id'    => $instance->id,
+                    'error' => $e->getMessage()
+                ];
+
+                $statusCode = 207;
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages['success'] = [
+                'ids'     => $updated,
+                'message' => sprintf(_('%s instances updated successfully.'), count($updated))
+            ];
+        }
+
+        return new JsonResponse($messages, $statusCode);
     }
 
     /**
@@ -579,15 +574,24 @@ class InstanceController extends Controller
     {
         $im = $this->get('instance_manager');
 
-        $instance = $im->find($id);
-        $im->getExternalInformation($instance);
+        try {
+            $instance = $im->find($id);
+            $im->getExternalInformation($instance);
 
-        return new JsonResponse(
-            array(
-                'instance' => $instance,
-                'template' => $this->templateParams()
-            )
-        );
+            return new JsonResponse(
+                array(
+                    'instance' => $instance,
+                    'template' => $this->templateParams()
+                )
+            );
+        } catch (InstanceNotFoundException $e) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the instance with id "%s"'), $id),
+                404
+            );
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), 400);
+        }
     }
 
     /**
@@ -599,106 +603,40 @@ class InstanceController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $success = false;
-        $message = array();
-
         $im = $this->get('instance_manager');
-
-        $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
-        $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);
-
-        if (!$domains) {
-            return new JsonResponse(
-                array(
-                    'success' => false,
-                    'message' => array(
-                        'type' => 'error',
-                        'text' => _('Instance domains cannot be empty')
-                    )
-                )
-            );
-        }
-
-        $criteria = array(
-            'domains' => array()
-        );
-
-        foreach ($domains as $domain) {
-            $criteria['domains']['union'] = 'OR';
-            $criteria['domains'][] = array(
-                'value' => "^$domain|,[ ]*$domain|$domain$",
-                'operator' => 'REGEXP'
-            );
-        }
-
-        $instance = $im->findOneBy($criteria);
-
-        if ($instance && $instance->id != $id) {
-            return new JsonResponse(
-                array(
-                    'success' => false,
-                    'message' => array(
-                        'type' => 'error',
-                        'text' => _('An instance with that domain already exists')
-                    )
-                )
-            );
-        }
-
-        // Create internalName from domains
-        if (!$internalName) {
-            $internalName = explode('.', array_pop($domains));
-            $internalName = array_pop($internalName);
-        }
-
-        $internalName = strtolower($internalName);
 
         try {
             $instance = $im->find($id);
 
-            $im->checkInternalName($instance);
+            $keys = array_unique(array_merge(
+                array_keys($request->request->all()),
+                array_keys(get_object_vars($instance))
+            ));
 
-            foreach (array_keys($request->request->all()) as $key) {
-                $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
-
-
-                if (!is_null($value)) {
-                    if ($key == 'domain_expire') {
-                        $value = new \Datetime($value);
-                        $value = $value->format('Y-m-d H:i:s');
-                    } elseif ($key == 'external' && array_key_exists('last_invoice', $value)) {
-                        $value['last_invoice'] = new \Datetime($value['last_invoice']);
-                        $value['last_invoice'] = $value['last_invoice']->format('Y-m-d H:i:s');
-                    }
-
-                    $instance->{$key} = $value;
+            foreach ($keys as $key) {
+                if ($request->request->get($key)
+                    && !is_null($request->request->get($key))
+                ) {
+                    $instance->{$key} =
+                        $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+                } else {
+                    $instance->{$key} = null;
                 }
             }
 
+            $this->get('onm.validator.instance')->validate($instance);
             $im->persist($instance);
             $im->updateSettings($instance);
 
-            $success = true;
-            $message = array(
-                'type' => 'success',
-                'text' => _('Instance saved successfully')
-            );
-
+            return new JsonResponse(_('Instance saved successfully'));
         } catch (InstanceNotFoundException $e) {
-            $message = array(
-                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type' => 'error'
+            return new JsonResponse(
+                sprintf(_('Unable to find the instance with id "%s"'), $id),
+                404
             );
         } catch (\Exception $e) {
-            $message = array(
-                'text' => sprintf(_('Error while updating the instance with id "%s"'), $id),
-                'type' => 'error'
-            );
+            return new JsonResponse($e->getMessage(), 400);
         }
-
-        return new JsonResponse(
-            array('success' => $success, 'message' => $message)
-        );
     }
 
     /**
