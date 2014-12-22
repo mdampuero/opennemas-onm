@@ -29,6 +29,13 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.template = data.template;
 
         /**
+         * Copy of changed_in_modules array.
+         *
+         * @type Array
+         */
+        $scope.changed_modules = angular.copy(data.instance.changes_in_modules);
+
+        /**
          * The instance object.
          *
          * @type Object
@@ -80,6 +87,25 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             }
 
             return true;
+        }
+
+        /**
+         * Add/remove modules from changed_in_modules array.
+         *
+         * @param string  moduleId The id of the module.
+         *
+         */
+        $scope.toggleChanges = function(module) {
+            if ($scope.instance.changes_in_modules.indexOf(module.id) != -1) {
+                $scope.instance.changes_in_modules.splice(
+                    $scope.instance.changes_in_modules.indexOf(module.id),
+                    1
+                );
+            } else if ($scope.changed_modules.indexOf(module.id) != -1 &&
+                $scope.instance.changes_in_modules.indexOf(module.id) == -1
+            ) {
+                $scope.instance.changes_in_modules.push(module.id);
+            }
         }
 
         /**
@@ -215,6 +241,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
 
         $scope.$on('$destroy', function() {
             $scope.instance = null;
+            $scope.changed_modules = null;
             $scope.template = null;
             $scope.selected = null;
         })

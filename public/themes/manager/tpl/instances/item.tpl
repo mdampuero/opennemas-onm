@@ -237,8 +237,9 @@
                                 <div class="radio col-sm-6" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}">
                                     <input id="[% support.id %]" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
                                     <label for="[% support.id %]">
-                                        [% support.name %] <span class="help muted" ng-if="support.description">( [% support.description %] )</span>
+                                        [% support.name %]
                                     </label>
+                                    <span class="help muted" ng-if="support.description">( [% support.description %] )</span>
                                 </div>
                             </div>
                         </div>
@@ -269,13 +270,13 @@
                                     </label>
                                 </div>
                                 <div class="checkbox check-default col-sm-4" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
-                                    <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module.id)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
+                                    <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
                                     <label for="checkbox-[% module.id %]">
                                         [% module.name %]
-                                        <span class="text-error" ng-if="instance.changes_in_modules.upgrade[module.name]">
+                                        <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) == -1 ">
                                             ({t}pending activation{/t})
                                         </span>
-                                        <span class="text-error" ng-if="instance.changes_in_modules.downgrade[module.name]">
+                                        <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) != -1 ">
                                             ({t}pending deactivation{/t})
                                         </span>
                                     </label>
