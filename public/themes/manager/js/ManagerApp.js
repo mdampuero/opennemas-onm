@@ -9,7 +9,9 @@ angular.module('ManagerApp', [ 'ngAnimate', 'webStorageModule', 'ngRoute', 'ngTo
     }).config(function ($httpProvider) {
         // Use x-www-form-urlencoded Content-Type
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-        $httpProvider.defaults.headers.post['X-App-Version'] = appVersion;
+        $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
+
+        $httpProvider.defaults.headers.common['X-App-Version'] = appVersion;
 
         /**
         * The workhorse; converts an object to x-www-form-urlencoded serialization.
