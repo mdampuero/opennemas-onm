@@ -203,6 +203,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         if (data.instance) {
             // Initialize instance
             $scope.instance = data.instance;
+            $scope.instance.activated = $scope.instance.activated.toString();
         } else {
             // Select Base plan as default
             for (var i = 0; i < data.template.available_modules.length; i++) {
