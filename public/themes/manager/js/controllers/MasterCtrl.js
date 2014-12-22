@@ -82,8 +82,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             paginationConfig.nextText     = $filter('translate')('Next');
             paginationConfig.previousText = $filter('translate')('Previous');
-
-            $scope.isAuthenticated();
         };
 
         /**
@@ -96,20 +94,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.isActive = function(route) {
             var url = fosJsRouting.ngGenerateShort('/manager', route);
             return $location.path() == url;
-        };
-
-        /**
-         * Checks and loads an user if it is authenticated in the system.
-         */
-        $scope.isAuthenticated = function() {
-            authService.isAuthenticated('manager_ws_auth_check_user')
-                .then(function (response) {
-                    if (response.data.success) {
-                        $rootScope.$broadcast('auth-login-confirmed', response.data.user);
-                    }
-
-                    $scope.loaded = true;
-                });
         };
 
         /**
@@ -135,8 +119,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
-                    if (response.data.success) {
-                        httpInterceptor.loginConfirmed(response.data.user);
+                    if (response.status == 200) {
+                        httpInterceptor.loginConfirmed(response.data);
                         fakeLogin();
                     } else {
                         $scope.token    = response.data.token;
@@ -165,9 +149,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         };
                     },
                     success: function() {
-                        return function() {
-                            return authService.logout('manager_ws_auth_logout');
-                        };
+                        return true;
                     }
                 }
             });
@@ -180,8 +162,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         inprogress: true
                     };
 
-                    $scope.token    = response.data.token;
-                    $scope.attempts = response.data.attempts;
+                    $scope.user = {};
+
+                    webStorage.local.remove('token');
+                    webStorage.local.remove('user');
                 }
             });
         };
@@ -261,12 +245,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param Object args  The user object.
          */
         $scope.$on('auth-login-confirmed', function (event, args) {
-            $scope.user            = args;
+            $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
+            $scope.user            = args.user;
             $scope.auth.inprogress = false;
             $scope.auth.modal      = false
             $scope.auth.status     = true;
 
-            webStorage.prefix('ONM-' + $scope.user.username);
+            webStorage.local.add('token', args.token);
+            webStorage.local.add('user', args.user);
         });
 
         /**
@@ -370,5 +356,17 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $('.content').css('margin-top', margin + 'px');
             }, 1000);
         };
+
+        webStorage.prefix('ONM-');
+        if (webStorage.local.get('token') && webStorage.local.get('user')) {
+            $http.defaults.headers.common.Authorization = 'Bearer '
+                + webStorage.local.get('token');
+            $scope.user = webStorage.local.get('user');
+            $scope.loaded = true;
+        }
+
+        $scope.test = function() {
+            console.log($scope.sidebar);
+        }
     }
 ]);
