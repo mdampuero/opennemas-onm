@@ -358,7 +358,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @param array oldValues The old values
          */
         $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
-            console.log(newValues, oldValues)
             if (newValues !== oldValues) {
                 list();
             }
