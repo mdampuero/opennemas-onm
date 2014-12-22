@@ -108,7 +108,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.delete = function (route, id) {
         var url = fosJsRouting.generate(route, { id: id });
 
-        return $http.post(url).success(function (response) {
+        return $http.delete(url).success(function (response) {
             return response;
         });
     };
@@ -272,8 +272,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.list = function(route, data) {
-        var url = fosJsRouting.generate(route);
-
         // Decode filters from URL and overwrite data
         var filters = itemService.decodeFilters();
         filters.criteria = itemService.cleanFilters(filters.criteria);
@@ -300,7 +298,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             data.epp = filters.epp;
         }
 
-        return $http.post(url, data).success(function (response) {
+        var url = fosJsRouting.generate(route, data);
+
+        return $http.get(url).success(function (response) {
             return response;
         });
     };
@@ -315,7 +315,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.new = function (route) {
         var url = fosJsRouting.generate(route);
 
-        return $http.post(url).success(function (response) {
+        return $http.get(url).success(function (response) {
             return response;
         });
     };
@@ -345,11 +345,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      *
      * @return Object The response object.
      */
-    itemService.setEnabled = function (route, id, enabled) {
+    itemService.patch = function (route, id, data) {
         var url = fosJsRouting.generate(route, { id: id });
-        var data = { enabled: enabled };
-
-        return $http.post(url, data).success(function (response) {
+        return $http.patch(url, data).success(function (response) {
             return response;
         });
     };
@@ -363,11 +361,11 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      *
      * @return Object The response object.
      */
-    itemService.setEnabledSelected = function (route, selected, enabled) {
+    itemService.patchSelected = function (route, selected, enabled) {
         var url = fosJsRouting.generate(route);
-        var data = { enabled: enabled, selected: selected };
+        var data = { activated: enabled, selected: selected };
 
-        return $http.post(url, data).success(function (response) {
+        return $http.patch(url, data).success(function (response) {
             return response;
         });
     };
@@ -383,7 +381,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.show = function (route, id) {
         var url = fosJsRouting.generate(route, { id: id });
 
-        return $http.post(url).success(function (response) {
+        return $http.get(url).success(function (response) {
             return response;
         });
     };
@@ -400,7 +398,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.update = function(route, id, data) {
         var url = fosJsRouting.generate(route, { id: id });
 
-        return $http.post(url, data).success(function (response) {
+        return $http.put(url, data).success(function (response) {
             return response;
         });
     };
