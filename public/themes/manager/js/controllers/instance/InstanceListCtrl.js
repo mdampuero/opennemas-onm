@@ -250,18 +250,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.setEnabled = function(instance, enabled) {
             instance.loading = 1;
 
-            itemService.setEnabled('manager_ws_instance_set_enabled',
-                instance.id, enabled).then(function (response) {
+            itemService.patch('manager_ws_instance_patch',
+                instance.id, { activated: enabled }).then(function (response) {
                     instance.loading = 0;
 
-                    if (response.data.success) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
+
+                    if (response.status == 200) {
                         instance.activated = enabled;
                     }
-
-                    messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
-                    });
                 });
         };
 
@@ -278,25 +278,36 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
+            itemService.patchSelected('manager_ws_instances_patch_selected',
                 $scope.selected.instances, enabled).then(function (response) {
-                    if (response.data.success) {
+                    if (response.status == 200 || response.status == 207) {
+                        // Update instances changed successfully
                         for (var i = 0; i < $scope.instances.length; i++) {
                             var id = $scope.instances[i].id;
-                            if ($scope.selected.instances.indexOf(id) != -1) {
+
+                            if (response.data.success.ids.indexOf(id) != -1) {
                                 $scope.instances[i].activated = enabled;
                                 delete $scope.instances[i].loading;
                             }
                         }
-                    }
 
-                    for (var i = 0; i < response.data.messages.length; i++) {
-                        var params = {
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
-                        };
+                        // Show success message
+                        if (response.data.success.ids.length > 0)
+                        messenger.post({
+                            message: response.data.success.message,
+                            type: 'success'
+                        });
 
-                        messenger.post(params);
+                        // Show errors
+                        for (var i = 0; i < response.data.errors.length; i++) {
+                            var params = {
+                                message: response.data.error[i].message,
+                                type:    'error'
+                            };
+
+                            messenger.post(params);
+                        }
+
                     }
                 }
             );
