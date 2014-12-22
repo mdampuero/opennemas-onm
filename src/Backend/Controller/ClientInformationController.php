@@ -43,22 +43,25 @@ class ClientInformationController extends Controller
 
         // Process activated modules with changes
         $hasChanges = false;
+        $upgradeChanges = $downgradeChanges = [];
         if (is_array($instance->changes_in_modules)
             && !empty($instance->changes_in_modules)
         ) {
-            $hasChanges = (
-                count($instance->changes_in_modules['upgrade']) > 0 ||
-                count($instance->changes_in_modules['downgrade']) > 0
-            );
+
+            $upgradeChanges = array_diff($instance->changes_in_modules, $instance->activated_modules);
+            $downgradeChanges = array_diff($instance->changes_in_modules, $upgradeChanges);
+
+            $hasChanges = true;
+
             $instance->activated_modules = array_diff(
                 array_merge(
                     $instance->activated_modules,
-                    array_values($instance->changes_in_modules['upgrade'])
+                    $upgradeChanges
                 ),
-                array_values($instance->changes_in_modules['downgrade'])
+                $downgradeChanges
             );
         } else {
-            $instance->changes_in_modules = array();
+            $instance->changes_in_modules = [];
         }
 
         // Calculate total modules activated by plans
@@ -87,10 +90,12 @@ class ClientInformationController extends Controller
         return $this->render(
             'stats/stats_info.tpl',
             array(
-                'instance' => $instance,
+                'instance'          => $instance,
+                'upgrade'           => $upgradeChanges,
+                'downgrade'         => $downgradeChanges,
                 'available_modules' => $availableModules,
-                'plans' => $plans,
-                'has_changes' => $hasChanges,
+                'plans'             => $plans,
+                'has_changes'       => $hasChanges,
             )
         );
     }
@@ -132,12 +137,17 @@ class ClientInformationController extends Controller
 
         // Get hired/dismiss modules
         $modulesRequest = [
-            'upgrade' => array_diff($modules, $activatedModules),
+            'upgrade'   => array_diff($modules, $activatedModules),
             'downgrade' => array_diff($activatedModules, $modules)
         ];
 
+        $modulesReqArray = array_merge(
+            array_values($modulesRequest['upgrade']),
+            array_values($modulesRequest['downgrade'])
+        );
+
         // Update instance information with modules changes
-        $instance->changes_in_modules = serialize($modulesRequest);
+        $instance->changes_in_modules = $modulesReqArray;
 
         // Set email subject and body
         $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);

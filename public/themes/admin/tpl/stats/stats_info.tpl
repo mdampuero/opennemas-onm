@@ -95,17 +95,13 @@
                                             <input type="checkbox" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}"
                                                 {if in_array($module['id'], $instance->activated_modules)}
                                                 checked> {$module['name']} <span class="pending"
-                                                    {if is_array($instance->changes_in_modules['upgrade']) && in_array($module['id'], $instance->changes_in_modules['upgrade'])}
+                                                    {if in_array($module['id'], $upgrade)}
                                                         style="display:inline;">({t}pending activation{/t})</span>
-                                                    {else}
-                                                        >({t}pending deactivation{/t})</span>
                                                     {/if}
                                                 {else}
                                                 > {$module['name']} <span class="pending"
-                                                    {if is_array($instance->changes_in_modules['downgrade']) && in_array($module['id'], $instance->changes_in_modules['downgrade'])}
+                                                    {if in_array($module['id'], $downgrade)}
                                                         style="display:inline;">({t}pending deactivation{/t})</span>
-                                                    {else}
-                                                        >({t}pending activation{/t})</span>
                                                     {/if}
                                                 {/if}
                                         </label>
@@ -172,14 +168,18 @@ $(document).ready(function (){
         e.preventDefault();
         if (isWaiting != 1) {
             var item = $('.modules');
-            var changesArray = [];
+            var hasChanges = false;
             item.each(function(){
-                changesArray.push(
-                    $(this).find('.element input:checkbox:checked').length
-                );
+                var elem = $(this).find('.element');
+                elem.each(function(){
+                    log($(this).find('.pending').css('display'));
+                    if ($(this).find('.pending').css('display') == 'inline') {
+                        hasChanges = true;
+                    };
+                });
             });
 
-            if (checkedArray.join() == changesArray.join()) {
+            if (!hasChanges) {
                 $('.warnings-validation').html(
                     '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'+
                         '{t}You have to select at least one module to upgrade.{/t}'+
