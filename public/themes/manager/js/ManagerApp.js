@@ -10,6 +10,7 @@ angular.module('ManagerApp', [ 'ngAnimate', 'webStorageModule', 'ngRoute', 'ngTo
         // Use x-www-form-urlencoded Content-Type
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
         $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
+        $httpProvider.defaults.headers.patch['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
 
         $httpProvider.defaults.headers.common['X-App-Version'] = appVersion;
 
