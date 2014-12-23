@@ -17,7 +17,7 @@ angular.module('onm.routing', []).provider('routing', function() {
      *
      * @return string The generated route.
      *
-     * @note This routes are used in Ajax requests.
+     * @note This route is used in Ajax requests.
      */
     this.generate = function(route, params) {
         return Routing.generate(route, params);
@@ -31,7 +31,7 @@ angular.module('onm.routing', []).provider('routing', function() {
      *
      * @return string The generated route.
      *
-     * @note This routes are used directly in template.
+     * @note This route is used directly in template.
      */
     this.ngGenerate = function(route, params) {
         var url = Routing.generate(route, params)
@@ -46,7 +46,7 @@ angular.module('onm.routing', []).provider('routing', function() {
      *
      * @return string The generated route.
      *
-     * @note This routes are used by the $location service.
+     * @note This route is used by the $location service.
      */
     this.ngGenerateShort = function(route, params) {
         var url = Routing.generate(route, params)
