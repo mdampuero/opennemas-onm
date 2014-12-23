@@ -196,15 +196,30 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data) {
-                    for (var i = 0; i < response.data.messages.length; i++) {
-                        messenger.post({
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
-                        });
-                    }
-
+                if (response.status == 200 || response.status == 207) {
                     list();
+
+                    $scope.selected = {
+                        all: false,
+                        instances: []
+                    };
+
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
+
+                    // Show errors
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
+
+                        messenger.post(params);
+                    }
                 }
             });
         };
