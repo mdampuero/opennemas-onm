@@ -60,7 +60,7 @@ class FilesController extends Controller
 
         // Create folder if it doesn't exist
         if (!file_exists($this->fileSavePath)) {
-            \FilesManager::createDirectory($this->fileSavePath);
+            \Onm\FilesManager::createDirectory($this->fileSavePath);
         }
     }
 
@@ -218,7 +218,7 @@ class FilesController extends Controller
                 $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
                 // Create folder if it doesn't exist
                 if (!file_exists($basePath)) {
-                    \FilesManager::createDirectory($basePath);
+                    \Onm\FilesManager::createDirectory($basePath);
                 }
 
                 $data = array(

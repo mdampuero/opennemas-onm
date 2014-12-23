@@ -170,7 +170,7 @@ class CoversController extends Controller
         try {
             // Create folder if it doesn't exist
             if (!file_exists($path)) {
-                \FilesManager::createDirectory($path);
+                \Onm\FilesManager::createDirectory($path);
             }
             $uploadStatus = false;
 

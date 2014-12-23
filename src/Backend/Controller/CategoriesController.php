@@ -451,7 +451,7 @@ class CategoriesController extends Controller
             $sectionSettings = $request->request->get('section_settings');
             if ($sectionSettings['allowLogo'] == 1) {
                 $path = MEDIA_PATH.'/sections';
-                \FilesManager::createDirectory($path);
+                \Onm\FilesManager::createDirectory($path);
             }
 
             s::set('section_settings', $sectionSettings);

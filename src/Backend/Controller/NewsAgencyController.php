@@ -969,7 +969,7 @@ class NewsAgencyController extends Controller
                             $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
                             $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
                             if (!is_dir($localImageDir)) {
-                                \FilesManager::createDirectory($localImageDir);
+                                \Onm\FilesManager::createDirectory($localImageDir);
                             }
                             if (file_exists($localImagePath)) {
                                 unlink($localImagePath);

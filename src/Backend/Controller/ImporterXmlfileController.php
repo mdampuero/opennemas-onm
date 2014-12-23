@@ -102,7 +102,7 @@ class ImporterXmlfileController extends Controller
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
                     if ($extension == "zip") {
-                        $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);
+                        $dataZIP = \Onm\Compress\Compress::decompressZIP($uploaddir.$name);
 
                         @chmod($uploaddir.$name, 0775);
                         sort($dataZIP);

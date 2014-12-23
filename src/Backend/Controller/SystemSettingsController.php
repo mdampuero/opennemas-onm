@@ -100,7 +100,7 @@ class SystemSettingsController extends Controller
 
         // Check if upload directory is already created
         if ($sectionSettings['allowLogo'] == 1 && !is_dir($uploadDirectory)) {
-            \FilesManager::createDirectory($uploadDirectory);
+            \Onm\FilesManager::createDirectory($uploadDirectory);
         }
 
         if (!is_null($siteLogo)) {

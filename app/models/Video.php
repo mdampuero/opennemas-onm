@@ -351,7 +351,7 @@ class Video extends Content
         $relativeUploadDir  = 'video'.DS.date("Y/m/d");
         $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
         if (!is_dir($absoluteUploadpath)) {
-            FilesManager::createDirectory($absoluteUploadpath);
+            \Onm\FilesManager::createDirectory($absoluteUploadpath);
         }
 
         // Calculate the final video name by its extension, current data, ...

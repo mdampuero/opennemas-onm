@@ -157,7 +157,7 @@ class Photo extends Content
         $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
         if (!is_dir($uploadDir)) {
-            FilesManager::createDirectory($uploadDir);
+            \Onm\FilesManager::createDirectory($uploadDir);
         }
 
         if (is_dir($uploadDir) && !is_writable($uploadDir)) {
