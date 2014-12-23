@@ -22,15 +22,6 @@ use Onm\Message as m;
 class DatabaseErrorsController extends Controller
 {
 
-    /**
-     * Common actions for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
     // TODO: refactorize this method to make it simpler
     /**
      * Gets all the settings and displays the form
@@ -43,31 +34,34 @@ class DatabaseErrorsController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+        // TODO: this if block is redundant according to Security annotation
         if (!Acl::isMaster()) {
-            m::add("You don't have permissions");
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You don't have permissions")
+            );
 
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        $page = $request->query->getDigits('page', 1);
-        $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
+        $where        = "";
+        $itemsPerPage = 10;
+        $totalErrors  = (int) $rsTotalErrors;
+        $page         = $request->query->getDigits('page', 1);
+        $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
 
-        $where = "";
         $values = array();
         if (!empty($search)) {
             $where = "WHERE `sql1` LIKE '%{$search}%' OR `tracer` LIKE '%{$search}%'";
         }
 
-        $itemsPerPage = 10;
-        $totalErrors = (int) $rsTotalErrors;
+        $sql = "SELECT * FROM adodb_logsql ".$where
+               ." ORDER BY created DESC";
+               .' LIMIT '.($page-1)*$itemsPerPage.', '.($itemsPerPage);
 
-        $limit = ' LIMIT '.($page-1)*$itemsPerPage.', '.($itemsPerPage);
-        $orderBy = " ORDER BY created DESC";
-
-        $sql = "SELECT * FROM adodb_logsql ".$where.$orderBy.$limit;
         $errors = $GLOBALS['application']->conn->Execute($sql, $values);
 
         $pagerOptions = array(
@@ -102,8 +96,12 @@ class DatabaseErrorsController extends Controller
      **/
     public function purgeAction()
     {
+        // TODO: this if block is redundant according to Security annotation
         if (!Acl::isMaster()) {
-            m::add("You don't have permissions");
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You don't have permissions")
+            );
 
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
@@ -111,7 +109,10 @@ class DatabaseErrorsController extends Controller
         $sql = "TRUNCATE TABLE `adodb_logsql`";
         $GLOBALS['application']->conn->Execute($sql);
 
-        m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('SQL errors registered in database cleaned sucessfully.')
+        );
 
         return $this->redirect($this->generateUrl('admin_databaseerrors', array(), true));
     }
