@@ -159,7 +159,9 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("The data send by the user is not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', _("The data send by the user is not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }
