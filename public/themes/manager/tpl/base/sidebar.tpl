@@ -10,7 +10,7 @@
                     </a>
                 </li>
                 <li ng-class="{ 'active': isActive('manager_instances_list') }" ng-click="goTo('manager_instances_list', 'instances')">
-                    <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instances_list') %]">
+                    <a ng-href="[% routing.ngGenerate('manager_instances_list') %]">
                         <i class="fa fa-cubes" ng-class="{ 'fa-circle-o-notch fa-spin': changing.instances }"></i>
                         <span class="title">{t}Instances{/t}</span>
                     </a>
@@ -23,13 +23,13 @@
                     </a>
                     <ul class="sub-menu">
                         <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="goTo('manager_framework_commands', 'commands')">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
+                            <a ng-href="[% routing.ngGenerate('manager_framework_commands') %]">
                                 <i class="fa fa-code" ng-class="{ 'fa-circle-o-notch fa-spin': changing.commands }"></i>
                                 <span class="title">{t}Commands{/t}</span>
                             </a>
                         </li>
                         <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="goTo('manager_framework_opcache_status', 'cache')">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_opcache_status') %]">
+                            <a ng-href="[% routing.ngGenerate('manager_framework_opcache_status') %]">
                                 <i class="fa fa-database" ng-class="{ 'fa-circle-o-notch fa-spin': changing.cache }"></i>
                                 <span class="title">{t}OPCache Status{/t}</span>
                             </a>
@@ -44,13 +44,13 @@
                     </a>
                     <ul class="sub-menu">
                         <li ng-class="{ 'active': isActive('manager_users_list') }" ng-click="goTo('manager_users_list', 'users')">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
+                            <a ng-href="[% routing.ngGenerate('manager_users_list') %]">
                                 <i class="fa fa-user" ng-class="{ 'fa-circle-o-notch fa-spin': changing.users }"></i>
                                 <span class="title">{t}Users{/t}</span>
                             </a>
                         </li>
                         <li ng-class="{ 'active': isActive('manager_user_groups_list') }" ng-click="goTo('manager_user_groups_list', 'groups')">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                            <a ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
                                 <i class="fa fa-users" ng-class="{ 'fa-circle-o-notch fa-spin': changing.groups }"></i>
                                 <span class="title">{t}User groups{/t}</span>
                             </a>
@@ -63,7 +63,7 @@
     <div class="footer-widget">
         <ul>
             <li class="profile-info">
-                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: 'me' }) %]">
+                <a ng-href="[% routing.ngGenerate('manager_user_show', { id: 'me' }) %]">
                     <div class="profile-pic">
                         <img class="gravatar" email="[% user.email %]" image="1" size="32" width=32 height=32 >
                     </div>

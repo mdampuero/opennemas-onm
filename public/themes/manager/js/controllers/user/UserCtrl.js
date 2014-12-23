@@ -8,8 +8,8 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserCtrl', [
-    '$filter', '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($filter, $location, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($filter, $location, $scope, itemService, routing, messenger, data) {
         /**
          * List of available users.
          *
@@ -52,7 +52,7 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
             itemService.save('manager_ws_user_create', $scope.user)
                 .then(function (response) {
                     if (response.data.success) {
-                        $location.path(fosJsRouting.ngGenerateShort('/manager',
+                        $location.path(routing.ngGenerateShort(
                             'manager_user_show',
                             { id: response.data.message.id }));
                     }

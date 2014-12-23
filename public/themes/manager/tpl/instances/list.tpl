@@ -12,7 +12,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]">
                             <i class="fa fa-download fa-lg"></i>
                         </a>
                     </li>
@@ -20,7 +20,7 @@
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
+                        <a ng-href="[% routing.ngGenerate('manager_instance_create') %]" class="btn btn-primary">
                             <i class="fa fa-plus fa-lg"></i>
                             {t}Create{/t}
                         </a>
@@ -51,7 +51,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+                    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
                         <i class="fa fa-download fa-lg"></i>
                     </a>
                 </li>
@@ -431,7 +431,7 @@
                                     [% instance.name %]
                                 </a>
                                 <div class="listing-inline-actions">
-                                    <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
+                                    <a class="link" ng-href="[% routing.ngGenerate('manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
                                         <i class="fa fa-pencil"></i>{t}Edit{/t}
                                     </a>
                                     <button class="link link-danger" ng-click="delete(instance)" type="button">

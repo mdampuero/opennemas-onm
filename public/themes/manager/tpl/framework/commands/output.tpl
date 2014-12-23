@@ -4,7 +4,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
+                        <a ng-href="[% routing.ngGenerate('manager_framework_commands') %]">
                             <i class="fa fa-cubes fa-lg"></i>
                             {t}Commands{/t}
                         </a>
@@ -28,6 +28,6 @@
 
         <pre class="command-output">[% output %]</pre>
 
-        <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">{t}Go back{/t}</a>
+        <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_framework_commands') %]">{t}Go back{/t}</a>
     </div>
 </div>

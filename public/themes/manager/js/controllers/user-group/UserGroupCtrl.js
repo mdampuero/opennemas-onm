@@ -8,8 +8,8 @@
  * @return Object The command controller.
  */
 angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
-    '$filter', '$location', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($filter, $location, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($filter, $location, $scope, itemService, routing, messenger, data) {
         /**
          * List of available groups.
          *
@@ -139,7 +139,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupCtrl', [
             itemService.save('manager_ws_user_group_create', $scope.group)
                 .then(function (response) {
                     if (response.data.success) {
-                        $location.path(fosJsRouting.ngGenerateShort('/manager',
+                        $location.path(routing.ngGenerateShort(
                             'manager_user_group_show',
                             { id: response.data.message.id }));
                     }

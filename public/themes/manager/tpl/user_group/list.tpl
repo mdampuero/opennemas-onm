@@ -4,7 +4,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                        <a ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
                             <i class="fa fa-users fa-lg"></i>
                             {t}Users groups{/t}
                         </a>
@@ -14,7 +14,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_create') %]">
+                        <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_user_group_create') %]">
                             <i class="fa fa-plus"></i>
                             {t}Create{/t}
                         </a>
@@ -140,7 +140,7 @@
                                 <td>
                                     [% group.name %]
                                     <div class="listing-inline-actions">
-                                        <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
+                                        <a class="link" ng-href="[% routing.ngGenerate('manager_user_group_show', { id: group.id }); %]" title="{t}Edit group{/t}">
                                             <i class="fa fa-pencil"></i>{t}Edit{/t}
                                         </a>
                                         <button class="link link-danger" ng-click="delete(group)" type="button">

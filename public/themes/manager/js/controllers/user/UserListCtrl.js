@@ -4,15 +4,15 @@
  * @param  Object $modal       The modal service.
  * @param  Object $scope       The current scope.
  * @param  Object itemService  The item service.
- * @param  Object fosJsRouting The fosJsRouting service.
+ * @param  Object routing The routing service.
  * @param  Object messenger    The messenger service.
  * @param  Object data         The input data.
  *
  * @return Object The user list controller.
  */
 angular.module('ManagerApp.controllers').controller('UserListCtrl', [
-    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($modal, $scope, itemService, routing, messenger, data) {
         /**
          * The criteria to search.
          *

@@ -3,24 +3,24 @@
  *
  * @param Object $location    The location service.
  * @param Object $scope       The current scope.
- * @param Object fosJsRouting The fosJsRouting service.
+ * @param Object routing The routing service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
-    'authService', 'fosJsRouting', 'history', 'webStorage', 'messenger',
+    'authService', 'routing', 'history', 'webStorage', 'messenger',
     'paginationConfig', 'cfpLoadingBar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
-        $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
+        $window, vcRecaptchaService, httpInterceptor, authService, routing,
         history, webStorage, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
-         * The fosJsRouting service.
+         * The routing service.
          *
          * @type Object
          */
-        $scope.fosJsRouting = fosJsRouting;
+        $scope.routing = routing;
 
         /**
          * The sidebar toggle status.
@@ -50,7 +50,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param string route The route name.
          */
         $scope.clear = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
+            var url = routing.ngGenerateShort(route);
             history.clear(url);
         };
 
@@ -92,7 +92,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @return True if the current section
          */
         $scope.isActive = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
+            var url = routing.ngGenerateShort(route);
             return $location.path() == url;
         };
 
@@ -208,7 +208,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         controller: 'LoginModalCtrl',
                         resolve: {
                             data: function() {
-                                var url = fosJsRouting.generate('manager_ws_auth_login');
+                                var url = routing.generate('manager_ws_auth_login');
 
                                 return $http.post(url).then(function (response) {
                                     return response.data;
@@ -228,7 +228,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         }
                     });
                 } else {
-                    var url = fosJsRouting.generate('manager_ws_auth_login');
+                    var url = routing.generate('manager_ws_auth_login');
 
                     $http.post(url).then(function (response) {
                         $scope.token     = response.data.token;
@@ -318,6 +318,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $scope.$on('http-error', function (event, args) {
+            console.log(args);
             messenger.post({
                 type: 'error',
                 message: args.data.text

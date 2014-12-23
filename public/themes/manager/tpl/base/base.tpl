@@ -256,8 +256,9 @@
 
             @Common/plugins/angular-onm/*,
 
-            @ManagerTheme/js/ManagerApp.js,
-            @ManagerTheme/js/Controllers.js,
+            @ManagerTheme/js/app.js,
+            @ManagerTheme/js/config.js,
+            @ManagerTheme/js/routing.js,
 
             @ManagerTheme/js/controllers/*,
 

@@ -1,14 +1,14 @@
 /**
  * Service to implement common actions related to item.
  *
- * @param Object $http        Http service
- * @param Object $location    Location service
- * @param Object $modal       Modal service
- * @param Object fosJsRouting Onm routing service.
+ * @param Object $http     Http service
+ * @param Object $location Location service
+ * @param Object $modal    Modal service
+ * @param Object routing   Onm routing service.
  *
  * @return Object The item service.
  */
-angular.module('onm.item', []).factory('itemService', function ($http, $location, $modal, fosJsRouting) {
+angular.module('onm.item', []).factory('itemService', function ($http, $location, $modal, routing) {
     /**
      * The item service.
      *
@@ -22,7 +22,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @param string route The route name.
      */
     itemService.cancel = function(route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
         $location.path(url);
     }
 
@@ -106,7 +106,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.delete = function (route, id) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
         return $http.delete(url).success(function (response) {
             return response;
@@ -122,10 +122,10 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.deleteSelected = function (route, selected) {
-        var url  = fosJsRouting.generate(route);
+        var url  = routing.generate(route);
         var data = { selected: selected };
 
-        return $http.post(url, data).success(function (response) {
+        return $http.delete(url, data).success(function (response) {
             return response;
         });
     };
@@ -255,7 +255,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.isAvailable = function(route, name) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
         var data = { name: name };
 
         return $http.post(url, data).success(function (response) {
@@ -298,7 +298,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             data.epp = filters.epp;
         }
 
-        var url = fosJsRouting.generate(route, data);
+        var url = routing.generate(route, data);
 
         return $http.get(url).success(function (response) {
             return response;
@@ -313,7 +313,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.new = function (route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
         return $http.get(url).success(function (response) {
             return response;
@@ -329,11 +329,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.save = function(route, data) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.post(url, data);
     };
 
     /**
@@ -346,7 +344,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.patch = function (route, id, data) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
         return $http.patch(url, data).success(function (response) {
             return response;
         });
@@ -362,7 +360,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.patchSelected = function (route, selected, enabled) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
         var data = { activated: enabled, selected: selected };
 
         return $http.patch(url, data).success(function (response) {
@@ -379,7 +377,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.show = function (route, id) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
         return $http.get(url).success(function (response) {
             return response;
@@ -396,7 +394,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.update = function(route, id, data) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
         return $http.put(url, data).success(function (response) {
             return response;
@@ -418,7 +416,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             data: data
         };
 
-        var url = fosJsRouting.generate(route, parameters);
+        var url = routing.generate(route, parameters);
 
         return $http.get(url).success(function (response) {
             return response;
@@ -435,7 +433,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.fetchOpcacheStatus = function(route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
         return $http.get(url).success(function (response) {
             return response;

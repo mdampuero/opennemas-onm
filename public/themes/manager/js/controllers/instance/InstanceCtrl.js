@@ -1,7 +1,7 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
-    '$filter', '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($filter, $location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($filter, $location, $modal, $scope, itemService, routing, messenger, data) {
         /**
          * The instance object.
          *
@@ -130,16 +130,14 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
 
             itemService.save('manager_ws_instance_create', $scope.instance)
                 .then(function (response) {
-                    if (response.data.success) {
-                        $location.path(fosJsRouting.ngGenerateShort('/manager',
-                            'manager_instance_show',
-                            { id: response.data.message.id }));
-                    }
-
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 201  ? 'success' : 'error'
                     });
+
+                    if (response.status == 201) {
+                        $location.path(response.headers()['location']);
+                    }
 
                     $scope.saving = 0;
                 });

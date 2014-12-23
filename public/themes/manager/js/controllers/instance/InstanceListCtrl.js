@@ -6,15 +6,15 @@
  * @param Object $modal        The modal service.
  * @param Object $scope        The current scope.
  * @param Object itemService   The item service.
- * @param Object fosJsRouting  The fosJsRouting service.
+ * @param Object routing  The routing service.
  * @param Object messenger     The messenger service.
  * @param Object data          The input data.
  *
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'webStorage', 'data',
-    function ($modal, $scope, itemService, fosJsRouting, messenger, webStorage, data) {
+    '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+    function ($modal, $scope, itemService, routing, messenger, webStorage, data) {
         /**
          * The criteria to search.
          *
@@ -139,22 +139,24 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     success: function() {
                         return function() {
                             return itemService.delete(
-                                'manager_ws_instance_delete', instance.id);
+                                'manager_ws_instance_delete',
+                                instance.id
+                            );
                         };
                     }
                 }
             });
 
             modal.result.then(function (response) {
-                if (response.data.success) {
-                    if (response.data.message) {
-                        messenger.post({
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
-                    }
+                if (response) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
 
-                    list();
+                    if (response.status == 200) {
+                        list();
+                    }
                 }
             });
         };
@@ -278,7 +280,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            itemService.patchSelected('manager_ws_instances_patch_selected',
+            itemService.patchSelected('manager_ws_instances_patch',
                 $scope.selected.instances, enabled).then(function (response) {
                     if (response.status == 200 || response.status == 207) {
                         // Update instances changed successfully
@@ -440,6 +442,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         // Get enabled columns from localStorage
         if (webStorage.local.get('instances-columns')) {
             $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        if (webStorage.local.get('token')) {
+            $scope.token = webStorage.local.get('token');
         }
     }
 ]);

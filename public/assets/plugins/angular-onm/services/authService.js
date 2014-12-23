@@ -1,15 +1,15 @@
 /**
  * Service to implement common actions related to item.
  *
- * @param Object $http        Http service
- * @param Object $location    Location service
- * @param Object $modal       Modal service
- * @param Object fosJsRouting Onm routing service.
+ * @param Object $http     Http service
+ * @param Object $location Location service
+ * @param Object $modal    Modal service
+ * @param Object routing   Onm routing service.
  *
  * @return Object The item service.
  */
 angular.module('onm.auth', []).factory('authService', function ($http,
-        $location, $modal, fosJsRouting, vcRecaptchaService) {
+        $location, $modal, routing, vcRecaptchaService) {
     /**
      * The item service.
      *
@@ -25,7 +25,7 @@ angular.module('onm.auth', []).factory('authService', function ($http,
      * @return Object The response object.
      */
     authService.isAuthenticated = function(route, name) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
         return $http.post(url).success(function (response) {
             return response;
@@ -52,7 +52,7 @@ angular.module('onm.auth', []).factory('authService', function ($http,
             data.challenge = recaptcha.challenge;
         }
 
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
         return $http.post(url, data).then(function (response) {
             if (!response.data.success && attempts > 2) {
@@ -72,7 +72,7 @@ angular.module('onm.auth', []).factory('authService', function ($http,
      * @return Object The response object.
      */
     authService.logout = function (route) {
-        var url  = fosJsRouting.generate(route);
+        var url  = routing.generate(route);
 
         return $http.post(url).success(function (response) {
             return response;
