@@ -1,7 +1,14 @@
 /**
  * Service to handle route generation by using FosJsRouting.
  */
-angular.module('onm.routing', []).provider('fosJsRouting', function() {
+angular.module('onm.routing', []).provider('routing', function() {
+    /**
+     * The base route (before #)
+     *
+     * @type string
+     */
+    this.base = '';
+
     /**
      * Generates a route.
      *
@@ -9,37 +16,50 @@ angular.module('onm.routing', []).provider('fosJsRouting', function() {
      * @param Object params The route parameters.
      *
      * @return string The generated route.
+     *
+     * @note This routes are used in Ajax requests.
      */
     this.generate = function(route, params) {
         return Routing.generate(route, params);
     };
 
     /**
-     * Generates a route for angular from a base route.
+     * Generates a route for angular with the hashbang (#).
      *
-     * @param string base   The base route pattern.
      * @param string route  The route name.
      * @param Object params The route parameters.
      *
      * @return string The generated route.
+     *
+     * @note This routes are used directly in template.
      */
-    this.ngGenerate = function(base, route, params) {
+    this.ngGenerate = function(route, params) {
         var url = Routing.generate(route, params)
-        return url.replace(base, '#');
+        return url.replace(this.base, '#');
     }
 
     /**
-     * Generates a route for angular from a base route.
+     * Generates a route for angular without the hashbang (#).
      *
-     * @param string base   The base route pattern.
      * @param string route  The route name.
      * @param Object params The route parameters.
      *
      * @return string The generated route.
+     *
+     * @note This routes are used by the $location service.
      */
-    this.ngGenerateShort = function(base, route, params) {
+    this.ngGenerateShort = function(route, params) {
         var url = Routing.generate(route, params)
-        return url.replace(base, '').replace('%3A', ':');
+        return url.replace(this.base, '').replace('%3A', ':');
+    }
+
+    /**
+     * Sets the base route.
+     *
+     * @param string base The base route.
+     */
+    this.setBaseRoute = function(base) {
+        this.base = base;
     }
 
     /**
