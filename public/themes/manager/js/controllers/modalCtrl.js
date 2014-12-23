@@ -20,6 +20,7 @@ angular.module('ManagerApp.controllers').controller('modalCtrl', [
             var getType = {};
             if (success && getType.toString.call(success) === '[object Function]') {
                 success().then(function (response) {
+                    $modalInstance.close(response);
                     $scope.loading = 0
                 });
             } else {
