@@ -136,7 +136,13 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                     });
 
                     if (response.status == 201) {
-                        $location.path(response.headers()['location']);
+                        // Get new instance id
+                        var url = response.headers()['location'];
+                        var id  = url.substr(url.lastIndexOf('/') + 1);
+
+                        url = routing.ngGenerateShort(
+                            'manager_instance_show', { id: id });
+                        $location.path(url);
                     }
 
                     $scope.saving = 0;
