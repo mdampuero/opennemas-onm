@@ -52,14 +52,14 @@ manager_ws_instances_csv:
     defaults: { _controller:  ManagerWebServiceBundle:Instance:export }
     methods:  [ GET ]
 
-manager_ws_instances_delete_selected:
+manager_ws_instances_delete:
     path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:deleteSelected }
     methods:  [ DELETE ]
     options:
         expose: true
 
-manager_ws_instances_patch_selected:
+manager_ws_instances_patch:
     path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:patchSelected }
     methods:  [ PATCH ]
