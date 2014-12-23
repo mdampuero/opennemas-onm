@@ -97,12 +97,6 @@ class InstanceValidator extends Validator
         $class->internal_name = strtolower($class->internal_name);
 
         $criteria = [
-            'id' => [
-                [
-                    'value' => $class->id,
-                    'operator' => '!='
-                ]
-            ],
             'internal_name' => [
                 [
                     'value' => $class->internal_name . '[0-9]*',
@@ -110,6 +104,15 @@ class InstanceValidator extends Validator
                 ]
             ]
         ];
+
+        if ($class->id) {
+            $criteria['id'] = [
+                [
+                    'value' => $class->id,
+                    'operator' => '!='
+                ]
+            ];
+        }
 
         $count = $this->im->countBy($criteria);
 
