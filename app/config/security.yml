@@ -92,6 +92,9 @@ security:
                 authorization_header:
                     enabled: true
                     prefix:  Bearer
+                query_parameter:      # check token in query string parameter
+                    enabled: true
+                    name:    token
 
         frontend:
             pattern:    ^/*
