@@ -108,9 +108,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.delete = function (route, id) {
         var url = routing.generate(route, { id: id });
 
-        return $http.delete(url).success(function (response) {
-            return response;
-        });
+        return $http.delete(url);
     };
 
     /**
@@ -125,8 +123,14 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var url  = routing.generate(route);
         var data = { selected: selected };
 
-        return $http.delete(url, data).success(function (response) {
-            return response;
+        return $http({
+            method: 'DELETE',
+            url: url,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+            data: data,
+
         });
     };
 
@@ -258,9 +262,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var url = routing.generate(route);
         var data = { name: name };
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.post(url, data);
     };
 
     /**
@@ -300,9 +302,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
         var url = routing.generate(route, data);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -315,9 +315,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.new = function (route) {
         var url = routing.generate(route);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -345,9 +343,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      */
     itemService.patch = function (route, id, data) {
         var url = routing.generate(route, { id: id });
-        return $http.patch(url, data).success(function (response) {
-            return response;
-        });
+        return $http.patch(url, data);
     };
 
     /**
@@ -363,9 +359,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
         var url = routing.generate(route);
         var data = { activated: enabled, selected: selected };
 
-        return $http.patch(url, data).success(function (response) {
-            return response;
-        });
+        return $http.patch(url, data);
     };
 
     /**
@@ -379,9 +373,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.show = function (route, id) {
         var url = routing.generate(route, { id: id });
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -396,9 +388,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.update = function(route, id, data) {
         var url = routing.generate(route, { id: id });
 
-        return $http.put(url, data).success(function (response) {
-            return response;
-        });
+        return $http.put(url, data);
     };
 
     /**
@@ -418,9 +408,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
 
         var url = routing.generate(route, parameters);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -435,9 +423,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     itemService.fetchOpcacheStatus = function(route) {
         var url = routing.generate(route);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     return itemService;
