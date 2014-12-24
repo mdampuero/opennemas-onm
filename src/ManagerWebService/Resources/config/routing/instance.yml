@@ -1,7 +1,7 @@
 manager_ws_instance_create:
     path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:create }
-    methods:   [ POST ]
+    methods:  [ POST ]
     options:
         expose: true
 
@@ -40,13 +40,6 @@ manager_ws_instance_update:
     options:
         expose: true
 
-manager_ws_instances_list:
-    path:     /instances
-    defaults: { _controller: ManagerWebServiceBundle:Instance:list }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 manager_ws_instances_csv:
     path:     /instances.csv
     defaults: { _controller:  ManagerWebServiceBundle:Instance:export }
@@ -56,6 +49,13 @@ manager_ws_instances_delete:
     path:     /instances
     defaults: { _controller: ManagerWebServiceBundle:Instance:deleteSelected }
     methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_instances_list:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:list }
+    methods:  [ GET ]
     options:
         expose: true
 

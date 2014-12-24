@@ -163,7 +163,9 @@ class InstanceController extends Controller
         $statusCode = 200;
         $updated    = [];
 
-        if (is_array($selected) && count($selected) == 0) {
+        if (!is_array($selected)
+            || (is_array($selected) && count($selected) == 0)
+        ) {
             return new JsonResponse(
                 _('Unable to find the instances for the given criteria'),
                 404
@@ -207,7 +209,6 @@ class InstanceController extends Controller
                     'type' => 'error'
                 );
             } catch (BackupException $e) {
-                $statusCode = 207;
                 $message    = $e->getMessage();
 
                 $creator->deleteBackup($backupPath);
@@ -217,7 +218,6 @@ class InstanceController extends Controller
                     'type' => 'error'
                 ];
             } catch (AssetsNotDeletedException $e) {
-                $statusCode = 207;
                 $message    = $e->getMessage();
 
                 $creator->restoreAssets($backupPath);
@@ -227,7 +227,6 @@ class InstanceController extends Controller
                     'type' => 'error'
                 ];
             } catch (DatabaseNotDeletedException $e) {
-                $statusCode = 207;
                 $message    = $e->getMessage();
 
                 $creator->restoreAssets($backupPath);
@@ -238,8 +237,6 @@ class InstanceController extends Controller
                     'type' => 'error'
                 ];
             } catch (\Exception $e) {
-                $statusCode = 207;
-
                 $messages['errors'][] = [
                     'id'    => $instance->id,
                     'error' => $e->getMessage()
@@ -247,12 +244,18 @@ class InstanceController extends Controller
             }
         }
 
-
         if (count($updated) > 0) {
             $messages['success'] = [
                 'ids'     => $updated,
                 'message' => sprintf(_('%s instances deleted successfully.'), count($updated))
             ];
+        }
+
+        // Return the proper status code
+        if (count($messages['errors']) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($messages['errors']) > 0) {
+            $statusCode = 409;
         }
 
         return new JsonResponse($messages, $statusCode);
@@ -325,21 +328,6 @@ class InstanceController extends Controller
     }
 
     /**
-     * Returns the data to create a new instance.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function newAction()
-    {
-        return new JsonResponse(
-            array(
-                'data'     => null,
-                'template' => $this->templateParams()
-            )
-        );
-    }
-
-    /**
      * Returns the list of instances as JSON.
      *
      * @param Request $request The request object.
@@ -365,10 +353,24 @@ class InstanceController extends Controller
         return new JsonResponse(
             array(
                 'epp'     => $epp,
-                'extra'   => array(),
                 'page'    => $page,
                 'results' => $instances,
                 'total'   => $total,
+            )
+        );
+    }
+
+    /**
+     * Returns the data to create a new instance.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function newAction()
+    {
+        return new JsonResponse(
+            array(
+                'data'     => null,
+                'template' => $this->templateParams()
             )
         );
     }
@@ -469,8 +471,6 @@ class InstanceController extends Controller
                     'id'    => $instance->id,
                     'error' => $e->getMessage()
                 ];
-
-                $statusCode = 207;
             }
         }
 
@@ -479,6 +479,12 @@ class InstanceController extends Controller
                 'ids'     => $updated,
                 'message' => sprintf(_('%s instances updated successfully.'), count($updated))
             ];
+        }
+
+        if (count($messages['errors']) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($messages['errors']) > 0) {
+            $statusCode = 409;
         }
 
         return new JsonResponse($messages, $statusCode);
