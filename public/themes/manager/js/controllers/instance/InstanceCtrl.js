@@ -176,7 +176,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 $scope.formValidated = 1;
 
                 messenger.post({
-                    message: 'There are errors in the form.',
+                    message: $filter('translate')('FormErrors'),
                     type:    'error'
                 });
 
