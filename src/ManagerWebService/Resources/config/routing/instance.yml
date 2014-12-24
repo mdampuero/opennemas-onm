@@ -15,7 +15,7 @@ manager_ws_instance_delete:
 manager_ws_instance_new:
     path:     /instances/new
     defaults: { _controller: ManagerWebServiceBundle:Instance:new }
-    methods:   [ GET ]
+    methods:  [ GET ]
     options:
         expose: true
 
