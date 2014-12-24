@@ -134,7 +134,7 @@
     </div>
 </div>
 <div class="content">
-    <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
+    <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
         <div class="row">
             <div class="col-xs-12 title">
                 <h5>{t}Columns{/t}</h5>
