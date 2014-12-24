@@ -204,27 +204,24 @@ class InstanceController extends Controller
 
                 $updated[] = $instance->id;
             } catch (InstanceNotFoundException $e) {
-                $errors[] = array(
-                    'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                    'type' => 'error'
+                $messages['errors'][] = array(
+                    'error' => sprintf(_('Unable to find the instance with id "%s"'), $id),
                 );
             } catch (BackupException $e) {
-                $message    = $e->getMessage();
+                $message = $e->getMessage();
 
                 $creator->deleteBackup($backupPath);
 
                 $messages['errors'][] = [
-                    'text' => sprintf(_($message), $id),
-                    'type' => 'error'
+                    'error' => sprintf(_($message), $id),
                 ];
             } catch (AssetsNotDeletedException $e) {
-                $message    = $e->getMessage();
+                $message = $e->getMessage();
 
                 $creator->restoreAssets($backupPath);
 
                 $messages['errors'][] = [
-                    'text' => sprintf(_($message), $id),
-                    'type' => 'error'
+                    'error' => sprintf(_($message), $id),
                 ];
             } catch (DatabaseNotDeletedException $e) {
                 $message    = $e->getMessage();
@@ -233,12 +230,10 @@ class InstanceController extends Controller
                 $creator->restoreDatabase($backupPath . DS . 'database.sql');
 
                 $messagtes['errors'][] = [
-                    'text' => sprintf(_($message), $id),
-                    'type' => 'error'
+                    'error' => sprintf(_($message), $id),
                 ];
             } catch (\Exception $e) {
                 $messages['errors'][] = [
-                    'id'    => $instance->id,
                     'error' => $e->getMessage()
                 ];
             }
