@@ -142,7 +142,7 @@ class UserGroupController extends Controller
         $epp      = $request->query->getDigits('epp', 10);
         $page     = $request->query->getDigits('page', 1);
         $criteria = $request->query->filter('criteria') ? : array();
-        $orderBy  = $request->query->filter('sort_by') ? : array();
+        $orderBy  = $request->query->filter('orderBy') ? : array();
 
         $order = array();
         foreach ($orderBy as $value) {
