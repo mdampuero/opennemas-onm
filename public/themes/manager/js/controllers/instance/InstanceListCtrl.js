@@ -204,11 +204,12 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     };
 
                     // Show success message
-                    if (response.data.success.ids.length > 0)
-                    messenger.post({
-                        message: response.data.success.message,
-                        type: 'success'
-                    });
+                    if (response.data.success.ids.length > 0) {
+                        messenger.post({
+                            message: response.data.success.message,
+                            type: 'success'
+                        });
+                    }
 
                     // Show errors messages
                     for (var i = 0; i < response.data.errors.length; i++) {
@@ -294,39 +295,41 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            itemService.patchSelected('manager_ws_instances_patch',
-                $scope.selected.instances, enabled).then(function (response) {
-                    if (response.status == 200 || response.status == 207) {
-                        // Update instances changed successfully
-                        for (var i = 0; i < $scope.instances.length; i++) {
-                            var id = $scope.instances[i].id;
+            var data = {
+                selected: $scope.selected.instances,
+                activated: enabled
+            }
 
-                            if (response.data.success.ids.indexOf(id) != -1) {
-                                $scope.instances[i].activated = enabled;
-                                delete $scope.instances[i].loading;
-                            }
+            itemService.patchSelected('manager_ws_instances_patch', data).then(function (response) {
+                if (response.status == 200 || response.status == 207) {
+                    // Update instances changed successfully
+                    for (var i = 0; i < $scope.instances.length; i++) {
+                        var id = $scope.instances[i].id;
+
+                        if (response.data.success.ids.indexOf(id) != -1) {
+                            $scope.instances[i].activated = enabled;
+                            delete $scope.instances[i].loading;
                         }
+                    }
 
-                        // Show success message
-                        if (response.data.success.ids.length > 0)
-                        messenger.post({
-                            message: response.data.success.message,
-                            type: 'success'
-                        });
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
 
-                        // Show errors
-                        for (var i = 0; i < response.data.errors.length; i++) {
-                            var params = {
-                                message: response.data.error[i].message,
-                                type:    'error'
-                            };
+                    // Show errors
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
 
-                            messenger.post(params);
-                        }
-
+                        messenger.post(params);
                     }
                 }
-            );
+            });
         };
 
         /**
