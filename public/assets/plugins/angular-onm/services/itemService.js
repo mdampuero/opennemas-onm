@@ -392,15 +392,15 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     /**
      * Executes a command and returns its name and output.
      *
-     * @param  string route         The route name.
-     * @param  mixed  command_name  The name of the command.
-     * @param  object data          Additional data to execute the command.
+     * @param  string route   The route name.
+     * @param  mixed  command The name of the command.
+     * @param  object data    Additional data to execute the command.
      *
      * @return Object The response object.
      */
-    itemService.executeCommand = function(route, command_name, data) {
+    itemService.executeCommand = function(route, command, data) {
         var parameters = {
-            command_name: command_name,
+            command: command,
             data: data
         };
 

@@ -50,7 +50,7 @@ angular.module('ManagerApp')
           }
         }
       })
-      .when(routingProvider.ngGenerateShort('manager_framework_commands'), {
+      .when(routingProvider.ngGenerateShort('manager_commands'), {
         templateUrl: '/managerws/template/framework:commands:commands.' + appVersion + '.tpl',
         controller:  'CommandListCtrl',
         resolve: {
@@ -68,20 +68,21 @@ angular.module('ManagerApp')
         controller:  'CommandCtrl',
         resolve: {
           data: function($route, itemService) {
-            return itemService.executeCommand('manager_ws_command_execute', $route.current.params.name, $route.current.params.data).then(
-              function (response) {
-                return response.data;
-              }
-            );
+            return itemService.executeCommand('manager_ws_command_output',
+              $route.current.params.command, $route.current.params.data).then(
+                function (response) {
+                  return response.data;
+                }
+              );
           }
         }
       })
-      .when(routingProvider.ngGenerateShort('manager_framework_opcache_status'), {
+      .when(routingProvider.ngGenerateShort('manager_opcache_status'), {
         templateUrl: '/managerws/template/framework:opcache_status.' + appVersion + '.tpl',
         controller: 'OpcacheCtrl',
         resolve: {
           data: function(itemService) {
-            return itemService.fetchOpcacheStatus('manager_ws_framework_opcache').then(
+            return itemService.fetchOpcacheStatus('manager_ws_opcache_status').then(
               function (response) {
                 return response.data;
               }

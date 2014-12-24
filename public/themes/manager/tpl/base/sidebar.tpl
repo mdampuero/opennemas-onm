@@ -15,21 +15,21 @@
                         <span class="title">{t}Instances{/t}</span>
                     </a>
                 </li>
-                <li ng-class="{ 'active open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }">
+                <li ng-class="{ 'active open': isActive('manager_commands') || isActive('manager_opcache_status') }">
                     <a href="#">
                         <i class="fa fa-flask"></i>
                         <span class="title"> {t}Framework{/t}</span>
-                        <span class="arrow" ng-class="{ 'open': isActive('manager_framework_commands') || isActive('manager_framework_opcache_status') }"></span>
+                        <span class="arrow" ng-class="{ 'open': isActive('manager_commands') || isActive('manager_opcache_status') }"></span>
                     </a>
                     <ul class="sub-menu">
-                        <li ng-class="{ 'active': isActive('manager_framework_commands') }" ng-click="goTo('manager_framework_commands', 'commands')">
-                            <a ng-href="[% routing.ngGenerate('manager_framework_commands') %]">
+                        <li ng-class="{ 'active': isActive('manager_commands') }" ng-click="goTo('manager_commands', 'commands')">
+                            <a ng-href="[% routing.ngGenerate('manager_commands') %]">
                                 <i class="fa fa-code" ng-class="{ 'fa-circle-o-notch fa-spin': changing.commands }"></i>
                                 <span class="title">{t}Commands{/t}</span>
                             </a>
                         </li>
-                        <li ng-class="{ 'active': isActive('manager_framework_opcache_status') }" ng-click="goTo('manager_framework_opcache_status', 'cache')">
-                            <a ng-href="[% routing.ngGenerate('manager_framework_opcache_status') %]">
+                        <li ng-class="{ 'active': isActive('manager_opcache_status') }" ng-click="goTo('manager_opcache_status', 'cache')">
+                            <a ng-href="[% routing.ngGenerate('manager_opcache_status') %]">
                                 <i class="fa fa-database" ng-class="{ 'fa-circle-o-notch fa-spin': changing.cache }"></i>
                                 <span class="title">{t}OPCache Status{/t}</span>
                             </a>

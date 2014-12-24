@@ -12,9 +12,13 @@ manager_instance:
     prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/instance.yml
 
-manager_framework:
-    prefix:   /manager/framework
-    resource: @ManagerBundle/Resources/config/routing/framework.yml
+manager_commands:
+    prefix:   /manager/
+    resource: @ManagerBundle/Resources/config/routing/command.yml
+
+manager_opcache:
+    prefix:   /manager/
+    resource: @ManagerBundle/Resources/config/routing/opcache.yml
 
 manager_user:
     prefix:   /manager
