@@ -139,10 +139,10 @@ class UserGroupController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->request->getDigits('epp', 10);
-        $page     = $request->request->getDigits('page', 1);
-        $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('sort_by') ? : array();
+        $epp      = $request->query->getDigits('epp', 10);
+        $page     = $request->query->getDigits('page', 1);
+        $criteria = $request->query->filter('criteria') ? : array();
+        $orderBy  = $request->query->filter('sort_by') ? : array();
 
         $order = array();
         foreach ($orderBy as $value) {
