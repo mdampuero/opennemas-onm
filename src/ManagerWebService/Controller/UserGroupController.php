@@ -50,6 +50,8 @@ class UserGroupController extends Controller
                 [ 'id' =>$userGroup->id ]
             )
         );
+
+        return $response;
     }
 
     /**
