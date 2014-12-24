@@ -70,7 +70,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.delete = function(group) {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {
@@ -89,15 +89,15 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data.success) {
-                    if (response.data.message) {
-                        messenger.post({
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
-                    }
+                if (response) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
 
-                    list();
+                    if (response.status == 200) {
+                        list();
+                    }
                 }
             });
         };
@@ -107,7 +107,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.deleteSelected = function() {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {
@@ -127,15 +127,30 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data) {
-                    for (var i = 0; i < response.data.messages.length; i++) {
-                        messenger.post({
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
-                        });
-                    }
-
+                if (response.status == 200 || response.status == 207) {
                     list();
+
+                    $scope.selected = {
+                        all: false,
+                        groups: []
+                    };
+
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
+
+                    // Show errors messages
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
+
+                        messenger.post(params);
+                    }
                 }
             });
         };
@@ -179,19 +194,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         };
 
         /**
-         * Selects/unselects all groups.
-         */
-        $scope.selectAll = function() {
-            if ($scope.selected.all) {
-                $scope.selected.groups = $scope.groups.map(function(group) {
-                    return group.id;
-                });
-            } else {
-                $scope.selected.groups = [];
-            }
-        };
-
-        /**
          * Reloads the list on keypress.
          *
          * @param  Object event The even object.
@@ -203,6 +205,19 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                 } else {
                     list();
                 }
+            }
+        };
+
+        /**
+         * Selects/unselects all groups.
+         */
+        $scope.selectAll = function() {
+            if ($scope.selected.all) {
+                $scope.selected.groups = $scope.groups.map(function(group) {
+                    return group.id;
+                });
+            } else {
+                $scope.selected.groups = [];
             }
         };
 
@@ -268,7 +283,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
             var data = {
                 criteria: cleaned,
                 orderBy:  $scope.orderBy,
-                epp:      $scope.epp,
+                epp:      $scope.pagination.epp,
                 page:     $scope.pagination.page
             };
 
