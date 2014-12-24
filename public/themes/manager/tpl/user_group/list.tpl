@@ -24,7 +24,7 @@
         </div>
     </div>
 </div>
-<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.groups.length == 0 }">
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.groups.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
@@ -67,7 +67,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks hidden-xs">
-                    <select class="xmedium" ng-model="epp">
+                    <select class="xmedium" ng-model="pagination.epp">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
