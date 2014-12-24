@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.instances.length == 0 }">
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.instances.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
