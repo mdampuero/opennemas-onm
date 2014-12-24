@@ -59,7 +59,7 @@ class DatabaseErrorsController extends Controller
         }
 
         $sql = "SELECT * FROM adodb_logsql ".$where
-               ." ORDER BY created DESC";
+               ." ORDER BY created DESC"
                .' LIMIT '.($page-1)*$itemsPerPage.', '.($itemsPerPage);
 
         $errors = $GLOBALS['application']->conn->Execute($sql, $values);

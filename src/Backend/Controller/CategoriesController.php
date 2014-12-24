@@ -377,7 +377,7 @@ class CategoriesController extends Controller
                     sprintf(
                         _("Unable to delete all the contents in the category '%s'"),
                         $category->title
-                    ),
+                    )
                 );
             }
 
