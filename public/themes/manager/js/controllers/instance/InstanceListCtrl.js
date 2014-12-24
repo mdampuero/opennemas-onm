@@ -1,13 +1,12 @@
 /**
  * Handles all actions in instances listing.
  *
- * @param Object $anchorScroll The anchor scroll service.
- * @param Object $location     The location service.
  * @param Object $modal        The modal service.
  * @param Object $scope        The current scope.
  * @param Object itemService   The item service.
- * @param Object routing  The routing service.
+ * @param Object routing       The routing service.
  * @param Object messenger     The messenger service.
+ * @param Object webStorage    The web storage service.
  * @param Object data          The input data.
  *
  * @return Object The instance list controller.
@@ -211,7 +210,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                         type: 'success'
                     });
 
-                    // Show errors
+                    // Show errors messages
                     for (var i = 0; i < response.data.errors.length; i++) {
                         var params = {
                             message: response.data.error[i].message,
