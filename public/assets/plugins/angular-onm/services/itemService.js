@@ -349,15 +349,13 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
     /**
      * Enables/disables a list of elements.
      *
-     * @param string  route    The route name.
-     * @param Object  selected The selected elements.
-     * @param integer enabled  The enabled value.
+     * @param string  route The route name.
+     * @param integer data  The selected items and the changes.
      *
      * @return Object The response object.
      */
-    itemService.patchSelected = function (route, selected, enabled) {
+    itemService.patchSelected = function (route, data) {
         var url = routing.generate(route);
-        var data = { activated: enabled, selected: selected };
 
         return $http.patch(url, data);
     };
