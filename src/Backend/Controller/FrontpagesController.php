@@ -309,10 +309,15 @@ class FrontpagesController extends Controller
 
             $this->dispatchEvent('frontpage.pick_layout', array('category' => $category));
 
-            m::add(sprintf(_('Layout %s seleted.'), $layout), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Layout %s seleted.'), $layout)
+            );
         } else {
-            m::add(_('Layout or category not valid.'), m::ERROR);
-
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Layout or category not valid.')
+            );
         }
 
         if ($category == 0) {
