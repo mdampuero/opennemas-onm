@@ -27,9 +27,6 @@ class UserController extends Controller
      */
     public function createAction(Request $request)
     {
-        $success = false;
-        $message = array();
-
         $user = new \User();
 
         $data = array(
@@ -76,31 +73,30 @@ class UserController extends Controller
                     $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                 }
 
-                $success = true;
-                $message = array(
-                    'id'   => $user->id,
-                    'type' => 'success',
-                    'text' => _('User saved successfully')
+                $response = new JsonResponse(_('User saved successfully'), 201);
+
+                // Add permanent URL for the current instance
+                $response->headers->set(
+                    'Location',
+                    $this->generateUrl(
+                        'manager_ws_user_show',
+                        [ 'id' => $user->id ]
+                    )
                 );
+
+                return $response;
             } else {
-                $message = array(
-                    'type' => 'error',
-                    'text' => _('Unable to create the user with that information')
+                return new JsonResponse(
+                    _('Unable to create the user with that information'),
+                    400
                 );
             }
         } catch (\Exception $e) {
-            $message = array(
-                'type' => 'error',
-                'text' => $e->getMessage()
+            return new JsonResponse(
+                _('Unable to create the user with that information'),
+                409
             );
         }
-
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
     }
 
     /**
@@ -112,38 +108,24 @@ class UserController extends Controller
      */
     public function deleteAction($id)
     {
-        $um      = $this->get('user_repository');
-        $message = array();
-        $success = false;
-
+        $um   = $this->get('user_repository');
         $user = $um->find($id);
 
         if ($user) {
             $user->delete($id);
             $user->deleteMeta($id);
 
-            $success = true;
-            $message = array(
-                'type' => 'success',
-                'text' => _('User deleted successfully')
-            );
+            return new JsonResponse(_('User deleted successfully'));
         } else {
-            $message = array(
-                'type' => 'error',
-                'text' =>  sprintf(_('Unable to delete the user with the id "%d"'), $id),
+            return new JsonResponse(
+                sprintf(_('Unable to delete the user with the id "%d"'), $id),
+                404
             );
         }
-
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
     }
 
     /**
-     * Deletes the selected instances.
+     * Deletes the selected users.
      *
      * @param Request $request The request object.
      *
@@ -151,50 +133,52 @@ class UserController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $messages = array();
-        $success  = false;
-        $updated  = 0;
+        $messages   = [ 'errors' => [], 'success' => [] ];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
 
-        $selected  = $request->request->get('selected', null);
+        if (!is_array($selected)
+            || (is_array($selected) && count($selected) == 0)
+        ) {
+            return new JsonResponse(
+                _('Unable to find users for the given criteria'),
+                404
+            );
+        }
 
-        if (is_array($selected) && count($selected) > 0) {
-            $um = $this->get('user_repository');
+        $um   = $this->get('user_repository');
 
-            foreach ($selected as $id) {
-                $user = $um->find($id);
+        foreach ($selected as $id) {
+            $user = $um->find($id);
 
-                if ($user) {
-                    $user->delete($id);
-                    $user->deleteMeta($id);
+            if ($user) {
+                $user->delete($id);
+                $user->deleteMeta($id);
 
-                    $updated++;
-                } else {
-                    $messages[] = array(
-                        'type' => 'error',
-                        'text' =>  sprintf(_('Unable to delete the user with the id "%d"'), $id),
-                    );
-                }
+                $updated[] = $id;
+            } else {
+                $messages['errors'][] = array(
+                    'error' => sprintf(_('Unable to delete the user with the id "%d"'), $id),
+                );
             }
         }
 
         if (count($updated) > 0) {
-            $success = true;
-
-            array_unshift(
-                $messages,
-                array(
-                    'text' => sprintf(_('%s users deleted successfully.'), count($updated)),
-                    'type' => 'success'
-                )
-            );
+            $messages['success'] = [
+                'ids'     => $updated,
+                'message' => sprintf(_('%s users deleted successfully.'), count($updated)),
+            ];
         }
 
-        return new JsonResponse(
-            array(
-                'success'  => $success,
-                'messages' => $messages
-            )
-        );
+        // Return the proper status code
+        if (count($messages['errors']) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($messages['errors']) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse($messages, $statusCode);
     }
 
     /**
@@ -206,10 +190,10 @@ class UserController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->request->getDigits('epp', 10);
-        $page     = $request->request->getDigits('page', 1);
-        $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('orderBy') ? : array();
+        $epp      = $request->query->getDigits('epp', 10);
+        $page     = $request->query->getDigits('page', 1);
+        $criteria = $request->query->filter('criteria') ? : array();
+        $orderBy  = $request->query->filter('orderBy') ? : array();
 
         $order = array();
         foreach ($orderBy as $value) {
@@ -260,16 +244,16 @@ class UserController extends Controller
     }
 
     /**
-     * Enables/disables an user given its id.
+     * Updated some user properties.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */
-    public function setEnabledAction(Request $request, $id)
+    public function patchAction(Request $request, $id)
     {
         $success  = false;
-        $activated = $request->request->getDigits('enabled');
+        $activated = $request->request->getDigits('activated');
         $message   = array();
 
         $user = $this->get('user_repository')->find($id);
@@ -281,96 +265,85 @@ class UserController extends Controller
                     $user->deactivateUser($id);
                 }
 
-                $success = true;
-                $message = array(
-                    'text'      => _('User updated successfully.'),
-                    'type'      => 'success'
-                );
+                return new JsonResponse(_('User updated successfully.'));
             } catch (Exception $e) {
-                $message = array(
-                    'text' => sprintf(_('Error while updating user with id "%s"'), $id),
-                    'type' => 'error'
+                return new JsonResponse(
+                    sprintf(_('Error while updating user with id "%s"'), $id),
+                    409
                 );
             }
         } else {
-            $message = array(
-                'text' => sprintf(_('Unable to find the user with id "%s"'), $id),
-                'type' => 'error'
+            return new JsonResponse(
+                sprintf(_('Unable to find the user with id "%s"'), $id),
+                404
             );
         }
-
-        return new JsonResponse(
-            array(
-                'success'   => $success,
-                'activated' => $activated,
-                'message'   => $message
-            )
-        );
     }
 
     /**
-     * Set the activated flag for instances in batch.
+     * Set the activated flag for users in batch.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */
-    public function setEnabledSelectedAction(Request $request)
+    public function patchSelectedAction(Request $request)
     {
-        $messages = array();
-        $success  = false;
-        $updated  = 0;
+        $messages   = [ 'errors' => [], 'success' => [] ];
+        $selected   = $request->request->get('selected', null);
+        $activated = $request->request->getDigits('activated', 0);
+        $statusCode = 200;
+        $updated    = [];
 
-        $selected  = $request->request->get('selected', null);
-        $activated = $request->request->getDigits('enabled', 0);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $um = $this->get('user_repository');
-
-            foreach ($selected as $id) {
-                $user = $um->find($id);
-                if ($user) {
-                    try {
-                        if ($activated) {
-                            $user->activateUser($id);
-                        } else {
-                            $user->deactivateUser($id);
-                        }
-
-                        $updated++;
-                    } catch (Exception $e) {
-                        $messages[] = array(
-                            'text' => sprintf(_('Error while updating user with id "%s"'), $id),
-                            'type' => 'error'
-                        );
-                    }
-                } else {
-                    $messages[] = array(
-                        'text' => sprintf(_('Unable to find the user with id "%s"'), $id),
-                        'type' => 'error'
-                    );
-                }
-            }
-        }
-
-        if ($updated > 0) {
-            $success = true;
-
-            array_unshift(
-                $messages,
-                array(
-                    'text' => sprintf(_('%s users updated successfully.'), $updated),
-                    'type' => 'success'
-                )
+        if (is_array($selected) && count($selected) == 0) {
+            return new JsonResponse(
+                _('Unable to find the users for the given criteria'),
+                404
             );
         }
 
-        return new JsonResponse(
-            array(
-                'success'  => $success,
-                'messages' => $messages
-            )
-        );
+        $um = $this->get('user_repository');
+
+        foreach ($selected as $id) {
+            $user = $um->find($id);
+
+            if ($user) {
+                try {
+                    if ($activated) {
+                        $user->activateUser($id);
+                    } else {
+                        $user->deactivateUser($id);
+                    }
+
+                    $updated[] = $id;
+                } catch (Exception $e) {
+                    $messages['errors'][] = [
+                        'id'    => $id,
+                        'error' => sprintf(_('Error while updating user with id "%s"'), $id),
+                    ];
+                }
+            } else {
+                $messages['errors'][] = [
+                    'id'    => $id,
+                    'error' => sprintf(_('Unable to find the user with id "%s"'), $id),
+                ];
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages['success'] = [
+                'ids'     => $updated,
+                'message' => sprintf(_('%s users updated successfully.'), count($updated))
+            ];
+        }
+
+        if (count($messages['errors']) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($messages['errors']) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse($messages, $statusCode);
     }
 
     /**
@@ -383,7 +356,16 @@ class UserController extends Controller
     public function showAction($id)
     {
         $user = $this->get('user_repository')->find($id);
+
+        if (!$user) {
+            return new JsonResponse(
+                sprintf(_('Unable to find the user with id "%s"'), $id),
+                404
+            );
+        }
+
         $user->eraseCredentials();
+
 
         return new JsonResponse(
             array(
@@ -404,6 +386,10 @@ class UserController extends Controller
 
         $user = $this->get('user_repository')->find($id);
 
+        if (!$user) {
+            return new JsonResponse(_('Unable to find the current user'), 404);
+        }
+
         return new JsonResponse(
             array(
                 'data'     => $user,
@@ -422,9 +408,6 @@ class UserController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $success = false;
-        $message = array();
-
         $data = array(
             'id'              => $id,
             'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
@@ -478,22 +461,15 @@ class UserController extends Controller
                     $request->getSession()->set('user_language', $user->getMeta('user_language'));
                 }
 
-                $success = true;
-                $message = array(
-                    'type' => 'success',
-                    'text' => _('User saved successfully')
-                );
+                return new JsonResponse(_('User saved successfully'));
             } else {
-                $message = array(
-                    'type' => 'error',
-                    'text' => _('Unable to update the user with that information')
+                return new JsonResponse(
+                    _('Unable to update the user with that information'),
+                    400
                 );
             }
         } catch (FileException $e) {
-            $message = array(
-                'type' => 'error',
-                'text' => $e->getMessage()
-            );
+            return new JsonResponse($e->getMessage(), 409);
         }
 
         return new JsonResponse(

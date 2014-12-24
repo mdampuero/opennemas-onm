@@ -51,16 +51,20 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
 
             itemService.save('manager_ws_user_create', $scope.user)
                 .then(function (response) {
-                    if (response.data.success) {
-                        $location.path(routing.ngGenerateShort(
-                            'manager_user_show',
-                            { id: response.data.message.id }));
-                    }
-
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 201  ? 'success' : 'error'
                     });
+
+                    if (response.status == 201) {
+                        // Get new user id
+                        var url = response.headers()['location'];
+                        var id  = url.substr(url.lastIndexOf('/') + 1);
+
+                        url = routing.ngGenerateShort(
+                            'manager_user_show', { id: id });
+                        $location.path(url);
+                    }
 
                     $scope.saving = 0;
                 });
@@ -90,8 +94,8 @@ angular.module('ManagerApp.controllers').controller('UserCtrl', [
             itemService.update('manager_ws_user_update', $scope.user.id,
                 $scope.user).then(function (response) {
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
                     });
 
                     $scope.saving = 0;
