@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the keywords
@@ -130,7 +129,7 @@ class KeywordsController extends Controller
             $keyword = new \PClave();
             $keyword->create($data);
 
-            m::add(_('Keyword created sucessfully'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Keyword created sucessfully'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -169,7 +168,7 @@ class KeywordsController extends Controller
         $keyword = new \PClave();
         $keyword->update($data);
 
-        m::add(_('Keyword updated sucessfully'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add('success', _('Keyword updated sucessfully'));
 
         return $this->redirect(
             $this->generateUrl(
