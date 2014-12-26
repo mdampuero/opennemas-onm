@@ -125,10 +125,10 @@ class VideosController extends Controller
                     && array_key_exists('name', $_FILES["video_file"])
                     && !empty($_FILES["video_file"]["name"]))
                 ) {
-                    m::add(
-                        'There was a problem while uploading the file. '
-                        .'Please check if you have completed all the form fields.',
-                        m::ERROR
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        _('There was a problem while uploading the file. '
+                        .'Please check if you have completed all the form fields.')
                     );
 
                     return $this->redirect(
@@ -152,7 +152,7 @@ class VideosController extends Controller
                     $video = new \Video();
                     $video->createFromLocalFile($videoFileData);
                 } catch (\Exception $e) {
-                    m::add($e->getMessage(), m::ERROR);
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
@@ -184,7 +184,7 @@ class VideosController extends Controller
                     $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
                     $cacheManager->delete('home|1');
                 } catch (\Exception $e) {
-                    m::add($e->getMessage());
+                    $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
@@ -205,18 +205,24 @@ class VideosController extends Controller
                         $cacheManager->delete('home|1');
 
                     } catch (\Exception $e) {
-                        m::add($e->getMessage());
+                        $this->get('session')->getFlashBag()->add('notice', $e->getMessage());
 
                         return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                     }
 
                 } else {
-                    m::add('There was an error while uploading the form, not all the required data was sent.');
+                    $this->get('session')->getFlashBag()->add(
+                        'notice',
+                        _('There was an error while uploading the form, not all the required data was sent.')
+                    );
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } else {
-                m::add('There was an error while uploading the form, the video type is not specified.');
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    _('There was an error while uploading the form, the video type is not specified.')
+                );
 
                 return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
             }
@@ -277,7 +283,9 @@ class VideosController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$video->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this video because you don't have enought privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'notice', _("You can't modify this video because you don't have enought privileges.")
+                );
             } else {
 
                 if ($video->author_name == 'external' || $video->author_name == 'script') {
@@ -304,7 +312,8 @@ class VideosController extends Controller
                     $_POST['starttime'] = $video->starttime;
                     $video->update($_POST);
                 }
-                m::add(_("Video updated successfully."), m::SUCCESS);
+
+                $this->get('session')->getFlashBag()->add('success', _("Video updated successfully."));
             }
 
             // Clean cache home and frontpage for category
@@ -357,9 +366,13 @@ class VideosController extends Controller
 
             $video->delete($id, $_SESSION['userid']);
 
-            m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success', _("Video '{$video->title}' deleted successfully.")
+            );
         } else {
-            m::add(_('You must give an id to delete the video.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', _('You must give an id to delete the video.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -392,7 +405,9 @@ class VideosController extends Controller
         $video = new \Video($id);
 
         if (is_null($video->id)) {
-            m::add(sprintf(_('Unable to find the video with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error', sprintf(_('Unable to find the video with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_videos'));
         }
@@ -473,7 +488,7 @@ class VideosController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Settings saved.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
             return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
