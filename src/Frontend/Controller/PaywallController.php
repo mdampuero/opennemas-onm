@@ -82,12 +82,12 @@ class PaywallController extends Controller
                 $user = new \User($_SESSION['userid']);
                 $user->getMeta();
 
-                m::add(
+                $this->get('session')->getFlashBag()->add(
+                    'error',
                     sprintf(
                         _('You already have an active Subscription until %s'),
                         $_SESSION['meta']['paywall_time_limit']
-                    ),
-                    m::ERROR
+                    )
                 );
 
                 return $this->redirect(
