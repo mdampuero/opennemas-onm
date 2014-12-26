@@ -39,7 +39,7 @@ class ImporterXmlfileController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAPER_IMPORT');
 
         if (is_null(s::get('xml_file_schema'))) {
-            m::add(_('Please provide XML file schema'));
+            $this->get('session')->getFlashBag()->add('notice', _('Please provide XML file schema'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         }
@@ -69,7 +69,7 @@ class ImporterXmlfileController extends Controller
     public function importAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            m::add(_('Form was sent in the wrong way.'));
+            $this->get('session')->getFlashBag()->add('error', _('Form was sent in the wrong way.'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
         }
@@ -155,7 +155,8 @@ class ImporterXmlfileController extends Controller
                     }
 
                 } else {
-                    m::add(
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
                         sprintf(
                             _("There was an error while uploading «%s» - «%s». Check its size before send it."),
                             $uploaddir.$name,
@@ -220,9 +221,15 @@ class ImporterXmlfileController extends Controller
             );
 
             if (s::set('xml_file_schema', $schema)) {
-                m::add(_('Importer XML configuration saved successfully'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Importer XML configuration saved successfully')
+                );
             } else {
-                m::add(_('There was an error while saving importer XML configuration'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('There was an error while saving importer XML configuration')
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
