@@ -162,7 +162,9 @@ class UserController extends Controller
                             ."user {$user->id}: ".$e->getMessage()
                         );
 
-                        m::add(_('Unable to send your registration email. Please try it later.'), m::ERROR);
+                        $this->get('session')->getFlashBag()->add(
+                            'error', _('Unable to send your registration email. Please try it later.')
+                        );
                     }
                     // Set registration date
                     $user->addRegisterDate();
@@ -206,7 +208,10 @@ class UserController extends Controller
         $data['avatar_img_id']   = 0;
 
         if ($data['password'] != $data['passwordconfirm']) {
-            m::add(_('Password and confirmation must be equal.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Password and confirmation must be equal.')
+            );
             return $this->redirect($this->generateUrl('frontend_user_show'));
         }
 
@@ -218,12 +223,18 @@ class UserController extends Controller
                 // Clear caches
                 $this->dispatchEvent('author.update', array('id' => $data['id']));
 
-                m::add(_('Data updated successfully'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',_('Data updated successfully')
+                );
             } else {
-                m::add(_('Unable to update the user.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error', _('Unable to update the user.')
+                );
             }
         } else {
-            m::add(_('The user does not exists.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', _('The user does not exists.')
+            );
         }
 
         $this->view = new \Template(TEMPLATE_USER);
@@ -290,7 +301,7 @@ class UserController extends Controller
                 setCookieSecure('default_expire', $user->sessionexpire, 0);
             }
 
-            m::add(_('Log in succesful.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Log in succesful.'));
 
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
@@ -327,12 +338,16 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                m::add(_('Unable to send your welcome email.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error', _('Unable to send your welcome email.')
+                );
             }
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
-            m::add(_('There was an error while creating your user account.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', _('There was an error while creating your user account.')
+            );
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
@@ -403,11 +418,15 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error', _('Unable to send your recover password email. Please try it later.')
+                );
             }
 
         } else {
-            m::add(_('Unable to find an user with that email.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', _('Unable to find an user with that email.')
+            );
         }
 
         // Display form
@@ -480,11 +499,17 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to send your recover password email. Please try it later.')
+                );
             }
 
         } else {
-            m::add(_('Unable to find an user with that email.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to find an user with that email.')
+            );
         }
 
         // Display form
@@ -507,13 +532,14 @@ class UserController extends Controller
 
         if ('POST' !== $request->getMethod()) {
             if (empty($user->id)) {
-                m::add(
+                $this->get('session')->getFlashBag()->add(
+                    'error',
                     _(
                         'Unable to find the password reset request. '
                         .'Please check the url we sent you in the email.'
-                    ),
-                    m::ERROR
+                    )
                 );
+
                 $this->view->assign('userNotValid', true);
             } else {
                 $this->view->assign('user', $user);
@@ -528,7 +554,10 @@ class UserController extends Controller
 
                 $this->view->assign('updated', true);
             } else {
-                m::add(_('Unable to find the password reset request. Please check the url we sent you in the email.'));
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    _('Unable to find the password reset request. Please check the url we sent you in the email.')
+                );
             }
 
         }
