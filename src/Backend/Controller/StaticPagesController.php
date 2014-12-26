@@ -158,7 +158,7 @@ class StaticPagesController extends Controller
             } else {
                 // Check empty data
                 if (count($request->request) < 1) {
-                    m::add(_("Static Page data sent not valid."), m::ERROR);
+                    $this->get('session')->getFlashBag()->add('error', _("Static Page data sent not valid."));
 
                     return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
                 }
