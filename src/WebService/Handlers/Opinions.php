@@ -90,7 +90,7 @@ class Opinions
             $opinion->uri = 'ext'.$opinion->uri;
             $opinion->author = $ur->find(1);
             if (!is_null($opinion->author)) {
-                $opinion->author->uri = 'ext'.Uri::generate(
+                $opinion->author->uri = 'ext'.\Uri::generate(
                     'opinion_author_frontpage',
                     array(
                         'slug' => 'editorial',
@@ -127,7 +127,7 @@ class Opinions
             $opinion->uri = 'ext'.$opinion->uri;
             $opinion->author = $ur->find(2);
             if (!is_null($opinion->author)) {
-                $opinion->author->uri = 'ext'.Uri::generate(
+                $opinion->author->uri = 'ext'.\Uri::generate(
                     'opinion_author_frontpage',
                     array(
                         'slug' => 'director',
@@ -426,7 +426,7 @@ class Opinions
                     'id'       => $origElem['pk_content'],
                     'date'     => date('YmdHis', strtotime($origElem['created'])),
                     'category' => $origElem['author_name_slug'],
-                    'slug'     => StringUtils::getTitle($origElem['title']),
+                    'slug'     => \StringUtils::getTitle($origElem['title']),
                 )
             );
         }
