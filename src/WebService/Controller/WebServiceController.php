@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
-use Restler\OnmAuth;
+use Onm\Restler\OnmAuth;
 
 
 /**
@@ -57,7 +57,7 @@ class WebServiceController extends Controller
         $r->addAPIClass('WebService\Handlers\Opinions');
         $r->addAPIClass('WebService\Handlers\Videos');
 
-        $r->addAuthenticationClass('OnmAuth');
+        $r->addAuthenticationClass('Onm\Restler\OnmAuth');
 
         $r->handle();
         return;

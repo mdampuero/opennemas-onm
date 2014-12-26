@@ -9,15 +9,17 @@
  * file that was distributed with this source code.
  *
  **/
+namespace Onm\Restler;
+
 use Onm\Settings as s;
 
 /**
  * Handles the authentication protocol for the Onm News Agency
  *
  **/
-class OnmAuth implements iAuthenticate
+class OnmAuth implements \Luracast\Restler\iAuthenticate
 {
-    public function __isAuthenticated()
+    public function __isAllowed()
     {
 
         $realm = 'Enter your credentials';
@@ -58,6 +60,11 @@ class OnmAuth implements iAuthenticate
         }
 
         return $response;
+    }
+
+    public function __getWWWAuthenticateString()
+    {
+        return 'Bearer realm="Enter your credentials"';
     }
 
     // This function returns the digest string
