@@ -89,6 +89,7 @@ class Acl
         }
 
         if (!self::checkPrivileges($rule)) {
+
             m::add(_("Sorry, you don't have enought privileges"));
             forward301('/admin/');
         }
@@ -151,13 +152,7 @@ class Acl
      */
     public static function deny($message = 'Acceso no permitido')
     {
-        if (strlen($message) > 0) {
-            $message = new Message($message, 'error');
-            $message->push();
-        }
-
-        m::add(_("Sorry, you don't have enough privileges"));
-        forward('/admin/');
+        throw new \Onm\Security\Exception\AccessDeniedException($message);
     }
 
     /**
