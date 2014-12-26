@@ -98,47 +98,58 @@ class ImporterXmlfileController extends Controller
                 $micro     = intval(substr($t['usec'], 0, 5));
 
                 $name      = date("YmdHis").$micro.".".$extension;
+                $importer  = \ImporterXml::getInstance();
 
-                if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
+                $moveFile = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name);
+                if (!$moveFile) {
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        sprintf(
+                            _("There was an error while uploading «%s» - «%s». Check its size before send it."),
+                            $uploaddir.$name,
+                            $nameFile
+                        )
+                    );
+                }
 
-                    if ($extension == "zip") {
-                        $dataZIP = \Onm\Compress\Compress::decompressZIP($uploaddir.$name);
+                if ($extension == "zip") {
+                    $dataZIP = \Onm\Compress\Compress::decompressZIP($uploaddir.$name);
 
-                        @chmod($uploaddir.$name, 0775);
-                        sort($dataZIP);
-                        foreach ($dataZIP as $elementZIP) {
-                            @chmod($uploaddir.$elementZIP, 0775);
+                    @chmod($uploaddir.$name, 0775);
+                    sort($dataZIP);
+                    foreach ($dataZIP as $elementZIP) {
+                        @chmod($uploaddir.$elementZIP, 0775);
 
-                            $importer = \ImporterXml::getInstance();
+                        try {
                             $eltoXML  = $importer->importXML($uploaddir.$elementZIP);
-                            if ($eltoXML) {
-                                $XMLFile[$j] = $elementZIP;
+                            $XMLFile[$j] = $elementZIP;
 
-                                $values      = $importer->getXMLData($eltoXML);
-                                if (!empty($dryRun)) {
-                                    $article = new \Article();
-                                    $article->create($values);
-                                    $photo = new \Photo($values['img1']);
-                                    $values['photo'] =
-                                        INSTANCE_MEDIA.IMG_DIR.
-                                        $photo->path_file.$photo->name;
-                                    $dataXML[$j] = $values;
-                                }
-
+                            $values      = $importer->getXMLData($eltoXML);
+                            if (!empty($dryRun)) {
+                                $article = new \Article();
+                                $article->create($values);
+                                $photo = new \Photo($values['img1']);
+                                $values['photo'] =
+                                    INSTANCE_MEDIA.IMG_DIR.
+                                    $photo->path_file.$photo->name;
                                 $dataXML[$j] = $values;
-                                $j++;
-                            } else {
-                                //  m::add(_( 'No valid XML format' ));
                             }
+
+                            $dataXML[$j] = $values;
+                        } catch (\Exception $e) {
+                            $this->get('session')->getFlashBag()->add(
+                                'error', _("Can't read file. Please check xml file.")
+                            );
                         }
-                    } else {
-                        $importer    = \ImporterXml::getInstance();
 
+                        $j++;
+                    }
+                } else {
+                    try {
                         $eltoXML     = $importer->importXML($uploaddir.$name);
-
                         $XMLFile[$j] = $nameFile;
-
                         $values      = $importer->getXMLData($eltoXML);
+
                         if (!empty($dryRun)) {
                             $article = new \Article();
                             $article->create($values);
@@ -150,19 +161,13 @@ class ImporterXmlfileController extends Controller
                         }
 
                         $dataXML[$j] = $values;
-
-                        $j++;
+                    } catch (\Exception $e) {
+                        $this->get('session')->getFlashBag()->add(
+                            'error', _("Can't read file. Please check xml file.")
+                        );
                     }
 
-                } else {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        sprintf(
-                            _("There was an error while uploading «%s» - «%s». Check its size before send it."),
-                            $uploaddir.$name,
-                            $nameFile
-                        )
-                    );
+                    $j++;
                 }
             }
 

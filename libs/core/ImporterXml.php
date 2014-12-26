@@ -74,12 +74,10 @@ class ImporterXml
 
     public static function importXML($xmlFile)
     {
-        try {
-            $simple = simplexml_load_file($xmlFile);
+        $simple = simplexml_load_file($xmlFile);
 
-        } catch (Exception $e) {
-            m::add(_("Can't read file. Please check xml file..."));
-            return false;
+        if ($simple === false) {
+            throw new \Exception();
         }
 
         return $simple;
