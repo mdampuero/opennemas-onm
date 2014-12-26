@@ -79,7 +79,9 @@ class StaticPagesController extends Controller
                 )
             );
         } else {
-            m::add(sprintf(_('Unable to find a static page with the id "%d".'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error', sprintf(_('Unable to find a static page with the id "%d".'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }
@@ -122,7 +124,7 @@ class StaticPagesController extends Controller
 
             $staticPage->create($data);
 
-            m::add(_('Static page created successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Static page created successfully.'));
 
             return $this->redirect(
                 $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
@@ -150,7 +152,9 @@ class StaticPagesController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$staticPage->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this static page because you don't have enough privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'error', _("You can't modify this static page because you don't have enough privileges.")
+                );
             } else {
                 // Check empty data
                 if (count($request->request) < 1) {
@@ -177,7 +181,9 @@ class StaticPagesController extends Controller
                 );
 
                 $staticPage->update($data);
-                m::add(_("Static page updated successfully."), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success', _("Static page updated successfully.")
+                );
             }
 
             return $this->redirect(
