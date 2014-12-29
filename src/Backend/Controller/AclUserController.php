@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the system users

@@ -19,7 +19,6 @@ use Onm\Framework\Controller\Controller;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**

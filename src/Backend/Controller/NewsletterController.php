@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -585,7 +584,6 @@ class NewsletterController extends Controller
                                 'Your newsletter configuration is not completed. Please'.
                                 ' go to settings and complete the form.'
                             )
-
                         );
 
                         return $this->redirect($this->generateUrl('admin_newsletter_config'));

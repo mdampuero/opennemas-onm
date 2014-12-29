@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**

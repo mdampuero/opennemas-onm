@@ -18,10 +18,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
+use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
-use \Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing opinions

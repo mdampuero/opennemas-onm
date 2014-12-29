@@ -11,7 +11,6 @@
  * @package    Onm_Import
  */
 use Onm\Settings as s;
-use Onm\Message  as m;
 use Onm\StringUtils;
 
 /**

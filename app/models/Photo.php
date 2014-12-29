@@ -11,7 +11,6 @@
  *
  * @package Model
  */
-use Onm\Message as m;
 use Onm\StringUtils;
 
 /**

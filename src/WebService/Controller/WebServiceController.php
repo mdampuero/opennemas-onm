@@ -13,8 +13,6 @@ use Luracast\Restler\Restler;
 use Luracast\Restler\Defaults;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
-use Onm\Settings as s;
 use Onm\Restler\OnmAuth;
 
 /**
