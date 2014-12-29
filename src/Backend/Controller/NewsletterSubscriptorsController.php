@@ -333,7 +333,8 @@ class NewsletterSubscriptorsController extends Controller
             );
         } else {
             $this->get('session')->getFlashBag()->add(
-                'error', _('Please specify a subscriptor id for delete it.')
+                'error',
+                _('Please specify a subscriptor id for delete it.')
             );
         }
 

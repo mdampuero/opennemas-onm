@@ -17,7 +17,6 @@ use Onm\Message as m;
 use Onm\Settings as s;
 use Onm\Restler\OnmAuth;
 
-
 /**
  * Handles the actions for the web service
  *

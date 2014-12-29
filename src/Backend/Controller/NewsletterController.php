@@ -581,8 +581,10 @@ class NewsletterController extends Controller
                     if (empty($value)) {
                         $this->get('session')->getFlashBag()->add(
                             'error',
-                            _('Your newsletter configuration is not completed. Please'.
-                            ' go to settings and complete the form.')
+                            _(
+                                'Your newsletter configuration is not completed. Please'.
+                                ' go to settings and complete the form.'
+                            )
 
                         );
 

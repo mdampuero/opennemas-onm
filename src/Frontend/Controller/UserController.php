@@ -163,7 +163,8 @@ class UserController extends Controller
                         );
 
                         $this->get('session')->getFlashBag()->add(
-                            'error', _('Unable to send your registration email. Please try it later.')
+                            'error',
+                            _('Unable to send your registration email. Please try it later.')
                         );
                     }
                     // Set registration date
@@ -223,18 +224,12 @@ class UserController extends Controller
                 // Clear caches
                 $this->dispatchEvent('author.update', array('id' => $data['id']));
 
-                $this->get('session')->getFlashBag()->add(
-                    'success',_('Data updated successfully')
-                );
+                $this->get('session')->getFlashBag()->add('success', _('Data updated successfully'));
             } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error', _('Unable to update the user.')
-                );
+                $this->get('session')->getFlashBag()->add('error', _('Unable to update the user.'));
             }
         } else {
-            $this->get('session')->getFlashBag()->add(
-                'error', _('The user does not exists.')
-            );
+            $this->get('session')->getFlashBag()->add('error', _('The user does not exists.'));
         }
 
         $this->view = new \Template(TEMPLATE_USER);
@@ -338,16 +333,12 @@ class UserController extends Controller
                     ."user {$user->id}: ".$e->getMessage()
                 );
 
-                $this->get('session')->getFlashBag()->add(
-                    'error', _('Unable to send your welcome email.')
-                );
+                $this->get('session')->getFlashBag()->add('error', _('Unable to send your welcome email.'));
             }
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
-            $this->get('session')->getFlashBag()->add(
-                'error', _('There was an error while creating your user account.')
-            );
+            $this->get('session')->getFlashBag()->add('error', _('There was an error while creating your user account.'));
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
@@ -419,14 +410,13 @@ class UserController extends Controller
                 );
 
                 $this->get('session')->getFlashBag()->add(
-                    'error', _('Unable to send your recover password email. Please try it later.')
+                    'error',
+                    _('Unable to send your recover password email. Please try it later.')
                 );
             }
 
         } else {
-            $this->get('session')->getFlashBag()->add(
-                'error', _('Unable to find an user with that email.')
-            );
+            $this->get('session')->getFlashBag()->add('error', _('Unable to find an user with that email.'));
         }
 
         // Display form
