@@ -671,7 +671,7 @@ EOF;
      *
      * @return string the random string
      **/
-    function generateRandomString($length = 10)
+    public static function generateRandomString($length = 10)
     {
         $validCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -690,7 +690,7 @@ EOF;
      *
      * @return string the UTF-8 converted string
      **/
-    function convertToUTF8AndStrToLower($str)
+    public static function convertToUTF8AndStrToLower($str)
     {
         // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
         $str = mb_convert_encoding(

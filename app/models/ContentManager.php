@@ -2014,7 +2014,7 @@ class ContentManager
      *
      * @return Content the content of type $content_type and id $content_id
      */
-    public static  function getOriginalIDForContentTypeAndID($content_type, $content_id)
+    public static function getOriginalIDForContentTypeAndID($content_type, $content_id)
     {
         $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
 
