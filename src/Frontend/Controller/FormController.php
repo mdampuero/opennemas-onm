@@ -64,8 +64,6 @@ class FormController extends Controller
 
         $this->view = new \Template(TEMPLATE_USER);
 
-        require_once 'recaptchalib.php';
-
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
 
@@ -77,16 +75,16 @@ class FormController extends Controller
         $class            = "";
 
         if (empty($verify)) {
+            // New captcha instance
+            $captcha = new \Captcha\Captcha();
+            $captcha->setPrivateKey($configRecaptcha['private_key']);
+            $captcha->setRemoteIp($request->getClientIp());
+
             // Get reCaptcha validate response
-            $resp = recaptcha_check_answer(
-                $configRecaptcha['private_key'],
-                $request->getClientIp(),
-                $rcChallengeField,
-                $rcResponseField
-            );
+            $resp = $captcha->check($rcChallengeField, $rcResponseField);
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (!$resp->is_valid) {
+            if (!$resp->isValid()) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {

@@ -53,9 +53,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $this->context = $context;
         $this->router  = $router;
         $this->session = $session;
-
-        // Load reCaptcha lib
-        require_once 'recaptchalib.php';
     }
 
     /**
@@ -80,14 +77,17 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         // Validate recaptcha
         if ($request->get('challenge')) {
-            $valid = recaptcha_check_answer(
-                '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
-                $request->getClientIp(),
+            // New captcha instance
+            $captcha = new \Captcha\Captcha();
+            $captcha->setPrivateKey('6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs');
+            $captcha->setRemoteIp($request->getClientIp());
+
+            // Get reCaptcha validate response
+            $valid = $captcha->check(
                 $request->get('challenge'),
                 $request->get('response')
             );
-
-            $valid = $valid->is_valid;
+            $valid = $valid->isValid();
         }
 
         // Validate CSRF

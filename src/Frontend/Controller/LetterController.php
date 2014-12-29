@@ -171,9 +171,6 @@ class LetterController extends Controller
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
         return $this->render('letter/letter_form.tpl');
     }
 
@@ -188,8 +185,6 @@ class LetterController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        require_once 'recaptchalib.php';
-
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =
@@ -198,16 +193,16 @@ class LetterController extends Controller
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
 
+        // New captcha instance
+        $captcha = new \Captcha\Captcha();
+        $captcha->setPrivateKey($configRecaptcha['private_key']);
+        $captcha->setRemoteIp($request->getClientIp());
+
         // Get reCaptcha validate response
-        $resp = \recaptcha_check_answer(
-            $configRecaptcha['private_key'],
-            $_SERVER["REMOTE_ADDR"],
-            $recaptcha_challenge_field,
-            $recaptcha_response_field
-        );
+        $resp = $captcha->check($recaptcha_challenge_field, $recaptcha_response_field);
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->is_valid) {
+        if (!$resp->isValid()) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
             $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
