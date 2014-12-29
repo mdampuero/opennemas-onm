@@ -172,6 +172,7 @@ class ImagesController extends Controller
                 $photos []= $photo;
             }
         }
+
         // Check if passed ids fits photos in database, if not redirect to listing
         if (count($photos) <= 0) {
             $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));

@@ -256,7 +256,7 @@ class LetterController extends Controller
                 if ($letter->hasBadWords($data)) {
                     $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
                 } else {
-                    $ip = getRealIp();
+                    $ip = getUserRealIP();
                     $params['ip']   = $ip;
                     $data["params"] = $params;
 

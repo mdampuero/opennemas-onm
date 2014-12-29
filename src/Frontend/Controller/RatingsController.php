@@ -36,7 +36,7 @@ class RatingsController extends Controller
     public function voteAction(Request $request)
     {
         // Retrieve data
-        $ip        = getRealIp();
+        $ip        = getUserRealIP();
         $ipFrom    = $request->query->filter('i', null, FILTER_SANITIZE_STRING);
         $voteValue = $request->query->filter('v', null, FILTER_VALIDATE_INT);
         $page      = $request->query->filter('p', null, FILTER_SANITIZE_STRING);

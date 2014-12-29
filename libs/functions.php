@@ -78,75 +78,6 @@ function setCookieSecure($name, $value, $expires = 0, $domain = '/')
 
 
 /**
- * Try to get the real IP of the client
- *
- * @return string the client ip
- **/
-function getUserRealIP()
-{
-    // REMOTE_ADDR: dirección ip del cliente
-    // HTTP_X_FORWARDED_FOR: si no está vacío indica que se ha utilizado
-    // un proxy. Al pasar por el proxy lo que hace este es poner su
-    // dirección IP como REMOTE_ADDR y añadir la que estaba como
-    // REMOTE_ADDR al final de esta cabecera.
-    // En el caso de que la petición pase por varios proxys cada uno
-    // repite la operación, por lo que tendremos una lista de direcciones
-    // IP que partiendo del REMOTE_ADDR original irá indicando los proxys
-    // por los que ha pasado.
-
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-        && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
-    ) {
-        $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
-            $_SERVER['REMOTE_ADDR']
-            :
-            ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
-                $_ENV['REMOTE_ADDR']
-                :
-                "unknown" );
-
-        // los proxys van añadiendo al final de esta cabecera
-        // las direcciones ip que van "ocultando". Para localizar la ip real
-        // del usuario se comienza a mirar por el principio hasta encontrar
-        // una dirección ip que no sea del rango privado. En caso de no
-        // encontrarse ninguna se toma como valor el REMOTE_ADDR
-
-        $entries = split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
-
-        reset($entries);
-        while (list(, $entry) = each($entries)) {
-            $entry = trim($entry);
-            if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
-                // http://www.faqs.org/rfcs/rfc1918.html
-                $privateIp = array(
-                      '/^0\./',
-                      '/^127\.0\.0\.1/',
-                      '/^192\.168\..*/',
-                      '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
-                      '/^10\..*/');
-
-                $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
-
-                if ($clientIp != $foundIP) {
-                    $clientIp = $foundIP;
-                    break;
-                }
-            }
-        }
-    } else {
-        $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
-            $_SERVER['REMOTE_ADDR']
-            :
-            ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
-                $_ENV['REMOTE_ADDR']
-                :
-                "unknown" );
-    }
-
-    return $clientIp;
-}
-
-/**
  * Cleans double slashes and trailing slash from an string url
  *
  * @param string $url the url to normalize
@@ -353,7 +284,7 @@ function forward301($url)
  *
  * @return string the client ip
  **/
-function getRealIp()
+function getUserRealIP()
 {
     // REMOTE_ADDR: dirección ip del cliente
     // HTTP_X_FORWARDED_FOR: si no está vacío indica que se ha utilizado
@@ -366,17 +297,15 @@ function getRealIp()
     // por los que ha pasado.
 
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-        && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-        $clientIp =
-            ( isset($_SERVER['REMOTE_ADDR'])
-                && !empty($_SERVER['REMOTE_ADDR']) ) ?
+        && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
+    ) {
+        $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
             $_SERVER['REMOTE_ADDR']
-                :
-                ( ( isset($_ENV['REMOTE_ADDR'])
-                    && !empty($_ENV['REMOTE_ADDR']) ) ?
+            :
+            ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
                 $_ENV['REMOTE_ADDR']
-                    :
-                    "unknown" );
+                :
+                "unknown" );
 
         // los proxys van añadiendo al final de esta cabecera
         // las direcciones ip que van "ocultando". Para localizar la ip real
@@ -384,7 +313,7 @@ function getRealIp()
         // una dirección ip que no sea del rango privado. En caso de no
         // encontrarse ninguna se toma como valor el REMOTE_ADDR
 
-        $entries = preg_split('/[, ]/', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $entries = split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
         reset($entries);
         while (list(, $entry) = each($entries)) {
@@ -392,31 +321,28 @@ function getRealIp()
             if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
                 // http://www.faqs.org/rfcs/rfc1918.html
                 $privateIp = array(
-                    '/^0\./',
-                    '/^127\.0\.0\.1/',
-                    '/^192\.168\..*/',
-                    '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
-                    '/^10\..*/'
-                );
+                      '/^0\./',
+                      '/^127\.0\.0\.1/',
+                      '/^192\.168\..*/',
+                      '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
+                      '/^10\..*/');
 
-                $foundIp = preg_replace($privateIp, $clientIp, $ipList[1]);
+                $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
 
-                if ($clientIp != $foundIp) {
-                    return  $foundIp;
+                if ($clientIp != $foundIP) {
+                    $clientIp = $foundIP;
+                    break;
                 }
             }
         }
     } else {
-        $clientIp =
-            ( isset($_SERVER['REMOTE_ADDR'])
-                && !empty($_SERVER['REMOTE_ADDR']) ) ?
+        $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
             $_SERVER['REMOTE_ADDR']
-                :
-                ( ( isset($_ENV['REMOTE_ADDR'])
-                    && !empty($_ENV['REMOTE_ADDR']) ) ?
+            :
+            ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
                 $_ENV['REMOTE_ADDR']
-                    :
-                    "unknown" );
+                :
+                "unknown" );
     }
 
     return $clientIp;
