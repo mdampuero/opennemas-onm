@@ -190,42 +190,6 @@ function stripslashes_deep($value)
 
     return $value;
 }
-
-function render_output($content, $banner)
-{
-    if (is_object($banner)
-        && property_exists($banner, 'type_advertisement')
-        && ((($banner->type_advertisement + 50)%100) == 0)
-    ) {
-        $content = json_encode($content);
-
-        $timeout = intval($banner->timeout) * 1000; // convert to ms
-        $pk_advertisement = date('YmdHis', strtotime($banner->created)).
-                            sprintf('%06d', $banner->pk_advertisement);
-
-        /*
-         * intersticial = new IntersticialBanner({iframeSrc: '/sargadelos.html?cacheburst=1254325526',
-         *                                        timeout: -1,
-         *                                        useIframe: true});
-         */
-        $output = <<< JSINTERSTICIAL
-<script type="text/javascript" language="javascript">
-/* <![CDATA[ */
-var intersticial = new IntersticialBanner({
-publiId: "$pk_advertisement",
-cookieName: "ib_$pk_advertisement",
-content: $content,
-timeout: $timeout});
-/* ]]> */
-</script>
-JSINTERSTICIAL;
-
-        return $output;
-    }
-
-    return $content;
-}
-
 /**
 * Perform a permanently redirection (301)
 *
