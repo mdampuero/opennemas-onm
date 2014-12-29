@@ -71,7 +71,10 @@ class WidgetsController extends Controller
             }
         }
         if (is_null($widget->id)) {
-            m::add(sprintf(_('Unable to find a widget with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a widget with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_widgets'));
         }
@@ -104,8 +107,8 @@ class WidgetsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $post = $request->request;
-            $items = $post->get('items');
+            $post   = $request->request;
+            $items  = $post->get('items');
             $values = $post->get('values');
 
             $widgetData = array(
@@ -128,12 +131,12 @@ class WidgetsController extends Controller
                 $widget = new \Widget();
                 $widget->create($widgetData);
             } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
                 return $this->redirect($this->generateUrl('admin_widget_create'));
             }
 
-            m::add(_('Widget created successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_widgets'));
 
@@ -168,12 +171,12 @@ class WidgetsController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Widget data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _("Widget data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
-        $items = $post->get('items');
+        $items  = $post->get('items');
         $values = $post->get('values');
 
         $widgetData = array(
@@ -193,14 +196,20 @@ class WidgetsController extends Controller
         }
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
-            m::add(_('There was an error while updating the widget.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while updating the widget.')
+            );
 
             return $this->redirect(
                 $this->generateUrl('admin_widgets', array('page' => $page,))
             );
         }
 
-        m::add(_('Widget updated successfully.'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Widget updated successfully.')
+        );
 
         return $this->redirect(
             $this->generateUrl('admin_widget_show', array('id' => $id,))
