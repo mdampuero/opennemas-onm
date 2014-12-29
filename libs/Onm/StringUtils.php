@@ -726,5 +726,4 @@ EOF;
 
         return utf8_encode(strtr($string, $transTbl));
     }
-
 }
