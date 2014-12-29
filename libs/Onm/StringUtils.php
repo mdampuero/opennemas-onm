@@ -671,4 +671,18 @@ EOF;
 
         return $text;
     }
+
+    /**
+     * Prepares HTML code to use it as html entity attribute
+     *
+     * @param string $string the string to clean
+     *
+     * @return string $string the cleaned string
+     **/
+    public static function htmlAttribute($string)
+    {
+        $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+
+        return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
 }

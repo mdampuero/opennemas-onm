@@ -335,7 +335,6 @@ JSINTERSTICIAL;
 }
 
 /**
- *
 * Perform a permanently redirection (301)
 *
 * Use the header PHP function to redirect browser to another page
@@ -454,8 +453,7 @@ function generateRandomString($length = 10)
  **/
 function html_attribute($string)
 {
-    $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
-    return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return \Onm\StringUtils::htmlAttribute($string);
 }
 
 // added Claudio Bustos  clbustos#entelchile.net

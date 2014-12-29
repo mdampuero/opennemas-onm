@@ -17,12 +17,13 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         // Set content data for facebook tags
         $summary = $content->summary;
         if (empty($summary)) {
-            $summary = mb_substr($content->body, 0, 120)."...";
             if (empty($content->body)) {
                 $summary = mb_substr($content->description, 0, 120)."...";
+            } else {
+                $summary = mb_substr($content->body, 0, 120)."...";
             }
         }
-        $summary = trim(html_attribute($summary));
+        $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
         $url = "http://".SITE.'/'.$content->uri;
 
         // Generate tags
