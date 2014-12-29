@@ -52,7 +52,6 @@ function clearslash($string)
     return stripslashes($string);
 }
 
-
 /**
  * Stablishes a cookie value in a secure way
  *
