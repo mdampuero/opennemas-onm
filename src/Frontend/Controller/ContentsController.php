@@ -350,7 +350,7 @@ class ContentsController extends Controller
         }
 
         $userAgent = $request->headers->get('User-Agent');
-        $isBot     = isBot($userAgent);
+        $isBot     = \Onm\Utils\BotDetector::isBot($userAgent);
 
         // Increment view only if the request is performed with an AJAX request
         if ($isBot) {
