@@ -89,9 +89,9 @@ class Acl
         }
 
         if (!self::checkPrivileges($rule)) {
-
-            m::add(_("Sorry, you don't have enought privileges"));
-            forward301('/admin/');
+            throw new \Onm\Security\Exception\AccessDeniedException(
+                _("Sorry, you don't have enough privileges")
+            );
         }
 
         return true;
