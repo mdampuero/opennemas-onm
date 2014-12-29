@@ -663,6 +663,26 @@ EOF;
         return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
+
+    /**
+     * Returns a randomly generated string from a given length
+     *
+     * @param int $length the length in chars of the generated string
+     *
+     * @return string the random string
+     **/
+    function generateRandomString($length = 10)
+    {
+        $validCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $validCharacters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
+    }
+
     /**
      * Converts to UTF-8 an string
      *
