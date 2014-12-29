@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Onm\Utils;
 
 /**
 * Detects a boot by its user agent string
@@ -20,7 +21,7 @@ class BotDetector
      *
      * @return boolean
      **/
-    function isBot($userAgentString)
+    public static function isBot($userAgentString)
     {
         // TODO: improve this implementation using this resource http://www.iplists.com/
         $spiders = [
