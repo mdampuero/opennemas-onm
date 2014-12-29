@@ -42,12 +42,12 @@ class RedirectorsController extends Controller
 
         if ($slug === 'none') {
             if (!empty($type)) {
-                $newContentID  = getOriginalIDForContentTypeAndID($type, $contentId);
+                $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($type, $contentId);
             } else {
-                list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
             }
         } else {
-            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
         }
 
         if ($oldVersion == 'editmaker') {
@@ -88,9 +88,9 @@ class RedirectorsController extends Controller
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
         if ($slug == 'none') {
-            $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+            $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($contentType, $contentId);
         } else {
-            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
             // Unused var $type
             unset($type);
         }

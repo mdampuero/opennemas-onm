@@ -2005,4 +2005,94 @@ class ContentManager
 
         return $contents;
     }
+
+    /**
+     * Helper function to check existance one element in translation_ids table
+     *
+     * @param string $content_type the content type to search for
+     * @param string $content_id the content id to get
+     *
+     * @return Content the content of type $content_type and id $content_id
+     */
+    public static  function getOriginalIDForContentTypeAndID($content_type, $content_id)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
+
+        $_values = array($content_id, $content_type);
+        $_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+
+                $returnValue =  $rss->fields['pk_content'];
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+
+    }
+
+
+    /**
+     * Returns the original ID and content type for a given content id
+     *
+     * @param string $content_id the content id to get
+     *
+     * @return array ($content_type and id $content_id)
+     */
+    public static function getOriginalIdAndContentTypeFromID($content_id)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? LIMIT 1';
+
+        $_values = $content_id;
+        $_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+                $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Returns the original ID and content type for a given content slug
+     *
+     * @param string $slug the slug of the content
+     *
+     * @return array ($content_type and id $content_id)
+     */
+    public static function getOriginalIdAndContentTypeFromSlug($slug)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `slug`=? LIMIT 1';
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rss = $GLOBALS['application']->conn->Execute($sql, array($slug));
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+                $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+    }
 }
