@@ -469,6 +469,7 @@ class Photo extends Content
                     }
 
                     if (isset($info['APP13'])) {
+
                         $iptc = iptcparse($info['APP13']);
 
                         if (is_array($iptc)) {
@@ -509,7 +510,7 @@ class Photo extends Content
                             $myiptc['Source']              = $iptc["2#110"][0];
                             $myiptc['Photo_source']        = $iptc["2#183"][0];
 
-                            $myiptc = array_map('map_entities', $myiptc);
+                            $myiptc = array_map('\Onm\StringUtils::convertToUTF8AndStrToLower', $myiptc);
                             $this->myiptc = $myiptc;
 
                             if (empty($this->description)) {
@@ -517,7 +518,7 @@ class Photo extends Content
                             }
 
                             if (empty($this->metadata)) {
-                                $this->metadata = map_entities($keywords);
+                                $this->metadata = \Onm\StringUtils::convertToUTF8AndStrToLower($keywords);
                             }
 
                             if (empty($this->author_name)) {

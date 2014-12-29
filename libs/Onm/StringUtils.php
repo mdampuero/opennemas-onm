@@ -664,6 +664,25 @@ EOF;
     }
 
     /**
+     * Converts to UTF-8 an string
+     *
+     * @param string $str the string to convert
+     *
+     * @return string the UTF-8 converted string
+     **/
+    function convertToUTF8AndStrToLower($str)
+    {
+        // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
+        $str = mb_convert_encoding(
+            $str,
+            "UTF-8",
+            "CP1252,CP1251,ISO-8859-1,UTF-8,ISO-8859-15"
+        );
+
+        return mb_strtolower($str, 'UTF-8');
+    }
+
+    /**
      * Cleans double slashes and trailing slash from an string url
      *
      * @param string $url the url to normalize

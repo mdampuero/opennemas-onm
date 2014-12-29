@@ -180,18 +180,6 @@ function getOriginalIdAndContentTypeFromSlug($slug)
     return $returnValue;
 }
 
-// Used in the Photo class
-function map_entities($str)
-{
-    // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
-    $str = mb_convert_encoding(
-        $str,
-        "UTF-8",
-        "CP1252,CP1251,ISO-8859-1,UTF-8, ISO-8859-15"
-    );
-
-    return mb_strtolower($str, 'UTF-8');
-    // return htmlentities($str, ENT_COMPAT, 'UTF-8');
 }
 
 function stripslashes_deep($value)
