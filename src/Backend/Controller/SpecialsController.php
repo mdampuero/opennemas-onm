@@ -109,38 +109,42 @@ class SpecialsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-            $special = new \Special();
+        if ('POST' !== $request->getMethod()) {
 
-            $data = array(
-                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
-                'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
-            );
-
-            if ($special->create($data)) {
-                m::add(_('Special successfully created.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to create the new special.'), m::ERROR);
-            }
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_special_show',
-                    array('id' => $special->id)
-                )
-            );
-        } else {
             return $this->render('special/new.tpl');
         }
+
+        $special = new \Special();
+
+        $data = array(
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+            'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
+            'noticias_right' => json_decode($request->request->get('noticias_right_input')),
+            'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
+        );
+
+        if ($special->create($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Special successfully created.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add('error', _('Unable to create the new special.'));
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_special_show',
+                array('id' => $special->id)
+            )
+        );
     }
 
     /**
@@ -158,7 +162,10 @@ class SpecialsController extends Controller
 
         $special = new \Special($id);
         if (is_null($special->id)) {
-            m::add(sprintf(_('Unable to find the special with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the special with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_specials'));
         }
@@ -215,7 +222,10 @@ class SpecialsController extends Controller
         if ($special->id != null) {
             // Check empty data
             if (count($request->request) < 1) {
-                m::add(_("Special data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Special data sent not valid.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_special_show', array('id' => $id)));
             }
@@ -235,9 +245,15 @@ class SpecialsController extends Controller
             );
 
             if ($special->update($data)) {
-                m::add(_('Special successfully updated.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Special successfully updated.')
+                );
             } else {
-                m::add(_('Unable to update the special.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the special.')
+                );
             }
 
             return $this->redirect(
@@ -268,9 +284,15 @@ class SpecialsController extends Controller
             $special = new \Special($id);
 
             $special->delete($id, $_SESSION['userid']);
-            m::add(_("Special deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Special deleted successfully.")
+            );
         } else {
-            m::add(_('You must give an id for delete a special.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id for delete a special.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -354,7 +376,10 @@ class SpecialsController extends Controller
             foreach ($data as $key => $value) {
                 s::set($key, $value);
             }
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_specials_config'));
         } else {
