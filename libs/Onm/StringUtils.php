@@ -373,29 +373,6 @@ EOF;
         return utf8_encode(strtr($string, $transTbl));
     }
 
-
-    /**
-     * Disable magic quotes if it is enabled
-     *
-     * @param array $data
-     *
-     * @return void
-     **/
-    public static function disabledMagicQuotes(&$data = null)
-    {
-        // @codeCoverageIgnoreStart
-        if (get_magic_quotes_gpc()) {
-            if (!is_null($data)) {
-                $data = array_map('stripslashes_deep', $data);
-            } else {
-                $_POST = array_map('stripslashes_deep', $_POST);
-                $_GET = array_map('stripslashes_deep', $_GET);
-                $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-                $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
-            }
-        }
-    }
-
     /**
      * Removes some spanish bad words and swears from the given string
      *
