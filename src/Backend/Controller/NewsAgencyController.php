@@ -555,8 +555,10 @@ class NewsAgencyController extends Controller
         $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
         try {
-            $message = $synchronizer->syncMultiple($servers);
-            $this->get('session')->getFlashBag()->add('error', $message);
+            $messages = $synchronizer->syncMultiple($servers);
+            foreach ($messages as $message) {
+                $this->get('session')->getFlashBag()->add('error', $message);
+            }
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
                 .sprintf(
