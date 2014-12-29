@@ -76,33 +76,6 @@ function setCookieSecure($name, $value, $expires = 0, $domain = '/')
     );
 }
 
-
-/**
- * Cleans double slashes and trailing slash from an string url
- *
- * @param string $url the url to normalize
- * @return string the normalized url
- **/
-function normalizeUrl($url)
-{
-    $urlParts = explode('?', $url);
-    $url      = $urlParts[0];
-
-    $urlParams = '';
-    if (array_key_exists('1', $urlParts)) {
-        $urlParams = '?'.$urlParts[1];
-    }
-    $url = rtrim($url, '/');
-
-    if ($urlParams !== '' && $url !== '/') {
-        while (strpos($url, '//') != false) {
-            $url = str_replace('//', '/', $url);
-        }
-    }
-
-    return $url.$urlParams;
-}
-
 /**
  * Register in the log one event in the content
  *

@@ -662,4 +662,30 @@ EOF;
 
         return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
+
+    /**
+     * Cleans double slashes and trailing slash from an string url
+     *
+     * @param string $url the url to normalize
+     * @return string the normalized url
+     **/
+    public static function normalizeUrl($url)
+    {
+        $urlParts = explode('?', $url);
+        $url      = $urlParts[0];
+
+        $urlParams = '';
+        if (array_key_exists('1', $urlParts)) {
+            $urlParams = '?'.$urlParts[1];
+        }
+        $url = rtrim($url, '/');
+
+        if ($urlParams !== '' && $url !== '/') {
+            while (strpos($url, '//') != false) {
+                $url = str_replace('//', '/', $url);
+            }
+        }
+
+        return $url.$urlParams;
+    }
 }
