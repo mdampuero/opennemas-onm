@@ -335,17 +335,7 @@ JSINTERSTICIAL;
 }
 
 /**
- * Returns the current time in UNIX forma including microsecs
  *
- * @return float
- **/
-function microtime_float()
-{
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
-}
-
-/**
 * Perform a permanently redirection (301)
 *
 * Use the header PHP function to redirect browser to another page
