@@ -235,7 +235,8 @@ class ImagesController extends Controller
 
         if (count($ids) > 0) {
             $this->get('session')->getFlashBag()->add(
-                'success', sprintf(_('Data successfully saved for %d photos'), $photosSaved)
+                'success',
+                sprintf(_('Data successfully saved for %d photos'), $photosSaved)
             );
         }
 
@@ -261,7 +262,8 @@ class ImagesController extends Controller
         $photo = new \Photo($id);
         if (is_null($photo->id)) {
             $this->get('session')->getFlashBag()->add(
-                'error', sprintf(_('Unable to find the photo with the id "%d"'), $id)
+                'error',
+                sprintf(_('Unable to find the photo with the id "%d"'), $id)
             );
 
             return $this->redirect($this->generateUrl('admin_images'));

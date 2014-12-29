@@ -327,7 +327,8 @@ class AdsController extends Controller
             );
         } else {
             $this->get('session')->getFlashBag()->add(
-                'error', _('Unable to update the advertisement data.')
+                'error',
+                _('Unable to update the advertisement data.')
             );
         }
 

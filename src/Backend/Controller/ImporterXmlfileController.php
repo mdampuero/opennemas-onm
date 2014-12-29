@@ -138,7 +138,8 @@ class ImporterXmlfileController extends Controller
                             $dataXML[$j] = $values;
                         } catch (\Exception $e) {
                             $this->get('session')->getFlashBag()->add(
-                                'error', _("Can't read file. Please check xml file.")
+                                'error',
+                                _("Can't read the file. Please check xml file.")
                             );
                         }
 
@@ -163,7 +164,8 @@ class ImporterXmlfileController extends Controller
                         $dataXML[$j] = $values;
                     } catch (\Exception $e) {
                         $this->get('session')->getFlashBag()->add(
-                            'error', _("Can't read file. Please check xml file.")
+                            'error',
+                            _("Can't read file. Please check xml file.")
                         );
                     }
 

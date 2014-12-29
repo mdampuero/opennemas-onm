@@ -127,8 +127,10 @@ class VideosController extends Controller
                 ) {
                     $this->get('session')->getFlashBag()->add(
                         'error',
-                        _('There was a problem while uploading the file. '
-                        .'Please check if you have completed all the form fields.')
+                        _(
+                            'There was a problem while uploading the file. '
+                            .'Please check if you have completed all the form fields.'
+                        )
                     );
 
                     return $this->redirect(
@@ -284,7 +286,8 @@ class VideosController extends Controller
                 && !$video->isOwner($_SESSION['userid'])
             ) {
                 $this->get('session')->getFlashBag()->add(
-                    'notice', _("You can't modify this video because you don't have enought privileges.")
+                    'notice',
+                    _("You can't modify this video because you don't have enought privileges.")
                 );
             } else {
 
@@ -367,11 +370,13 @@ class VideosController extends Controller
             $video->delete($id, $_SESSION['userid']);
 
             $this->get('session')->getFlashBag()->add(
-                'success', _("Video '{$video->title}' deleted successfully.")
+                'success',
+                _("Video '{$video->title}' deleted successfully.")
             );
         } else {
             $this->get('session')->getFlashBag()->add(
-                'error', _('You must give an id to delete the video.')
+                'error',
+                _('You must give an id to delete the video.')
             );
         }
 
@@ -406,7 +411,8 @@ class VideosController extends Controller
 
         if (is_null($video->id)) {
             $this->get('session')->getFlashBag()->add(
-                'error', sprintf(_('Unable to find the video with the id "%d"'), $id)
+                'error',
+                sprintf(_('Unable to find the video with the id "%d"'), $id)
             );
 
             return $this->redirect($this->generateUrl('admin_videos'));

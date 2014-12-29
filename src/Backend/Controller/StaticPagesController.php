@@ -80,7 +80,8 @@ class StaticPagesController extends Controller
             );
         } else {
             $this->get('session')->getFlashBag()->add(
-                'error', sprintf(_('Unable to find a static page with the id "%d".'), $id)
+                'error',
+                sprintf(_('Unable to find a static page with the id "%d".'), $id)
             );
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
@@ -153,7 +154,8 @@ class StaticPagesController extends Controller
                 && !$staticPage->isOwner($_SESSION['userid'])
             ) {
                 $this->get('session')->getFlashBag()->add(
-                    'error', _("You can't modify this static page because you don't have enough privileges.")
+                    'error',
+                    _("You can't modify this static page because you don't have enough privileges.")
                 );
             } else {
                 // Check empty data
@@ -182,7 +184,8 @@ class StaticPagesController extends Controller
 
                 $staticPage->update($data);
                 $this->get('session')->getFlashBag()->add(
-                    'success', _("Static page updated successfully.")
+                    'success',
+                    _("Static page updated successfully.")
                 );
             }
 
