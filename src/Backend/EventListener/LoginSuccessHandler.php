@@ -67,14 +67,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $user       = $token->getUser();
-        $valid      = true;
+        $user  = $token->getUser();
+        $valid = true;
 
         if ($request->get('recaptcha_challenge_field')) {
             // New captcha instance
-            $captcha = new \Captcha\Captcha();
-            $captcha->setPrivateKey('6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs');
-            $captcha->setRemoteIp($request->getClientIp());
+            $captcha = getService('recaptcha')
+                ->setRemoteIp($request->getClientIp());
 
             // Get reCaptcha validate response
             $valid = $captcha->check(

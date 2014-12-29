@@ -194,9 +194,9 @@ class LetterController extends Controller
         $configRecaptcha = s::get('recaptcha');
 
         // New captcha instance
-        $captcha = new \Captcha\Captcha();
-        $captcha->setPrivateKey($configRecaptcha['private_key']);
-        $captcha->setRemoteIp($request->getClientIp());
+        $captcha = getService('recaptcha')
+            ->setPrivateKey($configRecaptcha['private_key'])
+            ->setRemoteIp($request->getClientIp());
 
         // Get reCaptcha validate response
         $resp = $captcha->check($recaptcha_challenge_field, $recaptcha_response_field);

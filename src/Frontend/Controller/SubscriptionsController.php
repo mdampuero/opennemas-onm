@@ -74,9 +74,9 @@ class SubscriptionsController extends Controller
 
         if (empty($verify)) {
             // New captcha instance
-            $captcha = new \Captcha\Captcha();
-            $captcha->setPrivateKey($configRecaptcha['private_key']);
-            $captcha->setRemoteIp($request->getClientIp());
+            $captcha = getService('recaptcha')
+                ->setPrivateKey($configRecaptcha['private_key'])
+                ->setRemoteIp($request->getClientIp());
 
             // Get reCaptcha validate response
             $resp = $captcha->check($rcChallengeField, $rcResponseField);
