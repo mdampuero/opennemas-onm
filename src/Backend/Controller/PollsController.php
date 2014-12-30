@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -64,12 +63,11 @@ class PollsController extends Controller
     /**
      * Lists all the available polls.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('poll/list.tpl');
     }
@@ -77,12 +75,11 @@ class PollsController extends Controller
     /**
      * Lists all the polls in the widget.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
      */
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('poll_settings');
         if (array_key_exists('total_widget', $configurations)) {
@@ -124,11 +121,16 @@ class PollsController extends Controller
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'item'           => $request->request->get('item'),
+                'params'         => $request->request->get('params'),
             );
             $poll = $poll->create($data);
 
             if (!empty($poll->id)) {
-                m::add(_('Poll successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Poll successfully created.')
+                );
+
                 return $this->redirect(
                     $this->generateUrl(
                         'admin_poll_show',
@@ -136,7 +138,10 @@ class PollsController extends Controller
                     )
                 );
             } else {
-                m::add(_('Unable to create the new poll.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new poll.')
+                );
 
                 return $this->redirect(
                     $this->generateUrl(
@@ -148,7 +153,7 @@ class PollsController extends Controller
 
 
         } else {
-            return $this->render('poll/new.tpl');
+            return $this->render('poll/new.tpl', array('commentsConfig' => s::get('comments_config')));
         }
     }
 
@@ -166,17 +171,23 @@ class PollsController extends Controller
 
         $poll = new \Poll($id);
         if (is_null($poll->id)) {
-            m::add(sprintf(_('Unable to find the poll with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the poll with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_polls'));
         }
-
+        if (is_string($poll->params)) {
+            $poll->params = unserialize($poll->params);
+        }
 
         return $this->render(
             'poll/new.tpl',
             array(
                 'poll'  => $poll,
                 'items' => $poll->items,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }
@@ -192,53 +203,58 @@ class PollsController extends Controller
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add('error', _("Poll data sent not valid."));
+
+            return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
+        }
 
         $poll = new \Poll($id);
-        if ($poll->id != null) {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Poll data sent not valid."), m::ERROR);
-
-                return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'id'            => $id,
-                'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
-                'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'favorite'      => $request->request->getDigits('favorite', 0),
-                'with_comment'  => $request->request->getDigits('with_comment', 0),
-                'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'available'     => $request->request->getDigits('available', 0),
-                'item'          => $request->request->get('item'),
-                'votes'         => $request->request->get('votes'),
+        // Check empty data
+        if ($poll->id == null) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a poll with the id "%s".'), $id)
             );
-            if ($poll->update($data)) {
-                m::add(_('Poll successfully updated.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to update the poll.'), m::ERROR);
-            }
-
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_poll_show', array('id' => $poll->id))
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_polls', array('category' => $data['category']))
-                );
-            }
-        } else {
-            m::add(sprintf(_('Unable to find a poll with the id "%s".'), $id), m::ERROR);
 
             return $this->redirect(
                 $this->generateUrl('admin_polls', array('category' => $data['category']))
             );
         }
+
+
+        $data = array(
+            'id'            => $id,
+            'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+            'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
+            'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'favorite'      => $request->request->getDigits('favorite', 0),
+            'with_comment'  => $request->request->getDigits('with_comment', 0),
+            'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'available'     => $request->request->getDigits('available', 0),
+            'item'          => $request->request->get('item'),
+            'votes'         => $request->request->get('votes'),
+            'params'        => $request->request->get('params'),
+        );
+
+        if ($poll->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Poll successfully updated.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to update the poll.')
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_poll_show', array('id' => $poll->id))
+        );
     }
 
     /**
@@ -255,13 +271,19 @@ class PollsController extends Controller
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
 
-        if (!empty($id)) {
-            $poll = new \Poll($id);
-            $poll->delete($id);
-            m::add(_("Poll deleted successfully."), m::SUCCESS);
-        } else {
-            m::add(_('You must give an id for delete a poll.'), m::ERROR);
+        if (empty($id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id for delete a poll.')
+            );
         }
+
+        $poll = new \Poll($id);
+        $poll->delete($id);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _("Poll deleted successfully.")
+        );
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect(
@@ -276,208 +298,6 @@ class PollsController extends Controller
         } else {
             return new Response('Ok', 200);
         }
-    }
-
-    /**
-     * Change available status for one poll given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('POLL_AVAILABLE')")
-     */
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $poll = new \Poll($id);
-
-        if (is_null($poll->id)) {
-            m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
-        } else {
-            $poll->set_available($status, $_SESSION['userid']);
-            if ($status == 0) {
-                $poll->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for the poll "%s"'), $poll->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one poll given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('POLL_FAVORITE')")
-     */
-    public function toggleFavoriteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $poll = new \Poll($id);
-
-        if (is_null($poll->id)) {
-            m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
-        } else {
-            $poll->set_favorite($status);
-            m::add(sprintf(_('Successfully changed suggested flag for the poll "%s"'), $poll->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one poll given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('POLL_AVAILABLE')")
-     */
-    public function toggleInHomeAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $poll = new \Poll($id);
-
-        if (is_null($poll->id)) {
-            m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
-        } else {
-            $poll->set_inhome($status);
-            m::add(sprintf(_('Successfully changed suggested flag for the poll "%s"'), $poll->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Deletes multiple polls at once given their ids.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('POLL_DELETE')")
-     */
-    public function batchDeleteAction(Request $request)
-    {
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 'all');
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $poll = new \Poll((int) $id);
-                if (!is_null($poll->id)) {
-                    $poll->delete($id, $_SESSION['userid']);
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully deleted %d polls.'), $changes), m::SUCCESS);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_polls',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-    }
-
-    /**
-     * Changes the available status for polls given their ids.
-     *
-     * @param  Request  $request The request object
-     * @return Response          The response object
-     *
-     * @Security("has_role('POLL_AVAILABLE')")
-     */
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 'all');
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $poll = new \Poll((int) $id);
-                if (!is_null($poll->id)) {
-                    $poll->set_available($status, $_SESSION['userid']);
-                    if ($status == 0) {
-                        $poll->set_favorite($status);
-                    }
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a poll with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully changed the available status of %d polls.'), $changes), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_polls',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                )
-            )
-        );
     }
 
     /**
@@ -615,7 +435,7 @@ class PollsController extends Controller
             foreach ($data as $key => $value) {
                 s::set($key, $value);
             }
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_polls_config'));
         } else {

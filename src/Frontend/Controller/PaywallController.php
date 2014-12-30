@@ -14,9 +14,34 @@
  **/
 namespace Frontend\Controller;
 
+use PayPal\CoreComponentTypes\BasicAmountType;
+use PayPal\EBLBaseComponents\DoExpressCheckoutPaymentRequestDetailsType;
+use PayPal\EBLBaseComponents\ActivationDetailsType;
+use PayPal\EBLBaseComponents\AddressType;
+use PayPal\EBLBaseComponents\BillingAgreementDetailsType;
+use PayPal\EBLBaseComponents\PaymentDetailsItemType;
+use PayPal\EBLBaseComponents\PaymentDetailsType;
+use PayPal\EBLBaseComponents\SetExpressCheckoutRequestDetailsType;
+use PayPal\EBLBaseComponents\ManageRecurringPaymentsProfileStatusRequestDetailsType;
+use PayPal\EBLBaseComponents\RecurringPaymentsProfileDetailsType;
+use PayPal\EBLBaseComponents\BillingPeriodDetailsType;
+use PayPal\EBLBaseComponents\ScheduleDetailsType;
+use PayPal\EBLBaseComponents\CreateRecurringPaymentsProfileRequestDetailsType;
+use PayPal\PayPalAPI\CreateRecurringPaymentsProfileReq;
+use PayPal\PayPalAPI\CreateRecurringPaymentsProfileRequestType;
+use PayPal\PayPalAPI\DoExpressCheckoutPaymentReq;
+use PayPal\PayPalAPI\DoExpressCheckoutPaymentRequestType;
+use PayPal\PayPalAPI\GetExpressCheckoutDetailsReq;
+use PayPal\PayPalAPI\GetExpressCheckoutDetailsRequestType;
+use PayPal\PayPalAPI\GetRecurringPaymentsProfileDetailsReq;
+use PayPal\PayPalAPI\GetRecurringPaymentsProfileDetailsRequestType;
+use PayPal\PayPalAPI\ManageRecurringPaymentsProfileStatusReq;
+use PayPal\PayPalAPI\ManageRecurringPaymentsProfileStatusRequestType;
+use PayPal\PayPalAPI\SetExpressCheckoutReq;
+use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
+
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -56,12 +81,12 @@ class PaywallController extends Controller
                 $user = new \User($_SESSION['userid']);
                 $user->getMeta();
 
-                m::add(
+                $this->get('session')->getFlashBag()->add(
+                    'error',
                     sprintf(
-                        _('You already have an active Subscription till: %s'),
+                        _('You already have an active Subscription until %s'),
                         $_SESSION['meta']['paywall_time_limit']
-                    ),
-                    m::ERROR
+                    )
                 );
 
                 return $this->redirect(
@@ -124,22 +149,22 @@ class PaywallController extends Controller
 
         // Total costs of this operation
         $orderTotalAmount = (int) $selectedPlan['price'];
-        $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
+        $orderTotal = new BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
 
         $taxesTotal = 0; //(int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
-        $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
+        $taxTotal = new BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
 
         // Information about the products to buy
-        $itemDetails = new \PaymentDetailsItemType();
+        $itemDetails = new PaymentDetailsItemType();
         $itemDetails->Name         = $selectedPlan['description'];
         $itemDetails->Amount       = $orderTotal;
         $itemDetails->Quantity     = '1';
 
         // Complete informatin about the buy
-        $paymentDetails = new \PaymentDetailsType();
+        $paymentDetails = new PaymentDetailsType();
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
         $paymentDetails->PaymentAction         = 'Sale';
-        $paymentDetails->OrderTotal            = new \BasicAmountType(
+        $paymentDetails->OrderTotal            = new BasicAmountType(
             $paywallSettings['money_unit'],
             $orderTotalAmount + $taxesTotal
         );
@@ -147,7 +172,7 @@ class PaywallController extends Controller
         $paymentDetails->TaxTotal              = $taxTotal;
 
         // Information about the purchase
-        $setECDetails = new \SetExpressCheckoutRequestDetailsType();
+        $setECDetails = new SetExpressCheckoutRequestDetailsType();
         $setECDetails->PaymentDetails[0] = $paymentDetails;
         $setECDetails->CancelURL         = $cancelUrl;
         $setECDetails->ReturnURL         = $returnUrl;
@@ -156,16 +181,16 @@ class PaywallController extends Controller
         $setECDetails->BrandName          = s::get('site_name');
         if ($recurringPayment == '1') {
             // Billing agreement details
-            $billingAgreementDetails = new \BillingAgreementDetailsType('RecurringPayments');
+            $billingAgreementDetails = new BillingAgreementDetailsType('RecurringPayments');
             $billingAgreementDetails->BillingAgreementDescription = $selectedPlan['description'];
             $setECDetails->BillingAgreementDetails = array($billingAgreementDetails);
         }
 
 
-        $setECReqType = new \SetExpressCheckoutRequestType();
+        $setECReqType = new SetExpressCheckoutRequestType();
         $setECReqType->SetExpressCheckoutRequestDetails = $setECDetails;
 
-        $setECReq = new \SetExpressCheckoutReq();
+        $setECReq = new SetExpressCheckoutReq();
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
         // Perform the paypal API call
@@ -233,9 +258,9 @@ class PaywallController extends Controller
             );
         }
 
-        $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
+        $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
 
-        $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
         // Perform the paypal API call
@@ -279,24 +304,24 @@ class PaywallController extends Controller
 
         $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
 
-        $orderTotal = new \BasicAmountType();
+        $orderTotal = new BasicAmountType();
         $orderTotal->currencyID = $paywallSettings['money_unit'];
         $orderTotal->value      = $_SESSION['paywall_transaction']['plan']['price'];
 
-        $paymentDetails = new \PaymentDetailsType();
+        $paymentDetails = new PaymentDetailsType();
         $paymentDetails->OrderTotal = $orderTotal;
 
-        $DoECRequestDetails = new \DoExpressCheckoutPaymentRequestDetailsType();
+        $DoECRequestDetails = new DoExpressCheckoutPaymentRequestDetailsType();
         $DoECRequestDetails->PayerID           = $payerId;
         $DoECRequestDetails->Token             = $token;
         $DoECRequestDetails->PaymentAction     = 'Sale';
         $DoECRequestDetails->PaymentDetails[0] = $paymentDetails;
 
-        $DoECRequest = new \DoExpressCheckoutPaymentRequestType();
+        $DoECRequest = new DoExpressCheckoutPaymentRequestType();
         $DoECRequest->DoExpressCheckoutPaymentRequestDetails = $DoECRequestDetails;
 
 
-        $DoECReq = new \DoExpressCheckoutPaymentReq();
+        $DoECReq = new DoExpressCheckoutPaymentReq();
         $DoECReq->DoExpressCheckoutPaymentRequest = $DoECRequest;
 
         try {
@@ -392,9 +417,9 @@ class PaywallController extends Controller
             );
         }
 
-        $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
+        $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
 
-        $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
         // Perform the paypal API call
@@ -422,7 +447,6 @@ class PaywallController extends Controller
         }
 
         // Some transaction data
-        $payerId         = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
         $payerName       = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->FirstName;
         $payerLastName   = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->LastName;
         $currencyID      = $paywallSettings['money_unit'];
@@ -445,16 +469,16 @@ class PaywallController extends Controller
             $billingStartDate = gmdate('c', strtotime("+1 {$planPeriod}"));
         }
 
-        $RPProfileDetails = new \RecurringPaymentsProfileDetailsType();
+        $RPProfileDetails = new RecurringPaymentsProfileDetailsType();
         $RPProfileDetails->SubscriberName = $payerName.' '.$payerLastName;
         $RPProfileDetails->ProfileReference = $_SESSION['userid'];
         $RPProfileDetails->BillingStartDate = $billingStartDate;
 
         // Initial non-recurring payment amount due immediately upon profile creation. Use an initial amount for enrolment or set-up fees.
-        $activationDetails = new \ActivationDetailsType();
+        $activationDetails = new ActivationDetailsType();
         if (!$timeLimit) {
             // if is not an activation charge initial amount
-            $activationDetails->InitialAmount = new \BasicAmountType($currencyID, $price);
+            $activationDetails->InitialAmount = new BasicAmountType($currencyID, $price);
         }
 
         // CancelOnFailure – If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile,
@@ -464,30 +488,30 @@ class PaywallController extends Controller
         $activationDetails->FailedInitialAmountAction = 'CancelOnFailure';
 
         // Regular payment period for this schedule which takes mandatory params
-        $paymentBillingPeriod =  new \BillingPeriodDetailsType();
+        $paymentBillingPeriod =  new BillingPeriodDetailsType();
         $paymentBillingPeriod->BillingFrequency = '1';
         $paymentBillingPeriod->BillingPeriod = $_SESSION['paywall_transaction']['plan']['time'];
-        $paymentBillingPeriod->Amount = new \BasicAmountType($currencyID, $price);
+        $paymentBillingPeriod->Amount = new BasicAmountType($currencyID, $price);
 
         // Describes the recurring payments schedule, including the regular
         // payment period, whether there is a trial period, and the number of
         // payments that can fail before a profile is suspended which takes
         // mandatory params
-        $scheduleDetails = new \ScheduleDetailsType();
+        $scheduleDetails = new ScheduleDetailsType();
         $scheduleDetails->Description = $planDescription;
         $scheduleDetails->ActivationDetails = $activationDetails;
         $scheduleDetails->PaymentPeriod = $paymentBillingPeriod;
 
         // CreateRecurringPaymentsProfileRequestDetailsType which takes mandatory params
-        $createRPProfileRequestDetail = new \CreateRecurringPaymentsProfileRequestDetailsType();
+        $createRPProfileRequestDetail = new CreateRecurringPaymentsProfileRequestDetailsType();
         $createRPProfileRequestDetail->Token  = $token;
         $createRPProfileRequestDetail->ScheduleDetails = $scheduleDetails;
         $createRPProfileRequestDetail->RecurringPaymentsProfileDetails = $RPProfileDetails;
 
-        $createRPProfileRequest = new \CreateRecurringPaymentsProfileRequestType();
+        $createRPProfileRequest = new CreateRecurringPaymentsProfileRequestType();
         $createRPProfileRequest->CreateRecurringPaymentsProfileRequestDetails = $createRPProfileRequestDetail;
 
-        $createRPProfileReq =  new \CreateRecurringPaymentsProfileReq();
+        $createRPProfileReq =  new CreateRecurringPaymentsProfileReq();
         $createRPProfileReq->CreateRecurringPaymentsProfileRequest = $createRPProfileRequest;
 
         try {
@@ -543,11 +567,9 @@ class PaywallController extends Controller
     /**
      * Cancel the active recurring payment for paywall subscription
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function cancelRecurringPaymentAction(Request $request)
+    public function cancelRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
         $user = new \User($_SESSION['userid']);
@@ -560,14 +582,14 @@ class PaywallController extends Controller
         // Cancel – Only profiles in Active or Suspended state can be canceled.
         // Suspend – Only profiles in Active state can be suspended.
         // Reactivate – Only profiles in a suspended state can be reactivated.
-        $manageRPPStatusReqestDetails = new \ManageRecurringPaymentsProfileStatusRequestDetailsType();
+        $manageRPPStatusReqestDetails = new ManageRecurringPaymentsProfileStatusRequestDetailsType();
         $manageRPPStatusReqestDetails->Action =  'Cancel';
         $manageRPPStatusReqestDetails->ProfileID =  $recurringProfileId;
 
-        $manageRPPStatusReqest = new \ManageRecurringPaymentsProfileStatusRequestType();
+        $manageRPPStatusReqest = new ManageRecurringPaymentsProfileStatusRequestType();
         $manageRPPStatusReqest->ManageRecurringPaymentsProfileStatusRequestDetails = $manageRPPStatusReqestDetails;
 
-        $manageRPPStatusReq = new \ManageRecurringPaymentsProfileStatusReq();
+        $manageRPPStatusReq = new ManageRecurringPaymentsProfileStatusReq();
         $manageRPPStatusReq->ManageRecurringPaymentsProfileStatusRequest = $manageRPPStatusReqest;
 
         // Perform the paypal API call
@@ -607,11 +629,9 @@ class PaywallController extends Controller
     /**
      * Activate the canceled recurring payment for paywall subscription
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function activateRecurringPaymentAction(Request $request)
+    public function activateRecurringPaymentAction()
     {
         // Get recurring profile ID for this user
         $user = new \User($_SESSION['userid']);
@@ -621,10 +641,10 @@ class PaywallController extends Controller
         }
 
         // Obtain information about a recurring payments profile.
-        $getRPPDetailsReqest = new \GetRecurringPaymentsProfileDetailsRequestType();
+        $getRPPDetailsReqest = new GetRecurringPaymentsProfileDetailsRequestType();
         $getRPPDetailsReqest->ProfileID = $recurringProfileId;
 
-        $getRPPDetailsReq = new \GetRecurringPaymentsProfileDetailsReq();
+        $getRPPDetailsReq = new GetRecurringPaymentsProfileDetailsReq();
         $getRPPDetailsReq->GetRecurringPaymentsProfileDetailsRequest = $getRPPDetailsReqest;
 
         // Perform the paypal API call
@@ -686,22 +706,22 @@ class PaywallController extends Controller
 
             // Total costs of this operation
             $orderTotalAmount = (int) $price;
-            $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
+            $orderTotal = new BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
 
             $taxesTotal = 0; //(int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
-            $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
+            $taxTotal = new BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
 
             // Information about the products to buy
-            $itemDetails = new \PaymentDetailsItemType();
+            $itemDetails = new PaymentDetailsItemType();
             $itemDetails->Name         = $description;
             $itemDetails->Amount       = $orderTotal;
             $itemDetails->Quantity     = '1';
 
             // Complete informatin about the buy
-            $paymentDetails = new \PaymentDetailsType();
+            $paymentDetails = new PaymentDetailsType();
             $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
             $paymentDetails->PaymentAction         = 'Sale';
-            $paymentDetails->OrderTotal            = new \BasicAmountType(
+            $paymentDetails->OrderTotal            = new BasicAmountType(
                 $paywallSettings['money_unit'],
                 $orderTotalAmount + $taxesTotal
             );
@@ -709,7 +729,7 @@ class PaywallController extends Controller
             $paymentDetails->TaxTotal              = $taxTotal;
 
             // Information about the purchase
-            $setECDetails = new \SetExpressCheckoutRequestDetailsType();
+            $setECDetails = new SetExpressCheckoutRequestDetailsType();
             $setECDetails->PaymentDetails[0] = $paymentDetails;
             $setECDetails->CancelURL         = $cancelUrl;
             $setECDetails->ReturnURL         = $returnUrl;
@@ -718,14 +738,14 @@ class PaywallController extends Controller
             $setECDetails->BrandName          = s::get('site_name');
 
             // Billing agreement details
-            $billingAgreementDetails = new \BillingAgreementDetailsType('RecurringPayments');
+            $billingAgreementDetails = new BillingAgreementDetailsType('RecurringPayments');
             $billingAgreementDetails->BillingAgreementDescription = $description;
             $setECDetails->BillingAgreementDetails = array($billingAgreementDetails);
 
-            $setECReqType = new \SetExpressCheckoutRequestType();
+            $setECReqType = new SetExpressCheckoutRequestType();
             $setECReqType->SetExpressCheckoutRequestDetails = $setECDetails;
 
-            $setECReq = new \SetExpressCheckoutReq();
+            $setECReq = new SetExpressCheckoutReq();
             $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
             // Perform the paypal API call
@@ -776,11 +796,9 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function returnCancelPaymentAction(Request $request)
+    public function returnCancelPaymentAction()
     {
         $paywallSettings = s::get('paywall_settings');
 
@@ -795,11 +813,9 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function ipnPaymentAction(Request $request)
+    public function ipnPaymentAction()
     {
         return $this->redirect($this->generateUrl(''));
     }

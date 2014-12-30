@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -46,7 +45,7 @@ class MonographsController extends Controller
         if (!empty($this->categoryName)) {
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id =  $this->category;// FOR WIDGETS
-            $category_real_name = $this->ccm->get_title($this->categoryName);
+            $category_real_name = $this->ccm->getTitle($this->categoryName);
 
         } else {
             $category_real_name = 'Portada';

@@ -29,7 +29,6 @@ class AuthenticationController extends Controller
     public function loginAction(Request $request)
     {
         $error   = null;
-        $route   = $request->get('_route');
         $referer = $this->generateUrl('manager_welcome');
 
         if ($this->session->get('_security.manager.target_path')) {

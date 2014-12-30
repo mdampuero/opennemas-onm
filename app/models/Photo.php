@@ -11,7 +11,6 @@
  *
  * @package Model
  */
-use Onm\Message as m;
 use Onm\StringUtils;
 
 /**
@@ -145,7 +144,7 @@ class Photo extends Content
         $originalFileName = $data['original_filename'];
 
         if (empty($filePath)) {
-            throw new \Exception(_('Not valid photo data'));
+            throw new \Exception(_('Image data not valid'));
         }
 
         // Check upload directory
@@ -157,13 +156,13 @@ class Photo extends Content
         $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
         if (!is_dir($uploadDir)) {
-            FilesManager::createDirectory($uploadDir);
+            \Onm\FilesManager::createDirectory($uploadDir);
         }
 
         if (is_dir($uploadDir) && !is_writable($uploadDir)) {
             throw new Exception(
                 sprintf(
-                    _('Upload directory doesn\'t exists or you don\'t have enough privileges to write files there'),
+                    _('Unable to save your image file in the Opennemas storage target'),
                     $uploadDir.$finalPhotoFileName
                 )
             );
@@ -250,7 +249,7 @@ class Photo extends Content
                         $uploadDir.$finalPhotoFileName
                     )
                 );
-                throw new Exception(_('Unable to copy the photo file'));
+                throw new Exception(_('Unable to copy your image file'));
             }
         } else {
             $fileCopied = copy(
@@ -267,7 +266,7 @@ class Photo extends Content
                         $uploadDir.$finalPhotoFileName
                     )
                 );
-                throw new Exception(_('Unable to copy the photo file'));
+                throw new Exception(_('Unable to copy your image file'));
             }
         }
 
@@ -278,12 +277,12 @@ class Photo extends Content
             $logger = getService('logger');
             $logger->notice(
                 sprintf(
-                    _('Unable to register the photo object %s (destination: %s).'),
+                    'Unable to save the image object %s (destination: %s).',
                     $data['local_file'],
                     $uploadDir.$finalPhotoFileName
                 )
             );
-            throw new Exception(_('Unable to save the photo information.'));
+            throw new Exception(_('Unable to save your image information.'));
         }
 
         return $photoID;
@@ -413,22 +412,22 @@ class Photo extends Content
 
             switch ($size['mime']) {
                 case "image/gif":
-                    $this->infor = _("The image type is GIF </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'GIF');
 
                     break;
                 case "image/png":
-                    $this->infor = _("The image type is PNG </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'PNG');
 
                     break;
                 case "image/bmp":
-                    $this->infor = _("The image type is BMP </br>");
+                    $this->infor = sprintf(_("Image type: %s"), 'BMP');
 
                     break;
                 case 'image/jpeg':
 
                     $exif = array();
                     if (isset($info)) {
-                        foreach ($info as $key => $val) {
+                        foreach (array_keys($info) as $key) {
                             if ($key != 'APP1') {
                                 $exifData = @read_exif_data($image, 0, true);
                                 break;
@@ -443,7 +442,7 @@ class Photo extends Content
                     }
 
                     if (empty($exif)) {
-                        $this->infor .= _("No available EXIF data</br>");
+                        $this->infor .= _("No available EXIF data");
 
                     } else {
                         if (empty($this->color)) {
@@ -470,6 +469,7 @@ class Photo extends Content
                     }
 
                     if (isset($info['APP13'])) {
+
                         $iptc = iptcparse($info['APP13']);
 
                         if (is_array($iptc)) {
@@ -510,7 +510,7 @@ class Photo extends Content
                             $myiptc['Source']              = $iptc["2#110"][0];
                             $myiptc['Photo_source']        = $iptc["2#183"][0];
 
-                            $myiptc = array_map('map_entities', $myiptc);
+                            $myiptc = array_map('\Onm\StringUtils::convertToUTF8AndStrToLower', $myiptc);
                             $this->myiptc = $myiptc;
 
                             if (empty($this->description)) {
@@ -518,7 +518,7 @@ class Photo extends Content
                             }
 
                             if (empty($this->metadata)) {
-                                $this->metadata = map_entities($keywords);
+                                $this->metadata = \Onm\StringUtils::convertToUTF8AndStrToLower($keywords);
                             }
 
                             if (empty($this->author_name)) {
@@ -528,7 +528,7 @@ class Photo extends Content
                             ini_set($errorReporting);
 
                         } else {
-                            $this->infor .=  _("No availabel IPTC data</br>");
+                            $this->infor .=  _("No available IPTC data");
                         }
                     }
                     break;

@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the news agency module
@@ -59,11 +58,12 @@ class NewsAgencyController extends Controller
         ini_set('set_time_limit', '0');
 
         // Check if module is configured, if not redirect to configuration form
-        if (is_null(s::get('news_agency_config'))
-            && $action != 'config'
-        ) {
-            m::add(_('Please provide your EFE auth credentials to start to use your EFE Importer module'));
-            $this->redirect($this->generateUrl('admin_importer_efe_config'));
+        if (is_null(s::get('news_agency_config'))) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('Please provide your source server configuration to start to use your Importer module')
+            );
+            $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         }
     }
 
@@ -105,13 +105,13 @@ class NewsAgencyController extends Controller
             $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
         }
         if ($message) {
-            m::add(
+            $this->get('session')->getFlashBag()->add(
+                'notice',
                 $message
                 . _(
                     'Try syncing the news list from server by clicking '
                     .'in "Sync with server" button above'
-                ),
-                m::NOTICE
+                )
             );
         }
 
@@ -157,9 +157,6 @@ class NewsAgencyController extends Controller
             }
         }
 
-        // Get LocalRepository instance
-        $repository = new \Onm\Import\Repository\LocalRepository();
-
         // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
         if (!is_array($servers)) {
@@ -178,19 +175,19 @@ class NewsAgencyController extends Controller
 
         $sources = array_unique($sources);
 
-        // Fetch filter params
-        $findParams = array(
+        // Get LocalRepository instance
+        $repository = new \Onm\Import\Repository\LocalRepository();
+
+        list($countTotalElements, $elements) = $repository->findAllFromCompile(array(
             'source'     => $filterSource,
             'title'      => $filterTitle,
             'page'       => $page,
             'items_page' => $elementsPerPage,
-        );
-
-        list($countTotalElements, $elements) = $repository->findAll($findParams);
+        ));
 
         $urns = array();
         foreach ($elements as $element) {
-            $urns []= $element->urn;
+            $urns []= $element->getUrn();
         }
         $alreadyImported = \Content::findByUrn($urns);
 
@@ -199,26 +196,27 @@ class NewsAgencyController extends Controller
         }
 
         foreach ($elements as &$element) {
-            $element->load();
-            $element->source_name = $servers[$element->source_id]['name'];
-            $element->source_color = $servers[$element->source_id]['color'];
-            $element->import_url = $this->generateUrl(
-                'admin_news_agency_pickcategory',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->view_url = $this->generateUrl(
-                'admin_news_agency_show',
-                array(
-                    'source_id' => $element->source_id,
-                    'id'        => \urlencode($element->xmlFile)
-                )
-            );
-            $element->id = $element->source_id . ',' . $element->id . '.xml';
+            $element = $element->toArray();
 
-            $element->already_imported = in_array($element->urn, $alreadyImported);
+            $element['source_name']  = $servers[$element['source_id']]['name'];
+            $element['source_color'] = $servers[$element['source_id']]['color'];
+            $element['import_url']   = $this->generateUrl(
+                'admin_news_agency_pickcategory',
+                [
+                    'source_id' => $element['source_id'],
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            $element['view_url'] = $this->generateUrl(
+                'admin_news_agency_show',
+                [
+                    'source_id' => $element['source_id'],
+                    'id'        => \urlencode($element['xml_file'])
+                ]
+            );
+            // $element->id = $element->source_id . ',' . $element->id . '.xml';
+
+            $element['already_imported'] = in_array($element['urn'], $alreadyImported);
         }
 
         return new JsonResponse(
@@ -242,23 +240,25 @@ class NewsAgencyController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $request->query->getDigits('source_id');
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
             $element = $repository->findByFileName($sourceId, $id);
-            $element->source_id = $sourceId;
 
             $alreadyImported = false;
             if (!is_null($element)) {
-                $alreadyImported = (count(\Content::findByUrn($element->urn)) > 0);
+                $alreadyImported = (count(\Content::findByUrn($element->getUrn())) > 0);
             }
         } catch (\Exception $e) {
             // Redirect the user to the list of articles and show  an error message
-            m::add(sprintf(_('Unable to find an element with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an element with the id "%d"'), $id)
+            );
 
-            $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+            $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
             return $this->redirect(
                 $this->generateUrl('admin_news_agency', array('page' => $page))
@@ -314,7 +314,10 @@ class NewsAgencyController extends Controller
                 )
             );
         } else {
-            m::add(sprintf('Unable to import the file "%s"', $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf('Unable to import the file "%s"', $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_news_agency'));
         }
@@ -329,8 +332,7 @@ class NewsAgencyController extends Controller
      **/
     public function batchImportAction(Request $request)
     {
-        $ids      = array();
-        $selected = $this->request->request->get('ids', null);
+        $selected = $request->request->get('ids', null);
         $updated  = array();
 
 
@@ -371,22 +373,26 @@ class NewsAgencyController extends Controller
      **/
     public function selectCategoryWhereToImportAction(Request $request)
     {
-        $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $sourceId = $request->query->getDigits('source_id');
 
         if (empty($id)) {
-            m::add(_('The article you want to import doesn\'t exists.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('The article you want to import doesn\'t exists.')
+            );
+
             $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
-        $repository       = new \Onm\Import\Repository\LocalRepository();
-        $element          = $repository->findByFileName($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element    = $repository->findByFileName($sourceId, $id);
 
         $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu();
+        $parentCategories = $ccm->getArraysMenu();
         $categories = array();
-        foreach ($parentCategories as $category) {
+        foreach ($parentCategories[0] as $category) {
             $categories [$category->pk_content_category] = $category->title;
         }
 
@@ -423,7 +429,7 @@ class NewsAgencyController extends Controller
      **/
     public function getSimilarCategoryIdForElement($element)
     {
-        $originalCategory     = utf8_decode($element->getOpennemasData('category'));
+        $originalCategory     = utf8_decode($element->getMetaData()['category']);
         $originalCategoryTemp = strtolower($originalCategory);
 
         $ccm        = \ContentCategoryManager::get_instance();
@@ -456,43 +462,50 @@ class NewsAgencyController extends Controller
      **/
     public function showAttachmentAction(Request $request)
     {
-        $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $index        = $this->request->query->getDigits('index');
-        $sourceId     = $this->request->query->getDigits('source_id');
-        $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
+        $id           = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId     = $request->query->getDigits('source_id');
+        $attachmentId = $request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $element    = $repository->findById($sourceId, $id);
+        try {
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element    = $repository->findById($sourceId, $id);
+        } catch (\Exception $e) {
+            $element = null;
+        }
+
         $content = null;
         if ($element->hasPhotos()) {
-            $photos = $element->getPhotos();
-            foreach ($photos as $photo) {
+            foreach ($element->getPhotos() as $photo) {
 
-                if ($photo->id == $attachmentId) {
+                if ($photo->getId() == $attachmentId) {
+
+                    $filePath = null;
+                    if (strpos('http', $photo->getFilePath())) {
+                        $filePath = $photo->getFilePath();
+                    }
 
                     // Get image from FTP
-                    $filePath = realpath(
-                        $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                    );
+                    if (!$filePath) {
+                        $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+                    }
 
                     // If no image from FTP check HTTP
                     if (!$filePath) {
-                        $filePath = $repository->syncPath.DS.
-                            $sourceId.DS.$photo->name[$index];
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
+
                     $content = @file_get_contents($filePath);
 
                     $response = new Response(
                         $content,
                         200,
-                        array('content-type' => $photo->file_type)
+                        array('content-type' => $photo->getFileType())
                     );
                 }
             }
             if (empty($content)) {
                 $response = new Response('Image not found', 404);
             }
-
         } else {
             $response = new Response('Image not found', 404);
         }
@@ -516,7 +529,7 @@ class NewsAgencyController extends Controller
         $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
-        $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
+        $page = $request->query->filter('page', null, FILTER_VALIDATE_INT);
 
         return $this->redirect(
             $this->generateUrl('admin_news_agency', array('page' => $page))
@@ -534,7 +547,7 @@ class NewsAgencyController extends Controller
      **/
     public function syncAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $page = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $servers = s::get('news_agency_config');
 
@@ -542,17 +555,19 @@ class NewsAgencyController extends Controller
         $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
         try {
-            $message = $synchronizer->syncMultiple($servers);
-            m::add($message, m::SUCCESS);
+            $messages = $synchronizer->syncMultiple($servers);
+            foreach ($messages as $message) {
+                $this->get('session')->getFlashBag()->add('error', $message);
+            }
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
                 .sprintf(
                     _('If you are sure <a href="%s">try to unlock it</a>'),
                     $this->generateUrl('admin_news_agency_unlock')
                 );
-            m::add($errorMessage, m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', $errorMessage);
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
 
@@ -564,13 +579,11 @@ class NewsAgencyController extends Controller
     /**
      * Lists all the servers for the news agency
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('IMPORT_ADMIN')")
      **/
-    public function configListServersAction(Request $request)
+    public function configListServersAction()
     {
         $servers = s::get('news_agency_config');
 
@@ -615,7 +628,10 @@ class NewsAgencyController extends Controller
 
         s::set('news_agency_config', $servers);
 
-        m::add(_('News agency server updated.'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('News agency server updated.')
+        );
 
         return $this->redirect(
             $this->generateUrl(
@@ -675,13 +691,13 @@ class NewsAgencyController extends Controller
 
         s::set('news_agency_config', $servers);
 
-        m::add(
+        $this->get('session')->getFlashBag()->add(
+            'success',
             sprintf(
                 'Server "%s" has been %s',
                 $servers[$serverId]['name'],
                 $status
-            ),
-            m::SUCCESS
+            )
         );
 
         return $this->redirect($this->generateUrl('admin_news_agency_servers'));
@@ -732,7 +748,10 @@ class NewsAgencyController extends Controller
 
             s::set('news_agency_config', $servers);
 
-            m::add(_('News agency server added.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('News agency server added.')
+            );
 
             return $this->redirect(
                 $this->generateUrl(
@@ -759,12 +778,12 @@ class NewsAgencyController extends Controller
         $id = $request->query->getDigits('id');
 
         if (!array_key_exists($id, $servers)) {
-            m::add(
+            $this->get('session')->getFlashBag()->add(
+                'error',
                 sprintf(
                     _('Source identifier "%d" not valid'),
                     $id
-                ),
-                m::ERROR
+                )
             );
 
             return $this->redirect(
@@ -774,15 +793,19 @@ class NewsAgencyController extends Controller
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $repository->deleteFilesForSource($id);
+            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
+            $compiler->cleanCompileForSourceID($id, $servers);
 
             unset($servers[$id]);
 
             s::set('news_agency_config', $servers);
 
-            m::add(_('News agency server deleted.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('News agency server deleted.')
+            );
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect($this->generateUrl('admin_news_agency_servers'));
@@ -803,12 +826,9 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
         if (!array_key_exists($id, $servers)) {
-            m::add(
-                sprintf(
-                    _('Source identifier "%d" not valid'),
-                    $id
-                ),
-                m::ERROR
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Source identifier "%d" not valid'), $id)
             );
 
             return $this->redirect(
@@ -818,11 +838,18 @@ class NewsAgencyController extends Controller
 
         try {
             $repository = new \Onm\Import\Repository\LocalRepository();
-            $repository->deleteFilesForSource($id);
+            $compiler = new \Onm\Import\Compiler\Compiler($repository->syncPath);
+            $compiler->cleanCompileForSourceID($id, $servers);
 
-            m::add(sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name'])
+            );
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $e->getMessage()
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_news_agency_servers'));
@@ -838,14 +865,14 @@ class NewsAgencyController extends Controller
     private function importElements($id = '', $sourceId = '', $category = null)
     {
         if (empty($id) || empty($sourceId)) {
-            m::add(_('Please specify the article to import.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('Please specify the article to import.'));
 
             return 'redirect_list';
         }
 
         $categoryInstance = new \ContentCategory($category);
         if (!is_object($categoryInstance)) {
-            m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('The category you have chosen doesn\'t exists.'));
 
             return 'redirect_category';
         }
@@ -855,7 +882,7 @@ class NewsAgencyController extends Controller
             $repository = new \Onm\Import\Repository\LocalRepository();
             $element = $repository->findByFileName($sourceId, $id);
         } catch (\Exception $e) {
-            m::add(_('Please specify the article to import.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('Please specify the article to import.'));
 
             return 'redirect_list';
         }
@@ -869,7 +896,7 @@ class NewsAgencyController extends Controller
                 $category = '20';
             }
         } elseif (empty($category)) {
-            m::add(_('Please assign the category where import this article'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('Please assign the category where import this article'));
 
             return 'redirect_category';
         }
@@ -879,34 +906,33 @@ class NewsAgencyController extends Controller
         $server = $servers[$sourceId];
 
         // If the new has photos import them
-        if ($element->hasPhotos()) {
-            $photos = $element->getPhotos();
+        if (count($element->getPhotos()) > 0) {
             $i = 0;
             $importedPhotos = array();
 
-            foreach ($photos as $photo) {
+            foreach ($element->getPhotos() as $photo) {
                 // Get image from FTP
-                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->file_path);
-                $fileName = $photo->file_path;
+                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+                $fileName = $photo->getFilePath();
 
                 // If no image from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->name[$i];
-                    $fileName = $photo->name[$i];
+                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
+                    $fileName = $photo->getName();
                 }
 
                 // Check if the file cache exists(keys)
                 if (file_exists($filePath)) {
                     // If the image is already imported use its id
-                    if (!array_key_exists($photo->id, $importedPhotos)) {
+                    if (!array_key_exists($photo->getId(), $importedPhotos)) {
                         $data = array(
                             'title'         => $fileName,
-                            'description'   => $photo->title,
+                            'description'   => $photo->getTitle(),
                             'local_file'    => $filePath,
                             'fk_category'   => $category,
                             'category_name' => $categoryInstance->name,
                             'category'      => $categoryInstance->name,
-                            'metadata'      => \Onm\StringUtils::get_tags($photo->title),
+                            'metadata'      => \Onm\StringUtils::getTags($photo->getTitle()),
                             'author_name'   => '&copy; EFE '.date('Y'),
                             'original_filename' => $fileName,
                         );
@@ -914,17 +940,17 @@ class NewsAgencyController extends Controller
                         $newphoto = new \Photo();
                         $photoId = $newphoto->createFromLocalFile($data);
 
-                        $importedPhotos[$photo->id] = $photoId;
+                        $importedPhotos[$photo->getId()] = $photoId;
                     } else {
-                        $photoId = $importedPhotos[$photo->id];
+                        $photoId = $importedPhotos[$photo->getId()];
                     }
 
                     // Check if sync is from Opennemas instances
                     if ($element->getServicePartyName() == 'Opennemas') {
                         // If this article has more than one photo take the first one to front
-                        if (!isset($frontPhoto)) {
+                        if ($photo->getMediaType() == 'PhotoFront' && !isset($frontPhoto)) {
                             $frontPhoto = new \Photo($photoId);
-                        } elseif (!isset($innerPhoto)) {
+                        } elseif ($photo->getMediaType() == 'PhotoInner' && !isset($innerPhoto)) {
                             $innerPhoto = new \Photo($photoId);
                         }
                     } elseif (!isset($innerPhoto)) {
@@ -942,14 +968,15 @@ class NewsAgencyController extends Controller
             if (isset($server['author']) && $server['author'] == '1') {
 
                 // Get author object,decode it and create new author
-                $authorObj = json_decode($element->getRightsOwner());
+                $authorObj = $element->getRightsOwner();
 
-                if(!is_null($authorObj)) {
+                if (!is_null($authorObj)) {
                     // Fetch author data
                     $authorArray = get_object_vars($authorObj);
 
                     // Create author
                     $user = new \User();
+
                     if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
                         // Create new user
                         $user->create($authorArray);
@@ -968,7 +995,7 @@ class NewsAgencyController extends Controller
                             $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
                             $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
                             if (!is_dir($localImageDir)) {
-                                \FilesManager::createDirectory($localImageDir);
+                                \Onm\FilesManager::createDirectory($localImageDir);
                             }
                             if (file_exists($localImagePath)) {
                                 unlink($localImagePath);
@@ -1019,29 +1046,27 @@ class NewsAgencyController extends Controller
 
         // If the new has videos import them
         if ($element->hasVideos()) {
-            $videos = $element->getVideos();
-            foreach ($videos as $video) {
+            foreach ($element->getVideos() as $video) {
                 $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$video->file_path
+                    $repository->syncPath.DS.$sourceId.DS.$video->getFilePath()
                 );
 
                 // If no video from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$video->name[$i];
-                    $fileName = $video->name[$i];
+                    $filePath = $repository->syncPath.DS.$sourceId.DS.$video->getName();
+                    $fileName = $video['name'];
                 }
 
 
                 // Check if the file exists
                 if ($filePath) {
                     $videoFileData = array(
-                        'file_type'      => $video->file_type,
+                        'file_type'      => $video->getFileType(),
                         'file_path'      => $filePath,
                         'category'       => $category,
                         'content_status' => 1,
-                        'title'          => $video->title,
-                        'metadata'       => \Onm\StringUtils::get_tags($video->title),
+                        'title'          => $video->getTitle(),
+                        'metadata'       => \Onm\StringUtils::getTags($video->getTitle()),
                         'description'    => '',
                         'author_name'    => 'internal',
                     );
@@ -1058,20 +1083,22 @@ class NewsAgencyController extends Controller
             }
         }
 
+        $commentsConfig = (s::get('comments_config')) ? s::get('comments_config') : array();
+
         $values = array(
-            'title'          => $element->title,
+            'title'          => $element->getTitle(),
             'category'       => $category,
-            'with_comment'   => 1,
+            'with_comment'   => (array_key_exists('with_comments', $commentsConfig) ? $commentsConfig['with_comments'] : 1),
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,
-            'title_int'      => $element->title,
-            'metadata'       => \Onm\StringUtils::get_tags($element->title),
-            'subtitle'       => $element->pretitle,
+            'title_int'      => $element->getTitle(),
+            'metadata'       => \Onm\StringUtils::getTags($element->getTitle()),
+            'subtitle'       => $element->getPretitle(),
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),
-            'summary'        => $element->summary,
-            'body'           => $element->body,
+            'summary'        => $element->getSummary(),
+            'body'           => $element->getBody(),
             'posic'          => 0,
             'id'             => 0,
             'fk_publisher'   => $_SESSION['userid'],
@@ -1084,7 +1111,7 @@ class NewsAgencyController extends Controller
             'footer_video2'  => (isset($innerVideo) ? $innerVideo->title : ''),
             'ordenArti'      => '',
             'ordenArtiInt'   => '',
-            'urn_source'     => $element->urn,
+            'urn_source'     => $element->getUrn(),
         );
 
         $article           = new \Article();

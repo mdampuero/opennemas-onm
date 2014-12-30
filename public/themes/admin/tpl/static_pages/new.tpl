@@ -101,8 +101,9 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
-
+    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 <script type="text/javascript">
 /* <![CDATA[ */
 

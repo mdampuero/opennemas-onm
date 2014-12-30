@@ -11,7 +11,6 @@ namespace Framework\Controller;
 
 use Onm\Framework\Controller\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Onm\Message as m;
 
 /**
  * Handles all the request for Welcome actions

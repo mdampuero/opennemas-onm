@@ -24,9 +24,9 @@
             {elseif $menuItem->type == 'static'}
                 {t}Static Page{/t}:
             {elseif $menuItem->type == 'syncCategory'}
-                {t}Sync category{/t}:
+                {t}Synched category{/t}:
             {elseif $menuItem->type == 'syncBlogCategory'}
-                {t}Sync blog category{/t}:
+                {t}Synched blog category{/t}:
             {/if}
         </span>
         <span class="menu-title">

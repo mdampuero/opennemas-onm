@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -42,13 +41,11 @@ class CategoriesController extends Controller
     /**
      * Lists all the available categories
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $ccm = \ContentCategoryManager::get_instance();
 
@@ -153,20 +150,19 @@ class CategoriesController extends Controller
                 $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
                 getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-                m::add(_("Category created successfully."), m::SUCCESS);
+
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Category created successfully.")
+                );
             }
 
-            $continue = $request->request->getDigits('continue', 0);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_category_show',
-                        array('id' => $category->pk_content_category)
-                    )
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_categories'));
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_category_show',
+                    array('id' => $category->pk_content_category)
+                )
+            );
         } else {
             $allcategorys  = $ccm->categories;
             $categories = array();
@@ -227,7 +223,10 @@ class CategoriesController extends Controller
                 )
             );
         } else {
-            m::add(_('Unable to find a category for the give id.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to find a category for the given id.')
+            );
 
             return $this->redirect($this->generateUrl('admin_categories'));
         }
@@ -250,7 +249,10 @@ class CategoriesController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Category data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Category data sent not valid.')
+            );
 
             return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
         }
@@ -283,20 +285,19 @@ class CategoriesController extends Controller
         if ($category->update($data)) {
             getService('cache')->delete(CACHE_PREFIX.'_content_categories');
 
-            m::add(sprintf(_('Category "%s" updated successfully.'), $data['title']), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Category "%s" updated successfully.'), $data['title'])
+            );
+
         }
 
         /* Limpiar la cache de portada de todas las categorias */
         if ($data['inmenu'] == 1) {
-            \Content::refreshFrontpageForAllCategories();
+            dispatchEventWithParams('category.clean_all');
         }
 
-        $continue = $request->request->getDigits('continue', 0);
-        if ($continue) {
-            return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
-        } else {
-            return $this->redirect($this->generateUrl('admin_categories'));
-        }
+        return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
     }
 
     /**
@@ -323,13 +324,23 @@ class CategoriesController extends Controller
                     $user->getAccessCategoryIds($_SESSION['userid']);
 
                 getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-                m::add(_("Category deleted successfully."), m::SUCCESS);
+
+                $this->get('session')->getFlashBag()->add(
+                    'sucess',
+                    _("Category deleted successfully.")
+                );
             } else {
-                m::add(_("To delete a category previously you have to empty it."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("To delete a category previously you have to empty it.")
+                );
             }
 
         } else {
-            m::add(_('You must give a valid id for delete the category.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give a valid id for delete the category.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -356,19 +367,25 @@ class CategoriesController extends Controller
         if ($category->pk_content_category != null) {
 
             if ($category->deleteContents()) {
-                m::add(_("Category emptied successfully."), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Category emptied successfully.")
+                );
             } else {
-                m::add(
+                $this->get('session')->getFlashBag()->add(
+                    'error',
                     sprintf(
                         _("Unable to delete all the contents in the category '%s'"),
                         $category->title
-                    ),
-                    m::ERROR
+                    )
                 );
             }
 
         } else {
-            m::add(_('You must give a valid id for delete contents in a category.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give a valid id for delete contents in a category.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -395,16 +412,22 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if (is_null($category->pk_content_category)) {
-            m::add(sprintf(_('Unable to find a category with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a category with the id "%d"'), $id)
+            );
         } else {
             $category->setInMenu($status);
 
             getService('cache')->delete(CACHE_PREFIX.'_content_categories');
 
-            // Limpiar la cache de portada de todas las categorias
-            // $refresh = Content::refreshFrontpageForAllCategories();
+            // Clean cache for all category frontpages
+            // dispatchEventWithParams('category.clean_all');
 
-            m::add(sprintf(_('Successfully changed availability for category with id "%d"'), $id), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Successfully changed availability for category with id "%d"'), $id)
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_categories'));
@@ -428,7 +451,10 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if (is_null($category->pk_content_category)) {
-            m::add(sprintf(_('Unable to find a category with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a category with the id "%d"'), $id)
+            );
         } else {
             $category->setInRss($status, $id);
 
@@ -437,7 +463,10 @@ class CategoriesController extends Controller
             // Limpiar la cache de portada de todas las categorias
             // $refresh = Content::refreshFrontpageForAllCategories();
 
-            m::add(sprintf(_('Successfully changed availability for category with id "%d"'), $id), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Successfully changed availability for category with id "%d"'), $id)
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_categories'));
@@ -458,12 +487,12 @@ class CategoriesController extends Controller
             $sectionSettings = $request->request->get('section_settings');
             if ($sectionSettings['allowLogo'] == 1) {
                 $path = MEDIA_PATH.'/sections';
-                \FilesManager::createDirectory($path);
+                \Onm\FilesManager::createDirectory($path);
             }
 
             s::set('section_settings', $sectionSettings);
 
-            m::add(_('Settings saved.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
             return $this->redirect($this->generateUrl('admin_categories_config'));
         } else {

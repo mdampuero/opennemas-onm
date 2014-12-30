@@ -107,7 +107,7 @@ class RegionImporter
                 echo "Category with id {$originalID} already imported\n";
             } else {
                 $data = array(
-                    'name'              => (StringUtils::get_title($category['Nombre'])),
+                    'name'              => (StringUtils::getTitle($category['Nombre'])),
                     'title'             => $category['Nombre'],
                     'inmenu'            => 1,
                     'subcategory'       => 0,
@@ -280,7 +280,7 @@ class RegionImporter
                             'type_opinion' => self::$configuration['opinion']['typeOpinion'],
                             'body'         => $data['body'],
                             'metadata'     => strip_tags(
-                                StringUtils::get_tags(ImportHelper::convertoUTF8($rs->fields['post_title']))
+                                StringUtils::getTags(ImportHelper::convertoUTF8($rs->fields['post_title']))
                             ),
                             'description'    => strip_tags(substr($data['body'], 0, 150)),
                             'fk_author'      => self::$configuration['opinion']['authorOpinion'],
@@ -329,7 +329,7 @@ class RegionImporter
         if ($rs == null) {
             $data = array(
                 'title'               => $categoryName,
-                'name'                => \Onm\StringUtils::get_title($categoryName),
+                'name'                => \Onm\StringUtils::getTitle($categoryName),
                 'inmenu'              => 1,
                 'internal_category'   => 7,
                 'fk_content_category' => '0',
@@ -396,7 +396,7 @@ class RegionImporter
                         'content_status' => 1,
                         'frontpage'      => 0,
                         'in_home'        => 0,
-                        'metadata'       => StringUtils::get_tags($rs->fields['title']),
+                        'metadata'       => StringUtils::getTags($rs->fields['title']),
                         'description'    => $rs->fields['description'],
                         'created'        => $dateString,
                         'starttime'      => $dateString,

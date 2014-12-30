@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -37,7 +36,7 @@ class RatingsController extends Controller
     public function voteAction(Request $request)
     {
         // Retrieve data
-        $ip        = getRealIp();
+        $ip        = getUserRealIP();
         $ipFrom    = $request->query->filter('i', null, FILTER_SANITIZE_STRING);
         $voteValue = $request->query->filter('v', null, FILTER_VALIDATE_INT);
         $page      = $request->query->filter('p', null, FILTER_SANITIZE_STRING);

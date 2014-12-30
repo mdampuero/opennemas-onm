@@ -64,6 +64,14 @@ class ContentController extends Controller
         $results = $this->convertToUtf8($results);
         $total   = $em->countBy($search);
 
+        foreach ($results as &$result) {
+            $createdTime = new \DateTime($result->created);
+            $result->created = $createdTime->format(\DateTime::ISO8601);
+
+            $updatedTime = new \DateTime($result->changed);
+            $result->changed = $updatedTime->format(\DateTime::ISO8601);
+        }
+
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
@@ -550,7 +558,7 @@ class ContentController extends Controller
         $content   = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
-            $content->set_available($status, $this->getUser()->id);
+            $content->setAvailable($status, $this->getUser()->id);
 
             $status = $content->content_status;
             $success[] = array(
@@ -621,7 +629,7 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->set_available(
+                        $content->setAvailable(
                             $available,
                             $this->getUser()->id
                         );
@@ -830,7 +838,7 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->set_in_home(
+                        $content->setInHome(
                             $inHome,
                             $this->getUser()->id
                         );
@@ -1004,10 +1012,14 @@ class ContentController extends Controller
 
         $ids = array();
 
+        $vm = $this->get('content_views_repository');
+        $extra['views'] = array();
         foreach ($contents as $content) {
             $ids[] = $content->fk_author;
             $ids[] = $content->fk_publisher;
             $ids[] = $content->fk_user_last_editor;
+
+            $extra['views'][$content->id] = $vm->getViews($content->id);
         }
         $ids = array_unique($ids);
 
@@ -1018,7 +1030,6 @@ class ContentController extends Controller
         if (($key = array_search(null, $ids)) !== false) {
             unset($ids[$key]);
         }
-
 
         $users = $this->get('user_repository')->findMulti($ids);
 

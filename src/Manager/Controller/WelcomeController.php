@@ -29,21 +29,32 @@ class WelcomeController extends Controller
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+
     }
 
     /**
      * Shows the welcome page of the manager
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function defaultAction(Request $request)
+     * @return void
+     */
+    public function defaultAction()
     {
-        return $this->render('index/index.tpl');
+        $messages = [
+            _("Printing your newspaper..."),
+            _("Cloning journalists..."),
+            _("Writing articles using Wikipedia..."),
+            _("Spinning up the rotary..."),
+            _("Reinventing Gutenberg machine..."),
+        ];
+        $loadingMessage = $messages[array_rand($messages)];
+
+        return $this->render(
+            'base/base.tpl',
+            ['loading_message' => $loadingMessage,]
+        );
     }
 }

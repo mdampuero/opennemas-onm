@@ -19,7 +19,7 @@
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config disqus module{/t}" ><br />{t}Config{/t}
+                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png"><br />{t}Config{/t}
                 </a>
             </li>
         </ul>

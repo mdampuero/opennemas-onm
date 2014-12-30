@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 
 class MenusController extends ContentController
 {
@@ -22,10 +21,9 @@ class MenusController extends ContentController
      * Deletes multiple menus at once give them ids
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request, $contentType = null)
+    public function batchDeleteAction(Request $request)
     {
         $em = $this->get('menu_repository');
         $errors  = array();
@@ -78,10 +76,9 @@ class MenusController extends ContentController
      * Deletes a menu.
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function deleteAction($id, $contentType = null)
+    public function deleteAction($id)
     {
         $em       = $this->get('menu_repository');
         $messages = array();

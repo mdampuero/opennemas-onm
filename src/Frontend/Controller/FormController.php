@@ -14,11 +14,11 @@
  **/
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -31,12 +31,14 @@ class FormController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
+        if (!\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         return $this->render(
@@ -62,8 +64,6 @@ class FormController extends Controller
 
         $this->view = new \Template(TEMPLATE_USER);
 
-        require_once 'recaptchalib.php';
-
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
 
@@ -75,16 +75,16 @@ class FormController extends Controller
         $class            = "";
 
         if (empty($verify)) {
+            // New captcha instance
+            $captcha = getService('recaptcha')
+                ->setPrivateKey($configRecaptcha['private_key'])
+                ->setRemoteIp($request->getClientIp());
+
             // Get reCaptcha validate response
-            $resp = recaptcha_check_answer(
-                $configRecaptcha['private_key'],
-                $request->getClientIp(),
-                $rcChallengeField,
-                $rcResponseField
-            );
+            $resp = $captcha->check($rcChallengeField, $rcResponseField);
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (!$resp->is_valid) {
+            if (!$resp->isValid()) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
@@ -96,7 +96,7 @@ class FormController extends Controller
                         "Sorry, we were unable to complete your request.\n"
                         ."Check the form and try again"
                     );
-                    $message = _("Email is required but will not be published");
+                    $message = _("Email is required but it will not be published");
                     $class = 'error';
                 } else {
                     // Correct CAPTCHA, correct mail and name not empty

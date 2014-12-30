@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -43,23 +42,24 @@ class RedirectorsController extends Controller
 
         if ($slug === 'none') {
             if (!empty($type)) {
-                $newContentID  = getOriginalIDForContentTypeAndID($type, $contentId);
+                $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($type, $contentId);
             } else {
-                list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+                list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromID($contentId);
             }
         } else {
-            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
         }
 
         if ($oldVersion == 'editmaker') {
             $newContentID = \Content::resolveID($newContentID);
         }
 
-        $er = $this->get('entity_repository');
-
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = $this->get('entity_repository')->find('Article', $newContentID);
-            $content->category_name = $content->catName;
+
+            if (!is_null($content)) {
+                $content->category_name = $content->catName;
+            }
         } elseif ($type == 'opinion') {
             $content = $this->get('opinion_repository')->find('Opinion', $newContentID);
         } else {
@@ -88,9 +88,11 @@ class RedirectorsController extends Controller
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
         if ($slug == 'none') {
-            $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+            $newContentID  = \ContentManager::getOriginalIDForContentTypeAndID($contentType, $contentId);
         } else {
-            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+            list($type, $newContentID) = \ContentManager::getOriginalIdAndContentTypeFromSlug($slug);
+            // Unused var $type
+            unset($type);
         }
 
         $category = new \ContentCategory($newContentID);

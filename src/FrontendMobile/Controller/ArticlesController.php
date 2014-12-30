@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -62,7 +61,7 @@ class ArticlesController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
             $cm = new \ContentManager();
 
-            $article->category_name  = $ccm->get_name($article->category);
+            $article->category_name  = $ccm->getName($article->category);
             $article->category_title = $article->loadCategoryTitle($article->id);
 
             // Set inner photo if available

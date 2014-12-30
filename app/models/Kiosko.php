@@ -146,7 +146,7 @@ class Kiosko extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            throw new \Exception(_("Unable to save the cover data into the database."));
+            throw new \Exception(_("Unable to save the cover data."));
         }
 
         return $this->id;
@@ -292,7 +292,7 @@ class Kiosko extends Content
      *
      * @return array
      **/
-    public function get_months_by_years()
+    public function getMonthsByYears()
     {
         $sql = "SELECT DISTINCT MONTH(date) as month, "
                ."YEAR(date) as year FROM `kioskos` ORDER BY year DESC, month DESC";

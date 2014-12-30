@@ -54,7 +54,7 @@ EOF
         $_SERVER['REQUEST_URI']   = '/';
 
 
-        $this->generateStatics($input, $output);
+        $this->generateStatics($output);
 
         $output->writeln(
             "\n\t<fg=yellow;bg=white>Migration finished for Database: ".$serverName."</fg=yellow;bg=white>"
@@ -66,9 +66,8 @@ EOF
      *
      * @return void
      **/
-    protected function generateStatics($input, $output)
+    protected function generateStatics($output)
     {
-
         $request = Request::createFromGlobals();
         $request->setTrustedProxies(array('127.0.0.1'));
 
@@ -147,7 +146,7 @@ EOF
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
             $newFile = $basePath.$category_name.".html";
-            $result  = file_put_contents($newFile, $htmlOut);
+            file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);
         }

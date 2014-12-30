@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -49,7 +48,7 @@ class PollsController extends Controller
             $this->ccm = new \ContentCategoryManager();
             $this->category     = $this->ccm->get_id($this->categoryName);
             $actual_category_id = $this->category; // FOR WIDGETS
-            $category_real_name = $this->ccm->get_title($this->categoryName); //used in title
+            $category_real_name = $this->ccm->getTitle($this->categoryName); //used in title
 
         } else {
             $category_real_name = 'Portada';
@@ -76,11 +75,9 @@ class PollsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         if (!\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
             throw new ResourceNotFoundException();
@@ -124,6 +121,16 @@ class PollsController extends Controller
                 foreach ($polls as &$poll) {
                     $poll->items   = $poll->getItems($poll->id);
                     $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d', $poll->id);
+                    $poll->status  = 'opened';
+                    if (is_string($poll->params)) {
+                        $poll->params = unserialize($poll->params);
+                    }
+                    if (is_array($poll->params) && array_key_exists('closetime', $poll->params)
+                        && (!empty($poll->params['closetime']))
+                        && ($poll->params['closetime'] != date('00-00-00 00:00:00'))
+                        && ($poll->params['closetime'] < date('Y-m-d H:i:s'))) {
+                            $poll->status = 'closed';
+                    }
                 }
             }
 
@@ -210,20 +217,24 @@ class PollsController extends Controller
 
         $message = null;
         $alreadyVoted = false;
-        $voted = (int) $request->query->getDigits('voted', 0);
-        $valid = (int) $request->query->getDigits('valid', 3);
-        if ($voted == 1) {
-            if ($voted == 1 && $valid === 1) {
-                $message = _('Thanks for participating.');
-            } elseif ($voted == 1 && $valid === 0) {
-                $message = _('Please select a valid poll answer.');
+        if ($poll->status != 'closed') {
+            $voted = (int) $request->query->getDigits('voted', 0);
+            $valid = (int) $request->query->getDigits('valid', 3);
+            if ($voted == 1) {
+                if ($voted == 1 && $valid === 1) {
+                    $message = "<span class='thanks'>"._('Thanks for participating.')."</span>";
+                } elseif ($voted == 1 && $valid === 0) {
+                    $message = "<span class='wrong'>"._('Please select a valid poll answer.')."</span>";
+                }
+            } elseif (isset($cookie)) {
+                $alreadyVoted = true;
+                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
+            } elseif (($valid === 0) && ($voted == 0)) {
+                $alreadyVoted = true;
+                $message = "<span class='ok'>"._('You have voted this poll previously.')."</span>";
             }
-        } elseif (isset($cookie)) {
-            $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
-        } elseif (($valid === 0) && ($voted == 0)) {
-            $alreadyVoted = true;
-            $message = _('You have voted this poll previously.');
+        } else {
+            $message = "<span class='closed'>"._('You can\'t vote this poll, it is closed.')."</span>";
         }
 
         $ads = $this->getAds('inner');
@@ -234,6 +245,7 @@ class PollsController extends Controller
             array(
                 'cache_id'      => $cacheID,
                 'msg'           => $message,
+                'poll'          => $poll,
                 'already_voted' => $alreadyVoted,
             )
         );
@@ -266,21 +278,25 @@ class PollsController extends Controller
             throw new ResourceNotFoundException();
         }
 
+
         $cookieName = "poll-".$pollId;
         $cookie = $request->cookies->get($cookieName);
 
         $valid = 0;
         $voted = 0;
 
-        if (!empty($answer) && !isset($cookie)) {
-            $ip = getRealIp();
+        if (!empty($answer) && !isset($cookie) && ($poll->status != 'closed')) {
+            $ip    = getUserRealIP();
             $voted = $poll->vote($answer, $ip);
 
             $valid = 1;
 
             $cookieVoted = new Cookie($cookieName, 'voted', time() + (3600 * 1));
 
+            // Clear all caches
             $this->cleanCache($poll->category_name, $pollId);
+            $this->cleanCache('home', $pollId);
+            dispatchEventWithParams('content.update', array('content' => $poll));
         } elseif (empty($answer)) {
             $valid = 0;
             $voted = 1;
@@ -324,14 +340,17 @@ class PollsController extends Controller
      **/
     protected function cleanCache($categoryName, $pollId)
     {
-        $tplManager = new \TemplateCacheManager($this->view->templateBaseDir);
-        $cacheID    = $this->view->generateCacheId($categoryName, '', $pollId);
-        $tplManager->delete($cacheID, 'poll.tpl');
 
-        $cacheID = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
 
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollId);
+        $cacheManager->delete($cacheID, 'poll.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }

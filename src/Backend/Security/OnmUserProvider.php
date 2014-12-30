@@ -1,25 +1,36 @@
 <?php
 
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Backend\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
+/**
+ * Loads an user basing on the username.
+ */
 class OnmUserProvider implements UserProviderInterface
 {
-    protected $user;
-
     /**
      * Loads the user for the given username.
      *
      * This method must throw UsernameNotFoundException if the user is not
      * found.
      *
-     * @throws UsernameNotFoundException if the user is not found
-     * @param  string $username The username
+     * @param string $username The username
      *
      * @return AdvancedUserInterface
+     *
+     * @throws UsernameNotFoundException if the user is not found
      */
     public function loadUserByUsername($username)
     {
@@ -46,10 +57,11 @@ class OnmUserProvider implements UserProviderInterface
      * from the database, or if it simply merges the passed User into the
      * identity map of an entity manager.
      *
-     * @throws UnsupportedUserException if the account is not supported
-     * @param UserInterface $user
+     * @param UserInterface $user The user to refresh.
      *
-     * @return UserInterface
+     * @return UserInterface The refreshed user.
+     *
+     * @throws UnsupportedUserException if the account is not supported
      */
     public function refreshUser(UserInterface $user)
     {
@@ -57,11 +69,11 @@ class OnmUserProvider implements UserProviderInterface
     }
 
     /**
-     * Whether this provider supports the given user class
+     * Whether this provider supports the given user class.
      *
-     * @param string $class
+     * @param string  $class The class name.
      *
-     * @return boolean
+     * @return boolean True if the given class is supported.
      */
     public function supportsClass($class)
     {

@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -30,11 +29,9 @@ class PaypalNotificationsController extends Controller
     /**
      * Handles IPN notifications for paywall recurring payments
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function paywallAction(Request $request)
+    public function paywallAction()
     {
         // Get paypal developer mode settings
         $databaseSettings = s::get('paywall_settings');

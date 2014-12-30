@@ -141,7 +141,7 @@ label {
                                 </div>
                             </div>
                         </div>
-
+                        {is_module_activated name="BLOG_MANAGER"}
                         <div class="control-group">
                             <label for="meta[twitter]" class="control-label">{t}View as Blog{/t}</label>
                             <div class="controls">
@@ -151,7 +151,7 @@ label {
                                 </label>
                             </div>
                         </div>
-
+                        {/is_module_activated}
                         <div class="control-group">
                             <label for="url" class="control-label">{t}Other Blog Url{/t}</label>
                             <div class="controls">

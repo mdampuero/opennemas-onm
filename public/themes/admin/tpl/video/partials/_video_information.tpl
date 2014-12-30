@@ -76,7 +76,7 @@
                 <td>{$information['duration']}</td>
             </tr>
             <tr>
-                <td><strong>{t}Url Thumbnail{/t}</strong></td>
+                <td><strong>{t}Thumbnail URL{/t}</strong></td>
                 <td><img src="{$information['thumbnail']}" alt="" width="100"> {$information['thumbnail']}</td>
             </tr>
             <tr>

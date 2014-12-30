@@ -1,11 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
+    {stylesheets src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
@@ -86,14 +90,14 @@ jQuery(document).ready(function($) {
         <div class="control-group">
             <label for="username" class="control-label">{t}Username{/t}</label>
             <div class="controls">
-                <input type="text" id="username" name="username" value="{$server['username']}" class="input-xlarge" required="required"/>
+                <input type="text" id="username" name="username" value="{$server['username']}" class="input-xlarge"/>
             </div>
         </div>
 
         <div class="control-group">
             <label for="password" class="control-label">{t}Password{/t}</label>
             <div class="controls">
-                <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge" required="required"/>
+                <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge"/>
                 <button class="check-pass">{t}Show password{/t}</button>
             </div>
         </div>

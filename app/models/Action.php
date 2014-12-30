@@ -126,7 +126,7 @@ class Action
      *
      * @return int
      **/
-    public static function sum($filter = '', $config = array())
+    public static function sum($filter = '')
     {
         $where = '';
 

@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 use Onm\StringUtils;
 
 /**
@@ -67,34 +66,25 @@ class BooksController extends Controller
                 'timezone'     => $timezone->getName()
             )
         );
-        // ---------------------------------------------------------------------
-
-        // Optimize  this crap  ---------------------------------------
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        // Create folder if it doesn't exist
-        if (!file_exists($bookSavePath)) {
-            \FilesManager::createDirectory($bookSavePath);
-        }
-        // ---------------------------------------------------------------------
     }
 
     /**
      * Lists all the
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
+            );
         }
 
         return $this->render('book/list.tpl');
@@ -103,19 +93,20 @@ class BooksController extends Controller
     /**
      * List books favorites for widget
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
      **/
-    public function widgetAction(Request $request)
+    public function widgetAction()
     {
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
+            );
         }
 
         return $this->render(
@@ -143,14 +134,11 @@ class BooksController extends Controller
             return $this->render('book/new.tpl');
 
         } else {
-            $bookSavePath       = INSTANCE_MEDIA_PATH.'/books/';
-            $imageName          = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'file_img'    => $imageName,
+                'cover_id'    => $request->request->filter('cover_id', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -160,17 +148,19 @@ class BooksController extends Controller
             );
 
             $book = new \Book();
-            $id   =$book->create($data);
-
+            $id   = $book->create($data);
 
             if (!empty($id)) {
 
                 $book = $book->read($id);
 
-                return $this->render('book/new.tpl', array( 'book' => $book, ));
+                return $this->render('book/new.tpl', array('book' => $book));
 
             } else {
-                m::add(sprintf(_("Sorry, file can't created book.")));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Unable to create the new book.")
+                );
             }
 
             return $this->render('book/new.tpl');
@@ -188,12 +178,15 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $id = $this->request->query->getInt('id');
+        $id = $request->query->getInt('id');
 
         $book = new \Book($id);
 
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_books'));
         }
@@ -223,7 +216,10 @@ class BooksController extends Controller
         $book = new \Book($id);
 
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_books'));
         }
@@ -236,34 +232,33 @@ class BooksController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Book data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Book data sent not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
         }
 
-        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-        if (!empty($_FILES['file_img']['name'])) {
-            $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
-        } else {
-            $imageName = $book->file_img;
-        }
-
-        $data = array(
+        $data = [
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'file_img'       => $imageName,
+            'cover_id'       => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category'),
             'content_status' => $request->request->getInt('content_status'),
-        );
+        ];
 
-        $book->update($data);
+        if ($book->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Book updated succesfully.')
+            );
+        }
 
         return $this->redirect(
             $this->generateUrl(
@@ -291,11 +286,17 @@ class BooksController extends Controller
 
         $book = new \Book($id);
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
-        } else {
-            $book->delete($id);
-            m::add(_("Book '{$book->title}' deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
         }
+        $book->delete($id);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            sprintf(_("Book '%s' deleted successfully."), $book->title)
+        );
 
         return $this->redirect(
             $this->generateUrl(
@@ -345,44 +346,5 @@ class BooksController extends Controller
         }
 
         return new Response($msg);
-    }
-
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('BOOK_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('new_status', 0);
-
-        $selected = $request->query->get('selected_fld', null);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $book = new \Book($id);
-                $book->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $book->set_favorite($status, $_SESSION['userid']);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $this->category,
-                    'page'     => $page,
-                )
-            )
-        );
     }
 }

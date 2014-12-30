@@ -42,17 +42,16 @@ class CleanSmartyCacheCommand extends Command
                 return 1;
             }
 
-            $output->writeln(" - Cleaning temporary files for instance ".$themeName);
-            $this->cleanCompileForTheme($input, $output, $folder);
-            $this->cleanCacheForTheme($input, $output, $folder);
+            $output->writeln(" - Cleaning cache files for instance ".$themeName);
+            $this->cleanCacheForTheme($output, $folder);
         } else {
-            $output->writeln(" - Cleaning temporary files");
+            $output->writeln(" - Cleaning cache files");
 
             foreach (glob($baseTmpInstancesPath.'/*') as $folder) {
-                $this->cleanCompileForTheme($input, $output, $folder);
-                $this->cleanCacheForTheme($input, $output, $folder);
+                $this->cleanCacheForTheme($output, $folder);
             }
         }
+        $this->cleanCompileForTheme($output, $baseTmpInstancesPath);
     }
 
     /**
@@ -60,11 +59,11 @@ class CleanSmartyCacheCommand extends Command
      *
      * @return void
      **/
-    private function cleanCompileForTheme($input, $output, $themePath)
+    private function cleanCompileForTheme($output, $baseTmpInstancesPath)
     {
-        $output->write("\t* '".basename($themePath)."' compile files ");
+        $fullCompileFolderPath = realpath($baseTmpInstancesPath.'/common/smarty');
 
-        $fullCompileFolderPath = realpath($themePath.'/smarty/compile');
+        $output->write(" - Cleaning common compile folder ");
         if ($fullCompileFolderPath) {
             $out = exec('rm -r '.$fullCompileFolderPath);
             $output->write($out);
@@ -78,7 +77,7 @@ class CleanSmartyCacheCommand extends Command
      *
      * @return void
      **/
-    private function cleanCacheForTheme($input, $output, $themePath)
+    private function cleanCacheForTheme($output, $themePath)
     {
         $output->write("\t* '".basename($themePath)."' cache files ");
 

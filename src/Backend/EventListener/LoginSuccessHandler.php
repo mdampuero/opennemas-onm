@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Backend\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -12,69 +21,66 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Onm\Settings as s;
 use \Privileges;
 
+/**
+ * Handler to load user data when an user logs in the system successfully.
+ */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * @var Symfony\Component\Security\Core\SecurityContext
+     * @var SecurityContext
      */
     private $context;
 
     /**
-     * @var Symfony\Component\Routing\Router
+     * @var Router
      */
     protected $router;
 
     /**
-     * @var Symfony\Component\Security\Core\SecurityContext
+     * @var Session
      */
     private $session;
 
     /**
      * Constructs a new handler.
      *
-     * @param Symfony\Component\Security\Core\SecurityContext $context
-     * @param Symfony\Component\Routing\Router                $router
-     * @param Symfony\Component\HttpFoundation\Session        $session
+     * @param SecurityContext $context The security context.
+     * @param Router          $router  The router service.
+     * @param Session         $session The session.
      */
     public function __construct($context, $router, $session)
     {
         $this->context = $context;
         $this->router  = $router;
         $this->session = $session;
-
-        // Load reCaptcha lib
-        require_once 'recaptchalib.php';
     }
 
     /**
      * This is called when an interactive authentication attempt succeeds.
      *
-     * @param  Request        $request
-     * @param  TokenInterface $token
-     * @return Response                The response to return.
+     * @param Request        $request The request object.
+     * @param TokenInterface $token   The security token.
+     *
+     * @return Response The response to return.
      */
     public function onAuthenticationSuccess(
         Request $request,
         TokenInterface $token
     ) {
-        $group      = array();
-        $user       = $token->getUser();
-        $userGroups = $user->id_user_group;
-        $valid      = true;
-
-        foreach ($userGroups as $group) {
-            $groups[] = \UserGroup::getGroupName($group);
-        }
+        $user  = $token->getUser();
+        $valid = true;
 
         if ($request->get('recaptcha_challenge_field')) {
+            // New captcha instance
+            $captcha = getService('recaptcha')
+                ->setRemoteIp($request->getClientIp());
+
             // Get reCaptcha validate response
-            $valid = recaptcha_check_answer(
-                '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
-                $request->getClientIp(),
+            $valid = $captcha->check(
                 $request->get('recaptcha_challenge_field'),
                 $request->get('recaptcha_response_field')
             );
-            $valid = $valid->is_valid;
+            $valid = $valid->isValid();
         }
 
         // Set session array
@@ -126,7 +132,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             $time->setTimezone(new \DateTimeZone('UTC'));
             $time = $time->format('Y-m-d H:i:s');
 
-            s::set('last_login', $time);
+            if (!$user->isMaster()) {
+                s::set('last_login', $time);
+            }
 
             return new RedirectResponse($request->get('_referer'));
         }

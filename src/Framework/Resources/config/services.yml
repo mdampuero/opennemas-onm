@@ -9,18 +9,13 @@ services:
 
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
+        arguments: [ @instance_manager, @cache ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
-    # kernel.listener.admin_auth:
-    #     class: Framework\EventListener\AdminAuthenticationListener
-    #     arguments: [ @security.context ]
-    #     tags:
-    #         - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
-
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
-        arguments: [ @setting_repository ]
+        arguments: [ @service_container, @setting_repository ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
@@ -34,27 +29,42 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
+    kernel.listener.webservice_exceptions:
+        class: Framework\EventListener\WebServiceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
     kernel.listener.access_denied_exceptions:
         class: Framework\EventListener\AccessDeniedExceptionsListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-    kernel.listener.general_error_handler:
+    kernel.listener.general_exceptions:
         class: Framework\EventListener\GeneralExceptionsListener
-        arguments: [ %kernel.environment%, @logger ]
+        arguments: [ %kernel.environment% ]
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 98 }
 
-    kernel.listener.content_subscriber:
-        class: Framework\EventListener\ContentActionsSubscriber
-        arguments: [ @cache, @logger ]
+    kernel.listener.hooks_subscriber:
+        class: Framework\EventListener\HooksSubscriber
+        arguments: [ @service_container, @cache, @logger ]
         tags:
-            - {name: kernel.event_subscriber}
+            - { name: kernel.event_subscriber }
+    kernel.listener.user_listener:
+        class: Framework\EventListener\UserListener
+        arguments: [ @security.context, @onm_user_provider ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     kernel.listener.news_agency:
         class: Framework\EventListener\NewsAgencyCronActionSubscriber
         tags:
             - {name: kernel.event_subscriber}
+
+    kernel.listener.application_listener:
+        class: Framework\EventListener\ApplicationListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
     cache:
         class: %cache_handler%
@@ -131,6 +141,11 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    recaptcha:
+        class: Captcha\Captcha
+        calls:
+            - [setPrivateKey, [ %recaptcha_private_key% ]]
+
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
         arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
@@ -146,10 +161,28 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
-        arguments: [ @dbal_connection, @cache ]
+        arguments: [ @dbal_connection, @cache, @setting_repository ]
 
     onm_templating:
         class: Onm\Templating\Templating
         arguments: [ @service_container ]
+
+    template_cache_manager:
+        class: Onm\Templating\Cache\Manager
+
+    template_cache_config_manager:
+        class: Onm\Templating\Cache\Config
+
     view:
         alias: onm_templating
+
+    stylesheet_manager:
+        class: Framework\Assetic\StylesheetManager
+        arguments: [ @service_container, %assetic% ]
+
+    javascript_manager:
+        class: Framework\Assetic\JavascriptManager
+        arguments: [ @service_container, %assetic% ]
+
+    authentication_entry_point:
+        class: Framework\Security\AuthenticationEntryPoint

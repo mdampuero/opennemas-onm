@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the images
@@ -64,12 +63,11 @@ class ImagesController extends Controller
     /**
      * Lists images from an specific category.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('image/list.tpl');
     }
@@ -95,7 +93,7 @@ class ImagesController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Image module settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Image module settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_images_config'));
         } else {
@@ -119,12 +117,11 @@ class ImagesController extends Controller
     /**
      * Show the page for upload new images.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));
@@ -156,7 +153,7 @@ class ImagesController extends Controller
         if (!is_array($ids) || !(count($ids) > 0)) {
             $ids = (int) $ids;
             if ($ids <= 0) {
-                m::add(_('Please provide a image id for show it.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
                 return $this->redirect(
                     $this->generateUrl('admin_images', array('category' => $category))
@@ -175,9 +172,10 @@ class ImagesController extends Controller
                 $photos []= $photo;
             }
         }
+
         // Check if passed ids fits photos in database, if not redirect to listing
         if (count($photos) <= 0) {
-            m::add(_('Unable to find any photo with that id'));
+            $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -213,7 +211,7 @@ class ImagesController extends Controller
 
         $ids = array();
         $photosSaved = 0;
-        foreach ($photosRAW as $id => $value) {
+        foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
                 'id'          => filter_var($id, FILTER_SANITIZE_STRING),
                 'title'       => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
@@ -236,7 +234,10 @@ class ImagesController extends Controller
         }
 
         if (count($ids) > 0) {
-            m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Data successfully saved for %d photos'), $photosSaved)
+            );
         }
 
         $queryIDs = implode('&id[]=', $ids);
@@ -260,7 +261,10 @@ class ImagesController extends Controller
 
         $photo = new \Photo($id);
         if (is_null($photo->id)) {
-            m::add(sprintf(_('Unable to find the photo with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the photo with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_images'));
         }
@@ -322,11 +326,11 @@ class ImagesController extends Controller
 
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
-                    foreach ($upload['tmp_name'] as $index => $value) {
+                    foreach (array_keys($upload['tmp_name']) as $index) {
 
                         if (empty($upload['tmp_name'][$index])) {
                             $info [] = array(
-                                'error'         => _('Not valid file or the file exceeds the max allowed file size.'),
+                                'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
                             );
                             continue;
                         }
@@ -349,7 +353,7 @@ class ImagesController extends Controller
                             'fk_category'       => $category,
                             'category'          => $category,
                             'category_name'     => $category_name,
-                            'metadata'          => \Onm\StringUtils::get_tags($tempName),
+                            'metadata'          => \Onm\StringUtils::getTags($tempName),
                         );
 
                         try {
@@ -403,7 +407,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => \Onm\StringUtils::get_tags($tempName),
+                        'metadata'          => \Onm\StringUtils::getTags($tempName),
                     );
 
                     try {
@@ -495,7 +499,7 @@ class ImagesController extends Controller
         }
 
         if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = \Onm\StringUtils::getTags($metadata);
             $tokens = explode(', ', $tokens);
 
             $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));

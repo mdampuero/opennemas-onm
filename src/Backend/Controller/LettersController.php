@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -40,12 +39,11 @@ class LettersController extends Controller
     /**
      * Lists all the letters.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('letter/list.tpl');
     }
@@ -76,9 +74,15 @@ class LettersController extends Controller
             );
 
             if ($letter->create($data)) {
-                m::add(_('Letter successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Letter successfully created.')
+                );
             } else {
-                m::add(_('Unable to create the new letter.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new letter.')
+                );
             }
             return $this->redirect(
                 $this->generateUrl(
@@ -111,7 +115,10 @@ class LettersController extends Controller
         }
 
         if (is_null($letter->id)) {
-            m::add(sprintf(_('Unable to find the letter with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the letter with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_letters'));
         }
@@ -134,7 +141,7 @@ class LettersController extends Controller
     {
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Letter data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _("Letter data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
         }
@@ -159,9 +166,9 @@ class LettersController extends Controller
         );
 
         if ($letter->update($data)) {
-            m::add(_('Letter successfully updated.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Letter successfully updated.'));
         } else {
-            m::add(_('Unable to update the letter.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('Unable to update the letter.'));
         }
 
         return $this->redirect(

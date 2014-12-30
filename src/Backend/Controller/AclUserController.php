@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the system users
@@ -34,13 +33,11 @@ class AclUserController extends Controller
     /**
      * Show a paginated list of backend users
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('USER_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
@@ -177,7 +174,10 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("User data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("The data send by the user is not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }
@@ -328,7 +328,7 @@ class AclUserController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;
@@ -472,7 +472,7 @@ class AclUserController extends Controller
     {
         $user = new \User($_SESSION['userid']);
 
-        foreach ($request->query as $key => $value) {
+        foreach (array_keys($request->query) as $key) {
             if (!preg_match('@^_@', $key)) {
                 $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
             }
@@ -677,7 +677,7 @@ class AclUserController extends Controller
 
                     $request->getSession()->getFlashBag()->add(
                         'error',
-                        _('Unable to send your recover username email. Please try it later.')
+                        _('Unable to send the email to recover your username. Please try it later.')
                     );
                 }
 
@@ -780,6 +780,14 @@ class AclUserController extends Controller
             $connected = true;
         }
 
+        if ($resource == 'facebook') {
+            $resourceName = 'Facebook';
+        } else {
+            $resourceName = 'Twitter';
+        }
+
+        $this->dispatchEvent('social.disconnect', array('user' => $user));
+
         return $this->render(
             'acl/user/social.tpl',
             array(
@@ -787,6 +795,7 @@ class AclUserController extends Controller
                 'connected'       => $connected,
                 'resource_id'     => $resourceId,
                 'resource'        => $resource,
+                'resource_name'   => $resourceName,
                 'user'            => $user,
             )
         );
@@ -797,9 +806,9 @@ class AclUserController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The user's id.
-     * @return Response          The response object.
+     * @return void
      */
-    public function disconnectAction(Request $request, $id, $resource)
+    public function disconnectAction($id, $resource)
     {
         $user = $this->get('user_repository')->find($id);
 
@@ -812,14 +821,12 @@ class AclUserController extends Controller
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_token');
         $resourceId = $user->deleteMetaKey($user->id, $resource . '_realname');
 
-        return $this->render(
-            'acl/user/social.tpl',
-            array(
-                'current_user_id' => $this->getUser()->id,
-                'connected'       => false,
-                'resource_id'     => null,
-                'resource'        => $resource,
-                'user'            => $user,
+        $this->dispatchEvent('social.connect', array('user' => $user));
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_acl_user_social',
+                array('id' => $id, 'resource' => $resource)
             )
         );
     }

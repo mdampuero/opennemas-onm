@@ -17,8 +17,23 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use PayPal\CoreComponentTypes\BasicAmountType;
+use PayPal\PayPalAPI\GetBalanceReq;
+use PayPal\PayPalAPI\GetBalanceRequestType;
+use PayPal\EBLBaseComponents\DoExpressCheckoutPaymentRequestDetailsType;
+use PayPal\EBLBaseComponents\PaymentDetailsItemType;
+use PayPal\EBLBaseComponents\PaymentDetailsType;
+use PayPal\EBLBaseComponents\SetExpressCheckoutRequestDetailsType;
+use PayPal\PayPalAPI\DoExpressCheckoutPaymentReq;
+use PayPal\PayPalAPI\DoExpressCheckoutPaymentRequestType;
+use PayPal\PayPalAPI\GetExpressCheckoutDetailsReq;
+use PayPal\PayPalAPI\GetExpressCheckoutDetailsRequestType;
+use PayPal\PayPalAPI\SetExpressCheckoutReq;
+use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
+use PayPal\PayPalAPI\RefundTransactionReq;
+use PayPal\PayPalAPI\RefundTransactionRequestType;
+use PayPal\Service\PayPalAPIInterfaceServiceService;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -54,13 +69,11 @@ class PaywallController extends Controller
     /**
      * Shows a list of purchases for the paywall module
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
         $settings = s::get('paywall_settings');
 
@@ -91,8 +104,7 @@ class PaywallController extends Controller
         $time = $time->format('Y-m-d H:i:s');
 
         $purchasesLastMonth = \Order::count(
-            "type='paywall' AND created > '$time'",
-            array()
+            "type='paywall' AND created > '$time'"
         );
 
         return $this->render(
@@ -119,10 +131,10 @@ class PaywallController extends Controller
      **/
     public function usersAction(Request $request)
     {
-        $page  = $this->request->query->getDigits('page', 1);
-        $type  = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
-        $order = $this->request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+        $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
 
@@ -212,9 +224,9 @@ class PaywallController extends Controller
      **/
     public function userListExportAction(Request $request)
     {
-        $type = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
-        $order  = $this->request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
-        $name = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $users = array();
         if ($type === '0') {
@@ -284,8 +296,8 @@ class PaywallController extends Controller
      **/
     public function purchasesListExportAction(Request $request)
     {
-        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
         $purchases = \Order::find(
@@ -348,9 +360,9 @@ class PaywallController extends Controller
      **/
     public function purchasesAction(Request $request)
     {
-        $page  = $this->request->query->getDigits('page', 1);
-        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
-        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+        $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
         $purchases = \Order::find(
@@ -418,13 +430,11 @@ class PaywallController extends Controller
     /**
      * Description of the action
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
      **/
-    public function settingsAction(Request $request)
+    public function settingsAction()
     {
         $settings = s::get('paywall_settings');
 
@@ -511,11 +521,11 @@ class PaywallController extends Controller
         }
 
         if (!$isValid) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect. Please try again."));
+            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect."));
         } elseif ($isIpnValid === 'waiting') {
-            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute and try again."));
+            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute."));
         } elseif (!$isIpnValid) {
-            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it and try again."));
+            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it."));
         } else {
             $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
             // If config is all ok save data
@@ -545,13 +555,13 @@ class PaywallController extends Controller
         $mode      = $request->request->filter('mode', '', FILTER_SANITIZE_STRING);
 
         // Try getting balance to check API credentials
-        $getBalanceRequest = new \GetBalanceRequestType();
+        $getBalanceRequest = new GetBalanceRequestType();
 
         // 0 – Return only the balance for the primary currency holding.
         // 1 – Return the balance for each currency holding.
         $getBalanceRequest->ReturnAllCurrencies = 1;
 
-        $getBalanceReq = new \GetBalanceReq();
+        $getBalanceReq = new GetBalanceReq();
         $getBalanceReq->GetBalanceRequest = $getBalanceRequest;
 
         $APICredentials = array(
@@ -561,7 +571,7 @@ class PaywallController extends Controller
             "mode"            => $mode
         );
 
-        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
         try {
             /* wrap API method calls on the service object with a try catch */
             $getBalanceResponse = $paypalService->GetBalance($getBalanceReq);
@@ -595,17 +605,17 @@ class PaywallController extends Controller
         $signature = $request->request->filter('signature', '', FILTER_SANITIZE_STRING);
         $mode      = $request->request->filter('mode', '', FILTER_SANITIZE_STRING);
 
-        $itemDetails = new \PaymentDetailsItemType();
+        $itemDetails = new PaymentDetailsItemType();
         $itemDetails->Name         = 'Test IPN url';
-        $itemDetails->Amount       = new \BasicAmountType("EUR", '0.01');
+        $itemDetails->Amount       = new BasicAmountType("EUR", '0.01');
         $itemDetails->Quantity     = '1';
 
-        $paymentDetails = new \PaymentDetailsType();
+        $paymentDetails = new PaymentDetailsType();
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
-        $paymentDetails->OrderTotal = new \BasicAmountType("EUR", '0.01');
+        $paymentDetails->OrderTotal = new BasicAmountType("EUR", '0.01');
         $paymentDetails->PaymentAction = "Sale";
 
-        $setECReqDetails = new \SetExpressCheckoutRequestDetailsType();
+        $setECReqDetails = new SetExpressCheckoutRequestDetailsType();
         $setECReqDetails->PaymentDetails[0] = $paymentDetails;
         $setECReqDetails->CancelURL = $this->generateUrl('admin_paywall_settings', array(), true);
         $setECReqDetails->ReturnURL = $this->generateUrl(
@@ -615,10 +625,10 @@ class PaywallController extends Controller
         );
         $setECReqDetails->BrandName = s::get('site_name');
 
-        $setECReqType = new \SetExpressCheckoutRequestType();
+        $setECReqType = new SetExpressCheckoutRequestType();
         $setECReqType->SetExpressCheckoutRequestDetails = $setECReqDetails;
 
-        $setECReq = new \SetExpressCheckoutReq();
+        $setECReq = new SetExpressCheckoutReq();
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
         $APICredentials = array(
@@ -628,7 +638,7 @@ class PaywallController extends Controller
             "mode"            => $mode
         );
 
-        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
         try {
             /* wrap API method calls on the service object with a try catch */
             $setECResponse = $paypalService->SetExpressCheckout($setECReq);
@@ -664,8 +674,8 @@ class PaywallController extends Controller
         $signature = $request->query->get('signature', '', FILTER_SANITIZE_STRING);
         $mode      = $request->query->get('mode', '', FILTER_SANITIZE_STRING);
 
-        $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
-        $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
+        $getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
         $APICredentials = array(
@@ -675,7 +685,7 @@ class PaywallController extends Controller
             "mode"            => $mode
         );
 
-        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        $paypalService = new PayPalAPIInterfaceServiceService($APICredentials);
         try {
             /* wrap API method calls on the service object with a try catch */
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
@@ -687,23 +697,23 @@ class PaywallController extends Controller
 
         $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
 
-        $orderTotal = new \BasicAmountType();
+        $orderTotal = new BasicAmountType();
         $orderTotal->currencyID = 'EUR';
         $orderTotal->value = '0.01';
 
-        $paymentDetails= new \PaymentDetailsType();
+        $paymentDetails= new PaymentDetailsType();
         $paymentDetails->OrderTotal = $orderTotal;
 
-        $DoECRequestDetails = new \DoExpressCheckoutPaymentRequestDetailsType();
+        $DoECRequestDetails = new DoExpressCheckoutPaymentRequestDetailsType();
         $DoECRequestDetails->PayerID = $payerId;
         $DoECRequestDetails->Token = $token;
         $DoECRequestDetails->PaymentAction = "Sale";
         $DoECRequestDetails->PaymentDetails[0] = $paymentDetails;
 
-        $DoECRequest = new \DoExpressCheckoutPaymentRequestType();
+        $DoECRequest = new DoExpressCheckoutPaymentRequestType();
         $DoECRequest->DoExpressCheckoutPaymentRequestDetails = $DoECRequestDetails;
 
-        $DoECReq = new \DoExpressCheckoutPaymentReq();
+        $DoECReq = new DoExpressCheckoutPaymentReq();
         $DoECReq->DoExpressCheckoutPaymentRequest = $DoECRequest;
 
         try {
@@ -718,12 +728,12 @@ class PaywallController extends Controller
 
             $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
             // Do the refund of the transaction
-            $refundReqest = new \RefundTransactionRequestType();
+            $refundReqest = new RefundTransactionRequestType();
 
             $refundReqest->RefundType = 'Full';
             $refundReqest->TransactionID = $paymentInfo->TransactionID;
 
-            $refundReq = new \RefundTransactionReq();
+            $refundReq = new RefundTransactionReq();
             $refundReq->RefundTransactionRequest = $refundReqest;
             try {
                 /* wrap API method calls on the service object with a try catch */

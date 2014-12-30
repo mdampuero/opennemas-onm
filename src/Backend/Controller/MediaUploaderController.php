@@ -13,7 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -42,7 +41,7 @@ class MediaUploaderController extends Controller
      *
      * @return Response the object response
      **/
-    public function getMonthsAction(Request $request)
+    public function getMonthsAction()
     {
         $years = array();
 
@@ -129,6 +128,10 @@ class MediaUploaderController extends Controller
         }
 
         foreach ($photos as &$photo) {
+            if (!$photo->type_img) {
+                $photo->type_img = pathinfo($photo->name, PATHINFO_EXTENSION);
+            }
+
             $photo->image_path = INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name;
             $photo->crop_thumbnail_url = $this->generateUrl(
                 'asset_image',

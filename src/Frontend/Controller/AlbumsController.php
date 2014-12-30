@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -36,6 +35,11 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
+
+        if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+            throw new ResourceNotFoundException();
+        }
+
         $this->view = new \Template(TEMPLATE_USER);
 
         // Setting up available categories for menu.
@@ -86,17 +90,12 @@ class AlbumsController extends Controller
     /**
      * Renders the album frontpage.
      *
-     * @param  Request  $request The request object.
-     *
      * @return Response          The response object.
      */
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
-
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
@@ -160,7 +159,9 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album_frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'       => $cacheID,
+                'advertisements' => $this->getAds(),
+                'x-tags'         => "album-frontpage,{$this->page}"
             )
         );
     }
@@ -187,10 +188,6 @@ class AlbumsController extends Controller
         }
 
         $this->view->setConfig('gallery-inner');
-
-        // Load advertisement for this action
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -255,8 +252,10 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album.tpl',
             array(
-                'cache_id'  => $cacheID,
-                'contentId' => $albumID
+                'cache_id'       => $cacheID,
+                'contentId'      => $albumID,
+                'advertisements' => $this->getAds('inner'),
+                'x-tags'         => "album,$albumID"
             )
         );
     }
@@ -319,7 +318,7 @@ class AlbumsController extends Controller
         $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
 
         if (empty($this->category)) {
-            $this->category = $this->request->query->getDigits('category', 0);
+            $this->category = $request->query->getDigits('category', 0);
         }
 
         $order = array('created' => 'DESC');

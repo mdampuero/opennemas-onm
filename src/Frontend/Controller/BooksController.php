@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -35,12 +34,10 @@ class BooksController extends Controller
      **/
     public function init()
     {
-        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
-        $this->view->assign(
-            array(
-                'LIBROS_IMG_PATH'   => INSTANCE_MEDIA_PATH.'/books/',
-                'LIBROS_FILES_PATH' => INSTANCE_MEDIA_PATH.'/books/',
-            )
+        $this->categoryName = $this->request->query->filter(
+            'category_name',
+            'all',
+            FILTER_SANITIZE_STRING
         );
     }
 
@@ -65,12 +62,11 @@ class BooksController extends Controller
         // Setting up available categories for menu.
         $contentManager  = new \ContentManager();
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
-            $this->ccm->getArraysMenu('', $contentType);
+        $parentCategories = $this->ccm->getArraysMenu('', $contentType);
 
         $bookCategories = array();
         $i = 0;
-        foreach ($parentCategories as $cat) {
+        foreach ($parentCategories[0] as $cat) {
             // get only books categories
             if ($cat->internal_category == $contentType) {
                 $bookCategories[$i] = new \stdClass();
@@ -82,6 +78,12 @@ class BooksController extends Controller
                     'content_status=1',
                     'ORDER BY position ASC, created DESC LIMIT 5'
                 );
+
+                // Get books cover image
+                foreach ($bookCategories[$i]->books as &$book) {
+                    $book->cover_img = new \Photo($book->cover_id);
+                }
+
                 $i++;
             }
         }
@@ -113,7 +115,8 @@ class BooksController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $book = $this->get('entity_repository')->find('Book', $id);
+        $er = $this->get('entity_repository');
+        $book = $er->find('Book', $id);
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('book-inner');
@@ -124,8 +127,6 @@ class BooksController extends Controller
         ) {
             $book->category_title = $book->loadCategoryTitle($book->id);
 
-            $swf = preg_replace('%\.pdf%', '.swf', $book->file_name);
-
             $contentManager  = new \ContentManager();
             $books = $contentManager->find_by_category(
                 'Book',
@@ -134,6 +135,11 @@ class BooksController extends Controller
                 'ORDER BY position ASC, created DESC LIMIT 5'
             );
 
+            // Get books cover image
+            foreach ($books as $key => $value) {
+                $books[$key]->cover_img = $er->find('Photo', $value->cover_id);
+            }
+
             $this->view->assign(
                 array(
                     'book'        => $book,
@@ -141,7 +147,6 @@ class BooksController extends Controller
                     'libros'      => $books,
                     'contentId'   => $id,
                     'category'    => $book->category,
-                    'archivo_swf' => $swf,
                     'cache_id'    => $cacheID,
                 )
             );
@@ -190,6 +195,11 @@ class BooksController extends Controller
                 'ORDER BY position ASC, created DESC '. $limit
             );
             $last = true;
+        }
+
+        // Get books cover image
+        foreach ($books as &$book) {
+            $book->cover_img = new \Photo($book->cover_id);
         }
 
         $this->view = new \Template(TEMPLATE_USER);

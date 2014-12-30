@@ -8,7 +8,6 @@ action_counters:
             options: { default: null, length: 255 }
         date:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP }
         counter:
             type: integer
             options: { default: null }
@@ -59,7 +58,7 @@ advertisements:
             options: { default: '0', notnull: false }
         script:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         overlap:
             type: boolean
             options: { default: '0', comment: 'Flag esconder eventos flash' }
@@ -146,7 +145,7 @@ articles:
             options: { default: null, unsigned: true, autoincrement: true }
         summary:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         img1:
             type: bigint
             options: { default: null, notnull: false, unsigned: true }
@@ -168,9 +167,6 @@ articles:
         fk_video:
             type: bigint
             options: { default: null, notnull: false, unsigned: true }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
         fk_video2:
             type: bigint
             options: { default: null, notnull: false, unsigned: true, comment: 'video interior' }
@@ -219,12 +215,9 @@ books:
         author:
             type: string
             options: { default: null, notnull: false, length: 250 }
-        file:
-            type: string
-            options: { default: null, notnull: false, length: 250 }
-        file_img:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+        cover_id:
+            type: bigint
+            options: { default: null, notnull: false }
         editorial:
             type: string
             options: { default: null, notnull: false, length: 250 }
@@ -254,7 +247,7 @@ comments:
             options: { default: '0000-00-00 00:00:00' }
         body:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         status:
             type: string
             options: { default: pending, length: 20 }
@@ -314,7 +307,7 @@ commentsmeta:
             options: { default: null, length: 255 }
         meta_value:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -353,7 +346,7 @@ content_categories:
             options: { default: '0', notnull: false }
         params:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         logo_path:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -383,7 +376,7 @@ content_positions:
             options: { default: '', length: 45 }
         params:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         content_type:
             type: string
             options: { default: null, notnull: false, length: 45 }
@@ -404,7 +397,7 @@ contentmeta:
             options: { default: null, length: 255 }
         meta_value:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -434,10 +427,10 @@ contents:
             options: { default: null, notnull: false, length: 255 }
         description:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         body:
             type: text
-            options: { default: null }
+            options: { default: null, length: 65532 }
         metadata:
             type: string
             options: { default: null, notnull: false, length: 255 }
@@ -486,9 +479,12 @@ contents:
         available:
             type: smallint
             options: { default: '1', notnull: false }
+        with_comment:
+            type: smallint
+            options: { default: '1', notnull: false }
         params:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         category_name:
             type: string
             options: { default: null, length: 255 }
@@ -620,7 +616,7 @@ frontpages:
             options: { default: null, notnull: false }
         content_positions:
             type: text
-            options: { default: null, comment: 'serialized id of contents' }
+            options: { default: null, comment: 'serialized id of contents', length: 65532 }
         promoted:
             type: boolean
             options: { default: null, notnull: false }
@@ -629,7 +625,7 @@ frontpages:
             options: { default: null, notnull: false }
         params:
             type: text
-            options: { default: null, comment: 'serialized params' }
+            options: { default: null, comment: 'serialized params', length: 65532 }
     index:
         -
             name: PRIMARY
@@ -767,16 +763,15 @@ newsletter_archive:
             options: { default: null, length: 255 }
         data:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         html:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         created:
             type: datetime
             options: { default: '0000-00-00 00:00:00' }
         updated:
             type: datetime
-            options: { default: CURRENT_TIMESTAMP }
         sent:
             type: string
             options: { default: null, length: 255 }
@@ -801,9 +796,6 @@ opinions:
         fk_author_img:
             type: integer
             options: { default: null, notnull: false }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
         type_opinion:
             type: string
             options: { default: null, notnull: false, length: 150 }
@@ -857,7 +849,7 @@ orders:
             options: { default: null, length: 50 }
         params:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -986,16 +978,13 @@ polls:
             options: { default: '0' }
         used_ips:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         subtitle:
             type: string
             options: { default: null, notnull: false, length: 150 }
         visualization:
             type: smallint
             options: { default: '0', notnull: false }
-        with_comment:
-            type: smallint
-            options: { default: '1', notnull: false }
     index:
         -
             name: PRIMARY
@@ -1016,7 +1005,7 @@ ratings:
             options: { default: '0', unsigned: true }
         ips_count_rating:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1070,7 +1059,7 @@ settings:
             options: { default: '', length: 128 }
         value:
             type: text
-            options: { default: null }
+            options: { default: null, length: 65532 }
     index:
         -
             name: PRIMARY
@@ -1196,7 +1185,7 @@ usermeta:
             options: { default: '', length: 255 }
         meta_value:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
     index:
         -
             name: PRIMARY
@@ -1235,7 +1224,7 @@ users:
             options: { default: '', length: 255 }
         bio:
             type: text
-            options: { default: null }
+            options: { default: null, length: 65532 }
         avatar_img_id:
             type: bigint
             options: { default: '0', unsigned: true }
@@ -1304,7 +1293,7 @@ videos:
             options: { default: null, length: 255 }
         information:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         author_name:
             type: string
             options: { default: null, notnull: false, length: 200 }
@@ -1328,7 +1317,7 @@ votes:
             options: { default: '0' }
         ips_count_vote:
             type: text
-            options: { default: null, notnull: false }
+            options: { default: null, length: 65532, notnull: false }
         karma:
             type: integer
             options: { default: '100', notnull: false, unsigned: true }
@@ -1346,7 +1335,7 @@ widgets:
             options: { default: null, unsigned: true, autoincrement: true }
         content:
             type: text
-            options: { default: null }
+            options: { default: null, length: 65532 }
         renderlet:
             type: string
             options: { default: html, notnull: false, length: 50 }

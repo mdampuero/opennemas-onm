@@ -1,6 +1,10 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
+        @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+        @Common/js/jquery/jquery.tagsinput.min.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function ($){
         var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
@@ -9,6 +13,13 @@
             if (tags_input.val().length == 0) {
                 fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
             }
+        });
+        jQuery('#closetime').datetimepicker({
+            hourGrid: 4,
+            showAnim: 'fadeIn',
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'hh:mm:ss',
+            minuteGrid: 10,
         });
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -100,10 +111,17 @@
                         <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
                         <label for="content_status">{t}Available{/t}</label>
 
+                        <div class="control-group">
+                            <label for="endtime" class="control-label">{t}Publication closed date{/t}</label>
+                            <div class="controls">
+                                <input type="datetime" id="closetime" name="params[closetime]" value="{$poll->params['closetime']}">
+                            </div>
+                        </div>
+
                         <hr class="divisor">
 
                         {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if $poll->with_comment eq 1}checked="checked"{/if} value="1" />
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
                         <label for="with_comment">{t}Allow comments{/t}</label>
                         <br>
                         {/is_module_activated}

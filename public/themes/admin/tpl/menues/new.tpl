@@ -1,8 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/jquery/jquery.nestedSortable.js"}
-    {script_tag src="/onm/menues.js"}
+    {javascripts src="@AdminTheme/js/jquery/jquery.nestedSortable.js,
+        @AdminTheme/js/onm/menues.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
     <script type="text/javascript">
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -15,7 +17,9 @@
 {/block}
 
 {block name="header-css" append}
-    {css_tag href="/managerMenu.css" media="screen,projection"}
+    {stylesheets src="@AdminTheme/css/managerMenu.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen, projection">
+    {/stylesheets}
 {/block}
 
 {block name="content"}
@@ -218,44 +222,19 @@
                     <h3 href="#frontpages">{t}Modules{/t}</h3>
                     <div id="frontpages">
                         <ul id='availablePages' class="elementsContainer">
-                            {foreach from=$pages item=value key=page}
-                                <li id="page_{$page}"
-                                    data-item-id="{$page}"
-                                    data-title={if $page eq 'frontpage'}"Portada"
-                                            {elseif $page eq 'poll'}"Encuesta"
-                                            {elseif $page eq 'kiosko'}"Portadas Papel"
-                                            {elseif $page eq 'letter'}"Cartas Al Director"
-                                            {elseif $page eq 'boletin'}"Bolet&iacute;n"
-                                            {elseif $page eq 'hemeroteca'}"Hemeroteca"
-                                            {else}{$page}{/if}
-                                    data-link={if $page eq 'frontpage'}"/"
-                                            {elseif $page eq 'poll'}"encuesta/"
-                                            {elseif $page eq 'kiosko'}"portadas-papel/"
-                                            {elseif $page eq 'letter'}"cartas-al-director/"
-                                            {elseif $page eq 'boletin'}"newsletter/"
-                                            {elseif $page eq 'hemeroteca'}"archive/content/"
-                                            {else}"{$page}/"{/if}
-                                    data-type="internal"
+
+                            {foreach $pages as $key=>$value}
+                                <li id="page_{$value['link']}"
+                                    data-item-id="{$value['link']}"
+                                    data-title="{$value['title']}"
+                                    data-link="{$value['link']}"
                                     class="drag-category"
+                                    data-type="internal"
                                     pk_menu="">
                                     <div>
                                         <span class="type">{t}Module{/t}:</span>
                                         <span class="menu-title">
-                                            {if $page eq 'frontpage'}
-                                                Portada
-                                            {elseif $page eq 'poll'}
-                                                Encuesta
-                                            {elseif $page eq 'letter'}
-                                                Cartas al Director
-                                            {elseif $page eq 'kiosko'}
-                                                Portadas Papel
-                                            {elseif $page eq 'boletin'}
-                                                Bolet&iacute;n
-                                            {elseif $page eq 'hemeroteca'}
-                                                Hemeroteca
-                                            {else}
-                                                {$page}
-                                            {/if}
+                                        {$value['title']}
                                         </span>
                                         <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
@@ -313,7 +292,7 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        <span class="type">{t}Sync category{/t}:</span>
+                                        <span class="type">{t}Synched category{/t}:</span>
                                         <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
@@ -364,7 +343,7 @@
                     {is_module_activated name="FRONTPAGES_LAYOUT"}
                     {is_module_activated name="SYNC_MANAGER"}
                     {if count($elements) > 0}
-                    <h3 href="#syncBlogCategories">{t}Sync Blog Categories{/t}</h3>
+                    <h3 href="#syncBlogCategories">{t}Sync Automatic Categories{/t}</h3>
                     <div id="syncBlogCategories"  class="elementsContainer">
                         {foreach $elements as $config name=colors}
                             {foreach from=$config key=site item=syncBlogCategories}
@@ -379,10 +358,10 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        <span class="type">{t}Sync blog category{/t}:</span>
+                                        <span class="type">{t}Sync Automatic category{/t}:</span>
                                         <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                             alt="{t}Sync category blog{/t}" >
+                                             alt="{t}Synched blog category{/t}" >
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>

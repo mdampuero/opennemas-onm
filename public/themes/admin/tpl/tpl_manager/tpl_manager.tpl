@@ -240,20 +240,20 @@
                             {* RSS *}
                         {elseif $resource eq "RSS"}
                             <a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/{/if}" target="_blank"> <strong>{t}RSS:{/t}</strong>
-                                {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+                                {$ccm->getTitle($caches[c].category)|clearslash|default:"PORTADA"}
                             </a>
                             <input type="hidden" name="uris[]" value="rss/{$caches[c].category}/" />
                             {* Frontpage mobile *}
                         {elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
                             <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
-                                {t}Mobile frontpage: {/t}{$ccm->get_title($caches[c].category)|clearslash|default:"Portada"}
+                                {t}Mobile frontpage: {/t}{$ccm->getTitle($caches[c].category)|clearslash|default:"Portada"}
                             </a>
                             <input type="hidden" name="uris[]" value="mobile/seccion/{$caches[c].category}/" />
                             {* Frontpages *}
                         {elseif ($caches[c].template == 'frontpage')}
                             {if $caches[c].resource eq 0}
                             <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/"  target="_blank">
-                                {t}Frontpage: {/t}{$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category}
+                                {t}Frontpage: {/t}{$ccm->getTitle($caches[c].category)|clearslash|default:$caches[c].category}
                             </a>
                             {/if}
                             <input type="hidden" name="uris[]" value="seccion/{$caches[c].category}/" />
@@ -261,10 +261,10 @@
                         {elseif not isset($titles.$resource) && not isset($authors.$resource)}
                             <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
                                 {if $caches[c].resource gt 0}
-                                {$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category} {t 1=$caches[c].resource}(Page %1){/t}
+                                {$ccm->getTitle($caches[c].category)|clearslash|default:$caches[c].category} {t 1=$caches[c].resource}(Page %1){/t}
                             </a>
                             {else}
-                                {$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category}
+                                {$ccm->getTitle($caches[c].category)|clearslash|default:$caches[c].category}
                             </a>
                             {/if}
                         <input type="hidden" name="uris[]" value="seccion/{$caches[c].category}/{$caches[c].resource}" />
@@ -272,7 +272,7 @@
                     </td>
 
                     <td class="left">
-                        {$ccm->get_title($caches[c].category)|clearslash|capitalize|default:$caches[c].category|capitalize}
+                        {$ccm->getTitle($caches[c].category)|clearslash|capitalize|default:$caches[c].category|capitalize}
                     </td>
 
                     <!-- <td class="left">{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}</td> -->

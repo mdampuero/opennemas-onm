@@ -5,131 +5,265 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#22262e">
+    <link rel="manifest" href="manager_manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
 
     {block name="meta"}
-    <title>OpenNeMaS - Manager</title>
+    <title>opennemas - Manager</title>
     {/block}
 
     <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
+    <style>
+      @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+    </style>
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" common=1}
-        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css" common=1}
-        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css" common=1}
-        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css" common=1}
-    {/block}
+        {stylesheets src="
+            @Common/plugins/pace/pace-theme-minimal.css,
+            @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+            @Common/plugins/webarch/css/animate.min.css,
+            @Common/plugins/bootstrap-select2/select2.css,
 
-    {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-        {script_tag src="/libs/jquery.tools.min.js" common=1}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
-        {block name="prototype"}{/block}
+            @Common/plugins/bootstrap/css/bootstrap.min.css,
+
+            @Common/plugins/webarch/css/style.css,
+            @Common/plugins/font-awesome/css/font-awesome.min.css,
+            @Common/css/bootstrap/bootstrap-fileupload.min.css,
+            @Common/plugins/webarch/css/responsive.css,
+            @Common/plugins/webarch/css/custom-icon-set.css,
+            @Common/plugins/webarch/css/magic_space.css,
+
+            @Common/plugins/jquery-nanoscroller/nanoscroller.css,
+            @Common/plugins/angular-loading-bar/loading-bar.min.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+            @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+            @Common/plugins/jquery-notifications/css/messenger.css,
+            @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+
+            @Common/css/manager/base/*,
+            @Common/css/manager/layout/*,
+            @Common/css/manager/main.css"
+        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js" common=1}
-        {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js" common=1}
-     {/block}
+        <script>
+            var appVersion = '{$smarty.const.DEPLOYED_AT}';
+        </script>
+    {/block}
 
 </head>
-<body class="manager">
-
-    <header class="clearfix">
-        <div class="navbar navbar-inverse global-nav manager" style="position:fixed">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-
-                <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
-                <div class="nav pull-left" accesskey="m">
-                    {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+    <div class="application-loading" ng-hide="loaded">
+        <div class="loading-message">
+            <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+            <h2>{t}Initializing{/t}</h2>
+            <h5>{$loading_message}</h5>
+        </div>
+    </div>
+    <div class="nocss hidden">
+        {t}Your browser was unable to load all of Opennemas's resources. They may have been blocked by your firewall, proxy or browser configuration.{/t}
+        <br>
+        {t}Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again.{/t}
+        <hr>
+    </div>
+    <div class="nojs" ng-hide="true">
+        <noscript class="big-message text-center">
+            <h1>Opennemas</h1>
+            <p>To use Opennemas, please enable JavaScript.</p>
+        </noscript>
+    </div>
+    <header class="header navbar navbar-inverse ng-cloak" ng-show="(loaded && auth.status) || (!auth.status && auth.modal)">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="navbar-inner">
+            <div class="header-seperation">
+                <div class="layout-collapse pull-left">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                        <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
+                    </div>
                 </div>
-                <div class="nav-collapse collapse navbar-inverse-collapse">
-                    <ul class="nav pull-right">
-                        <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {if $smarty.session.email}
-                                    {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="24"}
-                                {else}
-                                    <span class="usericon"></span>
-                                {/if}
-                                <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b>
-                            </a>
-                            <div class="dropdown-menu">
-                                <div class="avatar">
-                                    {if $smarty.session.email}
-                                        {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
-                                    {else}
-                                        <span class="usericon"></span>
-                                    {/if}
-                                </div><!-- /.avatar -->
-                                <div class="user-info">
-                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                                    <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                                        <li><a href="javascript:salir('{t}Do you really want to exit from manager?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from manager{/t}">{t}Log out{/t}</a></li>
-                                    </ul><!-- /.links -->
-                                </div><!-- /.user-info -->
-                            </div>
-                        </li>
-                    </ul>
-
+                <a class="header-static-logo" href="{url name=manager_welcome}">
+                    <h1>
+                        open<strong>nemas</strong>
+                    </h1>
+                </a>
+                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                    <div class="overlay"></div>
+                    <a class="header-logo" href="{url name=manager_welcome}">
+                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                            <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
+                        </h1>
+                    </a>
                 </div>
             </div>
+        <!-- END TOP NAVIGATION MENU -->
         </div>
+      <!-- END TOP NAVIGATION BAR -->
     </header>
-
-    <div id="content" role="main">
-    {block name="content"}{/block}
+    <!-- BEGIN SIDEBAR -->
+    {include file="base/sidebar.tpl"}
+    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
+    <!-- END SIDEBAR -->
+    <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
+        <!-- BEGIN PAGE CONTAINER-->
+            <div class="page-content">
+                <div class="view" id="view" ng-view autoscroll="true"></div>
+            </div>
+        <!-- END PAGE CONTAINER -->
     </div>
-
-    {block name="copyright"}
-    <footer class="wrapper-content">
-        <div class="clearfix">
-            <nav class="left">
-                <ul>
-                    <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
-                </ul><!-- / -->
-            </nav>
-            <nav class="right">
-                <ul>
-                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-                </ul>
-            </nav>
-        </div><!-- / -->
-    </footer>
-    {/block}
-
-    {block name="footer-js"}
-        {browser_update}
-        {script_tag src="/onm/footer-functions.js" common=1}
-    {/block}
-
-
+    <div class="container login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
+        <div class="row login-container column-seperation">
+            <div class="col-md-5 col-md-offset-1">
+                <h2>{t}Opennemas manager{/t}</h2>
+                <p>{t}Use manager account to sign in.{/t}<br>
+                <br>
+                <!--
+                <button class="btn btn-block btn-info col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-facebook"></i></span>
+                    <span class="bold">Login with Facebook</span> </button>
+                <button class="btn btn-block btn-success col-md-8" type="button">
+                    <span class="pull-left"><i class="icon-twitter"></i></span>
+                    <span class="bold">Login with Twitter</span>
+                </button>
+                -->
+            </div>
+            <div class="col-md-5 "><br>
+                <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
+                    <!-- Hack to allow web browsers to remember credentials with AngularJS -->
+                    <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">{t}Username{/t}</label>
+                            <div class="controls">
+                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <label class="form-label">{t}Password{/t}</label>
+                            <span class="help"></span>
+                            <div class="controls">
+                                <div class="input-with-icon right">
+                                    <i class=""></i>
+                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="attempts > 2">
+                        <div class="form-group col-md-10">
+                            <label class="form-label"></label>
+                            <div class="controls">
+                                <div class="control-group clearfix">
+                                    <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-10">
+                          <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
+                              [% message.text %]
+                          </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="_referer" value="{$referer}">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
+                              <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
+                              {t}Login{/t}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/ng-template" id="modal-login">
+        {include file="login/modal_login.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-upgrade">
+        {include file="common/modal_application_upgrade.tpl"}
+    </script>
+    <script type="text/ng-template" id="error">
+        {include file="error/ws_404.tpl"}
+    </script>
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
 
+    {block name="footer-js"}
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+
+        {javascripts src="
+            @Common/plugins/jquery/jquery.min.js,
+            @Common/plugins/jquery-ui/jquery-ui.min.js,
+            @Common/plugins/bootstrap/js/bootstrap.min.js,
+            @Common/plugins/breakpoints/breakpoints.min.js,
+            @Common/plugins/fastclick/fastclick.js,
+            @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+            @Common/plugins/jquery-block-ui/jquery.blockui.min.js,
+            @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+            @Common/plugins/jquery-slider/jquery.sidr.min.js,
+            @Common/plugins/jquery-nanoscroller/jquery.nanoscroller.min.js,
+            @Common/plugins/jquery-notifications/js/messenger.min.js,
+            @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
+
+            @Common/js/onm/scripts.js,
+
+            @Common/js/jquery/select2/select2.min.js,
+            @Common/js/libs/modernizr.min.js,
+            @Common/js/onm/md5.min.js,
+            @Common/js/onm/scripts.js,
+            @Common/js/onm/jquery.onm-editor.js,
+
+            @FosJsRoutingBundle/js/router.js,
+            @Common/js/routes.js,
+            @Common/plugins/angular/angular.min.js,
+            @Common/plugins/angular-animate/angular-animate.min.js,
+            @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-webstorage/angular-webstorage.min.js,
+            @Common/plugins/angular-google-chart/angular-google-chart.js,
+            @Common/plugins/angular-nanoscroller/scrollable.js,
+            @Common/plugins/angular-loading-bar/loading-bar.min.js,
+            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+            @Common/plugins/angular-recaptcha/module.js,
+            @Common/plugins/angular-recaptcha/directive.js,
+            @Common/plugins/angular-recaptcha/service.js,
+            @Common/plugins/angular-route/angular-route.min.js,
+            @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+            @Common/plugins/angular-touch/angular-touch.min.js,
+            @Common/plugins/angular-translate/angular-translate.min.js,
+            @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/plugins/angular-ui/select2.js,
+
+            @Common/plugins/angular-onm/*,
+
+            @ManagerTheme/js/ManagerApp.js,
+            @ManagerTheme/js/Controllers.js,
+
+            @ManagerTheme/js/controllers/*,
+
+            @Common/plugins/webarch/js/core.js,
+            @Common/js/manager.js
+        " filters="uglifyjs"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+    {/block}
 </body>
 </html>

@@ -17,7 +17,6 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -41,13 +40,11 @@ class InstanceSyncController extends Controller
     /**
      * Lists all the instances synced
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $allSites = $colors = array();
 
@@ -111,9 +108,15 @@ class InstanceSyncController extends Controller
         if (s::set('sync_params', $syncParams)
             && s::set('sync_colors', $syncColors)
         ) {
-            m::add(_('Instance sync module configuration saved successfully'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Configuration saved successfully')
+            );
         } else {
-            m::add(_('There was an error while saving the Instance sync module configuration'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while saving the configuration')
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_instance_sync'));
@@ -154,7 +157,6 @@ class InstanceSyncController extends Controller
 
             // Fetch sync categories in config
             $syncParams = s::get('sync_params', array());
-            $syncColors = s::get('sync_colors', array());
             $categoriesChecked = array();
             if ($syncParams) {
                 foreach ($syncParams as $siteUrl => $categories) {
@@ -268,9 +270,15 @@ class InstanceSyncController extends Controller
         if (s::set('sync_params', $syncParams)
             && s::set('sync_colors', $syncColors)
         ) {
-            m::add(_('Site configuration deleted successfully'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Site configuration deleted successfully')
+            );
         } else {
-            m::add(_('There was an error while deleting this configuration'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while deleting this configuration')
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_instance_sync'));

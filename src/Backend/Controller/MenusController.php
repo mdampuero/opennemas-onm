@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the menus
@@ -37,18 +36,38 @@ class MenusController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
 
-        $this->pages = array(
-            'frontpage'  => 1,
-            'opinion'    => 4,
-            'album'      => 7,
-            'video'      => 9,
-            'poll'       => 11,
-            'letter'     => 17,
-            'kiosko'     => 14,
-            'boletin'    => 13,
-            'participa'  => 18,
-            'hemeroteca' => 19,
-        );
+        $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
+
+        if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Opinion"),'link'=>"opinion/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('BLOG_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Bloggers"),'link'=>"blog/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Album"),'link'=>"album/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Video"),'link'=>"video/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('POLL_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Poll"),'link'=>"poll/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('LETTER_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Letters to the Editor"),'link'=>"cartas-al-director/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('KIOSKO_MANAGER')) {
+            array_push($this->pages, array('title'=>_("News Stand"),'link'=>"portadas-papel/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('FORM_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Form"),'link'=>"participa/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('NEWSLETTER_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Newsletter"),'link'=>"newsletter/"));
+        }
+        if (\Onm\Module\ModuleManager::isActivated('LIBRARY_MANAGER')) {
+            array_push($this->pages, array('title'=>_("Archive"),'link'=>"archive/content/"));
+        }
 
         $this->menuPositions = array('' => _('Without position'));
 
@@ -63,13 +82,11 @@ class MenusController extends Controller
     /**
      * Lists all the available menus
      *
-     * @param Request $request the resquest object
-     *
-     * @return Response the response object
+     * @return void
      *
      * @Security("has_role('MENU_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         $menues = \Menu::find();
 
@@ -93,17 +110,20 @@ class MenusController extends Controller
         $cm = new \ContentManager();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        // Unused var  $categoryData
+        unset($categoryData);
+
         foreach ($subcat as $subcategory) {
             $parentCategories = array_merge($parentCategories, $subcategory);
         }
 
         $albumCategories = $videoCategories = $pollCategories = array();
         foreach ($ccm->categories as $category) {
-            if ($category->internal_category == $this->pages['album']) {
+            if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
                 $albumCategories[] = $category;
-            } elseif ($category->internal_category == $this->pages['video']) {
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
                 $videoCategories[] = $category;
-            } elseif ($category->internal_category == $this->pages['poll']) {
+            } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
                 $pollCategories[] = $category;
             }
         }
@@ -166,7 +186,6 @@ class MenusController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             $data = array(
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'params'    => serialize(
@@ -180,38 +199,41 @@ class MenusController extends Controller
 
             $menu = new \Menu();
             if ($menu->create($data)) {
-                m::add(sprintf(_("Menu '%s' created successfully."), $data['name']), m::SUCCESS);
-            } else {
-                m::add(sprintf(_("Unable to create the menu")), m::SUCCESS);
-            }
-
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_menu_show',
-                        array('id' => $menu->pk_menu)
-                    )
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    sprintf(_("Menu '%s' created successfully."), $data['name'])
                 );
             } else {
-                return $this->redirect($this->generateUrl('admin_menus'));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Unable to create the menu")
+                );
             }
 
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_menu_show',
+                    array('id' => $menu->pk_menu)
+                )
+            );
         } else {
-
             $cm  = new \ContentManager();
             $ccm = \ContentCategoryManager::get_instance();
 
             list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+            // Unused var  $categoryData
+            unset($categoryData);
+
             foreach ($subcat as $subcategory) {
                 $parentCategories = array_merge($parentCategories, $subcategory);
             }
             $albumCategories = $videoCategories = $pollCategories = array();
             foreach ($ccm->categories as $category) {
-                if ($category->internal_category == $this->pages['album']) {
+                if ($category->internal_category == \ContentManager::getContentTypeIdFromName('album')) {
                     $albumCategories[] = $category;
-                } elseif ($category->internal_category == $this->pages['video']) {
+                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('video')) {
                     $videoCategories[] = $category;
-                } elseif ($category->internal_category == $this->pages['poll']) {
+                } elseif ($category->internal_category == \ContentManager::getContentTypeIdFromName('poll')) {
                     $pollCategories[] = $category;
                 }
             }
@@ -262,18 +284,19 @@ class MenusController extends Controller
     public function updateAction(Request $request)
     {
         $id = $this->request->query->getDigits('id');
-        $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-
         $menu = new \Menu($id);
 
         if ($menu->pk_menu == null) {
-            m::add(sprintf(_('Unable to find a menu with the id "%s"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a menu with the id "%s"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_menus'));
         } else {
             // Check empty data
             if (count($request->request) < 1) {
-                m::add(_("Menu data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', _("Menu data sent not valid."));
 
                 return $this->redirect($this->generateUrl('admin_menu_show', array('id' => $id)));
             }
@@ -292,21 +315,23 @@ class MenusController extends Controller
             );
 
             if ($menu->update($data)) {
-                m::add(_("Menu updated successfully."), m::SUCCESS);
-            } else {
-                m::add(_("There was an error while updating the menu."), m::ERROR);
-            }
-
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_menu_show',
-                        array('id' => $menu->pk_menu)
-                    )
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Menu updated successfully.")
                 );
             } else {
-                return $this->redirect($this->generateUrl('admin_menus'));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("There was an error while updating the menu.")
+                );
             }
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_menu_show',
+                    array('id' => $menu->pk_menu)
+                )
+            );
         }
     }
 }

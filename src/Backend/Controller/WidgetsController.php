@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the system information
@@ -64,8 +63,17 @@ class WidgetsController extends Controller
 
         $widget = new \Widget($id);
 
+        if (is_string($widget->params)) {
+            $widget->params = unserialize($widget->params);
+            if (!is_array($widget->params)) {
+                $widget->params = array();
+            }
+        }
         if (is_null($widget->id)) {
-            m::add(sprintf(_('Unable to find a widget with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a widget with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_widgets'));
         }
@@ -98,7 +106,9 @@ class WidgetsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $post = $request->request;
+            $post   = $request->request;
+            $items  = $post->get('items');
+            $values = $post->get('values');
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
@@ -109,6 +119,7 @@ class WidgetsController extends Controller
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
                 'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
+                'params'         => array_combine($items, $values),
             );
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -119,12 +130,12 @@ class WidgetsController extends Controller
                 $widget = new \Widget();
                 $widget->create($widgetData);
             } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
                 return $this->redirect($this->generateUrl('admin_widget_create'));
             }
 
-            m::add(_('Widget created successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_widgets'));
 
@@ -159,10 +170,13 @@ class WidgetsController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Widget data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _("Widget data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
+
+        $items  = $post->get('items');
+        $values = $post->get('values');
 
         $widgetData = array(
             'id'              => $id,
@@ -174,20 +188,27 @@ class WidgetsController extends Controller
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
             'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
+            'params'          => array_combine($items, $values),
         );
         if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
             $widgetData['content'] = $widgetData['intelligentType'];
         }
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
-            m::add(_('There was an error while updating the widget.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while updating the widget.')
+            );
 
             return $this->redirect(
                 $this->generateUrl('admin_widgets', array('page' => $page,))
             );
         }
 
-        m::add(_('Widget updated successfully.'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Widget updated successfully.')
+        );
 
         return $this->redirect(
             $this->generateUrl('admin_widget_show', array('id' => $id,))

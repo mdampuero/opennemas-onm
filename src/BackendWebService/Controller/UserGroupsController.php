@@ -13,7 +13,6 @@ namespace BackendWebService\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Message as m;
 
 class UserGroupsController extends ContentController
 {
@@ -73,10 +72,9 @@ class UserGroupsController extends ContentController
      * Deletes a user.
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function deleteAction($id, $contentType = null)
+    public function deleteAction($id)
     {
         $em       = $this->get('usergroup_repository');
         $errors   = array();
@@ -119,10 +117,9 @@ class UserGroupsController extends ContentController
      * Deletes multiple users at once giving their ids
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request, $contentType = null)
+    public function batchDeleteAction(Request $request)
     {
         $em = $this->get('usergroup_repository');
         $errors  = array();

@@ -18,10 +18,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
+use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
-use \Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing opinions
@@ -57,12 +56,12 @@ class OpinionsController extends Controller
     /**
      * Lists all the opinions.
      *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
+     * @param  $blog      Blog flag for listing
+     * @return Response   The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
      */
-    public function listAction(Request $request, $blog)
+    public function listAction($blog)
     {
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
@@ -135,14 +134,23 @@ class OpinionsController extends Controller
         }
 
         if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
-            m::add(sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
+            );
         }
 
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
-            m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numEditorial, 'editorial'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
+            );
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
-             m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numDirector, 'opinion del director'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
+            );
         }
 
         if (isset($opinions) && is_array($opinions)) {
@@ -186,7 +194,10 @@ class OpinionsController extends Controller
 
         // Check if opinion id exists
         if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find the opinion with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
@@ -196,7 +207,10 @@ class OpinionsController extends Controller
             && !Acl::check('CONTENT_OTHER_UPDATE')
             && $opinion->fk_author != $_SESSION['userid']
         ) {
-            m::add(_("You can't modify this opinion because you don't have enought privileges."));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this opinion because you don't have enought privileges.")
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
@@ -224,9 +238,10 @@ class OpinionsController extends Controller
         return $this->render(
             'opinion/new.tpl',
             array(
-                'opinion'      => $opinion,
-                'all_authors'  => $allAuthors,
-                'author'       => $author,
+                'opinion'        => $opinion,
+                'all_authors'    => $allAuthors,
+                'author'         => $author,
+                'commentsConfig' => s::get('comments_config'),
             )
         );
     }
@@ -271,12 +286,18 @@ class OpinionsController extends Controller
             );
 
             if ($opinion->create($data)) {
-                m::add(_('Opinion successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Opinion successfully created.')
+                );
 
                 // Clear caches
                 dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
             } else {
-                m::add(_('Unable to create the new opinion.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new opinion.')
+                );
             }
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
@@ -293,7 +314,13 @@ class OpinionsController extends Controller
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
 
-            return $this->render('opinion/new.tpl', array('all_authors' => $allAuthors));
+            return $this->render(
+                'opinion/new.tpl',
+                array(
+                    'all_authors'    => $allAuthors,
+                    'commentsConfig' => s::get('comments_config'),
+                )
+            );
         }
     }
 
@@ -316,7 +343,10 @@ class OpinionsController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$opinion->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this opinion because you don't have enought privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("You can't modify this opinion because you don't have enought privileges.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_opinions'));
             }
@@ -327,7 +357,10 @@ class OpinionsController extends Controller
 
             // Check empty data
             if (count($request->request) < 1) {
-                m::add(_("Opinion data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Opinion data sent not valid.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
             }
@@ -356,7 +389,10 @@ class OpinionsController extends Controller
             );
 
             if ($opinion->update($data)) {
-                m::add(_('Opinion successfully updated.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Opinion successfully updated.')
+                );
 
                 $author = new \User($data['fk_author']);
 
@@ -370,7 +406,10 @@ class OpinionsController extends Controller
                     )
                 );
             } else {
-                m::add(_('Unable to update the opinion.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the opinion.')
+                );
             }
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
@@ -405,10 +444,17 @@ class OpinionsController extends Controller
         $opinion = new \Opinion($id);
 
         if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an opinion with the id "%d"'), $id)
+            );
         } else {
-            $opinion->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
+            $opinion->setInHome($status, $_SESSION['userid']);
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title)
+            );
         }
 
         if ($type != 'frontpage') {
@@ -533,18 +579,15 @@ class OpinionsController extends Controller
      */
     public function contentProviderRelatedAction(Request $request)
     {
-        $categoryId   = $request->query->getDigits('category', 0);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
             'content_type_name' => array(array('value' => 'opinion')),
             'in_litter'         => array(array('value' => 1, 'operator' => '!='))
         );
 
+        $em            = $this->get('entity_repository');
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
@@ -593,6 +636,8 @@ class OpinionsController extends Controller
                     'total_editorial'       => filter_var($configsRAW['total_editorial'], FILTER_VALIDATE_INT),
                     'total_opinions'        => filter_var($configsRAW['total_opinions'], FILTER_VALIDATE_INT),
                     'total_opinion_authors' => filter_var($configsRAW['total_opinion_authors'], FILTER_VALIDATE_INT),
+                    'blog_orderFrontpage'   => filter_var($configsRAW['blog_orderFrontpage'], FILTER_SANITIZE_STRING),
+                    'blog_itemsFrontpage'   => filter_var($configsRAW['blog_itemsFrontpage'], FILTER_VALIDATE_INT),
                 )
             );
 
@@ -600,7 +645,10 @@ class OpinionsController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
@@ -616,12 +664,11 @@ class OpinionsController extends Controller
     /**
      * Show a list of opinion authors.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return void
      *
      * @Security("has_role('AUTHOR_ADMIN')")
      */
-    public function listAuthorAction(Request $request)
+    public function listAuthorAction()
     {
         return $this->render('opinion/author_list.tpl');
     }
@@ -640,7 +687,10 @@ class OpinionsController extends Controller
 
         $user = new \User($id);
         if (is_null($user->id)) {
-            m::add(sprintf(_("Unable to find the author with the id '%d'"), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_("Unable to find the author with the id '%d'"), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_opinion_authors'));
         }
@@ -688,7 +738,7 @@ class OpinionsController extends Controller
             );
 
             // Generate username and password from real name
-            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::getTitle($data['name'])));
             $data['password'] = md5($data['name']);
 
             $file = $request->files->get('avatar');
@@ -696,7 +746,7 @@ class OpinionsController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;
@@ -711,7 +761,10 @@ class OpinionsController extends Controller
                         $user->setMeta(array($key => $value));
                     }
 
-                    m::add(_('Author created successfully.'), m::SUCCESS);
+                    $this->get('session')->getFlashBag()->add(
+                        'success',
+                        _('Author created successfully.')
+                    );
 
                     return $this->redirect(
                         $this->generateUrl(
@@ -720,10 +773,13 @@ class OpinionsController extends Controller
                         )
                     );
                 } else {
-                    m::add(_('Unable to create the author with that information'), m::ERROR);
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        _('Unable to create the author with that information')
+                    );
                 }
             } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
             }
         }
 
@@ -743,7 +799,10 @@ class OpinionsController extends Controller
         $userId = $request->query->getDigits('id');
 
         if (count($request->request) < 1) {
-            m::add(_("User data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("The data send by the user is not valid.")
+            );
 
             return $this->redirect(
                 $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
@@ -775,13 +834,13 @@ class OpinionsController extends Controller
 
         // Generate username and password from real name
         if (empty($data['username'])) {
-            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::getTitle($data['name'])));
         }
 
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } elseif (($data['avatar_img_id']) == 1) {
                 $data['avatar_img_id'] = $user->avatar_img_id;
@@ -798,14 +857,20 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('author.update', array('authorId' => $userId));
+                dispatchEventWithParams('author.update', array('id' => $userId));
 
-                m::add(_('Author data updated successfully.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Author updated successfully.')
+                );
             } else {
-                m::add(_('Unable to update the author with that information'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the author with that information')
+                );
             }
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect(
@@ -830,7 +895,7 @@ class OpinionsController extends Controller
         $opinionContents = $request->request->filter('contents');
 
         // Fetch all opinion properties and generate a new object
-        foreach ($opinionContents as $key => $value) {
+        foreach ($opinionContents as $value) {
             if (isset($value['name']) && !empty($value['name'])) {
                 $opinion->$value['name'] = $value['value'];
             }
@@ -849,7 +914,7 @@ class OpinionsController extends Controller
         $opinion->author = $author;
 
         // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-        $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
         // Machine suggested contents code -----------------------------
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
@@ -863,7 +928,7 @@ class OpinionsController extends Controller
             $element = new \Opinion($suggest['pk_content']);
             if (!empty($element->author)) {
                 $suggest['author_name'] = $element->author;
-                $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
+                $suggest['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
             } else {
                 $suggest['author_name_slug'] = "author";
             }
@@ -890,7 +955,7 @@ class OpinionsController extends Controller
 
         $otherOpinions = $cm->find(
             'Opinion',
-            $where.' AND `pk_opinion` <>' .$opinionID.' AND content_status=1',
+            $where.' AND `pk_opinion` <>' .$opinion->id.' AND content_status=1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 
@@ -926,12 +991,11 @@ class OpinionsController extends Controller
     /**
      * Description of this action.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @return Response  The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
      */
-    public function getPreviewAction(Request $request)
+    public function getPreviewAction()
     {
         $session = $this->get('session');
 

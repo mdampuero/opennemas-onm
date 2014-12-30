@@ -3,6 +3,8 @@
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 
+umask(0002);
+
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Use APC for autoloading to improve performance.
@@ -18,9 +20,13 @@ require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';
 
 // Little hack to allow final slashes in the url
-$_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
+$_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
 
-$kernel = new AppKernel('prod', false);
+if (file_exists(APPLICATION_PATH.'/.development')) {
+    $kernel = new AppKernel('dev', true);
+} else {
+    $kernel = new AppKernel('prod', false);
+}
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 

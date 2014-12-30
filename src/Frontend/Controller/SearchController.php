@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -55,7 +54,7 @@ class SearchController extends Controller
      *
      * @return Response the response object
      **/
-    public function internalAction($request)
+    public function internalAction()
     {
         // TODO: Implement
         return new Response('Not implemented', 501);

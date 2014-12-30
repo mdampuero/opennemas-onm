@@ -1,7 +1,3 @@
-accept_cookies:
-    path: /accepted_cookies
-    defaults: { _controller: FrontendBundle:Utilities:acceptCookies }
-
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
@@ -196,6 +192,18 @@ frontend_sitemapnews:
 frontend_sitemapweb:
     path: /sitemapweb.{_format}
     defaults: { _controller: FrontendBundle:Sitemap:web, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapimage:
+    path: /sitemapimage.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:image, _format:xml }
+    requirements:
+        _format: "xml|xml.gz"
+
+frontend_sitemapvideo:
+    path: /sitemapvideo.{_format}
+    defaults: { _controller: FrontendBundle:Sitemap:video, _format:xml }
     requirements:
         _format: "xml|xml.gz"
 
@@ -698,12 +706,19 @@ frontend_frontpage_category:
     requirements:
         category: "[a-z0-9\-]+"
 
+frontend_css_global:
+    path: dynamic/css/global.{cb}.css
+    defaults: { _controller: FrontendBundle:Asset:customCss }
+    requirements:
+        cb : "[0-9]+"
 
-frontend_frontpage_category_css:
-    path: nocache/css/{cb}/{category}.css
-    defaults: { _controller: FrontendBundle:Asset:customCss, category: home, cb:12345 }
+frontend_css_frontpage_category:
+    path: dynamic/css/frontpage/{cb}.{category}.css
+    defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
     requirements:
         category : "[a-z0-9\-]+"
+        cb : "[0-9]+"
+
 
 frontend_externalfrontpage_category:
     path: /extseccion/{category}

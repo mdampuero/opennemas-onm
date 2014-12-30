@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -31,11 +30,9 @@ class SubscriptionsController extends Controller
     /**
      * Shows the subscription form
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @return void
      **/
-    public function showAction(Request $request)
+    public function showAction()
     {
         $ads = $this->getAds();
 
@@ -75,20 +72,17 @@ class SubscriptionsController extends Controller
         $message          = null;
         $class            = "";
 
-        require_once 'recaptchalib.php';
-
         if (empty($verify)) {
+            // New captcha instance
+            $captcha = getService('recaptcha')
+                ->setPrivateKey($configRecaptcha['private_key'])
+                ->setRemoteIp($request->getClientIp());
 
             // Get reCaptcha validate response
-            $resp = recaptcha_check_answer(
-                $configRecaptcha['private_key'],
-                $request->getClientIp(),
-                $rcChallengeField,
-                $rcResponseField
-            );
+            $resp = $captcha->check($rcChallengeField, $rcResponseField);
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (!$resp->is_valid) {
+            if (!$resp->isValid()) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
@@ -185,7 +179,7 @@ class SubscriptionsController extends Controller
                             break;
                         case 'create_subscriptor':
                             if ($data['subscription'] == 'alta') {
-                                if ($user->exists_email($data['email'])) {
+                                if ($user->existsEmail($data['email'])) {
                                     $message = _("Sorry, that email is already subscribed to our newsletter");
                                     $class = 'error';
                                 } else {
@@ -206,7 +200,7 @@ class SubscriptionsController extends Controller
                                     }
                                 }
                             } else {
-                                if ($user->exists_email($data['email'])) {
+                                if ($user->existsEmail($data['email'])) {
                                     $data['subscription'] = 0;
                                     $data['status'] = 3;
 

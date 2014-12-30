@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
 use Onm\StringUtils;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -31,7 +30,7 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Displays the article given its id or slug
+     * Displays the article given its id
      *
      * @param Request $request the request object
      *
@@ -61,7 +60,7 @@ class ArticlesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles');
 
-        $this->paywallHook($article);
+        $cacheable = $this->paywallHook($article);
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
@@ -84,7 +83,7 @@ class ArticlesController extends Controller
                 // TODO: Seems that this is rubbish, evaluate its removal
                 $actualCategory      = $categoryName;
                 $actualCategoryId    = $this->ccm->get_id($actualCategory);
-                $actualCategoryTitle = $this->ccm->get_title($actualCategory);
+                $actualCategoryTitle = $this->ccm->getTitle($actualCategory);
                 $categoryData        = null;
                 if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $this->ccm->categories)) {
                     $categoryData = $this->ccm->categories[$actualCategoryId];
@@ -130,7 +129,7 @@ class ArticlesController extends Controller
 
                     // Add category name
                     foreach ($relatedContents as $key => &$content) {
-                        $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name = $this->ccm->getCategoryNameByContentId($content->id);
                         if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
                             $content->photo = $er->find('Photo', $content->img1);
                         }
@@ -152,21 +151,33 @@ class ArticlesController extends Controller
 
         } // end if $this->view->is_cached
 
+        $renderParams = [
+            'cache_id'        => $cacheID,
+            'contentId'       => $articleID,
+            'category_name'   => $categoryName,
+            'article'         => $article,
+            'content'         => $article,
+            'actual_category' => $categoryName,
+        ];
+
+        if ($cacheable) {
+            $renderParams = array_merge(
+                $renderParams,
+                [
+                    'x-tags'      => 'article,'.$article->id,
+                    'x-cache-for' => '1d'
+                ]
+            );
+        }
+
         return $this->render(
             "extends:{$layoutFile}|article/article.tpl",
-            array(
-                'cache_id'        => $cacheID,
-                'contentId'       => $articleID,
-                'category_name'   => $categoryName,
-                'article'         => $article,
-                'content'         => $article,
-                'actual_category' => $categoryName,
-            )
+            $renderParams
         );
     }
 
     /**
-     * Displays the external article given its id or slug
+     * Displays the external article given its id
      *
      * @param Request $request the request object
      *
@@ -177,7 +188,6 @@ class ArticlesController extends Controller
         // Fetch HTTP variables
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Setup view
         $this->view = new \Template(TEMPLATE_USER);
@@ -281,12 +291,11 @@ class ArticlesController extends Controller
      **/
     public function paywallHook(&$content)
     {
-        $this->cm   = new \ContentManager();
-
         $paywallActivated = ModuleManager::isActivated('PAYWALL');
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
-        $this->view = new \Template(TEMPLATE_USER);
+        $cacheable = true;
+
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $newContent = $this->renderView(
                 'paywall/partials/content_only_for_subscribers.tpl',
@@ -324,6 +333,10 @@ class ArticlesController extends Controller
             } else {
                 $content->body = $newContent;
             }
+
+            $cacheable = false;
         }
+
+        return $cacheable;
     }
 }

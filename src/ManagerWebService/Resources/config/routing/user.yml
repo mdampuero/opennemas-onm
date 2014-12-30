@@ -1,0 +1,63 @@
+manager_ws_user_create:
+    path:     /user/create
+    defaults: { _controller: ManagerWebServiceBundle:User:create }
+    options:
+        expose: true
+
+manager_ws_user_delete:
+    path:     /user/{id}/delete
+    defaults: { _controller: ManagerWebServiceBundle:User:delete }
+    options:
+        expose: true
+
+manager_ws_user_new:
+    path:     /user/new
+    defaults: { _controller: ManagerWebServiceBundle:User:new }
+    options:
+        expose: true
+
+manager_ws_user_set_enabled:
+    path:     /user/{id}/set-enabled
+    defaults: { _controller: ManagerWebServiceBundle:User:setEnabled }
+    options:
+        expose: true
+
+manager_ws_user_show_me:
+    path:     /user/me/show
+    defaults: { _controller: ManagerWebServiceBundle:User:showMe }
+    options:
+        expose: true
+
+manager_ws_user_show:
+    path:     /user/{id}/show
+    defaults: { _controller: ManagerWebServiceBundle:User:show }
+    options:
+        expose: true
+
+manager_ws_user_update:
+    path:     /user/{id}/update
+    defaults: { _controller: ManagerWebServiceBundle:User:update }
+    options:
+        expose: true
+
+manager_ws_users_delete:
+    path:     /users/delete
+    defaults: { _controller: ManagerWebServiceBundle:User:deleteSelected }
+    options:
+        expose: true
+
+manager_ws_users_list:
+    path:     /users/list
+    defaults: { _controller: ManagerWebServiceBundle:User:list }
+    options:
+        expose: true
+
+manager_ws_users_list_export:
+    path: /user/list-export.csv
+    defaults: { _controller:  ManagerWebServiceBundle:User:export }
+
+manager_ws_users_set_enabled:
+    path:     /users/set-enabled
+    defaults: { _controller: ManagerWebServiceBundle:User:setEnabledSelected }
+    options:
+        expose: true

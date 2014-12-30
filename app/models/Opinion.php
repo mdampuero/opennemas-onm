@@ -46,13 +46,6 @@ class Opinion extends Content
     public $fk_author_img         = null;
 
     /**
-     * Whether allowing comments on this opinion
-     *
-     * @var boolean
-     **/
-    public $with_comment          = null;
-
-    /**
      * The type of the opinion (0,1,2)
      *
      * @var int
@@ -112,7 +105,7 @@ class Opinion extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => $this->slug,
-                        'category' => StringUtils::get_title($authorName),
+                        'category' => StringUtils::getTitle($authorName),
                     )
                 );
 
@@ -120,7 +113,7 @@ class Opinion extends Content
 
                 break;
             case 'slug':
-                return StringUtils::get_title($this->title);
+                return StringUtils::getTitle($this->title);
 
                 break;
             case 'content_type_name':
@@ -174,15 +167,14 @@ class Opinion extends Content
         parent::create($data);
 
         $sql = 'INSERT INTO opinions
-                    (`pk_opinion`, `fk_author`, `fk_author_img`,`with_comment`, type_opinion)
+                    (`pk_opinion`, `fk_author`, `fk_author_img`, type_opinion)
                 VALUES
-                    (?,?,?,?,?)';
+                    (?,?,?,?)';
 
         $values = array(
             $this->id,
             $data['fk_author'],
             $data['fk_author_img'],
-            $data['with_comment'],
             $data['type_opinion']
         );
 
@@ -264,14 +256,12 @@ class Opinion extends Content
         parent::update($data);
 
         $sql = "UPDATE opinions "
-             . "SET `fk_author`=?, `fk_author_img`=?, "
-             . "`with_comment`=?, `type_opinion`=?"
+             . "SET `fk_author`=?, `fk_author_img`=?, `type_opinion`=? "
              . "WHERE pk_opinion=?";
 
         $values = array(
             $data['fk_author'],
             $data['fk_author_img'],
-            $data['with_comment'],
             $data['type_opinion'],
             $data['id']
         );
@@ -331,24 +321,6 @@ class Opinion extends Content
     }
 
     /**
-     * Removes the cache for an inner opinion and for the opinion frontpage
-     *
-     * @return void
-     **/
-    public function onUpdateClearCacheOpinion()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        if (property_exists($this, 'pk_opinion')) {
-            $tplManager->delete('opinion|' . $this->pk_opinion);
-            $tplManager->fetch(SITE_URL . $this->permalink);
-            if (isset($this->in_home) && $this->in_home) {
-                $tplManager->delete('home|0');
-            }
-        }
-    }
-
-    /**
      * Renders the opinion article
      *
      * @return string the generated HTML for the opinion
@@ -364,12 +336,16 @@ class Opinion extends Content
         } else {
 
             $author = new \User($this->fk_author);
-            $this->name = StringUtils::get_title($author->name);
+            $this->name = StringUtils::getTitle($author->name);
             $this->author_name_slug = $this->name;
 
             if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
                 $tpl->assign('item', $this);
-                return $tpl->fetch('frontpage/contents/_blog.tpl');
+                $template = 'frontpage/contents/_blog.tpl';
+                if ($params['custom'] == 1) {
+                    $template = $params['tpl'];
+                }
+                return $tpl->fetch($template);
             }
         }
 
@@ -377,8 +353,11 @@ class Opinion extends Content
         $tpl->assign('actual_category', $params['actual_category']);
         $tpl->assign('actual_category_id', $params['actual_category_id']);
         $tpl->assign('cssclass', 'opinion');
-
-        return $tpl->fetch('frontpage/contents/_opinion.tpl');
+        $template = 'frontpage/contents/_opinion.tpl';
+        if ($params['custom'] == 1) {
+            $template = $params['tpl'];
+        }
+        return $tpl->fetch($template);
     }
 
     /**

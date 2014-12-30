@@ -16,7 +16,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -38,7 +37,7 @@ class CategoryController extends Controller
         $page         = $request->query->getDigits('page', 1);
 
         $this->view = new \Template(TEMPLATE_USER);
-        $this->view->assign(array('actual_category' => $categoryName));
+        $this->view->setConfig('frontpages');
 
         $categoryManager = $this->get('category_repository');
         $category = $categoryManager->findOneBy(
@@ -49,8 +48,6 @@ class CategoryController extends Controller
         if (empty($category)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
-
-        $this->view->setConfig('frontpages');
 
         $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
@@ -76,8 +73,7 @@ class CategoryController extends Controller
 
             $order = array('starttime' => 'DESC');
 
-            $articles      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countArticles = $em->countBy($filters);
+            $articles = $em->findBy($filters, $order, $itemsPerPage, $page);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
@@ -142,13 +138,13 @@ class CategoryController extends Controller
             );
         }
 
-        $ads = $this->getInnerAds($category->id);
-        $this->view->assign('advertisements', $ads);
-
         return $this->render(
             'blog/blog.tpl',
             array(
-                'cache_id' => $cacheId
+                'cache_id'        => $cacheId,
+                'actual_category' => $categoryName,
+                'advertisements'  => $this->getInnerAds($category->id),
+                'x-tags'          => "category-frontpage,$categoryName,$page"
             )
         );
     }
@@ -182,11 +178,11 @@ class CategoryController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+        $cm = new \ContentManager();
         $cacheId = "sync|category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $ccm = \ContentCategoryManager::get_instance();
             // Get category object
-            $cm = new \ContentManager();
             $category = unserialize(
                 $cm->getUrlContent(
                     $wsUrl.'/ws/categories/object/'.$categoryName,
@@ -209,7 +205,7 @@ class CategoryController extends Controller
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                     'actual_category'       => $categoryName
                 )
             );
@@ -218,12 +214,13 @@ class CategoryController extends Controller
         //$this->getInnerAds();
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'blog/blog.tpl',
             array(
-                'cache_id' => $cacheId
+                'cache_id'       => $cacheId,
+                'advertisements' => $ads,
+                'x-tags'         => "ext-category,$categoryName,$page",
             )
         );
     }

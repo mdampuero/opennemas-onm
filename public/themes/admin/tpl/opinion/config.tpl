@@ -68,6 +68,8 @@
                     <div class="help-block">{t}How many opinions opinions will be shown in the opinion frontpage.{/t}</div>
                 </div>
             </div>
+            <hr class="divisor">
+
             <div class="control-group">
                 <label for="opinion_settings[total_opinion_authors]" class="control-label">{t}Author opinions in frontpage opinion widget:{/t}</label>
                 <div class="controls">
@@ -76,6 +78,29 @@
                     <div class="help-block">{t}How many author opinions will be shown in the widget.{/t}</div>
                 </div>
             </div>
+
+            {is_module_activated name="BLOG_MANAGER"}
+            <hr class="divisor">
+            <div class="control-group">
+                <label for="blog_orderFrontpage" class="control-label">{t}Order blog's frontpage by{/t}</label>
+                <div class="controls">
+                    <select name="opinion_settings[blog_orderFrontpage]" id="blog_orderFrontpage" required >
+                        <option value="created" {if !isset($configs['opinion_settings']['blog_orderFrontpage']) || $configs['opinion_settings']['blog_orderFrontpage'] eq "created"} selected {/if}>{t}Created Date{/t}</option>
+                        <option value="blogger" {if $configs['opinion_settings']['blog_orderFrontpage'] eq "blogger"} selected {/if}>{t}Blogger{/t}</option>
+                    </select>
+                    <div class="help-block">
+                        {t}Select if order blogs's frontpages by created date or bloggers name.{/t}
+                    </div>
+                </div>
+            </div>
+            <hr class="divisor">
+            <div class="control-group">
+                <label for="blog_itemsFrontpage]" class="control-label">{t}Items per blog page{/t}</label>
+                <div class="controls">
+                    <input type="number" id="blog_itemsFrontpage" name="opinion_settings[blog_itemsFrontpage]" value="{$configs['opinion_settings']['blog_itemsFrontpage']|default:12}">
+                </div>
+            </div>
+            {/is_module_activated}
         </div>
     </div>
 </form>

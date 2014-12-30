@@ -117,7 +117,7 @@ class Privilege
      *
      * @return array the list of Privileges objects
      */
-    public function find($filter = null)
+    public function find()
     {
         foreach (self::$privileges as $privilegeData) {
             $privilege = new Privilege();
@@ -171,7 +171,7 @@ class Privilege
      * @return array modules with each privileges
      *
      **/
-    public function getPrivilegesByModules($filter = null)
+    public function getPrivilegesByModules()
     {
         $groupedPrivileges = array();
         foreach (self::$privileges as $privilegeData) {
@@ -222,7 +222,7 @@ class Privilege
      **/
     private static function loadPrivileges()
     {
-        self::$privileges = $privileges = array(
+        self::$privileges = array(
             1 => array(
                 'pk_privilege' => '1',
                 'name'         => 'CATEGORY_ADMIN',

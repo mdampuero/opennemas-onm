@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -30,16 +29,6 @@ use Onm\Settings as s;
  **/
 class ContentsController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
     /**
      * Description of the action
      *
@@ -75,7 +64,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -107,6 +97,7 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
@@ -124,7 +115,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -147,7 +139,19 @@ class ContentsController extends Controller
 
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
-            if (false && $ext == 1) {
+            $ext       = $request->request->getDigits('ext', 0);
+            if ($ext == 1) {
+                // Getting Synchronize setting params
+                $categoryName = $request->request->get('category_name', null);
+                $wsUrl = '';
+                $syncParams = s::get('sync_params');
+                foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                    foreach ($categoriesToSync as $value) {
+                        if (preg_match('/'.$categoryName.'/i', $value)) {
+                            $wsUrl = $siteUrl;
+                        }
+                    }
+                }
                 $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
@@ -238,22 +242,41 @@ class ContentsController extends Controller
 
             return new Response($content, $httpCode);
         } else {
-            $contentId = $request->query->getDigits('content_id', null);
+            $contentID    = $request->query->getDigits('content_id', null);
+            $ext          = $request->query->getDigits('ext', 0);
 
             $session = $this->get('session');
 
             $token = md5(uniqid('sendform'));
             $session->set('sendformtoken', $token);
 
-            $content = new \Content($contentId);
+            if ($ext == 1) {
+                // Getting Synchronize setting params
+                $categoryName = $request->query->get('category_name', null);
+                $wsUrl = '';
+                $syncParams = s::get('sync_params');
+                foreach ($syncParams as $siteUrl => $categoriesToSync) {
+                    foreach ($categoriesToSync as $value) {
+                        if (preg_match('/'.$categoryName.'/i', $value)) {
+                            $wsUrl = $siteUrl;
+                        }
+                    }
+                }
+                $cm = new \ContentManager();
+                $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
+                $content = unserialize($content);
+            } else {
+                $content = new \Content($contentID);
+            }
 
             $this->view = new \Template(TEMPLATE_USER);
             return $this->render(
                 'common/share_by_mail.tpl',
                 array(
                     'content'    => $content,
-                    'content_id' => $contentId,
+                    'content_id' => $contentID,
                     'token'      => $token,
+                    'ext'        => $ext,
                 )
             );
         }
@@ -270,7 +293,7 @@ class ContentsController extends Controller
     {
         // If is POST request perform the vote action if not render the vote
         if ('POST' == $request->getMethod()) {
-            $ip        = getRealIp();
+            $ip        = getUserRealIP();
             $contentId = $request->request->getDigits('content_id', null);
             $voteValue = $request->request->getDigits('vote_value', null);
 
@@ -327,20 +350,10 @@ class ContentsController extends Controller
         }
 
         $userAgent = $request->headers->get('User-Agent');
-        $bots = array(
-            "archiver", "bot", "crawl", "curl", "eventbox", "facebookexternal",
-            "google", "msnbot", "monitor", "mechanize", "nambu", "perl",
-            "python", "sphere", "spider", "PEAR", "java", "radian", "twitter",
-            "wordpress", "yahoo", "yandex"
-        );
-
-        $i = 0;
-        while ($i < count($bots) && stristr($userAgent, $bots[$i]) != false) {
-            $i++;
-        }
+        $isBot     = \Onm\Utils\BotDetector::isBot($userAgent);
 
         // Increment view only if the request is performed with an AJAX request
-        if ($i >= count($bots)) {
+        if ($isBot) {
             $httpCode = 400;
             $content = "Bot detected";
         } elseif ($request->isXmlHttpRequest()) {

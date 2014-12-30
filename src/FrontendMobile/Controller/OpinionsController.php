@@ -12,7 +12,6 @@ namespace FrontendMobile\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -38,7 +37,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      **/
-    public function frontpageAction(Request $request)
+    public function frontpageAction()
     {
         $categoryName = 'opinion';
 
@@ -74,7 +73,7 @@ class OpinionsController extends Controller
             }
 
             foreach ($opinions as &$opinion) {
-                $opinion['author_name_slug'] = \Onm\StringUtils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = \Onm\StringUtils::getTitle($opinion['name']);
             }
 
 

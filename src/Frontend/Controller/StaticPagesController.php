@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -73,7 +72,7 @@ class StaticPagesController extends Controller
 
         // Get static_pages positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $positions = $positionManager->getAdsPositionsForGroup(null, array(1, 2, 103, 105, 7, 9, 10));
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(1, 2, 5, 6, 7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

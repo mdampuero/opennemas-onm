@@ -13,5 +13,32 @@ managerwebservice_instance_create:
     defaults: { _controller: ManagerWebServiceBundle:WebService:create }
     methods:  [POST]
 
+manager_ws_auth:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/auth.yml'
+    prefix: /
+
+manager_ws_framework_opcache:
+    path:     /opcache/status
+    defaults: { _controller: ManagerWebServiceBundle:FrameworkStatus:opcacheStatus }
+    options:
+        expose: true
+
+manager_ws_command:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/command.yml
+    prefix:   /
+
 manager_ws_instance:
     resource: @ManagerWebServiceBundle/Resources/config/routing/instance.yml
+    prefix:   /
+
+manager_ws_template:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/template.yml
+    prefix:   /template
+
+manager_ws_user:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/user.yml
+    prefix:   /
+
+manager_ws_usergroup:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/usergroup.yml
+    prefix:   /

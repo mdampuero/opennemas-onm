@@ -15,6 +15,7 @@
 namespace Framework;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Framework\DependencyInjection\OpennemasExtension;
 
 /**
  * Initializes the OnmFrameworkBundle
@@ -23,4 +24,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  **/
 class OnmFrameworkBundle extends Bundle
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getContainerExtension()
+    {
+        return new OpennemasExtension();
+    }
 }

@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -261,7 +260,7 @@ class NewStandController extends Controller
         //for widget_newsstand_dates
         //TODO: intelligent wigget
         $ki = new \Kiosko();
-        $months_kiosko = $ki->get_months_by_years();
+        $months_kiosko = $ki->getMonthsByYears();
         $this->view->assign('months_kiosko', $months_kiosko);
     }
 

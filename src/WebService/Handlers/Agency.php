@@ -6,28 +6,37 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
+namespace WebService\Handlers;
 
+use Luracast\Restler\Format\XmlFormat;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Data\Object;
+
+/**
+ * Handles REST actions for news agency.
+ *
+ * @package WebService
+ **/
 class Agency
 {
     public $restler;
 
     /**
-    * Get intance for contentManager
+    * Get instance for contentManager
     * This is used in some actions at lists function
     */
     public function __construct()
     {
-        $this->cm = new ContentManager();
+        $this->cm = new \ContentManager();
     }
 
     /**
-     * Get an xml with elements containig url to the NewsML content
+     * Get an xml with elements containing url to the NewsML content
      *
-     * @param type $timeLimit the mtime limit for the last content 1 day by default
+     * @param int $until
      *
-     * @return $output
+     * @return mixed
      */
-
     protected function export($until = 86400)
     {
         if ($until == 'no_limits') {
@@ -53,10 +62,14 @@ class Agency
 
         $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
 
-        $xml = new \XmlFormat();
-        XmlFormat::$root_name = 'contents';
+        XmlFormat::$rootName = 'contents';
+        XmlFormat::$importSettingsFromXml = true;
 
-        $output = $xml->toArray($output);
+        $output = simplexml_load_string($output);
+
+        $xml = new XmlFormat($output);
+
+        $output = $xml->read($output);
 
         return $output;
     }
@@ -64,9 +77,6 @@ class Agency
     /**
      * Get an newsml given a content id
      *
-     * @param type $id the id of the content
-     *
-     * @return $output
      */
     protected function newsml($id = null)
     {
@@ -144,9 +154,14 @@ class Agency
             )
         );
 
-        $xml = new \XmlFormat();
+        XmlFormat::$rootName = 'NewsML';
+        XmlFormat::$importSettingsFromXml = true;
 
-        $output = $xml->toArray($output);
+        $output = simplexml_load_string($output);
+
+        $xml = new XmlFormat();
+
+        $output = $xml->read($output);
 
         return $output;
     }
@@ -156,9 +171,6 @@ class Agency
      *
      * This is used for checking the int parameters
      *
-     * @param type $number the number to validate
-     *
-     * @return void
      */
     private function validateInt($number)
     {

@@ -1,12 +1,14 @@
 <?php
-/*
- * This file is part of the Symfony package.
+
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Framework\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -18,24 +20,39 @@ use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
 
 /**
- * InstanceLoaderListener initializes the instance from the request object
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Initializes the instance language basing on the request.
  */
 class L10nSystemListener implements EventSubscriberInterface
 {
     /**
-     * undocumented function
+     * The service container.
      *
-     * @return void
-     * @author
-     **/
-    public function __construct($settingRepository)
-    {
-        $this->settingRepository = $settingRepository;
-    }
+     * @var Container
+     */
+    protected $container;
+
     /**
-     * Filters the Response.
+     * The settings manager.
+     *
+     * @var SettingManager
+     */
+    protected $sm;
+
+    /**
+     * Initializes the l10system.
+     *
+     * @param Container      $container The settings manager.
+     * @param SettingManager $sm        The settings manager.
+     */
+    public function __construct($container, $sm)
+    {
+        $this->container = $container;
+        $this->sm = $sm;
+    }
+
+    /**
+     * Detects the language and the timezone for the current instance basing on
+     * the request.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
      */
@@ -45,20 +62,19 @@ class L10nSystemListener implements EventSubscriberInterface
             return;
         }
 
-        global $kernel;
-        $container = $kernel->getContainer();
         $request = $event->getRequest();
+        $session = $request->getSession();
 
-        $settings = $this->settingRepository->get(array('time_zone', 'site_language'));
-        $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 335;
-        $language = array_key_exists('site_language', $settings) ? $settings['site_language'] : 'en';
+        $settings = $this->sm->get(array('time_zone' => 335, 'site_language' => 'en'));
 
-        if (isset($timezone)) {
+        $language = $settings['site_language'];
+
+        if (isset($settings['time_zone'])) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
+            date_default_timezone_set($availableTimezones[$settings['time_zone']]);
         }
 
-        $availableLanguages = $container->getParameter('available_languages');
+        $availableLanguages = $this->container->getParameter('available_languages');
         $forceLanguage = $request->query->filter('language', null, FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null
@@ -66,13 +82,7 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            if (isset($_SESSION)
-                && array_key_exists('user_language', $_SESSION)
-            ) {
-                $userLanguage = $_SESSION['user_language'] ?: 'default';
-            } else {
-                $userLanguage = 'default';
-            }
+            $userLanguage = $session->get('user_language', 'default');
 
             if ($userLanguage != 'default') {
                 $language = $userLanguage;
@@ -109,6 +119,11 @@ class L10nSystemListener implements EventSubscriberInterface
         textdomain($domain);
     }
 
+    /**
+    * Returns an array of event names this subscriber wants to listen to.
+    *
+    * @return array The event names to listen to.
+    */
     public static function getSubscribedEvents()
     {
         return array(

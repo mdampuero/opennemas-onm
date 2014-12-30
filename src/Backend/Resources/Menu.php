@@ -29,6 +29,13 @@ $menuXml = '<?xml version="1.0"?>
             id="widget_manager"
             link="'.url('admin_widgets').'"
         />
+        <!-- <node
+            module_name="SIDEBAR_MANAGER"
+            privilege="SIDEBAR_ADMIN"
+            title="'.htmlspecialchars(_("Sidebars"), ENT_QUOTES).'"
+            id="sidebar_manager"
+            link="'.url('admin_sidebars').'"
+        />-->
         <node
             module_name="MENU_MANAGER"
             privilege="MENU_ADMIN"
@@ -114,7 +121,7 @@ $menuXml = '<?xml version="1.0"?>
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
-            privilege="PHOTO_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
+            privilege="PHOTO_ADMIN,ATTACHMENT_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
             privilege="PHOTO_ADMIN"
@@ -124,7 +131,7 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="FILE_MANAGER"
-            privilege="FILE_ADMIN"
+            privilege="ATTACHMENT_ADMIN"
             title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'"
             id="file_manager"
             link="'.url('admin_files').'"
@@ -227,13 +234,6 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
-        />
-        <node
-            module_name="SCHEDULE_MANAGER"
-            title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
-            id="cronicas_schedule_manager"
-            link="http://www.cronicasdelaemigracion.com//agenda/"
-            privilege="SCHEDULE_ADMIN"
         />
 
     </submenu>

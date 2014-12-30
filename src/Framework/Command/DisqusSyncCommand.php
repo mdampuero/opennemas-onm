@@ -40,7 +40,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phpBinPath = exec('which php');
         chdir(APPLICATION_PATH);
 
         // Initialize internal constants
@@ -53,6 +52,8 @@ EOF
         // Get database connection
         $databaseConnection = getService('db_conn');
         $databaseConnection->selectDatabase($databaseName);
+        $conn = getService('dbal_connection');
+        $conn->selectDatabase($databaseName);
 
         // Load application and initialize Database
         \Application::load();
@@ -78,7 +79,15 @@ EOF
             300
         );
 
+
+        // Get disqus shortname and secretkey
+        $disqusShortName = s::get('disqus_shortname');
+        $disqusSecretKey = s::get('disqus_secret_key');
+
+        $disqusSyncher = new \Onm\DisqusSync();
+        $disqusSyncher->setConfig($disqusShortName, $disqusSecretKey);
+
         // Save disqus comments to database
-        \Onm\DisqusSync::saveDisqusCommentsToDatabase();
+        $disqusSyncher->saveDisqusCommentsToDatabase();
     }
 }

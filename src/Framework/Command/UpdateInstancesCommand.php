@@ -56,6 +56,12 @@ class UpdateInstancesCommand extends ContainerAwareCommand
                 'If set, the command will get the page views from Piwik.'
             )
             ->addOption(
+                'created',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, the command will get the created date from instance.'
+            )
+            ->addOption(
                 'debug',
                 false,
                 InputOption::VALUE_NONE,
@@ -66,21 +72,22 @@ class UpdateInstancesCommand extends ContainerAwareCommand
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
+     * @param InputInterface  $input  An InputInterface instance.
+     * @param OutputInterface $output An OutputInterface instance.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $alexa = $input->getOption('alexa');
         $views = $input->getOption('views');
+        $created = $input->getOption('created');
 
-        $im = $this->getContainer()->get('instance_manager');
+        $this->im = $this->getContainer()->get('instance_manager');
 
-        $instances = $im->findBy(null, array('id', 'asc'));
+        $instances = $this->im->findBy(null, array('id', 'asc'));
 
         foreach ($instances as $instance) {
-            $this->getInstanceInfo($im, $instance, $alexa, $views);
-            $this->setDatabaseInfo($im);
+            $this->getInstanceInfo($instance, $alexa, $views, $created);
+            $this->im->persist($instance);
         }
     }
 
@@ -92,7 +99,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     private function getAlexa($domain)
     {
-        $rank = 0;
+        $rank = 100000000;
         $url  = "http://data.alexa.com/data?cli=10&dat=snbamz&url=" . $domain;
 
         $ch = curl_init($url);
@@ -115,83 +122,159 @@ class UpdateInstancesCommand extends ContainerAwareCommand
     /**
      * Gets the instance information.
      *
-     * @param  InstanceManager $im    The instance manager.
-     * @param  Instance        $i     The instance.
-     * @param  boolean         $alexa Whether to get the Alexa's rank.
-     * @param  boolean         $views Whether to get the page views.
+     * @param  Instance $i     The instance.
+     * @param  boolean  $alexa Whether to get the Alexa's rank.
+     * @param  boolean  $views Whether to get the page views.
+     * @param  boolean  $views Whether to get the created date.
      */
-    private function getInstanceInfo($im, $i, $alexa = false, $views = false)
+    private function getInstanceInfo(&$i, $alexa = false, $views = false, $created = false)
     {
-        $im->getConnection()->selectDatabase($i->settings['BD_DATABASE']);
-
-        $sql = 'SELECT COUNT(pk_content) FROM contents';
-        $rs  = $im->getConnection()->fetchArray($sql);
-
-        if ($rs !== false) {
-            $this->contents = $rs[0];
+        if (empty($i->getDatabaseName())) {
+            return false;
         }
 
-        $sql = 'SELECT COUNT(id) FROM users';
-        $rs  = $im->getConnection()->fetchArray($sql);
+        $this->im->getConnection()->selectDatabase($i->getDatabaseName());
 
-        if ($rs !== false) {
-            $this->users = $rs[0];
+        // Count contents
+        $sql = 'SELECT content_type_name as type, count(*) as total '
+            .'FROM contents GROUP BY `fk_content_type`';
+
+        $rs = $this->im->conn->fetchAll($sql);
+
+        if ($rs !== false && !empty($rs)) {
+            $contents = 0;
+
+            foreach ($rs as $value) {
+                $allowedContentTypes = array(
+                    'article',
+                    'opinion',
+                    'advertisement',
+                    'album',
+                    'photo',
+                    'video',
+                    'widget',
+                    'static_page'
+                );
+
+                if (!in_array($value['type'], $allowedContentTypes)) {
+                    continue;
+                }
+
+                $type = $value['type'] . 's';
+                $i->{$type} = $value['total'];
+                $contents += $value['total'];
+            }
+
+            $i->contents = $contents;
+        }
+
+        // Count users
+        $sql = "SELECT COUNT(id) FROM users WHERE type = 0 and activated = 1 and
+            fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
+        $rs  = $this->im->getConnection()->fetchArray($sql);
+
+        if ($rs !== false && !empty($rs)) {
+            $i->users = $rs[0];
         }
 
         // Check domain's rank in Alexa
         if ($alexa && !empty($i->domains)) {
-            $domains = explode(',', $i->domains);
-            $this->alexa = $this->getAlexa($i->domains[0]);
+            $i->alexa = $this->getAlexa($i->getMainDomain());
+        }
+
+        // Count emails
+        $sql = 'SELECT counter FROM action_counters WHERE action_name = \'newsletter\'';
+        $rs  = $this->im->getConnection()->fetchArray($sql);
+
+        if ($rs) {
+            $i->emails = $rs[0];
+        }
+
+        // Update created data
+        if ($created) {
+            $sql = 'SELECT * FROM settings WHERE name=\'site_created\'';
+            $rs  = $this->im->getConnection()->fetchAll($sql);
+
+            if ($rs !== false && !empty($rs)) {
+                foreach ($rs as $value) {
+                    $i->created = unserialize($rs['value']);
+                }
+            }
+        }
+
+        // Get Piwik config and last invoice date
+        $sql = 'SELECT * FROM settings WHERE name=\'piwik\' OR name=\'last_invoice\' OR name=\'last_login\'';
+        $rs  = $this->im->getConnection()->fetchAll($sql);
+
+        $piwik       = null;
+        $lastInvoice = null;
+
+        if ($rs !== false && !empty($rs)) {
+            foreach ($rs as $value) {
+                if ($value['name'] == 'piwik') {
+                    $piwik = unserialize($value['value']);
+                } elseif ($value['name'] == 'last_invoice') {
+                    $lastInvoice = unserialize($value['value']);
+                } else {
+                    $i->last_login = unserialize($value['value']);
+                }
+            }
         }
 
         // Get the page views from Piwik
-        if ($views && !empty($i->domains)) {
-            $domains = explode(',', $i->domains);
-            $this->views = $this->getViews($i->domains[0]);
+        if ($views && !empty($piwik) && !empty($lastInvoice)) {
+            $i->page_views = $this->getViews($piwik['page_id'], $lastInvoice);
+        }
+
+        // Get media size
+        $size = explode("\t", shell_exec('du -s '.SITE_PATH."media".DS.$i->internal_name.'/'));
+        if (is_array($size)) {
+            $i->media_size = $size[0] / 1024;
         }
     }
 
     /**
      * Gets the number of page views from Piwik.
      *
-     * @param  string  $domain The domain to check in Alexa.
+     * @param  integer $siteId The site id in Piwik.
+     * @param  string  $from   Date of the last invoice.
      * @return integer         The number of page views.
      */
-    private function getViews($domain)
+    private function getViews($siteId, $from)
     {
-    }
-
-    /**
-     * Updates the instance with the new information.
-     *
-     * @param InstanceManager $im The instance manager.
-     */
-    private function setDatabaseInfo($im)
-    {
-        if (!$this->contents && !$this->users) {
-            return;
+        if (!$siteId) {
+            return 0;
         }
 
-        $inserts = array();
-        if ($this->contents) {
-            $inserts[] = 'contents = ' . $this->contents;
+        $url   = $this->getContainer()->getParameter('piwik.url');
+        $token = $this->getContainer()->getParameter('piwik.token');
+
+        $from = \DateTime::createFromFormat('Y-m-d H:i:s', $from);
+        $from = $from->format('Y-m-d');
+        $to   = date('Y-m-d');
+
+        $url .= "?module=API&method=API.get"
+            . "&apiModule=VisitsSummary&apiAction=get"
+            . "&idSite=$siteId"
+            . "&period=range&date=$from,$to"
+            . "&format=json"
+            . "&showColumns=nb_visits"
+            . "&token_auth=$token";
+
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $resp = curl_exec($ch);
+        curl_close($ch);
+
+        $views = json_decode($resp, true);
+
+        if (array_key_exists('value', $views)) {
+            return $views['value'];
         }
 
-        if ($this->users) {
-            $inserts[] = 'users = ' . $this->users;
-        }
-
-        if ($this->alexa) {
-            $inserts[] = 'alexa = ' . $this->alexa;
-        }
-
-        if ($this->views) {
-            $inserts[] = 'views = ' . $this->views;
-        }
-
-        $im->getConnection()->selectDatabase('onm-instances');
-
-        $sql = 'UPDATE instances SET ' . implode(',', $inserts);
-        $rs  = $im->getConnection()->executeQuery($sql);
+        return 0;
     }
 }

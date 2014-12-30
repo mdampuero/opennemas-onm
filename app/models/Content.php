@@ -10,6 +10,7 @@
  *
  * @package    Model
  **/
+use Onm\Settings as s;
 
 /**
  * Handles all the common actions in all the contents
@@ -216,6 +217,13 @@ class Content
     public $favorite            = null;
 
     /**
+     * Wheter allowing comments in this content
+     *
+     * @var boolean
+     **/
+    public $with_comment  = null;
+
+    /**
      * Proxy cache handler
      *
      * @var MethodCacheManager
@@ -265,7 +273,7 @@ class Content
                 if (!empty($this->slug)) {
                     return $this->slug;
                 } else {
-                    return StringUtils::get_title($this->title);
+                    return StringUtils::getTitle($this->title);
                 }
                 break;
             case 'content_type_name':
@@ -392,9 +400,9 @@ class Content
             || empty($data['params'])) ? null: serialize($data['params']);
 
         if (!isset($data['slug']) || empty($data['slug'])) {
-            $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+            $data['slug'] = mb_strtolower(StringUtils::getTitle($data['title']));
         } else {
-            $data['slug'] = StringUtils::get_title($data['slug']);
+            $data['slug'] = StringUtils::getTitle($data['slug']);
         }
 
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
@@ -406,7 +414,10 @@ class Content
         if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
         }
-
+        if (!isset($data['with_comment'])) {
+            $config = s::get('comments_config');
+            $data['with_comment'] = isset($config['with_comments'])? intval($config['with_comments']) : 1;
+        }
 
         $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
@@ -415,16 +426,16 @@ class Content
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
         $ccm     = ContentCategoryManager::get_instance();
-        $catName = $ccm->get_name($data['category']);
+        $catName = $ccm->getName($data['category']);
 
         $sql = "INSERT INTO contents
             (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
             `metadata`, `starttime`, `endtime`,
             `created`, `changed`, `content_status`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `home_pos`,`available`,
+            `in_home`, `home_pos`,`available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?, ?,?,?,?)";
 
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
@@ -433,7 +444,7 @@ class Content
             $data['position'],$data['frontpage'],
             $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
-            $data['home_pos'], $data['available'],
+            $data['home_pos'], $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
@@ -529,6 +540,8 @@ class Content
                 (!isset($data['frontpage'])) ? $this->frontpage: $data['frontpage'],
             'in_home'        =>
                 (!isset($data['in_home'])) ? $this->in_home: $data['in_home'],
+            'with_comment'        =>
+                (!isset($data['with_comment'])) ? $this->with_comment: $data['with_comment'],
             'params'         =>
                 (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'description'    =>
@@ -550,12 +563,12 @@ class Content
         }
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = StringUtils::get_title($this->slug);
+                $data['slug'] = StringUtils::getTitle($this->slug);
             } else {
-                $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+                $data['slug'] = mb_strtolower(StringUtils::getTitle($data['title']));
             }
         } else {
-            $data['slug'] = StringUtils::get_title($data['slug']);
+            $data['slug'] = StringUtils::getTitle($data['slug']);
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';
@@ -566,7 +579,7 @@ class Content
 
         if ($data['category'] != $this->category) {
             $ccm     = ContentCategoryManager::get_instance();
-            $catName = $ccm->get_name($data['category']);
+            $catName = $ccm->getName($data['category']);
 
             $sql2   = "UPDATE contents_categories "
                       ."SET `pk_fk_content_category`=?, `catName`=? "
@@ -585,7 +598,7 @@ class Content
                 SET `title`=?, `description`=?, `body`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
                     `changed`=?, `in_home`=?, `frontpage`=?,
-                    `available`=?, `content_status`=?,
+                    `available`=?, `content_status`=?, `with_comment`=?,
                     `fk_author`=?, `fk_user_last_editor`=?,
                     `slug`=?, `category_name`=?, `params`=?
                 WHERE pk_content= ?";
@@ -594,7 +607,7 @@ class Content
             $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'],
-            $data['available'], $data['content_status'],
+            $data['available'], $data['content_status'], $data['with_comment'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $catName, $data['params'], $data['id']
         );
@@ -655,7 +668,7 @@ class Content
     {
         $changed = date("Y-m-d H:i:s");
 
-        $this->set_available(0, $lastEditor);
+        $this->setAvailable(0, $lastEditor);
 
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
              . '`fk_user_last_editor`=? WHERE pk_content=?';
@@ -670,6 +683,7 @@ class Content
         logContentEvent(__METHOD__, $this);
 
         dispatchEventWithParams('content.update', array('content' => $this));
+        dispatchEventWithParams('content.delete', array('content' => $this));
     }
 
     /**
@@ -856,10 +870,14 @@ class Content
      *
      * @return boolean true if it was changed successfully
      **/
-    public function set_available($status, $lastEditor)
+    public function setAvailable($status = 1, $lastEditor = null)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
+        }
+
+        if ($lastEditor == null) {
+            $lastEditor = $_SESSION['userid'];
         }
 
         $sql = 'UPDATE contents '
@@ -912,7 +930,7 @@ class Content
      *
      * @return boolean true if it was changed successfully
      **/
-    public function set_in_home($status, $lastEditor)
+    public function setInHome($status, $lastEditor = null)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
@@ -987,9 +1005,12 @@ class Content
         }
 
         if ($this->id !== null) {
+            $views = getService('content_views_repository')->getViews($this->id);
+
             return array(
                 'title'           => $this->title,
-                'category'        => $ccm->get_name($this->category),
+                'category'        => $ccm->getName($this->category),
+                'views'           => $views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
                 'scheduled_state' => $this->getSchedulingState(),
@@ -997,56 +1018,6 @@ class Content
                 'last_author'     => $author->name,
             );
         }
-    }
-
-
-    /**
-     * Sets the available status for this content.
-     *
-     * @return boolean true if all went well
-     **/
-    public function setAvailable()
-    {
-        // NEW APPROACH
-        // Set previous status = the actual value
-        // Set status = available
-
-        // OLD APPROACH
-        if ($this->id == null) {
-            return false;
-        }
-
-        if ($this->starttime =='0000-00-00 00:00:00') {
-            $this->starttime = date("Y-m-d H:i:s");
-        }
-
-        $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
-                .'`fk_user_last_editor`=?, `starttime`=?, `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-
-        $values = array(
-            $_SESSION['userid'],
-            $this->starttime,
-            date("Y-m-d H:i:s"),
-            $this->id
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-        if ($rs === false) {
-            return false;
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-
-        // Set status for it's updated to next event
-        $this->available      = 1;
-        $this->content_status = 1;
-
-        dispatchEventWithParams('content.update', array('content' => $this));
-
-        return true;
     }
 
     /**
@@ -1233,7 +1204,7 @@ class Content
             }
         }
 
-        return $ccm->get_name($this->category);
+        return $ccm->getName($this->category);
     }
 
     /**
@@ -1256,7 +1227,7 @@ class Content
             $this->category_name = $this->loadCategoryName($this->category);
         }
 
-        return $ccm->get_title($this->category_name);
+        return $ccm->getTitle($this->category_name);
     }
 
     /**
@@ -1311,7 +1282,7 @@ class Content
 
         if (isset($this->category_name)) {
             $ccm = ContentCategoryManager::get_instance();
-            $this->category_name = $ccm->get_name($this->category);
+            $this->category_name = $ccm->getName($this->category);
         }
 
         $this->permalink = '';//$this->uri;
@@ -1508,47 +1479,6 @@ class Content
     }
 
     /**
-     * Sets the content_status flag for the actual content, given the status value
-     * @deprecated not valid anymore
-     *
-     * @param int $status the content_status value
-     * @param int $last_editor the author id that performs the action
-     *
-     * @return void
-     **/
-    public function set_status($status, $last_editor)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
-
-        $sql = 'UPDATE contents SET `content_status`=?, `available`=?, '
-             . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-
-        if (!is_array($status)) {
-            $values = array($status, $last_editor, $currentTime, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-    /**
      * Returns true if the content is suggested
      *
      * @return boolean true if the content is suggested
@@ -1557,78 +1487,6 @@ class Content
     {
         return ($this->frontpage == 1);
     }
-
-    /**
-     * Sets the frontpage flag
-     *
-     * @param int $status the status of the flag
-     * @param int $lastEditor the id of the user that is changing the content
-     *
-     * @return boolean if the change was done
-     **/
-    public function set_frontpage($status, $lastEditor)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `frontpage`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-    /**
-     * Sets the in_home flag
-     *
-     * @param int $status the status of the flag
-     * @param int $lastEditor the id of the user that is changing the content
-     *
-     * @return boolean if the change was done
-     **/
-    public function set_inhome($status, $lastEditor = null)
-    {
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE `contents` SET `in_home`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
-    }
-
-
 
     /**
      * Return the content type name for this content
@@ -1668,32 +1526,6 @@ class Content
         }
     }
 
-    // TODO: move to a Cache handler
-    /**
-     * Regenerate cache files for all categories homepages.
-     *
-     * @return string Explanation for which elements were deleted
-     **/
-    public static function refreshFrontpageForAllCategories()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        $ccm = ContentCategoryManager::get_instance();
-
-        $availableCategories = $ccm->categories;
-        $output ='';
-
-        foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned successfully.");
-            $output .= sprintf($message, $category->name);
-        }
-
-        return $output;
-
-    }
-
     /**
      * Removes element with $contentPK from homepage of category.
      *
@@ -1710,7 +1542,7 @@ class Content
             $categoryName = 'home';
             $category = 0;
         } else {
-            $categoryName = $ccm->get_name($category);
+            $categoryName = $ccm->getName($category);
         }
 
         $sql = 'DELETE FROM content_positions '
@@ -1790,33 +1622,6 @@ class Content
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
         dispatchEventWithParams('content.set_positions', array('content' => $this));
-
-        return true;
-    }
-
-    /**
-     * Define contents as un/favorite for include them in a widget
-     *
-     * @param array $status array of contents id's
-     *
-     * @return true or false
-    */
-    public function set_favorite($status)
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=?";
-        $values = array($status, $this->id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            return false;
-        }
-
-        logContentEvent(__METHOD__, $this);
-        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -2005,7 +1810,7 @@ class Content
                     if ($content->fk_content_type == 4) {
                          $content = $content->get($relatedContentId);
                     }
-                    $content->categoryName = $ccm->get_name($content->category);
+                    $content->categoryName = $ccm->getName($content->category);
                     $this->related_contents []= $content;
                 }
             }
@@ -2162,6 +1967,28 @@ class Content
         return $value;
     }
 
+    /**
+     * Returns a list of metaproperty values from a list of contents
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return boolean true if it is in the category
+     **/
+    public static function getMultipleProperties($propertyMap)
+    {
+        $map = $values = [];
+        foreach ($propertyMap as $property) {
+            $map []= '(fk_content=? AND `meta_name`=?)';
+            $values []= $property[0];
+            $values []= $property[1];
+        }
+
+        $sql = 'SELECT `fk_content`,    `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
+        $value = $GLOBALS['application']->conn->GetArray($sql, $values);
+
+        return $value;
+    }
+
 
     /**
      * Sets a metaproperty for the actual content
@@ -2186,6 +2013,8 @@ class Content
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -2215,6 +2044,8 @@ class Content
             return false;
         }
 
+        dispatchEventWithParams('content.update', array('content' => $this));
+
         return true;
     }
 
@@ -2239,6 +2070,7 @@ class Content
             return false;
         }
 
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -2248,27 +2080,37 @@ class Content
      *
      * @return array if it is in the contentmeta table
      **/
-
     public function loadAllContentProperties($id = null)
     {
-        if ($this->id == null && $id == null) {
-            return false;
-        }
-        if (!empty($id)) {
-            $this->id = $id;
+        $cache             = getService('cache');
+        $contentProperties = $cache->fetch('content-meta-'.$this->id);
+
+        if (!is_array($contentProperties)) {
+            $contentProperties = array();
+
+            if ($this->id == null && $id == null) {
+                return false;
+            }
+            if (!empty($id)) {
+                $this->id = $id;
+            }
+
+            $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
+            $properties = $GLOBALS['application']->conn->GetArray($sql, array((int) $this->id));
+
+            if (is_null($properties) || !is_array($properties)) {
+                $contentProperties = array();
+            } else {
+                foreach ($properties as $property) {
+                    $contentProperties[$property['meta_name']] = $property['meta_value'];
+                }
+            }
+
+            $cache->save('content-meta-'.$this->id, $contentProperties);
         }
 
-        $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-        if ($rs == false) {
-            return false;
-        }
-        while (!$rs->EOF) {
-            $name = $rs->fields['meta_name'];
-            $this->{$name} = $rs->fields['meta_value'];
-
-            $rs->MoveNext();
+        foreach ($contentProperties as $key => $value) {
+            $this->{$key} = $value;
         }
 
         return $this;
@@ -2295,6 +2137,8 @@ class Content
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }

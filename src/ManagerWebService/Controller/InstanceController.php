@@ -4,171 +4,335 @@ namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
 use Onm\Framework\Controller\Controller;
+use Onm\Exception\InstanceNotFoundException;
+use Onm\Exception\AssetsNotDeletedException;
+use Onm\Exception\BackupException;
+use Onm\Exception\DatabaseNotDeletedException;
+use Onm\Instance\InstanceCreator;
+use Onm\Instance\Instance;
+use Onm\Instance\InstanceManager as im;
+use Onm\Module\ModuleManager as mm;
 
 class InstanceController extends Controller
 {
     /**
-     * Deletes the selected instances.
+     * Creates a new instance from the request.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
-    public function batchDeleteAction(Request $request)
+    public function createAction(Request $request)
     {
-        $error   = array();
-        $success = array();
-        $updated = array();
+        $success = false;
+        $message = array();
 
-        $selected  = $request->request->get('ids', null);
-        $activated = $request->request->getDigits('value', 0);
+        $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
+        $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);
 
-        if (is_array($selected) && count($selected) > 0) {
-            $im = $this->get('instance_manager');
-
-            foreach ($selected as $id) {
-                $instance = $im->read($id);
-                if ($instance !== false) {
-                    try {
-                        $delete = $im->delete($id);
-                        if (!$delete) {
-                            throw new \Exception();
-                        }
-
-                        $updated[] = $id;
-                    } catch (Exception $e) {
-                        $messages[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $error[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                        'type'    => 'error'
-                    );
-                }
-            }
-        }
-
-        if (count($updated) > 0) {
-            $success[] = array(
-                'id'        => $updated,
-                'activated' => $activated,
-                'message'   => sprintf(_('%s instances deleted successfully.'), count($updated)),
-                'type'      => 'success'
+        if (!$domains) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('Instance domains cannot be empty')
+                    )
+                )
             );
         }
 
-        return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $error)
-            )
+        $im = $this->get('instance_manager');
+
+        $criteria = array(
+            'domains' => array()
         );
-    }
 
-    /**
-     * Set the activated flag for instances in batch.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function batchSetActivatedAction(Request $request)
-    {
-        $error   = array();
-        $success = array();
-        $updated = 0;
+        foreach ($domains as $domain) {
+            $criteria['domains']['union'] = 'OR';
+            $criteria['domains'][] = array(
+                'value' => "^$domain|,[ ]*$domain|$domain$",
+                'operator' => 'REGEXP'
+            );
+        }
 
-        $selected  = $request->request->get('ids', null);
-        $activated = $request->request->getDigits('value', 0);
+        $instance = $im->findOneBy($criteria);
 
-        if (is_array($selected) && count($selected) > 0) {
-            $im = $this->get('instance_manager');
+        if ($instance) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('An instance with that domain already exists')
+                    )
+                )
+            );
+        }
 
-            foreach ($selected as $id) {
-                $instance = $im->read($id);
-                if ($instance !== false) {
-                    try {
-                        $im->changeActivated($id, $activated);
-                        $updated++;
-                    } catch (Exception $e) {
-                        $error[] = array(
-                            'id'      => $id,
-                            'message' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                            'type'    => 'error'
-                        );
-                    }
-                } else {
-                    $error[] = array(
-                        'id'      => $id,
-                        'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                        'type'    => 'error'
-                    );
+        // Create internalName from domains
+        if (!$internalName) {
+            $internalName = explode('.', array_pop($domains));
+            $internalName = array_pop($internalName);
+        }
+
+        $internalName = strtolower($internalName);
+
+        $instance = new Instance();
+        foreach (array_keys($request->request->all()) as $key) {
+            $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+
+            if (!is_null($value)) {
+                if ($key == 'domain_expire') {
+                    $value = new \Datetime($value);
+                    $value = $value->format('Y-m-d H:i:s');
+                } elseif ($key == 'external' && array_key_exists('last_invoice', $value)) {
+                    $value['last_invoice'] = new \Datetime($value['last_invoice']);
+                    $value['last_invoice'] = $value['last_invoice']->format('Y-m-d H:i:s');
                 }
+
+                $instance->{$key} = $value;
             }
         }
 
-        if ($updated > 0) {
-            $success[] = array(
-                'id'        => $updated,
-                'activated' => $activated,
-                'message'   => sprintf(_('%s instances updated successfully.'), $updated),
-                'type'      => 'success'
+        $instance->created = date('Y-m-d H:i:s');
+
+        $creator = new InstanceCreator($im->getConnection());
+
+        $im->checkInternalName($instance);
+
+        try {
+            $im->persist($instance);
+            $creator->createDatabase($instance->id);
+            $creator->copyDefaultAssets($instance->internal_name);
+
+            $im->configureInstance($instance);
+
+            $success = true;
+            $message = array(
+                'id'   => $instance->id,
+                'type' => 'success',
+                'text' => _('Instance saved successfully')
+            );
+
+        } catch (DatabaseNotRestoredException $e) {
+            $errors[] = $e->getMessage();
+
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+
+            $message = array(
+                'type' => 'error',
+                'text' => _('Unable to create the database for the instance')
+            );
+
+        } catch (AssetsNotCopiedException $e) {
+            $errors[] = $e->getMessage();
+
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($instance->id);
+            $im->remove($instance);
+
+            $message = array(
+                'type' => 'error',
+                'text' => _('Unable to copy default assets for the instance')
             );
         }
 
         return new JsonResponse(
-            array(
-                'messages' => array_merge($success, $error)
-            )
+            array('success' => true, 'message' => $message)
         );
     }
 
     /**
      * Deletes an instance.
      *
-     * @param  integer      $id The instance id.
-     * @return JsonResponse     The response object.
+     * @param integer $id The instance id.
+     *
+     * @return JsonResponse The response object.
      */
     public function deleteAction($id)
     {
-        $im        = $this->get('instance_manager');
-        $messages  = array();
+        $im      = $this->get('instance_manager');
+        $creator = new InstanceCreator($im->getConnection());
+        $message = array();
+        $success = false;
 
-        $instance = $im->read($id);
-        if ($instance !== false) {
-            try {
-                $delete = $im->delete($id);
-                if (!$delete) {
-                    throw new \Exception();
-                }
+        try {
+            $instance = $im->find($id);
 
-                $messages[] = array(
-                    'id'        => $id,
-                    'activated' => $activated,
-                    'message'   => _('Instance deleted successfully.'),
-                    'type'      => 'success'
-                );
-            } catch (Exception $e) {
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Error while deleting instance with id "%s"'), $id),
-                    'type'    => 'error'
-                );
-            }
-        } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type'    => 'error'
+            $assetFolder = realpath(
+                SITE_PATH . DS . 'media' . DS . $instance->internal_name
+            );
+
+            $backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+            $database = $instance->getDatabaseName();
+
+            $creator->backupAssets($assetFolder, $backupPath);
+            $creator->backupDatabase($database, $backupPath);
+            $creator->backupInstance($database, $instance->id, $backupPath);
+
+            $creator->deleteAssets($instance->internal_name);
+            $creator->deleteDatabase($database);
+            $im->remove($instance);
+
+            $success = true;
+            $message = array(
+                'text' => _('Instance deleted successfully.'),
+                'type' => 'success'
+            );
+        } catch (InstanceNotFoundException $e) {
+            $message = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
+            );
+        } catch (BackupException $e) {
+            $message = $e->getMessage();
+
+            $creator->deleteBackup($backupPath);
+
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
+            );
+        } catch (AssetsNotDeletedException $e) {
+            $message = $e->getMessage();
+
+            $creator->restoreAssets($backupPath);
+
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
+            );
+        } catch (DatabaseNotDeletedException $e) {
+            $message = $e->getMessage();
+
+            $creator->restoreAssets($backupPath);
+            $creator->restoreDatabase($backupPath . DS . 'database.sql');
+
+            $message = array(
+                'text' => sprintf(_($message), $id),
+                'type' => 'error'
+            );
+        } catch (\Exception $e) {
+            $message = array(
+                'id'   => $id,
+                'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                'type' => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'messages'  => $messages
+                'success' => $success,
+                'message' => $message
+            )
+        );
+    }
+
+    /**
+     * Deletes the selected instances.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $im      = $this->get('instance_manager');
+            $creator = new InstanceCreator($im->getConnection());
+
+            foreach ($selected as $id) {
+                try {
+                    $instance = $im->find($id);
+
+                    $assetFolder = realpath(
+                        SITE_PATH . DS . 'media' . DS . $instance->internal_name
+                    );
+
+                    $backupPath = BACKUP_PATH . DS . $instance->id . "-"
+                        . $instance->internal_name . DS . "DELETED-" . date("YmdHi");
+
+                    $database = $instance->getDatabaseName();
+
+                    $creator->backupAssets($assetFolder, $backupPath);
+                    $creator->backupDatabase($database, $backupPath);
+                    $creator->backupInstance($database, $instance->id, $backupPath);
+
+                    $creator->deleteAssets($instance->internal_name);
+                    $creator->deleteDatabase($database);
+                    $im->remove($instance);
+
+                    $updated++;
+                } catch (InstanceNotFoundException $e) {
+                    $errors[] = array(
+                        'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                } catch (BackupException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->deleteBackup($backupPath);
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (AssetsNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (DatabaseNotDeletedException $e) {
+                    $message = $e->getMessage();
+
+                    $creator->restoreAssets($backupPath);
+                    $creator->restoreDatabase($backupPath . DS . 'database.sql');
+
+                    $errors[] = array(
+                        'text' => sprintf(_($message), $id),
+                        'type' => 'error'
+                    );
+                } catch (\Exception $e) {
+                    $errors[] = array(
+                        'text' => sprintf(_('Error while deleting instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s instances deleted successfully.'), $updated),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
             )
         );
     }
@@ -176,26 +340,32 @@ class InstanceController extends Controller
     /**
      * Returns a CSV file with all the instances information.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
      */
     public function exportAction(Request $request)
     {
-        $name  = $request->query->filter('name', '', FILTER_SANITIZE_STRING);
-        $email = $request->query->filter('email', '', FILTER_SANITIZE_STRING);
+        $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
+        $ids    = $request->query->filter('ids', '', FILTER_SANITIZE_STRING);
 
         $criteria = array();
         $order    = array('id' => 'asc');
 
-        if (!empty($name)) {
-            $criteria['name'] = array(
-                array('value' => "%$name%", 'operator' => 'LIKE')
+        if (!empty($search)) {
+            $criteria = array(
+                'name' => array(
+                    array('value' => "%$search%", 'operator' => 'LIKE')
+                ),
+                'contact_mail' => array(
+                    array('value' => "%$search%", 'operator' => 'LIKE')
+                )
             );
-        }
-
-        if (!empty($email)) {
-            $criteria['contact_mail'] = array(
-                array('value' => "%$email%", 'operator' => 'LIKE')
+        } elseif (!empty($ids)) {
+            $criteria = array(
+                'id' => array(
+                    array('value' => explode(',', $ids), 'operator' => 'IN')
+                ),
             );
         }
 
@@ -203,18 +373,7 @@ class InstanceController extends Controller
         $instances = $im->findBy($criteria, $order);
 
         foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            $instance->domains = preg_split("@, @", $instance->domains);
+            $im->getExternalInformation($instance);
         }
 
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
@@ -226,8 +385,8 @@ class InstanceController extends Controller
             )
         );
 
-        if ($name != '*') {
-            $fileNameFilter = '-'.\Onm\StringUtils::get_title($name);
+        if (!empty($search) && $search != '*') {
+            $fileNameFilter = '-'.\Onm\StringUtils::getTitle($search);
         } else {
             $fileNameFilter = '-complete';
         }
@@ -245,96 +404,326 @@ class InstanceController extends Controller
     }
 
     /**
+     * Returns the data to create a new instance.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function newAction()
+    {
+        return new JsonResponse(
+            array(
+                'data'     => null,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
      * Returns the list of instances as JSON.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
     public function listAction(Request $request)
     {
-        $epp       = $request->request->getDigits('elements_per_page', 10);
-        $page      = $request->request->getDigits('page', 1);
-        $criteria  = $request->request->filter('search');
-        $sortBy    = $request->request->filter('sort_by');
-        $sortOrder = $request->request->filter('sort_order');
-        $order     = array($sortBy => $sortOrder);
+        $epp      = $request->request->getDigits('epp', 10);
+        $page     = $request->request->getDigits('page', 1);
+        $criteria = $request->request->filter('criteria') ? : array();
+        $orderBy  = $request->request->filter('orderBy') ? : array();
 
-        unset($criteria['content_type_name']);
+        $order = array();
+        foreach ($orderBy as $value) {
+            $order[$value['name']] = $value['value'];
+        }
 
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
 
-        foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
-
-            // Get real time for last login
-            if (isset($instance->configs['last_login'])) {
-                $instance->configs['last_login'] = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $instance->configs['last_login'],
-                    new \DateTimeZone('UTC')
-                );
-            }
-
-            unset($instance->settings);
-
-            $instance->domains = preg_split("@,@", $instance->domains);
-            $instance->show_url = $this->generateUrl('manager_instance_show', array('id' => $instance->id));
-        }
-
-        return new JsonResponse(array(
-            'elements_per_page' => $epp,
-            'extra'             => array(),
-            'page'              => $page,
-            'results'           => $instances,
-            'total'             => $total,
-        ));
+        return new JsonResponse(
+            array(
+                'epp'     => $epp,
+                'extra'   => array(),
+                'page'    => $page,
+                'results' => $instances,
+                'total'   => $total,
+            )
+        );
     }
 
     /**
      * Toggle the availability of an instance given its id.
      *
-     * @param  Request      $request The request object.
-     * @return JsonResponse          The response object.
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
      */
-    public function setActivatedAction(Request $request, $id)
+    public function setEnabledAction(Request $request, $id)
     {
-        $activated = $request->request->getDigits('value');
+        $success  = false;
+        $activated = $request->request->getDigits('enabled');
         $im        = $this->get('instance_manager');
-        $messages  = array();
+        $message   = array();
 
-        $instance = $im->read($id);
-        if ($instance !== false) {
+        $instance     = $im->find($id);
+        $oldActivated = $instance->activated;
+        if ($instance) {
             try {
-                $im->changeActivated($instance->id, $activated);
+                $instance->activated = $activated;
+                $im->persist($instance);
 
-                $messages[] = array(
-                    'id'        => $id,
-                    'activated' => $activated,
-                    'message'   => _('Instance updated successfully.'),
-                    'type'      => 'success'
+                if ($oldActivated != $activated) {
+                    dispatchEventWithParams(
+                        'instance.disable',
+                        array('instance' => $instance->internal_name)
+                    );
+                }
+
+                $success = true;
+                $message = array(
+                    'text' => _('Instance updated successfully.'),
+                    'type' => 'success'
                 );
             } catch (Exception $e) {
-                $messages[] = array(
-                    'id'      => $id,
-                    'message' => sprintf(_('Error while updating instance with id "%s"'), $id),
-                    'type'    => 'error'
+                $message = array(
+                    'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
+                    'type' => 'error'
                 );
             }
         } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                'type'    => 'error'
+            $message = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
             );
         }
 
         return new JsonResponse(
             array(
+                'success'   => $success,
                 'activated' => $activated,
-                'messages'  => $messages
+                'message'   => $message
             )
         );
+    }
+
+    /**
+     * Set the activated flag for instances in batch.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function setEnabledSelectedAction(Request $request)
+    {
+        $messages = array();
+        $success  = false;
+        $updated  = 0;
+
+        $selected  = $request->request->get('selected', null);
+        $activated = $request->request->getDigits('enabled', 0);
+
+        if (is_array($selected) && count($selected) > 0) {
+            $im = $this->get('instance_manager');
+
+            foreach ($selected as $id) {
+                $instance = $im->find($id);
+                if ($instance) {
+                    try {
+                        $instance->activated = $activated;
+                        $im->persist($instance);
+                        $updated++;
+                    } catch (Exception $e) {
+                        $messages[] = array(
+                            'text' => sprintf(_('Error while updating instance with id "%s"'), $id),
+                            'type' => 'error'
+                        );
+                    }
+                } else {
+                    $messages[] = array(
+                        'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                        'type' => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success = true;
+
+            array_unshift(
+                $messages,
+                array(
+                    'text' => sprintf(_('%s instances updated successfully.'), $updated),
+                    'type' => 'success'
+                )
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'success'  => $success,
+                'messages' => $messages
+            )
+        );
+    }
+
+    /**
+     * Returns an instance as JSON.
+     *
+     * @param integer  $id The instance id.
+     *
+     * @return Response The response object.
+     */
+    public function showAction($id)
+    {
+        $im = $this->get('instance_manager');
+
+        $instance = $im->find($id);
+        $im->getExternalInformation($instance);
+
+        return new JsonResponse(
+            array(
+                'instance' => $instance,
+                'template' => $this->templateParams()
+            )
+        );
+    }
+
+    /**
+     * Updates the instance information gives its id
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The instance id.
+     * @return Response          The response object.
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $success = false;
+        $message = array();
+
+        $im = $this->get('instance_manager');
+
+        $internalName = $request->request->filter('internal_name', null, FILTER_SANITIZE_STRING);
+        $domains      = $request->request->filter('domains', null, FILTER_SANITIZE_STRING);
+
+        if (!$domains) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('Instance domains cannot be empty')
+                    )
+                )
+            );
+        }
+
+        $criteria = array(
+            'domains' => array()
+        );
+
+        foreach ($domains as $domain) {
+            $criteria['domains']['union'] = 'OR';
+            $criteria['domains'][] = array(
+                'value' => "^$domain|,[ ]*$domain|$domain$",
+                'operator' => 'REGEXP'
+            );
+        }
+
+        $instance = $im->findOneBy($criteria);
+
+        if ($instance && $instance->id != $id) {
+            return new JsonResponse(
+                array(
+                    'success' => false,
+                    'message' => array(
+                        'type' => 'error',
+                        'text' => _('An instance with that domain already exists')
+                    )
+                )
+            );
+        }
+
+        // Create internalName from domains
+        if (!$internalName) {
+            $internalName = explode('.', array_pop($domains));
+            $internalName = array_pop($internalName);
+        }
+
+        $internalName = strtolower($internalName);
+
+        try {
+            $instance = $im->find($id);
+
+            $im->checkInternalName($instance);
+
+            foreach (array_keys($request->request->all()) as $key) {
+                $value = $request->request->filter($key, null, FILTER_SANITIZE_STRING);
+
+
+                if (!is_null($value)) {
+                    if ($key == 'domain_expire') {
+                        $value = new \Datetime($value);
+                        $value = $value->format('Y-m-d H:i:s');
+                    } elseif ($key == 'external' && array_key_exists('last_invoice', $value)) {
+                        $value['last_invoice'] = new \Datetime($value['last_invoice']);
+                        $value['last_invoice'] = $value['last_invoice']->format('Y-m-d H:i:s');
+                    }
+
+                    $instance->{$key} = $value;
+                }
+            }
+
+            $im->persist($instance);
+            $im->updateSettings($instance);
+
+            $success = true;
+            $message = array(
+                'type' => 'success',
+                'text' => _('Instance saved successfully')
+            );
+
+        } catch (InstanceNotFoundException $e) {
+            $message = array(
+                'text' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                'type' => 'error'
+            );
+        } catch (\Exception $e) {
+            $message = array(
+                'text' => sprintf(_('Error while updating the instance with id "%s"'), $id),
+                'type' => 'error'
+            );
+        }
+
+        return new JsonResponse(
+            array('success' => $success, 'message' => $message)
+        );
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function templateParams()
+    {
+        return [
+            'languages' => [
+                'en_US' => _("English"),
+                'es_ES' => _("Spanish"),
+                'gl_ES' => _("Galician")
+            ],
+            'plans'     => [
+                'Base',
+                'Profesional',
+                'Silver',
+                'Gold',
+                'Other',
+            ],
+            'templates' => im::getAvailableTemplates(),
+            'timezones' => \DateTimeZone::listIdentifiers(),
+            'available_modules' => mm::getAvailableModulesGrouped(),
+        ];
     }
 }

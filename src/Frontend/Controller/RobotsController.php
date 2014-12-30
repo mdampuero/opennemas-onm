@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -30,11 +29,9 @@ class RobotsController extends Controller
     /**
      * Displays a prebuilt robots.txt file
      *
-     * @param Request $request the request object
-     *
      * @return Response the response object
      **/
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $content = "User-Agent: *
 Disallow: /admin/
@@ -46,6 +43,8 @@ Disallow: /harm/to/self
 
 Sitemap: ".SITE_URL."sitemapnews.xml.gz
 Sitemap: ".SITE_URL."sitemapweb.xml.gz
+Sitemap: ".SITE_URL."sitemapvideo.xml.gz
+Sitemap: ".SITE_URL."sitemapimage.xml.gz
 ";
         return new Response(
             $content,

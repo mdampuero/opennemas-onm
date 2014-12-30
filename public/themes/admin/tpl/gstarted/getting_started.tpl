@@ -83,7 +83,7 @@
             <div class="wrapper-content ">
                 {render_messages}
                 <div class="brand-link">
-                    {t}Welcome to Opennemas{/t}
+                    {t}First steps in OpenNeMaS{/t}
                 </div>
                 <div class="row-fluid">
                     <div class="span12">
@@ -117,7 +117,7 @@
                         <div class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/103592875488169354089" data-rel="publisher"></div>
                         <script type="text/javascript">
                           (function() {
-                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
                             po.src = 'https://apis.google.com/js/plusone.js';
                             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
                           })();

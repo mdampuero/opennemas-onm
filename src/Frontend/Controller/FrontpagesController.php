@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -59,6 +58,7 @@ class FrontpagesController extends Controller
 
         $cm = new \ContentManager;
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+
         $contentsInHomepage = $cm->getInTime($contentsInHomepage);
 
         // Fetch ads
@@ -82,7 +82,7 @@ class FrontpagesController extends Controller
             $this->view->assign(
                 array(
                     'actual_category_id'    => $actualCategoryId,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                     'category_data'         => $categoryData,
                     'time'                  => time(),
                 )
@@ -94,7 +94,7 @@ class FrontpagesController extends Controller
             /***** GET ALL FRONTPAGE'S IMAGES *******/
             $imageIdsList = array();
             foreach ($contentsInHomepage as $content) {
-                if (isset($content->img1)) {
+                if (isset($content->img1) && !empty($content->img1)) {
                     $imageIdsList []= $content->img1;
                 }
             }
@@ -134,6 +134,7 @@ class FrontpagesController extends Controller
             'frontpage/frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
+                'x-tags'   => 'frontpage-page,'.$categoryName,
             )
         );
     }
@@ -196,7 +197,7 @@ class FrontpagesController extends Controller
                     'category_name'         => $categoryName,
                     'actual_category'       => $actualCategory,
                     'actual_category_id'    => $wsActualCategoryId,
-                    'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category_title' => $ccm->getTitle($categoryName),
                 )
             );
 
@@ -221,6 +222,7 @@ class FrontpagesController extends Controller
             'frontpage/frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
+                'x-tags'   => 'externalfrontpage-page,'.$categoryName,
             )
         );
     }

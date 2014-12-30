@@ -14,8 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
-use Onm\Settings as s;
 
 class UsersController extends ContentController
 {
@@ -23,10 +21,9 @@ class UsersController extends ContentController
      * Deletes multiple users at once give them ids
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request, $contentType = null)
+    public function batchDeleteAction(Request $request)
     {
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 
@@ -195,10 +192,9 @@ class UsersController extends ContentController
      * Deletes a user.
      *
      * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function deleteAction($id, $contentType = null)
+    public function deleteAction($id)
     {
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__);
 

@@ -56,8 +56,7 @@ class DatabaseProvider extends MigrationProvider
             $schema['translation']['name'],
             $this->translations
         )) {
-            foreach ($this->translations[$schema['translation']['name']] as
-                    $oldId => $newId) {
+            foreach (array_keys($this->translations[$schema['translation']['name']]) as $oldId) {
                 $translations .= $oldId . ', ';
             }
         }

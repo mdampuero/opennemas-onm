@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 use Onm\StringUtils;
 
 /**
@@ -45,13 +44,11 @@ class StaticPagesController extends Controller
     /**
      * Shows a list of the static pages
      *
-     * @param Request $request the request object
-     *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return void
      *
      * @Security("has_role('STATIC_PAGE_ADMIN')")
      **/
-    public function listAction(Request $request)
+    public function listAction()
     {
         return $this->render('static_pages/list.tpl');
     }
@@ -81,7 +78,10 @@ class StaticPagesController extends Controller
                 )
             );
         } else {
-            m::add(sprintf(_('Unable to find a static page with the id "%d".'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a static page with the id "%d".'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
         }
@@ -118,13 +118,13 @@ class StaticPagesController extends Controller
                 $data,
                 array(
                     'slug'     => $staticPage->buildSlug($data['slug'], $data['id'], $data['title']),
-                    'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                    'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                 )
             );
 
             $staticPage->create($data);
 
-            m::add(_('Static page created successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Static page created successfully.'));
 
             return $this->redirect(
                 $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
@@ -152,11 +152,14 @@ class StaticPagesController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$staticPage->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this static page because you don't have enough privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("You can't modify this static page because you don't have enough privileges.")
+                );
             } else {
                 // Check empty data
                 if (count($request->request) < 1) {
-                    m::add(_("Static Page data sent not valid."), m::ERROR);
+                    $this->get('session')->getFlashBag()->add('error', _("Static Page data sent not valid."));
 
                     return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
                 }
@@ -174,12 +177,15 @@ class StaticPagesController extends Controller
                     $data,
                     array(
                         'slug'     => $staticPage->buildSlug($data['slug'], 0, $data['title']),
-                        'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
+                        'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
                     )
                 );
 
                 $staticPage->update($data);
-                m::add(_("Static page updated successfully."), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Static page updated successfully.")
+                );
             }
 
             return $this->redirect(
@@ -231,7 +237,7 @@ class StaticPagesController extends Controller
         // If the action is an Ajax request handle it, if not redirect to list
         if ($request->isXmlHttpRequest()) {
             try {
-                $output  = StringUtils::normalize_metadata($metadata);
+                $output  = StringUtils::normalizeMetadata($metadata);
             } catch (\Exception $e) {
                 $output = _("Can't get static page metadata.");
             }

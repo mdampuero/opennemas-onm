@@ -1,9 +1,9 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,16 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
 
 /**
- * ResponseListener fixes the Response headers based on the Request.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Handles all backend requests when maintenance mode is enabled.
  */
 class MaintenanceModeListener implements EventSubscriberInterface
 {
     /**
-     * Filters the Response.
+     * Checks if maintenance mode is enabled and returns a custom response.
      *
-     * @param GetResponseEvent $event A GetResponseEvent instance
+     * @param GetResponseEvent $event A GetResponseEvent instance.
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -38,7 +36,6 @@ class MaintenanceModeListener implements EventSubscriberInterface
         }
 
         $request    = $event->getRequest();
-        $requestUri = $request->getRequestUri();
 
         if (strpos($request->getRequestUri(), '/admin') === 0) {
             $maintenanceFile = APP_PATH.'/../.maintenance';
@@ -64,7 +61,7 @@ class MaintenanceModeListener implements EventSubscriberInterface
                     // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
 
                     // set handling to false otherwise it wont be able to handle further more
-                    $handling = false;
+                    // $handling = false;
 
                     // re-throw the exception from within HttpKernel as this is a catch-all
                     return;
@@ -75,6 +72,11 @@ class MaintenanceModeListener implements EventSubscriberInterface
         }
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array The event names to listen to.
+     */
     public static function getSubscribedEvents()
     {
         return array(

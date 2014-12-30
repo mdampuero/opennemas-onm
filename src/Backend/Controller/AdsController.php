@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for managing ads
@@ -62,12 +61,11 @@ class AdsController extends Controller
     /**
      * Lists all the available ads.
      *
-     * @param  Request  $request The request object.
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         // Get ads positions
         $positionManager = $this->container->get('instance_manager')
@@ -152,10 +150,14 @@ class AdsController extends Controller
             );
 
             if ($advertisement->create($data)) {
-                m::add(_('Advertisement successfully created.'), m::SUCCESS);
+                $level = 'success';
+                $message = _('Advertisement successfully created.');
             } else {
-                m::add(_('Unable to create the new advertisement.'), m::ERROR);
+                $level = 'error';
+                $message = _('Unable to create the new advertisement.');
             }
+
+            $this->get('session')->getFlashBag()->add($level, $message);
 
             return $this->redirect(
                 $this->generateUrl(
@@ -174,7 +176,8 @@ class AdsController extends Controller
                 $serverUrl = $openXsettings['url'];
             }
 
-            $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
+            $positionManager = $this->container->get('instance_manager')
+                                    ->current_instance->theme->getAdsPositionManager();
             return $this->render(
                 'advertisement/new.tpl',
                 array(
@@ -208,14 +211,20 @@ class AdsController extends Controller
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
-            m::add(sprintf(_('Unable to find the advertisement with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_publisher != $_SESSION['userid']
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
-            m::add(_("You can't modify this content because you don't have enought privileges."));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this content because you don't have enough privileges.")
+            );
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
@@ -259,14 +268,20 @@ class AdsController extends Controller
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
-            m::add(sprintf(_('Unable to find the advertisement with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the advertisement with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if (!$ad->isOwner($_SESSION['userid'])
             && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
-            m::add(_("You can't modify this content because you don't have enought privileges."));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this content because you don't have enough privileges.")
+            );
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
@@ -306,9 +321,15 @@ class AdsController extends Controller
         );
 
         if ($ad->update($data)) {
-            m::add(_('Advertisement successfully updated.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Advertisement successfully updated.')
+            );
         } else {
-            m::add(_('Unable to update the advertisement data.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to update the advertisement data.')
+            );
         }
 
         return $this->redirect(
@@ -335,14 +356,13 @@ class AdsController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
 
-        $em  = $this->get('advertisement_repository');
-        $ids = $this->get('frontpage_repository')->getContentIdsForHomepageOfCategory();
-
         $filters = array(
             'content_type_name'  => array(array('value' => 'advertisement')),
             'type_advertisement' => array(array('value' => 37)),
+            'in_litter'          => array(array('value' => 1, 'operator' => '!='))
         );
 
+        $em       = $this->get('advertisement_repository');
         $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countAds = $em->countBy($filters);
 
@@ -401,7 +421,10 @@ class AdsController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
