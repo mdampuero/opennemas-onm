@@ -53,29 +53,6 @@ function clearslash($string)
 }
 
 /**
- * Stablishes a cookie value in a secure way
- *
- * @param string $name the name of the cookie
- * @param mixed $value the value to set into the cookie
- * @param int $expires the seconds during the cookie will be valid
- * @param int $domain the path for which the cookie will be valid
- *
- * @return void
- */
-function setCookieSecure($name, $value, $expires = 0, $domain = '/')
-{
-    setcookie(
-        $name,
-        $value,
-        $expires,
-        $domain,
-        $_SERVER['SERVER_NAME'],
-        isset($_SERVER['HTTPS']),
-        true
-    );
-}
-
-/**
  * Register in the log one event in the content
  *
  * @return void
