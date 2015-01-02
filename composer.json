@@ -69,7 +69,9 @@
         "hwi/oauth-bundle": "0.3.*@dev",
         "recaptcha/php5": "1.1.0",
         "smarty/smarty" : "3.1.21",
-        "smarty-gettext/smarty-gettext": "@stable"
+        "smarty-gettext/smarty-gettext": "@stable",
+
+	    "roave/security-advisories": "dev-master"
     },
     "scripts": {
         "post-root-package-install": [

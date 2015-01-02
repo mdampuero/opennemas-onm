@@ -2166,5 +2166,4 @@ class ContentManager
 
         return $contentID;
     }
-
 }
