@@ -33,7 +33,9 @@ class AclUserController extends Controller
     /**
      * Show a paginated list of backend users
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
      */
@@ -802,7 +804,7 @@ class AclUserController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The user's id.
-     * @return void
+     * @return Response          The response object.
      */
     public function disconnectAction($id, $resource)
     {
