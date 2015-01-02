@@ -51,7 +51,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'author.update' => [
                 ['deleteAllAuthorsCaches', 5],
-                ['deleteUsersCache', 10],
+                ['deleteUserCache', 10],
             ],
             'author.delete' => [
                 ['mockHookAction', 0],
