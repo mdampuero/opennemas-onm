@@ -17,29 +17,44 @@ class Slider
     /**
      * Creates an slider pager from a set of parameters
      *
-     * @param int $totalElements number of elements
-     * @param int $itemsPerpage number of elements to show per page
-     * @param string $baseUrl the base url to use in the pager
+     * @param int $options number of elements
      *
      * @return Pager the pager object
      **/
-    public static function create($totalElements, $itemsPerpage, $baseUrl)
+    public static function create($options)
     {
-        $pageComponent = (strpos($baseUrl, '?')) ? '&page=%d' : '?page=%d';
+        // Check required options and set default ones
+        if (!array_key_exists('base_url', $options)) {
+            throw new \LogicException('Provide a base_url for the paginator component.');
+        }
+
+        if (!array_key_exists('elements_per_page', $options)) {
+            $options['elements_per_page'] = 10;
+        }
+
+        $pageComponent = (strpos($options['base_url'], '?')) ? '&page=%d' : '?page=%d';
+
+        $defaultOptions = [
+            'mode'        => 'Sliding',
+            'append'      => false,
+            'path'        => '',
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'perPage'     => $options['elements_per_page'],
+            'totalItems'  => $options['total_items'],
+            'fileName'    => $options['base_url'].$pageComponent,
+        ];
+
+
+
+        unset($options['base_url']);
+        unset($options['elements_per_page']);
+
+        // Merge default options with providers
+        $options = array_merge($defaultOptions, $options);
 
         // Build the pager
-        return \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerpage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $totalElements,
-                'fileName'    => $baseUrl.$pageComponent,
-            )
-        );
+        return \Pager::factory($options);
     }
 }
