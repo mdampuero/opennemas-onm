@@ -51,7 +51,7 @@ class RedirectorsController extends Controller
         }
 
         if ($oldVersion == 'editmaker') {
-            $newContentID = \Content::resolveID($newContentID);
+            $newContentID = \ContentManager::resolveID($newContentID);
         }
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {

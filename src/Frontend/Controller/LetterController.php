@@ -112,7 +112,7 @@ class LetterController extends Controller
         $this->view->setConfig('letter-inner');
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
-        $letterId = \Content::resolveID($dirtyID);
+        $letterId = \ContentManager::resolveID($dirtyID);
 
         if (empty($letterId)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

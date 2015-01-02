@@ -269,7 +269,7 @@ class BlogsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('blog_id');
-        $blogID  = \Content::resolveID($dirtyID);
+        $blogID  = \ContentManager::resolveID($dirtyID);
 
         // Redirect to blog frontpage if blog_id wasn't provided
         if (empty($blogID)) {

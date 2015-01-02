@@ -23,31 +23,24 @@ use Onm\Settings as s;
 class ArticlesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-        define('BASE_PATH', '/mobile');
-    }
-
-    /**
-     * Displays the mobile version of an opinion
+     * Displays the mobile version of an article
      *
      * @return Response the response object
      **/
     public function showAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('articles-mobile');
+
+
+        define('BASE_PATH', '/mobile');
 
         $dirtyID = $request->query->getDigits('article_id');
 
-        $articleID = \Content::resolveID($dirtyID);
+        $articleID = \ContentManager::resolveID($dirtyID);
 
-        // Get entity repository for article
-        $er = $this->get('entity_repository');
+        // Search in the entity repository for an article
+        $er      = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
 
         // Check for paywall
@@ -59,7 +52,7 @@ class ArticlesController extends Controller
         ) {
             // Category manager to retrieve category of article
             $ccm = \ContentCategoryManager::get_instance();
-            $cm = new \ContentManager();
+            $cm  = new \ContentManager();
 
             $article->category_name  = $ccm->getName($article->category);
             $article->category_title = $article->loadCategoryTitle($article->id);

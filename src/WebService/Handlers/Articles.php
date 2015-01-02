@@ -18,15 +18,6 @@ class Articles
     public $restler;
 
     /**
-    * Get intance for contentManager
-    * This is used in some actions at lists function
-    */
-    public function __construct()
-    {
-        $this->cm = new \ContentManager();
-    }
-
-    /**
      * Get a complete article
      *
      * @param $id the id of the requested article
@@ -37,11 +28,12 @@ class Articles
     {
         $this->validateInt($id);
 
-        $er              = getService('entity_repository');
-        $ccm             = \ContentCategoryManager::get_instance();
+        $er       = getService('entity_repository');
+        $this->cm = new \ContentManager();
+        $ccm      = \ContentCategoryManager::get_instance();
 
         // Resolve dirty Id
-        $articleId = \Content::resolveID($id);
+        $articleId = \ContentManager::resolveID($id);
 
         // Fetch the content to work with
         $article = $er->find('Article', $articleId);

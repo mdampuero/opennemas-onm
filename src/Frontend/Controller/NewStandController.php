@@ -195,7 +195,7 @@ class NewStandController extends Controller
     {
         $dirtyID = $request->query->getDigits('id', null);
 
-        $epaperId = \Content::resolveID($dirtyID);
+        $epaperId = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
