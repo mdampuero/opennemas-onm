@@ -1421,7 +1421,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        if ($rs->fields['total'] >= $maxUsers) {
+        if ($rs->fields['total'] > $maxUsers) {
             return false;
         }
 
@@ -1442,18 +1442,13 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return -1;
         }
 
-        $sql = 'SELECT count(id) as total FROM `users` WHERE fk_user_group<>4 AND activated=1';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $activatedUsers = getService('instance_manager')->current_instance->users;
 
-        if ($rs === false) {
+        if ($activatedUsers > $maxUsers) {
             return false;
         }
 
-        if ($rs->fields['total'] > $maxUsers) {
-            return false;
-        }
-
-        return $maxUsers - $rs->fields['total'];
+        return $maxUsers - $activatedUsers;
     }
 
     /**

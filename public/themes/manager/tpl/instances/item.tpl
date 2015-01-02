@@ -280,6 +280,12 @@
                             </span>
                         </div>
                         <div class="form-group">
+                            <label class="form-label" for="activated">{t}Max activated users{/t}</label>
+                            <div class="controls">
+                                <input type="text" id="max_users" ng-model="instance.external.max_users">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label" for="template">{t}Minimum password level{/t}</label>
                             <div class="controls">
                                 <select ng-model="instance.external.pass_level">

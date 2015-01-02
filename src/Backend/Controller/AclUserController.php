@@ -37,7 +37,7 @@ class AclUserController extends Controller
      *
      * @Security("has_role('USER_ADMIN')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
@@ -215,7 +215,7 @@ class AclUserController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } elseif (($data['avatar_img_id']) == 1) {
                     $data['avatar_img_id'] = $user->avatar_img_id;
@@ -238,19 +238,15 @@ class AclUserController extends Controller
                         $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                     }
 
-                    // Clear caches
-                    $this->dispatchEvent('author.update', array('authorId' => $userId));
-                   
                     if ($user->id == $_SESSION['userid']) {
                         $_SESSION['user_language'] = $meta['user_language'];
                     }
+
+                    // Clear caches
+                    $this->dispatchEvent('user.update', array('user' => $user));
                     // Check if is an author and delete caches
                     if (in_array('3', $data['id_user_group'])) {
-                        // Clear caches
-                        $this->dispatchEvent('author.update', array('authorId' => $userId));
-                    } else {
-                        // Clear caches
-                        $this->dispatchEvent('user.update', array('authorId' => $userId));
+                        $this->dispatchEvent('author.update', array('id' => $userId));
                     }
 
                     $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));

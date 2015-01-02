@@ -17,6 +17,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 site_language: 'es_ES',
                 pass_level:    -1,
                 max_mailing:   0,
+                max_users:   0,
                 time_zone:     '335'
             }
         };
