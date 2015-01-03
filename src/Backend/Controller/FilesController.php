@@ -412,22 +412,14 @@ class FilesController extends Controller
         $files      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countFiles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countFiles,
-                'fileName'    => $this->generateUrl(
-                    'admin_files_content_provider_related',
-                    array( 'category' => $categoryId,)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countFiles,
+            'base_url'          => $this->generateUrl(
+                'admin_files_content_provider_related',
+                ['category' => $categoryId]
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',

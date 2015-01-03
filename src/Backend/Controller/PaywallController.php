@@ -181,26 +181,18 @@ class PaywallController extends Controller
 
         $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($users),
-                'fileName'    => $this->generateUrl(
-                    'admin_paywall_users',
-                    array(
-                        'order'      => $order,
-                        'type'       => $type,
-                        'searchname' => $name,
-                    )
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => count($users),
+            'base_url'          => $this->generateUrl(
+                'admin_paywall_users',
+                array(
+                    'order'      => $order,
+                    'type'       => $type,
+                    'searchname' => $name,
+                )
+            ),
+        ]);
 
         return $this->render(
             'paywall/users.tpl',
@@ -396,25 +388,17 @@ class PaywallController extends Controller
 
         $purchasesPage = array_slice($purchases, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($purchases),
-                'fileName'    => $this->generateUrl(
-                    'admin_paywall_purchases',
-                    array(
-                        'order'      => $order,
-                        'searchname' => $name,
-                    )
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => count($purchases),
+            'base_url'          => $this->generateUrl(
+                'admin_paywall_purchases',
+                array(
+                    'order'      => $order,
+                    'searchname' => $name,
+                )
+            ),
+        ]);
 
         return $this->render(
             'paywall/purchases.tpl',

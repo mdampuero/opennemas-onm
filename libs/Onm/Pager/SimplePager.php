@@ -65,7 +65,7 @@ class SimplePager
         return $output;
     }
 
-     /**
+    /**
      * Returns the HTML paginate with href params
      *
      * @param array $params the params for this function

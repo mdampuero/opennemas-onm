@@ -591,22 +591,16 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles_content_provider_in_frontpage',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countArticles,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl(
+                'admin_articles_content_provider_in_frontpage',
+                ['category' => $categoryId]
+            ),
+        ]);
+
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
             array(
@@ -645,28 +639,21 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => 8,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles_content_provider_suggested',
-                    array('category' => $category,)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => 8,
+            'total_items'       => $countArticles,
+            'delta'             => 4,
+            'base_url'          => $this->generateUrl(
+                'admin_articles_content_provider_suggested',
+                ['category' => $category]
+            ),
+        ]);
 
         return $this->render(
             'article/content-provider-suggested.tpl',
             array(
                 'articles' => $articles,
-                'pager'   => $pagination,
+                'pager'    => $pagination,
             )
         );
     }
@@ -700,22 +687,14 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), 8, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => 8,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles_content_provider_category',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => 8,
+            'total_items'       => $countArticles,
+            'base_url'          => $this->generateUrl(
+                'admin_articles_content_provider_category',
+                ['category' => $categoryId]
+            ),
+        ]);
 
         return $this->render(
             'article/content-provider-category.tpl',
@@ -753,22 +732,15 @@ class ArticlesController extends Controller
         $articles      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countArticles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles_content_provider_related',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countArticles,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl(
+                'admin_articles_content_provider_related',
+                ['category' => $categoryId]
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',

@@ -46,8 +46,6 @@ class Slider
             'fileName'    => $options['base_url'].$pageComponent,
         ];
 
-
-
         unset($options['base_url']);
         unset($options['elements_per_page']);
 
