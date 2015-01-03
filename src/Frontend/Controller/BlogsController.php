@@ -212,7 +212,7 @@ class BlogsController extends Controller
                     'total_items'       => $countItems,
                     'base_url'          => $this->generateUrl(
                         'frontend_blog_author_frontpage',
-                        ['author_slug' => $author->slug],
+                        ['author_slug' => $author->slug]
                     ),
                 ]);
 
