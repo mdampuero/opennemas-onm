@@ -69,8 +69,14 @@
         "hwi/oauth-bundle": "0.3.*@dev",
         "smarty/smarty" : "3.1.21",
         "smarty-gettext/smarty-gettext": "@stable",
-        "lexik/jwt-authentication-bundle": "@stable"
+        "lexik/jwt-authentication-bundle": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@github.com:openhost/jwt-authentication-bundle.git"
+        }
+    ],
     "scripts": {
         "post-root-package-install": [
             "SymfonyStandard\\Composer::hookRootPackageInstall"
