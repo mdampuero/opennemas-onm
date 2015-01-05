@@ -810,7 +810,7 @@ class ArticlesController extends Controller
 
         $videoInt = '';
         if (isset($article->fk_video2)
-            && ($article->fk_video2 != 09)
+            && ($article->fk_video2 != 0)
         ) {
             $videoInt = $er->find('Video', $article->fk_video2);
         }
