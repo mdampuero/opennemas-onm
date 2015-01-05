@@ -58,7 +58,7 @@ class ArticlesController extends Controller
             $article->category_title = $article->loadCategoryTitle($article->id);
 
             // Set inner photo if available
-            if (isset($article->img2) and ($article->img2 != 0)) {
+            if (isset($article->img2) && ($article->img2 != 0)) {
                 $photo = $er->find('Photo', $article->img2);
                 $article->photo = $photo;
                 $this->view->assign('photo', $photo->path_file.$photo->name);

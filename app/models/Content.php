@@ -570,7 +570,7 @@ class Content
         } else {
             $data['slug'] = StringUtils::getTitle($data['slug']);
         }
-        if (empty($data['description'] ) && !isset ($data['description'])) {
+        if (empty($data['description']) && !isset ($data['description'])) {
             $data['description']='';
         }
         if (empty($data['metadata']) && !isset ($data['metadata'])) {

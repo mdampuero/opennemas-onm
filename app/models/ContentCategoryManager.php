@@ -862,8 +862,9 @@ class ContentCategoryManager
         foreach ($fullcat as $prima) {
 
             if (!empty($category)
-                && ($prima->pk_content_category == $category)
-                && ($category !='home') && ( $category !='todos')
+                && $prima->pk_content_category == $categor
+                && $category !='home'
+                && $category !='todos'
             ) {
                 $categoryData[] = $prima;
             }
