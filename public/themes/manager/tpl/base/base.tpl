@@ -64,7 +64,7 @@
     {/block}
 
 </head>
-<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.isCollapsed() }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -112,8 +112,8 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    {include file="base/sidebar.tpl"}
-    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
+    <sidebar class="main-sidebar" id="my-m" ng-src="manager_ws_sidebar_list"></sidebar>
+    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.pin()"></div>
     <!-- END SIDEBAR -->
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
@@ -262,7 +262,6 @@
 
             @ManagerTheme/js/controllers/*,
 
-            @Common/plugins/webarch/js/core.js,
             @Common/js/manager.js
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
