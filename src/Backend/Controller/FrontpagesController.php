@@ -326,7 +326,7 @@ class FrontpagesController extends Controller
         }
 
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
         $cacheManager->delete($section . '|RSS');
         $cacheManager->delete($section . '|0');
 
