@@ -163,9 +163,7 @@ angular.module('onm.sidebar', [])
               + urls.join(' || ') + '}"></span>';
           };
 
-          if (item.route) {
-            tpl += '</a>'
-          }
+          tpl += '</a>'
 
           // Add sub-items
           if (item.items && item.items.length > 0) {
