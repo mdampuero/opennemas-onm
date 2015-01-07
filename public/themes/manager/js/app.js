@@ -22,6 +22,7 @@ angular.module('ManagerApp', [
   'onm.form-autofill-fix',
   'onm.history',
   'onm.resizable',
+  'onm.sidebar',
   'ManagerApp.controllers'
 ]);
 
