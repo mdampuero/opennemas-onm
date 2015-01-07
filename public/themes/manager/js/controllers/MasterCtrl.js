@@ -9,11 +9,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'routing', 'history', 'webStorage', 'messenger',
-    'paginationConfig', 'cfpLoadingBar',
+    'paginationConfig', 'cfpLoadingBar', 'sidebar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, routing,
-        history, webStorage, messenger, paginationConfig, cfpLoadingBar
+        history, webStorage, messenger, paginationConfig, cfpLoadingBar, sidebar
     ) {
         /**
          * The routing service.
@@ -23,15 +23,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         $scope.routing = routing;
 
         /**
-         * The sidebar toggle status.
+         * Sidebar service
          *
-         * @type integer
+         * @type Object
          */
-        $scope.sidebar = {
-            wanted: 0,
-            current: 0,
-            forced: 0,
-        };
+        $scope.sidebar = sidebar;
 
         /**
          * Flag to show modal window for login only once.
@@ -82,27 +78,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             paginationConfig.nextText     = $filter('translate')('Next');
             paginationConfig.previousText = $filter('translate')('Previous');
-        };
-
-        /**
-         * Checks if the section is active.
-         *
-         * @param  string route Route name of the section to check.
-         *
-         * @return True if the current section
-         */
-        $scope.isActive = function(route) {
-            var url = routing.ngGenerateShort(route);
-            return $location.path() == url;
-        };
-
-        /**
-         * Toggles the sidebar.
-         *
-         * @param integer status The toggle status.
-         */
-        $scope.toggle = function(status) {
-            $scope.mini = status;
         };
 
         /**
@@ -335,15 +310,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param integer ov Old width value.
          */
         $scope.$watch('windowWidth', function(nv, ov) {
-            if (nv < 992)  {
-                $scope.sidebar.forced  = 1;
-                $scope.sidebar.current = 1;
-            } else {
-                $scope.sidebar.forced = 0;
-                $scope.sidebar.current = $scope.sidebar.wanted;
-            }
-
-            $scope.checkFiltersBar();
+            sidebar.check();
         });
 
         /**
@@ -367,10 +334,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 + webStorage.local.get('token');
             $scope.user = webStorage.local.get('user');
             $scope.loaded = true;
-        }
-
-        $scope.test = function() {
-            console.log($scope.sidebar);
         }
     }
 ]);

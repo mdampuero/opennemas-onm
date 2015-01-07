@@ -12,9 +12,7 @@ angular.module('onm.sidebar', [])
        * @type Object
        */
       var sidebar = {
-        class:     'page-sidebar',
         collapsed: false,
-        id:        'main_menu',
         forced:    false,
         model:     {
           class: 'page-sidebar'
@@ -26,10 +24,12 @@ angular.module('onm.sidebar', [])
          * Checks the sidebar status basing on the current window width.
          */
         check: function() {
-          sidebar.forced = false;
+          sidebar.forced    = false;
+          sidebar.collapsed = sidebar.pinned;
 
-          if ($window.width < threshold) {
-            sidebar.forced = true;
+          if ($window.innerWidth < sidebar.threshold) {
+            sidebar.forced    = true;
+            sidebar.collapsed = true;
           }
         },
 
