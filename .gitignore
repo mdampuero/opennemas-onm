@@ -46,4 +46,4 @@ public/themes/*
 !public/themes/admin
 !public/themes/manager
 public/assets/components
-
+public/components
