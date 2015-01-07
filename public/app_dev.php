@@ -25,7 +25,7 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 require_once __DIR__.'/../app/AppKernel.php';
 
 // Little hack to allow final slashes in the url
-$_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
+$_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();

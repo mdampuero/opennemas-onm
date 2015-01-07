@@ -51,7 +51,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'author.update' => [
                 ['deleteAllAuthorsCaches', 5],
-                ['deleteUsersCache', 10],
+                ['deleteUserCache', 10],
             ],
             'author.delete' => [
                 ['mockHookAction', 0],
@@ -214,33 +214,34 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function deleteSmartyCache(Event $event)
     {
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         $content = $event->getArgument('content');
 
         if (property_exists($content, 'pk_article')) {
-            $tplManager->delete(
+            $cacheManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->pk_article
             );
 
             // Deleting frontpage cache files
-            $tplManager->delete('frontpage|home');
-            $tplManager->delete('home|RSS');
-            $tplManager->delete('last|RSS');
-            $tplManager->delete(
+            $cacheManager->delete('frontpage|home');
+            $cacheManager->delete('home|RSS');
+            $cacheManager->delete('last|RSS');
+            $cacheManager->delete(
                 'blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
             );
-            $tplManager->delete(
+            $cacheManager->delete(
                 'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
             );
-            $tplManager->delete(
+            $cacheManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS'
             );
 
             $this->cleanOpcode();
         } elseif (property_exists($content, 'pk_opinion')) {
-            $tplManager->delete('opinion', 'opinion_frontpage.tpl');
-            $tplManager->delete('blog', 'blog_frontpage.tpl');
+            $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
+            $cacheManager->delete('blog', 'blog_frontpage.tpl');
         }
     }
 
@@ -293,15 +294,16 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function refreshFrontpage(Event $event)
     {
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         if (isset($_REQUEST['category'])) {
             $ccm = \ContentCategoryManager::get_instance();
             $categoryName = $ccm->getName($_REQUEST['category']);
-            $tplManager->delete(
+            $cacheManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
             );
-            $tplManager->delete(
+            $cacheManager->delete(
                 'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName)
             );
 
@@ -316,7 +318,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function cleanFrontpage(Event $event)
     {
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         $category = $event->getArgument('category');
 
@@ -327,7 +330,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 $categoryName = 'home';
             } elseif ($category == 'opinion') {
                 $categoryName = 'opinion';
-                $tplManager->delete($categoryName, 'opinion_frontpage.tpl');
+                $cacheManager->delete($categoryName, 'opinion_frontpage.tpl');
             } else {
                 $categoryName = $ccm->getName($category);
             }
@@ -335,10 +338,10 @@ class HooksSubscriber implements EventSubscriberInterface
             $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);
             $categoryName = preg_replace('@-@', '', $categoryName);
 
-            $tplManager->delete($categoryName . '|RSS');
-            $tplManager->delete('last|RSS');
+            $cacheManager->delete($categoryName . '|RSS');
+            $cacheManager->delete('last|RSS');
 
-            $tplManager->delete('frontpage|'.$categoryName);
+            $cacheManager->delete('frontpage|'.$categoryName);
             $this->cacheHandler->delete('frontpage_elements_map_' . $category);
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
@@ -354,7 +357,8 @@ class HooksSubscriber implements EventSubscriberInterface
      **/
     public function refreshFrontpageForAllCategories()
     {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         $ccm = ContentCategoryManager::get_instance();
 
@@ -362,8 +366,8 @@ class HooksSubscriber implements EventSubscriberInterface
         $output ='';
 
         foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
             $message = _("Homepage for category %s cleaned successfully.");
             $output .= sprintf($message, $category->name);
         }
@@ -380,8 +384,6 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $authorId = $event->getArgument('id');
 
-        // Delete caches for all author opinions and frontpages
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
         // Get the list articles for this author
         $cm = new \ContentManager();
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
@@ -390,16 +392,20 @@ class HooksSubscriber implements EventSubscriberInterface
             'ORDER BY created DESC '
         );
 
+        // Delete caches for all author opinions and frontpages
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+
         if (!empty($opinions)) {
             foreach ($opinions as &$opinion) {
-                $tplManager->delete('opinion|'.$opinion['id']);
+                $cacheManager->delete('opinion|'.$opinion['id']);
             }
         }
         // Delete opinions frontpage caches
-        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
 
         // Delete author frontpages caches
-        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
 
         $this->cleanOpcode();
     }
@@ -416,15 +422,16 @@ class HooksSubscriber implements EventSubscriberInterface
         $opinionId = $event->getArgument('opinionId');
 
         // Delete caches for opinion inner, opinion frontpages and author frontpages
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         $authorSlug = preg_replace('/[^a-zA-Z0-9\s]+/', '', $authorSlug);
-        $tplManager->delete($authorSlug, 'blog_author_index.tpl');
-        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
-        $tplManager->delete('opinion|'.$opinionId);
-        $tplManager->delete('blog', 'blog_frontpage.tpl');
-        $tplManager->delete('blog|'.$opinionId);
-        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        $cacheManager->delete($authorSlug, 'blog_author_index.tpl');
+        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
+        $cacheManager->delete('opinion|'.$opinionId);
+        $cacheManager->delete('blog', 'blog_frontpage.tpl');
+        $cacheManager->delete('blog|'.$opinionId);
+        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
 
         $this->cleanOpcode();
     }
@@ -439,10 +446,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $authorId = $event->getArgument('authorId');
 
         // Delete caches for opinion frontpages and author frontpages
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
-        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
-        $tplManager->delete('blog', 'blog_frontpage.tpl');
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        $cacheManager->delete('opinion', 'opinion_frontpage.tpl');
+        $cacheManager->delete('blog', 'blog_frontpage.tpl');
 
         $this->cleanOpcode();
     }

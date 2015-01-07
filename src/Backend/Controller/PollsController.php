@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -127,7 +126,11 @@ class PollsController extends Controller
             $poll = $poll->create($data);
 
             if (!empty($poll->id)) {
-                m::add(_('Poll successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Poll successfully created.')
+                );
+
                 return $this->redirect(
                     $this->generateUrl(
                         'admin_poll_show',
@@ -135,7 +138,10 @@ class PollsController extends Controller
                     )
                 );
             } else {
-                m::add(_('Unable to create the new poll.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new poll.')
+                );
 
                 return $this->redirect(
                     $this->generateUrl(
@@ -165,7 +171,10 @@ class PollsController extends Controller
 
         $poll = new \Poll($id);
         if (is_null($poll->id)) {
-            m::add(sprintf(_('Unable to find the poll with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the poll with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_polls'));
         }
@@ -194,54 +203,58 @@ class PollsController extends Controller
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add('error', _("Poll data sent not valid."));
+
+            return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
+        }
 
         $poll = new \Poll($id);
-        if ($poll->id != null) {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Poll data sent not valid."), m::ERROR);
-
-                return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'id'            => $id,
-                'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
-                'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'favorite'      => $request->request->getDigits('favorite', 0),
-                'with_comment'  => $request->request->getDigits('with_comment', 0),
-                'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'available'     => $request->request->getDigits('available', 0),
-                'item'          => $request->request->get('item'),
-                'votes'         => $request->request->get('votes'),
-                'params'        => $request->request->get('params'),
+        // Check empty data
+        if ($poll->id == null) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find a poll with the id "%s".'), $id)
             );
-            if ($poll->update($data)) {
-                m::add(_('Poll successfully updated.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to update the poll.'), m::ERROR);
-            }
-
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_poll_show', array('id' => $poll->id))
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_polls', array('category' => $data['category']))
-                );
-            }
-        } else {
-            m::add(sprintf(_('Unable to find a poll with the id "%s".'), $id), m::ERROR);
 
             return $this->redirect(
                 $this->generateUrl('admin_polls', array('category' => $data['category']))
             );
         }
+
+
+        $data = array(
+            'id'            => $id,
+            'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+            'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
+            'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'favorite'      => $request->request->getDigits('favorite', 0),
+            'with_comment'  => $request->request->getDigits('with_comment', 0),
+            'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'available'     => $request->request->getDigits('available', 0),
+            'item'          => $request->request->get('item'),
+            'votes'         => $request->request->get('votes'),
+            'params'        => $request->request->get('params'),
+        );
+
+        if ($poll->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Poll successfully updated.')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to update the poll.')
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_poll_show', array('id' => $poll->id))
+        );
     }
 
     /**
@@ -258,13 +271,19 @@ class PollsController extends Controller
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
 
-        if (!empty($id)) {
-            $poll = new \Poll($id);
-            $poll->delete($id);
-            m::add(_("Poll deleted successfully."), m::SUCCESS);
-        } else {
-            m::add(_('You must give an id for delete a poll.'), m::ERROR);
+        if (empty($id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id for delete a poll.')
+            );
         }
+
+        $poll = new \Poll($id);
+        $poll->delete($id);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _("Poll deleted successfully.")
+        );
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect(
@@ -307,22 +326,14 @@ class PollsController extends Controller
         $countPolls = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl(
-                    'admin_polls_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countPolls,
+            'base_url'          => $this->generateUrl(
+                'admin_polls_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'poll/content-provider.tpl',
@@ -360,22 +371,16 @@ class PollsController extends Controller
         $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countPolls = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl(
-                    'admin_polls_content_provider_related',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countPolls,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl(
+                'admin_polls_content_provider_related',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
@@ -416,7 +421,7 @@ class PollsController extends Controller
             foreach ($data as $key => $value) {
                 s::set($key, $value);
             }
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_polls_config'));
         } else {

@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -168,7 +167,7 @@ class PollsController extends Controller
         $this->view->setConfig('poll-inner');
 
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
-        $pollId = \Content::resolveID($dirtyID);
+        $pollId  = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {
@@ -198,16 +197,14 @@ class PollsController extends Controller
                     'ORDER BY created DESC LIMIT 5'
                 );
 
-                $this->view->assign(
-                    array(
-                        'poll'       => $poll,
-                        'content'    => $poll,
-                        'contentId'  => $pollId,
-                        'items'      => $items,
-                        'otherPolls' => $otherPolls,
-                    )
-                );
-            } // end if $tpl->is_cached
+                $this->view->assign([
+                    'poll'       => $poll,
+                    'content'    => $poll,
+                    'contentId'  => $pollId,
+                    'items'      => $items,
+                    'otherPolls' => $otherPolls,
+                ]);
+            }
 
             // Used on module_comments.tpl
             $this->view->assign('contentId', $pollId);
@@ -263,7 +260,7 @@ class PollsController extends Controller
     {
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
-        $pollId = \Content::resolveID($dirtyID);
+        $pollId = \ContentManager::resolveID($dirtyID);
 
         if (empty($pollId) || is_null($pollId)) {
             $pollId = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
@@ -287,7 +284,7 @@ class PollsController extends Controller
         $voted = 0;
 
         if (!empty($answer) && !isset($cookie) && ($poll->status != 'closed')) {
-            $ip = getRealIp();
+            $ip    = getUserRealIP();
             $voted = $poll->vote($answer, $ip);
 
             $valid = 1;
@@ -341,14 +338,17 @@ class PollsController extends Controller
      **/
     protected function cleanCache($categoryName, $pollId)
     {
-        $tplManager = new \TemplateCacheManager($this->view->templateBaseDir);
-        $cacheID    = $this->view->generateCacheId($categoryName, '', $pollId);
-        $tplManager->delete($cacheID, 'poll.tpl');
 
-        $cacheID = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
 
-        $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
-        $tplManager->delete($cacheID, 'poll_frontpage.tpl');
+        $cacheID      = $this->view->generateCacheId($categoryName, '', $pollId);
+        $cacheManager->delete($cacheID, 'poll.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
+
+        $cacheID      = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
+        $cacheManager->delete($cacheID, 'poll_frontpage.tpl');
     }
 }

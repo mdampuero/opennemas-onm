@@ -1474,7 +1474,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         // Check upload directory
         if (!is_dir($uploadDirectory)) {
-            \FilesManager::createDirectory($uploadDirectory);
+            \Onm\FilesManager::createDirectory($uploadDirectory);
         }
 
         // Upload file

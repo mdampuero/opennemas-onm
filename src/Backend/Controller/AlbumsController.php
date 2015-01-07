@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the system information
@@ -113,9 +112,10 @@ class AlbumsController extends Controller
             $categoryName = $ccm->getName($request->request->get('category'));
 
             // Clean cache album home and frontpage for category
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
-            $tplManager->delete('home|1');
+            $cacheManager = $this->get('template_cache_manager');
+            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
+            $cacheManager->delete('home|1');
 
             // Return user to list if has no update acl
             if (Acl::check('ALBUM_UPDATE')) {
@@ -302,9 +302,10 @@ class AlbumsController extends Controller
             _("Album updated successfully.")
         );
 
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
-        $tplManager->delete('home|1');
+        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+        $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
+        $cacheManager->delete('home|1');
 
         return $this->redirect(
             $this->generateUrl('admin_album_show', array('id' => $album->id))
@@ -372,22 +373,11 @@ class AlbumsController extends Controller
         $countAlbums = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countAlbums,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countAlbums,
+            'base_url'          => $this->generateUrl('admin_albums_content_provider', ['category' => $categoryId]),
+        ]);
 
         return $this->render(
             'album/content-provider.tpl',
@@ -414,33 +404,26 @@ class AlbumsController extends Controller
         $category = $this->get('category_repository')->find($categoryId);
 
         $filters = array(
-            'content_type_name' => array(array('value' => 'album')),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
+            'content_type_name' => [['value' => 'album']],
+            'in_litter'         => [['value' => 1, 'operator' => '!=']]
         );
 
         if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
+            $filters['category_name'] = [['value' => $category->name]];
         }
 
-        $albums      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+        $albums      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
         $countAlbums = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countAlbums,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums_content_provider_related',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        // Build the pager
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countAlbums,
+            'base_url'          => $this->generateUrl(
+                'admin_albums_content_provider_related',
+                ['category' => $categoryId]
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',

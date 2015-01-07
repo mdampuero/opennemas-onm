@@ -84,7 +84,7 @@
                     {/if}
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
-                        <text>{$article->created_datetime->format('Ymd\THisP')}</text>
+                        {$article->created_datetime->format('Ymd\THisP')}
                       </story.date>
                     </dateline>
                     <abstract>

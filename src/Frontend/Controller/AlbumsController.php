@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -36,14 +35,12 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
-
         if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
         $this->view = new \Template(TEMPLATE_USER);
 
-        // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
@@ -60,6 +57,7 @@ class AlbumsController extends Controller
             if (empty($category)) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
+
             $category         = $category[0];
             $categoryRealName = $category->title;
             $this->category   = $category->pk_content_category;
@@ -74,7 +72,6 @@ class AlbumsController extends Controller
                 )
             );
         } else {
-
             $categoryRealName = 'Portada';
             $this->category   = 0;
             $this->view->assign(
@@ -180,7 +177,7 @@ class AlbumsController extends Controller
 
         // Items_page refers to the widget
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $albumID    = \Content::resolveID($dirtyID);
+        $albumID    = \ContentManager::resolveID($dirtyID);
         $itemsPerPage = 8;
 
         // Redirect to album frontpage if id_album wasn't provided

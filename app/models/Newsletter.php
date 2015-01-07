@@ -87,7 +87,14 @@ class Newsletter
         $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`, `sent`)'
              . ' VALUES (?,?,?,?,?,?)';
 
-        $values = array($data['title'], $data['data'], $data['html'], $data['created'], $data['created'], $data['sent']);
+        $values = [
+            $data['title'],
+            $data['data'],
+            $data['html'],
+            $data['created'],
+            $data['created'],
+            $data['sent']
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;

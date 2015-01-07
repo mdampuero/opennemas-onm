@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for handling the pdf covers
@@ -170,7 +169,7 @@ class CoversController extends Controller
         try {
             // Create folder if it doesn't exist
             if (!file_exists($path)) {
-                \FilesManager::createDirectory($path);
+                \Onm\FilesManager::createDirectory($path);
             }
             $uploadStatus = false;
 

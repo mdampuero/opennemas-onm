@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for comments
@@ -96,7 +95,10 @@ class CommentsController extends Controller
         switch ($type) {
             case 'onm':
                 $this->get('setting_repository')->set('comment_system', 'onm');
-                m::add(_("Now you are using the Opennemas comment system."), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Now you are using the Opennemas comment system.")
+                );
                 return $this->redirect($this->generateUrl('admin_comments_list'));
                 break;
 
@@ -106,7 +108,10 @@ class CommentsController extends Controller
 
             case 'facebook':
                 $this->get('setting_repository')->set('comment_system', 'facebook');
-                m::add(_("Now you are using the Facebook comment system."), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _("Now you are using the Facebook comment system.")
+                );
                 return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
                 break;
 
@@ -115,7 +120,10 @@ class CommentsController extends Controller
                 break;
 
             default:
-                m::add(_("Comment data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Comment data sent not valid.")
+                );
                 return $this->redirect($this->generateUrl('admin_comments'));
                 break;
         }
@@ -135,7 +143,10 @@ class CommentsController extends Controller
 
         // Check if module is configured, if not redirect to configuration form
         if (!$disqusShortName || !$disqusSecretKey) {
-            m::add(_('Please provide your Disqus configuration to start to use your Disqus Comments module'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('Please provide your Disqus configuration to start to use your Disqus Comments module')
+            );
 
             return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
         }
@@ -179,7 +190,10 @@ class CommentsController extends Controller
                 s::set('comment_system', 'disqus');
                 return $this->redirect($this->generateUrl('admin_comments_disqus'));
             } else {
-                m::add(_('There was an error while saving the Disqus module configuration'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('There was an error while saving the Disqus module configuration')
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
@@ -235,11 +249,17 @@ class CommentsController extends Controller
             $fbSettings = array_merge($fbSettings, $fbAppId);
 
             if (s::set('facebook', $fbSettings)) {
-                m::add(_('Facebook configuration saved successfully'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Facebook configuration saved successfully')
+                );
 
                 return $this->redirect($this->generateUrl('admin_comments_facebook'));
             } else {
-                m::add(_('There was an error while saving the Facebook comments module configuration'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('There was an error while saving the Facebook comments module configuration')
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
@@ -286,7 +306,11 @@ class CommentsController extends Controller
             );
         }
 
-        m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
+        $this->get('session')->getFlashBag()->add(
+            'error',
+            sprintf(_('Comment with id "%d" doesn\'t exists.'), $id)
+        );
+
         return $this->redirect($this->generateUrl('admin_comments_list'));
     }
 
@@ -304,31 +328,45 @@ class CommentsController extends Controller
         $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
-        if (!is_null($comment->id)) {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Comment data sent not valid."), m::ERROR);
-                return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'status' => $request->request->filter('status'),
-                'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+        if (is_null($comment->id)) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Comment with id "%d" doesn\'t exists.'), $id)
             );
 
-            try {
-                $comment->update($data);
+            return $this->redirect($this->generateUrl('admin_comments_list'));
+        }
 
-                m::add(_('Comment saved successfully.'), m::SUCCESS);
-            } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
-            }
-
+        // Check empty data
+        if (count($request->request) < 1) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Comment data sent not valid.")
+            );
             return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
         }
 
-        m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
-        return $this->redirect($this->generateUrl('admin_comments_list'));
+        $data = array(
+            'status' => $request->request->filter('status'),
+            'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+        );
+
+        try {
+            $comment->update($data);
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Comment updated successfully.')
+            );
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $e->getMessage()
+            );
+        }
+
+        return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
+
     }
 
     /**
@@ -353,9 +391,15 @@ class CommentsController extends Controller
             $configs = array_merge($defaultConfigs, $configs);
 
             if (s::set('comments_config', $configs)) {
-                m::add(_('Settings saved.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Settings saved.')
+                );
             } else {
-                m::add(_('There was an error while saving the settings'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('There was an error while saving the settings')
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_comments_config'));

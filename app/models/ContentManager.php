@@ -2005,4 +2005,165 @@ class ContentManager
 
         return $contents;
     }
+
+    /**
+     * Helper function to check existance one element in translation_ids table
+     *
+     * @param string $content_type the content type to search for
+     * @param string $content_id the content id to get
+     *
+     * @return Content the content of type $content_type and id $content_id
+     */
+    public static function getOriginalIDForContentTypeAndID($content_type, $content_id)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=? LIMIT 1';
+
+        $_values = array($content_id, $content_type);
+        $_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+
+                $returnValue =  $rss->fields['pk_content'];
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+
+    }
+
+
+    /**
+     * Returns the original ID and content type for a given content id
+     *
+     * @param string $content_id the content id to get
+     *
+     * @return array ($content_type and id $content_id)
+     */
+    public static function getOriginalIdAndContentTypeFromID($content_id)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? LIMIT 1';
+
+        $_values = $content_id;
+        $_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+                $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Returns the original ID and content type for a given content slug
+     *
+     * @param string $slug the slug of the content
+     *
+     * @return array ($content_type and id $content_id)
+     */
+    public static function getOriginalIdAndContentTypeFromSlug($slug)
+    {
+        $sql = 'SELECT * FROM `translation_ids` WHERE `slug`=? LIMIT 1';
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rss = $GLOBALS['application']->conn->Execute($sql, array($slug));
+
+        if (!$rss) {
+            $returnValue = false;
+        } else {
+            if ($rss->_numOfRows > 0) {
+                $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
+
+            } else {
+                $returnValue = false;
+            }
+        }
+
+        return $returnValue;
+    }
+
+
+
+    /**
+     * Check if content id exists
+     *
+     * @param string $oldID the content id to check
+     *
+     * @return pk_content or false
+    */
+    public static function searchContentID($oldID)
+    {
+        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ?";
+        $value     = array($oldID);
+        $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
+
+        return $contentID;
+    }
+
+     /**
+     *  Search id in refactor_id table. (used for translate old format ids)
+     *
+     * @param string $oldID Old id created with mktime
+     *
+     * @return int id in table refactor_id or false
+     *
+     */
+
+    public static function searchInRefactorID($oldID)
+    {
+        $sql = "SELECT pk_content FROM `refactor_ids` "
+             . "WHERE pk_content_old = ?";
+        $value  = array($oldID);
+        $refactorID = $GLOBALS['application']->conn->GetOne($sql, $value);
+
+        if (!empty($refactorID)) {
+            $content = new Content($refactorID);
+            $content = $content->get($refactorID);
+
+            forward301('/'.$content->uri);
+        }
+
+        return $oldID;
+    }
+
+    /**
+     * Clean id and search if exist in content table.
+     * If not found search in refactor_id table. (used for translate old format ids)
+     *
+     * @param string $dirtyID Vble with date in first 14 digits
+     *
+     * @return int id in table content or forward to 404
+     *
+     */
+    public static function resolveID($dirtyID)
+    {
+        $contentID = 0;
+        if (!empty($dirtyID)) {
+            if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
+                || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
+                || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
+            ) {
+                $contentID = self::searchInRefactorID($dirtyID);
+            }
+
+            preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
+            $contentID = self::searchContentID((int) $matches["digit"]);
+        }
+
+        return $contentID;
+    }
 }

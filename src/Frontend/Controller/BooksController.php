@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -29,20 +28,6 @@ use Onm\Settings as s;
 class BooksController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->categoryName = $this->request->query->filter(
-            'category_name',
-            'all',
-            FILTER_SANITIZE_STRING
-        );
-    }
-
-    /**
      * Renders the books frontpage
      *
      * @param Request $request the request object
@@ -52,6 +37,7 @@ class BooksController extends Controller
     public function frontpageAction(Request $request)
     {
         $this->page = $request->query->getDigits('page', 1);
+        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
 
         // Setup caching system
         $this->view = new \Template(TEMPLATE_USER);
@@ -109,8 +95,10 @@ class BooksController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->categoryName = $this->request->query->filter('category_name', 'all', FILTER_SANITIZE_STRING);
+
         $dirtyID = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $id      = \Content::resolveID($dirtyID);
+        $id      = \ContentManager::resolveID($dirtyID);
 
         if (empty($id)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

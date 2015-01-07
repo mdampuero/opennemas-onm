@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the images
@@ -94,7 +93,7 @@ class ImagesController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Image module settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Image module settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_images_config'));
         } else {
@@ -154,7 +153,7 @@ class ImagesController extends Controller
         if (!is_array($ids) || !(count($ids) > 0)) {
             $ids = (int) $ids;
             if ($ids <= 0) {
-                m::add(_('Please provide a image id for show it.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
                 return $this->redirect(
                     $this->generateUrl('admin_images', array('category' => $category))
@@ -173,9 +172,10 @@ class ImagesController extends Controller
                 $photos []= $photo;
             }
         }
+
         // Check if passed ids fits photos in database, if not redirect to listing
         if (count($photos) <= 0) {
-            m::add(_('Unable to find any photo with that id'));
+            $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -234,7 +234,10 @@ class ImagesController extends Controller
         }
 
         if (count($ids) > 0) {
-            m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Data successfully saved for %d photos'), $photosSaved)
+            );
         }
 
         $queryIDs = implode('&id[]=', $ids);
@@ -258,7 +261,10 @@ class ImagesController extends Controller
 
         $photo = new \Photo($id);
         if (is_null($photo->id)) {
-            m::add(sprintf(_('Unable to find the photo with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the photo with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_images'));
         }

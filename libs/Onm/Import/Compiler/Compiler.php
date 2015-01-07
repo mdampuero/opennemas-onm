@@ -109,7 +109,7 @@ class Compiler
         $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$sourceId);
 
         if (!empty($path)) {
-            \FilesManager::deleteDirectoryRecursively($path);
+            \Onm\FilesManager::deleteDirectoryRecursively($path);
 
             unset($servers[$sourceId]);
 
