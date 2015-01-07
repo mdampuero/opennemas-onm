@@ -194,8 +194,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.$on('auth-login-required', function (event, args) {
             $scope.auth.status = false;
+            $scope.loaded      = true;
 
-            $scope.loaded = true;
+            webStorage.local.remove('token');
+            webStorage.local.remove('user');
+
             cfpLoadingBar.complete();
 
             if (!$scope.auth.inprogress) {
