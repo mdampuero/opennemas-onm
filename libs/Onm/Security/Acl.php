@@ -8,10 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Onm\Security;
-
-use Onm\Message as m;
 
 /**
  * Class for handling user access to modules, actions and categories in backend
@@ -89,8 +86,9 @@ class Acl
         }
 
         if (!self::checkPrivileges($rule)) {
-            m::add(_("Sorry, you don't have enought privileges"));
-            forward301('/admin/');
+            throw new \Onm\Security\Exception\AccessDeniedException(
+                _("Sorry, you don't have enough privileges")
+            );
         }
 
         return true;
@@ -151,13 +149,7 @@ class Acl
      */
     public static function deny($message = 'Acceso no permitido')
     {
-        if (strlen($message) > 0) {
-            $message = new Message($message, 'error');
-            $message->push();
-        }
-
-        m::add(_("Sorry, you don't have enough privileges"));
-        forward('/admin/');
+        throw new \Onm\Security\Exception\AccessDeniedException($message);
     }
 
     /**

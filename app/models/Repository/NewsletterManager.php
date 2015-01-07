@@ -12,7 +12,6 @@
 namespace Repository;
 
 use Onm\Settings as s;
-use Onm\Message  as m;
 
 /**
  * Handles the operations of Newsletters.

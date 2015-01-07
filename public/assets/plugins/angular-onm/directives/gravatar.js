@@ -25,7 +25,7 @@ angular.module('onm.gravatar', []).directive('gravatar', function ($compile) {
                     img = $attrs.image;
                 }
 
-                var url = 'http://www.gravatar.com/avatar/';
+                var url = '//www.gravatar.com/avatar/';
 
                 url += hex_md5($attrs["email"].trim().toLowerCase());
                 url += "?s=" + size + "&d=" + d + "&r=" + r;

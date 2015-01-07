@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -36,14 +35,12 @@ class AlbumsController extends Controller
      **/
     public function init()
     {
-
         if (!\Onm\Module\ModuleManager::isActivated('ALBUM_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
         $this->view = new \Template(TEMPLATE_USER);
 
-        // Setting up available categories for menu.
         $this->ccm = new \ContentCategoryManager();
         $this->cm  = new \ContentManager();
 
@@ -60,6 +57,7 @@ class AlbumsController extends Controller
             if (empty($category)) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
+
             $category         = $category[0];
             $categoryRealName = $category->title;
             $this->category   = $category->pk_content_category;
@@ -74,7 +72,6 @@ class AlbumsController extends Controller
                 )
             );
         } else {
-
             $categoryRealName = 'Portada';
             $this->category   = 0;
             $this->view->assign(
@@ -97,9 +94,6 @@ class AlbumsController extends Controller
     {
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
-
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
@@ -163,7 +157,9 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album_frontpage.tpl',
             array(
-                'cache_id' => $cacheID,
+                'cache_id'       => $cacheID,
+                'advertisements' => $this->getAds(),
+                'x-tags'         => "album-frontpage,{$this->page}"
             )
         );
     }
@@ -181,7 +177,7 @@ class AlbumsController extends Controller
 
         // Items_page refers to the widget
         $dirtyID    = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $albumID    = \Content::resolveID($dirtyID);
+        $albumID    = \ContentManager::resolveID($dirtyID);
         $itemsPerPage = 8;
 
         // Redirect to album frontpage if id_album wasn't provided
@@ -190,10 +186,6 @@ class AlbumsController extends Controller
         }
 
         $this->view->setConfig('gallery-inner');
-
-        // Load advertisement for this action
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -258,8 +250,10 @@ class AlbumsController extends Controller
         return $this->render(
             'album/album.tpl',
             array(
-                'cache_id'  => $cacheID,
-                'contentId' => $albumID
+                'cache_id'       => $cacheID,
+                'contentId'      => $albumID,
+                'advertisements' => $this->getAds('inner'),
+                'x-tags'         => "album,$albumID"
             )
         );
     }

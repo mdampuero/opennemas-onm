@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -189,8 +188,9 @@ class VideosController extends Controller
             return $this->render(
                 'video/video_frontpage.tpl',
                 array(
-                    'cache_id' => $cacheID,
+                    'cache_id'     => $cacheID,
                     'categoryName' => $this->category_name,
+                    'x-tags'       => "video-frontpage,{$this->category_name},{$this->page}"
                 )
             );
         } else {
@@ -198,6 +198,7 @@ class VideosController extends Controller
                 'video/video_main_frontpage.tpl',
                 array(
                     'cache_id' => $cacheID,
+                    'x-tags'   => "video-frontpage,{$this->category_name},{$this->page}"
                 )
             );
         }
@@ -213,7 +214,7 @@ class VideosController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('video_id', '');
-        $videoID = \Content::resolveID($dirtyID);
+        $videoID = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provide
         if (is_null($videoID)) {
@@ -275,6 +276,7 @@ class VideosController extends Controller
             'video/video_inner.tpl',
             array(
                 'cache_id' => $cacheID,
+                'x-tags'   => "video,$videoID"
             )
         );
     }

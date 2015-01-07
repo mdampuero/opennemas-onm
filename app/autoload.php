@@ -100,8 +100,7 @@ $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 // Registering namespaces
 $loader->registerNamespaces(
     array(
-        'Onm'               => __DIR__.'/../libs',
-        'Luracast\\Restler' => __DIR__.'/../libs/luracast/restler/vendor/',
+        'Onm' => __DIR__.'/../libs',
     )
 );
 

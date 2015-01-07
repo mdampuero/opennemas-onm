@@ -53,7 +53,7 @@
                 <p>{t 1=$resource_name}Allows you to login into Opennemas with %1{/t}.</p>
             {else}
                 {if $current_user_id == $user->id}
-                    <button class="social-network-connect btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name={$resource}}" type="button">
+                    <button class="social-network-connect btn btn-social btn-{$resource}" data-url="{hwi_oauth_login_url name={$resource}}" onclick="connect(this)" type="button">
                         <i class="icon-{$resource}"></i> {t}Connect with {if $resource == 'facebook'}Facebook{else}Twitter{/if}{/t}
                     </button>
                     <div class="help-block">{t}Associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}</div>
@@ -64,5 +64,24 @@
         </div>
     </body>
     {block name="footer-js"}
+        <script>
+            function connect(btn) {
+                var win = window.open(
+                    btn.getAttribute('data-url'),
+                    btn.getAttribute('id'),
+                    'height=400, width=400'
+                );
+
+                var interval = window.setInterval(function() {
+                    if (win == null || win.closed) {
+                        window.clearInterval(interval);
+
+                        if (win.success) {
+                            window.location.reload();
+                        }
+                    }
+                }, 1000);
+            };
+        </script>
     {/block}
 </html>

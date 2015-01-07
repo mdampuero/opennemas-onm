@@ -16,7 +16,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -34,18 +33,18 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
-        $page    = $request->query->getDigits('page', 1);
         $tagName = \StringUtils::normalize($tagName);
+        $page    =  1; //$request->query->getDigits('page', 1);
 
         // Load config
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpages');
 
-        $cacheId = "tag|$tagName|$page";
+        $cacheId = "tag|$tagName";
 
         if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $itemsPerPage = s::get('items_in_blog');
+            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog');
             if (empty($itemsPerPage)) {
                 $itemsPerPage = 8;
             }
@@ -64,7 +63,7 @@ class TagsController extends Controller
             );
 
             $er = $this->get('entity_repository');
-            $contents = $er->findBy($criteria, 'starttime DESC', 200, 1);
+            $contents = $er->findBy($criteria, 'starttime DESC', 20, 1);
 
             $filteredContents = array();
             $tag = strtolower($tag);
@@ -107,38 +106,18 @@ class TagsController extends Controller
                 }
             }
 
-            $totalContents = count($filteredContents);
             $filteredContents = array_slice($filteredContents, ($page-1)*$itemsPerPage, $itemsPerPage);
 
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                array(
-                    'page'  => $page,
-                    'items' => $itemsPerPage,
-                    'total' => $totalContents,
-                    'url'   => $this->generateUrl(
-                        'tag_frontpage',
-                        array(
-                            'tag_name' => preg_replace('/[^a-z0-9]/', '-', $tag),
-                        )
-                    )
-                )
-            );
-
-            $this->view->assign(
-                array(
-                    'contents'   => $filteredContents,
-                    'tagName'    => $tagName,
-                    'pagination' => $pagination,
-                )
-            );
+            $this->view->assign('contents', $filteredContents);
         }
-
-        $this->view->assign('advertisements', $this->getInnerAds());
 
         return $this->render(
             'frontpage/tags.tpl',
             array(
-                'cache_id' => $cacheId
+                'cache_id'       => $cacheId,
+                'tagName'        => $tagName,
+                'advertisements' => $this->getInnerAds(),
+                'x-tags'         => 'tag-page,'.$tagName,
             )
         );
     }

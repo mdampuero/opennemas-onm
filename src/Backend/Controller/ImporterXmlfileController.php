@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the system information
@@ -39,7 +38,7 @@ class ImporterXmlfileController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAPER_IMPORT');
 
         if (is_null(s::get('xml_file_schema'))) {
-            m::add(_('Please provide XML file schema'));
+            $this->get('session')->getFlashBag()->add('notice', _('Please provide XML file schema'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         }
@@ -69,7 +68,7 @@ class ImporterXmlfileController extends Controller
     public function importAction(Request $request)
     {
         if ('POST' != $request->getMethod()) {
-            m::add(_('Form was sent in the wrong way.'));
+            $this->get('session')->getFlashBag()->add('error', _('Form was sent in the wrong way.'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
         }
@@ -98,47 +97,59 @@ class ImporterXmlfileController extends Controller
                 $micro     = intval(substr($t['usec'], 0, 5));
 
                 $name      = date("YmdHis").$micro.".".$extension;
+                $importer  = \ImporterXml::getInstance();
 
-                if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
+                $moveFile = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name);
+                if (!$moveFile) {
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        sprintf(
+                            _("There was an error while uploading «%s» - «%s». Check its size before send it."),
+                            $uploaddir.$name,
+                            $nameFile
+                        )
+                    );
+                }
 
-                    if ($extension == "zip") {
-                        $dataZIP = \FilesManager::decompressZIP($uploaddir.$name);
+                if ($extension == "zip") {
+                    $dataZIP = \Onm\Compress\Compress::decompressZIP($uploaddir.$name);
 
-                        @chmod($uploaddir.$name, 0775);
-                        sort($dataZIP);
-                        foreach ($dataZIP as $elementZIP) {
-                            @chmod($uploaddir.$elementZIP, 0775);
+                    @chmod($uploaddir.$name, 0775);
+                    sort($dataZIP);
+                    foreach ($dataZIP as $elementZIP) {
+                        @chmod($uploaddir.$elementZIP, 0775);
 
-                            $importer = \ImporterXml::getInstance();
+                        try {
                             $eltoXML  = $importer->importXML($uploaddir.$elementZIP);
-                            if ($eltoXML) {
-                                $XMLFile[$j] = $elementZIP;
+                            $XMLFile[$j] = $elementZIP;
 
-                                $values      = $importer->getXMLData($eltoXML);
-                                if (!empty($dryRun)) {
-                                    $article = new \Article();
-                                    $article->create($values);
-                                    $photo = new \Photo($values['img1']);
-                                    $values['photo'] =
-                                        INSTANCE_MEDIA.IMG_DIR.
-                                        $photo->path_file.$photo->name;
-                                    $dataXML[$j] = $values;
-                                }
-
+                            $values      = $importer->getXMLData($eltoXML);
+                            if (!empty($dryRun)) {
+                                $article = new \Article();
+                                $article->create($values);
+                                $photo = new \Photo($values['img1']);
+                                $values['photo'] =
+                                    INSTANCE_MEDIA.IMG_DIR.
+                                    $photo->path_file.$photo->name;
                                 $dataXML[$j] = $values;
-                                $j++;
-                            } else {
-                                //  m::add(_( 'No valid XML format' ));
                             }
+
+                            $dataXML[$j] = $values;
+                        } catch (\Exception $e) {
+                            $this->get('session')->getFlashBag()->add(
+                                'error',
+                                _("Can't read the file. Please check xml file.")
+                            );
                         }
-                    } else {
-                        $importer    = \ImporterXml::getInstance();
 
+                        $j++;
+                    }
+                } else {
+                    try {
                         $eltoXML     = $importer->importXML($uploaddir.$name);
-
                         $XMLFile[$j] = $nameFile;
-
                         $values      = $importer->getXMLData($eltoXML);
+
                         if (!empty($dryRun)) {
                             $article = new \Article();
                             $article->create($values);
@@ -150,18 +161,14 @@ class ImporterXmlfileController extends Controller
                         }
 
                         $dataXML[$j] = $values;
-
-                        $j++;
+                    } catch (\Exception $e) {
+                        $this->get('session')->getFlashBag()->add(
+                            'error',
+                            _("Can't read file. Please check xml file.")
+                        );
                     }
 
-                } else {
-                    m::add(
-                        sprintf(
-                            _("There was an error while uploading «%s» - «%s». Check its size before send it."),
-                            $uploaddir.$name,
-                            $nameFile
-                        )
-                    );
+                    $j++;
                 }
             }
 
@@ -220,9 +227,15 @@ class ImporterXmlfileController extends Controller
             );
 
             if (s::set('xml_file_schema', $schema)) {
-                m::add(_('Importer XML configuration saved successfully'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Importer XML configuration saved successfully')
+                );
             } else {
-                m::add(_('There was an error while saving importer XML configuration'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('There was an error while saving importer XML configuration')
+                );
             }
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));

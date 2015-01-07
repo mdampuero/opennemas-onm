@@ -1,21 +1,28 @@
-<div class="content">
-    <div class="page-title clearfix">
-        <h3 class="pull-left">
-            <i class="fa fa-cubes"></i>
-            <span>{t}Application command output{/t}</span>
-        </h3>
-        <ul class="breadcrumb pull-right">
-            <li>
-                <p>{t}YOU ARE HERE{/t}</p>
-            </li>
-            <li>
-                <a href="#">{t}Dashboard{/t}</a>
-            </li>
-            <li>
-                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">{t}Instances{/t}</a>
-            </li>
-        </ul>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_framework_commands') %]">
+                            <i class="fa fa-cubes fa-lg"></i>
+                            {t}Commands{/t}
+                        </a>
+                    </h4>
+                </li>
+                <li class="quicklinks seperate">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        {t}Command output{/t}
+                    </h5>
+                </li>
+            </ul>
+        </div>
     </div>
+</div>
+<div class="content">
     <div class="wrapper-table-block">
         <h4 class="command-name"><strong>{t}Command name:{/t}</strong> "[% name %]"</h4>
 

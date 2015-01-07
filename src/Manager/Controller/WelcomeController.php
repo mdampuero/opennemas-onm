@@ -33,6 +33,7 @@ class WelcomeController extends Controller
     public function init()
     {
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+
     }
 
     /**
@@ -42,6 +43,18 @@ class WelcomeController extends Controller
      */
     public function defaultAction()
     {
-        return $this->render('base/base.tpl');
+        $messages = [
+            _("Printing your newspaper..."),
+            _("Cloning journalists..."),
+            _("Writing articles using Wikipedia..."),
+            _("Spinning up the rotary..."),
+            _("Reinventing Gutenberg machine..."),
+        ];
+        $loadingMessage = $messages[array_rand($messages)];
+
+        return $this->render(
+            'base/base.tpl',
+            ['loading_message' => $loadingMessage,]
+        );
     }
 }

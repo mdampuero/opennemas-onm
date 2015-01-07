@@ -3,7 +3,6 @@
  *
  * @param  Object $modal       The modal service.
  * @param  Object $scope       The current scope.
- * @param  Object $timeout     The timeout service.
  * @param  Object itemService  The item service.
  * @param  Object fosJsRouting The fosJsRouting service.
  * @param  Object messenger    The messenger service.
@@ -12,8 +11,8 @@
  * @return Object The controller for user groups.
  */
 angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
-    '$modal', '$scope', '$timeout', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
+    function ($modal, $scope, itemService, fosJsRouting, messenger, data) {
 
         /**
          * The criteria to search.
@@ -23,13 +22,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         $scope.criteria = {
             name_like: [ { value: '', operator: 'like' } ]
         };
-
-        /**
-         * The number of elements per page
-         *
-         * @type integer
-         */
-        $scope.epp  = 25;
 
         /**
          * The list of elements.
@@ -49,13 +41,6 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         };
 
         /**
-         * The number of total items.
-         *
-         * @type integer
-         */
-        $scope.total = data.total;
-
-        /**
          * The listing order.
          *
          * @type Object
@@ -63,16 +48,15 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         $scope.orderBy = [ { name: 'name', value: 'asc' } ];
 
         /**
-         * The current page
+         * The current pagination status.
          *
-         * @type integer
+         * @type Object
          */
-        $scope.page = 1;
-
-        /**
-         * Variable to store the current search.
-         */
-        var search;
+        $scope.pagination = {
+            epp:   data.epp ? parseInt(data.epp) : 25,
+            page:  data.page ? parseInt(data.page) : 1,
+            total: data.total
+        }
 
         /**
          * Flag to know if it is the first run.
@@ -99,7 +83,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                         return function() {
                             return itemService.delete(
                                 'manager_ws_user_group_delete', group.id);
-                        }
+                        };
                     }
                 }
             });
@@ -111,7 +95,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                             message: response.data.message.text,
                             type:    response.data.message.type
                         });
-                    };
+                    }
 
                     list();
                 }
@@ -137,7 +121,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                             return itemService.deleteSelected(
                                 'manager_ws_user_groups_delete',
                                 $scope.selected.groups);
-                        }
+                        };
                     }
                 }
             });
@@ -149,7 +133,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                             message: response.data.messages[i].text,
                             type:    response.data.messages[i].type
                         });
-                    };
+                    }
 
                     list();
                 }
@@ -176,7 +160,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
             }
 
             return false;
-        }
+        };
 
         /**
          * Checks if a group is selected
@@ -184,15 +168,15 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          * @param string id The group id.
          */
         $scope.isSelected = function(id) {
-            return $scope.selected.groups.indexOf(id) != -1
-        }
+            return $scope.selected.groups.indexOf(id) != -1;
+        };
 
         /**
          * Reloads the listing.
          */
         $scope.refresh = function() {
             search = list();
-        }
+        };
 
         /**
          * Selects/unselects all groups.
@@ -214,15 +198,13 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                $scope.page = 1;
-
-                if (search) {
-                    $timeout.cancel(search);
+                if ($scope.pagination.page != 1) {
+                    $scope.pagination.page = 1;
+                } else {
+                    list();
                 }
-
-                search = list();
-            };
-        }
+            }
+        };
 
         /**
          * Changes the sort order.
@@ -245,21 +227,21 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                 }
             }
 
-            $scope.page = 1;
-        }
+            $scope.pagination.page = 1;
+        };
 
         /**
          * Frees up memory before controller destroy event
          */
         $scope.$on('$destroy', function() {
-            $scope.criteria = null;
-            $scope.epp      = null;
-            $scope.groups   = null;
-            $scope.selected = null;
-            $scope.orderBy  = null;
-            $scope.page     = null;
-            $scope.total    = null;
-        })
+            $scope.criteria         = null;
+            $scope.epp              = null;
+            $scope.groups           = null;
+            $scope.selected         = null;
+            $scope.orderBy          = null;
+            $scope.pagination.page  = null;
+            $scope.pagination.total = null;
+        });
 
         /**
          * Refresh the list of elements when some parameter changes.
@@ -267,13 +249,9 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          * @param array newValues The new values
          * @param array oldValues The old values
          */
-        $scope.$watch('[orderBy, epp, page]', function(newValues, oldValues) {
+        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
             if (newValues !== oldValues) {
-                if (search) {
-                    $timeout.cancel(search);
-                }
-
-                search = list();
+                list();
             }
         }, true);
 
@@ -283,32 +261,30 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          * @return Object The function to execute past 500 ms.
          */
         function list() {
-            return $timeout(function() {
-                $scope.loading = 1;
+            $scope.loading = 1;
 
-                var cleaned = itemService.cleanFilters($scope.criteria);
+            var cleaned = itemService.cleanFilters($scope.criteria);
 
-                var data = {
-                    criteria: cleaned,
-                    orderBy:  $scope.orderBy,
-                    epp:      $scope.epp,
-                    page:     $scope.page
-                };
+            var data = {
+                criteria: cleaned,
+                orderBy:  $scope.orderBy,
+                epp:      $scope.epp,
+                page:     $scope.pagination.page
+            };
 
-                itemService.encodeFilters($scope.criteria, $scope.orderBy,
-                    $scope.epp, $scope.page);
+            itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                $scope.epp, $scope.pagination.page);
 
-                itemService.list('manager_ws_user_groups_list', data).then(
-                    function (response) {
-                        $scope.groups  = response.data.results;
-                        $scope.total   = response.data.total;
-                        $scope.loading = 0;
+            itemService.list('manager_ws_user_groups_list', data).then(
+                function (response) {
+                    $scope.groups           = response.data.results;
+                    $scope.pagination.total = response.data.total;
+                    $scope.loading          = 0;
 
-                        // Scroll top
-                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
-                    }
-                );
-            }, 500);
+                    // Scroll top
+                    $(".page-content").animate({ scrollTop: "0px" }, 1000);
+                }
+            );
         }
     }
 ]);

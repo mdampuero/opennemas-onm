@@ -9,7 +9,7 @@
  */
 namespace Onm\Instance;
 
-use FilesManager as fm;
+use Onm\FilesManager as fm;
 use Onm\Database\DbalWrapper;
 use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\AssetsNotDeletedException;
@@ -62,7 +62,7 @@ class InstanceCreator
             );
         }
 
-        if (!fm::compressTgz($tgzFile, $mediaPath)) {
+        if (!\Onm\Compress\Compress::compressTgz($tgzFile, $mediaPath)) {
             throw new BackupException(
                 "Could not create a backup of the directory"
             );
@@ -252,7 +252,7 @@ class InstanceCreator
     public function restoreAssets($path)
     {
         $tgzFile = $path . DS . "media.tar.gz";
-        if (!fm::decompressTgz($tgzFile, "/")) {
+        if (!\Onm\Compress\Compress::decompressTgz($tgzFile, "/")) {
             throw new AssetsNotRestoredException(
                 "Could not restore the assets directory."
             );

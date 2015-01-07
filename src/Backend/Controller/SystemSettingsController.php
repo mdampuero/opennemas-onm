@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles all the request for Welcome actions
@@ -100,7 +99,7 @@ class SystemSettingsController extends Controller
 
         // Check if upload directory is already created
         if ($sectionSettings['allowLogo'] == 1 && !is_dir($uploadDirectory)) {
-            \FilesManager::createDirectory($uploadDirectory);
+            \Onm\FilesManager::createDirectory($uploadDirectory);
         }
 
         if (!is_null($siteLogo)) {
@@ -110,9 +109,9 @@ class SystemSettingsController extends Controller
             // Check max height for site logo
             $size = getimagesize($_FILES['site_logo']['tmp_name']);
             if ($size[1] > 120) {
-                m::add(
-                    _('The maximum height for the "Site Logo" is 120px. Please adjust your image size.'),
-                    m::ERROR
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('The maximum height for the "Site Logo" is 120px. Please adjust your image size.')
                 );
 
                 // Send the user back to the form
@@ -162,7 +161,7 @@ class SystemSettingsController extends Controller
             s::set($key, $value);
         }
 
-        m::add(_('Settings saved.'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
         // Send the user back to the form
         return $this->redirect($this->generateUrl('admin_system_settings'));

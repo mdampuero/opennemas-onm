@@ -21,7 +21,7 @@
     tr {
         &.row_selected {
             td {
-                background-color:  @color-white fcc !important;
+                background-color:  #ffffcc !important;
             }
             .progress {
                 background-color:  @color-white ;
@@ -58,13 +58,15 @@
         }
     }
     .checkbox {
-        margin-left: 3px;
+        .margin-left(3px);
     }
     .star {
-        margin-left: 3px;
+        .margin-left(3px);
     }
 }
-
+th {
+    .text-align(left);
+}
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     padding: 12px;
 }
@@ -89,15 +91,15 @@
 .table-condensed {
     th {
         .checkbox {
-            margin-left: 4px;
+            .margin-left(4px);
         }
     }
 }
 .table > tbody > tr > td, .table > tfoot > tr > td {
-    border-top: 1px solid #E8EDF1;
+    border-top: 1px solid @table-border;
 }
 .table-striped tbody > tr:nth-child(2n+1) > td, .table-striped tbody > tr:nth-child(2n+1) > th {
-    background-color: #ecf0f2;
+    background-color: @table-body-background;
     border: none;
 }
 .table-striped {
@@ -110,7 +112,7 @@
     }
 }
 .table-hover tbody tr:hover>td, .table-hover tbody tr:hover>th {
-    background-color: #e2e8eb;
+    background-color: @table-hover-background;
 }
 .table-hover {
     tbody {
@@ -144,13 +146,13 @@
     }
 }
 .table-bordered {
-    border-color: #E8EDF1 !important;
+    border-color: @table-border !important;
     th {
-        background-color: #ecf0f2;
+        background-color: @table-body-background;
         border: 0 !important;
     }
     td {
-        border: 1px solid #E8EDF1 !important;
+        border: 1px solid @table-border !important;
         &:first-child {
             border-radius: 0px;
         }

@@ -3,7 +3,6 @@ use \Onm\Settings as s;
 
 function smarty_function_include_piwik_code($params, &$smarty)
 {
-
     $output = "";
 
     // If comes from preview, don't render script

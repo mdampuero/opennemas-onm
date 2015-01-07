@@ -466,16 +466,24 @@ class InstanceController extends Controller
         $im        = $this->get('instance_manager');
         $message   = array();
 
-        $instance = $im->find($id);
+        $instance     = $im->find($id);
+        $oldActivated = $instance->activated;
         if ($instance) {
             try {
                 $instance->activated = $activated;
                 $im->persist($instance);
 
+                if ($oldActivated != $activated) {
+                    dispatchEventWithParams(
+                        'instance.disable',
+                        array('instance' => $instance->internal_name)
+                    );
+                }
+
                 $success = true;
                 $message = array(
-                    'text'      => _('Instance updated successfully.'),
-                    'type'      => 'success'
+                    'text' => _('Instance updated successfully.'),
+                    'type' => 'success'
                 );
             } catch (Exception $e) {
                 $message = array(

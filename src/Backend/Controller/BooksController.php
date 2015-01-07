@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 use Onm\StringUtils;
 
 /**
@@ -82,7 +81,10 @@ class BooksController extends Controller
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
+            );
         }
 
         return $this->render('book/list.tpl');
@@ -101,7 +103,10 @@ class BooksController extends Controller
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
+            );
         }
 
         return $this->render(
@@ -152,7 +157,10 @@ class BooksController extends Controller
                 return $this->render('book/new.tpl', array('book' => $book));
 
             } else {
-                m::add(sprintf(_("Unable to create the new book.")));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Unable to create the new book.")
+                );
             }
 
             return $this->render('book/new.tpl');
@@ -175,7 +183,10 @@ class BooksController extends Controller
         $book = new \Book($id);
 
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_books'));
         }
@@ -205,7 +216,10 @@ class BooksController extends Controller
         $book = new \Book($id);
 
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_books'));
         }
@@ -218,12 +232,15 @@ class BooksController extends Controller
 
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Book data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Book data sent not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
         }
 
-        $data = array(
+        $data = [
             'id'             => $id,
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
@@ -234,9 +251,14 @@ class BooksController extends Controller
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category'),
             'content_status' => $request->request->getInt('content_status'),
-        );
+        ];
 
-        $book->update($data);
+        if ($book->update($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Book updated succesfully.')
+            );
+        }
 
         return $this->redirect(
             $this->generateUrl(
@@ -264,11 +286,17 @@ class BooksController extends Controller
 
         $book = new \Book($id);
         if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
-        } else {
-            $book->delete($id);
-            m::add(_("Book '{$book->title}' deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the book with the id "%d"'), $id)
+            );
         }
+        $book->delete($id);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            sprintf(_("Book '%s' deleted successfully."), $book->title)
+        );
 
         return $this->redirect(
             $this->generateUrl(

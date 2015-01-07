@@ -13,9 +13,6 @@
  **/
 namespace Onm;
 
-use Onm\Cache\CacheInterface;
-use Onm\Settings as s;
-
 /**
 * Class for Disqus sync functions
 *
@@ -23,22 +20,38 @@ use Onm\Settings as s;
 */
 class DisqusSync
 {
+    private $disqusShortName = null;
+
+    private $disqusSecretKey = null;
+
+    /**
+     * Sets the configuration required to fetch and save comments
+     *
+     * @return DisqusSync the same object
+     **/
+    public function setConfig($disqusShortName, $disqusSecretKey)
+    {
+        $this->disqusSecretKey = $disqusSecretKey;
+        $this->disqusShortName = $disqusShortName;
+
+        return $this;
+    }
     /**
      * Fetch disqus comments from a forum and stores them in database
      *
      * @return void
      */
-    public static function saveDisqusCommentsToDatabase()
+    public function saveDisqusCommentsToDatabase()
     {
-        // Get disqus shortname and secretkey
-        $disqusShortName = s::get('disqus_shortname');
-        $disqusSecretKey = s::get('disqus_secret_key');
-
         // Create Disqus instance
-        $disqus = new \DisqusAPI($disqusSecretKey);
+        $disqus = new \DisqusAPI($this->disqusSecretKey);
 
         // Set API call params
-        $params = array('forum' => $disqusShortName, 'order' =>  'asc', 'limit' => 100);
+        $params = array(
+            'forum' => $this->disqusShortName,
+            'order' => 'asc',
+            'limit' => 100
+        );
 
         // Fetch last comment date
         $comment = new \Comment();

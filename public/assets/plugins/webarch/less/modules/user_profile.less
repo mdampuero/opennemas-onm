@@ -14,7 +14,7 @@
         width: 68px;
     }
     &.with-left-space-custom {
-        margin-left: 7px;
+        .margin-left(7px);
     }
 }
 .user-comment-wrapper {
@@ -63,7 +63,7 @@
             display: inline-block;
             float: left;
             color: #bfbfbf;
-            margin-right: 10px;
+            .margin-right(10px);
             font-size: 12px;
             white-space: nowrap;
             overflow: hidden;
@@ -79,7 +79,7 @@
     background-color: #c5c8cb;
     display: inline-block;
     float: left;
-    margin-right: 3px;
+    .margin-right(3px);
     top: 3px;
     &.busy {
         background-color: #fb3c4a;
@@ -107,7 +107,7 @@
 .blog-post-control {
     display: inline-block;
     float: left;
-    margin-right: 8px;
+    .margin-right(8px);
     color:  @color-white ;
     font-size: 11px;
     font-weight: 600;
@@ -127,7 +127,7 @@
 .simple-chat-popup {
     margin-top: 3px;
     padding: 5px 0;
-    left: -77.5px;
+    .left(-77.5px);
     top: 25px;
     position: absolute;
     z-index: 10000;
@@ -135,8 +135,8 @@
     .simple-chat-popup-arrow {
         border-bottom-color: #292b2e;
         border-width: 0 5px 5px;
-        left: 74%;
-        margin-left: -5px;
+        .left(74%);
+        .margin-left(-5px);
         top: 0;
     }
 }
@@ -188,7 +188,7 @@
     }
 }
 .user-mini-description {
-    margin-right: 10px;
+    .margin-right(10px);
     h3 {
         margin: 5px 0;
         margin-bottom: 0px;
@@ -223,12 +223,12 @@
     margin: 15px 0;
     .friend-details-wrapper {
         display: inline-block;
-        float: left;
+        .float(left);
     }
     .friend-profile-pic {
         display: inline-block;
-        float: left;
-        margin-right: 10px;
+        .float(left);
+        .margin-right(10px);
     }
     .friend-name {
         display: block;
@@ -241,8 +241,9 @@
     }
     .action-bar {
         display: inline-block;
-        margin-left: 10px;
+        .margin-left(10px);
         margin-top: 8px;
+        .float(left);
     }
 }
 .user-profile-pic-normal {
@@ -269,7 +270,7 @@
     display: block;
     .info-wrapper {
         display: inline-block;
-        float: left;
+        .float(left);
         width: 80%;
         &.small-width {
             width: 70%;
@@ -285,12 +286,12 @@
     }
     .user-profile-pic-wrapper {
         display: inline-block;
-        float: left;
-        margin-right: 16px;
+        .float(left);
+        .margin-right(16px);
     }
     .more-details {
         display: block;
-        float: left;
+        .float(left);
     }
     .post-links {
         margin: 4px 0 0;
@@ -304,12 +305,12 @@
             display: inline;
             float: left;
             position: relative;
-            padding-left: 0px;
-            padding-right: 8px;
+            .padding-left(0px);
+            .padding-right(8px);
             &:after {
                 color: #999999;
                 content: "•";
-                padding-left: 8px;
+                .padding-left(8px);
             }
             &:last-child {
                 &:after {
@@ -329,14 +330,14 @@
         padding: 0;
         li {
             display: inline;
-            float: left;
+            .float(left);
             position: relative;
-            padding-right: 8px;
+            .padding-right(8px);
         }
     }
 }
 .post-input {
-    padding-left: 14px !important;
+    .padding-left(14px) !important;
     padding-top: 18px !important;
     font-size: 14px;
 }
@@ -348,7 +349,7 @@
 }
 .img_wrapper {
     position: relative;
-    background: #d1dade;
+    background: @color-primary-grey;
     overflow: hidden;
     img {
         position: absolute;

@@ -259,6 +259,23 @@ a.btn-danger { color:White; }
   padding: 10px 20px;
   max-height: 450px;
 }
+.modal-header { position:relative;}
+.modal-header .close {
+  position:absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 13px 16px;
+  color: #aaa;
+  font-weight: normal;
+  border-left:1px solid #eee;
+  margin:0;
+}
+.modal-header .close:hover,
+.modal-header .close:focus {
+  color:#888;
+  border-left-color:#eee;
+}
 
 
 a.btn:not(.btn-mini) { padding:4px 8px;}

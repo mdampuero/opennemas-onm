@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -196,7 +195,7 @@ class NewStandController extends Controller
     {
         $dirtyID = $request->query->getDigits('id', null);
 
-        $epaperId = \Content::resolveID($dirtyID);
+        $epaperId = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {

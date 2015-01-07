@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the system users
@@ -159,7 +158,10 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("The data send by the user is not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("The data send by the user is not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }

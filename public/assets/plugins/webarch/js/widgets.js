@@ -1,5 +1,7 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 $(document).ready(function() {	
-/************************************** THIS FILE IS ONLY FOR DEMO PURPOSES **************************************/
 //One with the Map
 loadServerChart();
 //Real Time Red and grey graph
@@ -538,39 +540,44 @@ $("#earnings-chart").sparkline([0,4,4,5,6,8,3,2,2,4,6,7], {
 });
 
 //Location Map
+var myOptions = {
+    zoom: 10,
+    panControl : false,
+    streetViewControl : false,
+    mapTypeControl: false,
+    overviewMapControl: false,
+    zoomControl : false,
+    center: new google.maps.LatLng(40.6700, -73.9400),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: [{featureType:"administrative",stylers:[{visibility:"off"}]},{featureType:"poi",stylers:[{visibility:"simplified"}]},{featureType:"road",stylers:[{visibility:"simplified"}]},{featureType:"water",stylers:[{visibility:"simplified"}]},{featureType:"transit",stylers:[{visibility:"simplified"}]},{featureType:"landscape",stylers:[{visibility:"simplified"}]},{featureType:"road.highway",stylers:[{visibility:"off"}]},{featureType:"road.local",stylers:[{visibility:"on"}]},{featureType:"road.highway",elementType:"geometry",stylers:[{visibility:"on"}]},{featureType:"road.arterial",stylers:[{visibility:"off"}]},{featureType:"water",stylers:[{color:"#5f94ff"},{lightness:26},{gamma:5.86}]},{},{featureType:"road.highway",stylers:[{weight:0.6},{saturation:-85},{lightness:61}]},{featureType:"road"},{},{featureType:"landscape",stylers:[{hue:"#0066ff"},{saturation:74},{lightness:100}]}]
+};
+
+
+//Location Map
 if($('#location-map').length > 0){
  //Initialize Map
-	var po = org.polymaps;
-	var map = po.map()
-		.container(document.getElementById("location-map").appendChild(po.svg("svg")))
-		.add(po.interact());
-	map.add(po.image()
-		.url(po.url("http://{S}tile.cloudmade.com"
-		+ "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
-		+ "/998/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));
-	map.add(po.grid());
-	map.add(po.compass()
-		.pan("none"));
-
+    new google.maps.Map(document.getElementById('location-map'), myOptions);
 }
 
 if($('#location-map-2').length > 0){
  //Initialize Map
-	var po = org.polymaps;
-	var map = po.map()
-		.container(document.getElementById("location-map-2").appendChild(po.svg("svg")))
-		.add(po.interact());
-	map.add(po.image()
-		.url(po.url("http://{S}tile.cloudmade.com"
-		+ "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
-		+ "/998/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));
-	map.add(po.grid());
-	map.add(po.compass()
-		.pan("none"));
-
+  new google.maps.Map(document.getElementById('location-map-2'), myOptions);
 }
+
+//Mapplic
+$('#mapplic_demo').mapplic({
+    source: 'http://revox.io/webarch/json/states.json',
+    height: 494,
+    sidebar: false,
+    minimap: false,
+    locations: true,
+    deeplinking: true,
+    fullscreen: false,
+    hovertip: true,
+    developer: false,
+    maxscale: 3,
+    height:380
+});
 
  /**** Carousel for Testominals ****/
  if ($.fn.owlCarousel){

@@ -13,6 +13,7 @@
 namespace Onm\Module;
 
 use Onm\Security\Acl;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class for handling activated and available modules.
@@ -453,9 +454,8 @@ class ModuleManager
                 return true;
             }
         } catch (ModuleException $e) {
-             $_SESSION['error'] = $e->getMessage();
-             m::add(_("Sorry, you don't have enought privileges"));
-             Application::forward('/admin/');
+            $_SESSION['error'] = $e->getMessage();
+            throw new AccessDeniedException();
         }
 
     }

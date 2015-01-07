@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 $(document).ready(function() {	
 loadServerChart();
 //drawMouseSpeedDemo();
@@ -9,6 +12,7 @@ loadAnimatedWeatherIcons();
 loadAnimatedWidget_pure_white();
 //loadSampleChart();
 //loadSampleChartDemo2();
+loadLocationMaps();
 function loadServerChart(){
 	var seriesData_1 = [ [], []];
 	var random_1 = new Rickshaw.Fixtures.RandomData(50);
@@ -24,11 +28,11 @@ function loadServerChart(){
 		series: [
 			{
 				data: seriesData_1[0],
-				color: '#1b1e24',
+				color: 'rgba(0,0,0,0.30)',
 				name:'DB Server'
 			},{
 				data: seriesData_1[1],
-				color: '#2a2e36',
+				color: 'rgba(255,255,255,0.05)',
 				name:'Web Server'
 			}
 		]
@@ -60,7 +64,7 @@ function loadSalesGraph(){
 		series: [
 			{
 				data: seriesData[0],
-				color: '#f35958',
+				color: color_danger,
 				name:'DB Server'
 			},{
 				data: seriesData[1],
@@ -96,7 +100,7 @@ function loadShareMarketGraph(){
 		series: [
 			{
 				data: seriesData_3[0],
-				color: '#0aa699',
+				color: color_green,
 				name:'DB Server'
 			},
 			{
@@ -135,7 +139,7 @@ function loadShareMarketGraph_Demo2(){
 		series: [
 			{
 				data: seriesData_4[0],
-				color: '#0aa699',
+				color: color_green,
 				name:'DB Server'
 			},
 			{
@@ -395,7 +399,7 @@ function loadSalesSparkline(){
 		height: '20%',
 		lineColor: '#ffffff',
 		lineWidth: 2,
-		fillColor: '#0aa699',
+		fillColor: 'rgba(0,0,0,0.1)',
 		spotColor: '#ffffff',
 		minSpotColor: '#ffffff',
 		maxSpotColor: '#f35958',
@@ -413,50 +417,6 @@ $("#earnings-chart").sparkline([0,4,4,5,6,8,3,2,2,4,6,7], {
 	  //Initialize Map
 });
 
-//Location Map
-if($('#location-map').length > 0){
- //Initialize Map
-	var po = org.polymaps;
-	var arrow  = po.arrow();
-	var map = po.map()
-
-		.container(document.getElementById("location-map").appendChild(po.svg("svg")))
-		.add(po.interact());
-	map.add(po.image()
-		.url(po.url("http://{S}tile.cloudmade.com"
-		+ "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
-		+ "/998/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));
-	map.add(po.grid());
-
-
-	map.add(po.compass()
-		.pan("none"));
-		
-		map.remove(po.arrow());
-
-}
-
-if($('#location-map-2').length > 0){
- //Initialize Map
-	var po = org.polymaps;
-	var arrow  = po.arrow();
-	var map = po.map()
-		.container(document.getElementById("location-map-2").appendChild(po.svg("svg")))
-		.add(po.interact());
-	map.add(po.image()
-		.url(po.url("http://{S}tile.cloudmade.com"
-		+ "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
-		+ "/998/256/{Z}/{X}/{Y}.png")
-		.hosts(["a.", "b.", "c.", ""])));
-	map.add(po.grid());
-
-
-	map.add(po.compass()
-		.pan("none"));
-	map.remove(po.arrow());
-
-}
 
  /**** Carousel for Testominals ****/
  if ($.fn.owlCarousel){
@@ -682,4 +642,44 @@ function loadAnimatedWidget_pure_white(){
 	icons_grey.set("white_widget_13", Skycons.WIND);
 	icons_grey.set("white_widget_14", Skycons.SLEET);
 	icons_grey.play();
+}
+
+function loadLocationMaps(){
+var myOptions = {
+    zoom: 10,
+    panControl : false,
+    streetViewControl : false,
+    mapTypeControl: false,
+    overviewMapControl: false,
+    zoomControl : false,
+    center: new google.maps.LatLng(40.6700, -73.9400),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: [{featureType:"administrative",stylers:[{visibility:"off"}]},{featureType:"poi",stylers:[{visibility:"simplified"}]},{featureType:"road",stylers:[{visibility:"simplified"}]},{featureType:"water",stylers:[{visibility:"simplified"}]},{featureType:"transit",stylers:[{visibility:"simplified"}]},{featureType:"landscape",stylers:[{visibility:"simplified"}]},{featureType:"road.highway",stylers:[{visibility:"off"}]},{featureType:"road.local",stylers:[{visibility:"on"}]},{featureType:"road.highway",elementType:"geometry",stylers:[{visibility:"on"}]},{featureType:"road.arterial",stylers:[{visibility:"off"}]},{featureType:"water",stylers:[{color:"#5f94ff"},{lightness:26},{gamma:5.86}]},{},{featureType:"road.highway",stylers:[{weight:0.6},{saturation:-85},{lightness:61}]},{featureType:"road"},{},{featureType:"landscape",stylers:[{hue:"#0066ff"},{saturation:74},{lightness:100}]}]
+};
+
+
+//Location Map
+if($('#location-map').length > 0){
+ //Initialize Map
+    new google.maps.Map(document.getElementById('location-map'), myOptions);
+}
+
+if($('#location-map-2').length > 0){
+ //Initialize Map
+  new google.maps.Map(document.getElementById('location-map-2'), myOptions);
+}
+    
+$('#mapplic_demo').mapplic({
+    source: 'http://revox.io/webarch/json/states.json',
+    height: 494,
+    sidebar: false,
+    minimap: false,
+    locations: true,
+    deeplinking: true,
+    fullscreen: false,
+    hovertip: true,
+    developer: false,
+    maxscale: 3,
+    height:380
+});    
 }

@@ -99,7 +99,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     private function getAlexa($domain)
     {
-        $rank = 0;
+        $rank = 100000000;
         $url  = "http://data.alexa.com/data?cli=10&dat=snbamz&url=" . $domain;
 
         $ch = curl_init($url);
@@ -129,6 +129,10 @@ class UpdateInstancesCommand extends ContainerAwareCommand
      */
     private function getInstanceInfo(&$i, $alexa = false, $views = false, $created = false)
     {
+        if (empty($i->getDatabaseName())) {
+            return false;
+        }
+
         $this->im->getConnection()->selectDatabase($i->getDatabaseName());
 
         // Count contents

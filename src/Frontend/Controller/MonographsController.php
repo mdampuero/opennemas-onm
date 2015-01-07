@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -141,7 +140,7 @@ class MonographsController extends Controller
     {
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
-        $specialID = \Content::resolveID($dirtyID);
+        $specialID = \ContentManager::resolveID($dirtyID);
 
         $cacheID   = $this->view->generateCacheId($this->categoryName, null, $specialID);
         $special   = $this->get('entity_repository')->find('Special', $specialID);

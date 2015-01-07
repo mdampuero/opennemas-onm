@@ -1,5 +1,9 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 //Cool ios7 switch - Beta version
 //Done using pure Javascript
+if(!$('html').hasClass('lte9')) { 
 var Switch = require('ios7-switch')
         , checkbox = document.querySelector('.ios')
         , mySwitch = new Switch(checkbox);
@@ -17,7 +21,7 @@ var Switch2 = require('ios7-switch')
         e.preventDefault();
         mySwitch2.toggle();
       }, false);
-	  
+}
 $(document).ready(function(){
 	  //Dropdown menu - select2 plug-in
 	  $("#source").select2();
@@ -42,12 +46,9 @@ $(document).ready(function(){
     });
 	
 	//Time pickers
-	$('.timepicker-default').timepicker();
-    $('.timepicker-24').timepicker({
-                minuteStep: 1,
-                showSeconds: true,
-                showMeridian: false
-     });
+	$('.clockpicker ').clockpicker({
+        autoclose: true
+    });
 	//Color pickers
 	$('.my-colorpicker-control').colorpicker()
 	
