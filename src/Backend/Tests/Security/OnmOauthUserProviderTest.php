@@ -133,11 +133,4 @@ class OnmOAuthUserProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($userProvider->supportsClass('User'));
     }
-
-    protected static function callMethod($obj, $name, array $args) {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method->invokeArgs($obj, $args);
-    }
 }
