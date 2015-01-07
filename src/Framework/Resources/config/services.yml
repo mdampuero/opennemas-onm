@@ -186,3 +186,6 @@ services:
 
     authentication_entry_point:
         class: Framework\Security\AuthenticationEntryPoint
+
+    paginator:
+        class: Onm\Pager\Slider

@@ -214,7 +214,7 @@ class VideosController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('video_id', '');
-        $videoID = \Content::resolveID($dirtyID);
+        $videoID = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provide
         if (is_null($videoID)) {

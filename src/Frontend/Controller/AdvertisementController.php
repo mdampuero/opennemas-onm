@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Defines the frontend controller for the advertisement content type
@@ -39,15 +38,19 @@ class AdvertisementController extends Controller
 
         $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
 
+        if (!is_object($advertisement)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
         // Returns the HTML for the add and a header to varnish
         $this->view = new \Template(TEMPLATE_USER);
         return $this->render(
             'ads/advertisement.tpl',
-            array(
+            [
                 'banner'  => $advertisement,
-                'content' => $advertisement
-            ),
-            new Response('', 200, array('x-tags' => "ad,$id"))
+                'content' => $advertisement,
+                'x-tags' => "ad,$id"
+            ]
         );
     }
 
@@ -61,23 +64,18 @@ class AdvertisementController extends Controller
     public function redirectAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $id = \Content::resolveID($id);
 
-        $content = '';
-
-        if (isset($id)) {
-            $er = $this->get('entity_repository');
-
-            $advertisement = $er->find('Advertisement', $id);
-            $advertisement->setNumClics($id);
-
-            if ($advertisement->url) {
-                return $this->redirect($advertisement->url);
-            } else {
-                $content = '<script type="text/javascript">window.close();</script>';
-            }
+        if (!isset($id)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        return new Response($content);
+        $advertisement = $this->get('entity_repository')->find('Advertisement', $id);
+        $advertisement->setNumClics($id);
+
+        if ($advertisement->url) {
+            return $this->redirect($advertisement->url);
+        } else {
+            return new Response('<script type="text/javascript">window.close();</script>');
+        }
     }
 }

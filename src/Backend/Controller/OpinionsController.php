@@ -545,22 +545,14 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl(
-                    'admin_opinions_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countOpinions,
+            'base_url'          => $this->generateUrl(
+                'admin_opinions_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'opinion/content-provider.tpl',
@@ -591,19 +583,12 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl('admin_opinions_content_provider_related').'?page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countOpinions,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl('admin_opinions_content_provider_related'),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
@@ -627,7 +612,6 @@ class OpinionsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-
             $configsRAW = $request->request->get('opinion_settings');
 
             $configs = array(

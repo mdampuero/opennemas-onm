@@ -290,9 +290,6 @@ class UserController extends Controller
                     'csrf'             => md5(uniqid(mt_rand(), true)),
                     'meta'             => $user->getMeta(),
                 );
-
-                // Store default expire time
-                setCookieSecure('default_expire', $user->sessionexpire, 0);
             }
 
             $this->get('session')->getFlashBag()->add('success', _('Log in succesful.'));
@@ -300,10 +297,10 @@ class UserController extends Controller
             // Send welcome mail with link to subscribe action
             $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
 
-            $tplMail = new \Template(TEMPLATE_USER);
-            $tplMail->caching = 0;
-            $mailSubject = sprintf(_('Welcome to %s'), s::get('site_name'));
-            $mailBody = $tplMail->fetch(
+            $mailSubject      = sprintf(_('Welcome to %s'), s::get('site_name'));
+
+            $tplMail          = new \Template(TEMPLATE_USER);
+            $mailBody         = $tplMail->fetch(
                 'user/emails/welcome.tpl',
                 array(
                     'name' => $user->name,
