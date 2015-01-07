@@ -29,6 +29,10 @@ manager_ws_opcache:
     resource: @ManagerWebServiceBundle/Resources/config/routing/opcache.yml
     prefix:   /
 
+manager_ws_sidebar:
+    resource: @ManagerWebServiceBundle/Resources/config/routing/sidebar.yml
+    prefix:   /
+
 manager_ws_template:
     resource: @ManagerWebServiceBundle/Resources/config/routing/template.yml
     prefix:   /
