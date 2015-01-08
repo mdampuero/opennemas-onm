@@ -360,7 +360,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $cacheManager = $this->container->get('template_cache_manager');
         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
-        $ccm = ContentCategoryManager::get_instance();
+        $ccm = \ContentCategoryManager::get_instance();
 
         $availableCategories = $ccm->categories;
         $output ='';

@@ -138,7 +138,7 @@ class BooksController extends Controller
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'cover_id'    => $request->request->filter('cover_id', '', FILTER_SANITIZE_STRING),
+                'cover_id'    => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
