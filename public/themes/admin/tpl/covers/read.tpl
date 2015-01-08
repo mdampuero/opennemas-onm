@@ -38,10 +38,22 @@ jQuery(document).ready(function($) {
 
 {block name="content"}
 <form id="formulario" name="formulario" action="{if !empty($cover->id)}{url name=admin_cover_update id=$cover->id}{else}{url name=admin_cover_create}{/if}" method="POST"  enctype="multipart/form-data">
-
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}ePaper{/t} :: {if !isset($cover->id)}{t}Creating ePaper{/t}{else}{t}Editing ePaper{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{if !isset($cover->id)}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2></div>
         <ul class="old-button">
             <li>
                 <button type="submit">

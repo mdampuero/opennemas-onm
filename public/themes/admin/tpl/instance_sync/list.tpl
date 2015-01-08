@@ -11,19 +11,31 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Instance synchronization{/t}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=admin_instance_sync_create}" class="admin_add" title="{t}Add site to sync{/t}">
-                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Add site to sync{/t}" alt="{t}Add site to sync{/t}" ><br />{t}Add site to sync{/t}
-                </a>
-            </li>
-        </ul>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Instance Synchronization{/t} :: {t}Settings{/t}
+                        </h4>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="{url name=admin_instance_sync_create}" class="btn btn-primary" title="{t}Add site to sync{/t}">
+                                {t}Add site{/t}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+
+<div class="content">
 
     <div class="warnings-validation"></div>
 
@@ -74,7 +86,7 @@
                 {foreachelse}
                 <tr>
                     <td colspan=4 class="empty">
-                        <h4>{t}There are no synchorinize settings available{/t}</h4>
+                        <h4>{t}There are no synchronize settings available{/t}</h4>
                         <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
                     </td>
                 </tr>

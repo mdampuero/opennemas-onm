@@ -42,9 +42,24 @@
 <form action="{if isset($book)}{url name=admin_books_update id=$book->id}{else}{url name=admin_books_create}{/if}"
     method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
 
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Books{/t} :: {if !isset($book->id)}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if !isset($book->id)}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h2></div>
+            <div class="title"><h2></h2></div>
             <ul class="old-button">
                 {if isset($book->id)}
                     {acl isAllowed="BOOK_UPDATE"}

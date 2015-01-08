@@ -20,32 +20,39 @@ span.highlighted {
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Global search{/t}</h2></div>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Global search{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+<div class="content">
     <form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentCtrl" ng-controller="ContentCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-        <div class="wrapper-content">
-            <div class="table-info clearfix">
-                <div class="pull-left">
-                    <div class="form-inline">
-                        <strong>{t}FILTER:{/t}</strong>
-                        &nbsp;&nbsp;
-                        <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
-                        &nbsp;&nbsp;
-                        <strong>{t}CONTENT TYPE:{/t}</strong>
-                        <select class="select2 input-large" name="content_types[]" id="content_types" multiple ng-model="shvs.search.content_type_name">
-                            {html_options options=$content_types selected=$content_types_selected}
-                        </select>
-                    </div>
+        <div class="table-info clearfix">
+            <div class="pull-left">
+                <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
+                    &nbsp;&nbsp;
+                    <strong>{t}CONTENT TYPE:{/t}</strong>
+                    <select class="select2 input-large" name="content_types[]" id="content_types" multiple ng-model="shvs.search.content_type_name">
+                        {html_options options=$content_types selected=$content_types_selected}
+                    </select>
                 </div>
             </div>
-            <div id="search-results">
-                <div ng-include="'results'"></div>
-            </div><!-- /search-results -->
         </div>
+        <div id="search-results">
+            <div ng-include="'results'"></div>
+        </div><!-- /search-results -->
         <script type="text/ng-template" id="results">
             {include file="search_advanced/partials/_list.tpl"}
         </script>

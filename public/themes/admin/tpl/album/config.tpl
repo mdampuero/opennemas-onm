@@ -2,26 +2,40 @@
 
 {block name="content"}
 <form action="{url name=admin_albums_config}" method="POST">
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Albums{/t} :: {t}Configuration{/t}</h2></div>
-        <ul class="old-button">
-            <li>
-                <button type="submit">
-                    <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
-                    {t}Save{/t}
-                </button>
-            </li>
-            <li class="separator"></li>
-            <li>
-                <a href="{url name=admin_albums}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
-                </a>
-            </li>
-        </ul>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Albums{/t} :: {t}Configuration{/t}
+                        </h4>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_albums}" >
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save"></i>
+                                {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+<div class="content">
 
     {render_messages}
 

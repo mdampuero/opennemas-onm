@@ -160,10 +160,23 @@ label {
 
 {block name="content"}
 <form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
 			<ul class="old-button">
                 <li>
                     <button action="submit"  name="action" value="validate">

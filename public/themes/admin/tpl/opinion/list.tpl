@@ -9,10 +9,23 @@
 
 {block name="content"}
 <form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { content_status: -1, title: '', blog: {if $blog == 1}1{else}0{/if}, author: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {if $contentType eq 'blog'}Posts{else}{t}Opinions{/t} {/if} ::
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{if $contentType eq 'blog'}Posts{else}{t}Opinions{/t} {/if}::</h2>
             <div class="section-picker">
                 <div class="title-picker btn">
                     <span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span>

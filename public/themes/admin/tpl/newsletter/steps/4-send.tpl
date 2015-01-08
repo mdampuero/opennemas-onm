@@ -23,12 +23,23 @@
 {block name="content"}
 
 <form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Delivering report{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="top-action-bar clearfix" id="buttons-send">
         <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Delivered newsletter report{/t}</h2>
-            </div>
-
             <ul class="old-button">
                 <li>
                     <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">

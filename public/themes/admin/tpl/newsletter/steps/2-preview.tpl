@@ -32,13 +32,23 @@ var  newsletter_urls = {
 {block name="content"}
 
 <form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Preview{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 <div id="buttons-preview" class="top-action-bar clearfix">
 	<div class="wrapper-content">
-		<div class="title">
-            <h2>{t}Newsletter{/t} :: {t}Preview{/t}</h2>
-        </div>
-
 		<ul class="old-button">
 			<li>
 				<a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="admin_add" title="{t}Next{/t}" id="next-button">

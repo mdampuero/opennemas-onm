@@ -73,9 +73,22 @@ jQuery(document).ready(function($) {
 
 {block name="content"}
 <form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" name="formulario" id="formulario">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Letters to the Editor{/t} :: {if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button value="1" name="continue" type="submit">

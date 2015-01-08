@@ -66,6 +66,20 @@
 
 {block name="content"}
 <form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Videos{/t} :: {if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">

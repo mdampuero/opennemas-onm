@@ -37,13 +37,21 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-	<div class="wrapper-content">
-		<div class="title"><h2>{t}Videos{/t}</h2></div>
-	</div>
-</div>
-
-<div class="wrapper-content">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Videos{/t} :: {t}Pick type{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<div class="content">
 
     {render_messages}
 

@@ -2,10 +2,22 @@
 
 {block name="content"}
 <form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}News Agency{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}News Agency{/t}</h2></div>
-
         <ul class="old-button">
             <li>
                 <button type="submit">

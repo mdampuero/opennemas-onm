@@ -55,15 +55,6 @@
             </div>
         </div>
     </div>
-        <div class="top-action-bar clearfix">
-            <div class="wrapper-content">
-                <div class="title"><h2>{t}Menus{/t}</h2></div>
-                  <ul class="old-button">
-
-                </ul>
-            </div>
-        </div>
-
         <div class="content">
             {render_messages}
             <div ng-include="'menus'"></div>

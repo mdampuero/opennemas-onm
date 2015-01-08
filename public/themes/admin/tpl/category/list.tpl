@@ -21,10 +21,22 @@ jQuery(document).ready(function ($){
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
-
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Categories{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Categories{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="CATEGORY_CREATE"}
                 <li>

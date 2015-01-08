@@ -6,10 +6,24 @@
 
 {block name="content"}
 <form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 {if $category == 'widget'},'in_home': 1{/if}}, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Books{/t} ::
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Books{/t} :: </h2>
                 <div class="section-picker">
                     <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
                     <div class="options">

@@ -26,6 +26,7 @@
 
 {block name="content"}
 <form action="{url name=admin_images_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Images{/t} :: {t}Configuration{/t}</h2></div>

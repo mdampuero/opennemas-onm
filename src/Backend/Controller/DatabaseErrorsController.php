@@ -35,7 +35,8 @@ class DatabaseErrorsController extends Controller
     {
         $where        = "";
         $itemsPerPage = 10;
-        $totalErrors  = (int) $rsTotalErrors;
+        // $totalErrors  = (int) $rsTotalErrors;
+        $totalErrors = 0;
         $page         = $request->query->getDigits('page', 1);
         $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 

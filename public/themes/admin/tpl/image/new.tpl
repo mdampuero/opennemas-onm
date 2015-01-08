@@ -39,34 +39,45 @@
 
 {block name="content"}
 <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{t}Editing image{/t}</h2></div>
-            <ul class="old-button">
-                {acl isAllowed="PHOTO_UPDATE"}
-                <li>
-                    <button type="submit" name="action" value="validate">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" >
-                        <br />
-                        {t}Save{/t}
-                    </button>
-                </li>
-                {/acl}
-                <li class="separator"></li>
-                <li>
-                    {if !isset($smarty.request.stringSearch)}
-                        <a href="{url name=admin_images}" class="admin_add" title="{t}Go back{/t}">
-                    {else}
-                        <a href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0"
-                           title="Cancelar">
-                    {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back to listing{/t}
-                    </a>
-                </li>
-            </ul>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Images{/t} :: {t}Editing image{/t}
+                        </h4>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            {if !isset($smarty.request.stringSearch)}
+                                <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
+                            {else}
+                                <a class="btn btn-link" href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0" title="{t}Go back to list{/t}">
+                            {/if}
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        {acl isAllowed="PHOTO_UPDATE"}
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                            </button>
+                        </li>
+                        {/acl}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="wrapper-content">
+    </div>
+    <div class="content">
 
         {render_messages}
 

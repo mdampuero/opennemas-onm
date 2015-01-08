@@ -2,13 +2,21 @@
 
 {block name="content"}
 <form action="#" method="GET" name="formulario" id="formulario">
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Files{/t} :: {t}Statistics{/t}</h2></div>
-
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Files{/t} :: {t}Statistics{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+<div class="content">
     <ul class="pills">
         <li>
             <a href="{url name=admin_files_widget}" >{t}WIDGET HOME{/t}</a>

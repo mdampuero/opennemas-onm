@@ -40,11 +40,23 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form action="{if array_key_exists('id', $server)}{url name=admin_news_agency_server_update id=$server['id']}{else}{url name=admin_news_agency_server_create}{/if}"
-    method="POST" class="form-horizontal" autocomplete="off">
+<form action="{if array_key_exists('id', $server)}{url name=admin_news_agency_server_update id=$server['id']}{else}{url name=admin_news_agency_server_create}{/if}" method="POST" class="form-horizontal" autocomplete="off">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}News agency{/t} :: {if array_key_exists('id', $server)}{t}Update source{/t}{else}{t}Add source{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}News agency{/t} :: {if array_key_exists('id', $server)}{t}Update source{/t}{else}{t}Add source{/t}{/if}</h2></div>
+    <div class="content">
         <ul class="old-button">
             <li>
                 <button action="submit">
@@ -60,7 +72,7 @@ jQuery(document).ready(function($) {
         </ul>
     </div>
 </div>
-<div class="wrapper-content">
+<div class="content">
 
     {render_messages}
 

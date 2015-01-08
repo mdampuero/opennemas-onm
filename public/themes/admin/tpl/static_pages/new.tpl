@@ -2,9 +2,23 @@
 
 {block name="content"}
 <form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
+
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Static Pages{/t} :: {if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}</h2></div>
                 <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1" id="save-continue" title="Validar">

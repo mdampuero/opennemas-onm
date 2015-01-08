@@ -68,10 +68,22 @@ label {
 
 {block name="content"}
 <form action="{if isset($user->id)}{url name=admin_opinion_author_update id=$user->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
-
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Authors{/t} :: {if isset($user->id)}{t}Editing author{/t}{else}{t}Creating author{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if isset($user->id)}{t}Editing author{/t}{else}{t}Creating author{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button action="submit"  name="action" value="validate">

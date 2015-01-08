@@ -113,13 +113,24 @@
 {/block}
 
 {block name="content" append}
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Advertisement{/t} :: {if empty($advertisement->id)}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id category=$category page=$page filter=$filter}{else}{url name=admin_ad_create filter=$filter}{/if}" method="post" id="formulario">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Advertisement{/t} :: {if empty($advertisement->id)}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
-            </div>
             <ul class="old-button">
                 <li>
                     <button type="submit">

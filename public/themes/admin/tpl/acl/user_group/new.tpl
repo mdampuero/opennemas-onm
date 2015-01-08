@@ -13,9 +13,23 @@
 {block name="content"}
 <form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post" name="formulario" id="formulario">
 
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}User groups{/t} :: {if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit" name="action" value="validate">

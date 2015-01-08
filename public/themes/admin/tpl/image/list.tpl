@@ -6,11 +6,22 @@
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Images{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Images{/t}</h2>
-            </div>
             <ul class="old-button">
                 <li ng-if="shvs.selected.length > 0">
                     <a href="#">

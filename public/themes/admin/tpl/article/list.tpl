@@ -6,11 +6,23 @@
 
 {block name="content"}
 <form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { content_status: -1, category_name: -1, title_like: '', in_litter: 0, fk_author: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Articles{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Articles{/t}</h2>
-            </div>
             <ul class="old-button">
                 <li ng-if="shvs.selected.length > 0">
                     <a href="#">
@@ -167,15 +179,15 @@
                         {/acl}
                     </td>
                     <td class="right">
-                        <div class="btn-group">
+                        <div class="btn-group" role="group">
                             {acl isAllowed="ARTICLE_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_article_show') %]">
-                                    <i class="icon-pencil"></i>
+                                <a class="btn btn-default" href="[% edit(content.id, 'admin_article_show') %]">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
                             {/acl}
                             {acl isAllowed="ARTICLE_DELETE"}
                                 <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                                    <i class="icon-trash icon-white"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                             {/acl}
                         </div>

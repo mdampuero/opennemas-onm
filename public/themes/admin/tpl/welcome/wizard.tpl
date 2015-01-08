@@ -11,7 +11,7 @@
         <div class="span12">
             <div class="row-fluid">
                 <div class="span12 text-center">
-                    <span class="icon-ok-sign icon-huuge color-green"></span>
+                    <span class="fa fa-check-circle fa-4x color-green"></span>
                     <h3 class="final-message">{t}And that's it!{/t}</h3>
                     <h4>{t}You can start to use your newspaper.{/t}</h4>
                 </div>

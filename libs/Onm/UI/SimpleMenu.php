@@ -116,7 +116,7 @@ class SimpleMenu
         if (\Onm\Module\ModuleManager::isActivated( $element['module_name'])
             && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
         ) {
-            $isCurrent = ($_SERVER['REQUEST_URI'] == $element['link']);
+            $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 
             $classes = [];
 

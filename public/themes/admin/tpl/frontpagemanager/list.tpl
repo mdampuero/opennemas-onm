@@ -46,10 +46,24 @@
 {/block}
 
 {block name="content"}
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Frontpages{/t} :: {if $category eq 0}{t}Home{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Frontpages{/t} :: {if $category eq 0}{t}Home{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
             <ul class="old-button">
                 <li class="batch-actions">
                     <a href="#">

@@ -19,9 +19,22 @@
 <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}"
     enctype="multipart/form-data" method="POST" name="formulario" id="formulario" />
 
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Files{/t} :: {if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
                     <button  type="submit" >

@@ -11,9 +11,22 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}News agency{/t} :: {t}Configuration{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}News agency{/t} :: {t}Configuration{/t}</h2></div>
+    <div class="content">
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_news_agency_server_create}">
@@ -30,7 +43,7 @@ jQuery(document).ready(function($) {
         </ul>
     </div>
 </div>
-<div class="wrapper-content">
+<div class="content">
 
     {render_messages}
 

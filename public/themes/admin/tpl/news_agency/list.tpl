@@ -20,9 +20,22 @@
 
 {block name="content"}
 <div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}News Agency{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
             <li ng-if="shvs.selected.length > 0">
                     <a href="#">

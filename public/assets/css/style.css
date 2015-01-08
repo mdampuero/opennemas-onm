@@ -2306,16 +2306,13 @@ progress {
 
 .section-picker {
   position:relative;
-  margin-bottom:4px;
+  display:inline-block;
 }
   .section-picker .title-picker {
-    padding:5px;
     border:1px solid rgba(0,0,0,0);
     border-bottom: 0 none;
     border-radius:4px 4px 0 0;
     background:none;
-    font-size:1.5em;
-    font-family:"Open Sans";
   }
   .section-picker:hover .title-picker {
     z-index:100;
@@ -2323,9 +2320,6 @@ progress {
     border-bottom: 0 none;
     border-radius:4px 4px 0 0;
     background:White;
-    -moz-box-shadow: 0 0 0 White;
-    box-shadow:0 0 0 White;
-    -wekbit-box-shadow: 0 0 0 White;
   }
 
   .section-picker .options {
@@ -2475,6 +2469,7 @@ select#category option.unavailable {
           }
           .contentbox .content {
             padding:10px;
+            margin-top:0;
           }
           .contentbox label { display:inline-block;}
 

@@ -70,13 +70,23 @@
 {block name="content"}
 
 <form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Newsletter contents{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <div id="buttons-contents" class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Newsletter{/t} :: {t}Newsletter contents{/t}</h2>
-            </div>
-
             <ul class="old-button">
                 <li>
                     <button type="submit" title="{t}Next{/t}" id="next-button">

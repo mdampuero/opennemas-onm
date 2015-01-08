@@ -79,15 +79,22 @@
 
 {block name="content"}
 <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}System settings{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}System settings{/t}</h2></div>
-        <div class="buttons" style="display:none">
-            <a href="" class="button"><span class="icon home">&nbsp;</span>  </a>
-            <a href="" class="button"><span class="icon home">&nbsp;</span></a>
-            <a href="" class="button"><span class="icon home">&nbsp;</span></a>
-        </div>
-
         <ul class="old-button">
             <li>
                 <button type="submit" name="continue" value="1">

@@ -6,18 +6,32 @@
 
 {block name="content"}
 <form action="{url name=admin_files}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('attachment', { content_status: -1, category_name: -1, title_like: '', in_home: {if $category == 'widget'}1{else}-1{/if}, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Files{/t} ::
+                            <div class="section-picker">
+                                <div class="title-picker"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                                <div class="options">
+                                    <h4>{t}Special elements{/t}</h4>
+                                    <a href="{url name=admin_files_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
+                                    <a href="{url name=admin_files}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
+                                </div>
+                            </div>
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Files{/t} ::</h2>
-                <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
-                    <div class="options">
-                        <h4>{t}Special elements{/t}</h4>
-                        <a href="{url name=admin_files_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
-                        <a href="{url name=admin_files}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
-                    </div>
-                </div>
+
             </div>
             {if $category != ''}
             <ul class="old-button">

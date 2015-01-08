@@ -22,9 +22,22 @@
 {/block}
 
 {block name="content"}
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}News Agency{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}News Agency{/t}</h2></div>
+    <div class="content">
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xml_file}" title="{t}Import{/t}">
@@ -39,7 +52,7 @@
         </ul>
     </div>
 </div>
-<div class="wrapper-content">
+<div class="content">
 
     {render_messages}
 

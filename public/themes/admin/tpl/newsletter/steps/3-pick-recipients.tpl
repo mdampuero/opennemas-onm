@@ -78,12 +78,22 @@
 {block name="content"}
 
 <form action="#" method="POST" name="newsletterForm" id="pick-recipients-form">
-
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Recipient selection{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div id="buttons-recipients" class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Newsletter{/t} :: {t}Recipient selection{/t}</h2>
-            </div>
 
             <ul class="old-button">
 
@@ -104,7 +114,7 @@
         </div>
     </div>
 
-    <div class="wrapper-content">
+    <div class="content">
 
         {render_messages}
 
