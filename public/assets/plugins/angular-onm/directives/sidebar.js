@@ -7,16 +7,85 @@ angular.module('onm.sidebar', [])
   .service('sidebar', ['$http', '$location', '$rootScope', '$window', 'history', 'routing',
     function($http, $location, $rootScope, $window, history, routing) {
       /**
+       * Default template for the sidebar.
+       *
+       * @type string
+       */
+      var defaultSidebarTpl = '<div class="page-sidebar">\
+        <div class="spinner-wrapper">\
+          <div class="spinner">\
+            <i class="fa fa-circle-o-notch fa-3x fa-spin"></i>\
+          </div>\
+        </div>\
+      </div>';
+
+      /**
+       * Template for the sidebar footer.
+       *
+       * @type string
+       */
+      var footerTpl = '<div class="footer-widget">\
+        <ul>\
+          <li class="profile-info">\
+            <a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">\
+              <div class="profile-pic">\
+                <img class="gravatar" email="[% user.email %]" image="1" size="32" width=32 height=32 >\
+              </div>\
+              <div class="username">\
+                [% user.name %]\
+              </div>\
+            </a>\
+            <div class="logout" ng-click="logout();">\
+              <i class="fa fa-power-off"></i>\
+            </div>\
+          </li>\
+        </ul>\
+      </div>';
+
+      /**
+       * Template for a sidebar item.
+       *
+       * @type string
+       */
+      var itemTpl = '<li ng-class="{\'active open\': [urls]}"[click]>\
+        <a ng-href="#">\
+          <i class="fa[icon-class]"[spinner]></i>\
+          <span class="title">[name]</span>\
+          [arrow]\
+        </a>\
+        [submenu]\
+      </li>';
+
+      /**
+       * Template for the sidebar.
+       *
+       * @type string
+       */
+      var sidebarTpl = '<div class="[class]" id="[id]"[swipeable]>\
+        <div class="overlay"></div>\
+        <scrollable>\
+          <div class="page-sidebar-wrapper">\
+            <ul>\
+              [items]\
+            </ul>\
+          </div>\
+        </scrollable>\
+        [footer]\
+      </div>';
+
+      /**
        * Sidebar definition
        *
        * @type Object
        */
       var sidebar = {
         collapsed: false,
+        footer:    false,
         forced:    false,
         model:     {
           class: 'page-sidebar'
         },
+        pinnable:  true,
         pinned:    false,
         threshold: 992, // Minimum window width for a static sidebar
 
@@ -53,13 +122,7 @@ angular.module('onm.sidebar', [])
          * @return string The default HTML code for the sidebar.
          */
         default: function() {
-          return '<div class="page-sidebar">\
-              <div style="position: relative; height: 100%;">\
-                <div style="position: absolute; top: 50%; left: 50%; display: block; width: 40px; height: 40px; margin-top: -20px; margin-left: -20px;">\
-                  <i class="fa fa-circle-o-notch fa-3x fa-spin"></i>\
-                </div>\
-              </div>\
-            </div>';
+          return defaultSidebarTpl;
         },
 
         /**
@@ -165,6 +228,10 @@ angular.module('onm.sidebar', [])
           sidebar.collapsed = sidebar.pinned;
         },
 
+        renderBorder: function() {
+            return '<div class="layout-collapse-border ng-cloak" ng-click="sidebar.pin()"></div>';
+        },
+
         /**
          * Returns the HTML for an item.
          *
@@ -173,7 +240,13 @@ angular.module('onm.sidebar', [])
          * @return string The HTML code for the given item.
          */
         renderItem: function(item) {
-          var urls = [];
+          var arrow     = '';
+          var click     = '';
+          var iconClass = '';
+          var li        = itemTpl;
+          var spinner   = '';
+          var submenu   = '';
+          var urls      = [];
 
           if (item.route) {
             urls.push('sidebar.isActive(\''
@@ -190,53 +263,51 @@ angular.module('onm.sidebar', [])
             }
           }
 
-          var tpl = '<li ng-class="{ \'active open\':' + urls.join(' || ') + '}"';
+          urls = urls.join(' || ');
 
           if (item.route && item.click) {
-            tpl += ' ng-click="sidebar.itemClick(\'' + item.route + '\')"';
+            click = ' ng-click="sidebar.itemClick(\'' + item.route + '\')"';
           }
 
-          tpl += '>';
-
+          // Item with route
           if (item.route) {
-            tpl += '<a ng-href="' + routing.ngGenerate(item.route) + '">'
-          } else {
-            tpl += '<a ng-href="#">';
+            li = li.replace('#', routing.ngGenerate(item.route));
           }
 
-          // Add item icon
-          tpl += '<i class="fa '+ (item.icon ? item.icon : '') +'"';
+          // Custom icon class
+          if (item.icon) {
+            iconClass = ' ' + item.icon;
+          }
 
+          // Spinner
           if (item.route) {
-            tpl += ' ng-class="{ \'fa-spin fa-circle-o-notch\': sidebar.isChanging(\''
+            spinner = ' ng-class="{ \'fa-spin fa-circle-o-notch\': sidebar.isChanging(\''
               + item.route + '\')}"';
           }
 
-          tpl += '></i>';
-          tpl += '<span class="title">' + item.name + '</span>'
-
+          // Arrow & sub-menu
           if (item.items && item.items.length > 0) {
-            tpl += '<span class="arrow" ng-class="{ \'open\':'
-              + urls.join(' || ') + '}"></span>';
-          };
+            arrow = '<span class="arrow" ng-class="{ \'open\':'
+              + urls + '}"></span>';
 
-          tpl += '</a>'
-
-          // Add sub-items
-          if (item.items && item.items.length > 0) {
-            tpl += '<ul class="sub-menu">'
+            submenu += '<ul class="sub-menu">'
 
             for (var i = 0; i < item.items.length; i++) {
-              tpl += this.renderItem(item.items[i]);
+              submenu += this.renderItem(item.items[i]);
             }
 
-            tpl += '</ul>'
+            submenu += '</ul>';
           }
 
-          // Close item tags
-          tpl += '</li>';
+          li = li.replace('[urls]', urls);
+          li = li.replace('[click]', click);
+          li = li.replace('[icon-class]', iconClass);
+          li = li.replace('[spinner]', spinner);
+          li = li.replace('[name]', item.name);
+          li = li.replace('[arrow]', arrow);
+          li = li.replace('[submenu]', submenu);
 
-          return tpl;
+          return li;
         },
 
         /**
@@ -247,40 +318,30 @@ angular.module('onm.sidebar', [])
          * @return string The HTML code for the given sidebar
          */
         renderSidebar: function(sidebar) {
-          var tpl = '<div class="' + sidebar.class + '" id="' + sidebar.id
-            + ' ng-swipe-right="sidebar.mouseEnter()" ng-swipe-left="sidebar.mouseLeave()">\
-            <div class="overlay"></div>\
-            <scrollable>\
-              <div class="page-sidebar-wrapper">\
-                <ul>';
+          var div       = sidebarTpl;
+          var footer    = '';
+          var items     = '';
+          var swipeable = '';
+
+          if (this.swipeable) {
+            swipeable = ' ng-swipe-right="sidebar.mouseEnter()" ng-swipe-left="sidebar.mouseLeave()"';
+          }
+
+          if (this.model.footer) {
+            footer = footerTpl;
+          }
 
           for (var i = 0; i < sidebar.items.length; i++) {
-            tpl += this.renderItem(sidebar.items[i]);
+            items += this.renderItem(sidebar.items[i]);
           };
 
-          tpl += '</ul>\
-              </div>\
-            </scrollable>\
-            <div class="footer-widget">\
-              <ul>\
-                <li class="profile-info">\
-                  <a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">\
-                    <div class="profile-pic">\
-                      <img class="gravatar" email="[% user.email %]" image="1" size="32" width=32 height=32 >\
-                    </div>\
-                    <div class="username">\
-                      [% user.name %]\
-                    </div>\
-                  </a>\
-                  <div class="logout" ng-click="logout();">\
-                    <i class="fa fa-power-off"></i>\
-                  </div>\
-                </li>\
-              </ul>\
-            </div>\
-          </div>';
+          div = div.replace('[class]', sidebar.class);
+          div = div.replace('[id]', sidebar.id);
+          div = div.replace('[swipeable]', swipeable);
+          div = div.replace('[items]', items);
+          div = div.replace('[footer]', footer);
 
-          return tpl;
+          return div;
         },
 
         /**
@@ -302,8 +363,20 @@ angular.module('onm.sidebar', [])
       return {
         restrict: 'E',
         link: function($scope, elm, attrs) {
-          if (!attrs['ngSrc']) {
+          if (!attrs['src']) {
             return;
+          }
+
+          if (attrs['class']) {
+            sidebar.model.class = attrs['class'];
+          }
+
+          if (attrs['footer']) {
+            sidebar.model.footer = attrs['footer'];
+          }
+
+          if (attrs['id']) {
+            sidebar.model.id = attrs['id'];
           }
 
           var html = sidebar.default();
@@ -311,7 +384,8 @@ angular.module('onm.sidebar', [])
 
           elm.replaceWith(dft);
 
-          sidebar.init(attrs['ngSrc']).then(function(response) {
+          sidebar.init(attrs['src']).then(function(response) {
+            console.log(sidebar);
             var html = sidebar.render();
             var e    = $compile(html)($scope);
 
@@ -352,6 +426,15 @@ angular.module('onm.sidebar', [])
             });
 
             dft.replaceWith(e);
+
+            // Add sidebar border to pin/unpin
+            if (attrs['pinnable']) {
+              sidebar.pinnable = attrs['pinnable'];
+
+              var html = sidebar.renderBorder();
+              var border = $compile(html)($scope);
+              e.after(border);
+            }
           });
         }
       }
