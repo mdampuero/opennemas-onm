@@ -112,8 +112,7 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <sidebar class="main-sidebar" id="my-m" ng-src="manager_ws_sidebar_list"></sidebar>
-    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.pin()"></div>
+    <sidebar class="page-sidebar" footer="true" id="main-menu" src="manager_ws_sidebar_list" pinnable="true"></sidebar>
     <!-- END SIDEBAR -->
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
