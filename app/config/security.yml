@@ -28,6 +28,10 @@ security:
             pattern:  ^/manager$
             security: false
 
+        manager_ws_fake_login:
+            pattern:  ^/managerws/fake-login
+            security: false
+
         manager_ws_login_tpl:
             pattern: ^/managerws/template/login:(fake_form|blank).tpl$
             security: false
