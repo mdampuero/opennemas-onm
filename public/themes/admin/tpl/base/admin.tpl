@@ -76,9 +76,6 @@
         </script>
     {/block}
 
-</head>
-                <!--  -->
-
     {block name="js-library"}
         {javascripts
             src="@Common/js/jquery/jquery.min.js,
@@ -97,13 +94,9 @@
     {/block}
 
     {block name="header-js"}
-        {block name="js-library"}{/block}
     {/block}
 </head>
 <body>
-    {acl isAllowed="ROLE_BACKEND"}
-    {/acl}
-
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -131,10 +124,12 @@
         </div>
       <!-- END TOP NAVIGATION BAR -->
     </header>
+
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
     <div class="layout-collapse-border" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
     <!-- END SIDEBAR -->
+
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
@@ -154,7 +149,6 @@
         <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
         {javascripts src="
-            @Common/plugins/jquery/jquery.min.js,
             @Common/plugins/jquery-ui/jquery-ui.min.js,
             @Common/plugins/bootstrap/js/bootstrap.min.js,
             @Common/plugins/breakpoints/breakpoints.min.js,
