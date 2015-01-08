@@ -204,6 +204,23 @@ angular.module('onm.sidebar', [])
           tpl += '</ul>\
               </div>\
             </scrollable>\
+            <div class="footer-widget">\
+              <ul>\
+                <li class="profile-info">\
+                  <a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">\
+                    <div class="profile-pic">\
+                      <img class="gravatar" email="[% user.email %]" image="1" size="32" width=32 height=32 >\
+                    </div>\
+                    <div class="username">\
+                      [% user.name %]\
+                    </div>\
+                  </a>\
+                  <div class="logout" ng-click="logout();">\
+                    <i class="fa fa-power-off"></i>\
+                  </div>\
+                </li>\
+              </ul>\
+            </div>\
           </div>';
 
           return tpl;
