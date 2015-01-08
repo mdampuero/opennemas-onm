@@ -245,7 +245,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             var fakePassword = iframedoc.getElementById("password");
 
             fakeUsername.value = $scope.username;
-            fakePassword.value = $scope.password;
+
+            if ($scope.password && $scope.password.indexOf('md5:') === -1) {
+                fakePassword.value = 'md5:' + hex_md5($scope.password);
+            }
+
             fakeForm.submit();
         }
 
