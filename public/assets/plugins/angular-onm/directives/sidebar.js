@@ -4,8 +4,8 @@
 * Description
 */
 angular.module('onm.sidebar', [])
-  .service('sidebar', ['$http', '$location', '$rootScope', '$window', 'routing',
-    function($http, $location, $rootScope, $window, routing) {
+  .service('sidebar', ['$http', '$location', '$rootScope', '$window', 'history', 'routing',
+    function($http, $location, $rootScope, $window, history, routing) {
       /**
        * Sidebar definition
        *
@@ -19,6 +19,13 @@ angular.module('onm.sidebar', [])
         },
         pinned:    false,
         threshold: 992, // Minimum window width for a static sidebar
+
+        /**
+         * Resets the changing status for the sidebar.
+         */
+        changed: function() {
+          sidebar.changing = {};
+        },
 
         /**
          * Checks the sidebar status basing on the current window width.
@@ -78,6 +85,18 @@ angular.module('onm.sidebar', [])
         },
 
         /**
+         * Checks if an item is active (waiting for the response from server)
+         * given its route.
+         *
+         * @param string route The route name.
+         *
+         * @return boolean True if the item active. Otherwise, returns false.
+         */
+        isChanging: function(route) {
+          return sidebar.changing && sidebar.changing[route];
+        },
+
+        /**
          * Returns the current sidebar status.
          *
          * @return boolean True if the sidebar is collapsed. Otherwise, returns
@@ -85,6 +104,32 @@ angular.module('onm.sidebar', [])
          */
         isCollapsed: function() {
           return sidebar.collapsed;
+        },
+
+        /**
+         * Clears history for the given route and shows a spinner on route
+         * change on item click.
+         *
+         * @param string route The section route name.
+         */
+        itemClick: function(route) {
+          var url = routing.ngGenerateShort(route);
+          history.clear(url);
+
+          console.log(sidebar.changing);
+
+          // Show spinner
+          if (!sidebar.changing[route] && !sidebar.isActive(url)) {
+            sidebar.changing[route] = true;
+            console.log(sidebar.changing);
+          }
+
+          sidebar.current = sidebar.pinned;
+
+          // Collapse sidebar for small screens
+          if (sidebar.forced) {
+            sidebar.collapsed = true;
+          }
         },
 
         /**
@@ -145,8 +190,13 @@ angular.module('onm.sidebar', [])
             }
           }
 
-          var tpl = '<li ng-class="{ \'active open\':'
-            + urls.join(' || ') + '}">';
+          var tpl = '<li ng-class="{ \'active open\':' + urls.join(' || ') + '}"';
+
+          if (item.route && item.click) {
+            tpl += ' ng-click="sidebar.itemClick(\'' + item.route + '\')"';
+          }
+
+          tpl += '>';
 
           if (item.route) {
             tpl += '<a ng-href="' + routing.ngGenerate(item.route) + '">'
@@ -155,7 +205,14 @@ angular.module('onm.sidebar', [])
           }
 
           // Add item icon
-          tpl += '<i class="fa '+ (item.icon ? item.icon : '') +'"></i>'
+          tpl += '<i class="fa '+ (item.icon ? item.icon : '') +'"';
+
+          if (item.route) {
+            tpl += ' ng-class="{ \'fa-spin fa-circle-o-notch\': sidebar.isChanging(\''
+              + item.route + '\')}"';
+          }
+
+          tpl += '></i>';
           tpl += '<span class="title">' + item.name + '</span>'
 
           if (item.items && item.items.length > 0) {

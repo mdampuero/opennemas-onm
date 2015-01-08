@@ -19,12 +19,14 @@ class SidebarController extends Controller
                 [
                     'name' => _('Dashboard'),
                     'icon' => 'fa-home',
-                    'route' => 'manager_welcome'
+                    'route' => 'manager_welcome',
+                    'click' => true
                 ],
                 [
                     'name' => _('Instances'),
                     'icon' => 'fa-cubes',
-                    'route' => 'manager_instances_list'
+                    'route' => 'manager_instances_list',
+                    'click' => 'true'
                 ],
                 [
                     'name' => _('Framework'),
@@ -33,12 +35,14 @@ class SidebarController extends Controller
                         [
                             'name' => _('Commands'),
                             'icon' => 'fa-code',
-                            'route' => 'manager_commands'
+                            'route' => 'manager_commands',
+                            'click' => true
                         ],
                         [
                             'name' => _('OpCache Status'),
                             'icon' => 'fa-database',
-                            'route' => 'manager_opcache_status'
+                            'route' => 'manager_opcache_status',
+                            'click' => true
                         ]
                     ]
                 ],
@@ -49,12 +53,14 @@ class SidebarController extends Controller
                         [
                             'name' => _('Users'),
                             'icon' => 'fa-user',
-                            'route' => 'manager_users_list'
+                            'route' => 'manager_users_list',
+                            'click' => true
                         ],
                         [
                             'name' => _('User groups'),
                             'icon' => 'fa-users',
-                            'route' => 'manager_user_groups_list'
+                            'route' => 'manager_user_groups_list',
+                            'click' => true
                         ]
                     ]
                 ]

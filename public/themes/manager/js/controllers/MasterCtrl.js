@@ -41,36 +41,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         };
 
         /**
-         * Clears the last value for the current path.
-         *
-         * @param string route The route name.
-         */
-        $scope.clear = function(route) {
-            var url = routing.ngGenerateShort(route);
-            history.clear(url);
-        };
-
-        /**
-         * Updates sidebar status basing on the section.
-         *
-         * @param string route   The route name.
-         * @param string section The section to show.
-         */
-        $scope.goTo = function(route, section) {
-            $scope.clear(route);
-
-            if (!$scope.changing[section] && !$scope.isActive(route)) {
-                $scope.changing[section] = 1;
-            }
-
-            if ($scope.sidebar.forced) {
-                $scope.sidebar.current = 1;
-            } else {
-                $scope.sidebar.current = $scope.sidebar.wanted;
-            }
-        };
-
-        /**
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function(language) {
@@ -277,7 +247,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
-            $scope.changing = {};
+            sidebar.changed();
             $scope.checkFiltersBar();
         });
 
