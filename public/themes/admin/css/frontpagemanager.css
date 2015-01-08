@@ -11,6 +11,10 @@ body {
     margin-bottom:207px
 }
 
+#frontpagemanager .content {
+    margin-top:0;
+}
+
 #frontpagemanager.home .suggest-to-home {
     display:none;
 }
@@ -215,7 +219,9 @@ div.content div.description span.type {
 
 .content-provider-element {
     display:block;
+    color:#222;
 }
+
 
 div#content-provider span.type {
     display:none;

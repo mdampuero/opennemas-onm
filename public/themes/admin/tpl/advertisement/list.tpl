@@ -5,12 +5,23 @@
 {/block}
 
 {block name="content"}
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Advertisements{/t}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
         <div class="top-action-bar clearfix">
             <div class="wrapper-content">
-                <div class="title">
-                    <h2>{t}Advertisements{/t}</h2>
-                </div>
                 <ul class="old-button">
                     {acl isAllowed="ADVERTISEMENT_SETTINGS"}
                         <li>
@@ -63,7 +74,8 @@
                 </ul>
             </div>
         </div>
-        <div class="wrapper-content">
+
+        <div class="content">
             {render_messages}
             <div class="table-info clearfix">
                 <div class="pull-left form-inline">
@@ -117,7 +129,8 @@
                 </div>
             </div>
             <div ng-include="'advertisements'"></div>
-        </div> <!--end wrapper-->
+        </div>
+
         <script type="text/ng-template" id="advertisements">
             <div class="spinner-wrapper" ng-if="loading">
                 <div class="spinner"></div>

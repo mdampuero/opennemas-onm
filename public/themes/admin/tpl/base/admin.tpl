@@ -5,33 +5,79 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#22262e">
+    <link rel="manifest" href="manager_manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
 
     {block name="meta"}
-        <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
+    <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
     {/block}
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
+    <style>
+      @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+    </style>
     {block name="header-css"}
+        {stylesheets src="
+            @Common/plugins/pace/pace-theme-minimal.css,
+            @Common/plugins/jquery-slider/css/jquery.sidr.light.css,
+            @Common/plugins/webarch/css/animate.min.css,
+            @Common/plugins/bootstrap-select2/select2.css,
+
+            @Common/plugins/bootstrap/css/bootstrap.min.css,
+
+            @Common/plugins/webarch/css/style.css,
+            @Common/plugins/font-awesome/css/font-awesome.min.css,
+            @Common/css/bootstrap/bootstrap-fileupload.min.css,
+            @Common/plugins/webarch/css/responsive.css,
+            @Common/plugins/webarch/css/custom-icon-set.css,
+            @Common/plugins/webarch/css/magic_space.css,
+
+            @Common/plugins/jquery-nanoscroller/nanoscroller.css,
+            @Common/plugins/angular-loading-bar/loading-bar.min.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-default-theme.css,
+            @Common/plugins/angular-quickdate/css/ng-quick-date-plus-default-theme.css,
+            @Common/plugins/angular-tags-input/css/ng-tags-input.min.css,
+            @Common/plugins/jquery-notifications/css/messenger.css,
+            @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
+
+            @Common/css/manager/base/*,
+            @Common/css/manager/layout/*,
+            @Common/css/manager/main.css"
+        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
+
         {stylesheets
-            src="@Common/css/bootstrap/bootstrap.css,
-                @Common/css/fontawesome/font-awesome.min.css,
-                @Common/css/style.css,
-                @Common/css/jquery/jquery-ui.css,
+            src="@Common/css/jquery/jquery-ui.css,
                 @Common/css/jquery/select2/select2-bootstrap.css,
-                @Common/css/jquery/select2/select2.css,
                 @Common/css/jquery/messenger/messenger.css,
                 @Common/css/jquery/messenger/messenger-spinner.css,
                 @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
-                @AdminTheme/css/jquery/bootstrap-nav-wizard.css"
+                @AdminTheme/css/jquery/bootstrap-nav-wizard.css,
+                @Common/css/style.cs"
             filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-	{/block}
+    {/block}
+
+    {block name="header-js"}
+        <script>
+            var appVersion = '{$smarty.const.DEPLOYED_AT}';
+        </script>
+    {/block}
+
+</head>
+                <!--  -->
 
     {block name="js-library"}
         {javascripts
@@ -56,127 +102,107 @@
 </head>
 <body>
     {acl isAllowed="ROLE_BACKEND"}
-    <header class="clearfix">
-        <div class="navbar navbar-inverse global-nav" style="position:fixed">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+    {/acl}
 
-                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
-                <div class="nav-collapse collapse navbar-inverse-collapse">
-                    {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
-                    <ul class="nav pull-right">
-                        <li>
-                            <form action="{url name=admin_search}" class="navbar-search global-search nofillonhover pull-right">
-                                <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
-                            </form>
-                        </li>
-                        {if is_null($errorMessage)}
-                        {if {count_pending_comments} gt 0}
-                        <li class="notification-messages">
-                            <a class="" title="{count_pending_comments} {t}Pending comments{/t}"
-                                href="{url name=admin_comments}">
-                                <span class="icon icon-inbox icon-large"></span>
-                                <span class="icon count">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
-                            </a>
-                        </li>
-                        {/if}
-                        {/if}
-                        <li class="help dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            {if $smarty.session.avatar_url}
-                                <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
-                            {else}
-                                {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="24"}
-                            {/if}
-                            <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
-                            <div class="dropdown-menu">
-                                <div class="avatar">
-                                    {if $smarty.session.avatar_url}
-                                        <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
-                                    {else}
-                                        {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
-                                    {/if}
-                                </div><!-- /.avatar -->
-                                <div class="user-info">
-                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                                    <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
-                                        <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{url name="admin_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                                    </ul><!-- /.links -->
-                                </div><!-- /.user-info -->
-                            </div>
-                        </li>
-                    </ul>
+    <header class="header navbar navbar-inverse">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="navbar-inner">
+            <div class="header-seperation">
+                <div class="layout-collapse pull-left">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                        <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
+                    </div>
+                </div>
+                <a class="header-static-logo" href="{url name=admin_welcome}">
+                    <h1>
+                        open<strong>nemas</strong>
+                    </h1>
+                </a>
+                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                    <div class="overlay"></div>
+                    <a class="header-logo" href="{url name=admin_welcome}">
+                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                            <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
+                        </h1>
+                    </a>
                 </div>
             </div>
+        <!-- END TOP NAVIGATION MENU -->
         </div>
+      <!-- END TOP NAVIGATION BAR -->
     </header>
-    {/acl}
-    <div id="content" role="main">
-    {block name="content"}{/block}
+    <!-- BEGIN SIDEBAR -->
+    {include file="base/sidebar.tpl"}
+    <div class="layout-collapse-border" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
+    <!-- END SIDEBAR -->
+    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
+        <!-- BEGIN PAGE CONTAINER-->
+            <div class="page-content">
+                <div class="view" id="view" ng-view autoscroll="true">
+                    {block name="content"}{/block}
+                </div>
+            </div>
+        <!-- END PAGE CONTAINER -->
     </div>
 
-    {block name="copyright"}
-    <footer>
-        <div class="wrapper-content clearfix">
-            <nav class="left">
-                <ul>
-                    <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
-                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-
-                </ul><!-- / -->
-            </nav>
-            <nav class="right">
-                <ul>
-                    <li>
-                        <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FOpenNemas%2F282535299100&amp;width=100&amp;height=21&amp;colorscheme=light&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;send=false&amp;appId=229591810467176" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
-                    </li>
-                    <li>
-                        <div class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/103592875488169354089" data-rel="publisher"></div>
-                        <script type="text/javascript">
-                          (function() {
-                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                            po.src = 'https://apis.google.com/js/plusone.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                          })();
-                        </script>
-                    </li>
-                    <li>
-                        {literal}
-                        <a href="https://twitter.com/opennemas" class="twitter-follow-button" data-show-count="true" data-show-screen-name="false">Seguir</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        {/literal}
-                    </li>
-                </ul>
-            </nav>
-        </div><!-- / -->
-    </footer>
-	{/block}
+    <!--[if lt IE 7 ]>
+        <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+        <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
+    <![endif]-->
 
     {block name="footer-js"}
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+
+        {javascripts src="
+            @Common/plugins/jquery/jquery.min.js,
+            @Common/plugins/jquery-ui/jquery-ui.min.js,
+            @Common/plugins/bootstrap/js/bootstrap.min.js,
+            @Common/plugins/breakpoints/breakpoints.min.js,
+            @Common/plugins/fastclick/fastclick.js,
+            @Common/plugins/jquery-unveil/jquery.unveil.min.js,
+            @Common/plugins/jquery-block-ui/jquery.blockui.min.js,
+            @Common/plugins/jquery-lazyload/jquery.lazyload.min.js,
+
+            @Common/plugins/jquery-slider/jquery.sidr.min.js,
+            @Common/plugins/jquery-nanoscroller/jquery.nanoscroller.min.js,
+            @Common/plugins/jquery-notifications/js/messenger.min.js,
+            @Common/plugins/jquery-notifications/js/messenger-theme-flat.js,
+
+            @Common/js/onm/scripts.js,
+
+            @Common/js/jquery/select2/select2.min.js,
+            @Common/js/libs/modernizr.min.js,
+            @Common/js/onm/md5.min.js,
+            @Common/js/onm/scripts.js,
+            @Common/js/onm/jquery.onm-editor.js,
+
+            @FosJsRoutingBundle/js/router.js,
+            @Common/js/routes.js,
+            @Common/plugins/angular/angular.min.js,
+            @Common/plugins/angular-animate/angular-animate.min.js,
+            @Common/plugins/angular-checklist-model/checklist-model.js,
+            @Common/plugins/angular-webstorage/angular-webstorage.min.js,
+            @Common/plugins/angular-google-chart/angular-google-chart.js,
+            @Common/plugins/angular-nanoscroller/scrollable.js,
+            @Common/plugins/angular-loading-bar/loading-bar.min.js,
+            @Common/plugins/angular-quickdate/js/ng-quick-date.min.js,
+            @Common/plugins/angular-recaptcha/module.js,
+            @Common/plugins/angular-recaptcha/directive.js,
+            @Common/plugins/angular-recaptcha/service.js,
+            @Common/plugins/angular-route/angular-route.min.js,
+            @Common/plugins/angular-tags-input/js/ng-tags-input.min.js,
+            @Common/plugins/angular-touch/angular-touch.min.js,
+            @Common/plugins/angular-translate/angular-translate.min.js,
+            @Common/plugins/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/plugins/angular-ui/select2.js,
+
+            @Common/plugins/angular-onm/*,
+
+            @Common/plugins/webarch/js/core.js,
+        " filters="uglifyjs"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
+
         {browser_update}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});
@@ -205,6 +231,4 @@
             });
         })
         </script>
-	{/block}
-</body>
-</html>
+    {/block}
