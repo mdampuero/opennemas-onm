@@ -127,6 +127,9 @@ class SimpleMenu
             if ($isCurrent || $isSubmenuCurrent) {
                 $classes []= 'active';
             }
+            if ($isSubmenuCurrent) {
+                $classes []= 'open';
+            }
 
             $class = '';
             if (!empty($classes)) {
