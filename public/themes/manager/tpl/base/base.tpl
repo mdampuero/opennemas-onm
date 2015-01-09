@@ -64,7 +64,7 @@
     {/block}
 
 </head>
-<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.isCollapsed() }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -89,7 +89,7 @@
         <div class="navbar-inner">
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
-                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.toggle()">
                         <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
                     </div>
                 </div>
@@ -112,8 +112,9 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <sidebar class="page-sidebar" footer="true" id="main-menu" src="manager_ws_sidebar_list" pinnable="true"></sidebar>
+    <sidebar class="page-sidebar" footer="true" id="sidebar1" ng-model="sidebar" position="right" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
     <!-- END SIDEBAR -->
+
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
