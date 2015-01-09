@@ -9,11 +9,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
     'authService', 'routing', 'history', 'webStorage', 'messenger',
-    'paginationConfig', 'cfpLoadingBar', 'sidebar',
+    'paginationConfig', 'cfpLoadingBar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
         $window, vcRecaptchaService, httpInterceptor, authService, routing,
-        history, webStorage, messenger, paginationConfig, cfpLoadingBar, sidebar
+        history, webStorage, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
          * The routing service.
@@ -21,13 +21,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @type Object
          */
         $scope.routing = routing;
-
-        /**
-         * Sidebar service
-         *
-         * @type Object
-         */
-        $scope.sidebar = sidebar;
 
         /**
          * Flag to show modal window for login only once.
@@ -247,7 +240,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
-            sidebar.changed();
             $scope.checkFiltersBar();
         });
 
@@ -286,7 +278,9 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param integer ov Old width value.
          */
         $scope.$watch('windowWidth', function(nv, ov) {
-            sidebar.check();
+            if ($scope.sidebar) {
+                $scope.sidebar.check();
+            }
         });
 
         /**
