@@ -97,7 +97,7 @@ abstract class AbstractCache implements CacheInterface
      * @return boolean TRUE if the entry was successfully stored in the
      *                         cache, FALSE otherwise.
      */
-    public function save($id, $data, $lifeTime = 0)
+    public function save($id, $data = null, $lifeTime = 0)
     {
         if (is_array($id)) {
             $values = array();

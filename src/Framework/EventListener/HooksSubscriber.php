@@ -51,7 +51,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'author.update' => [
                 ['deleteAllAuthorsCaches', 5],
-                ['deleteUserCache', 10],
             ],
             'author.delete' => [
                 ['mockHookAction', 0],
@@ -392,8 +391,11 @@ class HooksSubscriber implements EventSubscriberInterface
             'ORDER BY created DESC '
         );
 
+        // Delete cache for author profile
+        $this->cacheHandler->delete('user-' . $authorId);
+
         // Delete caches for all author opinions and frontpages
-        $cacheManager = $this->get('template_cache_manager');
+        $cacheManager = $this->container->get('template_cache_manager');
         $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         if (!empty($opinions)) {
