@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -61,13 +62,13 @@ class NewsletterSubscriptorsController extends Controller
         $total = $user->countUsers($where);
 
         // Pager
-        $pager = \Onm\Pager\Slider::create(
-            $total,
-            $itemsPerPage,
-            $this->generateUrl(
+        $pager = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $total,
+            'base_url'          => $this->generateUrl(
                 'admin_newsletter_subscriptors'
-            )
-        );
+            ),
+        ]);
 
         return $this->render(
             'newsletter/subscriptions/list.tpl',
