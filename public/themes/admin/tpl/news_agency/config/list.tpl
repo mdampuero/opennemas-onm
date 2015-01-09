@@ -72,7 +72,7 @@ jQuery(document).ready(function($) {
                 <div class="btn-group">
                     <a href="{url name=admin_news_agency_server_show id=$server['id']}" class="btn edit"><i class="pencil"></i> Editar</a>
                     <a href="{url name=admin_news_agency_server_clean_files id=$server['id']}" class="btn" title="{t}Removes the synchronized files for this source{/t}"><i class="icon-fire"></i></a>
-                    <a href="#" data-url="{url name=admin_news_agency_server_delete id=$server['id']}" class="btn btn-danger del-server"><i class="icon-trash icon-white"></i></a>
+                    <a href="#" data-url="{url name=admin_news_agency_server_delete id=$server['id']}" class="btn btn-danger del-server"><i class="fa fa-trash-o"></i></a>
                 </div>
             </td>
         </tr>

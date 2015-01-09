@@ -62,7 +62,7 @@
             {/if}
         </td>
         <td class="center">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn" title="{t}Edit{/t}"><i class="icon-pencil"></i></a>
+            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
         </td>
         {/if}
 

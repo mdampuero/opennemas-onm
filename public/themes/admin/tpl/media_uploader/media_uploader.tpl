@@ -188,7 +188,7 @@ var fileUploadErrors = {
         <div>{{created}}</div>
     </div>
     <div class="buttons btn-group">
-        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn btn-mini"><i class="icon icon-pencil"></i> {/literal}{t}Edit image{/t}{literal}</a>
+        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn btn-mini"><i class="icon fa fa-pencil"></i> {/literal}{t}Edit image{/t}{literal}</a>
         <!-- <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a> -->
     </div>
 </div>

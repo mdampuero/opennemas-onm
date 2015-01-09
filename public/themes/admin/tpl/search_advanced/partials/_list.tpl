@@ -37,7 +37,7 @@
             <td class="right">
                 <div class="btn-group right">
                     <a class="btn" href="[% edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
-                        <i class="icon-pencil"></i>
+                        <i class="fa fa-pencil"></i>
                     </a>
                 </div>
             </td>

@@ -104,7 +104,7 @@
                             </button>
 
                             <button class="btn btn-danger" ng-click="open('modal-remove-permanently', 'backend_ws_content_remove_permanently', $index)" type="button" title="{t}Restore{/t}">
-                                <i class="icon-trash icon-white"></i>
+                                <i class="fa fa-trash-o"></i>
                             </button>
                         </div>
                     </td>

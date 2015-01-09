@@ -248,7 +248,7 @@
                             <td class="right">
                                 <div class="btn-group">
                                     <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategorys[s]->pk_content_category}" title="Modificar">
-                                        <i class="icon-pencil"></i>
+                                        <i class="fa fa-pencil"></i>
                                     </a>
                                 </div>
                             </td>

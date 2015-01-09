@@ -101,12 +101,12 @@
                         <div class="btn-group">
                             {acl isAllowed="AUTHOR_UPDATE"}
                             <a class="btn" href="[% edit(content.id, 'admin_opinion_author_show') %]" title="{t}Edit user{/t}">
-                                <i class="icon-pencil"></i> {t}Edit{/t}
+                                <i class="fa fa-pencil"></i> {t}Edit{/t}
                             </a>
                             {/acl}
                             {acl isAllowed="AUTHOR_DELETE"}
                             <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)" type="button">
-                                <i class="icon-trash icon-white"></i>
+                                <i class="fa fa-trash-o"></i>
                             </button>
                             {/acl}
                         </div>

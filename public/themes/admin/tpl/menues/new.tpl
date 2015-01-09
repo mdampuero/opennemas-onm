@@ -135,7 +135,7 @@
                                         <span class="menu-title">{$category->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
                                     <span class="menu-title">{$albumCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                         <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                     </div>
                                 </div>
@@ -192,7 +192,7 @@
                                     <span class="menu-title">{$videoCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                         <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                     </div>
                                 </div>
@@ -220,7 +220,7 @@
                                     <span class="menu-title">{$pollCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                         <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                     </div>
                                 </div>
@@ -251,7 +251,7 @@
                                         </span>
                                         <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@
                                         <span class="menu-title">{$staticPages[k]->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                     </div>
@@ -311,7 +311,7 @@
                                              alt="{t}Sync{/t}" >
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                         </div>
@@ -342,7 +342,7 @@
                                         <span class="menu-title">{$blog->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                     </div>
@@ -377,7 +377,7 @@
                                              alt="{t}Synched blog category{/t}" >
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
                                         </div>

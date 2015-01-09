@@ -41,8 +41,6 @@ font-size: 13px;
 .table a.btn {font-weight:normal;}
 .table input[type="checkbox"] {margin-top:0;}
 .table tbody td.empty { padding:30px; text-align: center; font-size:13px;}
-.table th { background:#ecf0f2; color:#666; text-transform:uppercase; font-weight:bold; }
-.table th, .table tfoot td { background:#ecf0f2; padding: 9px; text-align: left; }
 
 .table tr.row_selected td {
   background-color: #ffffcc !important;
@@ -676,9 +674,10 @@ div.utilities-conf input[type="text"]{
   font-size:1.1em;
 }
 
-.navbar .btn, .navbar .btn-group {
+/*.navbar .btn, .navbar .btn-group {
   margin-top: 8px;
 }
+*/
 .notification-messages a {
   position:relative;
 }

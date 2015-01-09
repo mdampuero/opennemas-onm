@@ -296,7 +296,7 @@
                     <td class="center nowrap">{$caches[c].size} KB</td>
                     <td class="right nowrap">
                         <a class="btn btn-danger delete-cache-button" href="{url name=admin_tpl_manager_delete cacheid=$caches[c].cache_id  tpl=$caches[c].tpl}"
-                            title="{t}Delete cache file{/t}"><i class="icon-trash icon-white"></i></a>
+                            title="{t}Delete cache file{/t}"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
                 {/if}

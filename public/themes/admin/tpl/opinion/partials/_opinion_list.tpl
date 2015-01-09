@@ -90,17 +90,17 @@
                     <div class="btn-group">
                         {acl isAllowed="OPINION_UPDATE"}
                         <a class="btn" href="[% edit(content.id, 'admin_opinion_show') %]">
-                            <i class="icon-pencil"></i>
+                            <i class="fa fa-pencil"></i>
                         </a>
                         {/acl}
                         {acl isAllowed="OPINION_DELETE"}
                         {acl isAllowed="CONTENT_OTHER_DELETE"}
                         <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                            <i class="icon-trash icon-white"></i>
+                            <i class="fa fa-trash-o"></i>
                         {aclelse}
                         </button>
                         <button ng-if="content.fk_author == {$smarty.session.userid}" class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                            <i class="icon-trash icon-white"></i>
+                            <i class="fa fa-trash-o"></i>
                         </button>
                         {/acl}
                         {/acl}

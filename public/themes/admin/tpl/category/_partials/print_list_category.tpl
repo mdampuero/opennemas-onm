@@ -43,7 +43,7 @@
             {acl isAllowed="CATEGORY_UPDATE"}
                 {if $category->internal_category != 0 && $category->internal_category != 2}
                 <a class="btn btn-mini" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
-                    <i class="icon-pencil"></i>
+                    <i class="fa fa-pencil"></i>
                 </a>
                 {/if}
             {/acl}
@@ -63,7 +63,7 @@
                     data-url="{url name=admin_category_delete id=$category->pk_content_category}"
                     data-title="{$category->title}"
                     title="Eliminar">
-                    <i class="icon-trash icon-white"></i>
+                    <i class="fa fa-trash-o"></i>
                 </a>
                 {/if}
             {/acl}
@@ -118,7 +118,7 @@
             <div class="btn-group">
                 {acl isAllowed="CATEGORY_UPDATE"}
                     <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                        <i class="icon-pencil"></i>
+                        <i class="fa fa-pencil"></i>
                     </a>
                 {/acl}
                 {acl isAllowed="CATEGORY_DELETE"}
@@ -136,7 +136,7 @@
                         data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
                         data-title="{$subcategory->title}"
                         title="{t}Delete category{/t}">
-                        <i class="icon-trash icon-white"></i>
+                        <i class="fa fa-trash-o"></i>
                     </a>
                 {/acl}
             </div>

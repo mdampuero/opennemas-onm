@@ -76,10 +76,10 @@
 					<td class="right">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_keyword_show id=$keyword->id}" title="{t}Edit this content{/t}">
-	                            <i class="icon-pencil"></i>{t}Edit{/t}
+	                            <i class="fa fa-pencil"></i>{t}Edit{/t}
 	                        </a>
 	                        <a href="{url name=admin_keyword_delete id=$keyword->id}" class="btn btn-danger" title="{t}Delete{/t}">
-	                            <i class="icon-trash icon-white"></i>
+	                            <i class="fa fa-trash-o"></i>
 	                        </a>
 						</div>
 

@@ -72,11 +72,11 @@
                             <div class="btn-group">
                                 <a href="{url name=admin_instance_sync_show site_url=$site}"
                                    title="{t}Edit{/t}" class="btn">
-                                    <i class="icon-pencil"></i>
+                                    <i class="fa fa-pencil"></i>
                                 </a>
                                 <a href="{url name=admin_instance_sync_delete site_url=$site}"
                                    title="{t}Delete{/t}"  class="btn btn-danger">
-                                    <i class="icon-trash icon-white"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </a>
                             </div>
                         </td>

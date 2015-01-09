@@ -139,7 +139,7 @@
                                     <span>{t}In Frontpage{/t}</span>
                                     <div class="container-buttons">
                                         <i class="icon-chevron-up"></i>
-                                        <i class="icon-pencil"></i>
+                                        <i class="fa fa-pencil"></i>
                                         <i class="icon-remove"></i>
                                         <i class="icon-trash"></i>
                                     </div>
@@ -159,7 +159,7 @@
                                             {else}
                                                 <i class="icon-chevron-down"></i>
                                             {/if}
-                                            <i class="icon-pencil"></i>
+                                            <i class="fa fa-pencil"></i>
                                             <i class="icon-remove"></i>
                                             <i class="icon-trash"></i>
                                         </div>

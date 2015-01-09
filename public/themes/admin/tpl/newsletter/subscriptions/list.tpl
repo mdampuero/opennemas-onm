@@ -121,7 +121,7 @@
                     <td class="right nowrap">
                         <div class="btn-group">
                             <a href="{url name=admin_newsletter_subscriptor_show id=$user->id}" title="{t}Edit user{/t}" class="btn">
-                                <i class="icon-pencil"></i>
+                                <i class="fa fa-pencil"></i>
                             </a>
                             <a  href ="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
                                 class="del btn btn-danger"

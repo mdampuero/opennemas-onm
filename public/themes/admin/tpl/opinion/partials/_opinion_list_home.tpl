@@ -44,7 +44,7 @@
                 <div class="btn-group">
                 {acl isAllowed="OPINION_UPDATE"}
                     <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
-                        <i class="icon-pencil"></i>
+                        <i class="fa fa-pencil"></i>
                     </a>
                 {/acl}
                 </div>
@@ -88,7 +88,7 @@
 
             {acl isAllowed="OPINION_UPDATE"}
             <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
-                <i class="icon-pencil"></i>
+                <i class="fa fa-pencil"></i>
             </a>
             {/acl}
         </div>
@@ -149,7 +149,7 @@
 
             {acl isAllowed="OPINION_UPDATE"}
             <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
-                <i class="icon-pencil"></i>
+                <i class="fa fa-pencil"></i>
             </a>
             {/acl}
             </div>

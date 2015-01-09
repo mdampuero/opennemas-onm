@@ -17,7 +17,7 @@
         <ul class="dropdown-menu pull-right">
             <li>
                 <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_album_show id=$content->id}">
-                    <i class="icon-pencil"></i> {t}Edit{/t}
+                    <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
             <li>

@@ -132,12 +132,12 @@
                         <div class="btn-group">
                             {acl isAllowed="COMMENT_UPDATE"}
                                 <a class="btn" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
-                                    <i class="icon-pencil"></i>
+                                    <i class="fa fa-pencil"></i>
                                 </a>
                             {/acl}
                             {acl isAllowed="COMMENT_DELETE"}
                                 <button class="btn btn-danger" ng-click="open('modal-remove-permanently', 'backend_ws_comment_delete', $index)" type="button">
-                                   <i class="icon-trash icon-white"></i>
+                                   <i class="fa fa-trash-o"></i>
                                 </button>
                             {/acl}
                         </div>

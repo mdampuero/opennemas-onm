@@ -57,14 +57,21 @@
     </div>
         <div class="content">
             {render_messages}
-            <div ng-include="'menus'"></div>
+            <div class="grid simple">
+                <div class="grid-body no-padding">
+                    <div class="grid-overlay" ng-if="loading"></div>
+                    <div class="table-wrapper">
+                        <div ng-include="'menus'"></div>
+                    </div>
+                </div>
         </div><!--fin wrapper-content-->
         <script type="text/ng-template" id="menus">
             <div class="spinner-wrapper" ng-if="loading">
                 <div class="spinner"></div>
                 <div class="spinner-text">{t}Loading{/t}...</div>
             </div>
-            <table class="table table-hover table-condensed" ng-if="!loading">
+
+            <table class="table table-hover table-condensed no-margin" ng-if="!loading">
                 <thead>
                     <tr>
                         <th style="width:15px;">
@@ -74,7 +81,6 @@
                         {if count($menu_positions) > 1}
                         <th class="nowrap center" style="width:100px;">{t}Position assigned{/t}</th>
                         {/if}
-                        <th class="center" style="width:100px;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,6 +90,14 @@
                         </td>
                         <td>
                             [% content.name %]
+                            <div class="listing-inline-actions">
+                                    <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
+                                        <i class="fa fa-pencil"></i>{t}Edit{/t}
+                                    </a>
+                                    <button class="link link-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', 'backend_ws_menu_delete', $index)" type="button">
+                                        <i class="fa fa-trash-o"></i>{t}Delete{/t}
+                                    </button>
+                                </div>
                         </td>
                         {if count($menu_positions) > 1}
                         <td class="left">
@@ -95,20 +109,6 @@
                             </span>
                         </td>
                         {/if}
-                        <td class="right">
-                            <div class="btn-group">
-                                {acl isAllowed="MENU_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit page '[% content.name %]'{/t}">
-                                    <i class="fa fa-pencil"></i> {t}Edit{/t}
-                                </a>
-                                {/acl}
-                                {acl isAllowed="MENU_DELETE"}
-                                    <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', 'backend_ws_menu_delete', $index)" type="button">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
-                                {/acl}
-                            </div>
-                        </td>
                     </tr>
                 </tbody>
                 <tfoot>

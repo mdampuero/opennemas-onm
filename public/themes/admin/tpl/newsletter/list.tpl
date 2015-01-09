@@ -108,7 +108,7 @@
                     <td style="padding:1px; font-size:11px;" class="right">
                         <div class="btn-group">
                             <a class="btn" href="{url name=admin_newsletter_show_contents id=$newsletter->id}" title="{t}Edit{/t}" >
-                                <i class="icon-pencil"></i> {t}Edit{/t}
+                                <i class="fa fa-pencil"></i> {t}Edit{/t}
                             </a>
 
                             <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
@@ -118,7 +118,7 @@
                             <a class="del btn btn-danger"
                                data-id="{$newsletter->id}"
                                href="{url name=admin_newsletter_delete id=$newsletter->id}" >
-                                <i class="icon-trash icon-white"></i>
+                                <i class="fa fa-trash-o"></i>
                             </a>
                             {/if}
                         </div>

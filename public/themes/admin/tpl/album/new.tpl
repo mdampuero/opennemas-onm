@@ -35,7 +35,7 @@
                             '<div class="overlay-image">'+
                                 '<div>'+
                                     '<ul class="image-buttons clearfix">'+
-                                        '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
+                                        '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="fa fa-pencil"></i></a></li>'+
                                         '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
                                     '</ul>'+
                                 '</div>'+
@@ -258,7 +258,7 @@
                                 <div class="overlay-image">
                                     <div>
                                         <ul class="image-buttons clearfix">
-                                            <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>
+                                            <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="fa fa-pencil"></i></a></li>
                                             <li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>
                                         </ul>
                                     </div>

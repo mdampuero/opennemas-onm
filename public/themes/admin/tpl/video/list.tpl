@@ -235,12 +235,12 @@
                             <div class="btn-group">
                                 {acl isAllowed="VIDEO_UPDATE"}
                                 <a class="btn" href="[% edit(content.id, 'admin_video_show') %]">
-                                    <i class="icon-pencil"></i>
+                                    <i class="fa fa-pencil"></i>
                                 </a>
                                 {/acl}
                                 {acl isAllowed="VIDEO_DELETE"}
                                 <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                                    <i class="icon-trash icon-white"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                                 {/acl}
                            </div>

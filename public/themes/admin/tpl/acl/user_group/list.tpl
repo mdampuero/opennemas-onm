@@ -94,12 +94,12 @@
                             <div class="btn-group">
 
                                 <a class="btn" href="[% edit(content.id, 'admin_acl_usergroup_show') %]" title="{t}Edit user{/t}">
-                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                                    <i class="fa fa-pencil"></i> {t}Edit{/t}
                                 </a>
 
                                 <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_usergroup_delete', $index)"
                                     title="{t}Delete this user{/t}" type="button">
-                                    <i class="icon-trash icon-white"></i>
+                                    <i class="fa fa-trash-o"></i>
                                 </button>
                             </div>
                         </td>
