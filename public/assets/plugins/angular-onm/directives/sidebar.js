@@ -13,13 +13,6 @@ angular.module('onm.sidebar', [])
         },
         link: function($scope, elm, attrs) {
           /**
-           * The default template for the sidebar border.
-           *
-           * @type string
-           */
-          var borderTpl = '<div class="layout-collapse-border ng-cloak[position]"></div>';
-
-          /**
            * Default template for the sidebar.
            *
            * @type string
@@ -74,8 +67,8 @@ angular.module('onm.sidebar', [])
            *
            * @type string
            */
-          var sidebarTpl = '<div ng-class="{ \'collapsed\': [ngModel].isCollapsed() }">\
-            <div class="[class][position]" id="[id]"[swipeable]>\
+          var sidebarTpl = '<div class="[position][inverted]" ng-class="{ \'collapsed\': ngModel.isCollapsed() }">\
+            <div class="[class]" id="[id]"[swipeable]>\
               <div class="overlay"></div>\
               <scrollable>\
                 <div class="page-sidebar-wrapper">\
@@ -86,6 +79,7 @@ angular.module('onm.sidebar', [])
               </scrollable>\
               [footer]\
             </div>\
+            [border]\
           </div>';
 
           if (!attrs['src']) {
@@ -109,6 +103,7 @@ angular.module('onm.sidebar', [])
               footer:    attrs['footer'] ? attrs['footer'] : false,
               forced:    false,
               id:        attrs['id'] ? attrs['id'] : null,
+              inverted:  attrs['inverted'] ? attrs['inverted'] : false,
               class:     attrs['class'] ? attrs['class'] : 'page-sidebar',
               pinnable:  attrs['pinnable'] ? attrs['pinnable'] : true,
               pinned:    false,
@@ -253,26 +248,6 @@ angular.module('onm.sidebar', [])
               },
 
               /**
-               * Returns the HTML for the sidebar border.
-               *
-               * @return string The HTML code for the sidebar border.
-               */
-              renderBorder: function() {
-                var border   = borderTpl;
-                var position = '';
-
-
-                if (this.position != 'left') {
-                  position = ' border-on-right'
-                }
-
-                border = border.replace('[ngModel]', attrs['ngModel']);
-                border = border.replace('[position]', position);
-
-                return border;
-              },
-
-              /**
                * Returns the HTML for an item.
                *
                * @param Object item The item to render.
@@ -356,14 +331,20 @@ angular.module('onm.sidebar', [])
                * @return string The HTML code for the given sidebar
                */
               renderSidebar: function() {
+                var border    = '';
                 var div       = sidebarTpl;
+                var inverted  = '';
                 var footer    = '';
                 var items     = '';
-                var position  = '';
+                var position  = ''
                 var swipeable = '';
 
                 if (this.position != 'left') {
                   position = ' page-sidebar-on-right'
+                }
+
+                if (this.inverted) {
+                  inverted = ' page-sidebar-inverted'
                 }
 
                 if (this.swipeable) {
@@ -378,6 +359,10 @@ angular.module('onm.sidebar', [])
                   footer = footerTpl;
                 }
 
+                if (this.pinnable) {
+                  border = '<div class="page-sidebar-border ng-cloak"></div>'
+                }
+
                 for (var i = 0; i < this.data.items.length; i++) {
                   items += this.renderItem(this.data.items[i]);
                 };
@@ -387,10 +372,12 @@ angular.module('onm.sidebar', [])
                 console.log(this.swipeable);
                 console.log(swipeable);
 
+                div = div.replace('[footer]', footer);
+                div = div.replace('[border]', border);
+                div = div.replace('[items]', items);
+                div = div.replace('[inverted]', inverted);
                 div = div.replace('[position]', position);
                 div = div.replace('[swipeable]', swipeable);
-                div = div.replace('[items]', items);
-                div = div.replace('[footer]', footer);
                 div = div.replace('[ngModel]', attrs['ngModel']);
 
                 return div;
@@ -431,12 +418,12 @@ angular.module('onm.sidebar', [])
             var html = $scope.ngModel.render();
             var e    = $compile(html)($scope);
 
-            e.bind('mouseenter', function() {
+            e.find('.page-sidebar').bind('mouseenter', function() {
               $scope.ngModel.mouseEnter();
               $scope.$apply();
             });
 
-            e.bind('mouseleave', function() {
+            e.find('.page-sidebar').bind('mouseleave', function() {
               $scope.ngModel.mouseLeave();
               $scope.$apply();
             })
@@ -470,14 +457,10 @@ angular.module('onm.sidebar', [])
             dft.replaceWith(e);
 
             if ($scope.ngModel.pinnable) {
-              var html = $scope.ngModel.renderBorder();
-              var border = $compile(html)($scope);
-
-              border.bind('click', function (e) {
+               e.find('.page-sidebar-border').on('click', function (e) {
                 $scope.ngModel.pin();
                 $scope.$apply();
               });
-              e.after(border);
             }
           });
         }

@@ -105,7 +105,7 @@ i.ng-hide-add-active, .ng-hide-remove {
     margin: 0;
 }
 
-.collapsed .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
     padding: 15px !important;
 }
 
@@ -113,8 +113,8 @@ i.ng-hide-add-active, .ng-hide-remove {
 .page-sidebar .page-sidebar-wrapper ul li a i,
 .page-sidebar .page-sidebar-wrapper ul > li.open > a i,
 .page-sidebar .page-sidebar-wrapper > ul > li.open > a i,
-.collapsed .page-sidebar .page-sidebar-wrapper ul li a i,
-.collapsed .page-sidebar .page-sidebar-wrapper ul li a {
+.collapsed > .page-sidebar .page-sidebar-wrapper ul li a i,
+.collapsed > .page-sidebar .page-sidebar-wrapper ul li a {
     color: #8b91a0 !important;
 }
 
