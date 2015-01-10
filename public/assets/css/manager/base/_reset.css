@@ -2,6 +2,10 @@ body {
     overflow-x: hidden;
 }
 
+a {
+    transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
+}
+
 i.ng-hide-add-active, .ng-hide-remove {
     display: inline-block !important;
 }
@@ -69,44 +73,126 @@ i.ng-hide-add-active, .ng-hide-remove {
     position: fixed;
 }
 
-.page-sidebar .page-sidebar-wrapper > ul > li > a {
-    padding: 15px !important;
+.page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li {
+    margin-top: 0 !important;
 }
 
+.page-sidebar .page-sidebar-wrapper > ul > li > a,
 .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
-    padding: 15px 30px !important;
+    height: 50px;
+    width: 210px;
+    padding: 0 !important;
 
-    -webkit-transition: padding .25s;
-    -moz-transition:  padding .25s !important;
-    transition:  padding .25s !important;
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition: all .25s;
 }
 
-.page-sidebar .page-sidebar-wrapper > ul > li.open > a,
-.page-sidebar .page-sidebar-wrapper > ul > li:hover > a,
-.page-sidebar .page-sidebar-wrapper > ul > li.active > a {
+.page-sidebar .page-sidebar-wrapper > ul > li  a  i {
+    float: left;
+    height: 40px;
+    margin: 0;
+    padding: 18px 0;
+    width: 50px;
+
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition: all .25s;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li a .title {
+    display: inline-block;
+    float: left;
+    height: 40px;
+    padding: 15px 0;
+
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition: all .25s;
+}
+
+
+/* Collapsed */
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li,
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li:first-child,
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a,
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i,
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a .title {
+    height: 50px;
+}
+
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li {
+    padding-left: 0;
+}
+
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i {
+    padding-top: 18px;
+}
+
+.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a .title {
+    padding-top: 15px;
+}
+
+.collapsed.page-sidebar-inverted > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i {
+    margin-right: 0;
+}
+
+/* Not collapsed */
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li,
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li:first-child,
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a,
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i,
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a .title {
+    height: 40px;
+
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition: all .25s;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li {
+    padding-left: 15px;
+}
+
+.page-sidebar-inverted > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li {
+    padding-left: 0;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i {
+    padding-top: 12px;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a .title {
+    padding-top: 10px;
+}
+
+.page-sidebar-inverted > .page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu li a i {
+    margin-right: 15px;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > a .arrow {
+    float: right;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li > a .arrow:before,
+.page-sidebar .page-sidebar-wrapper > ul > li > a .arrow.open:before {
+    margin: 16px 20px 0 0;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul > li.open a,
+.page-sidebar .page-sidebar-wrapper > ul > li:hover a,
+.page-sidebar .page-sidebar-wrapper > ul > li.active a {
     background: none;
 }
 
-.page-sidebar .page-sidebar-wrapper > ul li span.title {
-    display: inline-block;
-}
-
-.page-sidebar .page-sidebar-wrapper > ul li span.arrow {
-    display: inline;
-}
-
-.page-sidebar .page-sidebar-wrapper > ul {
+.page-sidebar .page-sidebar-wrapper ul {
     width: 210px;
 }
 
-.page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu {
+.page-sidebar .page-sidebar-wrapper > ul > li ul.sub-menu {
     padding: 0;
     position: relative;
     margin: 0;
-}
-
-.collapsed > .page-sidebar .page-sidebar-wrapper > ul > li > ul.sub-menu > li > a {
-    padding: 15px !important;
 }
 
 .page-sidebar .page-sidebar-wrapper ul li a,
@@ -130,10 +216,4 @@ i.ng-hide-add-active, .ng-hide-remove {
     margin: 0;
     padding: 0;
     left: 0;
-}
-
-@media (max-width: 992px) and (min-width: 768px) {
-    .page-sidebar .page-sidebar-wrapper > ul {
-        padding-top: 0;
-    }
 }
