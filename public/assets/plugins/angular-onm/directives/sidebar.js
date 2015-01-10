@@ -100,15 +100,15 @@ angular.module('onm.sidebar', [])
               changing:  {},
               collapsed: false,
               data:      response.data,
-              footer:    attrs['footer'] ? attrs['footer'] : false,
+              footer:    attrs['footer'] == 'true' ? attrs['footer'] : false,
               forced:    false,
               id:        attrs['id'] ? attrs['id'] : null,
-              inverted:  attrs['inverted'] ? attrs['inverted'] : false,
+              inverted:  attrs['inverted'] == 'true' ? attrs['inverted'] : false,
               class:     attrs['class'] ? attrs['class'] : 'page-sidebar',
-              pinnable:  attrs['pinnable'] ? attrs['pinnable'] : true,
+              pinnable:  attrs['pinnable'] == 'true' ? attrs['pinnable'] : true,
               pinned:    false,
               position:  attrs['position'] ? attrs['position'] : 'left',
-              swipeable: attrs['swipeable'] ? attrs['swipeable'] : true,
+              swipeable: attrs['swipeable'] == 'true' ? attrs['swipeable'] : true,
               threshold: 992, // Minimum window width for a static sidebar
 
               /**
