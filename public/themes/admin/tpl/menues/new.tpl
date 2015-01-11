@@ -35,60 +35,63 @@
                         </h4>
                     </li>
                 </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_menus}" title="{t}Go back to list{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i> {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button type="submit" name="continue" value="1">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a  href="{url name=admin_menus}"  title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-    <div class="wrapper-content">
+    <div class="content">
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
         {render_messages}
 
-        <div class="form-vertical panel">
-            <div class="form-inline-block">
-                <div class="control-group">
-                    <label for="name" class="control-label">{t}Name{/t}</label>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><span class="semi-bold">{t}Basic information{/t}</span></h4>
+            </div>
+            <div class="grid-body">
+                <div class="form-group">
+                    <label for="name" class="form-label">{t}Name{/t}</label>
                     <div class="controls">
                         <input type="text" id="name" name="name" value="{$menu->name|default:""}"
-                               maxlength="120" tabindex="1" required="required" class="input-xxlarge"
+                               maxlength="120" tabindex="1" required="required" class="form-input"
                                {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
                     </div>
                 </div>
 
                 {if count($menu_positions) > 1}
-                <div class="control-group">
-                    <label for="name" class="control-label">{t}Position{/t}</label>
+                <div class="form-group">
+                    <label for="name" class="form-label">{t}Position{/t}</label>
+                    <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
                     <div class="controls">
                         {html_options options=$menu_positions selected=$menu->position name=position}
                     </div>
                 </div>
                 {/if}
-
             </div>
-
-            <div class="control-group clearfix">
-
-                <label>{t}Menu components{/t}</label>
+        </div>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
+            </div>
+            <div class="grid-body">
                 <p>{t}Pick elements from the right column and drag them to the left column to include them as elements of this menu.{/t}</p>
-
-                <div class="wrapper-menu-items pull-left" style="width:57%" >
+                <div class="wrapper-menu-items pull-left" style="width:60%" >
                     <ol id="menuelements" class="nested-sortable">
                     {if isset($menu) && is_array($menu->items) && count($menu->items) > 0}
                         {foreach from=$menu->items item=menuItem}
@@ -392,7 +395,7 @@
                     {/is_module_activated}
                 </div>
             </div>
-        </div><!-- fin -->
+        </div>
 
         <input type="hidden" name="items" id="items" value="" />
         <input type="hidden" name="items-hierarchy" id="items-hierarchy" value="" />
