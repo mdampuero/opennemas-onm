@@ -68,7 +68,7 @@ angular.module('onm.sidebar', [])
            * @type string
            */
           var sidebarTpl = '<div class="[position][inverted]" ng-class="{ \'collapsed\': ngModel.isCollapsed() }">\
-            <div class="[class]" id="[id]"[swipeable]>\
+            <div class="[class]"[id][swipeable]>\
               <div class="overlay"></div>\
               <scrollable>\
                 <div class="sidebar-wrapper">\
@@ -333,11 +333,16 @@ angular.module('onm.sidebar', [])
               renderSidebar: function() {
                 var border    = '';
                 var div       = sidebarTpl;
+                var id        = '';
                 var inverted  = '';
                 var footer    = '';
                 var items     = '';
                 var position  = ''
                 var swipeable = '';
+
+                if (this.id) {
+                  id = ' id="' + this.id + '"';
+                }
 
                 if (this.position != 'left') {
                   position = ' on-right'
@@ -368,8 +373,8 @@ angular.module('onm.sidebar', [])
                 };
 
                 div = div.replace('[class]', this.class);
-                div = div.replace('[id]', this.id);
 
+                div = div.replace('[id]', id);
                 div = div.replace('[footer]', footer);
                 div = div.replace('[border]', border);
                 div = div.replace('[items]', items);
