@@ -264,23 +264,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $scope.$on('http-error', function (event, args) {
-            console.log(args);
             messenger.post({
                 type: 'error',
                 message: args.data.text
             });
-        });
-
-        /**
-         * Updates sidebar status when window width changes.
-         *
-         * @param integer nv New width value.
-         * @param integer ov Old width value.
-         */
-        $scope.$watch('windowWidth', function(nv, ov) {
-            if ($scope.sidebar) {
-                $scope.sidebar.check();
-            }
         });
 
         /**
