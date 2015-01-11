@@ -1,0 +1,20 @@
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 0;
+  z-index: 220;
+
+  -webkit-transition:width .25s;
+  -moz-transition: width .25s;
+  transition: width .25s;
+}
+
+.collapsed > .sidebar > .overlay {
+  width: 50px;
+}
+
+@media (max-width: 767px) {
+  .overlay {
+    display: none;
+  }
+}
