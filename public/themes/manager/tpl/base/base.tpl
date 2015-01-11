@@ -51,6 +51,7 @@
             @Common/plugins/jquery-notifications/css/messenger.css,
             @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
 
+            @Common/plugins/openhost/sidebar/css/sidebar.min.css,
             @Common/css/manager/base/*,
             @Common/css/manager/layout/*,
             @Common/css/manager/main.css"
@@ -98,10 +99,10 @@
                         open<strong>nemas</strong>
                     </h1>
                 </a>
-                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                <div ng-mouseleave="sidebar.mouseLeave()" ng-mouseenter="sidebar.mouseEnter()">
                     <div class="overlay"></div>
                     <a class="header-logo" href="{url name=manager_welcome}">
-                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                        <h1>
                             <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
                         </h1>
                     </a>
@@ -112,7 +113,7 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    <sidebar class="page-sidebar" footer="true" id="sidebar1" ng-model="sidebar" position="right" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
+    <sidebar class="sidebar" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
     <!-- END SIDEBAR -->
 
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
@@ -255,6 +256,7 @@
             @Common/plugins/angular-ui/select2.js,
 
             @Common/plugins/angular-onm/*,
+            @Common/plugins/openhost/sidebar/js/sidebar.min.js,
 
             @ManagerTheme/js/app.js,
             @ManagerTheme/js/config.js,
