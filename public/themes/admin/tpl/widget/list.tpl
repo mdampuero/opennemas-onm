@@ -5,22 +5,34 @@
 {/block}
 
 {block name="content"}
-<div class="page-navbar actions-navbar">
-    <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}Widgets{/t}
-                    </h4>
-                </li>
-            </ul>
+<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Widgets{/t}
+                        </h4>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        {acl isAllowed="ARTICLE_CREATE"}
+                        <li class="quicklinks">
+                            <a href="{url name=admin_widget_create category=$category}" class="btn btn-primary">
+                                <i class="fa fa-plus fa-lg"></i>
+                                {t}Create{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-    <div class="top-action-bar clearfix">
+    <!-- <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <ul class="old-button">
                 <li ng-if="shvs.selected.length > 0">
@@ -55,41 +67,67 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {acl isAllowed="ARTICLE_CREATE"}
-                    <li>
-                        <a href="{url name=admin_widget_create category=$category}">
-                            <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New widget{/t}
-                        </a>
-                    </li>
-                {/acl}
+
             </ul>
         </div>
-    </div>
-    <div class="wrapper-content">
-        {render_messages}
-        <div class="table-info clearfix">
-            <div class="pull-left">
-                <div class="form-inline">
-                    <strong>{t}FILTER:{/t}</strong>
-                    &nbsp;&nbsp;
-                    <input type="text" placeholder="{t}Search by title:{/t}" ng-model="shvs.search.title_like"/>
-                    &nbsp;&nbsp;
-                    <select class="select2 input-medium" name="type" ng-model="shvs.search.renderlet" data-label="{t}Type{/t}">
-                        <option value="-1">{t}-- All --{/t}</option>
-                        <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
-                        <option value="html">{t}HTML{/t}</option>
-                        <option value="smarty">{t}Smarty{/t}</option>
-                    </select>
-                    &nbsp;&nbsp;
-                    <select class="select2 input-medium" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
-                        <option value="-1"> {t}-- All --{/t} </option>
-                        <option value="1"> {t}Published{/t} </option>
-                        <option value="0"> {t}No published{/t} </option>
-                    </select>
-                </div>
+    </div> -->
+    <div class="page-navbar filters-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="m-r-10 input-prepend inside search-form no-boarder">
+                        <span class="add-on">
+                            <span class="fa fa-search fa-lg"></span>
+                        </span>
+                        <input placeholder="{t}Filter by title{/t}" ng-model="shvs.search.title_like" type="text" style="width:250px;">
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <select class="select2" name="type" ng-model="shvs.search.renderlet" data-label="{t}Type{/t}">
+                            <option value="-1">{t}-- All --{/t}</option>
+                            <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
+                            <option value="html">{t}HTML{/t}</option>
+                            <option value="smarty">{t}Smarty{/t}</option>
+                        </select>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                            <option value="-1"> {t}-- All --{/t} </option>
+                            <option value="1"> {t}Published{/t} </option>
+                            <option value="0"> {t}No published{/t} </option>
+                        </select>
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="refresh()">
+                            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div ng-include="'widgets'"></div>
+    </div>
+    <div class="content">
+
+        {render_messages}
+
+        <div class="grid simple">
+            <div class="grid-body">
+                <div ng-include="'widgets'"></div>
+            </div>
+        </div>
     </div>
     <script type="text/ng-template" id="widgets">
         <div class="spinner-wrapper" ng-if="loading">
@@ -102,7 +140,6 @@
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                <th class="center" style="width:10px"></th>
             </thead>
             <tbody>
                 <tr ng-if="shvs.contents.length == 0">
@@ -116,6 +153,18 @@
                     </td>
                     <td>
                         [% content.title %]
+                        <div class="listing-inline-actions">
+                            {acl isAllowed="WIDGET_UPDATE"}
+                                <a class="link" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
+                                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                                </a>
+                            {/acl}
+                            {acl isAllowed="WIDGET_DELETE"}
+                                <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                    <i class="fa fa-trash-o"></i> {t}Delete{/t}
+                                </button>
+                            {/acl}
+                        </div>
                     </td>
                     <td>
                         [% content.renderlet %]
@@ -124,20 +173,6 @@
                         {acl isAllowed="WIDGET_AVAILABLE"}
                         <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
                         {/acl}
-                    </td>
-                    <td class="right">
-                        <div class="btn-group">
-                            {acl isAllowed="WIDGET_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
-                                    <i class="fa fa-pencil"></i> {t}Edit{/t}
-                                </a>
-                            {/acl}
-                            {acl isAllowed="WIDGET_DELETE"}
-                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                            {/acl}
-                        </div>
                     </td>
                 </tr>
             </tbody>
