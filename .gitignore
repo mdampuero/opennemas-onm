@@ -42,8 +42,8 @@ vendor/*
 public/assets/components/*
 !public/assets/components/opennemas
 public/assets/js/routes.js
-public/build/assets/
-public/bundles/
+public/build
+public/bundles
 public/media/
 public/themes/*
 !public/themes/admin
