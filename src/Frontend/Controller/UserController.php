@@ -446,6 +446,8 @@ class UserController extends Controller
             $token = md5(uniqid(mt_rand(), true));
             $user->updateUserToken($user->id, $token);
 
+            $url = $this->generateUrl('frontend_auth_login', array(), true);
+
             $tplMail = new \Template(TEMPLATE_USER);
             $tplMail->caching = 0;
 
@@ -454,6 +456,7 @@ class UserController extends Controller
                 'user/emails/recoverusername.tpl',
                 array(
                     'user' => $user,
+                    'url' => $url
                 )
             );
 
@@ -468,8 +471,6 @@ class UserController extends Controller
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
-
-                $url = $this->generateUrl('frontend_auth_login', array(), true);
 
                 $this->view->assign(
                     array(
