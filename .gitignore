@@ -39,12 +39,12 @@ tmp/*
 vendor/*
 
 #public
+public/assets/components/*
+!public/assets/components/opennemas
 public/assets/js/routes.js
 public/build/assets/
-public/bundles
+public/bundles/
 public/media/
 public/themes/*
 !public/themes/admin
 !public/themes/manager
-public/assets/components
-public/components
