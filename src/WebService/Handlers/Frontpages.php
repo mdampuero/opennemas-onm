@@ -8,6 +8,8 @@
  **/
 namespace WebService\Handlers;
 
+use Onm\Settings as s;
+
 /**
  * Handles REST actions for frontpages.
  *
@@ -146,14 +148,22 @@ class Frontpages
         }
         $category = $category[0];
 
-        $itemsPerPage = 10;
+        $itemsPerPage = s::get('items_in_blog');
+        if (empty($itemsPerPage )) {
+            $itemsPerPage = 8;
+        }
 
-        $order = array('created' => 'DESC');
+        $order = array('starttime' => 'DESC');
         $filters = array(
             'content_type_name' => array(array('value' => 'article')),
             'content_status'    => array(array('value' => 1)),
             'in_litter'         => array(array('value' => 1, 'operator' => '!=')),
-            'category_name'     => array(array('value' => $category->name))
+            'category_name'     => array(array('value' => $category->name)),
+            'starttime'         => array(
+                'union' => 'OR',
+                array('value' => '0000-00-00 00:00:00'),
+                array('value' => date('Y-m-d H:i:s'), 'operator' => '<='),
+            )
         );
 
         // Get all articles for this page
