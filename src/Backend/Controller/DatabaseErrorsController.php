@@ -35,7 +35,6 @@ class DatabaseErrorsController extends Controller
     {
         $where        = "";
         $itemsPerPage = 10;
-        $totalErrors  = (int) $rsTotalErrors;
         $page         = $request->query->getDigits('page', 1);
         $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
@@ -55,7 +54,7 @@ class DatabaseErrorsController extends Controller
 
         $pagination = $this->get('paginator')->create([
             'elements_per_page' => $itemsPerPage,
-            'total_items'       => $totalErrors,
+            'total_items'       => (int) $rsTotalErrors,
             'base_url'          => $this->generateUrl('admin_databaseerrors'),
         ]);
 
