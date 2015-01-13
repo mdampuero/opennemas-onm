@@ -52,7 +52,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-newspaper-o fa-lg"></i>
                         {t}Frontpages{/t} :: {if $category eq 0}{t}Home{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}
                     </h4>
                 </li>

@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">

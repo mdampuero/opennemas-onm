@@ -156,6 +156,8 @@
             @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
             @Common/components/messenger/build/js/messenger.min.js,
             @Common/components/messenger/build/js/messenger-theme-flat.js,
+            @Common/components/moment/min/moment-with-locales.min.js,
+            @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
             @Common/components/select2/select2.min.js,
 
             @Common/js/onm/md5.min.js,

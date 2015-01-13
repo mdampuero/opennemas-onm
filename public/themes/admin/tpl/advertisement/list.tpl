@@ -28,7 +28,7 @@
                         {/acl}
                         <li class="quicklinks">
                             <a href="{url name=admin_ad_create category=$category page=$page filter=$filter}" class="btn btn-primary">
-                                <i class="fa fa-plus fa-lg"></i>
+                                <i class="fa fa-plus"></i>
                                 {t}Create{/t}
                             </a>
                         </li>
@@ -55,12 +55,6 @@
                         </li>
                     </ul>
                     <ul class="nav quick-section pull-right">
-
-                        <li class="quicklinks">
-                            <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-download fa-lg"></i>
-                            </a>
-                        </li>
                         {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                             <li class="quicklinks">
                                 <button class="btn btn-link"  ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -201,7 +195,7 @@
                         <div class="spinner-text">{t}Loading{/t}...</div>
                     </div>
                     <div class="table-wrapper" ng-if="!loading">
-                        <table class="table table-hover table-condensed">
+                        <table class="table table-hover no-margin">
                             <thead>
                                 <tr>
                                     <th style="width:15px">
@@ -271,16 +265,12 @@
                     </div>
                 </div>
                 <div class="grid-footer clearfix" ng-if="!loading">
-                    <tr>
-                        <td colspan="8" class="center">
-                            <div class="pull-left pagination-info" ng-if="shvs.contents.length > 0">
-                                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
-                            </div>
-                            <div class="pull-right" ng-if="shvs.contents.length > 0">
-                                <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="shvs.elements_per_page" ng-model="shvs.page" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="shvs.page" total-items="shvs.total"></pagination>
-                            </div>
-                        </td>
-                    </tr>
+                    <div class="pull-left pagination-info" ng-if="shvs.contents.length > 0">
+                        {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                    </div>
+                    <div class="pull-right" ng-if="shvs.contents.length > 0">
+                        <pagination class="no-margin" max-size="5" direction-links="true" items-per-page="shvs.elements_per_page" ng-model="shvs.page" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" total-items="shvs.total"></pagination>
+                    </div>
                 </div>
             </div>
         </div>
