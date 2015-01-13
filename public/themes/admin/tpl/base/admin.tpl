@@ -28,10 +28,10 @@
     </style>
     {block name="header-css"}
         {stylesheets src="
-            @Common/components/pace/themes/blue/pace-theme-minimal.css,
-
-            @Common/components/select2/select2-bootstrap.css,
             @Common/components/bootstrap/dist/css/bootstrap.min.css,
+
+            @Common/components/pace/themes/blue/pace-theme-minimal.css,
+            @Common/components/select2/select2-bootstrap.css,
 
             @Common/components/font-awesome/css/font-awesome.min.css,
             @Common/css/bootstrap/bootstrap-fileupload.min.css,
@@ -179,8 +179,20 @@
             @Common/components/angular-translate/angular-translate.min.js,
             @Common/components/angular-ui/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
+            @Common/components/angular-ui-sortable/sortable.min.js,
 
             @Common/components/opennemas/*,
+            @Common/components/webarch/js/core.js,
+
+            @BackendBundle/js/app.js,
+            @BackendBundle/js/controllers.js,
+            @BackendBundle/js/services.js,
+            @BackendBundle/js/filters.js,
+            @BackendBundle/js/directives.js,
+            @BackendBundle/js/controllers/*,
+            @BackendBundle/js/services/*,
+            @BackendBundle/js/filters/*,
+            @BackendBundle/js/directives/*
 
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
