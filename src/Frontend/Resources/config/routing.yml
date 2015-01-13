@@ -383,7 +383,7 @@ frontend_archive_content:
 
 frontend_archive_category:
     path: /archive/content/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: FrontendBundle:Archive:archiveCategory, page: 1 }
+    defaults: { _controller: FrontendBundle:Archive:archiveCategory, _format: html, page: 1 }
     requirements:
         category_name : "[a-z0-9\-]+"
         year      : "([0-9]+)"
