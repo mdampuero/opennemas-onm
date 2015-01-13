@@ -698,10 +698,3 @@ frontend_externalfrontpage_category:
     defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
         category : "[a-z0-9\-]+"
-
-frontend_externalfrontpage_category_page:
-    path: /extseccion/{category}/{page}
-    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
-    requirements:
-        category : "[a-z0-9\-]+"
-        page     : "[0-9]+"
