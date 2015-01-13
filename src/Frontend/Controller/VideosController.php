@@ -327,13 +327,17 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function ajaxInCategoryAction()
+    public function ajaxInCategoryAction(Request $request)
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
         $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
 
         $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
+
+        if (empty($this->category)) {
+            $this->category = $request->query->getDigits('category', 0);
+        }
 
         $videos = $this->cm->findAll(
             'Video',
