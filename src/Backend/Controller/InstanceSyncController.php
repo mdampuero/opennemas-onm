@@ -237,7 +237,7 @@ class InstanceSyncController extends Controller
     }
 
     /**
-     * Deletes a synched instance from the configuration
+     * Deletes a synced instance from the configuration
      *
      * @param Request $request the request object
      *
@@ -253,19 +253,13 @@ class InstanceSyncController extends Controller
         $syncParams = s::get('sync_params');
         $syncColors = s::get('sync_colors');
 
-        $syncParamsToDelete = $syncColorToDelete = array();
-        foreach ($syncParams as $siteUrl => $categories) {
-            if (preg_match('@'.$siteUrl.'@', $siteUrl)) {
-                $syncParamsToDelete = array($siteUrl => $categories);
-            }
+        if (array_key_exists($siteUrl, $syncParams)) {
+            unset($syncParams[$siteUrl]);
         }
 
         if (array_key_exists($siteUrl, $syncColors)) {
-            $syncColorToDelete = array($siteUrl => $syncColors[$siteUrl]);
+            unset($syncColors[$siteUrl]);
         }
-
-        $syncParams = array_diff_assoc($syncParams, $syncParamsToDelete);
-        $syncColors = array_diff_assoc($syncColors, $syncColorToDelete);
 
         if (s::set('sync_params', $syncParams)
             && s::set('sync_colors', $syncColors)
