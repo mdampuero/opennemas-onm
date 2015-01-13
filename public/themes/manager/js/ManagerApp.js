@@ -1,5 +1,5 @@
 angular.module('ManagerApp', [ 'ngAnimate', 'webStorageModule', 'ngRoute', 'ngTouch', 'angular-loading-bar',
-        'ui.bootstrap', 'ui.select2', 'pascalprecht.translate', 'ngQuickDate',
+        'ui.bootstrap', 'ui.select', 'pascalprecht.translate', 'ngQuickDate',
         'ngTagsInput', 'checklist-model', 'http-interceptor', 'googlechart',
         'vcRecaptcha', 'sun.scrollable', 'onm.routing', 'onm.item',
         'onm.messenger', 'onm.auth', 'onm.gravatar', 'onm.form-autofill-fix',
