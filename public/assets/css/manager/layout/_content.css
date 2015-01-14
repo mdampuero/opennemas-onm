@@ -27,8 +27,10 @@
 }
 
 .page-content {
+  left: 0;
   margin: 0;
   overflow: hidden;
+  padding: 0;
   padding-left: 210px;
 
   -webkit-transition: all .25s;

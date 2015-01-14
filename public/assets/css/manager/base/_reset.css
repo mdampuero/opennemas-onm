@@ -1,73 +1,21 @@
 body {
-    overflow-x: hidden;
-}
-
-a {
-    transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
-}
-
-i.ng-hide-add-active, .ng-hide-remove {
-    display: inline-block !important;
-}
-
-.application-loading {
-    background: #e5e9ec;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1000;
-}
-
-.loading-message {
-    height: 150px;
-    left: 50%;
-    margin: 0 auto;
-    margin-top: -75px;
-    margin-left: -250px;
-    position: absolute;
-    text-align: center;
-    top: 30%;
-    width: 500px;
-}
-
-.header {
-    height: 50px;
-    min-height: 50px;
-}
-
-.header .header-seperation {
-    display: block !important;
-    width: 210px;
-    height: 50px;
-    min-height: 50px;
-}
-
-.header .chat-toggler {
-    top: 4px;
-}
-
-.header .header-quick-nav {
-    height: 50px;
-}
-
-.header .quick-section {
-    margin-top: 12px;
+  overflow-x: hidden;
 }
 
 [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-    display: none !important;
+  display: none !important;
 }
 
-.nojs {
-    margin-top: 100px;
+a {
+  color:#376092;
+  transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
 }
 
-.nano > .nano-content:focus {
-    outline: none;
+a:hover,
+a:focus {
+  color:#376092;
 }
 
-.page-content {
-    margin: 0;
-    padding: 0;
-    left: 0;
+i.ng-hide-add-active, .ng-hide-remove {
+  display: inline-block !important;
 }
