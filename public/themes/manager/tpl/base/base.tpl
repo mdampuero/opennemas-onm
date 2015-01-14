@@ -52,9 +52,7 @@
             @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
 
             @Common/plugins/openhost/sidebar/css/sidebar.min.css,
-            @Common/css/manager/base/*,
-            @Common/css/manager/layout/*,
-            @Common/css/manager/main.css"
+            @Common/css/manager/*"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
@@ -143,7 +141,7 @@
                 <div class="col-md-5 "><br>
                     <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
                         <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                        <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
+                        <iframe class="hidden" id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
                         <div class="row">
                             <div class="form-group col-md-10">
                                 <label class="form-label">{t}Username{/t}</label>
