@@ -29,6 +29,7 @@
     "bootstrap": "~3.3.*",
     "bootstrap-checkbox": "git@github.com:extremeFE/bootstrap-checkbox.git",
     "bootstrap-datepicker": "~1.*",
+    "bootstrap-nav-wizard": "git@github.com:LeadDyno/bootstrap-nav-wizard.git",
     "bootstrap-tagsinput": "~0.4.*",
     "bootstrap-timepicker": "~0.2.*",
     "bootstrap-wysiwyg": "*",
@@ -90,7 +91,6 @@
     "shape-hovers": "git@github.com:codrops/ShapeHoverEffectSVG.git",
     "sidr": "~1.2.*",
     "skyicons": "git@github.com:darkskyapp/skycons.git",
-    "twitter-bootstrap-wizard": "~1.*",
     "wordcount": "git@github.com:w8tcha/CKEditor-WordCount-Plugin.git",
     "wysihtml": "<0.5"
   },
