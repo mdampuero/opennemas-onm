@@ -108,156 +108,221 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-home fa-lg"></i>
-                            {t}Articles{/t} :: {if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
+                            {t}Articles{/t}
                         </h4>
                     </li>
+                    <li class="quicklinks seperate">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>
+                            {if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
+                        </h5>
+                    </li>
                 </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_articles}" title="{t}Go back{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <a href="#" accesskey="P" id="button_preview">
+                                <i class="fa fa-desktop"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        {if isset($article->id)}
+                            {acl isAllowed="ARTICLE_UPDATE"}
+                                <li class="quicklinks">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        {t}Update{/t}
+                                    </button>
+                                </li>
+                            {/acl}
+                        {else}
+                            {acl isAllowed="ARTICLE_CREATE"}
+                                <li class="quicklinks">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        {t}Save{/t}
+                                    </button>
+                                </li>
+                            {/acl}
+                        {/if}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                {if isset($article->id)}
-                    {acl isAllowed="ARTICLE_UPDATE"}
-                    <li>
-                        <button type="submit">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Update{/t}
-                        </button>
-                    </li>
-                    {/acl}
-                {else}
-                    {acl isAllowed="ARTICLE_CREATE"}
-                    <li>
-                        <button type="submit">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                        </button>
-                    </li>
-                    {/acl}
-                {/if}
 
-                <li>
-                    <a href="#" accesskey="P" id="button_preview">
-                        <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{if !empty($smarty.session._from)}{$smarty.session._from}{else}{url name=admin_articles category=$category page=$page}{/if}" title="{t}Cancel{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="wrapper-content contentform">
-
+    <div class="content">
         {render_messages}
-
-        <div id="article-form" class="tabs">
-
-            <ul>
-                <li>
-                    <a href="#edicion-contenido">{t}Content{/t}</a>
-                </li>
-                <li>
-                    <a href="#edicion-extra">{t}Parameters{/t}</a>
-                </li>
-                {is_module_activated name="CRONICAS_MODULES"}
-                <li>
-                    <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
-                </li>
-                {/is_module_activated}
-                <li>
-                    <a href="#related-contents">{t}Related contents{/t}</a>
-                </li>
-
-            </ul>
-
-            <div id="edicion-contenido">
-
-                <div class="contentform-inner clearfix">
-                    <div class="contentform-main">
-                        <div class="form-vertical">
-                            <div class="control-group">
-                                <label for="title" class="control-label">{t}Title{/t}</label>
-                                <div class="controls">
-                                    <div class="input-append" id="title">
-                                        <input type="text" name="title" id="title_input" class="input-xxlarge"
-                                            value="{$article->title|clearslash|escape:"html"}" maxlength="256" required="required"/>
-                                        <span class="add-on"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label for="title_int" class="control-label">{t}Inner title{/t}</label>
-                                <div class="controls">
-                                    <div class="input-append" id="title_int">
-                                        <input type="text" name="title_int" id="title_int_input" maxlength="256" class="input-xxlarge"
-                                                value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
-                                        <span class="add-on"></span>
-                                    </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Content{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label class="form-label" for="title">
+                                {t}Title{/t}
+                            </label>
+                            <div class="controls">
+                                <div class="input-group" id="title">
+                                    <input class="form-control" id="title_input" maxlength="256" name="title" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
+                                    <span class="input-group-addon"></span>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label" for="title_int">
+                                {t}Inner title{/t}
+                            </label>
+                            <div class="controls">
+                                <div class="input-group" id="title_int">
+                                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
+                                    <span class="input-group-addon"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label class="form-label" for="agency">
+                                    {t}Signature{/t}
+                                </label>
+                                <div class="controls">
+                                    <input class="form-control" id="agency" name="agency" type="text"
+                                        {if is_object($article)}
+                                            value="{$article->agency|clearslash|escape:"html"}"
+                                        {else}
+                                            value="{setting name=site_agency}"
+                                        {/if} />
+                                </div>
+                            </div>
+                            {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                                <div class="form-group col-sm-4">
+                                    <label class="form-label" for="agency_bulletin">
+                                        {t}Signature{/t} #2
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="agency_bulletin" name="params[agencyBulletin]" type="text"
+                                            {if is_object($article)}
+                                                value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
+                                            {else}
+                                                value="{setting name=site_agency}"
+                                            {/if} />
+                                    </div>
+                                </div>
+                            {/is_module_activated}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="subtitle">
+                                {t}Pretitle{/t}
+                            </label>
+                            <div class="controls">
+                                <div class="input-group" id="subtitle">
+                                    <input class="form-control" name="subtitle" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
+                                    <span class="input-group-addon"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label clearfix" for="summary">
+                                <div class="pull-left">
+                                    {t}Summary{/t}
+                                </div>
+                            </label>
+                            {acl isAllowed='PHOTO_ADMIN'}
+                                <div class="pull-right">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="summary" class="btn btn-mini">{t}Insert image{/t}</a>
+                                </div>
+                            {/acl}
+                            <div class="controls">
+                                <textarea class="onm-editor" data-preset="simple" id="summary" name="summary">
+                                    {$article->summary|clearslash|escape:"html"|default:"&nbsp;"}
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label clearfix" for="metadata">
+                                <div class="pull-left">{t}Body{/t}</div>
+                            </label>
+                            {acl isAllowed='PHOTO_ADMIN'}
+                                <div class="pull-right">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini">{t}Insert image{/t}</a>
+                                </div>
+                            {/acl}
+                            <div class="controls">
+                                <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="contentbox-container">
-                        <div class="contentbox">
-                            <h3 class="title">{t}Attributes{/t}</h3>
-                            <div class="content">
-                                {acl isAllowed="ARTICLE_AVAILABLE"}
-                                    <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
-                                    <label for="content_status">{t}Available{/t}</label>
-                                    <br/>
-                                {/acl}
-                                {is_module_activated name="COMMENT_MANAGER"}
-                                <input type="checkbox" name="with_comment" id="with_comment"  {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
-                                <label for="with_comment">{t}Allow coments{/t}</label>
-                                <br/>
-                                {/is_module_activated}
-                                <hr class="divisor">
-                                {acl isAllowed="ARTICLE_FRONTPAGE"}
-                                    <input type="checkbox"  name="promoted_to_category_frontpage" id="promoted" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
-                                    <label for="promoted">{t}Put in category frontpage{/t}</label>
-                                    <br/>
-                                {/acl}
-                                {acl isAllowed="ARTICLE_HOME"}
-                                    <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
-                                    <label for="frontpage">{t}Suggested for frontpage{/t}</label>
-                                {/acl}
-                                <hr class="divisor">
-                                <h4>{t}Category{/t}</h4>
-                                <select name="category" id="category">
-                                    {section name=as loop=$allcategorys}
-                                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                            {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                            {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
-                                                {$allcategorys[as]->title}</option>
-                                        {/acl}
-                                        {section name=su loop=$subcat[as]}
-                                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                            {if $subcat[as][su]->internal_category eq 1}
-                                                <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                                {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
-                                                &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                            {/if}
-                                            {/acl}
-                                        {/section}
-                                    {/section}
-                                    <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
-                                </select>
-                                <br>
-                                <hr class="divisor" style="margin-top:8px;">
-                                <h4>{t}Author{/t}</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="grid simple">
+                            <div class="grid-title">
+                                <h4>{t}Attributes{/t}</h4>
+                            </div>
+                            <div class="grid-body">
+                                <div class="form-group">
+                                    {acl isAllowed="ARTICLE_AVAILABLE"}
+                                        <div class="checkbox">
+                                            <input id="content_status" name="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                                            <label for="content_status">
+                                                {t}Available{/t}
+                                            </label>
+                                        </div>
+                                    {/acl}
+                                    {is_module_activated name="COMMENT_MANAGER"}
+                                        <div class="checkbox">
+                                            <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" type="checkbox" value="1"/>
+                                            <label class="form-label" for="with_comment">
+                                                {t}Allow coments{/t}
+                                            </label>
+                                        </div>
+                                    {/is_module_activated}
+                                </div>
+                                <div class="form-group">
+                                    {acl isAllowed="ARTICLE_FRONTPAGE"}
+                                        <div class="checkbox">
+                                            <input {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} id="promoted" name="promoted_to_category_frontpage" type="checkbox" value="1"/>
+                                            <label class="form-label" for="promoted">
+                                                {t}Put in category frontpage{/t}
+                                            </label>
+                                        </div>
+                                    {/acl}
+                                    {acl isAllowed="ARTICLE_HOME"}
+                                        <div class="checkbox">
+                                            <input {if (isset($article) && $article->frontpage eq '1')} checked {/if}  id="frontpage" name="frontpage" type="checkbox" value="1"/>
+                                            <label class="form-label" for="frontpage">
+                                                {t}Suggested for frontpage{/t}
+                                            </label>
+                                        </div>
+                                    {/acl}
+                                </div>
                                 {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                                    <select name="fk_author" id="fk_author">
-                                        {html_options options=$authors selected=$article->fk_author}
-                                    </select>
+                                    <div class="form-group">
+                                        <label class="form-label" for="fk_author">
+                                            {t}Author{/t}
+                                        </label>
+                                        <div class="controls">
+                                            <select id="fk_author" name="fk_author">
+                                                {html_options options=$authors selected=$article->fk_author}
+                                            </select>
+                                        </div>
+                                    </div>
                                 {aclelse}
                                     {if !isset($article->fk_author)}
                                         {$smarty.session.realname}
@@ -267,175 +332,150 @@
                                         <input type="hidden" name="fk_author" value="{$article->fk_author}">
                                     {/if}
                                 {/acl}
-                            </div>
-                        </div>
-
-                        <div class="contentbox">
-                            <h3 class="title">{t}Tags{/t}</h3>
-                            <div class="content">
-                                <div class="control-group">
+                                <div class="form-group">
+                                    <label class="form-label" for="category">
+                                        {t}Category{/t}
+                                    </label>
                                     <div class="controls">
-                                        <input  type="text" id="metadata" name="metadata" required="required" value="{$article->metadata|clearslash|escape:"html"}"/>
+                                        <select id="category" name="category">
+                                            {section name=as loop=$allcategorys}
+                                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                                <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                                    {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                                    {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
+                                                        {$allcategorys[as]->title}</option>
+                                                {/acl}
+                                                {section name=su loop=$subcat[as]}
+                                                    {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                                    {if $subcat[as][su]->internal_category eq 1}
+                                                        <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                                        {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
+                                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                    {/if}
+                                                    {/acl}
+                                                {/section}
+                                            {/section}
+                                            <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="metadata">
+                                        {t}Tags{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="metadata" name="metadata" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="slug">
+                                        {t}Slug{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}">
+                                        {if $article}
+                                            {assign var=uri value="\" "|explode:$article->uri}
+                                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$uri.0|clearslash}</span>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="bodyLink">
+                                        {t}External link{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="bodyLink" name="params[bodyLink]" type="text" value="{$article->params['bodyLink']}">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="contentbox">
-                            <h3 class="title"><i class="icon-time"></i> {t}Schedule{/t}</h3>
-                            <div class="content">
-                                <div class="form-inline-block">
-                                    <div class="control-group">
-                                        <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
-                                        <div class="controls">
-                                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
-                                            <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
-                                        <div class="controls">
-                                            <input type="datetime" id="endtime" name="endtime" value="{$article->endtime}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {is_module_activated name="PAYWALL"}
-                        <div class="contentbox">
-                            <h3 class="title">{t}Paywall{/t}</h3>
-                            <div class="content">
-                                <input type="checkbox" id="only_subscribers" name="params[only_subscribers]" {if $article->params["only_subscribers"] == "1"}checked=checked{/if} value="1">
-                                <label for="only_subscribers">{t}Only available for subscribers{/t}</label>
-
-                            </div>
-                        </div>
-                        {/is_module_activated}
-
-                    </div>
-
-                    <div class="form-inline-block contentform-main">
-                        <div class="control-group">
-                            <label for="agency" class="control-label">{t}Signature{/t}</label>
-                            <div class="controls">
-                                <input  type="text" id="agency" name="agency"
-                                    {if is_object($article)}
-                                        value="{$article->agency|clearslash|escape:"html"}"
-                                    {else}
-                                        value="{setting name=site_agency}"
-                                    {/if} />
-                            </div>
-                        </div>
-
-                        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-                        <div class="control-group">
-                            <label for="agency_bulletin" class="control-label">{t}Signature{/t} #2</label>
-                            <div class="">
-                                <input  type="text" id="agency_bulletin" name="params[agencyBulletin]"
-                                    {if is_object($article)}
-                                        value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
-                                    {else}
-                                        value="{setting name=site_agency}"
-                                    {/if} />
-                            </div>
-                        </div>
-                        {/is_module_activated}
-                    </div>
-
-                    <div class="form-vertical contentform-main">
-                        <div class="control-group">
-                            <label for="subtitle" class="control-label clearfix">{t}Pretitle{/t}</label>
-                            <div class="controls">
-                                <div class="input-append" id="subtitle">
-                                    <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
-                                    <span class="add-on"></span>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="control-group clearfix">
-                            <label for="summary" class="control-label clearfix">
-                                <div class="pull-left">
-                                    {t}Summary{/t}
-                                </div>
-                                <div class="pull-right">
-                                    {acl isAllowed='PHOTO_ADMIN'}
-                                    <a href="#media-uploader" data-toggle="modal" data-position="summary" class="btn btn-mini">{t}Insert image{/t}</a>
-                                    {/acl}
-                                </div>
-                            </label>
-                            <div class="controls">
-                                <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">
-                                    {$article->summary|clearslash|escape:"html"|default:"&nbsp;"}
-                                </textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-vertical">
-                            <div class="control-group">
-                                <label for="metadata" class="control-label clearfix">
-                                    <div class="pull-left">{t}Body{/t}</div>
-                                    <div class="pull-right">
-                                        {acl isAllowed='PHOTO_ADMIN'}
-                                        <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini">{t}Insert image{/t}</a>
-                                        {/acl}
-                                    </div>
-                                </label>
-                                <div class="controls">
-                                    <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash|default:"&nbsp;"}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- /contentform-main -->
-
-                <div id="related_media" class="clearfix">
-                    {include  file="article/partials/_images.tpl"}
-                </div>
-            </div><!-- /edicion-contenido -->
-
-            <!-- Parameters -->
-            <div id="edicion-extra">
-                <div class="form-vertical">
-                    <div class="control-group">
-                        <label for="slug" class="control-label">{t}Slug{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="slug" name="slug" class="input-xxlarge" value="{$article->slug|clearslash}">
-                            {if $article}
-                            {assign var=uri value="\" "|explode:$article->uri}
-                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$uri.0|clearslash}</span>
-                            {/if}
                         </div>
                     </div>
                 </div>
-                <div class="form-vertical">
-                    <div class="control-group">
-                        <label for="bodyLink" class="control-label">{t}External link{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="bodyLink" name="params[bodyLink]" class="input-xxlarge" value="{$article->params['bodyLink']}">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="grid simple">
+                            <div class="grid-title">
+                                <h4>{t}Schedule{/t}</h4>
+                            </div>
+                            <div class="grid-body">
+                                <div class="form-group">
+                                    <label class="form-label" for="starttime">
+                                        {t}Publication start date{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="starttime" name="starttime" type="datetime" value="{$article->starttime}">
+                                        <span class="help-block">
+                                            {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="endtime">
+                                        {t}Publication end date{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="endtime" name="endtime" type="datetime" value="{$article->endtime}">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {is_module_activated name="PAYWALL"}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="grid simple">
+                                <div class="grid-title">
+                                    <h4>{t}Paywall{/t}</h4>
+                                </div>
+                                <div class="grid-body">
+                                    <div class="checkbox">
+                                        <input {if $article->params["only_subscribers"] == "1"}checked=checked{/if} id="only_subscribers" name="params[only_subscribers]" type="checkbox" value="1">
+                                        <label for="only_subscribers">
+                                            {t}Only available for subscribers{/t}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/is_module_activated}
             </div>
-            {is_module_activated name="CRONICAS_MODULES"}
-            <div id="avanced-custom">
-                {include file ="article/partials/_article_avanced_customize.tpl"}
-            </div>
-            {/is_module_activated}
+        </div>
 
-            <div id="related-contents">
-                {include file ="article/related/_related_list.tpl"}
-                <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
-                <input type="hidden" id="relatedInner" name="relatedInner" value="" />
+        {include  file="article/partials/_images.tpl"}
 
-                <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
-                <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
+        {is_module_activated name="CRONICAS_MODULES"}
+            {include file ="article/partials/_article_advanced_customize.tpl"}
+        {/is_module_activated}
 
-                <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-                <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
-            </div>
+        <div id="related-contents">
+            {include file ="article/related/_related_list.tpl"}
+            <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
+            <input type="hidden" id="relatedInner" name="relatedInner" value="" />
+
+            <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
+            <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
+
+            <input type="hidden" id="relatedHome" name="relatedHome" value="" />
+            <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
+        </div>
+
+        <div id="article-form" class="tabs">
+            <ul>
+                {is_module_activated name="CRONICAS_MODULES"}
+                <li>
+                    <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
+                </li>
+                {/is_module_activated}
+                <li>
+                    <a href="#related-contents">{t}Related contents{/t}</a>
+                </li>
+            </ul>
+
+
+
 
 
             <input type="hidden" id="action" name="action" value="{$action}" />
