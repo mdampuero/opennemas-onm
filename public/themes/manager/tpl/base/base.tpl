@@ -240,7 +240,7 @@
             @Common/components/ng-tags-input/ng-tags-input.min.js,
             @Common/components/angular-touch/angular-touch.min.js,
             @Common/components/angular-translate/angular-translate.min.js,
-            @Common/components/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
 
             @Common/components/opennemas/*,
