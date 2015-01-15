@@ -34,6 +34,7 @@
             @Common/components/select2/select2-bootstrap.css,
 
             @Common/components/font-awesome/css/font-awesome.min.css,
+            @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
             @Common/css/bootstrap/bootstrap-fileupload.min.css,
 
             @Common/components/webarch/css/animate.min.css,
@@ -50,50 +51,22 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
+            @Common/components/bootstrap-nav-wizard/dist/bootstrap-nav-wizard.css,
+            @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
 
             @Common/css/manager/base/*,
             @Common/css/manager/layout/*,
-            @Common/css/manager/main.css"
-        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
+            @Common/css/manager/main.css,
 
-        {stylesheets
-            src="@Common/css/jquery/jquery-ui.css,
-                @Common/css/jquery/select2/select2-bootstrap.css,
-                @Common/css/jquery/messenger/messenger.css,
-                @Common/css/jquery/messenger/messenger-spinner.css,
-                @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
-                @AdminTheme/css/jquery/bootstrap-nav-wizard.css,
-                @Common/css/style.cs"
-            filters="cssrewrite"}
-            <link rel="stylesheet" type="text/css" href="{$asset_url}">
-        {/stylesheets}
-        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
+            @Common/css/style.css"
+        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
     {block name="header-js"}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
+            var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
         </script>
-    {/block}
-
-    {block name="js-library"}
-        {javascripts
-            src="@Common/js/jquery/jquery.min.js,
-                @Common/js/libs/bootstrap.js,
-                @Common/js/jquery/select2/select2.min.js,
-                @Common/js/jquery-onm/jquery.onmvalidate.js,
-                @Common/js/libs/jquery.tools.min.js,
-                @Common/js/libs/tinycon.min.js,
-                @Common/js/libs/modernizr.min.js,
-                @Common/js/onm/scripts.js,
-                @Common/js/onm/footer-functions.js,
-                @Common/js/onm/jquery.onm-editor.js,
-                @AdminTheme/js/jquery/bootstrap-nav-wizard.js"}
-            <script type="text/javascript" src="{$asset_url}"></script>
-        {/javascripts}
-    {/block}
-
-    {block name="header-js"}
     {/block}
 </head>
 <body>
@@ -151,8 +124,11 @@
         {javascripts src="
             @Common/components/jquery/jquery.min.js,
             @Common/components/bootstrap/dist/js/bootstrap.min.js,
+            @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
 
-            @Common/components/ckeditor/ckeditor.min.js,
+            @Common/components/breakpoints/breakpoints.js,
+            @Common/components/ckeditor/ckeditor.js,
+            @Common/components/fastclick/lib/fastclick.js,
             @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
             @Common/components/messenger/build/js/messenger.min.js,
             @Common/components/messenger/build/js/messenger-theme-flat.js,
@@ -160,8 +136,14 @@
             @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
             @Common/components/select2/select2.min.js,
 
+            @Common/js/libs/modernizr.min.js,
+            @Common/js/libs/tinycon.min.js,
+            @Common/js/onm/footer-functions.js,
+            @AdminTheme/js/jquery/bootstrap-nav-wizard.js,
             @Common/js/onm/md5.min.js,
             @Common/js/onm/scripts.js,
+            @Common/components/jquery-validation/dist/jquery.validate.js,
+            @Common/js/jquery-onm/jquery.onmvalidate.js,
             @Common/js/onm/jquery.onm-editor.js,
 
             @FosJsRoutingBundle/js/router.js,
@@ -179,11 +161,11 @@
             @Common/components/ng-tags-input/ng-tags-input.min.js,
             @Common/components/angular-touch/angular-touch.min.js,
             @Common/components/angular-translate/angular-translate.min.js,
-            @Common/components/angular-ui/ui-bootstrap-tpls.min.js,
+            @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
 
-            @Common/components/opennemas/*,
+            @Common/components/opennemas/angular-*,
             @Common/components/webarch/js/core.js,
 
             @BackendBundle/js/app.js,
@@ -205,9 +187,7 @@
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
-        <script>
-        var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
-        </script>
+
         <script type="text/javascript">
         $(function() {
             $.onmEditor({
