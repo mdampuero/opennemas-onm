@@ -1499,8 +1499,14 @@
             "target-dir": "Lexik/Bundle/JWTAuthenticationBundle",
             "source": {
                 "type": "git",
-                "url": "git@github.com:openhost/jwt-authentication-bundle.git",
+                "url": "https://github.com/openhost/jwt-authentication-bundle.git",
                 "reference": "2721be7c142e66fd06c7009ee4c8613f6017fb4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openhost/jwt-authentication-bundle/zipball/2721be7c142e66fd06c7009ee4c8613f6017fb4e",
+                "reference": "2721be7c142e66fd06c7009ee4c8613f6017fb4e",
+                "shasum": ""
             },
             "require": {
                 "namshi/jose": "~1.1",
@@ -1554,6 +1560,9 @@
                 "jwt",
                 "rest"
             ],
+            "support": {
+                "source": "https://github.com/openhost/jwt-authentication-bundle/tree/master"
+            },
             "time": "2015-01-05 19:01:35"
         },
         {
