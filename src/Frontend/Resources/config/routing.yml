@@ -230,10 +230,6 @@ frontend_search_google:
     path: /search/google
     defaults: { _controller: FrontendBundle:Search:google }
 
-frontend_rating_vote:
-    path: /ratings/vote
-    defaults: { _controller: FrontendBundle:Ratings:vote }
-
 frontend_comments_get:
     path: /comments/get
     defaults: { _controller: FrontendBundle:Comments:get }
