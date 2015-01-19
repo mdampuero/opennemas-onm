@@ -1,63 +1,69 @@
 manager_ws_user_create:
-    path:     /user/create
+    path:     /user
     defaults: { _controller: ManagerWebServiceBundle:User:create }
+    methods:  [ POST ]
     options:
         expose: true
 
 manager_ws_user_delete:
-    path:     /user/{id}/delete
+    path:     /user/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:delete }
+    methods:  [ DELETE ]
     options:
         expose: true
 
 manager_ws_user_new:
     path:     /user/new
     defaults: { _controller: ManagerWebServiceBundle:User:new }
+    methods:  [ GET ]
     options:
         expose: true
 
-manager_ws_user_set_enabled:
-    path:     /user/{id}/set-enabled
-    defaults: { _controller: ManagerWebServiceBundle:User:setEnabled }
+manager_ws_user_patch:
+    path:     /user/{id}
+    defaults: { _controller: ManagerWebServiceBundle:User:patch }
+    methods:  [ PATCH ]
     options:
         expose: true
 
 manager_ws_user_show_me:
-    path:     /user/me/show
+    path:     /user/me
     defaults: { _controller: ManagerWebServiceBundle:User:showMe }
+    methods:  [ GET ]
     options:
         expose: true
 
 manager_ws_user_show:
-    path:     /user/{id}/show
+    path:     /user/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:show }
+    methods:  [ GET ]
     options:
         expose: true
 
 manager_ws_user_update:
-    path:     /user/{id}/update
+    path:     /user/{id}
     defaults: { _controller: ManagerWebServiceBundle:User:update }
+    methods:  [ PUT ]
     options:
         expose: true
 
 manager_ws_users_delete:
-    path:     /users/delete
+    path:     /users
     defaults: { _controller: ManagerWebServiceBundle:User:deleteSelected }
+    methods:  [ DELETE ]
     options:
         expose: true
 
 manager_ws_users_list:
-    path:     /users/list
+    path:     /users
     defaults: { _controller: ManagerWebServiceBundle:User:list }
+    methods:  [ GET ]
     options:
         expose: true
 
-manager_ws_users_list_export:
-    path: /user/list-export.csv
-    defaults: { _controller:  ManagerWebServiceBundle:User:export }
-
-manager_ws_users_set_enabled:
-    path:     /users/set-enabled
-    defaults: { _controller: ManagerWebServiceBundle:User:setEnabledSelected }
+manager_ws_users_patch:
+    path:     /users
+    defaults: { _controller: ManagerWebServiceBundle:User:patchSelected }
+    methods:  [ PATCH ]
     options:
         expose: true

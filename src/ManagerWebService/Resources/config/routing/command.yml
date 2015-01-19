@@ -1,11 +1,13 @@
 manager_ws_commands_list:
-    path:     /commands/list
+    path:     /commands
     defaults: { _controller: ManagerWebServiceBundle:Command:list }
+    methods:  [ GET ]
     options:
         expose: true
 
-manager_ws_command_execute:
-    path: /commands/execute
-    defaults: { _controller:  ManagerWebServiceBundle:Command:executeCommand }
+manager_ws_command_output:
+    path:     /commands/output
+    defaults: { _controller:  ManagerWebServiceBundle:Command:execute }
+    methods:  [ GET ]
     options:
         expose: true

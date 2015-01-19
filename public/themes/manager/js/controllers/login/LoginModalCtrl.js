@@ -1,7 +1,7 @@
 
 angular.module('ManagerApp.controllers').controller('LoginModalCtrl', [
-    '$http', '$modalInstance', '$scope', 'authService', 'fosJsRouting', 'vcRecaptchaService', 'data',
-    function ($http, $modalInstance, $scope, authService, fosJsRouting, vcRecaptchaService, data) {
+    '$http', '$modalInstance', '$scope', 'authService', 'routing', 'vcRecaptchaService', 'data',
+    function ($http, $modalInstance, $scope, authService, routing, vcRecaptchaService, data) {
         /**
          * Login attempts
          *

@@ -1,10 +1,16 @@
 .header {
+  height: 50px;
+  min-height: 50px;
   width: auto;
 }
 
 .header .header-seperation  {
+  background-color: #22252d;
+  display: block !important;
+  height: 50px;
+  min-height: 50px;
   overflow: hidden;
-  width: 210px
+  width: 210px;
 
   -webkit-transition:width .25s;
   -moz-transition: width .25s;

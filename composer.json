@@ -69,8 +69,15 @@
         "hwi/oauth-bundle": "0.3.*@dev",
         "recaptcha/php5": "1.1.0",
         "smarty/smarty" : "3.1.21",
-        "smarty-gettext/smarty-gettext": "@stable"
+        "smarty-gettext/smarty-gettext": "@stable",
+        "lexik/jwt-authentication-bundle": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/openhost/jwt-authentication-bundle"
+        }
+    ],
     "scripts": {
         "post-root-package-install": [
             "SymfonyStandard\\Composer::hookRootPackageInstall"
