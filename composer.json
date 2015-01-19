@@ -70,9 +70,15 @@
         "recaptcha/php5": "1.1.0",
         "smarty/smarty" : "3.1.21",
         "smarty-gettext/smarty-gettext": "@stable",
-
-	    "roave/security-advisories": "dev-master"
+        "lexik/jwt-authentication-bundle": "dev-master",
+	"roave/security-advisories": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@github.com:openhost/jwt-authentication-bundle.git"
+        }
+    ],
     "scripts": {
         "post-root-package-install": [
             "SymfonyStandard\\Composer::hookRootPackageInstall"

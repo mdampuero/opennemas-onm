@@ -4,7 +4,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">
+                        <a ng-href="[% routing.ngGenerate('manager_users_list') %]">
                             <i class="fa fa-user fa-lg"></i>
                             {t}Users{/t}
                         </a>
@@ -14,7 +14,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-primary" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_create') %]">
+                        <a class="btn btn-primary" ng-href="[% routing.ngGenerate('manager_user_create') %]">
                             <i class="fa fa-plus"></i>
                             {t}Create{/t}
                         </a>
@@ -24,7 +24,7 @@
         </div>
     </div>
 </div>
-<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.users.length == 0 }">
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.users.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
@@ -159,11 +159,11 @@
                             </div>
 						</td>
 						<td class="left">
-							<a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
+							<a ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }); %]">
 								[% user.name %]
 							</a>
 							<div class="listing-inline-actions">
-								<a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_show', { id: user.id }); %]">
+								<a class="link" ng-href="[% routing.ngGenerate('manager_user_show', { id: user.id }); %]">
 									<i class="fa fa-pencil"></i>{t}Edit{/t}
 								</a>
 								<button class="link link-danger" ng-click="delete(user)" type="button">

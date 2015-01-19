@@ -40,11 +40,12 @@ vendor/*
 
 #public
 public/assets/js/routes.js
-public/build/assets/
+public/assets/components
+public/build
 public/bundles
+public/components
 public/media/
 public/themes/*
 !public/themes/admin
 !public/themes/manager
-public/assets/components
-public/components
+

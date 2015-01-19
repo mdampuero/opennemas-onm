@@ -1,0 +1,234 @@
+.sidebar {
+  background-color: @background;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  height: 100%;
+  margin-top: 50px;
+  overflow: hidden;
+  padding-bottom: 100px;
+  position: fixed;
+  width: @width;
+  z-index: 1000;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+
+  .sidebar-wrapper {
+    overflow: hidden;
+    position: relative;
+    right: 0;
+    width: @width;
+
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    transition: all .25s;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        clear: both;
+        padding: 0;
+
+        -webkit-transition: all .25s;
+        -moz-transition: all .25s;
+        transition: all .25s;
+
+        a {
+          color: @color;
+          display: block;
+          height: 50px;
+
+          -webkit-transition: all .25s;
+          -moz-transition: all .25s;
+          transition: all .25s;
+
+          &:hover {
+            color: #fff;
+          }
+
+          i {
+            float: left;
+            height: 50px;
+            margin: 0;
+            padding: 18px 0;
+            text-align: center;
+            width: 50px;
+
+            -webkit-transition: all .25s;
+            -moz-transition: all .25s;
+            transition: all .25s;
+          }
+
+          .arrow {
+            float: right;
+            margin: 16px 20px 0 0;
+
+            &:before {
+              content: "\f105";
+            }
+
+            &.open:before {
+              content: "\f107";
+            }
+          }
+
+          .title {
+            display: inline-block;
+            float: left;
+            height: 40px;
+            padding: 15px 0;
+
+            -webkit-transition: all .25s;
+            -moz-transition: all .25s;
+            transition: all .25s;
+          }
+        }
+
+        .sub-menu {
+          background-color: lighten(@background, 3%);
+          clear: both;
+          display: none;
+          font-weight: 300;
+          position: relative;
+
+          li {
+            i {
+              margin-left: 10px;
+            }
+
+            .sub-menu {
+              background-color: lighten(@background, 6%);
+
+              li {
+                  i {
+                  margin-left: 20px;
+                }
+              }
+            }
+          }
+        }
+
+        &.active {
+          font-weight: 400;
+
+          & > a {
+            color: #fff;
+          }
+        }
+
+        &.open {
+          & > .sub-menu {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+.collapsed > .sidebar {
+  width: 50px;
+
+  // Remove margin for icons in sub-menus
+  .sidebar-wrapper ul li .sub-menu li {
+    i {
+      margin-left: 0;
+    }
+
+    .sub-menu li {
+      i {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.collapsed.inverted  > .sidebar {
+  .sidebar-wrapper {
+    right: 160px;
+
+    // Remove margin for icons in sub-menus
+    .sub-menu li {
+      i {
+        margin-right: 0;
+      }
+
+      .sub-menu li i {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.inverted > .sidebar .sidebar-wrapper {
+  ul {
+    li {
+      a {
+        i {
+          float: right;
+        }
+
+        .arrow {
+          float: left;
+          margin: 16px 0 0 20px;
+
+          &:before {
+            content: "\f104";
+          }
+
+          &.open:before {
+            content: "\f107";
+          }
+        }
+
+        .title {
+          float: right;
+
+        }
+      }
+
+      // Add margin-right to icons in sub-menus
+      .sub-menu li {
+        i {
+          margin-left: 0;
+          margin-right: 10px;
+        }
+
+        .sub-menu li i {
+          margin-left: 0;
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+}
+
+.on-right > .sidebar {
+  right: 0;
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    display: block;
+    width: @width;
+    z-index: 100;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .collapsed > .sidebar {
+    width: 0;
+  }
+}
+
+@media only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (orientation: portrait) {
+  .sidebar {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+}
