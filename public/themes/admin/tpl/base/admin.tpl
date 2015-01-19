@@ -54,11 +54,10 @@
             @Common/components/bootstrap-nav-wizard/dist/bootstrap-nav-wizard.css,
             @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
 
-            @Common/css/manager/base/*,
-            @Common/css/manager/layout/*,
-            @Common/css/manager/main.css,
-
-            @Common/css/style.css"
+            @Common/components/opennemas/webarch/base/*,
+            @Common/components/opennemas/webarch/components/*,
+            @Common/components/opennemas/webarch/layout/*,
+            @Common/components/opennemas/webarch/main.css"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 

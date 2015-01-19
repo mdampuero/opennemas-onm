@@ -9,18 +9,147 @@
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                             <h4>
-                                <i class="fa fa-file-text-o fa-lg"></i>
                                 {t}Articles{/t}
                             </h4>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="m-r-10 input-prepend inside search-input no-boarder">
+                            <span class="add-on">
+                                <span class="fa fa-search fa-lg"></span>
+                            </span>
+                            <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                        </li>
+                        <li class="quicklinks dropdown">
+                            <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                <span class="dropdown-current">
+                                    <strong>{t}Category{/t}:</strong>
+                                    <span ng-if="shvs.search.category_name == -1">{t}All{/t}</span>
+                                    <span ng-if="shvs.search.category_name != -1">[% shvs.search.category_name %]</span>
+                                </span>
+                                    <span class="caret"></span>
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li ng-click="shvs.search.category_name = -1">
+                                    <span class="a">{t}All{/t}</span>
+                                </li>
+                                {section name=as loop=$allcategorys}
+                                    {assign var=ca value=$allcategorys[as]->pk_content_category}
+                                    <li ng-click="shvs.search.category_name = '{$allcategorys[as]->name}'">
+                                        <span class="a">
+                                            {$allcategorys[as]->title}
+                                            {if $allcategorys[as]->inmenu eq 0}
+                                                {t}(inactive){/t}
+                                            {/if}
+                                        </span>
+                                    </li>
+                                    {section name=su loop=$subcat[as]}
+                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                    {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                        {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                        <li ng-click="shvs.search.category_name = '{$subcat[as][su]->name}'">
+                                            <span class="a">
+                                                &rarr;
+                                                {$subcat[as][su]->title}
+                                                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                                                    {t}(inactive){/t}
+                                                {/if}
+                                            </span>
+                                        </li>
+                                    {/acl}
+                                    {/section}
+                                {/section}
+                            </ul>
+                        </li>
+                        <li class="quicklinks dropdown">
+                            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                <span class="dropdown-current">
+                                    {t}Status{/t}:
+                                    <span ng-if="shvs.search.content_status == -1">{t}All{/t}</span>
+                                    <span ng-if="shvs.search.content_status == 0">{t}Published{/t}</span>
+                                    <span ng-if="shvs.search.content_status == 1">{t}No published{/t}</span>
+                                </span>
+                                <span class="caret"></span>
+                            </button>
+                          <ul class="dropdown-menu">
+                            <li ng-click="shvs.search.content_status = -1">
+                                <span class="a">{t}All{/t}</span>
+                            </li>
+                            <li ng-click="shvs.search.content_status = 1">
+                                <span class="a">{t}Published{/t}</span>
+                            </li>
+                            <li ng-click="shvs.search.content_status = 0">
+                                <span class="a">{t}No Published{/t}</span>
+                            </li>
+                          </ul>
+                        </li>
+                        <li class="quicklinks dropdown">
+                            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                <span class="dropdown-current">
+                                    {t}Author{/t}: [% shvs.extra.authors[content.fk_author].name %]
+                                    <span ng-if="shvs.search. == -1">{t}All{/t}</span>
+                                    <span ng-if="shvs.search. != -1">[% shvs.search.category_name %]</span>
+                                </span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li ng-click="shvs.search.fk_author = -1">
+                                    <span class="a">{t}All{/t}</span>
+                                </li>
+                                {foreach $authors as $author}
+                                    <li ng-click="shvs.search.fk_author = {$author->id}">
+                                        <span class="a">{$author->name}</span>
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                        <li class="quicklinks dropdown">
+                            <span class="a dropdown-toggle" data-toggle="dropdown">
+                                <span class="dropdown-current">
+                                    {t}View{/t}: [% shvs.elements_per_page %]
+                                </span>
+                                <span class="caret"></span>
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li ng-click="shvs.elements_per_page = 10">
+                                    <span class="a">10</span>
+                                </li>
+                                <li ng-click="shvs.elements_per_page = 25">
+                                    <span class="a">25</span>
+                                </li>
+                                <li ng-click="shvs.elements_per_page = 50">
+                                    <span class="a">50</span>
+                                </li>
+                                <li ng-click="shvs.elements_per_page = 100">
+                                    <span class="a">100</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="info">
+                            {t}Results{/t}: [% shvs.total %]
+                            </span>
                         </li>
                     </ul>
                     <div class="all-actions pull-right">
                         <ul class="nav quick-section">
-                            <li>
+                            {*<li class="quicklinks">
+                                <span class="a">
+                                {t}Results{/t}: [% shvs.total %]
+                                </span>
+                            </li>
+                            <li class="quicklinks">
+                                <span class="h-seperate"></span>
+                            </li>*}
+                            <li class="quicklinks">
                                 {acl isAllowed="ARTICLE_CREATE"}
                                     <a class="btn btn-primary" href="{url name=admin_article_create category=$category}">
                                         <i class="fa fa-plus"></i>
-                                        {t}New article{/t}
+                                        {t}Create{/t}
                                     </a>
                                 {/acl}
                             </li>
@@ -68,109 +197,6 @@
                                 </button>
                             </li>
                         {/acl}
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-navbar filters-navbar">
-            <div class="navbar navbar-inverse">
-                <div class="navbar-inner">
-                    <ul class="nav quick-section">
-                        <li class="m-r-10 input-prepend inside search-form no-boarder">
-                            <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li>
-                            <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
-                                <option value="-1">{t}-- All --{/t}</option>
-                                    {section name=as loop=$allcategorys}
-                                        {assign var=ca value=$allcategorys[as]->pk_content_category}
-                                        <option value="{$allcategorys[as]->name}">
-                                            {$allcategorys[as]->title}
-                                            {if $allcategorys[as]->inmenu eq 0}
-                                                <span class="inactive">{t}(inactive){/t}</span>
-                                            {/if}
-                                        </option>
-                                        {section name=su loop=$subcat[as]}
-                                        {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                        {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                            {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                            <option value="{$subcat[as][su]->name}">
-                                                &rarr;
-                                                {$subcat[as][su]->title}
-                                                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                                                    <span class="inactive">{t}(inactive){/t}</span>
-                                                {/if}
-                                            </option>
-                                        {/acl}
-                                        {/section}
-                                    {/section}
-                            </select>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li>
-                            <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
-                                <option value="-1"> {t}-- All --{/t} </option>
-                                <option value="1"> {t}Published{/t} </option>
-                                <option value="0"> {t}No published{/t} </option>
-                            </select>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li>
-                            <select class="select2" ng-model="shvs.search.fk_author" data-label="{t}Author{/t}">
-                                <option value="-1">{t}-- All --{/t}</option>
-                                {foreach $authors as $author}
-                                    <option value="{$author->id}">{$author->name}</option>
-                                {/foreach}
-                            </select>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks hidden-xs">
-                            <select class="xmedium" ng-model="pagination.epp">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="500">500</option>
-                            </select>
-                        </li>
-                        <li class="quicklinks hidden-xs">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </button>
-                        </li>
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="refresh()">
-                                <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-                            </button>
-                        </li>
-                    </ul>
-                    <ul class="nav quick-section pull-right">
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks form-inline pagination-links">
-                            <div class="btn-group">
-                                <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </li>
                     </ul>
                 </div>
             </div>

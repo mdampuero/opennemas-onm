@@ -516,31 +516,6 @@ td .btn .fa.fa-circle-o-notch {
 /* =============================================================================
    Pseudo <a>: Make .a class act like a elements
    ========================================================================== */
-.a {
-    text-shadow: none !important;
-    color: #0d638f;
-    transition: color 0.1s linear 0s,background-color 0.1s linear 0s !important;
-}
-
-.a {
-    cursor: pointer;
-    color: #428bca;
-    text-decoration: none;
-}
-
-.a {
-    background: 0 0;
-}
-
-.header .nav > li.quicklinks > .a {
-    padding: 4px 2px !important;
-}
-
-.nav > li > .a {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-}
 
 
 .header .nav > li.quicklinks i {
