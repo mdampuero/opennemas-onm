@@ -306,13 +306,13 @@ class Widget extends Content
      */
     private function renderletSmarty()
     {
-        Template::$registry['widget'][$this->pk_widget] = $this->content;
         $resource = 'string:' . $this->content;
         $wgtTpl = new Template(TEMPLATE_USER);
 
         // no caching
         $wgtTpl->caching = 0;
         $wgtTpl->force_compile = true;
+        $wgtTpl->assign('widget', $this->content);
         $output = $wgtTpl->fetch($resource);
 
         return $output;
