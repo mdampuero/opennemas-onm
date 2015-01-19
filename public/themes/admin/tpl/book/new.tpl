@@ -148,27 +148,7 @@
             <div class="control-group">
                 <label for="category" class="control-label">{t}Category{/t}</label>
                 <div class="controls">
-                    <select name="category" id="category">
-                        {section name=as loop=$allcategorys}
-                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
-                                    {$allcategorys[as]->title}</option>
-                            {/acl}
-                            {section name=su loop=$subcat[as]}
-                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                {if $subcat[as][su]->internal_category eq 1}
-                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                    {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                    {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
-                                    &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                {/if}
-                                {/acl}
-                            {/section}
-                        {/section}
-                        <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
-                    </select>
+                    {include file="common/selector_categories.tpl" name="category" item=$book}
                 </div>
             </div>
 

@@ -24,10 +24,10 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
 
         // Preparing content data for the twitter card
         $summary = $content->summary;
+        $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
         if (empty($summary)) {
             $summary = mb_substr($content->body, 0, 80)."...";
         }
-        $summary = trim(html_attribute($summary));
         $url = "http://".SITE.'/'.$content->uri;
 
         // Writing Twitter card info

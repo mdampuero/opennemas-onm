@@ -79,7 +79,15 @@ EOF
             300
         );
 
+
+        // Get disqus shortname and secretkey
+        $disqusShortName = s::get('disqus_shortname');
+        $disqusSecretKey = s::get('disqus_secret_key');
+
+        $disqusSyncher = new \Onm\DisqusSync();
+        $disqusSyncher->setConfig($disqusShortName, $disqusSecretKey);
+
         // Save disqus comments to database
-        \Onm\DisqusSync::saveDisqusCommentsToDatabase();
+        $disqusSyncher->saveDisqusCommentsToDatabase();
     }
 }

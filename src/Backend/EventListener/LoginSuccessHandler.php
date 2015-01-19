@@ -53,9 +53,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $this->context = $context;
         $this->router  = $router;
         $this->session = $session;
-
-        // Load reCaptcha lib
-        require_once 'recaptchalib.php';
     }
 
     /**
@@ -70,18 +67,20 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Request $request,
         TokenInterface $token
     ) {
-        $user       = $token->getUser();
-        $valid      = true;
+        $user  = $token->getUser();
+        $valid = true;
 
         if ($request->get('recaptcha_challenge_field')) {
+            // New captcha instance
+            $captcha = getService('recaptcha')
+                ->setRemoteIp($request->getClientIp());
+
             // Get reCaptcha validate response
-            $valid = recaptcha_check_answer(
-                '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
-                $request->getClientIp(),
+            $valid = $captcha->check(
                 $request->get('recaptcha_challenge_field'),
                 $request->get('recaptcha_response_field')
             );
-            $valid = $valid->is_valid;
+            $valid = $valid->isValid();
         }
 
         // Set session array

@@ -134,9 +134,11 @@ class Frontpage extends Content
                                             `version`, `promoted`, `day_frontpage`,
                                             `params`)
                     VALUES (?,?,?, ?,?,?, ?)";
-            $values = array($date, $category,$contents,
-                            $version, $promoted, $day_frontpage,
-                            $params );
+            $values = array(
+                $date, $category,$contents,
+                $version, $promoted, $day_frontpage,
+                $params
+            );
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

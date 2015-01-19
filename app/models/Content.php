@@ -517,7 +517,8 @@ class Content
     {
         $this->read($data['id']);
 
-        if ($data['content_status'] == 1
+        if (array_key_exists('content_status', $data)
+            && $data['content_status'] == 1
             && $this->content_status == 0
             && array_key_exists('starttime', $data)
             && ($data['starttime'] =='0000-00-00 00:00:00')
@@ -570,7 +571,7 @@ class Content
         } else {
             $data['slug'] = StringUtils::getTitle($data['slug']);
         }
-        if (empty($data['description'] ) && !isset ($data['description'])) {
+        if (empty($data['description']) && !isset ($data['description'])) {
             $data['description']='';
         }
         if (empty($data['metadata']) && !isset ($data['metadata'])) {
@@ -1526,32 +1527,6 @@ class Content
         }
     }
 
-    // TODO: move to a Cache handler
-    /**
-     * Regenerate cache files for all categories homepages.
-     *
-     * @return string Explanation for which elements were deleted
-     **/
-    public static function refreshFrontpageForAllCategories()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        $ccm = ContentCategoryManager::get_instance();
-
-        $availableCategories = $ccm->categories;
-        $output ='';
-
-        foreach ($availableCategories as $category) {
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned successfully.");
-            $output .= sprintf($message, $category->name);
-        }
-
-        return $output;
-
-    }
-
     /**
      * Removes element with $contentPK from homepage of category.
      *
@@ -1661,76 +1636,6 @@ class Content
     {
         return true;
     }
-
-    /**
-     * Check if content id exists
-     *
-     * @param string $oldID the content id to check
-     *
-     * @return pk_content or false
-    */
-    public static function searchContentID($oldID)
-    {
-        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ?";
-        $value     = array($oldID);
-        $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
-
-        return $contentID;
-    }
-
-     /**
-     *  Search id in refactor_id table. (used for translate old format ids)
-     *
-     * @param string $oldID Old id created with mktime
-     *
-     * @return int id in table refactor_id or false
-     *
-     */
-
-    public static function searchInRefactorID($oldID)
-    {
-        $sql = "SELECT pk_content FROM `refactor_ids` "
-             . "WHERE pk_content_old = ?";
-        $value  = array($oldID);
-        $refactorID = $GLOBALS['application']->conn->GetOne($sql, $value);
-
-        if (!empty($refactorID)) {
-            $content = new Content($refactorID);
-            $content = $content->get($refactorID);
-
-            forward301('/'.$content->uri);
-        }
-
-        return $oldID;
-    }
-
-    /**
-     * Clean id and search if exist in content table.
-     * If not found search in refactor_id table. (used for translate old format ids)
-     *
-     * @param string $dirtyID Vble with date in first 14 digits
-     *
-     * @return int id in table content or forward to 404
-     *
-     */
-    public static function resolveID($dirtyID)
-    {
-        $contentID = 0;
-        if (!empty($dirtyID)) {
-            if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
-                || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
-                || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
-            ) {
-                $contentID = self::searchInRefactorID($dirtyID);
-            }
-
-            preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
-            $contentID = self::searchContentID((int) $matches["digit"]);
-        }
-
-        return $contentID;
-    }
-
 
     /**
      * Search contents by its urn

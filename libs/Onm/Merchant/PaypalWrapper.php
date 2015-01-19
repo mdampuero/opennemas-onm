@@ -9,6 +9,8 @@
  **/
 namespace Onm\Merchant;
 
+use PayPal\Service\PayPalAPIInterfaceServiceService;
+
 /**
  *
  */
@@ -43,7 +45,7 @@ class PaypalWrapper
      **/
     public function getMerchantService()
     {
-        return new \PayPalAPIInterfaceServiceService($this->settings);
+        return new PayPalAPIInterfaceServiceService($this->settings);
     }
 
     /**

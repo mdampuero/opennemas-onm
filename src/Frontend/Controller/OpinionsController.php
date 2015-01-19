@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -188,21 +187,13 @@ class OpinionsController extends Controller
 
             }
             $countOpinions = $em->countBy($of);
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $numOpinions,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 3,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countOpinions,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_opinion_frontpage'
-                    ).'/?page=%d',
-                )
-            );
+
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $numOpinions,
+                'total_items'       => $countOpinions,
+                'delta'             => 3,
+                'base_url'          => $this->generateUrl('frontend_opinion_frontpage'),
+            ]);
 
             $authors = array();
             $opinionsResult = array();
@@ -243,7 +234,6 @@ class OpinionsController extends Controller
                     );
                     $opinionsResult[] = $opinion;
                 }
-
             }
 
             $this->view->assign(
@@ -362,21 +352,12 @@ class OpinionsController extends Controller
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 3,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $totalOpinions,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_opinion_external_frontpage'
-                    ).'/?page=%d',
-                )
-            );
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $totalOpinions,
+                'delta'             => 3,
+                'base_url'          => $this->generateUrl('frontend_opinion_external_frontpage'),
+            ]);
 
             $this->view->assign(
                 array(
@@ -513,25 +494,17 @@ class OpinionsController extends Controller
                 }
             }
 
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 4,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countOpinions,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_opinion_author_frontpage',
-                        array(
-                            'author_id' => sprintf('%06d', $author->id),
-                            'author_slug' => $author->slug,
-                        )
-                    ).'/?page=%d',
-                )
-            );
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $countOpinions,
+                'base_url'          => $this->generateUrl(
+                    'frontend_opinion_author_frontpage',
+                    array(
+                        'author_id' => sprintf('%06d', $author->id),
+                        'author_slug' => $author->slug,
+                    )
+                ),
+            ]);
 
             $this->view->assign(
                 array(
@@ -542,7 +515,7 @@ class OpinionsController extends Controller
                 )
             );
 
-        } // End if isCached
+        }
 
         //Fetch information for Advertisements
         $ads = $this->getAds();
@@ -665,25 +638,17 @@ class OpinionsController extends Controller
             // Get external media url for author images
             $externalMediaUrl = $this->cm->getUrlContent($wsUrl.'/ws/instances/mediaurl/', true);
 
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 4,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countOpinions,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_opinion_external_author_frontpage',
-                        array(
-                            'author_id' => sprintf('%06d', $author->id),
-                            'author_slug' => $author->slug,
-                        )
-                    ).'/?page=%d',
-                )
-            );
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $countOpinions,
+                'base_url'          => $this->generateUrl(
+                    'frontend_opinion_external_author_frontpage',
+                    array(
+                        'author_id' => sprintf('%06d', $author->id),
+                        'author_slug' => $author->slug,
+                    )
+                ),
+            ]);
 
             $this->view->assign(
                 array(

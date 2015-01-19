@@ -15,6 +15,9 @@ guard 'livereload' do
   # src
   watch(%r{src\/[a-zA-Z_\.\/]*$})
 
+  # lib
+  watch(%r{lib\/[a-zA-Z_\.\/]*$})
+
   # vendor
   watch(%r{vendor\/[a-zA-Z_\-\.\/]*$})
 end

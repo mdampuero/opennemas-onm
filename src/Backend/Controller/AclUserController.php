@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the system users
@@ -159,7 +158,10 @@ class AclUserController extends Controller
         }
 
         if (count($request->request) < 1) {
-            m::add(_("The data send by the user is not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("The data send by the user is not valid.")
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
         }
@@ -544,93 +546,6 @@ class AclUserController extends Controller
 
             // Display form
             return $this->render('login/recover_pass.tpl', array('token' => $token));
-        }
-    }
-
-    /**
-     * Shows the form for recovering the username of a user and
-     * sends the mail to the user
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function recoverUsernameAction(Request $request)
-    {
-        // Setup view
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
-        $this->view->assign('languages', $this->container->getParameter('available_languages'));
-        $this->view->assign('current_language', \Application::$language);
-
-        if ('POST' != $request->getMethod()) {
-            return $this->render('login/recover_username.tpl');
-        } else {
-            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
-            // Get user by email
-            $user = new \User();
-            $user->findByEmail($email);
-
-            // If e-mail exists in DB
-            if (!is_null($user->id)) {
-                // Generate and update user with new token
-                $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($user->id, $token);
-
-                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
-                $tplMail->caching = 0;
-
-                $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
-                $mailBody = $tplMail->fetch(
-                    'login/emails/recoverusername.tpl',
-                    array(
-                        'user' => $user,
-                    )
-                );
-
-                //  Build the message
-                $message = \Swift_Message::newInstance();
-                $message
-                    ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/plain')
-                    ->setTo($user->email)
-                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
-
-                try {
-                    $mailer = $this->get('mailer');
-                    $mailer->send($message);
-
-                    $url = $this->generateUrl('admin_login', array(), true);
-
-                    $this->view->assign(
-                        array(
-                            'mailSent' => true,
-                            'user' => $user,
-                            'url' => $url
-                        )
-                    );
-                } catch (\Exception $e) {
-                    // Log this error
-                    $this->get('application.log')->notice(
-                        "Unable to send the recover password email for the "
-                        ."user {$user->id}: ".$e->getMessage()
-                    );
-
-                    $request->getSession()->getFlashBag()->add(
-                        'error',
-                        _('Unable to send the email to recover your username. Please try it later.')
-                    );
-                }
-
-            } else {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to find an user with that email.')
-                );
-            }
-
-            // Display form
-            return $this->render('login/recover_username.tpl');
         }
     }
 

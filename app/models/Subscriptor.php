@@ -118,9 +118,15 @@ class Subscriptor
                   `email`, `name`, `firstname`, `lastname`,
                  `status`, `subscription`) VALUES
                 ( ?,?,?,?, ?,?)';
-        $values = array( $data['email'],
-                         $data['name'], $data['firstname'],$data['lastname'],
-                         $data['status'], $data['subscription'] );
+
+        $values = [
+            $data['email'],
+            $data['name'],
+            $data['firstname'],
+            $data['lastname'],
+            $data['status'],
+            $data['subscription']
+        ];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;

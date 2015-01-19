@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -215,7 +214,7 @@ class VideosController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('video_id', '');
-        $videoID = \Content::resolveID($dirtyID);
+        $videoID = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provide
         if (is_null($videoID)) {
@@ -328,13 +327,17 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function ajaxInCategoryAction()
+    public function ajaxInCategoryAction(Request $request)
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
         $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
 
         $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
+
+        if (empty($this->category)) {
+            $this->category = $request->query->getDigits('category', 0);
+        }
 
         $videos = $this->cm->findAll(
             'Video',

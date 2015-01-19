@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the system information
@@ -60,7 +59,7 @@ class FilesController extends Controller
 
         // Create folder if it doesn't exist
         if (!file_exists($this->fileSavePath)) {
-            \FilesManager::createDirectory($this->fileSavePath);
+            \Onm\FilesManager::createDirectory($this->fileSavePath);
         }
     }
 
@@ -205,60 +204,69 @@ class FilesController extends Controller
     {
         if ('POST' != $request->getMethod()) {
             return $this->render('files/new.tpl', array('category' => $this->category,));
-        } else {
-            set_time_limit(0);
-
-            if (isset($_FILES['path']['name'])
-               && !empty($_FILES['path']['name'])
-            ) {
-                $date          = new \DateTime();
-                $directoryDate = $date->format("/Y/m/d/");
-                $basePath      = $this->fileSavePath.$directoryDate;
-
-                $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
-                // Create folder if it doesn't exist
-                if (!file_exists($basePath)) {
-                    \FilesManager::createDirectory($basePath);
-                }
-
-                $data = array(
-                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'path'           => $directoryDate.$fileName,
-                    'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                    'content_status' => 1,
-                    'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher'   => $_SESSION['userid'],
-                );
-
-                // Move uploaded file
-                $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
-
-                if ($uploadStatus !== false) {
-                    $attachment = new \Attachment();
-                    if ($attachment->create($data)) {
-                        m::add(_("File created successfuly."), m::SUCCESS);
-
-                    } else {
-                        m::add(_('Unable to upload the file: A file with the same name already exists.'), m::ERROR);
-                    }
-                } else {
-                    m::add(
-                        _(
-                            'There was an error while uploading the file.'
-                        ),
-                        m::ERROR
-                    );
-                }
-
-                return $this->redirect(
-                    $this->generateUrl('admin_files', array('category' => $this->category,))
-                );
-
-            } else {
-                m::add(_('You must pick a file before submitting the form'), m::ERROR);
-            }
         }
+
+        set_time_limit(0);
+
+        if (!isset($_FILES['path']['name'])
+           || empty($_FILES['path']['name'])
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must pick a file before submitting the form')
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_files', array('category' => $this->category,))
+            );
+        }
+
+        $date          = new \DateTime();
+        $directoryDate = $date->format("/Y/m/d/");
+        $basePath      = $this->fileSavePath.$directoryDate;
+
+        $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
+        // Create folder if it doesn't exist
+        if (!file_exists($basePath)) {
+            \Onm\FilesManager::createDirectory($basePath);
+        }
+
+        $data = array(
+            'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+            'path'           => $directoryDate.$fileName,
+            'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+            'content_status' => 1,
+            'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'fk_publisher'   => $_SESSION['userid'],
+        );
+
+        // Move uploaded file
+        $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
+
+        if ($uploadStatus === false) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while uploading the file.')
+            );
+        }
+
+        $attachment = new \Attachment();
+        if ($attachment->create($data)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("File created successfuly.")
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Unable to upload the file: A file with the same name already exists.')
+            );
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_files', array('category' => $this->category,))
+        );
     }
 
     /**
@@ -279,7 +287,10 @@ class FilesController extends Controller
         // If the file doesn't exists redirect to the listing
         // and show error message
         if (is_null($file->pk_attachment)) {
-            m::add(sprintf(_('Unable to find the file with the id "%s"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the file with the id "%s"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_files'));
         }
@@ -319,9 +330,12 @@ class FilesController extends Controller
 
         if ($file->update($data)) {
             dispatchEventWithParams('content.update', array('content' => $file));
-            m::add(sprintf(_('File successfully updated.')), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', sprintf(_('File successfully updated.')));
         } else {
-            m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('There was a problem while saving the file information.'))
+            );
         }
 
         return $this->redirect(
@@ -398,22 +412,14 @@ class FilesController extends Controller
         $files      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countFiles = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countFiles,
-                'fileName'    => $this->generateUrl(
-                    'admin_files_content_provider_related',
-                    array( 'category' => $categoryId,)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countFiles,
+            'base_url'          => $this->generateUrl(
+                'admin_files_content_provider_related',
+                ['category' => $categoryId]
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
