@@ -76,7 +76,7 @@
     "repositories": [
         {
             "type": "git",
-            "url":  "git@github.com:openhost/jwt-authentication-bundle.git"
+            "url":  "https://github.com/openhost/jwt-authentication-bundle.git"
         }
     ],
     "scripts": {
