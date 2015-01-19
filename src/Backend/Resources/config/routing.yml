@@ -1073,10 +1073,6 @@ admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
     defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
 
-admin_welcome_accept_terms:
-    path:     /accept-terms
-    defaults: { _controller  : BackendBundle:Welcome:acceptTerms }
-
 # Media uploader routes
 admin_media_uploader:
     path:     /media-uploader
