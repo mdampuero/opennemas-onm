@@ -332,14 +332,6 @@ admin_image_update:
     path:     /image/update
     defaults: { _controller  : BackendBundle:Images:update }
 
-# admin_images_config:
-#     path:     /images/config
-#     defaults: { _controller  : BackendBundle:Images:config }
-
-admin_images_content_provider_gallery:
-    path:     /images/content-provider-gallery
-    defaults: { _controller  : BackendBundle:Images:contentProviderGallery }
-
 # Videos controller routes
 admin_videos:
     path:     /videos
