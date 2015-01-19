@@ -691,7 +691,7 @@ EOF;
      *
      * @return string the url compatible list of params
      **/
-    public static function toHttpParams(Array $httpParams)
+    public static function toHttpParams(array $httpParams)
     {
         $result = array();
 

@@ -107,8 +107,8 @@ class WidgetsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $post   = $request->request;
-            $items  = $post->get('items');
-            $values = $post->get('values');
+            $items  = $post->get('items', array());
+            $values = $post->get('values', array());
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
@@ -175,8 +175,8 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
-        $items  = $post->get('items');
-        $values = $post->get('values');
+        $items  = $post->get('items', array());
+        $values = $post->get('values', array());
 
         $widgetData = array(
             'id'              => $id,
@@ -241,22 +241,14 @@ class WidgetsController extends Controller
         $countWidgets = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countWidgets,
-                'fileName'    => $this->generateUrl(
-                    'admin_widgets_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countWidgets,
+            'base_url'          => $this->generateUrl(
+                'admin_widgets_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'widget/content-provider.tpl',

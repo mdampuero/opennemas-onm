@@ -9,6 +9,15 @@
   padding: 15px;
 }
 
+.login-container-wrapper {
+  background-color: #e5e9ec;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .page-container {
   height: auto;
   margin: 0;
@@ -18,8 +27,10 @@
 }
 
 .page-content {
+  left: 0;
   margin: 0;
   overflow: hidden;
+  padding: 0;
   padding-left: 210px;
 
   -webkit-transition: all .25s;

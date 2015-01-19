@@ -17,10 +17,15 @@ angular.module('ManagerApp.controllers').controller('modalCtrl', [
         $scope.confirm = function() {
             $scope.loading = 1;
 
-            success().then(function (response) {
-                $scope.loading = 0
-                $modalInstance.close(response);
-            });
+            var getType = {};
+            if (success && getType.toString.call(success) === '[object Function]') {
+                success().then(function (response) {
+                    $modalInstance.close(response);
+                    $scope.loading = 0
+                });
+            } else {
+                $modalInstance.close(true);
+            }
         }
 
         /**

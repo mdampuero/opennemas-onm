@@ -12,7 +12,6 @@ namespace FrontendMobile\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the mobile opinion section
@@ -28,22 +27,20 @@ class OpinionsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \Template(TEMPLATE_USER);
         define('BASE_PATH', '/mobile');
     }
 
     /**
-     * Description of the action
+     * Renders the opinion frontpage for mobile devices
      *
      * @return Response the response object
      **/
     public function frontpageAction()
     {
-        $categoryName = 'opinion';
-
+        $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('frontpage-mobile');
 
-        $cacheID = $this->view->generateCacheId($categoryName, '', 0);
+        $cacheID = $this->view->generateCacheId('opinion-mobile', '', 0);
         if (($this->view->caching == 0)
             || !$this->view->isCached('mobile/opinion-index.tpl', $cacheID)
         ) {
@@ -67,6 +64,7 @@ class OpinionsController extends Controller
                 'type_opinion=0 AND content_status=1',
                 'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10'
             );
+
             if (isset ($director[0])) {
                 $director[0]->name = 'Director';
                 $this->view->assign('director', $director[0]);
@@ -76,20 +74,19 @@ class OpinionsController extends Controller
                 $opinion['author_name_slug'] = \Onm\StringUtils::getTitle($opinion['name']);
             }
 
-
-            $this->view->assign(
-                array(
-                    'editorial'          => $editorial,
-                    'opinions'           => $opinions,
-                    'category_name'      => $categoryName,
-                    'category_real_name' => 'Opinion',
-                    'section'            => 'opinion'
-                )
-            );
+            $this->view->assign([
+                'editorial' => $editorial,
+                'opinions'  => $opinions,
+            ]);
         }
         return $this->render(
             'mobile/opinion-index.tpl',
-            array('cache_id' => $cacheID )
+            [
+                'cache_id'           => $cacheID,
+                'category_name'      => 'opinion',
+                'category_real_name' => 'Opinion',
+                'section'            => 'opinion'
+            ]
         );
     }
 
@@ -100,19 +97,20 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->view = new \Template(TEMPLATE_USER);
+        $this->view->setConfig('frontpage-mobile');
 
-        $categoryName = 'opinion';
         // Fetch vars from http
         $dirtyID = $request->query->getDigits('opinion_id');
         // Clean dirty id
-        $opinionID = \Content::resolveID($dirtyID);
+        $opinionID = \ContentManager::resolveID($dirtyID);
 
-        $this->view->setConfig('frontpage-mobile');
         $cacheID = $this->view->generateCacheId('opinion-mobile', '', $opinionID);
         if (($this->view->caching == 0)
             || !$this->view->isCached('mobile/opinion-inner.tpl', $cacheID)
         ) {
             $er = getService('entity_repository');
+
             // Fetch opinion
             $opinion = $er->find('Opinion', $opinionID);
             // Get author photo
@@ -123,9 +121,6 @@ class OpinionsController extends Controller
                     'opinion'            => $opinion,
                     'author_name'        => $opinion->name,
                     'condition'          => $opinion->bio,
-                    'section'            => 'opinion',
-                    'category_name'      => $categoryName,
-                    'category_real_name' => 'Opinion',
                     'menuMobile'         => $this->getMobileMenu(),
                     'photo'              => $photo
                 )
@@ -134,9 +129,12 @@ class OpinionsController extends Controller
 
         return $this->render(
             'mobile/opinion-inner.tpl',
-            array(
-                'cache_id' => $cacheID,
-            )
+            [
+                'cache_id'           => $cacheID,
+                'section'            => 'opinion',
+                'category_name'      => 'opinion',
+                'category_real_name' => 'Opinion'
+            ]
         );
     }
 

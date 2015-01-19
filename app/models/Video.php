@@ -407,9 +407,9 @@ class Video extends Content
     public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
         $defaultThumbnailSizes = array(
-            'small'  =>  array( 'width' => 150, 'height' => 150 ),
-            'normal' =>  array( 'width' => 300, 'height' => 300 ),
-            'big'    =>  array( 'width' => 450, 'height' => 450 ),
+            'small'  =>  ['width' => 150, 'height' => 150],
+            'normal' =>  ['width' => 300, 'height' => 300],
+            'big'    =>  ['width' => 450, 'height' => 450],
         );
 
         // Get the thumbnail sizes

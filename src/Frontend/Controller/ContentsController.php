@@ -41,7 +41,7 @@ class ContentsController extends Controller
         $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
-        $contentID = \Content::resolveID($dirtyID);
+        $contentID = \ContentManager::resolveID($dirtyID);
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
@@ -130,10 +130,9 @@ class ContentsController extends Controller
      **/
     public function shareByEmailAction(Request $request)
     {
-        $session = $this->get('session');
         if ('POST' == $request->getMethod()) {
             // Check direct access
-            if ($session->get('sendformtoken') != $request->request->get('token')) {
+            if ($this->get('session')->get('sendformtoken') != $request->request->get('token')) {
                 throw new ResourceNotFoundException();
             }
 
@@ -245,10 +244,8 @@ class ContentsController extends Controller
             $contentID    = $request->query->getDigits('content_id', null);
             $ext          = $request->query->getDigits('ext', 0);
 
-            $session = $this->get('session');
-
             $token = md5(uniqid('sendform'));
-            $session->set('sendformtoken', $token);
+            $this->get('session')->set('sendformtoken', $token);
 
             if ($ext == 1) {
                 // Getting Synchronize setting params

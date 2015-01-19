@@ -326,22 +326,14 @@ class PollsController extends Controller
         $countPolls = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl(
-                    'admin_polls_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countPolls,
+            'base_url'          => $this->generateUrl(
+                'admin_polls_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'poll/content-provider.tpl',
@@ -379,22 +371,16 @@ class PollsController extends Controller
         $polls      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countPolls = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl(
-                    'admin_polls_content_provider_related',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countPolls,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl(
+                'admin_polls_content_provider_related',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',

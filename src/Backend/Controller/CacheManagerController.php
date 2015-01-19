@@ -66,26 +66,18 @@ class CacheManagerController extends Controller
         }
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $this->itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($caches),
-                'fileName'    => $this->generateUrl(
-                    'admin_tpl_manager',
-                    array(
-                        'items_page'      => $this->itemsPerPage,
-                        'section'         => $this->request->query->filter('section', '', FILTER_SANITIZE_STRING),
-                        'type'            => $this->request->query->filter('type', '', FILTER_SANITIZE_STRING),
-                    )
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $this->itemsPerPage,
+            'total_items'       => count($caches),
+            'base_url'          => $this->generateUrl(
+                'admin_tpl_manager',
+                array(
+                    'items_page'      => $this->itemsPerPage,
+                    'section'         => $this->request->query->filter('section', '', FILTER_SANITIZE_STRING),
+                    'type'            => $this->request->query->filter('type', '', FILTER_SANITIZE_STRING),
+                )
+            ),
+        ]);
 
         // Get only cache files within pagination range
         $caches = array_slice($caches, ($this->page-1)*$this->itemsPerPage, $this->itemsPerPage);
@@ -149,6 +141,7 @@ class CacheManagerController extends Controller
             $categoryName = $ccm->getTitle($cacheGroup);
             $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
         }
+
         foreach ($caches as &$cache) {
             $cache['cache_id'] = $cache["category"] . "|" . $cache["resource"];
             $cache['tpl'] = $cache["template"] . ".tpl";
@@ -158,7 +151,6 @@ class CacheManagerController extends Controller
                     $cache["page"] =$match[2];
                 }
             }
-
         }
 
         return $this->render(

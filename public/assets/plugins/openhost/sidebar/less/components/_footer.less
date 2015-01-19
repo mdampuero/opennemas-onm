@@ -1,0 +1,97 @@
+.sidebar-footer-widget {
+  background: lighten(@background, 3%);
+  padding: 0;
+  position: relative;
+  right: 0;
+  width: @width;
+
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  transition: all .25s;
+
+  a {
+    color: @color;
+
+    &:hover,
+    &:visited {
+      color: #fff;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    width: @width;
+
+    li {
+      list-style: none;
+      padding: 9px;
+      height: 50px;
+    }
+  }
+
+  .logout {
+    background-color: #1b1e24;
+    border-radius: 100%;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    width: 32px;
+
+    .fa-power-off {
+      color: #f35958;
+    }
+
+    &:hover .fa-power-off {
+      color: #fff;
+    }
+  }
+
+  .profile-pic {
+    border-radius: 100%;
+    display: inline-block;
+    height: 32px;
+    float: left;
+    overflow: hidden;
+    width: 32px;
+  }
+
+  .username {
+    display: inline-block;
+    height: 20px;
+    float: left;
+    margin: 6px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 108px;
+    white-space: nowrap;
+  }
+}
+
+.collapsed.inverted .sidebar-footer-widget {
+  right: 160px;
+}
+
+.inverted .sidebar-footer-widget {
+  .logout {
+    left: 9px;
+  }
+
+  .profile-pic {
+    float: right;
+  }
+
+  .username {
+    float: right;
+    margin-right: 10px;
+    text-align: right;
+  }
+}
+
+.on-right .sidebar-footer-widget {
+  left: auto;
+  right: 0;
+}

@@ -595,8 +595,9 @@ class Advertisement extends Content
                     $url = url('frontend_ad_get', array('id' => $this->pk_content));
                 }
 
-                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;" '.
-                ' scrolling="no"></iframe>';
+                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; '
+                            .'height:'.$height.'px; overflow: hidden;" '
+                            .' scrolling="no"></iframe>';
             }
 
         } elseif ($this->with_script == 2) {
@@ -611,9 +612,10 @@ class Advertisement extends Content
                 // ]]> --></script>";
             }
         } elseif ($this->with_script == 3) {
-            $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'><script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
-googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
-// ]]> --></script></div>";
+            $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'>"
+                       ."<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA["
+                       ."googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });"
+                       ."// ]]> --></script></div>";
         } else {
             // Check for external advertisement Flash/Image based
             if (isset($this->extWsUrl)) {
@@ -679,7 +681,8 @@ googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
                 $content = '<div style="width:'.$width.'px; height:'.$height.'px; margin: 0 auto;">'.$content.'</div>';
             } else {
                 // Image
-                $imageObject = '<img alt="'.$photo->category_name.'" src="'. $mediaUrl.'" width="'.$width.'" height="'.$height.'" />';
+                $imageObject = '<img alt="'.$photo->category_name.'" src="'. $mediaUrl.'" '
+                                .'width="'.$width.'" height="'.$height.'" />';
 
                 $content = '<a target="_blank" href="'.$url.'" rel="nofollow">'.$imageObject.'</a>';
             }

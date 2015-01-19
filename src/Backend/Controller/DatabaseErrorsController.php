@@ -33,19 +33,8 @@ class DatabaseErrorsController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        // TODO: this if block is redundant according to Security annotation
-        if (!Acl::isMaster()) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You don't have permissions")
-            );
-
-            return $this->redirect($this->generateUrl('admin_welcome'));
-        }
-
         $where        = "";
         $itemsPerPage = 10;
-        $totalErrors  = (int) $rsTotalErrors;
         $page         = $request->query->getDigits('page', 1);
         $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
@@ -63,21 +52,17 @@ class DatabaseErrorsController extends Controller
 
         $errors = $GLOBALS['application']->conn->Execute($sql, $values);
 
-        $pagerOptions = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => $totalErrors,
-        );
-        $pager = \Pager::factory($pagerOptions);
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => (int) $rsTotalErrors,
+            'base_url'          => $this->generateUrl('admin_databaseerrors'),
+        ]);
 
         return $this->render(
             'system_information/sql_error_log.tpl',
             array(
                 'errors'        => $errors,
-                'pagination'    => $pager,
+                'pagination'    => $pagination,
                 'total_errors'  => $rsTotalErrors,
                 'sql'           => $sql,
                 'elements_page' => ($itemsPerPage*($page-1)),

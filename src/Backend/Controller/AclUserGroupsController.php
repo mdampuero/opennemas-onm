@@ -105,15 +105,26 @@ class AclUserGroupsController extends Controller
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($userGroup->create($data)) {
-                // If user group was saved successfully show again the form
+                $level = 'success';
+                $message = _('User group created successfully.');
+            } else {
+                $level = 'error';
+                $message = _('Unable to create the new user group');
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                $level,
+                $message
+            );
+
+            // If user group was saved successfully show again the form
+            if ($level == 'success') {
                 return $this->redirect(
                     $this->generateUrl(
                         'admin_acl_usergroup_show',
                         array('id' => $userGroup->id)
                     )
                 );
-            } else {
-                $this->view->assign('errors', $userGroup->errors);
             }
         }
 

@@ -27,7 +27,7 @@ class Opinions
         $er = getService('entity_repository');
 
         // Resolve dirty Id
-        $opinionId = \Content::resolveID($id);
+        $opinionId = \ContentManager::resolveID($id);
 
         // Load opinion
         $opinion = $er->find('Opinion', $opinionId);

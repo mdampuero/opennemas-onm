@@ -43,6 +43,16 @@ class AuthenticationController extends Controller
     }
 
     /**
+     * Returns an empty response on fake login.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function fakeLoginAction()
+    {
+        return new JsonResponse();
+    }
+
+    /**
      * Returns the parameters to use in login.
      *
      * @return JsonResponse The response object.

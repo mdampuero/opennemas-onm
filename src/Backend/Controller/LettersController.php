@@ -204,23 +204,14 @@ class LettersController extends Controller
         $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countLetters = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countLetters,
-                'fileName'    => $this->generateUrl(
-                    'admin_letters_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
-
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countLetters,
+            'base_url'          => $this->generateUrl(
+                'admin_letters_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'letter/content-provider.tpl',
@@ -259,19 +250,11 @@ class LettersController extends Controller
         $countLetters = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countLetters,
-                'fileName'    => $this->generateUrl('admin_letters_content_provider_related').'?page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countLetters,
+            'base_url'          => $this->generateUrl('admin_letters_content_provider_related'),
+        ]);
 
         return $this->render(
             "common/content_provider/_container-content-list.tpl",

@@ -195,11 +195,11 @@ class NewStandController extends Controller
     {
         $dirtyID = $request->query->getDigits('id', null);
 
-        $epaperId = \Content::resolveID($dirtyID);
+        $epaperId = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
-            return new RedirectResponse($this->generateUrl('frontend_newstandPaypal_frontpage'));
+            return new RedirectResponse($this->generateUrl('frontend_newstand_frontpage'));
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);

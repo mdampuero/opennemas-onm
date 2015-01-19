@@ -138,12 +138,13 @@ class BooksController extends Controller
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'cover_id'    => $request->request->filter('cover_id', '', FILTER_SANITIZE_STRING),
+                'cover_id'    => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'category'    => $request->request->getInt('category', 0),
+                'position'    => $request->request->getInt('position', 1),
                 'content_status'   => $request->request->getInt('content_status', 0),
             );
 
@@ -250,6 +251,7 @@ class BooksController extends Controller
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category'),
+            'position'       => $request->request->getInt('position'),
             'content_status' => $request->request->getInt('content_status'),
         ];
 

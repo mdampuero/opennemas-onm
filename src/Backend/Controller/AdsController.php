@@ -364,24 +364,14 @@ class AdsController extends Controller
 
         $em       = $this->get('advertisement_repository');
         $ads      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
+
         $countAds = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countAds,
-                'fileName'    => $this->generateUrl(
-                    'admin_ads_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countAds,
+            'base_url'          => $this->generateUrl('admin_ads_content_provider', ['category' => $categoryId]),
+        ]);
 
         return $this->render(
             'advertisement/content-provider.tpl',

@@ -1,7 +1,7 @@
 
 angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
-    '$filter', '$location', '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($filter, $location, $modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$filter', '$location', '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($filter, $location, $modal, $scope, itemService, routing, messenger, data) {
         /**
          * The instance object.
          *
@@ -131,16 +131,20 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
 
             itemService.save('manager_ws_instance_create', $scope.instance)
                 .then(function (response) {
-                    if (response.data.success) {
-                        $location.path(fosJsRouting.ngGenerateShort('/manager',
-                            'manager_instance_show',
-                            { id: response.data.message.id }));
-                    }
-
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 201  ? 'success' : 'error'
                     });
+
+                    if (response.status == 201) {
+                        // Get new instance id
+                        var url = response.headers()['location'];
+                        var id  = url.substr(url.lastIndexOf('/') + 1);
+
+                        url = routing.ngGenerateShort(
+                            'manager_instance_show', { id: id });
+                        $location.path(url);
+                    }
 
                     $scope.saving = 0;
                 });
@@ -173,7 +177,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 $scope.formValidated = 1;
 
                 messenger.post({
-                    message: 'There are errors in the form.',
+                    message: $filter('translate')('FormErrors'),
                     type:    'error'
                 });
 
@@ -193,8 +197,8 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             itemService.update('manager_ws_instance_update', $scope.instance.id,
                 $scope.instance).then(function (response) {
                     messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
                     });
 
                     $scope.saving = 0;

@@ -80,36 +80,6 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Checks for repeated internal name and returns it, corrected if necessary.
-     *
-     * @param string $instance The instance to check.
-     */
-    public function checkInternalName(&$instance)
-    {
-        $this->conn->selectDatabase('onm-instances');
-
-        $internalName = $instance->internal_name;
-        if (empty($internalName)) {
-            $domain = explode('.', $instance->domains[0]);
-            $internalName = $domain[0];
-        }
-
-        $internalName = strtolower($internalName);
-
-        // Check if the generated InternalShortName already exists
-        $sql = "SELECT count(*) as internal_exists FROM instances "
-             . "WHERE `internal_name` REGEXP '"
-             . $internalName . "[0-9]*'";
-        $rs = $this->conn->fetchAssoc($sql);
-
-        if ($rs && $rs['internal_exists'] > 0) {
-            $internalName .= $rs['internal_exists'];
-        }
-
-        $instance->internal_name = $internalName;
-    }
-
-    /**
      * Checks if a contact email is already in use.
      *
      * @param string $mail The email to check.
