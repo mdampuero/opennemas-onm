@@ -132,6 +132,13 @@
             </div>
 
             <div class="control-group">
+                <label for="position" class="control-label">{t}Position{/t}</label>
+                <div class="controls">
+                    <input type="number" id="position" name="position" value="{$book->position}">
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label for="editorial" class="control-label">{t}Editorial{/t}</label>
                 <div class="controls">
                     <input type="text" id="editorial" name="editorial" value="{$book->editorial|default:""}" required="required" class="input-xxlarge"/>

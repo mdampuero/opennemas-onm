@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 {if $category == 'widget'},'in_home': 1{/if}}, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 {if $category == 'widget'},'in_home': 1{/if}}, 'position', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -52,14 +52,14 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {if $category == 'widget' && $page <= 1}
+                {*if $category == 'widget' && $page <= 1}
                 <li>
                     <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
-                {/if}
+                {/if*}
                 {acl isAllowed="BOOK_CREATE"}
                 <li>
                     <a href="{url name=admin_books_create category=$category}"  title="{t}New book{/t}">
@@ -131,7 +131,9 @@
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
+                    <th class="center">{t}Position{/t}</th>
                     <th class="center" style="width:100px;">{t}Created on{/t}</th>
+                    <th class="center" style="width:40px">{t}Views{/t}</th>
                     {acl isAllowed="BOOK_AVAILABLE"}
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {/acl}
@@ -141,7 +143,7 @@
                     <th class="right" style="width:10px;"></th>
                 </tr>
             </thead>
-            <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
+            <tbody {*if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if*}>
             <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="10">{t}No available books.{/t}</td>
             </tr>
@@ -162,7 +164,13 @@
                     </span>
                 </td>
                 <td class="center nowrap">
+                    [% content.position %]
+                </td>
+                <td class="center nowrap">
                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                </td>
+                <td class="center">
+                    [% shvs.extra.views[content.id] %]
                 </td>
                 {acl isAllowed="BOOK_AVAILABLE"}
                 <td class="center">
