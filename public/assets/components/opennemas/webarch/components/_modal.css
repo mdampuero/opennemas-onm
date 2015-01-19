@@ -1,0 +1,12 @@
+.modal-footer {
+  background: none;
+}
+
+.modal-header .close {
+  margin-top: 2px;
+}
+
+.modal-body {
+  background: none;
+  padding-top: 20px;
+}

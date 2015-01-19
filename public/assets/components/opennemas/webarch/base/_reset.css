@@ -1,0 +1,32 @@
+body {
+  background-color: rgb(229, 233, 236) !important;
+  overflow-x: hidden;
+}
+
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+a {
+  color:#376092;
+  transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
+}
+
+a:hover,
+a:focus {
+  color:#376092;
+}
+
+.a {
+  cursor: pointer;
+}
+
+i.ng-hide-add-active, .ng-hide-remove {
+  display: inline-block !important;
+}
+
+@media (min-width: 900px)
+  ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: none !important;
+  }
+}
