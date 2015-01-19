@@ -63,7 +63,6 @@ class NewsAgencyController extends Controller
                 'notice',
                 _('Please provide your source server configuration to start to use your Importer module')
             );
-            $this->redirect($this->generateUrl('admin_news_agency_servers'));
         }
     }
 
