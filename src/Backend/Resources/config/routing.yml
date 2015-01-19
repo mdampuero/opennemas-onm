@@ -78,10 +78,6 @@ admin_staticpages_build_slug:
     path:     /static-pages/{id}/build-slug
     defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
 
-admin_staticpages_clean_metadata:
-    path:     /static-pages/{id}/clean_metadata
-    defaults: { _controller  : BackendBundle:StaticPages:cleanMetadata }
-
 # Widget manager routes
 admin_widgets:
     path:     /widgets
