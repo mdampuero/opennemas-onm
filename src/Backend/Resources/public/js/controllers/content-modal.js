@@ -160,6 +160,14 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
+        // Generate selecte items with [xml_file, source_id]
+        var items = [];
+        for (var i = 0; i < contents.length; i++) {
+            if (selected.indexOf(contents[i].id) !== -1) {
+                items.push([contents[i].xml_file, contents[i].source_id]);
+            }
+        };
+
         // Enable spinner
         $scope.deleting = 1;
 
@@ -167,7 +175,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             route,
             { contentType: sharedVars.get('contentType') }
         );
-        $http.post(url, { ids: selected }).success(function(response) {
+        $http.post(url, { ids: items }).success(function(response) {
             var errors = 0;
             for (var i = 0; i < response.messages.length; i++) {
                 var params = {

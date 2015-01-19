@@ -340,7 +340,7 @@ class PollsController extends Controller
     {
 
         $cacheManager = $this->get('template_cache_manager');
-        $cacheManager->setSmarty(new Template(TEMPLATE_USER_PATH));
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
 
         $cacheID      = $this->view->generateCacheId($categoryName, '', $pollId);
         $cacheManager->delete($cacheID, 'poll.tpl');

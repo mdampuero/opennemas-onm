@@ -44,7 +44,7 @@
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         <li>
-                            <a href="{url name=admin_news_agency_sync}" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
+                            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
                                 {t}Batch import{/t}
                             </a>
                         </li>

@@ -35,37 +35,23 @@ class UserGroupController extends Controller
         );
 
         if (!$data['name']) {
-            return new JsonResponse(
-                array(
-                    'success' => false,
-                    'message' => array(
-                        'type' => 'error',
-                        'text' => _('User group name cannot be empty')
-                    )
-                )
-            );
+            return new JsonResponse(_('User group name cannot be empty'), 400);
         }
 
-        if ($userGroup->create($data)) {
-            $success = true;
-            $message = array(
-                'id'   => $userGroup->id,
-                'type' => 'success',
-                'text' => _('User group saved successfully')
-            );
-        } else {
-            $message = array(
-                'type' => 'error',
-                'text' => _('Unable to create a new usergroup')
-            );
+        if (!$userGroup->create($data)) {
+            return new JsonResponse(_('Unable to create a new usergroup'), 409);
         }
 
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
+        $response =  new JsonResponse(_('User group saved successfully'), 201);
+        $response->headers->set(
+            'Location',
+            $this->generateUrl(
+                'manager_ws_user_group_show',
+                [ 'id' =>$userGroup->id ]
             )
         );
+
+        return $response;
     }
 
     /**
@@ -77,33 +63,15 @@ class UserGroupController extends Controller
      */
     public function deleteAction($id)
     {
-        $success = false;
-        $message = array();
-
         $userGroup = new \UserGroup();
-        $deleted   = $userGroup->delete($id);
-        if ($deleted) {
-            $success = true;
-            $message = array(
-                'type' => 'success',
-                'text' => _('User group deleted successfully.')
-            );
-        } else {
-            $message = array(
-                'type' => 'success',
-                'text' => sprintf(
-                    _('Unable to delete the user group with id "%d"'),
-                    $id
-                )
+        if (!$userGroup->delete($id)) {
+            return new JsonResponse(
+                sprintf(_('Unable to delete the user group with id "%d"'), $id),
+                409
             );
         }
 
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
+        return new JsonResponse(_('User group deleted successfully.'));
     }
 
     /**
@@ -115,51 +83,51 @@ class UserGroupController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $message = array();
-        $success  = false;
-        $updated  = 0;
+        $messages   = [ 'errors' => [], 'success' => [] ];
+        $selected   = $request->request->get('selected', null);
+        $statusCode = 200;
+        $updated    = [];
 
-        $selected  = $request->request->get('selected', null);
-
-        if (is_array($selected) && count($selected) > 0) {
-            $userGroup = new \UserGroup();
-
-            foreach ($selected as $id) {
-                $deleted = $userGroup->delete($id);
-
-                if ($deleted) {
-                    $updated++;
-                } else {
-                    $message = array(
-                        'type' => 'success',
-                        'text' => sprintf(
-                            _('Unable to delete the user group with id "%d"'),
-                            $id
-                        )
-                    );
-                }
-            }
-        }
-
-
-        if (count($updated) > 0) {
-            $success = true;
-
-            array_unshift(
-                $message,
-                array(
-                    'text' => sprintf(_('%s user groups deleted successfully.'), count($updated)),
-                    'type' => 'success'
-                )
+        if (!is_array($selected)
+            || (is_array($selected) && count($selected) == 0)
+        ) {
+            return new JsonResponse(
+                _('Unable to find user groups for the given criteria'),
+                409
             );
         }
 
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
+        $userGroup = new \UserGroup();
+
+        foreach ($selected as $id) {
+            if ($userGroup->delete($id)) {
+                $updated[] = $id;
+            } else {
+                $messages['errors'][] = [
+                    'type' => 'success',
+                    'text' => sprintf(
+                        _('Unable to delete the user group with id "%d"'),
+                        $id
+                    )
+                ];
+            }
+        }
+
+        if (count($updated) > 0) {
+            $messages['success'] = [
+                'ids' => $updated,
+                'message' => sprintf(_('%s user groups deleted successfully.'), count($updated)),
+            ];
+        }
+
+        // Return the proper status code
+        if (count($messages['errors']) > 0 && count($updated) > 0) {
+            $statusCode = 207;
+        } elseif (count($messages['errors']) > 0) {
+            $statusCode = 409;
+        }
+
+        return new JsonResponse($messages, $statusCode);
     }
 
     /**
@@ -171,10 +139,10 @@ class UserGroupController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp      = $request->request->getDigits('epp', 10);
-        $page     = $request->request->getDigits('page', 1);
-        $criteria = $request->request->filter('criteria') ? : array();
-        $orderBy  = $request->request->filter('sort_by') ? : array();
+        $epp      = $request->query->getDigits('epp', 10);
+        $page     = $request->query->getDigits('page', 1);
+        $criteria = $request->query->filter('criteria') ? : array();
+        $orderBy  = $request->query->filter('orderBy') ? : array();
 
         $order = array();
         foreach ($orderBy as $value) {
@@ -238,9 +206,6 @@ class UserGroupController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $success = false;
-        $message = array();
-
         $data = array(
             'id'         => $id,
             'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
@@ -248,39 +213,20 @@ class UserGroupController extends Controller
         );
 
         if (!$data['name']) {
-            return new JsonResponse(
-                array(
-                    'success' => false,
-                    'message' => array(
-                        'type' => 'error',
-                        'text' => _('User group name cannot be empty')
-                    )
-                )
-            );
+            return new JsonResponse(_('User group name cannot be empty'), 400);
         }
 
         $userGroup = new \UserGroup();
         if ($userGroup->update($data)) {
             $this->get('usergroup_repository')->deleteCache($id);
 
-            $success = true;
-            $message = array(
-                'type' => 'success',
-                'text' => _('User group updated successfully')
-            );
+            return new JsonResponse(_('User group updated successfully'));
         } else {
-            $message = array(
-                'type' => 'error',
-                'text' => _('Unable to update the user group with id "%d"'), $id
+            return new JsonResponse(
+                sprintf(_('Unable to update the user group with id "%d"'), $id),
+                409
             );
         }
-
-        return new JsonResponse(
-            array(
-                'success' => $success,
-                'message' => $message
-            )
-        );
     }
 
     /**

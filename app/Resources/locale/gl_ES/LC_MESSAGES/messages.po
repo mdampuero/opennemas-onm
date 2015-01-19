@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Fran Diéguez <frandieguez@gnome.org>, 2011.
 # sandra <sandra@openhost.es>, 2013.
-# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014.
+# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012, 2013, 2014, 2015.
 # Diego Blanco <diego@openhost.es>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-26 12:21+0100\n"
-"PO-Revision-Date: 2014-11-26 11:31+0200\n"
+"POT-Creation-Date: 2015-01-19 10:59+0100\n"
+"PO-Revision-Date: 2015-01-19 11:10+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -53,10 +53,6 @@ msgstr "Campo «%s» non válido"
 
 msgid "Database error."
 msgstr "Erro de base de datos."
-
-#, php-format
-msgid "Homepage for category %s cleaned successfully."
-msgstr "A portadilla da categoría %s foi limpada correctamente."
 
 msgid "Advertisement"
 msgstr "Publicidade"
@@ -391,6 +387,12 @@ msgstr "O contrasinal e a confirmación deben que ser iguais."
 msgid "Unable to find user group with id '%d'"
 msgstr "Non se puido atopar o grupo de usuarios co identificador «%d»"
 
+msgid "User group created successfully."
+msgstr "Grupo de usuarios creado correctamente."
+
+msgid "Unable to create the new user group"
+msgstr "No se puido crear o novo grupo de usuarios"
+
 msgid "User group updated successfully."
 msgstr "Grupo de usuario actualizado correctamente."
 
@@ -436,8 +438,7 @@ msgstr "Non se puido crear a nova publicidade."
 msgid "Unable to find the advertisement with the id \"%d\""
 msgstr "Non se puido atopar a publicidade co identificador «%d»"
 
-msgid ""
-"You can't modify this content because you don't have enought privileges."
+msgid "You can't modify this content because you don't have enough privileges."
 msgstr "Non tes permisos dabondo para modificar este contido."
 
 msgid "Advertisement successfully updated."
@@ -522,7 +523,6 @@ msgstr "O teu token de inicio de sesión non é válido. Téntao de novo."
 msgid "You must put %d books in the HOME widget"
 msgstr "Débense ter %d libros para o Widget de portada"
 
-#, php-format
 msgid "Unable to create the new book."
 msgstr "Non se puido crear o novo libro."
 
@@ -532,6 +532,13 @@ msgstr "Non se puido atopar o libro co identificador «%d»"
 
 msgid "Book data sent not valid."
 msgstr "Os datos enviados do libro non son válidos."
+
+msgid "Book updated succesfully."
+msgstr "Libro actualizado correctamente."
+
+#, php-format
+msgid "Book '%s' deleted successfully."
+msgstr "Libro «%s» foi eliminado correctamente."
 
 msgid ""
 "Unable to save the new positions. Please contact with your system "
@@ -545,6 +552,9 @@ msgstr "PORTADA"
 
 msgid "Cache configuration saved successfully."
 msgstr "Configuración de caché gardada correctamente."
+
+msgid "Unable to save the cache configuration."
+msgstr "Non se puido gardar a configuración de caché."
 
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
@@ -585,8 +595,8 @@ msgstr "Mapa do sitio"
 msgid "Category created successfully."
 msgstr "Categoria creada correctamente."
 
-msgid "Unable to find a category for the give id."
-msgstr "Non se puido atopar unha categoría co identificador fornecido."
+msgid "Unable to find a category for the given id."
+msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
 
 msgid "Category data sent not valid."
 msgstr "Os datos enviados da categoría non son válidos."
@@ -670,8 +680,8 @@ msgstr ""
 msgid "Comment with id \"%d\" doesn't exists."
 msgstr "Non existe o comentario co identificador «%d»"
 
-msgid "Comment saved successfully."
-msgstr "Comentario gardado correctamente."
+msgid "Comment updated successfully."
+msgstr "Comentario actualizado correctamente."
 
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
@@ -724,6 +734,9 @@ msgstr "Capa «%s» foi eliminada correctamente."
 msgid "You must give an id to delete the cover."
 msgstr "Debes fornecer un identificador para eliminar unha portada."
 
+msgid "You don't have permissions"
+msgstr "Non tes permisos"
+
 msgid "SQL errors registered in database cleaned sucessfully."
 msgstr "Errores SQL registrados en la base de datos limpiados correctamente."
 
@@ -740,17 +753,17 @@ msgid ""
 "Oups! Seems that we had an unknown problem while trying to run your request."
 msgstr "Oups! Semella que tivemos algún problema ao executar a túa consulta."
 
+msgid "You must pick a file before submitting the form"
+msgstr "Selecciona un ficheiro antes de enviar o formulario"
+
+msgid "There was an error while uploading the file."
+msgstr "Produciuse un erro ao actualizar o widget."
+
 msgid "File created successfuly."
 msgstr "Ficheiro creado correctamente."
 
 msgid "Unable to upload the file: A file with the same name already exists."
 msgstr "Non se puido subir o ficheiro: Xa existe un ficheiro co mesmo nome."
-
-msgid "There was an error while uploading the file."
-msgstr "Produciuse un erro ao actualizar o widget."
-
-msgid "You must pick a file before submitting the form"
-msgstr "Selecciona un ficheiro antes de enviar o formulario"
 
 #, php-format
 msgid "Unable to find the file with the id \"%s\""
@@ -823,6 +836,12 @@ msgstr ""
 "Produciuse un erro ao subir «%s» - «%s». Comprobe o teu tamaño antes de "
 "envialo."
 
+msgid "Can't read the file. Please check xml file."
+msgstr "Non é posibel ler o ficheiro. Comprobe o ficheiro XML."
+
+msgid "Can't read file. Please check xml file."
+msgstr "Non é posíbel ler o ficheiro. Comprobe o ficheiro XML."
+
 msgid "Importer XML configuration saved successfully"
 msgstr "Configuración do importador de XML gardada correctamente"
 
@@ -865,6 +884,24 @@ msgstr "Carta gardada correctamente."
 
 msgid "Unable to update the letter."
 msgstr "Non se puido actualizar a carta."
+
+msgid "Bloggers"
+msgstr "Autores de blog"
+
+msgid "Letters to the Editor"
+msgstr "Cartas ao director"
+
+msgid "News Stand"
+msgstr "Portadas de papel"
+
+msgid "Form"
+msgstr "Formularios"
+
+msgid "Newsletter"
+msgstr "Boletin de novas"
+
+msgid "Archive"
+msgstr "Arquivar"
 
 msgid "Without position"
 msgstr "Sen posición"
@@ -1006,7 +1043,7 @@ msgid "Newsletter module settings saved successfully."
 msgstr "Configuración do módulo de boletin de novas gardada correctamente."
 
 msgid "Please fill the sender email address in the module configuration."
-msgstr "Produciuse un erro ao gardar a configuración do módulo de Disqus"
+msgstr "Complete o enderezo de correo-e do emisor na configuración do módulo."
 
 msgid "Please fill the mail list email address in the module configuration."
 msgstr "Completa o enderezo do correo-e na configuración do módulo."
@@ -1067,10 +1104,6 @@ msgstr ""
 
 #, php-format
 msgid "You must put %d opinions %s in the frontpage "
-msgstr "Débense ter %d opinións %s para a portada"
-
-#, php-format
-msgid "You must put %d opinions %s in the frontpage"
 msgstr "Débense ter %d opinións %s para a portada"
 
 #, php-format
@@ -1170,21 +1203,21 @@ msgstr "Non se puido atopar a enquisa co identificador «%d»"
 msgid "Poll data sent not valid."
 msgstr "Os datos enviados da enquisa non son válidos."
 
+#, php-format
+msgid "Unable to find a poll with the id \"%s\"."
+msgstr "Non se puido atopar a enquisa co identificador «%s»."
+
 msgid "Poll successfully updated."
 msgstr "Enquisa actualizada correctamente."
 
 msgid "Unable to update the poll."
 msgstr "Non se puido actualizar a enquisa."
 
-#, php-format
-msgid "Unable to find a poll with the id \"%s\"."
-msgstr "Non se puido atopar a enquisa co identificador «%s»."
+msgid "You must give an id for delete a poll."
+msgstr "Debe fornecer un identificador para eliminar unha enquisa."
 
 msgid "Poll deleted successfully."
 msgstr "Enquisa eliminada correctamente."
-
-msgid "You must give an id for delete a poll."
-msgstr "Debe fornecer un identificador para eliminar unha enquisa."
 
 msgid "Special successfully created."
 msgstr "Especial creado correctamente."
@@ -1252,6 +1285,26 @@ msgid ""
 msgstr ""
 "O alto máximo para o «Logotipo do sitio» é 120px. Por favor axusta a imaxe "
 "ao tamaño."
+
+msgid ""
+"There was a problem while uploading the file. Please check if you have "
+"completed all the form fields."
+msgstr ""
+"Produciuse un erro ao subir o ficheiro. Comprobe que completara todos os "
+"campos do formulario."
+
+msgid ""
+"There was an error while uploading the form, not all the required data was "
+"sent."
+msgstr ""
+"Produciuse un erro ao subir o formulario, non se enviaron todos os datos "
+"requiridos."
+
+msgid ""
+"There was an error while uploading the form, the video type is not specified."
+msgstr ""
+"Produciuse un erro ao actualizar o formulario, non se especificou o tipo de "
+"vídeo."
 
 msgid "You can't modify this video because you don't have enought privileges."
 msgstr "Non tes permisos dabondo para modificar este vídeo."
@@ -1370,9 +1423,6 @@ msgstr "Videos"
 msgid "Albums"
 msgstr "Álbumes"
 
-msgid "News Stand"
-msgstr "Portadas de papel"
-
 msgid "Books"
 msgstr "Libros"
 
@@ -1384,9 +1434,6 @@ msgstr "Busca global"
 
 msgid "Trash"
 msgstr "Lixo"
-
-msgid "Newsletter"
-msgstr "Boletin de novas"
 
 msgid "Keywords"
 msgstr "Palabras chave"
@@ -1542,6 +1589,10 @@ msgstr "Non se puido atopar o elemento co identificador «%d»"
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
 
+#, php-format
+msgid "Homepage for category %s cleaned successfully."
+msgstr "A portadilla da categoría %s foi limpada correctamente."
+
 msgid "Already voted."
 msgstr "Xa votaches antes."
 
@@ -1633,6 +1684,9 @@ msgstr "Selecciona unha resposta válida da enquisa."
 
 msgid "You have voted this poll previously."
 msgstr "Xa votaches nesta enquisa anteriormente."
+
+msgid "You can't vote this poll, it is closed."
+msgstr "A enquisa está pechada, non podes votar."
 
 msgid "Problem with IP verification!"
 msgstr "Houbo un problema coa verificación da túa IP!"
@@ -1862,9 +1916,6 @@ msgstr "Creouse unha nova instancia de Opennemas"
 msgid "is now on-line"
 msgstr "está agora dispoñíbel"
 
-msgid "Can't read file. Please check xml file..."
-msgstr "Non é posibel ler o ficheiro. Comprobe o ficheiro XML…"
-
 #, php-format
 msgid "Seems that the server configuration for %s is not correct."
 msgstr "Semella que a configuración do servidor para %s non é correcta."
@@ -1971,9 +2022,6 @@ msgstr "Integración de UserVoice"
 
 msgid "Videos (local)"
 msgstr "Videos (local)"
-
-msgid "Sorry, you don't have enought privileges"
-msgstr "Non tes permisos dabondo"
 
 msgid "Get next page"
 msgstr "Páxina seguinte"
@@ -3184,9 +3232,6 @@ msgstr "Personalizar en portada"
 msgid "Customize content"
 msgstr "Personalizar contido"
 
-msgid "Letters to the Editor"
-msgstr "Cartas ao director"
-
 msgid "New letter"
 msgstr "Nova carta"
 
@@ -3477,6 +3522,9 @@ msgstr "Creando enquisa"
 
 msgid "Subtitle"
 msgstr "Subtitulo"
+
+msgid "Publication closed date"
+msgstr "Data de final de publicación"
 
 msgid "Allow comments"
 msgstr "Permitir comentarios"
@@ -3914,11 +3962,11 @@ msgstr "Sincronizar"
 msgid "Automatic Categories"
 msgstr "Categorias automáticas"
 
-msgid "Sync Blog Categories"
-msgstr "Categorias sincronizadas blog"
+msgid "Sync Automatic Categories"
+msgstr "Sincronización automática de categorías"
 
-msgid "Sync blog category"
-msgstr "Categoria sincronizada blog"
+msgid "Sync Automatic category"
+msgstr "Sincronización automática de categoría"
 
 msgid "Synched blog category"
 msgstr "Categoria sincronizada blog"
@@ -5230,9 +5278,6 @@ msgstr "Video para a páxina de artigo interior"
 msgid "Drop a video to here"
 msgstr "Arrastre un vídeo aquí"
 
-msgid "Footer text for frontpage image:"
-msgstr "Texto inferior para a imaxe en portada:"
-
 msgid "Footer text for inner video:"
 msgstr "Texto inferior para o vídeo interior:"
 
@@ -5491,8 +5536,8 @@ msgid ""
 "You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
 "applications/\" target=\"_blank\">here</a>"
 msgstr ""
-"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">aquí</a>"
+"Pode obter as súas chaves de Disqus desde <a href=\""
+"http://disqus.com/api/applications/\" target=\"_blank\">aquí</a>"
 
 msgid "Disqus module configuration"
 msgstr "Configuración do módulo «Disqus»"
@@ -6817,6 +6862,24 @@ msgstr "Grupo de usuarios"
 msgid "All groups"
 msgstr "Todos os grupos"
 
+#~ msgid "Comment saved successfully."
+#~ msgstr "Comentario gardado correctamente."
+
+#~ msgid "You must put %d opinions %s in the frontpage"
+#~ msgstr "Débense ter %d opinións %s para a portada"
+
+#~ msgid "Sorry, you don't have enought privileges"
+#~ msgstr "Non tes permisos dabondo"
+
+#~ msgid "Sync Blog Categories"
+#~ msgstr "Categorias sincronizadas blog"
+
+#~ msgid "Sync blog category"
+#~ msgstr "Categoria sincronizada blog"
+
+#~ msgid "Footer text for frontpage image:"
+#~ msgstr "Texto inferior para a imaxe en portada:"
+
 #~ msgid "Unable to find a poll with the id \"%d\""
 #~ msgstr "Non se puido atopar unha enquisa co identificador «%d»"
 
@@ -6983,13 +7046,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "There was a problem with the cover data. Try again"
 #~ msgstr "Produciuse un erro ao analizar os datos da portada. Ténteo de novo."
-
-#~ msgid ""
-#~ "There was an error while uploading the file. <br />Please, contact your "
-#~ "system administrator."
-#~ msgstr ""
-#~ "Produciuse un erro ao subir o ficheiro.<br/>Por favor, contacte co "
-#~ "administrador do sistema."
 
 #~ msgid "File information updated successfully."
 #~ msgstr "Información do ficheiro actualizada correctamente."
@@ -7391,9 +7447,6 @@ msgstr "Todos os grupos"
 #~ "You can't modify this book data because you don't have enought privileges."
 #~ msgstr "Non pode modificar este libro porque non ten permisos dabondo."
 
-#~ msgid "Book \"%s\" deleted successfully."
-#~ msgstr "O libro «%s» foi eliminado correctamente."
-
 #~ msgid "Unable to find book with id \"%d\""
 #~ msgstr "Non foi posíbel atopar o libro co identificador «%d»"
 
@@ -7406,9 +7459,6 @@ msgstr "Todos os grupos"
 #~ msgstr ""
 #~ "Estado de suxerido cambiado correctamente para o libro co identificador "
 #~ "«%d»"
-
-#~ msgid "Comment deleted successfully."
-#~ msgstr "Comentario eliminado correctamente."
 
 #~ msgid "Comment status changed to '%s'."
 #~ msgstr "Estado do comentario cambiado a «%s»."

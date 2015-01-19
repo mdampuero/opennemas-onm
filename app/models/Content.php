@@ -517,7 +517,8 @@ class Content
     {
         $this->read($data['id']);
 
-        if ($data['content_status'] == 1
+        if (array_key_exists('content_status', $data)
+            && $data['content_status'] == 1
             && $this->content_status == 0
             && array_key_exists('starttime', $data)
             && ($data['starttime'] =='0000-00-00 00:00:00')

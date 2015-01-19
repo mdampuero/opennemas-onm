@@ -120,7 +120,7 @@ class MonographsController extends Controller
         }
 
         return $this->render(
-            'special/special_frontpage.tpl',
+            'special/frontpage_special.tpl',
             array(
                 'cache_id' => $cacheID,
             )
@@ -168,13 +168,13 @@ class MonographsController extends Controller
                     foreach ($contents as $item) {
                         $content = \Content::get($item['fk_content']);
 
-                        if (isset($content->img1)) {
+                        if (!empty($content->img1)) {
                             $photo                = $this->get('entity_repository')->find('Photo', $content->img1);
                             $content->img1_path = $photo->path_file.$photo->name;
                             $content->img1      = $photo;
                         }
 
-                        if (isset($content->fk_video)) {
+                        if (!empty($content->fk_video)) {
                             $video              = $this->get('entity_repository')->find('Video', $content->fk_video);
                             $content->obj_video = $video;
                         }

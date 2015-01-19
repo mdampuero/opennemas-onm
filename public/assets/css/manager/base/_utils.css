@@ -1,0 +1,14 @@
+.no-style {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.no-style li {
+  margin: 0;
+  padding: 0;
+}
+
+.pointer {
+  cursor:pointer !important;
+}
