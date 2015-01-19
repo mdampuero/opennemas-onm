@@ -112,3 +112,5 @@ parameters:
     # JWT (Shared key)
     shared_key_algorithm: HS512
     shared_key:           yoursharedkey
+
+    recaptcha_private_key: 6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs

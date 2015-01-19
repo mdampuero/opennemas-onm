@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -54,7 +53,7 @@ class BlogsController extends Controller
                 }
             }
 
-            $itemsPerPage = s::get('items_in_blog');
+            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
 
             $order   = array('starttime' => 'DESC');
             $filters = array(
@@ -68,21 +67,11 @@ class BlogsController extends Controller
             $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
             $countItems = $em->countBy($filters);
 
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 3,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countItems,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_blog_frontpage'
-                    ).'/?page=%d',
-                )
-            );
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $countItems,
+                'base_url'          => $this->generateUrl('frontend_blog_frontpage'),
+            ]);
 
             foreach ($blogs as &$blog) {
                 if (array_key_exists($blog->fk_author, $authors)) {
@@ -217,24 +206,15 @@ class BlogsController extends Controller
                         );
                     }
                 }
-                $pagination = \Pager::factory(
-                    array(
-                        'mode'        => 'Sliding',
-                        'perPage'     => $itemsPerPage,
-                        'append'      => false,
-                        'path'        => '',
-                        'delta'       => 4,
-                        'clearIfVoid' => true,
-                        'urlVar'      => 'page',
-                        'totalItems'  => $countItems,
-                        'fileName'    => $this->generateUrl(
-                            'frontend_blog_author_frontpage',
-                            array(
-                                'author_slug' => $author->slug,
-                            )
-                        ).'/?page=%d',
-                    )
-                );
+
+                $pagination = $this->get('paginator')->create([
+                    'elements_per_page' => $itemsPerPage,
+                    'total_items'       => $countItems,
+                    'base_url'          => $this->generateUrl(
+                        'frontend_blog_author_frontpage',
+                        ['author_slug' => $author->slug]
+                    ),
+                ]);
 
                 $this->view->assign(
                     array(
@@ -270,7 +250,7 @@ class BlogsController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('blog_id');
-        $blogID  = \Content::resolveID($dirtyID);
+        $blogID  = \ContentManager::resolveID($dirtyID);
 
         // Redirect to blog frontpage if blog_id wasn't provided
         if (empty($blogID)) {

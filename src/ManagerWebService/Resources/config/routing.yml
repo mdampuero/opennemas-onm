@@ -1,13 +1,3 @@
-managerwebservice_checkinstancename:
-    path: '/instances/checkinstancename'
-    defaults: { _controller: ManagerWebServiceBundle:WebService:checkInstanceName }
-    methods:  [POST]
-
-managerwebservice_checkemailinuse:
-    path: '/instances/checkmailinuse'
-    defaults: { _controller: ManagerWebServiceBundle:WebService:checkMailInUse }
-    methods:  [POST]
-
 managerwebservice_instance_create:
     path: '/instances/create'
     defaults: { _controller: ManagerWebServiceBundle:WebService:create }

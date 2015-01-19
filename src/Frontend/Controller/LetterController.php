@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -113,7 +112,7 @@ class LetterController extends Controller
         $this->view->setConfig('letter-inner');
         $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
-        $letterId = \Content::resolveID($dirtyID);
+        $letterId = \ContentManager::resolveID($dirtyID);
 
         if (empty($letterId)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
@@ -172,9 +171,6 @@ class LetterController extends Controller
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
         return $this->render('letter/letter_form.tpl');
     }
 
@@ -189,8 +185,6 @@ class LetterController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        require_once 'recaptchalib.php';
-
         $recaptcha_challenge_field =
             $request->request->filter('recaptcha_challenge_field', '', FILTER_SANITIZE_STRING);
         $recaptcha_response_field =
@@ -199,16 +193,16 @@ class LetterController extends Controller
         //Get config vars
         $configRecaptcha = s::get('recaptcha');
 
+        // New captcha instance
+        $captcha = getService('recaptcha')
+            ->setPrivateKey($configRecaptcha['private_key'])
+            ->setRemoteIp($request->getClientIp());
+
         // Get reCaptcha validate response
-        $resp = \recaptcha_check_answer(
-            $configRecaptcha['private_key'],
-            $_SERVER["REMOTE_ADDR"],
-            $recaptcha_challenge_field,
-            $recaptcha_response_field
-        );
+        $resp = $captcha->check($recaptcha_challenge_field, $recaptcha_response_field);
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->is_valid) {
+        if (!$resp->isValid()) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
             $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
@@ -257,7 +251,7 @@ class LetterController extends Controller
                 if ($letter->hasBadWords($data)) {
                     $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
                 } else {
-                    $ip = getRealIp();
+                    $ip = getUserRealIP();
                     $params['ip']   = $ip;
                     $data["params"] = $params;
 

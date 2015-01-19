@@ -14,11 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Onm\Instance\Instance;
 use Onm\Instance\InstanceCreator;
+use Onm\Framework\Controller\Controller;
 use Onm\Exception\AssetsNotCopiedException;
 use Onm\Exception\InstanceNotConfiguredException;
 use Onm\Exception\DatabaseNotRestoredException;
-
-use Onm\Framework\Controller\Controller;
 
 /**
  * Handles the actions for the manager web service

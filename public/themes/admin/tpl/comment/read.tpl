@@ -27,12 +27,6 @@
                     </button>
                 </li>
 
-                <li>
-                    <a href="{url name=admin_comments_delete id=$comment->id}" class="admin_add">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
-                    </a>
-                </li>
-
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_comments}" value="{t}Go back{/t}" title="{t}Go back{/t}">

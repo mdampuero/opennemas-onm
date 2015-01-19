@@ -11,7 +11,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Message as m;
 
 /**
  * Handles video CRUD actions.
@@ -351,7 +350,7 @@ class Video extends Content
         $relativeUploadDir  = 'video'.DS.date("Y/m/d");
         $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
         if (!is_dir($absoluteUploadpath)) {
-            FilesManager::createDirectory($absoluteUploadpath);
+            \Onm\FilesManager::createDirectory($absoluteUploadpath);
         }
 
         // Calculate the final video name by its extension, current data, ...
@@ -408,9 +407,9 @@ class Video extends Content
     public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
         $defaultThumbnailSizes = array(
-            'small'  =>  array( 'width' => 150, 'height' => 150 ),
-            'normal' =>  array( 'width' => 300, 'height' => 300 ),
-            'big'    =>  array( 'width' => 450, 'height' => 450 ),
+            'small'  =>  ['width' => 150, 'height' => 150],
+            'normal' =>  ['width' => 300, 'height' => 300],
+            'big'    =>  ['width' => 450, 'height' => 450],
         );
 
         // Get the thumbnail sizes
