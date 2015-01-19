@@ -306,10 +306,6 @@ admin_category_togglerss:
     defaults: { _controller  : BackendBundle:Categories:toggleRss }
 
 # Image manager routes
-admin_images_search:
-    path:     /images/search
-    defaults: { _controller  : BackendBundle:Images:search }
-
 admin_images:
     path:     /images
     defaults: { _controller  : BackendBundle:Images:list }
