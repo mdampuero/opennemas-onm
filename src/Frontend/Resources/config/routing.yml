@@ -162,13 +162,6 @@ frontend_rss_author:
     requirements:
         author_slug: "[A-Za-z\d-.]+"
 
-frontend_rss_subcategory:
-    path: /rss/{category_name}/{subcategory_name}
-    defaults: { _controller: FrontendBundle:Rss:generalRSS }
-    requirements:
-        category_name    : "[a-z\d-]+"
-        subcategory_name : "[a-z\d-]+"
-
 frontend_rss_category:
     path: /rss/{category_name}
     defaults: { _controller: FrontendBundle:Rss:generalRSS }
