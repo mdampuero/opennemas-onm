@@ -1069,10 +1069,6 @@ admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
     defaults: { _controller  : BackendBundle:AclUser:recoverPassword }
 
-admin_acl_user_recover_user:
-    path:     /login/user/recover-user
-    defaults: { _controller  : BackendBundle:AclUser:recoverUsername }
-
 admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
     defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
