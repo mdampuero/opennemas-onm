@@ -43,6 +43,7 @@ node_modules/*
 
 #public
 public/assets/components/*
+!public/assets/components/opennemas
 public/assets/js/routes.js
 public/build
 public/bundles
