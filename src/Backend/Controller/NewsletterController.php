@@ -512,7 +512,6 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
-                    'newsletter_sender',
                     'recaptcha',
                     'max_mailing'
                 )
@@ -543,19 +542,10 @@ class NewsletterController extends Controller
      **/
     public function checkModuleActivated()
     {
-        $sender   = s::get('newsletter_sender');
-        $maillist = s::get('newsletter_maillist');
         $type     = s::get('newsletter_subscriptionType');
         $config   = s::get('newsletter_maillist');
 
-        if (is_null($sender) || !$sender) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                _('Please fill the sender email address in the module configuration.')
-            );
-        }
-
-        if (is_null($maillist) || !$type) {
+        if (is_null($config) || !$type) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please fill the mail list email address in the module configuration.')
