@@ -122,6 +122,7 @@ class ModuleManager
                 'OPINION_MANAGER'           => _('Opinion'),
                 'PAPER_IMPORT'              => _('Paper import'),
                 'POLL_MANAGER'              => _('Polls'),
+                'PROMOTIONAL_BAR'           => _('Promotional bar'),
                 'SCHEDULE_MANAGER'          => _('Schedules'),
                 'SETTINGS_MANAGER'          => _('System wide settings'),
                 'SPECIAL_MANAGER'           => _('Specials'),
@@ -290,6 +291,11 @@ class ModuleManager
                     'id'   => 'POLL_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Polls'),
+                ],
+                [
+                    'id'   => 'PROMOTIONAL_BAR',
+                    'plan' => 'Other',
+                    'name' => _('Promotional bar'),
                 ],
                 [
                     'id'   => 'SCHEDULE_MANAGER',
