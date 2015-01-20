@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_acl_user}" method="get" id="userform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=admin_acl_user}" method="get" id="userform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1, activated: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Users{/t}</h2></div>
@@ -74,6 +74,13 @@
 					<option value="-1">{t}--All--{/t}</option>
 					{html_options options=$groupsOptions selected=$smarty.request.group|default:""}
 				</select>
+                &nbsp;&nbsp;
+                <select id="activated" name="activated" class="select2" ng-model="shvs.search.activated" data-label="{t}Access{/t}">
+                    {assign var=activated value=$smarty.request.activated}
+                    <option value="-1">{t}--All--{/t}</option>
+                    <option value="1">{t}Activated{/t}</option>
+                    <option value="0">{t}Deactivated{/t}</option>
+                </select>
 			</div>
 		</div>
 		<div class="spinner-wrapper" ng-if="loading">
