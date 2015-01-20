@@ -315,7 +315,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         ) {
             $sql = "UPDATE users
                     SET `username`=?, `password`= ?, `sessionexpire`=?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `email`=?, `name`=?, `fk_user_group`=?, type=?
+                        `avatar_img_id`=?, `email`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = array(
@@ -327,6 +327,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
+                $data['activated'],
                 $data['id_user_group'],
                 $data['type'],
                 intval($data['id'])
@@ -335,7 +336,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         } else {
             $sql = "UPDATE users
                     SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
-                        `avatar_img_id`=?, `name`=?, `fk_user_group`=?, type=?
+                        `avatar_img_id`=?, `name`=?, `activated`=?, `fk_user_group`=?, type=?
                     WHERE id=?";
 
             $values = array(
@@ -346,6 +347,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
                 $data['bio'],
                 $data['avatar_img_id'],
                 $data['name'],
+                $data['activated'],
                 $data['id_user_group'],
                 $data['type'],
                 intval($data['id'])
@@ -1394,6 +1396,69 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $users = array_values($users);
 
         return $users;
+    }
+
+    /**
+     * Returns the total allowed users to create
+     *
+     * @param  int  $maxUsers
+     *
+     * @return int  total users
+     **/
+    public static function getTotalUsersRemaining($maxUsers = false)
+    {
+        // The value isn't set on DB or is set to 0 (no limit)
+        if (!$maxUsers) {
+            return -1;
+        }
+
+        // Get total created backend users - not masters nor only authors
+        $sql = 'SELECT count(id) as total FROM `users`
+                WHERE type=0 AND fk_user_group NOT REGEXP "^4$|^4,|,4,|,4$" AND
+                fk_user_group NOT REGEXP "^3$"';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        if ($rs->fields['total'] > $maxUsers) {
+            return false;
+        }
+
+        return $maxUsers - $rs->fields['total'];
+    }
+
+    /**
+     * Returns the total users that can be activated
+     *
+     * @param  int  $maxUsers
+     *
+     * @return int  total users
+     **/
+    public static function getTotalActivatedUsersRemaining($maxUsers = false)
+    {
+        // The value isn't set on DB or is set to 0 (no limit)
+        if (!$maxUsers) {
+            return -1;
+        }
+
+        // Get total activated backend users - not masters
+        $sql = "SELECT count(id) as total FROM users
+                WHERE type = 0 and activated = 1 and fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        if ($rs->fields['total'] > $maxUsers) {
+            return false;
+        }
+
+        return $maxUsers - $rs->fields['total'];
     }
 
     /**
