@@ -1,0 +1,70 @@
+<?php
+
+namespace ManagerWebService\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class SidebarController extends Controller
+{
+    /**
+     * Returns the sidebar items for manager.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listAction()
+    {
+        return new JsonResponse([
+            'items' => [
+                [
+                    'name' => _('Dashboard'),
+                    'icon' => 'fa-home',
+                    'route' => 'manager_welcome',
+                    'click' => true
+                ],
+                [
+                    'name' => _('Instances'),
+                    'icon' => 'fa-cubes',
+                    'route' => 'manager_instances_list',
+                    'click' => 'true'
+                ],
+                [
+                    'name' => _('Framework'),
+                    'icon' => 'fa-home',
+                    'items' => [
+                        [
+                            'name' => _('Commands'),
+                            'icon' => 'fa-code',
+                            'route' => 'manager_commands',
+                            'click' => true
+                        ],
+                        [
+                            'name' => _('OpCache Status'),
+                            'icon' => 'fa-database',
+                            'route' => 'manager_opcache_status',
+                            'click' => true
+                        ]
+                    ]
+                ],
+                [
+                    'name' => _('Settings'),
+                    'icon' => 'fa-gears',
+                    'items' => [
+                        [
+                            'name' => _('Users'),
+                            'icon' => 'fa-user',
+                            'route' => 'manager_users_list',
+                            'click' => true
+                        ],
+                        [
+                            'name' => _('User groups'),
+                            'icon' => 'fa-users',
+                            'route' => 'manager_user_groups_list',
+                            'click' => true
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+    }
+}

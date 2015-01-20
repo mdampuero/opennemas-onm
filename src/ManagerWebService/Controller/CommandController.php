@@ -63,10 +63,10 @@ class CommandController extends Controller
      *
      * @return Response the response object
      **/
-    public function executeCommandAction(Request $request)
+    public function executeAction(Request $request)
     {
-        $commandName = $request->query->filter('command_name', null, FILTER_SANITIZE_STRING);
-        $params      = $request->query->get('data', null, FILTER_SANITIZE_STRING);
+        $command = $request->query->get('command', null, FILTER_SANITIZE_STRING);
+        $params  = $request->query->get('data', null, FILTER_SANITIZE_STRING);
 
         if (is_array($params)) {
             foreach ($params as &$param) {
@@ -79,18 +79,18 @@ class CommandController extends Controller
 
         chdir(APPLICATION_PATH);
 
-        $output = shell_exec('app/console '.$commandName.' ' .$params.' 2>&1');
+        $output = shell_exec('app/console '.$command.' ' .$params.' 2>&1');
 
         $application = $this->getApplication();
         try {
-            $application->find($commandName);
+            $application->find($command);
         } catch (\InvalidArgumentException $e) {
             $output = $e->getMessage();
         }
 
         return new JsonResponse(
             array(
-                'name'   => $commandName,
+                'name'   => $command,
                 'output' => $output,
             )
         );

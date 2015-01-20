@@ -162,13 +162,6 @@ frontend_rss_author:
     requirements:
         author_slug: "[A-Za-z\d-.]+"
 
-frontend_rss_subcategory:
-    path: /rss/{category_name}/{subcategory_name}
-    defaults: { _controller: FrontendBundle:Rss:generalRSS }
-    requirements:
-        category_name    : "[a-z\d-]+"
-        subcategory_name : "[a-z\d-]+"
-
 frontend_rss_category:
     path: /rss/{category_name}
     defaults: { _controller: FrontendBundle:Rss:generalRSS }
@@ -229,10 +222,6 @@ frontend_search_internal:
 frontend_search_google:
     path: /search/google
     defaults: { _controller: FrontendBundle:Search:google }
-
-frontend_rating_vote:
-    path: /ratings/vote
-    defaults: { _controller: FrontendBundle:Ratings:vote }
 
 frontend_comments_get:
     path: /comments/get
@@ -383,7 +372,7 @@ frontend_archive_content:
 
 frontend_archive_category:
     path: /archive/content/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: FrontendBundle:Archive:archiveCategory, page: 1 }
+    defaults: { _controller: FrontendBundle:Archive:archiveCategory, _format: html, page: 1 }
     requirements:
         category_name : "[a-z0-9\-]+"
         year      : "([0-9]+)"
@@ -578,33 +567,6 @@ frontend_newstand_show:
         category_name : "[a-z0-9\-]+"
         id            : "([0-9]+)"
 
-frontend_newstandPaypal_frontpage:
-    path: /kiosko
-    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage }
-
-frontend_newstandPaypal_frontpage_date:
-    path: /kiosko/{year}/{month}/{day}
-    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage, month: date(n), day: 1 }
-    requirements:
-        year  : "[0-9]{4}"
-        month : "[0-9]{1,2}"
-        day   : "[0-3][0-9]"
-
-frontend_newstandPaypal_frontpage_category:
-    path: /kiosko/{category_name}/{year}/{month}
-    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage }
-    requirements:
-        category_name : "[a-z0-9\-]+"
-        year          : "([0-9]{4})"
-        month         : "([0-9]{1,2})"
-
-frontend_newstandPaypal_show:
-    path: /kiosko/{category_name}/{id}.{_format}
-    defaults: { _controller: FrontendBundle:NewStandPaypal:show, _format: html }
-    requirements:
-        category_name : "[a-z0-9\-]+"
-        id            : "([0-9]+)"
-
 frontend_opinion_editorial_frontpage:
     path: /editorial
     defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor, author_slug: editorial, author_id: 000001 }
@@ -706,22 +668,22 @@ frontend_frontpage_category:
     requirements:
         category: "[a-z0-9\-]+"
 
+frontend_css_global:
+    path: dynamic/css/global.{cb}.css
+    defaults: { _controller: FrontendBundle:Asset:customCss }
+    requirements:
+        cb : "[0-9]+"
 
-frontend_frontpage_category_css:
-    path: nocache/css/{cb}/{category}.css
-    defaults: { _controller: FrontendBundle:Asset:customCss, category: home, cb:12345 }
+frontend_css_frontpage_category:
+    path: dynamic/css/frontpage/{cb}.{category}.css
+    defaults: { _controller: FrontendBundle:Asset:customCssFrontpage, category: home, cb:12345 }
     requirements:
         category : "[a-z0-9\-]+"
+        cb : "[0-9]+"
+
 
 frontend_externalfrontpage_category:
     path: /extseccion/{category}
     defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
         category : "[a-z0-9\-]+"
-
-frontend_externalfrontpage_category_page:
-    path: /extseccion/{category}/{page}
-    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
-    requirements:
-        category : "[a-z0-9\-]+"
-        page     : "[0-9]+"

@@ -1,14 +1,14 @@
 /**
  * Service to implement common actions related to item.
  *
- * @param Object $http        Http service
- * @param Object $location    Location service
- * @param Object $modal       Modal service
- * @param Object fosJsRouting Onm routing service.
+ * @param Object $http     Http service
+ * @param Object $location Location service
+ * @param Object $modal    Modal service
+ * @param Object routing   Onm routing service.
  *
  * @return Object The item service.
  */
-angular.module('onm.item', []).factory('itemService', function ($http, $location, $modal, fosJsRouting) {
+angular.module('onm.item', []).factory('itemService', function ($http, $location, $modal, routing) {
     /**
      * The item service.
      *
@@ -22,7 +22,7 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @param string route The route name.
      */
     itemService.cancel = function(route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
         $location.path(url);
     }
 
@@ -106,11 +106,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.delete = function (route, id) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
-        return $http.post(url).success(function (response) {
-            return response;
-        });
+        return $http.delete(url);
     };
 
     /**
@@ -122,11 +120,17 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.deleteSelected = function (route, selected) {
-        var url  = fosJsRouting.generate(route);
+        var url  = routing.generate(route);
         var data = { selected: selected };
 
-        return $http.post(url, data).success(function (response) {
-            return response;
+        return $http({
+            method: 'DELETE',
+            url: url,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+            data: data,
+
         });
     };
 
@@ -255,12 +259,10 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.isAvailable = function(route, name) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
         var data = { name: name };
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.post(url, data);
     };
 
     /**
@@ -272,8 +274,6 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.list = function(route, data) {
-        var url = fosJsRouting.generate(route);
-
         // Decode filters from URL and overwrite data
         var filters = itemService.decodeFilters();
         filters.criteria = itemService.cleanFilters(filters.criteria);
@@ -287,10 +287,22 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
             data.criteria[name] = filters.criteria[name];
         }
 
+        // Merge data with filters from URL
+        if (filters.orderBy) {
+            data.orderBy = filters.orderBy;
+        }
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        if (filters.page) {
+            data.page = filters.page;
+        }
+
+        if (filters.epp) {
+            data.epp = filters.epp;
+        }
+
+        var url = routing.generate(route, data);
+
+        return $http.get(url);
     };
 
     /**
@@ -301,11 +313,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.new = function (route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
-        return $http.post(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -317,11 +327,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.save = function(route, data) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.post(url, data);
     };
 
     /**
@@ -333,31 +341,23 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      *
      * @return Object The response object.
      */
-    itemService.setEnabled = function (route, id, enabled) {
-        var url = fosJsRouting.generate(route, { id: id });
-        var data = { enabled: enabled };
-
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+    itemService.patch = function (route, id, data) {
+        var url = routing.generate(route, { id: id });
+        return $http.patch(url, data);
     };
 
     /**
      * Enables/disables a list of elements.
      *
-     * @param string  route    The route name.
-     * @param Object  selected The selected elements.
-     * @param integer enabled  The enabled value.
+     * @param string  route The route name.
+     * @param integer data  The selected items and the changes.
      *
      * @return Object The response object.
      */
-    itemService.setEnabledSelected = function (route, selected, enabled) {
-        var url = fosJsRouting.generate(route);
-        var data = { enabled: enabled, selected: selected };
+    itemService.patchSelected = function (route, data) {
+        var url = routing.generate(route);
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.patch(url, data);
     };
 
     /**
@@ -369,11 +369,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.show = function (route, id) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
-        return $http.post(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -386,33 +384,29 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.update = function(route, id, data) {
-        var url = fosJsRouting.generate(route, { id: id });
+        var url = routing.generate(route, { id: id });
 
-        return $http.post(url, data).success(function (response) {
-            return response;
-        });
+        return $http.put(url, data);
     };
 
     /**
      * Executes a command and returns its name and output.
      *
-     * @param  string route         The route name.
-     * @param  mixed  command_name  The name of the command.
-     * @param  object data          Additional data to execute the command.
+     * @param  string route   The route name.
+     * @param  mixed  command The name of the command.
+     * @param  object data    Additional data to execute the command.
      *
      * @return Object The response object.
      */
-    itemService.executeCommand = function(route, command_name, data) {
+    itemService.executeCommand = function(route, command, data) {
         var parameters = {
-            command_name: command_name,
+            command: command,
             data: data
         };
 
-        var url = fosJsRouting.generate(route, parameters);
+        var url = routing.generate(route, parameters);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     /**
@@ -425,11 +419,9 @@ angular.module('onm.item', []).factory('itemService', function ($http, $location
      * @return Object The response object.
      */
     itemService.fetchOpcacheStatus = function(route) {
-        var url = fosJsRouting.generate(route);
+        var url = routing.generate(route);
 
-        return $http.get(url).success(function (response) {
-            return response;
-        });
+        return $http.get(url);
     };
 
     return itemService;

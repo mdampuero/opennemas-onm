@@ -1,24 +1,20 @@
-<div class="content">
-
-    <div class="page-title clearfix">
-        <h3 class="pull-left">
-            <i class="fa fa-code"></i> {t}Commands{/t}
-        </h3>
-        <ul class="breadcrumb pull-right">
-            <li>
-                <p>{t}YOU ARE HERE{/t}</p>
-            </li>
-            <li>
-                <a href="#">{t}Dashboard{/t}</a>
-            </li>
-            <li>
-                <a href="#/instances" class="active">{t}Commands{/t}</a>
-            </li>
-        </ul>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-code fa-lg"></i>
+                        {t}Commands{/t}
+                    </h4>
+                </li>
+            </ul>
+        </div>
     </div>
-
+</div>
+<div class="content">
     <div class="grid simple">
-        <div class="grid-body">
+        <div class="grid-body no-padding">
             <table class="table no-margin no-padding">
                 <thead>
                     <tr>
@@ -54,7 +50,7 @@
                             <input type="hidden" name="command" value="clean:smarty-cache">
                         </td>
                         <td class="right">
-                            <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_command_output', { name: 'clean:smarty-cache', data: [theme] }) %]" type="submit" class="btn btn-danger"><i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Execute{/t}</a>
+                            <a ng-href="[% routing.ngGenerate('manager_command_output', { command: 'clean:smarty-cache', data: [theme] }) %]" type="submit" class="btn btn-danger"><i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Execute{/t}</a>
                         </td>
                     </tr>
                     </form>
@@ -64,7 +60,7 @@
                         <td></td>
                         <td class="right">
                             <div class="btn-group">
-                                <a class="btn btn-danger" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_command_output', { name: command.name, data: [] }) %]">
+                                <a class="btn btn-danger" ng-href="[% routing.ngGenerate('manager_command_output', { command: command.name, data: [] }) %]">
                                     <i class="fa fa-cog" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
                                     {t}Execute{/t}
                                 </a>

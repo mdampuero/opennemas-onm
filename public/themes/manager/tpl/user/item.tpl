@@ -1,44 +1,64 @@
-<div class="content">
-    <div class="page-title clearfix">
-        <h3 class="pull-left">
-            <i class="fa fa-user"></i>
-            <span ng-if="!user.id">{t}New user{/t}</span>
-            <span ng-if="user.id">{t}Edit user{/t}</span>
-        </h3>
-        <ul class="breadcrumb pull-right">
-            <li>
-                <p>{t}YOU ARE HERE{/t}</p>
-            </li>
-            <li>
-                <a href="#">{t}Dashboard{/t}</a>
-            </li>
-            <li>
-                <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_users_list') %]">{t}Users{/t}</a>
-            </li>
-            <li>
-                <span class="active" ng-if="!user.id">{t}New user{/t}</span>
-                <span class="active" ng-if="user.id">{t}Edit user{/t}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="grid simple">
-        <div class="grid-title clearfix">
-            <h3 class="pull-left" ng-if="user.id">
-                [% user.name %]
-            </h3>
-            <div class="pull-right">
-                <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
-                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
-                <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
-                    <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <a ng-href="[% routing.ngGenerate('manager_users_list') %]">
+                            <i class="fa fa-cubes fa-lg"></i>
+                            {t}Users{/t}
+                        </a>
+                    </h4>
+                </li>
+                <li class="quicklinks seperate">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        <span ng-if="!user.id">{t}New user{/t}</span>
+                        <span ng-if="user.id">{t}Edit user{/t}</span>
+                    </h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_users_list') %]">
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-primary" ng-click="save();" ng-disabled="saving" ng-if="!user.id">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                        <button class="btn btn-primary" ng-click="update();" ng-disabled="saving" ng-if="user.id">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="grid-body no-padding">
-            <form name="userForm" novalidate>
-                <tabset class="tab-form clearfix">
-                    <tab heading="{t}User info{/t}">
+    </div>
+</div>
+<div class="content">
+    <form name="userForm" novalidate>
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>
+                            <span class="semi-bold" ng-if="user.id">
+                                [% user.name %]
+                            </span>
+                            <span class="semi-bold" ng-if="!user.id">
+                                {t}New user{/t}
+                            </span>
+                        </h4>
+                    </div>
+                    <div class="grid-body">
                         <div class="form-group">
                             <label class="control-label" for="name">
                                 {t}Display name{/t}
@@ -105,8 +125,42 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
-                    <tab heading="{t}Settings{/t}">
+                     </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                {is_module_activated name="PAYWALL"}
+                    <div class="grid simple">
+                        <div class="grid-title">
+                            <h4>{t}Paywall{/t}</h4>
+                        </div>
+                        <div class="grid-body">
+                            <div class="form-group">
+                                <label for="time-limit">{t}Paywall time limit:{/t}</label>
+                                <quick-datepicker icon-class="fa fa-clock-o" id="time-limit" name="time_limit" ng-model="user.meta.paywall_time_limit" placeholder="{t}Click to set date{/t}"></quick-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                {/is_module_activated}
+                {acl isAllowed="GROUP_CHANGE"}
+                    <div class="grid simple">
+                        <div class="grid-title">
+                            <h4>{t}Privileges{/t}</h4>
+                        </div>
+                        <div class="grid-body">
+                            <div class="form-group">
+                                <label for="id-user-group">{t}User group{/t}</label>
+                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
+                            </div>
+                        </div>
+                    </div>
+                {/acl}
+
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Settings{/t}</h4>
+                    </div>
+                    <div class="grid-body">
                         <div class="form-group">
                             <label for="user-type">{t}User type{/t}</label>
                             <select id="user-type" ng-model="user.type">
@@ -119,25 +173,9 @@
                             <select id="user-language" ng-model="user.meta.user_language" ng-options="key as value for (key, value) in template.languages"></select>
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
-                    </tab>
-                    <tab heading="{t}Privileges{/t}">
-                        {acl isAllowed="GROUP_CHANGE"}
-                            <div class="form-group">
-                                <label for="id-user-group">{t}User group{/t}</label>
-                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
-                            </div>
-                        {/acl}
-                    </tab>
-                    {is_module_activated name="PAYWALL"}
-                        <tab heading="{t}Paywall{/t}">
-                            <div class="form-group">
-                                <label for="time-limit">{t}Paywall time limit:{/t}</label>
-                                <quick-datepicker icon-class="fa fa-clock-o" id="time-limit" name="time_limit" ng-model="user.meta.paywall_time_limit" placeholder="{t}Click to set date{/t}"></quick-datepicker>
-                            </div>
-                        </tab>
-                    {/is_module_activated}
-                </tabset>
-            </form>
-         </div>
-    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div><!-- .content -->

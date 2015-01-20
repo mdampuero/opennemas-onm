@@ -11,7 +11,28 @@
 {/block}
 
 {block name="footer-js" append}
-    <script>
+{include file="media_uploader/media_uploader.tpl"}
+<script type="text/javascript">
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+                var image_element = mediapicker.buildHTMLElement(params);
+
+                var container = $('#related_media').find('.'+params['position']);
+
+                var image_data_el = container.find('.image-data');
+                image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                image_data_el.find('.image').html(image_element);
+                container.addClass('assigned');
+            }
+        }
+    });
     var video_manager_url = {
         get_information: '{url name=admin_videos_get_info}',
         fill_tags: '{url name=admin_utils_calculate_tags}'
@@ -22,7 +43,22 @@
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
     });
-    </script>
+
+    $('#title').on('change', function(e, ui) {
+        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+
+    $('.article_images .unset').on('click', function (e, ui) {
+        e.preventDefault();
+
+        var parent = jQuery(this).closest('.contentbox');
+
+        parent.find('.related-element-id').val('');
+        parent.find('.image').html('');
+
+        parent.removeClass('assigned');
+    });
+</script>
     {javascripts src="@AdminTheme/js/onm/video.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
@@ -108,8 +144,6 @@
                 {else}
                     {include file="video/partials/_form_video_panorama.tpl"}
                 {/if}
-
-
             </div>
 
             <input type="hidden" value="1" name="content_status">

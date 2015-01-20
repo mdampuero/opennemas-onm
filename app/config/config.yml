@@ -117,6 +117,10 @@ services:
     application.log:
         alias: monolog.logger.applog
 
+    shared_key_jwt_encoder:
+        class: Lexik\Bundle\JWTAuthenticationBundle\Encoder\SharedKeyJWTEncoder
+        arguments: [ %shared_key_algorithm%, %shared_key% ]
+
 hwi_oauth:
     firewall_name: backend
     resource_owners:
@@ -125,7 +129,13 @@ hwi_oauth:
             client_id:     %api.facebook.client_id%
             client_secret: %api.facebook.client_secret%
             scope:         email
+            options:
+                display: popup #dialog is optimized for popup window
         twitter:
             type:          twitter
             client_id:     %api.twitter.client_id%
             client_secret: %api.twitter.client_secret%
+
+lexik_jwt_authentication:
+    token_ttl:       %session.gc_maxlifetime%
+    encoder_service: shared_key_jwt_encoder

@@ -109,3 +109,4 @@ you can use the generic selector below, but it's slower:
 .icon-custom-alert:before {
 	content: "\e017";
 }
+

@@ -3,30 +3,24 @@
  *
  * @param Object $location    The location service.
  * @param Object $scope       The current scope.
- * @param Object fosJsRouting The fosJsRouting service.
+ * @param Object routing The routing service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
-    '$translate', '$window', 'vcRecaptchaService', 'httpInterceptor',
-    'authService', 'fosJsRouting', 'history', 'messenger', 'paginationConfig',
+    '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
+    'authService', 'routing', 'history', 'webStorage', 'messenger',
+    'paginationConfig', 'cfpLoadingBar',
     function (
-        $filter, $http, $location, $modal, $rootScope, $scope, $translate,
-        $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
-        history, messenger, paginationConfig
+        $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
+        $window, vcRecaptchaService, httpInterceptor, authService, routing,
+        history, webStorage, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
-         * The fosJsRouting service.
+         * The routing service.
          *
          * @type Object
          */
-        $scope.fosJsRouting = fosJsRouting;
-
-        /**
-         * The sidebar toggle status.
-         *
-         * @type integer
-         */
-        $scope.mini = 0;
+        $scope.routing = routing;
 
         /**
          * Flag to show modal window for login only once.
@@ -37,74 +31,17 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             status: true,
             modal: false,
             inprogress: false
-        }
-
-        /**
-         * Clears the last value for the current path.
-         */
-        $scope.clear = function(url) {
-            history.clear(url);
-        }
+        };
 
         /**
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function(language) {
-            $('body').removeClass('application-loading');
-
-            console.log(language);
             $translate.use(language);
 
             paginationConfig.nextText     = $filter('translate')('Next');
             paginationConfig.previousText = $filter('translate')('Previous');
-
-            $scope.isAuthenticated();
-        }
-
-        /**
-         * Checks if the section is active.
-         *
-         * @param  string route Route name of the section to check.
-         *
-         * @return True if the current section
-         */
-        $scope.isActive = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
-            return $location.path() == url;
-        }
-
-        /**
-         * Checks and loads an user if it is authenticated in the system.
-         */
-        $scope.isAuthenticated = function() {
-            authService.isAuthenticated('manager_ws_auth_check_user')
-                .then(function (response) {
-                    if (response.data.success) {
-                        $scope.user        = response.data.user;
-                        $scope.auth.status = true;
-                        $scope.auth.modal  = false;
-                    }
-                });
-        }
-
-        /**
-         * Toggles the sidebar.
-         *
-         * @param integer status The toggle status.
-         */
-        $scope.toggle = function(status) {
-            $scope.mini = status;
-        }
-
-        /**
-         * Closes the sidebar on click in small devices.
-         */
-        $scope.go = function() {
-            if (angular.element('body').hasClass('breakpoint-480')) {
-                $.sidr('close', 'main-menu');
-                $.sidr('close', 'sidr');
-            }
-        }
+        };
 
         /**
          * Logs an user in.
@@ -116,29 +53,25 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 _username: $scope.username,
                 _password: $scope.password,
                 _token:    $scope.token,
-            }
+            };
 
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
-                    if (response.data.success) {
-                        $scope.auth.status     = true;
-                        $scope.auth.inprogress = false;
-                        $scope.auth.modal      = true;
-                        $scope.user            = response.data.user;
-
-                        httpInterceptor.loginConfirmed();
-
+                    if (response.status == 200) {
+                        httpInterceptor.loginConfirmed(response.data);
                         fakeLogin();
                     } else {
                         $scope.token    = response.data.token;
                         $scope.attempts = response.data.attempts;
                         $scope.message  = response.data.message;
+
+                        $scope.loginForm.$setPristine();
                     }
 
                     $scope.loading = 0;
                 }
             );
-        }
+        };
 
         /**
          * Logs the user out.
@@ -154,9 +87,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         };
                     },
                     success: function() {
-                        return function() {
-                            return authService.logout('manager_ws_auth_logout');
-                        }
+                        return true;
                     }
                 }
             });
@@ -169,11 +100,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         inprogress: true
                     };
 
-                    $scope.token    = response.data.token;
-                    $scope.attempts = response.data.attempts;
+                    $scope.user = {};
+
+                    webStorage.local.remove('token');
+                    webStorage.local.remove('user');
                 }
             });
-        }
+        };
 
         /**
          * Force page reload.
@@ -182,7 +115,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             $scope.loading = 1;
 
             $window.location.reload();
-        }
+        };
+
+        /**
+         * Scrolls the page to top.
+         */
+        $scope.scrollTop = function() {
+            $("body").animate({ scrollTop: 0 }, 250);
+        };
 
         /**
          * Shows the login form when login is required.
@@ -192,6 +132,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.$on('auth-login-required', function (event, args) {
             $scope.auth.status = false;
+            $scope.loaded      = true;
+
+            webStorage.local.remove('token');
+            webStorage.local.remove('user');
+
+            cfpLoadingBar.complete();
 
             if (!$scope.auth.inprogress) {
                 $scope.auth.inprogress = true;
@@ -203,7 +149,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         controller: 'LoginModalCtrl',
                         resolve: {
                             data: function() {
-                                var url = fosJsRouting.generate('manager_ws_auth_login');
+                                var url = routing.generate('manager_ws_auth_login');
 
                                 return $http.post(url).then(function (response) {
                                     return response.data;
@@ -223,7 +169,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         }
                     });
                 } else {
-                    var url = fosJsRouting.generate('manager_ws_auth_login');
+                    var url = routing.generate('manager_ws_auth_login');
 
                     $http.post(url).then(function (response) {
                         $scope.token     = response.data.token;
@@ -231,6 +177,23 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                     });
                 }
             }
+        });
+
+        /**
+         * Updates the user and the auth status on event.
+         *
+         * @param Object event The event object.
+         * @param Object args  The user object.
+         */
+        $scope.$on('auth-login-confirmed', function (event, args) {
+            $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
+            $scope.user            = args.user;
+            $scope.auth.inprogress = false;
+            $scope.auth.modal      = false
+            $scope.auth.status     = true;
+
+            webStorage.local.add('token', args.token);
+            webStorage.local.add('user', args.user);
         });
 
         /**
@@ -246,19 +209,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             fakeUsername.value = $scope.username;
             fakePassword.value = $scope.password;
-            fakeForm.submit();
-        }
 
-        /**
-         * Empties ng-view.
-         */
-        function refreshApp() {
-            // var host = document.getElementById('view');
-            // if (host) {
-            //     var mainDiv = $("#view");
-            //     mainDiv.empty();
-            //     angular.element(host).empty();
-            // }
+            // TODO: Remove this when https supported
+            if ($scope.password && $scope.password.indexOf('md5:') === -1) {
+                fakePassword.value = 'md5:' + hex_md5($scope.password);
+            }
+
+            fakeForm.submit();
         }
 
         /**
@@ -268,10 +225,22 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            refreshApp();
+            if ($location.path().indexOf('framework') != -1) {
+                return false;
+            }
 
             history.restore($location.path());
             history.push($location.path(), $location.search());
+        });
+
+        /**
+         * Restart the loading status for sidebar and check the top margin.
+         *
+         * @param Object event The event object.
+         * @param array  args  The list of arguments.
+         */
+        $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
+            $scope.checkFiltersBar();
         });
 
         /**
@@ -300,5 +269,28 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 message: args.data.text
             });
         });
+
+        /**
+         * Updates the content margin-top basing on the filters-navbar height.
+         */
+        $scope.checkFiltersBar = function checkFiltersBar() {
+            $timeout(function() {
+                if ($('.view:not(.ng-leave-active) .filters-navbar').length != 1) {
+                    return false;
+                }
+
+                var margin = 50 + $('.filters-navbar').height() - 15;
+
+                $('.content').css('margin-top', margin + 'px');
+            }, 1000);
+        };
+
+        webStorage.prefix('ONM-');
+        if (webStorage.local.get('token') && webStorage.local.get('user')) {
+            $http.defaults.headers.common.Authorization = 'Bearer '
+                + webStorage.local.get('token');
+            $scope.user = webStorage.local.get('user');
+            $scope.loaded = true;
+        }
     }
 ]);

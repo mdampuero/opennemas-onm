@@ -91,6 +91,13 @@ class Theme
     public $disposition = null;
 
     /**
+     * undocumented class variable
+     *
+     * @var string
+     **/
+    public $parentTheme = null;
+
+    /**
      * Default property definitions for a menu
      *
      * @var array

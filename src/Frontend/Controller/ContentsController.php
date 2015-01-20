@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
 use Onm\Module\ModuleManager;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -30,16 +29,6 @@ use Onm\Settings as s;
  **/
 class ContentsController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
     /**
      * Description of the action
      *
@@ -52,7 +41,7 @@ class ContentsController extends Controller
         $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
-        $contentID = \Content::resolveID($dirtyID);
+        $contentID = \ContentManager::resolveID($dirtyID);
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
@@ -75,7 +64,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -107,6 +97,7 @@ class ContentsController extends Controller
 
         // Resolve article ID
         $contentID = $cm->getUrlContent($wsUrl.'/ws/contents/resolve/'.$dirtyID, true);
+
         $this->view = new \Template(TEMPLATE_USER);
         $cacheID   = $this->view->generateCacheId('article', null, $contentID);
 
@@ -124,7 +115,8 @@ class ContentsController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'content'  => $content,
-                'article'  => $content
+                'article'  => $content,
+                'x-tags'   => "content-print,$contentID",
             )
         );
     }
@@ -138,10 +130,9 @@ class ContentsController extends Controller
      **/
     public function shareByEmailAction(Request $request)
     {
-        $session = $this->get('session');
         if ('POST' == $request->getMethod()) {
             // Check direct access
-            if ($session->get('sendformtoken') != $request->request->get('token')) {
+            if ($this->get('session')->get('sendformtoken') != $request->request->get('token')) {
                 throw new ResourceNotFoundException();
             }
 
@@ -253,10 +244,8 @@ class ContentsController extends Controller
             $contentID    = $request->query->getDigits('content_id', null);
             $ext          = $request->query->getDigits('ext', 0);
 
-            $session = $this->get('session');
-
             $token = md5(uniqid('sendform'));
-            $session->set('sendformtoken', $token);
+            $this->get('session')->set('sendformtoken', $token);
 
             if ($ext == 1) {
                 // Getting Synchronize setting params
@@ -301,7 +290,7 @@ class ContentsController extends Controller
     {
         // If is POST request perform the vote action if not render the vote
         if ('POST' == $request->getMethod()) {
-            $ip        = getRealIp();
+            $ip        = getUserRealIP();
             $contentId = $request->request->getDigits('content_id', null);
             $voteValue = $request->request->getDigits('vote_value', null);
 
@@ -358,20 +347,10 @@ class ContentsController extends Controller
         }
 
         $userAgent = $request->headers->get('User-Agent');
-        $bots = array(
-            "archiver", "bot", "crawl", "curl", "eventbox", "facebookexternal",
-            "google", "msnbot", "monitor", "mechanize", "nambu", "perl",
-            "python", "sphere", "spider", "PEAR", "java", "radian", "twitter",
-            "wordpress", "yahoo", "yandex"
-        );
-
-        $i = 0;
-        while ($i < count($bots) && stristr($userAgent, $bots[$i]) != false) {
-            $i++;
-        }
+        $isBot     = \Onm\Utils\BotDetector::isBot($userAgent);
 
         // Increment view only if the request is performed with an AJAX request
-        if ($i >= count($bots)) {
+        if ($isBot) {
             $httpCode = 400;
             $content = "Bot detected";
         } elseif ($request->isXmlHttpRequest()) {

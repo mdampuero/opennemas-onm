@@ -29,7 +29,7 @@ class Memcache extends AbstractCache
     private $memcache;
 
     /**
-     * Initializes the database layer
+     * Initializes the cache layer
      *
      * @param array $options options to change initialization of the cache layer
      *

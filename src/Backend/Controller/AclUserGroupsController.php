@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the system information
@@ -28,7 +27,6 @@ use Onm\Message as m;
  **/
 class AclUserGroupsController extends Controller
 {
-
     /**
      * Common code for all the actions
      *
@@ -67,7 +65,10 @@ class AclUserGroupsController extends Controller
 
         $userGroup = new \UserGroup($id);
         if (is_null($userGroup->id)) {
-            m::add(sprintf(_("Unable to find user group with id '%d'"), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_("Unable to find user group with id '%d'"), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_usergroups'));
         }
@@ -104,15 +105,26 @@ class AclUserGroupsController extends Controller
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($userGroup->create($data)) {
-                // If user group was saved successfully show again the form
+                $level = 'success';
+                $message = _('User group created successfully.');
+            } else {
+                $level = 'error';
+                $message = _('Unable to create the new user group');
+            }
+
+            $this->get('session')->getFlashBag()->add(
+                $level,
+                $message
+            );
+
+            // If user group was saved successfully show again the form
+            if ($level == 'success') {
                 return $this->redirect(
                     $this->generateUrl(
                         'admin_acl_usergroup_show',
                         array('id' => $userGroup->id)
                     )
                 );
-            } else {
-                $this->view->assign('errors', $userGroup->errors);
             }
         }
 
@@ -138,20 +150,24 @@ class AclUserGroupsController extends Controller
     {
         $userGroup = new \UserGroup();
 
-        $data = array(
+        $data = [
             'id'         => $request->query->getDigits('id'),
             'name'       => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
             'privileges' => $request->request->get('privileges'),
-        );
+        ];
 
         if ($userGroup->update($data)) {
-            m::add(_('User group updated successfully.'), m::SUCCESS);
+            $level = 'success';
+            $message = _('User group updated successfully.');
         } else {
-            m::add(
-                sprintf(_('Unable to update the user group with id "%d"'), $data['id']),
-                m::ERROR
-            );
+            $level = 'error';
+            $message = sprintf(_('Unable to update the user group with id "%d"'), $data['id']);
         }
+
+        $this->get('session')->getFlashBag()->add(
+            $level,
+            $message
+        );
 
         return $this->redirect(
             $this->generateUrl('admin_acl_usergroup_show', array('id' => $userGroup->id))
@@ -174,13 +190,14 @@ class AclUserGroupsController extends Controller
         $userGroup = new \UserGroup();
         $deleted = $userGroup->delete($id);
         if ($deleted) {
-            m::add(_('User group deleted successfully.'));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('User group deleted successfully.')
+            );
         } else {
-            m::add(
-                sprintf(
-                    _('Unable to delete the user group with id "%d"'),
-                    $id
-                )
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to delete the user group with id "%d"'), $id)
             );
         }
 

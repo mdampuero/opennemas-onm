@@ -210,7 +210,8 @@ class Widget extends Content
         }
         $id = $rs->fields['pk_widget'];
         parent::read($id);
-        $this->id = array($id);
+
+        $this->id = $id;
         $sql      = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
         $values   = array($id);
         $this->loadAllContentProperties();
@@ -220,7 +221,6 @@ class Widget extends Content
             return null;
         }
         $this->load($rs->fields);
-        $this->id = array($id);
     }
 
     /**
@@ -306,13 +306,13 @@ class Widget extends Content
      */
     private function renderletSmarty()
     {
-        Template::$registry['widget'][$this->pk_widget] = $this->content;
         $resource = 'string:' . $this->content;
         $wgtTpl = new Template(TEMPLATE_USER);
 
         // no caching
         $wgtTpl->caching = 0;
         $wgtTpl->force_compile = true;
+        $wgtTpl->assign('widget', $this->content);
         $output = $wgtTpl->fetch($resource);
 
         return $output;

@@ -1,0 +1,21 @@
+.grid.simple .grid-body,
+.grid.simple .grid-title {
+  padding: 15px;
+}
+
+.grid.simple .grid-title h4 {
+  overflow: initial;
+  margin: 0;
+}
+
+.grid-body {
+  position: relative;
+}
+
+.grid-overlay {
+  background: rgba(255,255,255,.5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+}

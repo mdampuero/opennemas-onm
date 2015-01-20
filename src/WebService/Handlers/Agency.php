@@ -8,6 +8,10 @@
  **/
 namespace WebService\Handlers;
 
+use Luracast\Restler\Format\XmlFormat;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Data\Object;
+
 /**
  * Handles REST actions for news agency.
  *
@@ -29,11 +33,10 @@ class Agency
     /**
      * Get an xml with elements containing url to the NewsML content
      *
-     * @param type $timeLimit the mtime limit for the last content 1 day by default
+     * @param int $until
      *
-     * @return $output
+     * @return mixed
      */
-
     protected function export($until = 86400)
     {
         if ($until == 'no_limits') {
@@ -59,10 +62,14 @@ class Agency
 
         $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
 
-        $xml = new \XmlFormat();
-        \XmlFormat::$root_name = 'contents';
+        XmlFormat::$rootName = 'contents';
+        XmlFormat::$importSettingsFromXml = true;
 
-        $output = $xml->toArray($output);
+        $output = simplexml_load_string($output);
+
+        $xml = new XmlFormat($output);
+
+        $output = $xml->read($output);
 
         return $output;
     }
@@ -70,9 +77,6 @@ class Agency
     /**
      * Get an newsml given a content id
      *
-     * @param type $id the id of the content
-     *
-     * @return $output
      */
     protected function newsml($id = null)
     {
@@ -82,7 +86,7 @@ class Agency
         $article = $er->find('Article', $id);
 
         if (is_null($article->id)) {
-            throw new \RestException(400, 'parameter is not valid');
+            throw new RestException(400, 'parameter is not valid');
         }
 
         $tpl = new \TemplateAdmin('admin');
@@ -150,9 +154,14 @@ class Agency
             )
         );
 
-        $xml = new \XmlFormat();
+        XmlFormat::$rootName = 'NewsML';
+        XmlFormat::$importSettingsFromXml = true;
 
-        $output = $xml->toArray($output);
+        $output = simplexml_load_string($output);
+
+        $xml = new XmlFormat();
+
+        $output = $xml->read($output);
 
         return $output;
     }
@@ -162,17 +171,14 @@ class Agency
      *
      * This is used for checking the int parameters
      *
-     * @param type $number the number to validate
-     *
-     * @return void
      */
     private function validateInt($number)
     {
         if (!is_numeric($number)) {
-            throw new \RestException(400, 'parameter is not a number');
+            throw new RestException(400, 'parameter is not a number');
         }
         if (is_infinite($number)) {
-            throw new \RestException(400, 'parameter is not finite');
+            throw new RestException(400, 'parameter is not finite');
         }
     }
 }

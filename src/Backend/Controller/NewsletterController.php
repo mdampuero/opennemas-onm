@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -356,10 +355,11 @@ class NewsletterController extends Controller
         $newsletter = new \Newsletter($id);
         $sessId = 'data-recipients-'.$newsletter->id;
         if (array_key_exists($sessId, $_SESSION) && !empty($_SESSION[$sessId])) {
-            m::add(
-                sprintf(_('Sorry, newsletter "%d" was been sent previously'), $newsletter->id),
-                m::ERROR
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Sorry, newsletter "%d" was been sent previously'), $newsletter->id)
             );
+
             return $this->redirect($this->generateUrl('admin_newsletters'));
         }
 
@@ -367,15 +367,13 @@ class NewsletterController extends Controller
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $newsletterSender = s::get('newsletter_sender');
+        $newsletterSender = $this->container->getParameter('mailer_no_reply_address');
         $configurations   = s::get('newsletter_maillist');
 
         if (empty($newsletterSender)) {
-            m::add(
-                _(
-                    'Your newsletter configuration is not complete. You must complete the sender email addres.'
-                ),
-                m::ERROR
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Your newsletter configuration is not complete. You must complete the sender email addres.')
             );
 
             return $this->redirect($this->generateUrl('admin_newsletters'));
@@ -383,7 +381,6 @@ class NewsletterController extends Controller
 
         $params = array(
             'subject'            => $newsletter->title,
-            'newsletter_sender'  => $newsletterSender,
             'mail_from'          => $configurations['sender'],
             'mail_from_name'     => s::get('site_name'),
         );
@@ -406,22 +403,11 @@ class NewsletterController extends Controller
                             ->setSubject($subject)
                             ->setBody($htmlContent, 'text/html')
                             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-                            ->setSender($params['newsletter_sender'])
+                            ->setSender($newsletterSender)
                             ->setTo(array($mailbox->email => $mailbox->name));
 
                         // Send it
                         $properlySent = $this->get('mailer')->send($message);
-
-                        // $headers   = array();
-                        // $headers[] = "MIME-Version: 1.0";
-                        // $headers[] = "Content-type: text/html; charset=utf-8";
-                        // $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
-                        // $headers[] = "Sender: {$params['newsletter_sender']}";
-                        // $headers[] = "Subject: {$subject}";
-                        // $headers[] = "Message-ID: <".$_SERVER['REQUEST_TIME'].md5($_SERVER['REQUEST_TIME'])."@".$_SERVER['SERVER_NAME'].">";
-                        // $headers[] = "X-Mailer: PHP/".phpversion();
-
-                        // $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
 
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
@@ -476,9 +462,15 @@ class NewsletterController extends Controller
             $newsletter = new \Newsletter($id);
             $newsletter->delete();
 
-            m::add(_("Newsletter deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Newsletter deleted successfully.")
+            );
         } else {
-            m::add(_('You must give an id for delete a newsletter.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('You must give an id for delete a newsletter.')
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -509,7 +501,10 @@ class NewsletterController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Newsletter module settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Newsletter module settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
         } else {
@@ -517,7 +512,6 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
-                    'newsletter_sender',
                     'recaptcha',
                     'max_mailing'
                 )
@@ -548,19 +542,12 @@ class NewsletterController extends Controller
      **/
     public function checkModuleActivated()
     {
-        $sender   = s::get('newsletter_sender');
-        $maillist = s::get('newsletter_maillist');
         $type     = s::get('newsletter_subscriptionType');
         $config   = s::get('newsletter_maillist');
 
-        if (is_null($sender) || !$sender) {
-            m::add(
-                _('Please fill the sender email address in the module configuration.')
-            );
-        }
-
-        if (is_null($maillist) || !$type) {
-            m::add(
+        if (is_null($config) || !$type) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
                 _('Please fill the mail list email address in the module configuration.')
             );
 
@@ -569,12 +556,12 @@ class NewsletterController extends Controller
             foreach ($config as $key => $value) {
                 if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
                     if (empty($value)) {
-                        m::add(
+                        $this->get('session')->getFlashBag()->add(
+                            'error',
                             _(
                                 'Your newsletter configuration is not completed. Please'.
                                 ' go to settings and complete the form.'
-                            ),
-                            m::ERROR
+                            )
                         );
 
                         return $this->redirect($this->generateUrl('admin_newsletter_config'));
@@ -622,7 +609,10 @@ class NewsletterController extends Controller
             if ($maxAllowed > 0) {
                 $result = $maxAllowed - $total;
                 if ($result <= 0) {
-                    m::add(_('You have reached the maximum of emails allowed to send'), m::ERROR);
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        _('You have reached the maximum of emails allowed to send')
+                    );
 
                     return $maxAllowed;
                 }

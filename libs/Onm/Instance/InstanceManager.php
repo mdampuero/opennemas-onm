@@ -80,36 +80,6 @@ class InstanceManager extends BaseManager
     }
 
     /**
-     * Checks for repeated internal name and returns it, corrected if necessary.
-     *
-     * @param string $instance The instance to check.
-     */
-    public function checkInternalName(&$instance)
-    {
-        $this->conn->selectDatabase('onm-instances');
-
-        $internalName = $instance->internal_name;
-        if (empty($internalName)) {
-            $domain = explode('.', $instance->domains[0]);
-            $internalName = $domain[0];
-        }
-
-        $internalName = strtolower($internalName);
-
-        // Check if the generated InternalShortName already exists
-        $sql = "SELECT count(*) as internal_exists FROM instances "
-             . "WHERE `internal_name` REGEXP '"
-             . $internalName . "[0-9]*'";
-        $rs = $this->conn->fetchAssoc($sql);
-
-        if ($rs && $rs['internal_exists'] > 0) {
-            $internalName .= $rs['internal_exists'];
-        }
-
-        $instance->internal_name = $internalName;
-    }
-
-    /**
      * Checks if a contact email is already in use.
      *
      * @param string $mail The email to check.
@@ -299,7 +269,9 @@ class InstanceManager extends BaseManager
      */
     public function getExternalInformation(Instance &$instance)
     {
-        $database = $instance->getDatabaseName();
+        if (empty($instance->getDatabaseName())) {
+            return false;
+        }
 
         $cacheId = 'instance' . $this->cacheSeparator . $instance->id
             . $this->cacheSeparator . 'information';
@@ -307,7 +279,7 @@ class InstanceManager extends BaseManager
         $instance->external = $this->cache->fetch($cacheId);
 
         if (!$instance->external) {
-            $this->conn->selectDatabase($database);
+            $this->conn->selectDatabase($instance->getDatabaseName());
             $sql = "SELECT * FROM `settings`";
 
             $rs = $this->conn->executeQuery($sql);
@@ -439,7 +411,6 @@ class InstanceManager extends BaseManager
                 . implode(', ', array_keys($values)) . ') VALUES ('
                 . implode(', ', array_values($values)) .')';
         } else {
-
             $sql = 'UPDATE instances SET ';
 
             foreach ($values as $key => $value) {
@@ -508,7 +479,11 @@ class InstanceManager extends BaseManager
                         $instance->domains[$k] = trim($v);
                     }
                 } else {
-                    $instance->{$key} = unserialize($value);
+                    $instance->{$key} = @unserialize($value);
+
+                    if (!$instance->{$key}) {
+                        $instance->{$key} = array();
+                    }
                 }
             } else {
                 $instance->{$key} = $value;

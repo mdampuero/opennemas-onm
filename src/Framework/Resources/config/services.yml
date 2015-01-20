@@ -47,7 +47,7 @@ services:
 
     kernel.listener.hooks_subscriber:
         class: Framework\EventListener\HooksSubscriber
-        arguments: [ @cache, @logger ]
+        arguments: [ @service_container, @cache, @logger ]
         tags:
             - { name: kernel.event_subscriber }
     kernel.listener.user_listener:
@@ -141,6 +141,11 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    recaptcha:
+        class: Captcha\Captcha
+        calls:
+            - [setPrivateKey, [ %recaptcha_private_key% ]]
+
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
         arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @application.log ]
@@ -162,6 +167,12 @@ services:
         class: Onm\Templating\Templating
         arguments: [ @service_container ]
 
+    template_cache_manager:
+        class: Onm\Templating\Cache\Manager
+
+    template_cache_config_manager:
+        class: Onm\Templating\Cache\Config
+
     view:
         alias: onm_templating
 
@@ -175,3 +186,18 @@ services:
 
     authentication_entry_point:
         class: Framework\Security\AuthenticationEntryPoint
+
+    onm.event.authentication_success_listener:
+        class: Framework\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    onm.validator:
+        class: Onm\Validator\Validator
+
+    onm.validator.instance:
+        class: Onm\Validator\InstanceValidator
+        arguments: [ @instance_manager ]
+
+    paginator:
+        class: Onm\Pager\Slider

@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -29,17 +28,6 @@ use Onm\Settings as s;
 class BlogsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->category_name = $this->request->query->filter('category_name', 'blog', FILTER_SANITIZE_STRING);
-        $this->view->assign('actual_category', 'blog'); // Used in renderMenu
-    }
-
-    /**
      * Renders the blog opinion frontpage.
      *
      * @param  Request  $request The request object.
@@ -49,13 +37,12 @@ class BlogsController extends Controller
     {
         $page = $request->query->getDigits('page', 1);
 
-        // Index frontpage
+        // Setup view layer
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $page);
-
         // Don't execute the app logic if there are caches available
+        $cacheID = $this->view->generateCacheId('blog', '', $page);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/blog_frontpage.tpl', $cacheID)
         ) {
@@ -66,7 +53,7 @@ class BlogsController extends Controller
                 }
             }
 
-            $itemsPerPage = s::get('items_in_blog');
+            $itemsPerPage = $this->get('setting_repository')->get('items_in_blog', 10);
 
             $order   = array('starttime' => 'DESC');
             $filters = array(
@@ -80,21 +67,11 @@ class BlogsController extends Controller
             $blogs      = $em->findBy($filters, $order, $itemsPerPage, $page);
             $countItems = $em->countBy($filters);
 
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 3,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countItems,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_blog_frontpage'
-                    ).'/?page=%d',
-                )
-            );
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $countItems,
+                'base_url'          => $this->generateUrl('frontend_blog_frontpage'),
+            ]);
 
             foreach ($blogs as &$blog) {
                 if (array_key_exists($blog->fk_author, $authors)) {
@@ -131,12 +108,14 @@ class BlogsController extends Controller
             );
         }
 
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
         return $this->render(
             'opinion/blog_frontpage.tpl',
-            array('cache_id' => $cacheID)
+            array(
+                'cache_id'        => $cacheID,
+                'advertisements'  => $this->getAds(),
+                'actual_category' => 'blog', // Used in renderMenu
+                'x-tags'          => "blog-frontpage,$page"
+            )
         );
     }
 
@@ -149,8 +128,8 @@ class BlogsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
-        $page = $this->request->query->getDigits('page', 1);
-        $slug       = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
+        $slug = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
 
         if (empty($slug)) {
             return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
@@ -158,9 +137,9 @@ class BlogsController extends Controller
 
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
-        $cacheID = $this->view->generateCacheId($this->category_name, $slug, $page);
 
         // Don't execute the app logic if there are caches available
+        $cacheID = $this->view->generateCacheId('blog', $slug, $page);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/blog_author_index.tpl', $cacheID)
         ) {
@@ -227,24 +206,15 @@ class BlogsController extends Controller
                         );
                     }
                 }
-                $pagination = \Pager::factory(
-                    array(
-                        'mode'        => 'Sliding',
-                        'perPage'     => $itemsPerPage,
-                        'append'      => false,
-                        'path'        => '',
-                        'delta'       => 4,
-                        'clearIfVoid' => true,
-                        'urlVar'      => 'page',
-                        'totalItems'  => $countItems,
-                        'fileName'    => $this->generateUrl(
-                            'frontend_blog_author_frontpage',
-                            array(
-                                'author_slug' => $author->slug,
-                            )
-                        ).'/?page=%d',
-                    )
-                );
+
+                $pagination = $this->get('paginator')->create([
+                    'elements_per_page' => $itemsPerPage,
+                    'total_items'       => $countItems,
+                    'base_url'          => $this->generateUrl(
+                        'frontend_blog_author_frontpage',
+                        ['author_slug' => $author->slug]
+                    ),
+                ]);
 
                 $this->view->assign(
                     array(
@@ -258,21 +228,20 @@ class BlogsController extends Controller
 
         } // End if isCached
 
-        //Fetch information for Advertisements
-        $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
-
         return $this->render(
             'opinion/blog_author_index.tpl',
-            array('cache_id' => $cacheID)
+            [
+                'cache_id'        => $cacheID,
+                'advertisements'  => $this->getAds(),
+                'actual_category' => 'blog', // Used in renderMenu
+                'x-tags'          => "blog-author-frontpage,$slug,$page",
+            ]
         );
 
     }
 
-
-
     /**
-     * Displays an blog given its id
+     * Displays a blog given its id
      *
      * @param Request $request the request object
      *
@@ -280,8 +249,8 @@ class BlogsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $dirtyID   = $request->query->getDigits('blog_id');
-        $blogID = \Content::resolveID($dirtyID);
+        $dirtyID = $request->query->getDigits('blog_id');
+        $blogID  = \ContentManager::resolveID($dirtyID);
 
         // Redirect to blog frontpage if blog_id wasn't provided
         if (empty($blogID)) {
@@ -290,7 +259,7 @@ class BlogsController extends Controller
 
         $blog = $this->get('opinion_repository')->find('Opinion', $blogID);
 
-        // TODO: Think that this comments related code can be deleted.
+        // Check if the content is ready to be published
         if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
@@ -298,12 +267,8 @@ class BlogsController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('opinion');
 
-        //Fetch information for Advertisements
-        $ads = $this->getAds('inner');
-        $this->view->assign('advertisements', $ads);
-
         // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $blogID);
+        $cacheID = $this->view->generateCacheId('blog', '', $blogID);
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/blog_inner.tpl', $cacheID)
         ) {
@@ -312,9 +277,11 @@ class BlogsController extends Controller
             $author = $this->get('user_repository')->find($blog->fk_author);
             $blog->author = $author;
 
-            // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
+            // This assignation is required to get the frontpage opinion link generated properly
             $blog->author_name_slug = $author->username;
-            if (!array_key_exists('is_blog', $author->meta) || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)) {
+            if (!array_key_exists('is_blog', $author->meta)
+                || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)
+            ) {
                 return new RedirectResponse(
                     $this->generateUrl(
                         'frontend_opinion_show',
@@ -332,20 +299,22 @@ class BlogsController extends Controller
                 $photo = $this->get('entity_repository')->find('Photo', $blog->img2);
                 $this->view->assign('photo', $photo);
             }
-            $this->view->assign(
-                array(
+            $this->view->assign([
                     'blog'     => $blog,
                     'content'  => $blog,
                     'author'   => $author,
-                )
-            );
-
+            ]);
         } // End if isCached
 
         // Show in Frontpage
         return $this->render(
             'opinion/blog_inner.tpl',
-            array('cache_id' => $cacheID)
+            [
+                'cache_id'        => $cacheID,
+                'advertisements'  => $this->getAds('inner'),
+                'actual_category' => 'blog', // Used in renderMenu
+                'x-tags'          => "blog-inner,$blogID",
+            ]
         );
     }
 

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the images
@@ -94,7 +93,7 @@ class ImagesController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Image module settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Image module settings saved successfully.'));
 
             return $this->redirect($this->generateUrl('admin_images_config'));
         } else {
@@ -154,7 +153,7 @@ class ImagesController extends Controller
         if (!is_array($ids) || !(count($ids) > 0)) {
             $ids = (int) $ids;
             if ($ids <= 0) {
-                m::add(_('Please provide a image id for show it.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', _('Please provide a image id for show it.'));
 
                 return $this->redirect(
                     $this->generateUrl('admin_images', array('category' => $category))
@@ -173,9 +172,10 @@ class ImagesController extends Controller
                 $photos []= $photo;
             }
         }
+
         // Check if passed ids fits photos in database, if not redirect to listing
         if (count($photos) <= 0) {
-            m::add(_('Unable to find any photo with that id'));
+            $this->get('session')->getFlashBag()->add('error', _('Unable to find any photo with that id'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -234,7 +234,10 @@ class ImagesController extends Controller
         }
 
         if (count($ids) > 0) {
-            m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Data successfully saved for %d photos'), $photosSaved)
+            );
         }
 
         $queryIDs = implode('&id[]=', $ids);
@@ -258,7 +261,10 @@ class ImagesController extends Controller
 
         $photo = new \Photo($id);
         if (is_null($photo->id)) {
-            m::add(sprintf(_('Unable to find the photo with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the photo with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_images'));
         }
@@ -461,75 +467,5 @@ class ImagesController extends Controller
         }
 
         return $response;
-    }
-
-    /**
-     * Shows a paginated list of images from a category.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('PHOTO_ADMIN')")
-     */
-    public function contentProviderGalleryAction(Request $request)
-    {
-        $metadata   = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-        $categoryId = $request->query->getDigits('category', 0);
-        $page       = $request->query->getDigits('page', 1);
-
-        $itemsPerPage = 16;
-
-        $em       = $this->get('entity_repository');
-        $category = $this->get('category_repository')->find($categoryId);
-
-        $filters = array(
-            'content_type_name' => array(array('value' => 'photo')),
-            'content_status'    => array(array('value' => 1)),
-            'in_litter'         => array(array('value' => 1, 'operator' => '!='))
-        );
-
-        if ($categoryId != 0) {
-            $filters['category_name'] = array(array('value' => $category->name));
-        }
-
-        if (!empty($metadata)) {
-            $tokens = \Onm\StringUtils::getTags($metadata);
-            $tokens = explode(', ', $tokens);
-
-            $filters['metadata'] = array(array('value' => $tokens, 'operator' => 'LIKE'));
-            $filters['metadata']['union'] = 'OR';
-        }
-
-        $photos      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
-        $countPhotos = $em->countBy($filters);
-
-        if (empty($photos)) {
-            return new Response(
-                _("<div><p>Unable to find any image matching your search criteria.</p></div>")
-            );
-        }
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $countPhotos,
-                'url'   => $this->generateUrl(
-                    'admin_images_content_provider_gallery',
-                    array(
-                        'category'  => $categoryId,
-                        'metadatas' => $metadata,
-                    )
-                )
-            )
-        );
-
-        return $this->render(
-            'image/image_gallery.ajax.tpl',
-            array(
-                'imagePager' => $pagination,
-                'photos'     => $photos,
-            )
-        );
     }
 }

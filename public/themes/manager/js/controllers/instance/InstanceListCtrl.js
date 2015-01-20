@@ -1,21 +1,19 @@
 /**
  * Handles all actions in instances listing.
  *
- * @param Object $anchorScroll The anchor scroll service.
- * @param Object $location     The location service.
  * @param Object $modal        The modal service.
  * @param Object $scope        The current scope.
- * @param Object $timeout      The timeout service.
  * @param Object itemService   The item service.
- * @param Object fosJsRouting  The fosJsRouting service.
+ * @param Object routing       The routing service.
  * @param Object messenger     The messenger service.
+ * @param Object webStorage    The web storage service.
  * @param Object data          The input data.
  *
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$modal', '$scope', '$timeout', 'itemService','fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, $timeout, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+    function ($modal, $scope, itemService, routing, messenger, webStorage, data) {
         /**
          * The criteria to search.
          *
@@ -31,21 +29,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @type Object
          */
         $scope.columns = {
-            name:       1,
-            domains:    1,
-            last_login: 1,
-            created:    1,
-            articles:   1,
-            alexa:      1,
-            activated:  1
-        }
-
-        /**
-         * The number of elements per page
-         *
-         * @type integer
-         */
-        $scope.epp  = 25;
+            collapsed: 1,
+            selected: [ 'name', 'domains', 'last_login', 'created', 'articles',
+                'alexa', 'activated' ]
+        };
 
         /**
          * The list of elements.
@@ -77,18 +64,15 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.orderUI = {};
 
         /**
-         * The current page
+         * The current pagination status.
          *
-         * @type integer
+         * @type Object
          */
-        $scope.page = 1;
-
-        /**
-         * The number of total items.
-         *
-         * @type integer
-         */
-        $scope.total = data.total;
+        $scope.pagination = {
+            epp:   data.epp ? parseInt(data.epp) : 25,
+            page:  data.page ? parseInt(data.page) : 1,
+            total: data.total
+        }
 
         /**
          * Default join operator for filters.
@@ -98,9 +82,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.union = 'OR';
 
         /**
-         * Variable to store the current search.
+         * Checks if a columns is selected.
+         *
+         * @param string id The columns name.
          */
-        var search;
+        $scope.isEnabled = function(id) {
+            return $scope.columns.selected.indexOf(id) != -1;
+        };
 
         /**
          * Checks if the listing is ordered by the given field name.
@@ -112,8 +100,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          */
         $scope.isOrderedBy = function(name) {
             var i = 0;
-            while (i < $scope.orderBy.length
-                    && $scope.orderBy[i].name != name) {
+            while (i < $scope.orderBy.length && $scope.orderBy[i].name != name) {
                 i++;
             }
 
@@ -122,23 +109,23 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             }
 
             return false;
-        }
+        };
 
         /**
-         * Checks if an instance is selected
+         * Checks if an instance is selected.
          *
          * @param string id The group id.
          */
         $scope.isSelected = function(id) {
-            return $scope.selected.instances.indexOf(id) != -1
-        }
+            return $scope.selected.instances.indexOf(id) != -1;
+        };
 
         /**
          * Confirm delete action.
          */
         $scope.delete = function(instance) {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {
@@ -151,22 +138,24 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     success: function() {
                         return function() {
                             return itemService.delete(
-                                'manager_ws_instance_delete', instance.id);
-                        }
+                                'manager_ws_instance_delete',
+                                instance.id
+                            );
+                        };
                     }
                 }
             });
 
             modal.result.then(function (response) {
-                if (response.data.success) {
-                    if (response.data.message) {
-                        messenger.post({
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
-                    };
+                if (response) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
 
-                    list();
+                    if (response.status == 200) {
+                        list();
+                    }
                 }
             });
         };
@@ -176,7 +165,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          */
         $scope.deleteSelected = function() {
             var modal = $modal.open({
-                templateUrl: '/managerws/template/common:modal_confirm.tpl',
+                templateUrl: 'modal-confirm',
                 backdrop: 'static',
                 controller: 'modalCtrl',
                 resolve: {
@@ -188,7 +177,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                                     $scope.instances[i].id) != -1) {
                                 selected.push($scope.instances[i]);
                             }
-                        };
+                        }
 
                         return {
                             name: 'delete-instances',
@@ -200,21 +189,37 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                             return itemService.deleteSelected(
                                 'manager_ws_instances_delete',
                                 $scope.selected.instances);
-                        }
+                        };
                     }
                 }
             });
 
             modal.result.then(function (response) {
-                if (response.data) {
-                    for (var i = 0; i < response.data.messages.length; i++) {
-                        messenger.post({
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
-                        });
+                if (response.status == 200 || response.status == 207) {
+                    list();
+
+                    $scope.selected = {
+                        all: false,
+                        instances: []
                     };
 
-                    list();
+                    // Show success message
+                    if (response.data.success.ids.length > 0) {
+                        messenger.post({
+                            message: response.data.success.message,
+                            type: 'success'
+                        });
+                    }
+
+                    // Show errors messages
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
+
+                        messenger.post(params);
+                    }
                 }
             });
         };
@@ -223,8 +228,8 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * Reloads the listing.
          */
         $scope.refresh = function() {
-            search = list();
-        }
+            list();
+        };
 
         /**
          * Reloads the list on keypress.
@@ -233,15 +238,13 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          */
         $scope.searchByKeypress = function(event) {
             if (event.keyCode == 13) {
-                $scope.page = 1;
-
-                if (search) {
-                    $timeout.cancel(search);
+                if ($scope.pagination.page != 1) {
+                    $scope.pagination.page = 1;
+                } else {
+                    list();
                 }
-
-                search = list();
-            };
-        }
+            }
+        };
 
         /**
          * Selects/unselects all instances.
@@ -264,20 +267,20 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.setEnabled = function(instance, enabled) {
             instance.loading = 1;
 
-            itemService.setEnabled('manager_ws_instance_set_enabled',
-                instance.id, enabled).then(function (response) {
+            itemService.patch('manager_ws_instance_patch',
+                instance.id, { activated: enabled }).then(function (response) {
                     instance.loading = 0;
 
-                    if (response.data.success) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
+
+                    if (response.status == 200) {
                         instance.activated = enabled;
                     }
-
-                    messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
-                    });
                 });
-        }
+        };
 
         /**
          * Enables/disables the selected instances.
@@ -290,30 +293,44 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 if ($scope.selected.instances.indexOf(id) != -1) {
                     $scope.instances[i].loading = 1;
                 }
-            };
+            }
 
-            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
-                $scope.selected.instances, enabled).then(function (response) {
-                    if (response.data.success) {
-                        for (var i = 0; i < $scope.instances.length; i++) {
-                            var id = $scope.instances[i].id;
-                            if ($scope.selected.instances.indexOf(id) != -1) {
-                                $scope.instances[i].activated = enabled;
-                                delete $scope.instances[i].loading;
-                            }
-                        };
+            var data = {
+                selected: $scope.selected.instances,
+                activated: enabled
+            }
+
+            itemService.patchSelected('manager_ws_instances_patch', data).then(function (response) {
+                if (response.status == 200 || response.status == 207) {
+                    // Update instances changed successfully
+                    for (var i = 0; i < $scope.instances.length; i++) {
+                        var id = $scope.instances[i].id;
+
+                        if (response.data.success.ids.indexOf(id) != -1) {
+                            $scope.instances[i].activated = enabled;
+                            delete $scope.instances[i].loading;
+                        }
                     }
 
-                    for (var i = 0; i < response.data.messages.length; i++) {
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
+
+                    // Show errors
+                    for (var i = 0; i < response.data.errors.length; i++) {
                         var params = {
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
+                            message: response.data.error[i].message,
+                            type:    'error'
                         };
 
                         messenger.post(params);
-                    };
-                });
-        }
+                    }
+                }
+            });
+        };
 
         /**
          * Changes the sort order.
@@ -336,21 +353,32 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            $scope.page = 1;
-        }
+            $scope.pagination.page = 1;
+        };
+
+        /**
+         * Toggles column filters container.
+         */
+        $scope.toggleColumns = function () {
+            $scope.columns.collapsed = !$scope.columns.collapsed;
+
+            if (!$scope.columns.collapsed) {
+                $scope.scrollTop();
+            }
+        };
 
         /**
          * Marks variables to delete for garbage collector;
          */
         $scope.$on('$destroy', function() {
-            $scope.criteria  = null;
-            $scope.columns   = null;
-            $scope.epp       = null;
-            $scope.instances = null;
-            $scope.selected  = null;
-            $scope.orderBy   = null;
-            $scope.page      = null;
-            $scope.total     = null;
+            $scope.criteria         = null;
+            $scope.columns          = null;
+            $scope.pagination.epp   = null;
+            $scope.instances        = null;
+            $scope.selected         = null;
+            $scope.orderBy          = null;
+            $scope.pagination.page  = null;
+            $scope.pagination.total = null;
         });
 
         /**
@@ -359,13 +387,21 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @param array newValues The new values
          * @param array oldValues The old values
          */
-        $scope.$watch('[orderBy, epp, page]', function(newValues, oldValues) {
+        $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
             if (newValues !== oldValues) {
-                if (search) {
-                    $timeout.cancel(search);
-                }
+                list();
+            }
+        }, true);
 
-                search = list();
+        /**
+         * Updates the columns stored in localStorage.
+         *
+         * @param Object newValues New values.
+         * @param Object oldValues Old values.
+         */
+        $scope.$watch('columns', function(newValues, oldValues) {
+            if (newValues != oldValues) {
+                webStorage.local.add('instances-columns', $scope.columns);
             }
         }, true);
 
@@ -375,51 +411,58 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
          * @return Object The function to execute past 500 ms.
          */
         function list() {
-            return $timeout(function() {
-                $scope.loading = 1;
+            $scope.loading = 1;
 
-                // Search by name, domains and contact mail
-                if ($scope.criteria.name_like) {
-                    $scope.criteria.domains_like =
-                        $scope.criteria.contact_mail_like =
-                            $scope.criteria.name_like;
+            // Search by name, domains and contact mail
+            if ($scope.criteria.name_like) {
+                $scope.criteria.domains_like =
+                    $scope.criteria.contact_mail_like =
+                        $scope.criteria.name_like;
+            }
+
+            var cleaned = itemService.cleanFilters($scope.criteria);
+
+            if (cleaned.name && cleaned.domains && cleaned.contact_mail) {
+                // OR operator
+                cleaned.union = $scope.union;
+            }
+
+            var data = {
+                criteria: cleaned,
+                orderBy:  $scope.orderBy,
+                epp:      $scope.pagination.epp,
+                page:     $scope.pagination.page
+            };
+
+            itemService.encodeFilters($scope.criteria, $scope.orderBy,
+                $scope.pagination.epp, $scope.pagination.page, $scope.union);
+
+            itemService.list('manager_ws_instances_list', data).then(
+                function (response) {
+                    $scope.instances        = response.data.results;
+                    $scope.pagination.total = response.data.total;
+
+                    $scope.loading = 0;
+
+                    // Scroll top
+                    $(".page-content").animate({ scrollTop: "0px" }, 1000);
                 }
-
-                var cleaned = itemService.cleanFilters($scope.criteria);
-
-                if (cleaned.name && cleaned.domains && cleaned.contact_mail) {
-                    // OR operator
-                    cleaned.union = $scope.union;
-                }
-
-                var data = {
-                    criteria: cleaned,
-                    orderBy: $scope.orderBy,
-                    epp: $scope.epp,
-                    page: $scope.page
-                };
-
-                itemService.encodeFilters($scope.criteria, $scope.orderBy,
-                    $scope.epp, $scope.page, $scope.union);
-
-                itemService.list('manager_ws_instances_list', data).then(
-                    function (response) {
-                        $scope.instances = response.data.results;
-                        $scope.total = response.data.total;
-
-                        $scope.loading = 0;
-
-                        // Scroll top
-                        $(".page-content").animate({ scrollTop: "0px" }, 1000);
-                    }
-                );
-            }, 500);
+            );
         }
 
         // Initialize filters from URL
         var filters = itemService.decodeFilters();
-        for(var name in filters) {
+        for (var name in filters) {
             $scope[name] = filters[name];
+        }
+
+        // Get enabled columns from localStorage
+        if (webStorage.local.get('instances-columns')) {
+            $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        if (webStorage.local.get('token')) {
+            $scope.token = webStorage.local.get('token');
         }
     }
 ]);

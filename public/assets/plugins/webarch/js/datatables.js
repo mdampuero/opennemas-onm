@@ -1,3 +1,6 @@
+/* Webarch Admin Dashboard 
+/* This JS is only for DEMO Purposes - Extract the code that you need
+-----------------------------------------------------------------*/	
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'p i>>",
@@ -29,6 +32,7 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 			0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
 	};
 };
+
 
 
 /* Bootstrap style pagination control */
@@ -190,7 +194,14 @@ $(document).ready(function() {
             responsiveHelper.respond();
         }
 	});
-	
+	$('#example th').click(function(e) { 
+			$('#example .animate-progress-bar').each(function () {
+				$(this).removeClass('progress-bar');
+				$(this).css('width','0%');
+       			$(this).css('width', $(this).attr("data-percentage"));
+				$(this).addClass('progress-bar');
+  		    });
+	});
 	$('#example_wrapper .dataTables_filter input').addClass("input-medium "); // modify table search input
     $('#example_wrapper .dataTables_length select').addClass("select2-wrapper span12"); // modify table per page dropdown
 

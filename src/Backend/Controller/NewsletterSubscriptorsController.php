@@ -15,9 +15,9 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -62,13 +62,13 @@ class NewsletterSubscriptorsController extends Controller
         $total = $user->countUsers($where);
 
         // Pager
-        $pager = \Onm\Pager\Slider::create(
-            $total,
-            $itemsPerPage,
-            $this->generateUrl(
+        $pager = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $total,
+            'base_url'          => $this->generateUrl(
                 'admin_newsletter_subscriptors'
-            )
-        );
+            ),
+        ]);
 
         return $this->render(
             'newsletter/subscriptions/list.tpl',
@@ -105,15 +105,25 @@ class NewsletterSubscriptorsController extends Controller
 
             // Check for repeated e-mail
             if ($user->existsEmail($data['email'])) {
-                m::add(_('Unable to create the new subscriptor. This email is already in use'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new subscriptor. This email is already in use')
+                );
+
                 return $this->redirect(
                     $this->generateUrl('admin_newsletter_subscriptor_create')
                 );
             } else {
                 if ($user->create($data)) {
-                    m::add(_('Subscription successfully created.'), m::SUCCESS);
+                    $this->get('session')->getFlashBag()->add(
+                        'success',
+                        _('Subscription successfully created.')
+                    );
                 } else {
-                    m::add(sprintf(_('Unable to create the new subscriptor: %s', $user->_errors)), m::ERROR);
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        sprintf(_('Unable to create the new subscriptor: %s', $user->_errors))
+                    );
                 }
             }
 
@@ -158,9 +168,15 @@ class NewsletterSubscriptorsController extends Controller
 
             $user = new \Subscriptor();
             if ($user->update($data, true)) {
-                m::add(_('Subscription successfully updated.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Subscription successfully updated.')
+                );
             } else {
-                m::add(_('Unable to update the subscriptor information'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the subscriptor information')
+                );
             }
 
             $continue = $request->request->filter('continue', 0);
@@ -192,7 +208,10 @@ class NewsletterSubscriptorsController extends Controller
         $user = new \Subscriptor($id);
 
         if (is_null($user->id)) {
-            m::add(sprintf(_('Unable to find the user with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the user with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
         }
@@ -219,11 +238,17 @@ class NewsletterSubscriptorsController extends Controller
         $user = new \Subscriptor($id);
 
         if (is_null($user->id)) {
-            m::add(sprintf(_('Unable to find the user with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the user with the id "%d"'), $id)
+            );
         } else {
             $user->delete($id);
 
-            m::add(sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Subscritor with id "%d" deleted sucessfully'), $id)
+            );
         }
 
         if (!$request->isXmlHttpRequest()) {
@@ -295,13 +320,22 @@ class NewsletterSubscriptorsController extends Controller
                 if ($user->delete($id)) {
                     $count++;
                 } else {
-                    m::add(sprintf(_('Unable to delete the subscriptor with the id %d.'), $id), m::ERROR);
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        sprintf(_('Unable to delete the subscriptor with the id %d.'), $id)
+                    );
                 }
             }
 
-            m::add(sprintf(_('Successfully deleted %d subscriptors.'), $count), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully deleted %d subscriptors.'), $count)
+            );
         } else {
-            m::add(_('Please specify a subscriptor id for delete it.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Please specify a subscriptor id for delete it.')
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
@@ -333,9 +367,15 @@ class NewsletterSubscriptorsController extends Controller
 
             $user->mUpdateProperty($data, 'subscription');
 
-            m::add(sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids)), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids))
+            );
         } else {
-            m::add(_('Please specify a subscriptor id for change its subscribed state it.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('Please specify a subscriptor id for change its subscribed state it.')
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));

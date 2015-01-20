@@ -17,7 +17,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -39,7 +38,10 @@ class UtilitiesController extends Controller
             'count' => 0
         );
 
+        $cacheFor = 300;
+
         $json['url'] = $request->query->filter('url', '', FILTER_SANITIZE_STRING);
+        $json['time'] = time();
         $url = urlencode($request->query->filter('url', '', FILTER_SANITIZE_STRING));
         $type = urlencode($request->query->filter('type', '', FILTER_SANITIZE_STRING));
 
@@ -48,7 +50,7 @@ class UtilitiesController extends Controller
                 //source http://www.helmutgranda.com/2011/11/01/get-a-url-google-count-via-php/
                 $content = $this->createCurlRequest(
                     "https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true",
-                    300
+                    $cacheFor
                 );
 
                 $dom = new \DOMDocument;
@@ -79,7 +81,11 @@ class UtilitiesController extends Controller
         return new Response(
             $content,
             200,
-            array('Content-Type' => 'application/json')
+            [
+                'x-tags'       => "sharre,$type,$url",
+                'x-cache-for'  => $cacheFor.'s',
+                'Content-Type' => 'application/json',
+            ]
         );
     }
 

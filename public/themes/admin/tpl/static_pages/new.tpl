@@ -136,17 +136,6 @@ jQuery(document).ready(function($){
         }
     });
 
-    jQuery("#metadata").on('change', '', function(e){
-        jQuery.ajax({
-            url:  "{url name=admin_staticpages_clean_metadata id=$page->id|default:0}",
-            type: "POST",
-            data: { action:"cleanMetadata", id:'{$page->id|default:0}', metadata:jQuery('#metadata').attr('value') },
-            success: function(data){
-                jQuery('#slug').attr('value', data);
-                previous = jQuery('#slug').attr('value');
-            }
-        });
-    });
 });
 /* ]]> */
 </script>

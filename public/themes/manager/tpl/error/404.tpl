@@ -39,7 +39,9 @@
                           @Common/plugins/jquery-notifications/css/messenger.css,
                           @Common/plugins/jquery-notifications/css/messenger-theme-flat.css,
 
-                          @Common/css/opennemas/style.css"
+                          @Common/css/manager/base/*,
+                          @Common/css/manager/layout/*,
+                          @Common/css/manager/main.css"
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}

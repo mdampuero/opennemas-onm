@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.40, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: onm-instances
 -- ------------------------------------------------------
--- Server version	5.5.38-0ubuntu0.14.04.1
+-- Server version	5.5.40-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -51,7 +51,7 @@ CREATE TABLE `instances` (
   `page_views` bigint(20) unsigned NOT NULL DEFAULT '0',
   `emails` int(10) unsigned NOT NULL DEFAULT '0',
   `users` int(10) unsigned NOT NULL DEFAULT '0',
-  `deltas` text NOT NULL,
+  `activated_modules` text,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -63,7 +63,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.onm','','a:7:{s:13:\"TEMPLATE_USER\";s:5:\"admin\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'0000-00-00 00:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.onm','','a:7:{s:13:\"TEMPLATE_USER\";s:5:\"admin\";s:9:\"MEDIA_URL\";s:0:\"\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";s:9:\"c-default\";s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'0000-00-00 00:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,4 +209,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-10-07 13:58:46
+-- Dump completed on 2014-12-19 11:41:18

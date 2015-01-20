@@ -321,24 +321,6 @@ class Opinion extends Content
     }
 
     /**
-     * Removes the cache for an inner opinion and for the opinion frontpage
-     *
-     * @return void
-     **/
-    public function onUpdateClearCacheOpinion()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        if (property_exists($this, 'pk_opinion')) {
-            $tplManager->delete('opinion|' . $this->pk_opinion);
-            $tplManager->fetch(SITE_URL . $this->permalink);
-            if (isset($this->in_home) && $this->in_home) {
-                $tplManager->delete('home|0');
-            }
-        }
-    }
-
-    /**
      * Renders the opinion article
      *
      * @return string the generated HTML for the opinion

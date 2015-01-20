@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -75,9 +74,15 @@ class LettersController extends Controller
             );
 
             if ($letter->create($data)) {
-                m::add(_('Letter successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Letter successfully created.')
+                );
             } else {
-                m::add(_('Unable to create the new letter.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new letter.')
+                );
             }
             return $this->redirect(
                 $this->generateUrl(
@@ -110,7 +115,10 @@ class LettersController extends Controller
         }
 
         if (is_null($letter->id)) {
-            m::add(sprintf(_('Unable to find the letter with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the letter with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_letters'));
         }
@@ -133,7 +141,7 @@ class LettersController extends Controller
     {
         // Check empty data
         if (count($request->request) < 1) {
-            m::add(_("Letter data sent not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _("Letter data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
         }
@@ -158,9 +166,9 @@ class LettersController extends Controller
         );
 
         if ($letter->update($data)) {
-            m::add(_('Letter successfully updated.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Letter successfully updated.'));
         } else {
-            m::add(_('Unable to update the letter.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('Unable to update the letter.'));
         }
 
         return $this->redirect(
@@ -196,23 +204,14 @@ class LettersController extends Controller
         $letters      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countLetters = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countLetters,
-                'fileName'    => $this->generateUrl(
-                    'admin_letters_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
-
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countLetters,
+            'base_url'          => $this->generateUrl(
+                'admin_letters_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'letter/content-provider.tpl',
@@ -251,19 +250,11 @@ class LettersController extends Controller
         $countLetters = $em->countBy($filters);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countLetters,
-                'fileName'    => $this->generateUrl('admin_letters_content_provider_related').'?page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countLetters,
+            'base_url'          => $this->generateUrl('admin_letters_content_provider_related'),
+        ]);
 
         return $this->render(
             "common/content_provider/_container-content-list.tpl",

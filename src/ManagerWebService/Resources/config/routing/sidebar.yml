@@ -1,0 +1,6 @@
+manager_ws_sidebar_list:
+    path:     /sidebar
+    defaults: { _controller: ManagerWebServiceBundle:Sidebar:list }
+    methods:  [ GET ]
+    options:
+        expose: true

@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -121,7 +120,7 @@ class MonographsController extends Controller
         }
 
         return $this->render(
-            'special/special_frontpage.tpl',
+            'special/frontpage_special.tpl',
             array(
                 'cache_id' => $cacheID,
             )
@@ -141,7 +140,7 @@ class MonographsController extends Controller
     {
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);
 
-        $specialID = \Content::resolveID($dirtyID);
+        $specialID = \ContentManager::resolveID($dirtyID);
 
         $cacheID   = $this->view->generateCacheId($this->categoryName, null, $specialID);
         $special   = $this->get('entity_repository')->find('Special', $specialID);
@@ -169,13 +168,13 @@ class MonographsController extends Controller
                     foreach ($contents as $item) {
                         $content = \Content::get($item['fk_content']);
 
-                        if (isset($content->img1)) {
+                        if (!empty($content->img1)) {
                             $photo                = $this->get('entity_repository')->find('Photo', $content->img1);
                             $content->img1_path = $photo->path_file.$photo->name;
                             $content->img1      = $photo;
                         }
 
-                        if (isset($content->fk_video)) {
+                        if (!empty($content->fk_video)) {
                             $video              = $this->get('entity_repository')->find('Video', $content->fk_video);
                             $content->obj_video = $video;
                         }
