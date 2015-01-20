@@ -223,5 +223,20 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             $scope.template = null;
             $scope.selected = null;
         })
+
+        /**
+         * Forces the values to be integer.
+         *
+         * @param Object newValues New values.
+         * @param Object oldValues Old values.
+         */
+        $scope.$watch(
+            '[instance.external.max_users, instance.external.max_mailing]',
+            function(newValues, oldValues) {
+                $scope.instance.external.max_users = parseInt($scope.instance.external.max_users);
+                $scope.instance.external.max_mailing = parseInt($scope.instance.external.max_mailing);
+            },
+            true
+        );
     }
 ]);
