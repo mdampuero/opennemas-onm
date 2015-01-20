@@ -210,7 +210,7 @@ class AclUserController extends Controller
         // Check total activated users remaining before updating
         $updateEnabled = true;
         if ($data['activated'] == '1' && $maxUsers > 0) {
-            $updateEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+            $updateEnabled = \User::getTotalActivatedUsersRemaining($maxUsers + $user->activated);
         }
 
         if ($updateEnabled) {

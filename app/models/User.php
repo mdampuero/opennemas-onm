@@ -1412,9 +1412,11 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return -1;
         }
 
+        // Get total created backend users - not masters nor only authors
         $sql = 'SELECT count(id) as total FROM `users`
-                WHERE (type=0 AND fk_user_group<>4 AND fk_user_group<>3)
-                OR (fk_user_group<>4 AND activated=1)';
+                WHERE type=0 AND fk_user_group NOT REGEXP "^4$|^4,|,4,|,4$" AND
+                fk_user_group NOT REGEXP "^3$"';
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
@@ -1442,13 +1444,21 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return -1;
         }
 
-        $activatedUsers = getService('instance_manager')->current_instance->users;
+        // Get total activated backend users - not masters
+        $sql = "SELECT count(id) as total FROM users
+                WHERE type = 0 and activated = 1 and fk_user_group NOT REGEXP '^4$|^4,|,4,|,4$'";
 
-        if ($activatedUsers > $maxUsers) {
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
             return false;
         }
 
-        return $maxUsers - $activatedUsers;
+        if ($rs->fields['total'] > $maxUsers) {
+            return false;
+        }
+
+        return $maxUsers - $rs->fields['total'];
     }
 
     /**
