@@ -367,7 +367,7 @@ class NewsletterController extends Controller
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $newsletterSender = s::get('newsletter_sender');
+        $newsletterSender = $this->container->getParameter('mailer_no_reply_address');
         $configurations   = s::get('newsletter_maillist');
 
         if (empty($newsletterSender)) {
@@ -381,7 +381,6 @@ class NewsletterController extends Controller
 
         $params = array(
             'subject'            => $newsletter->title,
-            'newsletter_sender'  => $newsletterSender,
             'mail_from'          => $configurations['sender'],
             'mail_from_name'     => s::get('site_name'),
         );
@@ -404,22 +403,11 @@ class NewsletterController extends Controller
                             ->setSubject($subject)
                             ->setBody($htmlContent, 'text/html')
                             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-                            ->setSender($params['newsletter_sender'])
+                            ->setSender($newsletterSender)
                             ->setTo(array($mailbox->email => $mailbox->name));
 
                         // Send it
                         $properlySent = $this->get('mailer')->send($message);
-
-                        // $headers   = array();
-                        // $headers[] = "MIME-Version: 1.0";
-                        // $headers[] = "Content-type: text/html; charset=utf-8";
-                        // $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
-                        // $headers[] = "Sender: {$params['newsletter_sender']}";
-                        // $headers[] = "Subject: {$subject}";
-                        // $headers[] = "Message-ID: <".$_SERVER['REQUEST_TIME'].md5($_SERVER['REQUEST_TIME'])."@".$_SERVER['SERVER_NAME'].">";
-                        // $headers[] = "X-Mailer: PHP/".phpversion();
-
-                        // $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
 
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
@@ -524,7 +512,6 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
-                    'newsletter_sender',
                     'recaptcha',
                     'max_mailing'
                 )
@@ -555,19 +542,10 @@ class NewsletterController extends Controller
      **/
     public function checkModuleActivated()
     {
-        $sender   = s::get('newsletter_sender');
-        $maillist = s::get('newsletter_maillist');
         $type     = s::get('newsletter_subscriptionType');
         $config   = s::get('newsletter_maillist');
 
-        if (is_null($sender) || !$sender) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                _('Please fill the sender email address in the module configuration.')
-            );
-        }
-
-        if (is_null($maillist) || !$type) {
+        if (is_null($config) || !$type) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please fill the mail list email address in the module configuration.')

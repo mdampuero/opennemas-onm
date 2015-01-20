@@ -446,6 +446,8 @@ class UserController extends Controller
             $token = md5(uniqid(mt_rand(), true));
             $user->updateUserToken($user->id, $token);
 
+            $url = $this->generateUrl('frontend_auth_login', array(), true);
+
             $tplMail = new \Template(TEMPLATE_USER);
             $tplMail->caching = 0;
 
@@ -454,6 +456,7 @@ class UserController extends Controller
                 'user/emails/recoverusername.tpl',
                 array(
                     'user' => $user,
+                    'url' => $url
                 )
             );
 
@@ -468,8 +471,6 @@ class UserController extends Controller
             try {
                 $mailer = $this->get('mailer');
                 $mailer->send($message);
-
-                $url = $this->generateUrl('frontend_auth_login', array(), true);
 
                 $this->view->assign(
                     array(
@@ -654,14 +655,14 @@ class UserController extends Controller
                     }
                 }
                 // Build the pager
-                $pagination = \Onm\Pager\Slider::create(
-                    $contentsCount,
-                    $itemsPerPage,
-                    $this->generateUrl(
+                $pagination = $this->get('paginator')->create([
+                    'elements_per_page' => $itemsPerPage,
+                    'total_items'       => $contentsCount,
+                    'base_url'          => $this->generateUrl(
                         'frontend_author_frontpage',
                         array('slug' => $slug,)
-                    )
-                );
+                    ),
+                ]);
 
                 $this->view->assign(
                     array(
@@ -752,12 +753,13 @@ class UserController extends Controller
             }
 
             // Build the pager
-            $pagination = \Onm\Pager\Slider::create(
-                $totalUsers,
-                $itemsPerPage,
-                $this->generateUrl('frontend_frontpage_authors')
-            );
-
+            $pagination = $this->get('paginator')->create([
+                'elements_per_page' => $itemsPerPage,
+                'total_items'       => $totalUsers,
+                'base_url'          => $this->generateUrl(
+                    'frontend_frontpage_authors'
+                ),
+            ]);
 
             // Get user by slug
             $ur = $this->get('user_repository');

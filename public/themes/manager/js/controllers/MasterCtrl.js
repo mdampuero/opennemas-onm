@@ -3,35 +3,24 @@
  *
  * @param Object $location    The location service.
  * @param Object $scope       The current scope.
- * @param Object fosJsRouting The fosJsRouting service.
+ * @param Object routing The routing service.
  */
 angular.module('ManagerApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
     '$translate', '$timeout', '$window', 'vcRecaptchaService', 'httpInterceptor',
-    'authService', 'fosJsRouting', 'history', 'webStorage', 'messenger',
+    'authService', 'routing', 'history', 'webStorage', 'messenger',
     'paginationConfig', 'cfpLoadingBar',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
-        $window, vcRecaptchaService, httpInterceptor, authService, fosJsRouting,
+        $window, vcRecaptchaService, httpInterceptor, authService, routing,
         history, webStorage, messenger, paginationConfig, cfpLoadingBar
     ) {
         /**
-         * The fosJsRouting service.
+         * The routing service.
          *
          * @type Object
          */
-        $scope.fosJsRouting = fosJsRouting;
-
-        /**
-         * The sidebar toggle status.
-         *
-         * @type integer
-         */
-        $scope.sidebar = {
-            wanted: 0,
-            current: 0,
-            forced: 0,
-        };
+        $scope.routing = routing;
 
         /**
          * Flag to show modal window for login only once.
@@ -45,36 +34,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         };
 
         /**
-         * Clears the last value for the current path.
-         *
-         * @param string route The route name.
-         */
-        $scope.clear = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
-            history.clear(url);
-        };
-
-        /**
-         * Updates sidebar status basing on the section.
-         *
-         * @param string route   The route name.
-         * @param string section The section to show.
-         */
-        $scope.goTo = function(route, section) {
-            $scope.clear(route);
-
-            if (!$scope.changing[section] && !$scope.isActive(route)) {
-                $scope.changing[section] = 1;
-            }
-
-            if ($scope.sidebar.forced) {
-                $scope.sidebar.current = 1;
-            } else {
-                $scope.sidebar.current = $scope.sidebar.wanted;
-            }
-        };
-
-        /**
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function(language) {
@@ -82,43 +41,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             paginationConfig.nextText     = $filter('translate')('Next');
             paginationConfig.previousText = $filter('translate')('Previous');
-
-            $scope.isAuthenticated();
-        };
-
-        /**
-         * Checks if the section is active.
-         *
-         * @param  string route Route name of the section to check.
-         *
-         * @return True if the current section
-         */
-        $scope.isActive = function(route) {
-            var url = fosJsRouting.ngGenerateShort('/manager', route);
-            return $location.path() == url;
-        };
-
-        /**
-         * Checks and loads an user if it is authenticated in the system.
-         */
-        $scope.isAuthenticated = function() {
-            authService.isAuthenticated('manager_ws_auth_check_user')
-                .then(function (response) {
-                    if (response.data.success) {
-                        $rootScope.$broadcast('auth-login-confirmed', response.data.user);
-                    }
-
-                    $scope.loaded = true;
-                });
-        };
-
-        /**
-         * Toggles the sidebar.
-         *
-         * @param integer status The toggle status.
-         */
-        $scope.toggle = function(status) {
-            $scope.mini = status;
         };
 
         /**
@@ -135,8 +57,8 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             authService.login('manager_ws_auth_check', data, $scope.attempts)
                 .then(function (response) {
-                    if (response.data.success) {
-                        httpInterceptor.loginConfirmed(response.data.user);
+                    if (response.status == 200) {
+                        httpInterceptor.loginConfirmed(response.data);
                         fakeLogin();
                     } else {
                         $scope.token    = response.data.token;
@@ -165,9 +87,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         };
                     },
                     success: function() {
-                        return function() {
-                            return authService.logout('manager_ws_auth_logout');
-                        };
+                        return true;
                     }
                 }
             });
@@ -180,8 +100,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         inprogress: true
                     };
 
-                    $scope.token    = response.data.token;
-                    $scope.attempts = response.data.attempts;
+                    $scope.user = {};
+
+                    webStorage.local.remove('token');
+                    webStorage.local.remove('user');
                 }
             });
         };
@@ -210,8 +132,11 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          */
         $scope.$on('auth-login-required', function (event, args) {
             $scope.auth.status = false;
+            $scope.loaded      = true;
 
-            $scope.loaded = true;
+            webStorage.local.remove('token');
+            webStorage.local.remove('user');
+
             cfpLoadingBar.complete();
 
             if (!$scope.auth.inprogress) {
@@ -224,7 +149,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         controller: 'LoginModalCtrl',
                         resolve: {
                             data: function() {
-                                var url = fosJsRouting.generate('manager_ws_auth_login');
+                                var url = routing.generate('manager_ws_auth_login');
 
                                 return $http.post(url).then(function (response) {
                                     return response.data;
@@ -244,7 +169,7 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                         }
                     });
                 } else {
-                    var url = fosJsRouting.generate('manager_ws_auth_login');
+                    var url = routing.generate('manager_ws_auth_login');
 
                     $http.post(url).then(function (response) {
                         $scope.token     = response.data.token;
@@ -261,12 +186,14 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param Object args  The user object.
          */
         $scope.$on('auth-login-confirmed', function (event, args) {
-            $scope.user            = args;
+            $http.defaults.headers.common.Authorization = 'Bearer ' + args.token;
+            $scope.user            = args.user;
             $scope.auth.inprogress = false;
             $scope.auth.modal      = false
             $scope.auth.status     = true;
 
-            webStorage.prefix('ONM-' + $scope.user.username);
+            webStorage.local.add('token', args.token);
+            webStorage.local.add('user', args.user);
         });
 
         /**
@@ -282,6 +209,12 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
 
             fakeUsername.value = $scope.username;
             fakePassword.value = $scope.password;
+
+            // TODO: Remove this when https supported
+            if ($scope.password && $scope.password.indexOf('md5:') === -1) {
+                fakePassword.value = 'md5:' + hex_md5($scope.password);
+            }
+
             fakeForm.submit();
         }
 
@@ -307,7 +240,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
-            $scope.changing = {};
             $scope.checkFiltersBar();
         });
 
@@ -339,24 +271,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         });
 
         /**
-         * Updates sidebar status when window width changes.
-         *
-         * @param integer nv New width value.
-         * @param integer ov Old width value.
-         */
-        $scope.$watch('windowWidth', function(nv, ov) {
-            if (nv < 992)  {
-                $scope.sidebar.forced  = 1;
-                $scope.sidebar.current = 1;
-            } else {
-                $scope.sidebar.forced = 0;
-                $scope.sidebar.current = $scope.sidebar.wanted;
-            }
-
-            $scope.checkFiltersBar();
-        });
-
-        /**
          * Updates the content margin-top basing on the filters-navbar height.
          */
         $scope.checkFiltersBar = function checkFiltersBar() {
@@ -370,5 +284,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 $('.content').css('margin-top', margin + 'px');
             }, 1000);
         };
+
+        webStorage.prefix('ONM-');
+        if (webStorage.local.get('token') && webStorage.local.get('user')) {
+            $http.defaults.headers.common.Authorization = 'Bearer '
+                + webStorage.local.get('token');
+            $scope.user = webStorage.local.get('user');
+            $scope.loaded = true;
+        }
     }
 ]);

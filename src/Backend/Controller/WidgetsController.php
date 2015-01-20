@@ -107,8 +107,8 @@ class WidgetsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $post   = $request->request;
-            $items  = $post->get('items');
-            $values = $post->get('values');
+            $items  = $post->get('items', array());
+            $values = $post->get('values', array());
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
@@ -175,8 +175,8 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
-        $items  = $post->get('items');
-        $values = $post->get('values');
+        $items  = $post->get('items', array());
+        $values = $post->get('values', array());
 
         $widgetData = array(
             'id'              => $id,

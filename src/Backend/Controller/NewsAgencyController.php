@@ -63,7 +63,6 @@ class NewsAgencyController extends Controller
                 'notice',
                 _('Please provide your source server configuration to start to use your Importer module')
             );
-            $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         }
     }
 
@@ -335,16 +334,12 @@ class NewsAgencyController extends Controller
         $selected = $request->request->get('ids', null);
         $updated  = array();
 
-
         if (is_array($selected) && count($selected) > 0) {
             foreach ($selected as $value) {
-                $updated[] = $value;
-
-                // First is sorce_id and second is xml filename
-                $item = explode(',', $value);
+                $updated[] = $value[0];
 
                 // Import and create element - category unknown
-                $this->importElements($item[1], $item[0], 'GUESS');
+                $this->importElements($value[0], $value[1], 'GUESS');
             }
         }
 
@@ -480,7 +475,7 @@ class NewsAgencyController extends Controller
                 if ($photo->getId() == $attachmentId) {
 
                     $filePath = null;
-                    if (strpos('http', $photo->getFilePath())) {
+                    if (strpos($photo->getFilePath(), 'http://') !== false) {
                         $filePath = $photo->getFilePath();
                     }
 
@@ -557,7 +552,7 @@ class NewsAgencyController extends Controller
         try {
             $messages = $synchronizer->syncMultiple($servers);
             foreach ($messages as $message) {
-                $this->get('session')->getFlashBag()->add('error', $message);
+                $this->get('session')->getFlashBag()->add('success', $message);
             }
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()

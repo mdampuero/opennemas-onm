@@ -64,6 +64,7 @@ class AdvertisementController extends Controller
     public function redirectAction(Request $request)
     {
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $id = \ContentManager::resolveID($id);
 
         if (!isset($id)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

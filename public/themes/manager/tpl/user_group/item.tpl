@@ -4,7 +4,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                        <a ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
                             <i class="fa fa-users fa-lg"></i>
                             {t}User Groups{/t}
                         </a>
@@ -23,7 +23,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_user_groups_list') %]">
+                        <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_user_groups_list') %]">
                             <i class="fa fa-reply"></i>
                         </a>
                     </li>

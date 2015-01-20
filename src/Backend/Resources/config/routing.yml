@@ -78,10 +78,6 @@ admin_staticpages_build_slug:
     path:     /static-pages/{id}/build-slug
     defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
 
-admin_staticpages_clean_metadata:
-    path:     /static-pages/{id}/clean_metadata
-    defaults: { _controller  : BackendBundle:StaticPages:cleanMetadata }
-
 # Widget manager routes
 admin_widgets:
     path:     /widgets
@@ -310,10 +306,6 @@ admin_category_togglerss:
     defaults: { _controller  : BackendBundle:Categories:toggleRss }
 
 # Image manager routes
-admin_images_search:
-    path:     /images/search
-    defaults: { _controller  : BackendBundle:Images:search }
-
 admin_images:
     path:     /images
     defaults: { _controller  : BackendBundle:Images:list }
@@ -339,14 +331,6 @@ admin_image_create:
 admin_image_update:
     path:     /image/update
     defaults: { _controller  : BackendBundle:Images:update }
-
-# admin_images_config:
-#     path:     /images/config
-#     defaults: { _controller  : BackendBundle:Images:config }
-
-admin_images_content_provider_gallery:
-    path:     /images/content-provider-gallery
-    defaults: { _controller  : BackendBundle:Images:contentProviderGallery }
 
 # Videos controller routes
 admin_videos:
@@ -1085,17 +1069,9 @@ admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
     defaults: { _controller  : BackendBundle:AclUser:recoverPassword }
 
-admin_acl_user_recover_user:
-    path:     /login/user/recover-user
-    defaults: { _controller  : BackendBundle:AclUser:recoverUsername }
-
 admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
     defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
-
-admin_welcome_accept_terms:
-    path:     /accept-terms
-    defaults: { _controller  : BackendBundle:Welcome:acceptTerms }
 
 # Media uploader routes
 admin_media_uploader:
