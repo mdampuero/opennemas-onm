@@ -139,7 +139,6 @@ class UsersController extends ContentController
             if ($createEnabled < count($ids)) {
                 return new JsonResponse(
                     array(
-                        'activated' => 0,
                         'messages'  => array(
                             array(
                                 'id'      => '500',
@@ -183,8 +182,8 @@ class UsersController extends ContentController
 
         return new JsonResponse(
             array(
-                'activated'  => $enabled,
-                'messages' => array_merge($success, $errors)
+                'activated' => $enabled,
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -348,7 +347,6 @@ class UsersController extends ContentController
             if (!$createEnabled) {
                 return new JsonResponse(
                     array(
-                        'activated' => 0,
                         'messages'  => array(
                             array(
                                 'id'      => '500',
