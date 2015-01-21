@@ -1,4 +1,4 @@
-<table class="table table-hover table-condensed">
+<table class="table table-condensed">
 
     {if count($purchases) > 0}
     <thead>
@@ -8,15 +8,6 @@
             <th class="left">{t}Order id{/t}</th>
             <th class="left">{t}Payment date{/t}</th>
             <th class="right">{t}Amount{/t}</th>
-        </tr>
-    </thead>
-    {else}
-    <thead>
-        <tr>
-            <th colspan="11">
-                &nbsp;
-            </th>
-
         </tr>
     </thead>
     {/if}
@@ -45,6 +36,7 @@
     </tr>
     {/foreach}
     </tbody>
+    {if count($purchases) > 0}
     <tfoot>
         <tr>
             <td colspan="11" class="center">
@@ -54,4 +46,5 @@
             </td>
         </tr>
     </tfoot>
+    {/if}
 </table>

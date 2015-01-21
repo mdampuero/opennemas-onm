@@ -1,4 +1,4 @@
-<table class="table table-hover table-condensed">
+<table class="table table-condensed">
     {if count($users) > 0}
     <thead>
         <tr>
@@ -10,15 +10,6 @@
             <th class="center">{t}Status{/t}</th>
             <th style="width:10px">{t}Edit{/t}</th>
             {/if}
-
-        </tr>
-    </thead>
-    {else}
-    <thead>
-        <tr>
-            <th colspan="11">
-                &nbsp;
-            </th>
 
         </tr>
     </thead>
@@ -69,10 +60,11 @@
     </tr>
     {foreachelse}
     <tr>
-        <td class="empty" colspan="11">{t}No users with paywall{/t}</td>
+        <td class="center" colspan="11">{t}No users with paywall{/t}</td>
     </tr>
     {/foreach}
     </tbody>
+    {if count($users) > 0}
     <tfoot>
         <tr>
             <td colspan="11" class="center">
@@ -82,4 +74,5 @@
             </td>
         </tr>
     </tfoot>
+    {/if}
 </table>

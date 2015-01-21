@@ -60,112 +60,147 @@
 
 {block name="content"}
 <form action="{url name=admin_paywall_settings_save}" method="post">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{t}Paywall{/t} :: {t}Settings{/t}</h2></div>
-            <ul class="old-button">
-                <li>
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_paywall}" title="{t}Go back to list{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Paywall{/t}
+                        </h4>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{t}Settings{/t}</h5>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_paywall}" title="{t}Go back to list{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i> {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="wrapper-content clearfix">
+    <div class="content">
 
-        <div id="warnings-validation"></div>
         {render_messages}
 
-        <div class="form-horizontal">
+        <div class="alert">
+            {t escape=off}In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below{/t}
+        </div>
 
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">1</div> {t}Paypal API authentication{/t}</h4>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><div class="step-number">1</div> {t}Paypal API authentication{/t}</h4>
+                <div class="pull-right">
+                    <span class="fa fa-question-circle"></span>
+                    {t}Get this parameters from your {/t}
+                    <a href="#" id="paypal-get-identification">{t}Paypal identification data{/t}</a>
+                </div>
+            </div>
 
-                <p>{t escape=off}In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below:{/t}</p>
+            <div class="grid-body">
 
-                <div class="control-group">
-                    <label for="paypal_username" class="control-label">{t}User name{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="username" name="settings[paypal_username]" value="{$settings['paypal_username']}" class="input-xlarge" required>
+
+                <div class="row col-md-7">
+                    <div class="form-group">
+                        <label for="paypal_username" class="form-label">{t}User name{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="username" name="settings[paypal_username]" value="{$settings['paypal_username']}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paypal_password" class="form-label">{t}Password{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="password" name="settings[paypal_password]" value="{$settings['paypal_password']}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paypal_signature" class="form-label">{t}Signature{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="signature" name="settings[paypal_signature]" value="{$settings['paypal_signature']}" class="form-control" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+                     <div class="form-group">
+                        <div class="controls">
+                            <label class="form-label">{t}Use the testing environment Sandbox{/t}</label>
+                            <label for="developer_mode_yes">
+                                <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
+                                {t}Real mode (recommended){/t}
+                            </label>
+                            <label for="developer_mode_no">
+                                <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
+                                {t}Testing mode{/t}
+                            </label>
+                        </div>
+
+                        <div class="help-block">
+                            <p>{t escape=off}Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.{/t}</p>
+                            {t}Active a testing environment in your Paypal account (only if you are a developer){/t} <a href="https://developer.paypal.com/">{t}More information{/t}</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="paypal_password" class="control-label">{t}Password{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="password" name="settings[paypal_password]" value="{$settings['paypal_password']}" class="input-xlarge" required>
-                    </div>
-                </div>
 
-                <div class="control-group">
-                    <label for="paypal_signature" class="control-label">{t}Signature{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="signature" name="settings[paypal_signature]" value="{$settings['paypal_signature']}" class="input-xlarge" required>
-                    </div>
-                </div>
-
-                <p class="help-block">
-                    {t}If you don't have these identification params click on the next link{/t}
-                    <a href="#" id="paypal-get-identification" class="btn btn-mini btn-warning">{t}Obtain your Paypal identification data{/t}</a>
-                </p>
-            </fieldset>
-
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">2</div> {t}Use the testing environment Sandbox{/t}</h4>
-
-                <div class="control-group">
-                    <div class="controls">
-                        <label for="developer_mode_yes">
-                            <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
-                            {t}Real mode (recommended){/t}
-                        </label>
-                        <label for="developer_mode_no">
-                            <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
-                            {t}Testing mode{/t}
-                        </label>
-                    </div>
-                </div>
-                <p class="help-block">
+                <p class="col-md-12">
                     {t}Validate here your Paypal API credentials in the selected mode{/t}
-                    <a href="#" id="validate-credentials" class="btn btn-mini btn-danger">{t}Validate{/t}</a>
+                    <a href="#" id="validate-credentials" class="btn btn-success pull-right">{t}Validate{/t}</a>
                     <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image">
                 </p>
-                <br>
-                <div class="help-block">
-                    <p>{t escape=off}Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.{/t}</p>
-                    {t}Active a testing environment in your Paypal account (only if you are a developer){/t} <a href="https://developer.paypal.com/">{t}More information{/t}</a>
-                </div>
-            </fieldset>
+            </div>
+        </div>
 
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">3</div> {t}Currency & taxes{/t}</h4>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><div class="step-number">2</div> {t}Currency & taxes{/t}</h4>
+            </div>
 
-                <div id="money" class="control-group">
-                    <label for="money_unit" class="control-label">{t}Money unit{/t}</label>
+            <div class="grid-body">
+                <div id="money" class="form-group">
+                    <label for="money_unit" class="form-label">{t}Money unit{/t}</label>
                     <div class="controls">
                         {html_options name="settings[money_unit]" options=$money_units selected=$settings['money_unit']}
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="vat_percentage" class="control-label">{t}VAT %{/t}</label>
+                <div class="form-group">
+                    <label for="vat_percentage" class="form-label">{t}VAT %{/t}</label>
                     <div class="controls">
                         <input type="number" name="settings[vat_percentage]" value="{$settings['vat_percentage']}" step="any" min="0" required>
                     </div>
                 </div>
-            </fieldset>
+            </div>
+        </div>
 
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">4</div> {t}Payment modes{/t}</h4>
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><div class="step-number">3</div> {t}Payment modes{/t}</h4>
+            </div>
+
+            <div class="grid-body">
                 <p>{t}Below you can add different payment modes by including the time range that the user can purchase, the description and the price{/t}</p>
-                <div id="payment_modes" class="control-group">
+                <div id="payment_modes" class="form-group">
                     <div class="controls">
                         <div class="modes">
                             {foreach name=i from=$settings['payment_modes'] item=payment_mode}
@@ -178,7 +213,7 @@
                                         {if $settings['money_unit']}
                                             {$money_units[$settings['money_unit']]}
                                         {else}
-                                            <i class="icon-money"></i>
+                                            <i class="fa fa-money"></i>
                                         {/if}
                                     </div>
                                 </div>
@@ -196,17 +231,21 @@
                         </a>
                     </div>
                 </div>
-            </fieldset>
-{*
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">5</div> {t}Recurring payments (optional){/t}</h4>
+            </div>
+        </div>
 
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><div class="step-number">4</div> {t}Recurring payments (optional){/t}</h4>
+            </div>
+
+            <div class="grid-body">
                 <p>
                     {t}Paypal allow your users to subscribe to your Paywall through recurring payments. This means that your users will be charged periodically without having to worry about payments and due dates, and will allow you to increase the user engagement.{/t}
                 </p>
 
-                <div class="control-group">
-                    <div class="control-label">
+                <div class="form-group">
+                    <div class="form-label">
                     </div>
                     <div class="controls">
                         <label for="recurring_checkbox">
@@ -216,7 +255,7 @@
                     </div>
                 </div>
                 {capture name=ipn}{setting name=valid_ipn}{/capture}
-                <div class="control-group well recurring-paypal-help {if (!isset($settings['recurring']) || $settings['recurring'] eq 0)}hide{/if}">
+                <div class="form-group well recurring-paypal-help {if (!isset($settings['recurring']) || $settings['recurring'] eq 0)}hide{/if}">
                     <p>{t}You have to activate some options in the Paypal configuration to make recurring payments work. Please follow next steps:{/t}</p>
                     <ol>
                         <li>{t}Go to your merchant Paypal{/t} <a class="btn btn-mini" href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_profile-ipn-notify" target="_blank">{t}IPN web configuration page {/t}<i class="icon icon-external-link"></i></a>{t} and log in with your merchant account{/t}.</li>
@@ -236,18 +275,22 @@
                         <li>{t}Finally, click in the "Save" button to save this configuration{/t}.</li>
                     </ol>
                 </div>
-            </fieldset>
-            <fieldset>
-                <h4 class="settings-header"><div class="step-number">6</div> {t}Accept Opennemas payment agreements terms{/t}</h4>
+            </div>
+        </div>
 
+        <div class="grid simple">
+            <div class="grid-title">
+                <h4><div class="step-number">6</div> {t}Accept Opennemas payment agreements terms{/t}</h4>
+            </div>
+
+            <div class="grid-body">
                 <div class="controls">
                     <label for="terms">
                         <input type="checkbox" name="settings[terms]" value="1" {if (isset($settings['terms']) && $settings['terms'] eq 1)}checked{/if} id="terms" required>
                         {t escape=off}Read and accept the <a href="http://help.opennemas.com/" target="_blank">payment agreements terms</a> of Opennemas{/t}
                     </label>
                 </div>
-            </fieldset>
-*}
+            </div>
         </div>
     </div>
 </form>
