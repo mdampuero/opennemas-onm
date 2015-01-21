@@ -424,7 +424,12 @@ class NewsAgencyController extends Controller
      **/
     public function getSimilarCategoryIdForElement($element)
     {
-        $originalCategory     = utf8_decode($element->getMetaData()['category']);
+        if (!array_key_exists('category', $element->getMetaData())) {
+            $originalCategory = '';
+        } else {
+            $originalCategory = utf8_decode($element->getMetaData()['category']);
+
+        }
         $originalCategoryTemp = strtolower($originalCategory);
 
         $ccm        = \ContentCategoryManager::get_instance();
@@ -721,11 +726,13 @@ class NewsAgencyController extends Controller
         } else {
             $servers = s::get('news_agency_config');
 
+
             if (!is_array($servers)) {
                 $servers = array();
+                $latestServerId = 0;
+            } else {
+                $latestServerId = max(array_keys($servers));
             }
-
-            $latestServerId = max(array_keys($servers));
 
             $server = array(
                 'id'            => $latestServerId + 1,
