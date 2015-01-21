@@ -12,14 +12,79 @@
                                 {t}Articles{/t}
                             </h4>
                         </li>
+                    </ul>
+                    <div class="all-actions pull-right">
+                        <ul class="nav quick-section">
+                            <li class="quicklinks">
+                                {acl isAllowed="ARTICLE_CREATE"}
+                                    <a class="btn btn-primary" href="{url name=admin_article_create category=$category}">
+                                        <i class="fa fa-plus"></i>
+                                        {t}Create{/t}
+                                    </a>
+                                {/acl}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner">
+                    <ul class="nav quick-section pull-left">
                         <li class="quicklinks">
+                          <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                            <i class="fa fa-check fa-lg"></i>
+                          </button>
+                        </li>
+                         <li class="quicklinks">
                             <span class="h-seperate"></span>
                         </li>
+                        <li class="quicklinks">
+                            <h4>
+                                [% shvs.selected.length %] {t}items selected{/t}
+                            </h4>
+                        </li>
+                    </ul>
+                    <ul class="nav quick-section pull-right">
+                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                            <li class="quicklinks">
+                                <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                                    <i class="fa fa-times fa-lg"></i>
+                                </button>
+                            </li>
+                            <li class="quicklinks">
+                                <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                                    <i class="fa fa-check fa-lg"></i>
+                                </button>
+                            </li>
+                        {/acl}
+                        {acl isAllowed="ARTICLE_DELETE"}
+                            <li class="quicklinks">
+                                <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                                    <i class="fa fa-trash-o fa-lg"></i>
+                                </button>
+                            </li>
+                        {/acl}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page-navbar filters-navbar">
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner">
+                    <ul class="nav quick-section">
                         <li class="m-r-10 input-prepend inside search-input no-boarder">
                             <span class="add-on">
                                 <span class="fa fa-search fa-lg"></span>
                             </span>
                             <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks dropdown">
                             <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -135,68 +200,20 @@
                             </span>
                         </li>
                     </ul>
-                    <div class="all-actions pull-right">
-                        <ul class="nav quick-section">
-                            {*<li class="quicklinks">
-                                <span class="a">
-                                {t}Results{/t}: [% shvs.total %]
-                                </span>
-                            </li>
-                            <li class="quicklinks">
-                                <span class="h-seperate"></span>
-                            </li>*}
-                            <li class="quicklinks">
-                                {acl isAllowed="ARTICLE_CREATE"}
-                                    <a class="btn btn-primary" href="{url name=admin_article_create category=$category}">
-                                        <i class="fa fa-plus"></i>
-                                        {t}Create{/t}
-                                    </a>
-                                {/acl}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
-            <div class="navbar navbar-inverse">
-                <div class="navbar-inner">
-                    <ul class="nav quick-section pull-left">
+                    <ul class="nav quick-section pull-right">
                         <li class="quicklinks">
-                          <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                            <i class="fa fa-check fa-lg"></i>
-                          </button>
-                        </li>
-                         <li class="quicklinks">
                             <span class="h-seperate"></span>
                         </li>
-                        <li class="quicklinks">
-                            <h4>
-                                [% shvs.selected.length %] {t}items selected{/t}
-                            </h4>
+                        <li class="quicklinks form-inline pagination-links">
+                            <div class="btn-group">
+                                <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
                         </li>
-                    </ul>
-                    <ul class="nav quick-section pull-right">
-                        {acl isAllowed="ARTICLE_AVAILABLE"}
-                            <li class="quicklinks">
-                                <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
-                                    <i class="fa fa-times fa-lg"></i>
-                                </button>
-                            </li>
-                            <li class="quicklinks">
-                                <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
-                                    <i class="fa fa-check fa-lg"></i>
-                                </button>
-                            </li>
-                        {/acl}
-                        {acl isAllowed="ARTICLE_DELETE"}
-                            <li class="quicklinks">
-                                <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
-                                    <i class="fa fa-trash-o fa-lg"></i>
-                                </button>
-                            </li>
-                        {/acl}
                     </ul>
                 </div>
             </div>
