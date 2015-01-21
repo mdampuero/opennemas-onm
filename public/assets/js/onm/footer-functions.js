@@ -1,9 +1,3 @@
-function hide_alerts () {
-    $(".alert:not(.alert-sticky):not(.messenger-message)").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove();
-    });
-}
-
 function toggleCheckbox()  {
     var toggleElement = $('.table .toggleallcheckbox');
     if (toggleElement !== null) {
@@ -38,11 +32,6 @@ jQuery(document).ready(function($) {
     toggleCheckbox();
 
     FastClick.attach(document.body);
-
-    // Hide alerts after 5 seconds
-    window.setInterval(function() {
-        hide_alerts()
-    }, 5000);
 
     noentersubmit = (function() {
         $('.noentersubmit').keydown(function(event) {
