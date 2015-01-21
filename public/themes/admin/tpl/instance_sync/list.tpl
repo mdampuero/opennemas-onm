@@ -35,73 +35,67 @@
         </div>
     </div>
 
-<div class="content">
+    <div class="content">
 
-    <div class="warnings-validation"></div>
+	{render_messages}
 
-    <form action="{url name=admin_instance_create}" method="GET" id="formulario">
-
-    	{render_messages}
-
-        <table class="table table-hover table-condensed">
-            <thead>
-                <tr>
+        <div class="grid simple">
+            <div class="grid-body {if count($elements) >0}no-padding{/if}">
                 {if count($elements) >0}
-                    <th>{t}Site Url{/t}</th>
-                    <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
-                    <th style="width:10% !important;">{t}Color{/t}</th>
-                    <th style="width:5% !important;">{t}Actions{/t}</th>
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>{t}Site Url{/t}</th>
+                            <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
+                            <th style="width:10% !important;">{t}Color{/t}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {foreach $elements as $num => $config}
+                            {foreach $config as $site => $categories}
+                            <tr>
+                                <td>
+                                    {$site}
+                                    <div class="listing-inline-actions">
+                                        <a class="link" href="{url name=admin_instance_sync_show site_url=$site}"
+                                           title="{t}Edit{/t}" class="btn">
+                                            <i class="fa fa-pencil"></i> {t}Edit{/t}
+                                        </a>
+                                        <a class="link link-danger" href="{url name=admin_instance_sync_delete site_url=$site}"
+                                           title="{t}Delete{/t}"  class="btn btn-danger">
+                                            <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    {$categories|implode:", "}
+                                </td>
+                                <td>
+                                    <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        {/foreach}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <div class="pagination">
+                                    {$pagination->links|default:"&nbsp;"}
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
                 {else}
-                    <th coslpan=4>&nbsp;</th>
+                <div class="center">
+                    <h4>{t}There are no synchronize settings available{/t}</h4>
+                    <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
+                </div>
                 {/if}
-                </tr>
-            </thead>
-
-            <tbody>
-                {foreach $elements as $num => $config}
-                    {foreach $config as $site => $categories}
-                    <tr>
-                        <td>{$site}</td>
-                        <td>
-                            {$categories|implode:", "}
-                        </td>
-                        <td>
-                            <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
-                        </td>
-                        <td class="right nowrap">
-                            <div class="btn-group">
-                                <a href="{url name=admin_instance_sync_show site_url=$site}"
-                                   title="{t}Edit{/t}" class="btn">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="{url name=admin_instance_sync_delete site_url=$site}"
-                                   title="{t}Delete{/t}"  class="btn btn-danger">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </div>
-                        </td>
-
-                    </tr>
-                    {/foreach}
-                {foreachelse}
-                <tr>
-                    <td colspan=4 class="empty">
-                        <h4>{t}There are no synchronize settings available{/t}</h4>
-                        <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <div class="pagination">
-                            {$pagination->links|default:"&nbsp;"}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+            </div>
+        </div>
 	</form>
 </div>
 {/block}

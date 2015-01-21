@@ -4,17 +4,6 @@
     {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
         <link rel="stylesheet" href="{$asset_url}">
     {/stylesheets}
-
-    <style type="text/css">
-    input[type="text"],
-    input[type="password"] {
-        width:300px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:50%;
-    }
-    </style>
 {/block}
 
 {block name="footer-js" append}
@@ -97,24 +86,30 @@
     </div>
 
     <div class="content">
-        <div class="panel">
-            <div class="form-horizontal">
-                <div class="control-group">
-                    <label for="site_url" class="control-label">{t}Site URL{/t}</label>
+        <div class="grid simple ">
+            <div class="grid-body">
+                <div class="form-group">
+                    <label for="site_url" class="form-label">{t}Site URL{/t}</label>
                     <div class="controls">
-                        <input type="text" required="required" name="site_url" id="site_url" value="{$site_url}" placeholder="http://example.com"/>
-                        <input type="button" name="connect" value="{t}Connect{/t}" id="connect" class="onm-button blue">
+                        <div class="input-group">
+                            <input type="text" required="required" name="site_url" id="site_url" value="{$site_url}" placeholder="http://example.com" class="form-control">
+                            <span class="input-group-addon primary">
+                                <span class="arrow"></span>
+                                <i class="fa fa-plug"></i>
+                                <input class="btn btn-link" type="button" name="connect" value="{t}Connect{/t}" id="connect"> </input>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="control-group" id="colorDiv" {if !$site_color}style="display:none;"{/if}>
-                    <label for="site_color" class="control-label">{t}Site color{/t}</label>
+                <div class="form-group" id="colorDiv" {if !$site_color}style="display:none;"{/if}>
+                    <label for="site_color" class="form-label">{t}Site color{/t}</label>
                     <div class="controls">
                         <input readonly="readonly" type="text" class="colorpicker_input" id="color-picker" name="site_color" value="{$site_color}" required="required">
                         <div class="colorpicker_viewer" style="background-color:#{$site_color}"></div>
                     </div>
                 </div>
-                <div class="control-group" id="categories">
-                    <label for="site_color" class="control-label">{t}Available categories for sync{/t}</label>
+                <div class="form-group" id="categories">
+                    <label for="site_color" class="form-label">{t}Available categories for sync{/t}</label>
                     <div class="controls">
                         {$output}
                     </div>

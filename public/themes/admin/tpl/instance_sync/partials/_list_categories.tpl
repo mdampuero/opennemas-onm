@@ -1,3 +1,4 @@
+{if $categories}
 <table class="table table-hover table-condensed">
     <tbody>
         {foreach name=d from=$categories item=category}
@@ -25,13 +26,12 @@
             </tr>
             {/foreach}
         {/if}
-        {foreachelse}
-        <tr>
-            <td class="empty">
-                <h4>{t}There is no elements to sync{/t}</h4>
-                <p>{t}Check if the given site url is correct.{/t}</p>
-            </td>
-        </tr>
         {/foreach}
     </tbody>
 </table>
+{else}
+<div class="center">
+    <h5>{t}No elements to sync in this server{/t}</h5>
+    <p>{t}The given url has no elements to sync or it is not an Opennemas server.{/t}</p>
+</div>
+{/if}
