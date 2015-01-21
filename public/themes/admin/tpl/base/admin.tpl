@@ -117,7 +117,7 @@
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
     <![endif]-->
 
-    {block name="footer-js"}
+    {block name="global-js"}
         <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
         {javascripts src="
@@ -180,6 +180,10 @@
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
+
+        {block name="footer-js"}
+
+        {/block}
 
         {browser_update}
         <script type="text/javascript">
