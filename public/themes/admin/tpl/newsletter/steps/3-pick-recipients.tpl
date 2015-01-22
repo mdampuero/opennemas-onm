@@ -2,9 +2,7 @@
 
 {block name="header-css" append}
 <style type="text/css">
-    .btn-group .btn {
-        display:inline-block;
-    }
+
     #accounts-provider > div,
     #items-recipients {
         height:500px;
@@ -71,60 +69,54 @@
 </style>
 {/block}
 
-{block name="footer-js" append}
-{script_tag src="/onm/newsletter.js"}
-{/block}
-
 {block name="content"}
 
 <form action="#" method="POST" name="newsletterForm" id="pick-recipients-form">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Recipient selection{/t}
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Recipient selection{/t}
-                        </h4>
+                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks btn-group">
+                        <a class="btn btn-primary" href="{url name=admin_newsletter_preview id=$id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
+                            <span class="fa fa-chevron-left"></span>
+                            {t}Previous step{/t}
+                        </a>
+                        <a class="btn btn-primary confirm-send-button" data-controls-modal="modal-confirm-send" href="#" title="{t}Next{/t}" id="next-button">
+                            {t}Send newsletter{/t}
+                            <span class="fa fa-chevron-right"></span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    <div id="buttons-recipients" class="top-action-bar clearfix">
-        <div class="wrapper-content">
+</div>
 
-            <ul class="old-button">
+<div class="content">
 
-                <li>
-                    <a class="confirm-send-button" data-controls-modal="modal-confirm-send" href="#" title="{t}Next{/t}" id="next-button">
-                        <img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
-                        {t}Send newsletter{/t}
-                    </a>
-                </li>
-                 <li>
-                    <a href="{url name=admin_newsletter_preview id=$id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
-                        <img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Previous{/t}" /><br />
-                        {t}Prev step{/t}
-                    </a>
-                </li>
-            </ul>
+    {render_messages}
 
-        </div>
-    </div>
-
-    <div class="content">
-
-        {render_messages}
-
-        <div class="alert alert-info">
-            <button class="close" data-dismiss="alert">×</button>
+    <div class="grid simple">
+        <div class="grid-title">
             {t}Please select your desired persons to sent the newsletter to.{/t}
         </div>
-
-        <div class="clearfix">
-            <div class="pull-left" style="width:49%">
+        <div class="grid-body">
+            <div class="col-md-6">
                 <div id="accounts-provider" class="tabs">
                     <ul>
                         {if $subscriptionType eq 'submit'}
@@ -183,7 +175,11 @@
                 </div>
             </div>
 
-            <div class="pull-right" style="width:49%">
+            <div class="col-md-1 center" style="padding-top:100px">
+                <span class="fa fa-chevron-right fa-3x"></span>
+            </div>
+
+            <div class="col-md-5">
                 <p>{t}Receivers{/t}</p>
                 <div id="recipients">
                     <ul id="items-recipients">
@@ -197,11 +193,17 @@
                     </ul>
                 </div>
             </div>
+
+            <input type="hidden" id="recipients_hidden" name="recipients" />
+
         </div>
+    </div>
 
-        <input type="hidden" id="recipients_hidden" name="recipients" />
-	</div>
+</div>
 </form>
+{/block}
 
-{include file="newsletter/modals/_confirm_send.tpl"}
+{block name="footer-js"}
+    {script_tag src="/onm/newsletter.js"}
+    {include file="newsletter/modals/_confirm_send.tpl"}
 {/block}

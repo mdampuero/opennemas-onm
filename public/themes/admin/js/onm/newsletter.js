@@ -3,6 +3,7 @@
 //STEPS
 $('#clean-button').on('click', function() {
     $('div#newsletter-container').find('ul li').remove();
+    e.preventDefault();
 });
 
 $('#newsletter-pick-elements-form').on('submit', function(e, ui) {

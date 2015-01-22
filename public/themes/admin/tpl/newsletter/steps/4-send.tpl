@@ -21,63 +21,55 @@
 {/block}
 
 {block name="content"}
-
-<form action="#" method="post" name="newsletterForm" id="newsletterForm" {$formAttrs}>
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Delivering report{/t}
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Delivering report{/t}
-                        </h4>
+                    <li>
+                        <a href="{url name=admin_newsletters}" class="btn btn-primary" title="{t}Back to list{/t}">
+                            <span class="fa fa-reply"></span>
+                            {t}Back to list{/t}
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="top-action-bar clearfix" id="buttons-send">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
-                        {t}Back to list{/t}
-                    </a>
-                </li>
-            </ul>
+<div class="content">
+    {render_messages}
+
+    <div class="grid simple">
+        <div class="grid-title">
+            <h4>{t}Newsletter sending report{/t}</h4>
         </div>
-    </div>
-
-    <div class="wrapper-content">
-        {render_messages}
-
-        <div id="warnings-validation"></div>
-
-        <table class="table">
-            {foreach from=$sent_result item=result}
-            <tr>
-                <td>
-                    {$result[0]->name} &lt;{$result[0]->email}&gt;
-                    {if $result[1]}
-                        <span class="ok">{t}OK{/t}</span>
-                    {else}
-                        <span class="failed">{t}Failed{/t} - {$result[2]}</span>
-                    {/if}
-                </td>
-            </tr>
-            {/foreach}
-
-            <tfoot>
+        <div class="grid-body">
+            <p>{t}Your newsletter was sent to the list of mails. Please find below the detailed report for each email and its status.{/t}</p>
+            <table class="table">
+                {foreach from=$sent_result item=result}
                 <tr>
-                    <td colspan=2>
-                        <strong>Envío finalizado.</strong>
+                    <td>
+                        {$result[0]->name} &lt;{$result[0]->email}&gt;
+                        {if $result[1]}
+                            <span class="ok">{t}OK{/t}</span>
+                        {else}
+                            <span class="failed">{t}Failed{/t} - {$result[2]}</span>
+                        {/if}
                     </td>
                 </tr>
-            </tfoot>
-        </table>
+                {/foreach}
+            </table>
+        </div>
     </div>
-</form>
+</div>
 {/block}
