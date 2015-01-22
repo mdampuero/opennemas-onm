@@ -95,81 +95,81 @@
 </div>
 
 
-        <div class="page-navbar filters-navbar">
-            <div class="navbar navbar-inverse">
-                <div class="navbar-inner">
-                    <ul class="nav quick-section">
-                        <li class="m-r-10 input-prepend inside search-input no-boarder">
-                            <span class="add-on">
-                                <span class="fa fa-search fa-lg"></span>
-                            </span>
-                            <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks dropdown">
-                            <select id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
-                                <option value="-1">{t}-- All --{/t}</option>
-                                {section name=as loop=$allcategorys}
-                                {assign var=ca value=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->name}">
-                                    {$allcategorys[as]->title}
-                                    {if $allcategorys[as]->inmenu eq 0}
-                                        <span class="inactive">{t}(inactive){/t}</span>
-                                    {/if}
-                                </option>
-                                {section name=su loop=$subcat[as]}
-                                {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                    <option value="{$subcat[as][su]->name}">
-                                        &rarr;
-                                        {$subcat[as][su]->title}
-                                        {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                                            <span class="inactive">{t}(inactive){/t}</span>
-                                        {/if}
-                                    </option>
-                                {/acl}
-                                {/section}
-                                {/section}
-                        </select>
-                        </li>
-                        <li class="quicklinks"><span class="h-seperate"></span></li>
-                        <li class="quicklinks">
-                            <select name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
-                                <option value="-1"> {t}-- All --{/t} </option>
-                                <option value="1"> {t}Published{/t} </option>
-                                <option value="0"> {t}No published{/t} </option>
-                            </select>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="info">
-                            {t}Results{/t}: [% shvs.total %]
-                            </span>
-                        </li>
-                    </ul>
-                    <ul class="nav quick-section pull-right">
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <li class="quicklinks form-inline pagination-links">
-                            <div class="btn-group">
-                                <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-input no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-search fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks dropdown">
+                    <select id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+                        <option value="-1">{t}-- All --{/t}</option>
+                        {section name=as loop=$allcategorys}
+                        {assign var=ca value=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->name}">
+                            {$allcategorys[as]->title}
+                            {if $allcategorys[as]->inmenu eq 0}
+                                <span class="inactive">{t}(inactive){/t}</span>
+                            {/if}
+                        </option>
+                        {section name=su loop=$subcat[as]}
+                        {assign var=subca value=$subcat[as][su]->pk_content_category}
+                        {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                            {assign var=subca value=$subcat[as][su]->pk_content_category}
+                            <option value="{$subcat[as][su]->name}">
+                                &rarr;
+                                {$subcat[as][su]->title}
+                                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                                    <span class="inactive">{t}(inactive){/t}</span>
+                                {/if}
+                            </option>
+                        {/acl}
+                        {/section}
+                        {/section}
+                </select>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <select name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <span class="info">
+                    {t}Results{/t}: [% shvs.total %]
+                    </span>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
         </div>
+    </div>
+</div>
 
 <div class="content">
 
