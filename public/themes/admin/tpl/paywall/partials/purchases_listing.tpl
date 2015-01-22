@@ -1,6 +1,5 @@
+{if count($purchases) > 0}
 <table class="table table-condensed">
-
-    {if count($purchases) > 0}
     <thead>
         <tr>
             <th class="left">{t}User name{/t}</th>
@@ -30,10 +29,6 @@
             {$purchase->payment_amount|clearslash} {$money_units[$settings['money_unit']]}
         </td>
     </tr>
-    {foreachelse}
-    <tr>
-        <td class="empty" colspan="11">{t}No purchases available{/t}</td>
-    </tr>
     {/foreach}
     </tbody>
     {if count($purchases) > 0}
@@ -46,5 +41,9 @@
             </td>
         </tr>
     </tfoot>
-    {/if}
 </table>
+{else}
+<div class="center">
+    {t}No purchases were made yet.{/t}
+</div>
+{/if}
