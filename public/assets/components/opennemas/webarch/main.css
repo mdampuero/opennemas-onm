@@ -389,3 +389,92 @@
     display:inline-block;
     line-height:1em;
 }
+
+
+/* =============================================================================
+   Section picker
+   ========================================================================== */
+
+.section-picker {
+  position:relative;
+  display:inline-block;
+}
+  .section-picker .title-picker {
+    border:1px solid rgba(0,0,0,0);
+    border-bottom: 0 none;
+    border-radius:4px 4px 0 0;
+    background:none;
+  }
+  .section-picker:hover .title-picker {
+    z-index:100;
+    border:1px solid #ccc;
+    border-bottom: 0 none;
+    border-radius:4px 4px 0 0;
+    background:White;
+  }
+
+  .section-picker .options {
+    position:absolute;
+    top:99%;
+    left:0;
+    z-index:99;
+    display:none;
+    margin-top:-1px;
+    padding:10px;
+    min-width:600px;
+    max-width:900px;
+    border:1px solid #ccc;
+    background:White;
+  }
+    .section-picker .options > * {
+      margin-left:10px;
+      vertical-align:top;
+    }
+    .section-picker .options h4 {
+      margin-left:0;
+    }
+    .section-picker .options ul {
+      margin-left:0;
+    }
+    .section-picker .options ul ul {
+      margin-left:15px;
+    }
+    .section-picker .options .component {
+      display:block;
+      margin-right:10px;
+    }
+  .section-picker .options .categories {
+    -webkit-column-count:3; /* Safari and Chrome */
+    -moz-column-count:3; /* Firefox */
+    column-count:3;
+    -webkit-column-gap:10px; /* Safari and Chrome */
+    -moz-column-gap:vpx; /* Firefox */
+    column-gap:10px;
+    -ms-column-count:3; /* Firefox */
+    -ms-column-gap:10px; /* Firefox */
+  }
+  .section-picker .options ul li {
+    display:block;
+  }
+  .section-picker .options ul li a {
+    display:block;
+    padding:3px 0;
+    word-wrap: no-wrap;
+  }
+  .section-picker:hover .options {
+    display:block;
+  }
+  .section-picker .options .all {
+    display:block;
+    margin-bottom:5px;
+  }
+  .section-picker .options .active {
+    padding:5px;
+    border-radius:2px;
+    background: #0B55C4;
+    color:White;
+  }
+  .section-picker .options .inactive {
+    color:#888;
+  }
+
