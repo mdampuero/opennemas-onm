@@ -1,61 +1,69 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-#search_string{
-    width:195px;
-    margin-bottom:5px;
-}
-#search-form {
-    height:100%
-}
-span.highlighted {
-    color:Red
-}
-</style>
-{/block}
-
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Global search{/t}
-                        </h4>
-                    </li>
-                </ul>
-            </div>
+<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentCtrl" ng-controller="ContentCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Global search{/t}
+                    </h4>
+                </li>
+            </ul>
         </div>
     </div>
-<div class="content">
-    <form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentCtrl" ng-controller="ContentCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-        <div class="table-info clearfix">
-            <div class="pull-left">
-                <div class="form-inline">
-                    <strong>{t}FILTER:{/t}</strong>
-                    &nbsp;&nbsp;
-                    <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    &nbsp;&nbsp;
-                    <strong>{t}CONTENT TYPE:{/t}</strong>
-                    <select class="select2 input-large" name="content_types[]" id="content_types" multiple ng-model="shvs.search.content_type_name">
+</div>
+
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-input no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-search fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" type="text" name="name" ng-model="shvs.search.title_like" placeholder="{t}Filter by title{/t}" />
+                </li>
+                <li class="quicklinks">
+                    {t}CONTENT TYPE:{/t}
+                </li>
+                <li class="quicklinks">
+                    <select name="content_types[]" id="content_types" ng-model="shvs.search.content_type_name"> <!-- multiple -->
                         {html_options options=$content_types selected=$content_types_selected}
                     </select>
-                </div>
-            </div>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <button type="submit" class="btn"><i class="fa fa-search"></i></button>
+                </li>
+                <li class="pull-right">
+                    <strong>Result:</strong> {$pagination->_totalItems} {t}users{/t}
+                </li>
+            </ul>
         </div>
-        <div id="search-results">
-            <div ng-include="'results'"></div>
-        </div><!-- /search-results -->
-        <script type="text/ng-template" id="results">
-            {include file="search_advanced/partials/_list.tpl"}
-        </script>
-    </form>
+    </div>
 </div>
+
+<div class="content">
+
+    <div class="grid simple">
+        <div class="grid-body no-padding">
+            <div id="search-results">
+                <div ng-include="'results'"></div>
+            </div><!-- /search-results -->
+
+            <script type="text/ng-template" id="results">
+                {include file="search_advanced/partials/_list.tpl"}
+            </script>
+        </div>
+    </div>
+</div>
+
+</form>
 {/block}
