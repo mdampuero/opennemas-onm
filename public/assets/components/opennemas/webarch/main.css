@@ -13,6 +13,14 @@
 .center { text-align:center !important; }
 .pointer { cursor: pointer; }
 
+.btn-white {
+    background-color: transparent;
+    color: #505458;
+    border: 1px solid #d1dade;
+}
+.btn-white:hover {
+    border:1px solid #999;
+}
 /* =============================================================================
    Welcome page rules
    ========================================================================== */
