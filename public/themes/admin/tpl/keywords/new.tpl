@@ -12,67 +12,75 @@ jQuery(document).ready(function($) {
 
 {block name="content"}
 <form id="formulario" name="formulario" action="{if $keyword->id}{url name=admin_keyword_update id=$keyword->id}{else}{url name=admin_keyword_create}{/if}" method="POST">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+
+
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Keywords{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{if isset($keyword->id)}{t}Editing keyword{/t}{else}{t}Creating keyword{/t}{/if}</h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Keywords{/t} :: {if isset($keyword->id)}{t}Editing keyword{/t}{else}{t}Creating keyword{/t}{/if}
-                        </h4>
+                        <a class="btn btn-link" href="{url name=admin_keywords}" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                            <span class="fa fa-reply"></span>
+                        </a>
                     </li>
-                </ul>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    {acl isAllowed="PCLAVE_CREATE"}
+                    <li>
+                        <button class="btn btn-primary" action="submit">
+                            {t}Save{/t}
+                        </button>
+                    </li>
+                    {/acl}
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button action="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and continue{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_keywords}" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png"><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+</div>
 
-    <div class="wrapper-content">
+<div class="content">
 
-        {render_messages}
+    {render_messages}
 
-        <div class="form-horizontal panel">
-            <fieldset>
-                <div class="control-group">
-                    <label class="control-label" for="pclave">{t}Name{/t}</label>
+    <div class="grid simple">
+
+        <div class="grid-body">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label class="form-label" for="pclave">{t}Name{/t}</label>
                     <div class="controls">
                         <input type="text" id="pclave" name="pclave" value="{$keyword->pclave|default:""}"
-                               class="input-xlarge" size="30" maxlength="60" required="required"/>
+                               class="form-control" size="30" maxlength="60" required="required"/>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="tipo">{t}Type{/t}</label>
+                <div class="form-group">
+                    <label class="form-label" for="tipo">{t}Type{/t}</label>
                     <div class="controls">
                         <select name="tipo" id="tipo" required="required">
                             {html_options options=$tipos selected=$keyword->tipo|default:""}
                         </select>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="value">{t}Value{/t}</label>
+                <div class="form-group">
+                    <label class="form-label" for="value">{t}Value{/t}</label>
                     <div class="controls">
-                       <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="input-xlarge" required="required"/>
+                       <input type="text" id="value" name="value" value="{$keyword->value|default:""}" class="form-control" required="required"/>
                     </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
+
     </div>
 </form>
 {/block}
