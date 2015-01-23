@@ -109,8 +109,25 @@ class VideosController extends Controller
                 $othersVideos = $this->cm->findAll(
                     'Video',
                     'content_status=1 ',
-                    'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
+                    'ORDER BY created DESC LIMIT '.$totalVideosMoreFrontpage
                 );
+
+                // Pagination for block more videos
+                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                    array(
+                        'page'  => $this->page,
+                        'items' => $totalVideosMoreFrontpage,
+                        'total' => count($othersVideos)+1,
+                        'url'   => $this->generateUrl(
+                            'frontend_video_ajax_paginated',
+                            array(
+                                'category' => $this->category
+                            )
+                        )
+                    )
+                );
+
+                $this->view->assign('pagination', $pagination);
 
                 if (count($frontVideos) > 0) {
                     foreach ($frontVideos as &$video) {
@@ -247,7 +264,8 @@ class VideosController extends Controller
             //Get other_videos for widget video most
             $otherVideos = $this->cm->findAll(
                 'Video',
-                ' content_status=1 AND pk_content <> '.$videoID,
+                ' content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
+                . $this->category . ' AND pk_content <> '.$videoID,
                 ' ORDER BY created DESC LIMIT 4'
             );
 
