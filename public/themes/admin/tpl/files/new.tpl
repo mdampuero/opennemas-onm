@@ -15,96 +15,113 @@
 {/block}
 
 {block name="content"}
-
 <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}"
     enctype="multipart/form-data" method="POST" name="formulario" id="formulario" />
 
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Files{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}</h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
+
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Files{/t} :: {if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}
-                        </h4>
+                        <a class="btn btn-link" href="{url name=admin_files}" title="{t}Go back{/t}">
+                            <span class="fa fa-reply"></span>
+                        </a>
                     </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+
+                    {acl isAllowed="BOOK_CREATE"}
+                    <li>
+                        <button class="btn btn-primary" type="submit">
+                            <span class="fa fa-plus"></span>
+                            {t}Save{/t}
+                        </button>
+                    </li>
+                    {/acl}
                 </ul>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button  type="submit" >
-                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_files}" class="admin_add" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+</div>
 
-    <div class="wrapper-content">
-        {render_messages}
-    </div>
+<div class="content">
 
-    <div class="wrapper-content panel">
-        <div class="form-horizontal">
-            <div class="control-group">
-                <label for="" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" value="{$attaches->title|clearslash}"
-                        class="input-xlarge" required="required">
-                </div>
-            </div>
+    {render_messages}
 
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" value="{$attaches->metadata|clearslash}" class="input-xlarge" required="required">
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="grid simple">
+                <div class="grid-body">
+                    <div class="form-group">
+                        <label for="" class="form-label">{t}Title{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="title" name="title" value="{$attaches->title|clearslash}"
+                                class="form-control" required="required">
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label for="description" class="control-label">{t}Description{/t}</label>
-                <div class="controls">
-                    <textarea id="description" name="description" class="input-xlarge" required="required"
-                                    class="required">{$attaches->description|clearslash}</textarea>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label for="description" class="form-label">{t}Description{/t}</label>
+                        <div class="controls">
+                            <textarea id="description" name="description" class="form-control" required="required"
+                                            class="required">{$attaches->description|clearslash}</textarea>
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label for="path" class="control-label">{t}Path{/t}</label>
-                <div class="controls">
-                    {if !is_null($attaches)}
-                    <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}</a>
-                    <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="input-xlarge" required="required" readonly="readonly">
-                    {else}
-                    <input type="file" id="path" name="path" value="" required="required" />
-                    {/if}
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label for="path" class="form-label">{t}Path{/t}</label>
+                        <div class="controls">
+                            {if !is_null($attaches)}
+                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}</a>
+                            <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
+                            {else}
+                            <input type="file" id="path" name="path" value="" required="required" />
+                            {/if}
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label for="category" class="control-label">{t}Category{/t}</label>
-                <div class="controls">
-                    {include file="common/selector_categories.tpl" name="category" item=$attaches}
+
                 </div>
             </div>
         </div>
-
-        {if !is_null($attaches->id)}
-        <input type="hidden" id="id" name="id"  value="{$attaches->id|default:""}" />
-        <input type="hidden" id="fich" name="fich" value="{$attaches->pk_attachment}" />
-        {/if}
-        <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
+        <div class="col-md-4">
+            <div class="grid simple">
+                <div class="grid-body">
+                    <div class="form-group">
+                        <label for="category" class="form-label">{t}Category{/t}</label>
+                        <div class="controls">
+                            {include file="common/selector_categories.tpl" name="category" item=$attaches}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="metadata" class="form-label">{t}Tags{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="metadata" name="metadata" value="{$attaches->metadata|clearslash}" class="form-control" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    {if !is_null($attaches->id)}
+    <input type="hidden" id="id" name="id"  value="{$attaches->id|default:""}" />
+    <input type="hidden" id="fich" name="fich" value="{$attaches->pk_attachment}" />
+    {/if}
+    <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
+
 </form>
 {/block}

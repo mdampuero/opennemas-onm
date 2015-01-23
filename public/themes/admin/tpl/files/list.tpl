@@ -1,107 +1,123 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_files}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('attachment', { content_status: -1, category_name: -1, title_like: '', in_home: {if $category == 'widget'}1{else}-1{/if}, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Files{/t} ::
-                            <div class="section-picker">
-                                <div class="title-picker"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
-                                <div class="options">
-                                    <h4>{t}Special elements{/t}</h4>
-                                    <a href="{url name=admin_files_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
-                                    <a href="{url name=admin_files}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
-                                </div>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Files{/t} ::
+                        <div class="section-picker">
+                            <div class="title-picker"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                            <div class="options">
+                                <a href="{url name=admin_files_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
+                                <a href="{url name=admin_files}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
                             </div>
-                        </h4>
+                        </div>
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+
+                    <li class="quicklinks">
+                        <a class="btn btn-link" href="{url name=admin_files_statistics}">
+                            <span class="fa fa-bar-chart"></span>
+                        </a>
                     </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+
+                    {if $category eq 'widget'}
+                    {acl isAllowed="VIDEO_WIDGET"}
+                    <li class="quicklinks">
+                        <a class="btn btn-white" href="#" id="save-widget-positions" title="{t}Save positions{/t}" ng-click="savePositions('backend_ws_contents_save_positions')">
+                            <span class="fa fa-save"></span>
+                            {t}Save positions{/t}
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    {/acl}
+                    {/if}
+
+                    {acl isAllowed="BOOK_CREATE"}
+                    <li>
+                        <a class="btn btn-primary" href="{url name=admin_files_create category=$category page=$page}" title="{t}New file{/t}">
+                            <span class="fa fa-plus"></span>
+                            {t}Create{/t}
+                        </a>
+                    </li>
+                    {/acl}
                 </ul>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title">
+</div>
 
-            </div>
-            {if $category != ''}
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_files_create category=$category page=$page}" title="{t}Upload file{/t}">
-                        <img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
-                        {t}Upload file{/t}
+<div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section pull-left">
+                <li class="quicklinks">
+                  <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                    <i class="fa fa-check fa-lg"></i>
+                  </button>
+                </li>
+                 <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h4>
+                        [% shvs.selected.length %] {t}items selected{/t}
+                    </h4>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                {acl isAllowed="ATTACHMENT_AVAILABLE"}
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
+                        <i class="icon-eye-open"></i>
+                        {t}Publish{/t}
                     </a>
                 </li>
-                <li class="separator"></li>
-                <li ng-if="shvs.selected.length > 0">
-                    <a href="#">
-                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                        <br/>{t}Batch actions{/t}
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
+                        <i class="icon-eye-close"></i>
+                        {t}Unpublish{/t}
                     </a>
-                    <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="ATTACHMENT_AVAILABLE"}
-                        <li>
-                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
-                                <i class="icon-eye-open"></i>
-                                {t}Publish{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
-                                <i class="icon-eye-close"></i>
-                                {t}Unpublish{/t}
-                            </a>
-                        </li>
-                        {/acl}
-                        {acl isAllowed="ATTACHMENT_DELETE"}
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
-                                    <i class="icon-trash"></i>
-                                    {t}Delete{/t}
-                                </a>
-                            </li>
-                        {/acl}
-                    </ul>
                 </li>
-                <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {if $category eq 'widget'}
-                {acl isAllowed="VIDEO_WIDGET"}
-                    <li>
-                        <a href="#" id="save-widget-positions" title="{t}Save positions{/t}" ng-click="savePositions('backend_ws_contents_save_positions')">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br/>{t}Save positions{/t}
+                {/acl}
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                {acl isAllowed="ATTACHMENT_DELETE"}
+                    <li class="quicklinks">
+                        <a class="btn btn-link" href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                            <i class="icon-trash"></i>
+                            {t}Delete{/t}
                         </a>
                     </li>
                 {/acl}
-                {/if}
-                <li>
-                    <a href="{url name=admin_files_statistics}">
-                        <img src="{$params.IMAGE_DIR}statistics.png" alt="Statistics"><br>Statistics
-                    </a>
-                </li>
             </ul>
-            {/if}
         </div>
     </div>
-    <div class="wrapper-content">
-        {render_messages}
-        <div class="table-info clearfix">
-            <div class="pull-left">
-                <div class="form-inline">
-                    <strong>{t}FILTER:{/t}</strong>
-                    &nbsp;&nbsp;
-                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    &nbsp;&nbsp;
-                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+</div>
+
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-input no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-search fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <select id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -126,17 +142,55 @@
                                 {/section}
                             {/section}
                     </select>
-                    &nbsp;&nbsp;
-                    <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <select name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
                     <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
-                </div>
-            </div>
+                    <span class="info">
+                    {t}Results{/t}: [% shvs.total %]
+                    </span>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div ng-include="'files'"></div>
+    </div>
+</div>
+
+
+<div class="content">
+    {render_messages}
+
+    <div class="grid simple">
+        <div class="grid-body no-padding">
+            <div ng-include="'files'"></div>
+        </div>
+    </div>
 
         <script type="text/ng-template" id="files">
             <div class="spinner-wrapper" ng-if="loading">
@@ -150,12 +204,11 @@
                         {if $category == 'widget'}<th ng-if="shvs.contents.length >= 0" style="width:1px"></th>{/if}
                         <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                         <th>{t}Title{/t}</th>
-                        <th class="center" style="width:20px">{t}Category{/t}</th>
-                        <th class="center nowrap" style="width:20px">{t}Created on{/t}</th>
+                        <th style="width:20px">{t}Category{/t}</th>
+                        <th class="nowrap" style="width:20px">{t}Created on{/t}</th>
                         <th class="center" style="width:20px">{t}Published{/t}</th>
                         {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                         <th class="center" style="width:20px;">{t}Home{/t}</th>
-                        <th style="width:10px" class="center">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
@@ -169,12 +222,26 @@
                             <checkbox index="[% content.id %]">
                         </td>
                         <td>
-                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
-                                {t}[Link]{/t}
-                            </a>
+
                             [% content.title %]
+
+                            <div class="listing-inline-actions">
+                                {acl isAllowed="ATTACHMENT_UPDATE"}
+                                <a class="link" href="[% edit(content.id, 'admin_file_show') %]">
+                                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                                </a>
+                                {/acl}
+                                {acl isAllowed="ATTACHMENT_DELETE"}
+                                <button class="del link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                    <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                                </button>
+                                {/acl}
+                                <a class="link" href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
+                                    <span class="fa fa-download"></span>  {t}Download{/t}
+                                </a>
+                            </div>
                         </td>
-                        <td class="center">
+                        <td>
                             <span ng-if="content.category_name">
                                 [% content.category_name %]
                             </span>
@@ -182,7 +249,7 @@
                                 {t}Unassigned{/t}
                             </span>
                         </td>
-                        <td class="center nowrap">
+                        <td class="nowrap">
                             [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                         </td>
                         {acl isAllowed="ATTACHMENT_AVAILABLE"}
@@ -202,20 +269,6 @@
                             <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
                         </td>
                         {/acl}
-                        <td class="right">
-                            <div class="btn-group">
-                                {acl isAllowed="ATTACHMENT_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_file_show') %]">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                {/acl}
-                                {acl isAllowed="ATTACHMENT_DELETE"}
-                                <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
-                                {/acl}
-                           </ul>
-                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
