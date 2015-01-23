@@ -115,16 +115,14 @@ class ContentCategory
      **/
     public function create($data)
     {
-        if (!isset($data['name'])) {
-            $data['name'] = strtolower($data['title']);
-            $data['name'] = StringUtils::normalizeName($data['name']);
-        }
-        $data['logo_path'] =
-            (isset($data['logo_path'])) ? $data['logo_path'] : '';
-        $data['color'] = (isset($data['color'])) ? $data['color'] : '';
-        $data['params'] = serialize($data['params']);
-        $ccm = new ContentCategoryManager();
+        // Generate slug for category
+        $data['name'] = StringUtils::getTitle(strtolower($data['title']));
 
+        // Unserialize params
+        $data['params'] = serialize($data['params']);
+
+        // Check if slug already exists and add number
+        $ccm = new ContentCategoryManager();
         if ($ccm->exists($data['name'])) {
             $i = 1;
             $name = $data['name'];
