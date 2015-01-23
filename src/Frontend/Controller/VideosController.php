@@ -108,7 +108,8 @@ class VideosController extends Controller
                 // Videos on others videos block
                 $othersVideos = $this->cm->findAll(
                     'Video',
-                    'content_status=1 ',
+                    'content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
+                    . $this->category . '',
                     'ORDER BY created DESC LIMIT '.$totalVideosMoreFrontpage
                 );
 
