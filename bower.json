@@ -54,7 +54,7 @@
     "Harry-Plotter": "https://github.com/nikopol/Harry-Plotter.git",
     "imageresize": "https://github.com/nmmf/imageresize.git",
     "jquery": "~1.9.*",
-    "jquery-animateNumber": "~0.0.10",
+    "jquery-animateNumber": "https://github.com/aishek/jquery-animateNumber.git#0.0.10",
     "jquery-knob": "~1.2.*",
     "jquery-lazyload": "~1.9.3",
     "jquery-ui": "~1.9.*",
