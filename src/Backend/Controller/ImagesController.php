@@ -73,48 +73,6 @@ class ImagesController extends Controller
     }
 
     /**
-     * Handles the form for configure the images module.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('PHOTO_ADMIN')")
-     */
-    public function configAction(Request $request)
-    {
-        if ('POST' == $request->getMethod()) {
-            $configurations = array(
-                'image_thumb_size'       => $request->request->get('image_thumb_size'),
-                'image_inner_thumb_size' => $request->request->get('image_inner_thumb_size'),
-                'image_front_thumb_size' => $request->request->get('image_front_thumb_size'),
-            );
-
-            foreach ($configurations as $key => $value) {
-                s::set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add('success', _('Image module settings saved successfully.'));
-
-            return $this->redirect($this->generateUrl('admin_images_config'));
-        } else {
-            $configurations = s::get(
-                array(
-                    'image_thumb_size',
-                    'image_inner_thumb_size',
-                    'image_front_thumb_size',
-                )
-            );
-
-            return $this->render(
-                'image/config.tpl',
-                array(
-                    'configs'   => $configurations,
-                )
-            );
-        }
-    }
-
-    /**
      * Show the page for upload new images.
      *
      * @return Response          The response object.
