@@ -30,6 +30,10 @@
         }
     });
 </script>
+
+{javascripts src="@AdminTheme/js/onm/jquery.datepicker.js"}
+    <script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 {/block}
 
 {block name="header-css" append}
@@ -93,7 +97,6 @@
     <div class="row">
         <div class="col-md-8">
             <div class="grid simple">
-
                 <div class="grid-body">
                     <div class="form-group">
                         <label for="title" class="form-label">{t}Title{/t}</label>
@@ -174,10 +177,8 @@
                 <input type="hidden" id="action" name="action" value="" />
                 <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
             </div>
-
         </div>
         <div class="col-md-4">
-
             <div class="grid simple">
                 <div class="grid-title">{t}Attributes{/t}</div>
                 <div class="grid-body">
@@ -211,7 +212,4 @@
         </div>
     </div>
 </form>
-{javascripts src="@AdminTheme/js/onm/jquery.datepicker.js"}
-    <script type="text/javascript" src="{$asset_url}"></script>
-{/javascripts}
 {/block}

@@ -94,7 +94,6 @@
     </div>
 </div>
 
-
 <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
