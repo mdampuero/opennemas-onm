@@ -1,9 +1,4 @@
 {extends file="base/admin.tpl"}
-
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">

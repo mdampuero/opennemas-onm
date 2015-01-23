@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('static_page', { title_like: '', content_status: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">

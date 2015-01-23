@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="header-css" append}
 <style type="text/css">
     .submitted-on {
