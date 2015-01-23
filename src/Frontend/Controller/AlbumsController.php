@@ -204,11 +204,11 @@ class AlbumsController extends Controller
                 $total    = isset($settings['total_front'])?($settings['total_front']):2;
                 $days     = isset($settings['time_last'])?($settings['time_last']):4;
 
-                $otherAlbums = $this->cm->find(
+                $otherAlbums = $this->cm->findAll(
                     'Album',
-                    'content_status=1 AND pk_content !='.$albumID
-                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
-                    ' ORDER BY views DESC,  created DESC LIMIT '.$total
+                    'content_status=1 AND pk_content !='.$albumID.' AND `contents_categories`.`pk_fk_content_category` ='
+                    . $this->category . ' AND created >=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ',
+                    ' ORDER BY created DESC LIMIT '.$total
                 );
 
                 foreach ($otherAlbums as &$content) {
