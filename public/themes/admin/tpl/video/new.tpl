@@ -66,72 +66,94 @@
 
 {block name="content"}
 <form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Videos{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Videos{/t} :: {if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}
-                        </h4>
+                        <a href="{url name=admin_videos category=$category|default:""}" class="btn btn-link" title="{t}Go Back{/t}">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                    {if isset($video->id)}
+                        {acl isAllowed="VIDEO_UPDATE"}
+                            <button class="btn btn-primary" type="submit">
+                        {/acl}
+                    {else}
+                        {acl isAllowed="VIDEO_CREATE"}
+                            <button class="btn btn-primary" type="submit">
+                        {/acl}
+                    {/if}
+                            <span class="fa fa-save"></span>{t}Save{/t}
+                        </button>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{if !isset($video)}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
-            <ul class="old-button">
-                <li>
-                {if isset($video->id)}
-                    {acl isAllowed="VIDEO_UPDATE"}
-                        <button href="{url name=admin_videos_update id=$video->id}" id="continue" name="continue" value="1">
-                    {/acl}
-                {else}
-                    {acl isAllowed="VIDEO_CREATE"}
-                        <button href="{url name=admin_videos_create}" id="continue" name="continue" value="1">
-                    {/acl}
-                {/if}
-                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_videos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
-                    </a>
-                </li>
-            </ul>
+<div class="content">
+
+    {render_messages}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="grid simple">
+                <div class="grid-body">
+                    {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
+                        {include file="video/partials/_form_video_internal.tpl"}
+                    {elseif $type == "external" || (isset($video) && $video->author_name == 'external')}
+                        {include file="video/partials/_form_video_external.tpl"}
+                    {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
+                        {include file="video/partials/_form_video_script.tpl"}
+                    {else}
+                        {include file="video/partials/_form_video_panorama.tpl"}
+                    {/if}
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="col-md-4">
+            <div class="grid simple">
+                <div class="grid-title">{t}Attributes{/t}</div>
+                <div class="grid-body">
 
-    <div class="wrapper-content">
+                    <label for="content_status" >
+                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $video->content_status eq 1}checked="checked"{/if}>
+                        {t}Available{/t}
+                    </label>
 
-        {render_messages}
-        <div class="form-vertical video-edit-form">
+                    {is_module_activated name="COMMENT_MANAGER"}
+                    <label for="with_comment">
+                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($video) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($video) && $video->with_comment eq 1)}checked{/if} value="1" />
+                        {t}Allow comments{/t}
+                    </label>
+                    {/is_module_activated}
 
-            <div class="contentform-inner clearfix">
-                <div class="contentbox-container">
-                    <div class="contentbox">
-                        <h3 class="title">{t}Attributes{/t}</h3>
-                        <div class="content">
-                            <input type="checkbox" value="1" id="content_status" name="content_status" {if $video->content_status eq 1}checked="checked"{/if}>
-                            <label for="content_status" >{t}Available{/t}</label>
-                            {is_module_activated name="COMMENT_MANAGER"}
-                            <br/>
-                            <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($video) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($video) && $video->with_comment eq 1)}checked{/if} value="1" />
-                            <label for="with_comment">{t}Allow comments{/t}</label>
-                            <hr class="divisor">
-                            {/is_module_activated}
-
-                            <h4>{t}Category{/t}</h4>
+                    <div class="form-group">
+                        <label for="category" class="form-label">{t}Category{/t}</label>
+                        <div class="controls">
                             {include file="common/selector_categories.tpl" name="category" item=$video}
-                            <br/>
-                            <hr class="divisor" style="margin-top:8px;">
-                            <h4>{t}Author{/t}</h4>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fk_author" class="form-label">{t}Author{/t}</label>
+                        <div class="controls">
                             {acl isAllowed="CONTENT_OTHER_UPDATE"}
                                 <select name="fk_author" id="fk_author">
                                     {html_options options=$authors selected=$video->fk_author}
@@ -147,18 +169,17 @@
                             {/acl}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <lable for="metadata" class="form-label">{t}Tags{/t}</h3>
+                        <div class="controls">
+                            <input  type="text" id="metadata" name="metadata" required="required" value="{$video->metadata}" class="form-control" />
+                        </div>
+                    </div>
                 </div>
-
-                {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
-                    {include file="video/partials/_form_video_internal.tpl"}
-                {elseif $type == "external" || (isset($video) && $video->author_name == 'external')}
-                    {include file="video/partials/_form_video_external.tpl"}
-                {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
-                    {include file="video/partials/_form_video_script.tpl"}
-                {else}
-                    {include file="video/partials/_form_video_panorama.tpl"}
-                {/if}
             </div>
+        </div>
+    </div>
+        <div class="form-vertical video-edit-form">
 
             <input type="hidden" value="1" name="content_status">
             <input type="hidden" name="type" value="{$smarty.get.type}">

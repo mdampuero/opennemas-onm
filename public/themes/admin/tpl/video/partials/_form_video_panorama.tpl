@@ -1,13 +1,20 @@
 <div class="contentform-main">
-    <div class="control-group">
-        <label for="video_url" class="control-label">{t}Video URL{/t}</label>
+    <div class="form-group">
+        <label for="video_url" class="form-label">{t}Video URL{/t}</label>
         <div class="controls">
-            <div class="input-append">
+            <div class="input-group">
                 <input type="text" id="video_url" name="video_url"
-                    value="{$video->video_url|default:""}" required="required" class="input-xlarge" />
-                <a href="#" id="video_url_button" class="btn">
-                    {t}Get information{/t}
-                </a>
+                    value="{$video->video_url|default:""}" required="required" class="form-control" />
+                <span class="input-group-addon primary">
+                    <span class="arrow"></span>
+                    <a href="#" id="video_url_button">
+                        {if isset($video)}{t}Update information{/t}{else}{t}Get information{/t}{/if}
+                    </a>
+                </span>
+            </div>
+            <div class="input-append">
+
+
             </div>
             {if !$video}
             <script type="text/javascript" defer="defer">
