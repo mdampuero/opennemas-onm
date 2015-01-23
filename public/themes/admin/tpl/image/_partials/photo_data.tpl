@@ -1,6 +1,6 @@
 <div id="photo-{$photo->id}" class="form-vertical clearfix photo-edit">
 
-    <div style="width:330px; display:inline-block;" class="pull-left clearfix">
+    <div class="col-md-4">
         <div class="thumbnail">
             {if preg_match('/^swf$/i', $photo->type_img)}
                 <object>
@@ -12,6 +12,11 @@
             {/if}
         </div>
 
+        <div>
+            <a class="btn btn-white" href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
+                <span class="fa fa-download"></span> {t}Download{/t}
+            </a>
+        </div>
         <br>
 
         <div class="well well-small">
@@ -22,20 +27,14 @@
 
     </div>
 
-    <div class="photo-basic-information">
+    <div class="photo-basic-information col-md-8">
 
         <div>
-            <div class="control-group">
-                <label class="control-label">{t}Link{/t}</label>
+            <div class="form-group">
+                <label for="description-{$photo->id}" class="form-label">{t}Description{/t}</label>
                 <div class="controls">
-                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">{$smarty.const.SITE_URL}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}</a>
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="description-{$photo->id}" class="control-label">{t}Description{/t}</label>
-                <div class="controls">
-                    <textarea required="required" id="description-{$photo->id}" name="description[{$photo->id}]"  class="input-xxlarge"
-                        rows="2">{$photo->description|clearslash}</textarea>
+                    <textarea required="required" id="description-{$photo->id}" name="description[{$photo->id}]"  class="form-control"
+                        rows="4">{$photo->description|clearslash}</textarea>
                 </div>
                 <script type="text/javascript">
                 jQuery(document).ready(function() {
@@ -45,32 +44,32 @@
                 });
                 </script>
             </div>
-            <div class="control-group">
-                <label for="metadata-{$photo->id}" class="control-label">{t}Keywords{/t}</label>
+            <div class="form-group">
+                <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
                 <div class="controls">
-                    <textarea id="metadata-{$photo->id}" name="metadata[{$photo->id}]" rows="2"  class="input-xxlarge" required="required">{$photo->metadata|strip}</textarea>
+                    <textarea id="metadata-{$photo->id}" name="metadata[{$photo->id}]" rows="4"  class="form-control" required="required">{$photo->metadata|strip}</textarea>
                     <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label for="author_name[{$photo->id}]" class="control-label">{t}Copyright{/t}</label>
+            <div class="form-group">
+                <label for="author_name[{$photo->id}]" class="form-label">{t}Copyright{/t}</label>
                 <div class="controls">
                     <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
                         value='{$photo->author_name|clearslash}'/>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label for="date-{$photo->id}" class="control-label">{t}Date{/t}</label>
+            <div class="form-group">
+                <label for="date-{$photo->id}" class="form-label">{t}Date{/t}</label>
                 <div class="controls">
                     <input class="date" type="text" id="date-{$photo->id}" name="date[{$photo->id}]"
                         value='{$photo->date|date_format:"%Y-%m-%d %H:%M:%S"}'/>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label for="geolocation" class="control-label">{t}Location{/t}</label>
+            <div class="form-group">
+                <label for="geolocation" class="form-label">{t}Location{/t}</label>
                 <div class="controls">
                     <div class="input-append">
                         <input type="text" id="address_{$photo->id}" name="address[{$photo->id}]" value="{$photo->address}" class="photo_address">
@@ -126,5 +125,4 @@
     <input type="hidden" name="category[{$photo->id}]" value="{$photo->category}" />
 
 </div><!-- /photo-{$rnf} -->
-<hr>
 

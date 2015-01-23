@@ -28,7 +28,7 @@
 </style>
 {/block}
 
-{block name="header-js" append}
+{block name="footer-js" append}
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
     {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
         @AdminTheme/js/onm/jquery.datepicker.js,
@@ -39,52 +39,59 @@
 
 {block name="content"}
 <form id="formulario" name="form_upload" action="{url name=admin_image_update}" method="POST">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Images{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{t}Editing image{/t}</h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Images{/t} :: {t}Editing image{/t}
-                        </h4>
+                        {if !isset($smarty.request.stringSearch)}
+                            <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
+                        {else}
+                            <a class="btn btn-link" href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0" title="{t}Go back to list{/t}">
+                        {/if}
+                            <i class="fa fa-reply"></i>
+                        </a>
                     </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    {acl isAllowed="PHOTO_UPDATE"}
+                    <li class="quicklinks">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                    </li>
+                    {/acl}
                 </ul>
-                <div class="all-actions pull-right">
-                    <ul class="nav quick-section">
-                        <li class="quicklinks">
-                            {if !isset($smarty.request.stringSearch)}
-                                <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
-                            {else}
-                                <a class="btn btn-link" href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0" title="{t}Go back to list{/t}">
-                            {/if}
-                                <i class="fa fa-reply"></i>
-                            </a>
-                        </li>
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        {acl isAllowed="PHOTO_UPDATE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                            </button>
-                        </li>
-                        {/acl}
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
-    </div>
-    <div class="content">
+</div>
+<div class="content">
 
-        {render_messages}
+    {render_messages}
 
-        {foreach from=$photos item=photo name=photo_show}
-            {include file="image/_partials/photo_data.tpl" display='inline'}
-        {/foreach}
-    </div>
+    {foreach from=$photos item=photo name=photo_show}
+        <div class="grid simple">
+            <div class="grid-body">
+                {include file="image/_partials/photo_data.tpl" display='inline'}
+            </div>
+        </div>
+    {/foreach}
+</div>
 </form>
 
 
@@ -185,7 +192,8 @@ jQuery(document).ready(function($) {
 
         // Styles from http://snazzymaps.com/
         var styles = [
-            {                "featureType": "water",
+            {
+                "featureType": "water",
                 "stylers": [
                     {
                         "visibility": "on"
