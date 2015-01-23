@@ -3,6 +3,35 @@
         <a href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
             {$category->title|clearslash|escape:"html"}
         </a>
+        <div class="listing-inline-actions">
+            {acl isAllowed="CATEGORY_UPDATE"}
+                {if $category->internal_category != 0 && $category->internal_category != 2}
+                <a class="link" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
+                    <i class="fa fa-pencil"></i> {t}Edit{/t}
+                </a>
+                {/if}
+            {/acl}
+            {acl isAllowed="CATEGORY_DELETE"}
+                {if $category->internal_category != 0}
+                <a class="link empty-category"
+                    href="{url name=admin_category_empty id=$category->pk_content_category}"
+                    data-url="{url name=admin_category_empty id=$category->pk_content_category}"
+                    data-title="{$category->title}"
+                    title="Vaciar">
+                    <i class="fa fa-fire"></i> {t}Empty{/t}
+                </a>
+                {/if}
+                {if $category->internal_category != 0 && $category->internal_category != 2}
+                <a class="link link-danger del-category"
+                    href="{url name=admin_category_delete id=$category->pk_content_category}"
+                    data-url="{url name=admin_category_delete id=$category->pk_content_category}"
+                    data-title="{$category->title}"
+                    title="Eliminar">
+                    <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                </a>
+                {/if}
+            {/acl}
+        </div>
     </td>
     <td>
         {$category->name}
@@ -38,47 +67,47 @@
         {/if}
     </td>
     {/if}
-    <td class="right nowrap">
-        <div class="btn-group">
-            {acl isAllowed="CATEGORY_UPDATE"}
-                {if $category->internal_category != 0 && $category->internal_category != 2}
-                <a class="btn btn-mini" href="{url name=admin_category_show id=$category->pk_content_category}" title="Modificar">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                {/if}
-            {/acl}
-            {acl isAllowed="CATEGORY_DELETE"}
-                {if $category->internal_category != 0}
-                <a class="btn btn-mini empty-category"
-                    href="{url name=admin_category_empty id=$category->pk_content_category}"
-                    data-url="{url name=admin_category_empty id=$category->pk_content_category}"
-                    data-title="{$category->title}"
-                    title="Vaciar">
-                    <i class="icon-fire"></i>
-                </a>
-                {/if}
-                {if $category->internal_category != 0 && $category->internal_category != 2}
-                <a class="btn btn-mini btn-danger del-category"
-                    href="{url name=admin_category_delete id=$category->pk_content_category}"
-                    data-url="{url name=admin_category_delete id=$category->pk_content_category}"
-                    data-title="{$category->title}"
-                    title="Eliminar">
-                    <i class="fa fa-trash-o"></i>
-                </a>
-                {/if}
-            {/acl}
-        </div>
-    </td>
 </tr>
 {if count($subcategorys) >0}
     {assign var=i value=0}
     {foreach from=$subcategorys item=subcategory}
     <tr>
         <td style="padding-left: 20px;">
-            &rArr;
-            <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                <strong>{$subcategory->title}</strong>
-            </a>
+            <div class="row">
+                <div class="col-md-1">
+                    &rArr;
+                </div>
+                <div class="col-md-11">
+                    <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
+                        <strong>{$subcategory->title}</strong>
+                    </a>
+                    <div class="listing-inline-actions">
+                        {acl isAllowed="CATEGORY_UPDATE"}
+                            <a class="link" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
+                                <i class="fa fa-pencil"></i> {t}Edit{/t}
+                            </a>
+                        {/acl}
+                        {acl isAllowed="CATEGORY_DELETE"}
+                            {if $subcategory->internal_category==1 && $num_sub_contents[$i].articles!=0}
+                            <a class="link empty-category"
+                                href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
+                                data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
+                                data-title="{$subcategory->title}"
+                                title="{t}Delete all the contents in this category{/t}">
+                                <i class="icon-fire"></i> {t}Empty{/t}
+                            </a>
+                            {/if}
+                            <a class="link link-danger del-category"
+                                href="{url name=admin_category_delete id=$subcategory->pk_content_category}"
+                                data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
+                                data-title="{$subcategory->title}"
+                                title="{t}Delete category{/t}">
+                                <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                            </a>
+                        {/acl}
+                    </div>
+                </div>
+            </div>
         </td>
         <td>
             {$subcategory->name}
@@ -114,33 +143,6 @@
             {/if}
         </td>
         {/acl}
-        <td class="right nowrap">
-            <div class="btn-group">
-                {acl isAllowed="CATEGORY_UPDATE"}
-                    <a class="btn btn-mini" href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                {/acl}
-                {acl isAllowed="CATEGORY_DELETE"}
-                    {if $subcategory->internal_category==1 && $num_sub_contents[$i].articles!=0}
-                    <a class="btn btn-mini empty-category"
-                        href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
-                        data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
-                        data-title="{$subcategory->title}"
-                        title="{t}Delete all the contents in this category{/t}">
-                        <i class="icon-fire"></i>
-                    </a>
-                    {/if}
-                    <a class="btn btn-mini btn-danger del-category"
-                        href="{url name=admin_category_delete id=$subcategory->pk_content_category}"
-                        data-url="{url name=admin_category_delete id=$subcategory->pk_content_category}"
-                        data-title="{$subcategory->title}"
-                        title="{t}Delete category{/t}">
-                        <i class="fa fa-trash-o"></i>
-                    </a>
-                {/acl}
-            </div>
-        </td>
     </tr>
     {capture}
     {$i++}

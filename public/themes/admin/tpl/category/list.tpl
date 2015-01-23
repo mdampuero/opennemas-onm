@@ -11,93 +11,85 @@
 </style>
 {/block}
 
-{block name="footer-js" append}
-<script>
-jQuery(document).ready(function ($){
-    $('#categories-types').tabs();
-});
-</script>
-{/block}
-
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<form action="#" method="post" name="formulario" id="formulario">
+
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Categories{/t}
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Categories{/t}
-                        </h4>
+                        <a class="btn btn-link" href="{url name=admin_categories_config}" class="admin_add" title="{t}Config categories module{/t}">
+                            <span class="fa fa-cog"></span>
+                        </a>
                     </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    {acl isAllowed="CATEGORY_CREATE"}
+                    <li class="quicklinks">
+                        <a class="btn btn-primary" href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1">
+                            <span class="fa fa-plus"></span>
+                            {t}Create{/t}
+                        </a>
+                    </li>
+                    {/acl}
                 </ul>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                {acl isAllowed="CATEGORY_CREATE"}
-                <li>
-                    <a href="{url name=admin_category_create}" class="admin_add" accesskey="N" tabindex="1">
-                        <img src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New category{/t}
-                    </a>
-                </li>
-                {/acl}
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_categories_config}" class="admin_add" title="{t}Config categories module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="wrapper-content">
+</div>
+<div class="content">
 
-        {render_messages}
+    {render_messages}
 
-        <div id="categories-types" class="tabs">
+    <div id="categories-types" class="tabbable">
 
-            <ul>
-                <li>
-                    <a href="#global" id="global-tab" class="active-tab">{t}For articles{/t}</a>
-                </li>
-                {is_module_activated name="ALBUM_MANAGER"}
-                <li>
-                    <a href="#album" id="album-tab">{t}For albums{/t}</a>
-                </li>
-                {/is_module_activated}
-                {is_module_activated name="VIDEO_MANAGER"}
-                <li>
-                    <a href="#video" id="video-tab">{t}For videos{/t}</a>
-                </li>
-                {/is_module_activated}
-                {is_module_activated name="KIOSKO_MANAGER"}
-                <li>
-                    <a href="#epapel" id="epapel-tab">{t}For ePapers{/t}</a>
-                </li>
-                {/is_module_activated}
-                {is_module_activated name="POLL_MANAGER"}
-                <li>
-                    <a href="#poll" id="poll-tab">{t}For polls{/t}</a>
-                </li>
-                {/is_module_activated}
-                {is_module_activated name="SPECIAL_MANAGER"}
-                <li>
-                    <a href="#special" id="special-tab">{t}For Specials{/t}</a>
-                </li>
-                {/is_module_activated}
-                {is_module_activated name="BOOK_MANAGER"}
-                <li>
-                    <a href="#book" id="book-tab">{t}For books{/t}</a>
-                </li>
-                {/is_module_activated}
-            </ul>
+        <ul class="nav nav-tabs ">
+            <li class="active">
+                <a href="#global" id="global-tab" class="active-tab">{t}For articles{/t}</a>
+            </li>
+            {is_module_activated name="ALBUM_MANAGER"}
+            <li>
+                <a href="#album" id="album-tab">{t}For albums{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="VIDEO_MANAGER"}
+            <li>
+                <a href="#video" id="video-tab">{t}For videos{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="KIOSKO_MANAGER"}
+            <li>
+                <a href="#epapel" id="epapel-tab">{t}For ePapers{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="POLL_MANAGER"}
+            <li>
+                <a href="#poll" id="poll-tab">{t}For polls{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="SPECIAL_MANAGER"}
+            <li>
+                <a href="#special" id="special-tab">{t}For Specials{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="BOOK_MANAGER"}
+            <li>
+                <a href="#book" id="book-tab">{t}For books{/t}</a>
+            </li>
+            {/is_module_activated}
+        </ul>
 
-            <div id="global">
+        <div class="tab-content">
+            <div id="global" class="tab-pane active">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -138,7 +130,7 @@ jQuery(document).ready(function ($){
                 </table>
             </div>
              {is_module_activated name="ALBUM_MANAGER"}
-            <div id="album">
+            <div id="album" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -177,7 +169,7 @@ jQuery(document).ready(function ($){
             </div>
             {/is_module_activated}
             {is_module_activated name="VIDEO_MANAGER"}
-            <div id="video">
+            <div id="video" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -217,7 +209,7 @@ jQuery(document).ready(function ($){
             </div>
             {/is_module_activated}
             {is_module_activated name="KIOSKO_MANAGER"}
-            <div id="epapel">
+            <div id="epapel" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -257,7 +249,7 @@ jQuery(document).ready(function ($){
             </div>
              {/is_module_activated}
              {is_module_activated name="POLL_MANAGER"}
-            <div id="poll">
+            <div id="poll" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -297,7 +289,7 @@ jQuery(document).ready(function ($){
             </div>
             {/is_module_activated}
             {is_module_activated name="SPECIAL_MANAGER"}
-            <div id="special">
+            <div id="special" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -337,7 +329,7 @@ jQuery(document).ready(function ($){
             </div>
             {/is_module_activated}
             {is_module_activated name="BOOK_MANAGER"}
-            <div id="book">
+            <div id="book" class="tab-pane">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
@@ -347,7 +339,6 @@ jQuery(document).ready(function ($){
                             {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
                             {/acl}
-                            <th style="width:70px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -367,18 +358,13 @@ jQuery(document).ready(function ($){
                         </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="7">
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             {/is_module_activated}
-        </div><!-- categories-tabs -->
+        </div>
+    </div><!-- categories-tabs -->
 
-    </div>
+</div>
 </form>
 <!--fin wrapper-content-->
 {include file="category/modals/_modalDelete.tpl"}
