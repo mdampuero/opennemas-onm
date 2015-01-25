@@ -80,144 +80,169 @@ jQuery(document).ready(function($) {
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-home fa-lg"></i>
-                            {t}Letters to the Editor{/t} :: {if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}
+                            {t}Letters to the Editor{/t}
                         </h4>
                     </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                        <h5>{if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}</h5>
+                    </li>
                 </ul>
-            </div>
-        </div>
-    </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button value="1" name="continue" type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir" ><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_letters}" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" >
-                        <br />
-                        {t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="wrapper-content">
-
-        {render_messages}
-
-        <div class="form-horizontal panel">
-            <div class="control-group">
-                <label for="title" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="input-xxlarge" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
-                            value="{$letter->metadata|clearslash|escape:"html"}"/>
-                    <div class="help-block">{t}List of words separated by words.{/t}</div>
-                </div>
-            </div>
-
-            {acl isAllowed="LETTER_AVAILABLE"}
-            <div class="control-group">
-                <label for="content_status" class="control-label">{t}Published{/t}</label>
-                <div class="controls">
-                    <select name="content_status" id="content_status" required="required">
-                        <option value="1" {if $letter->content_status eq 1} selected {/if}>Si</option>
-                        <option value="0" {if $letter->content_status eq 0} selected {/if}>No</option>
-                    </select>
-                </div>
-            </div>
-            {/acl}
-
-            <div class="control-group">
-                <label class="control-label">{t}Author information{/t}</label>
-                <div class="controls">
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="author" class="control-label">{t}Nickname{/t}</label>
-                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="input-xlarge" />
-                        </div>
-                        <div class="control-group">
-                            <label for="email" class="control-label">{t}Email{/t}</label>
-                            <div class="controls">
-                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="input-xlarge" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-inline-block">
-                        {foreach $letter->params as $key => $value}
-                        <div class="control-group">
-                            <label for="{$key}" class="control-label">{t}{$key|capitalize}{/t}</label>
-                            <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly/>
-                        </div>
-                        {/foreach}
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="created" class="control-label">{t}Created at{/t}</label>
-                <div class="controls">
-                    <input type="text" id="created" name="created" value="{$letter->created}"class="input-xxlarge" />
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="body" class="control-label">{t}Body{/t}</label>
-                <div class="controls">
-                    <textarea name="body" id="body"   class="onm-editor">{$letter->body|clearslash}</textarea>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="url" class="control-label">{t}Related url{/t}</label>
-                <div class="controls">
-                    <input type="text" id="url" name="url" value="{$letter->url}" class="input-xxlarge"/>
-                </div>
-            </div>
-
-            {acl isAllowed='PHOTO_ADMIN'}
-            {is_module_activated name="IMAGE_MANAGER"}
-            <div id="related_media" class="control-group">
-                <label for="special-image" class="control-label">{t}Image for Special{/t}</label>
-                <div class="controls">
-                    <ul class="related-images thumbnails">
-                        <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
-                            <h3 class="title">{t}Frontpage image{/t}</h3>
-                            <div class="content">
-                                <div class="image-data">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
-                                    </a>
-                                    <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
-                                </div>
-
-                                <div class="not-set">
-                                    {t}Image not set{/t}
-                                </div>
-
-                                <div class="btn-group">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
-                                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
-                                </div>
-                            </div>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_letters}" title="{t}Go back{/t}">
+                                <span class="fa fa-reply"></span>
+                            </a>
+                        </li>
+                        <li class="quicklinks"><span class="h-seperate"></span></li>
+                        <li class="quicklinks">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="fa fa-save"></span>
+                                {t}Save{/t}
+                            </button>
                         </li>
                     </ul>
                 </div>
             </div>
-            {/is_module_activated}
-            {/acl}
+        </div>
+    </div>
+
+<div class="content">
+
+    {render_messages}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="grid simple">
+                <div class="grid-body">
+
+                    <div class="form-group">
+                        <label for="title" class="form-label">{t}Title{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{t}Author information{/t}</label>
+                        <div class="controls">
+                            <div class="form-inline-block">
+                                <div class="form-group">
+                                    <label for="author" class="form-label">{t}Nickname{/t}</label>
+                                    <div class="controls">
+                                        <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">{t}Email{/t}</label>
+                                    <div class="controls">
+                                        <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline-block">
+                                {foreach $letter->params as $key => $value}
+                                <div class="form-group">
+                                    <label for="{$key}" class="form-label">{t}{$key|capitalize}{/t}</label>
+                                    <div class="controls">
+                                        <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly class="form-control" />
+                                    </div>
+                                </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="created" class="form-label">{t}Created at{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="created" name="created" value="{$letter->created}"class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="body" class="form-label">{t}Body{/t}</label>
+                        <div class="controls">
+                            <textarea name="body" id="body"   class="onm-editor form-control" rows="10">{$letter->body|clearslash}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url" class="form-label">{t}Related url{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="url" name="url" value="{$letter->url}" class="form-control"/>
+                        </div>
+                    </div>
+
+                    {acl isAllowed='PHOTO_ADMIN'}
+                    {is_module_activated name="IMAGE_MANAGER"}
+                    <div id="related_media" class="form-group">
+                        <label for="special-image" class="form-label">{t}Image for Special{/t}</label>
+                        <div class="controls">
+                            <ul class="related-images thumbnails">
+                                <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
+                                    <h3 class="title">{t}Frontpage image{/t}</h3>
+                                    <div class="content">
+                                        <div class="image-data">
+                                            <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
+                                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
+                                            </a>
+                                            <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
+                                        </div>
+
+                                        <div class="not-set">
+                                            {t}Image not set{/t}
+                                        </div>
+
+                                        <div class="btn-group">
+                                            <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
+                                            <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {/is_module_activated}
+                    {/acl}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="grid simple">
+                <div class="grid-body">
+                    <div class="form-group">
+                        <label for="metadata" class="form-label">{t}Tags{/t}</label>
+                        <span class="help">{t}List of words separated by words.{/t}</span>
+                        <div class="controls">
+                            <input type="text" id="metadata" name="metadata" required="required" class="form-control"
+                                    value="{$letter->metadata|clearslash|escape:"html"}"/>
+                        </div>
+                    </div>
+
+                    {acl isAllowed="LETTER_AVAILABLE"}
+                    <div class="form-group">
+                        <label for="content_status" class="form-label">{t}Published{/t}</label>
+                        <div class="controls">
+                            <select name="content_status" id="content_status" required="required">
+                                <option value="1" {if $letter->content_status eq 1} selected {/if}>Si</option>
+                                <option value="0" {if $letter->content_status eq 0} selected {/if}>No</option>
+                            </select>
+                        </div>
+                    </div>
+                    {/acl}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <div class="form-horizontal panel">
+
 
 
         </div>
