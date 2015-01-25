@@ -74,12 +74,12 @@
     <tr>
         <td style="padding-left: 20px;">
             <div class="row">
-                <div class="col-md-1">
-                    &rArr;
+                <div class="col-md-2 right">
+                    <span class="fa fa-angle-right"></span>
                 </div>
-                <div class="col-md-11">
+                <div class="col-md-10">
                     <a href="{url name=admin_category_show id=$subcategory->pk_content_category}" title="Modificar">
-                        <strong>{$subcategory->title}</strong>
+                        {$subcategory->title}
                     </a>
                     <div class="listing-inline-actions">
                         {acl isAllowed="CATEGORY_UPDATE"}
