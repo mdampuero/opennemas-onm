@@ -131,8 +131,8 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <a href="#" accesskey="P" id="button_preview">
-                                <i class="fa fa-desktop"></i>
+                            <a href="#" accesskey="P" id="button_preview" class="btn btn-white">
+                                <i class="fa fa-desktop"></i> {t}Preview{/t}
                             </a>
                         </li>
                         <li class="quicklinks">
@@ -247,9 +247,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea class="onm-editor" data-preset="simple" id="summary" name="summary">
-                                    {$article->summary|clearslash|escape:"html"|default:"&nbsp;"}
-                                </textarea>
+                                <textarea class="onm-editor form-control" data-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -262,7 +260,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" class="onm-editor form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                     </div>

@@ -47,6 +47,7 @@
         </div>
     </div>
 </div>
+
 <div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
