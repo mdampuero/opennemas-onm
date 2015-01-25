@@ -3,106 +3,103 @@
 {block name="content"}
 <form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
 
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Static Pages{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}</h5>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Static Pages{/t} :: {if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}
-                        </h4>
+                        <a href="{url name=admin_staticpages}" title="{t}Go back{/t}">
+                            <span class="fa fa-reply"></span>
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                        <button class="btn btn-primary" type="submit">
+                            <span class="fa fa-save"></span> {t}Save{/t}
+                        </button>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-                <ul class="old-button">
-                <li>
-                    <button type="submit" name="continue" value="1" id="save-continue" title="Validar">
-                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_staticpages}" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" /><br />{t}Go back{/t}
-                    </a>
-                </li>
-    		</ul>
-    	</div>
-    </div>
-    <div class="wrapper-content contentform clearfix">
-        {render_messages}
+</div>
 
-        <div class="form-vertical contentform-inner">
+<div class="content">
+    {render_messages}
 
-            <div class="contentform-main">
-                <div class="control-group">
-                    <label for="name" class="control-label">{t}Title{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="title" name="title" value="{$page->title|default:""}"
-                               maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="grid simple">
+                <div class="grid-body">
+
+                    <div class="form-group">
+                        <label for="name" class="form-label">{t}Title{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="title" name="title" value="{$page->title|default:""}"
+                                   maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
+                        </div>
                     </div>
-                </div>
 
-                <div class="control-group">
-                    <label for="slug" class="control-label">{t}URL{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
-                               maxlength="120" tabindex="2" required="required"  class="input-xxlarge"/>
-                        <span class="help-block">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html</span>
+                    <div class="form-group">
+                        <label for="slug" class="form-label">{t}URL{/t}</label>
+                        <span class="help">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html</span>
+                        <div class="controls">
+                            <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
+                                   maxlength="120" tabindex="2" required="required"  class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="body" class="form-label clearfix">
+                            <div class="pull-left">{t}Body{/t}</div>
+                            <div class="pull-right">
+                                {acl isAllowed='PHOTO_ADMIN'}
+                                <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
+                                {/acl}
+                            </div>
+                        </label>
+                        <div class="controls">
+                            <textarea name="body" id="body" tabindex="5" class="onm-editor form-control" rows="10">{$page->body|default:""}</textarea>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="contentbox-container">
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Attributes{/t}</h3>
-                    <div class="content">
-                        {acl isAllowed="STATIC_PAGE_AVAILABLE"}
-                        <div class="control-group">
-                            <label for="content_status" class="control-label">{t}Published{/t}</label>
-                            <div class="controls">
-                                <select name="content_status" id="content_status" tabindex="3">
-                                    <option value="1"{if isset($page->content_status) && $page->content_status eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
-                                    <option value="0"{if isset($page->content_status) && $page->content_status eq 0} selected="selected"{/if}>{t}No{/t}</option>
-                                </select>
-                            </div>
-                        </div>
-                        {/acl}
-                    </div>
-                </div>
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Tags{/t}</h3>
-                    <div class="content">
-                        <div class="control-group">
-                            <div class="controls">
-                                <input  type="text" id="metadata" name="metadata" required="required" value="{$page->metadata|clearslash|escape:"html"}"/>
-                            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="grid simple">
+                <div class="grid-body">
+                    {acl isAllowed="STATIC_PAGE_AVAILABLE"}
+                    <div class="form-group">
+                        <label for="content_status" class="form-label">{t}Published{/t}</label>
+                        <div class="controls">
+                            <select name="content_status" id="content_status" tabindex="3">
+                                <option value="1"{if isset($page->content_status) && $page->content_status eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
+                                <option value="0"{if isset($page->content_status) && $page->content_status eq 0} selected="selected"{/if}>{t}No{/t}</option>
+                            </select>
                         </div>
                     </div>
-                </div>
+                    {/acl}
 
-            </div>
-
-            <div class="contentform-main">
-                <div class="control-group">
-                    <label for="body" class="control-label clearfix">
-                        <div class="pull-left">{t}Body{/t}</div>
-                        <div class="pull-right">
-                            {acl isAllowed='PHOTO_ADMIN'}
-                            <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
-                            {/acl}
+                    <div class="form-group">
+                        <label class="form-label" class="title">{t}Tags{/t}</h3>
+                        <div class="controls">
+                            <input  type="text" id="metadata" name="metadata" required="required" value="{$page->metadata|clearslash|escape:"html"}" class="form-control" />
                         </div>
-                    </label>
-                    <div class="controls">
-                        <textarea name="body" id="body" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
                     </div>
+
                 </div>
             </div>
         </div>
