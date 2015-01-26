@@ -5,7 +5,7 @@ angular.module('ManagerApp', [
   'ngTouch',
   'angular-loading-bar',
   'ui.bootstrap',
-  'ui.select2',
+  'ui.select',
   'pascalprecht.translate',
   'ngQuickDate',
   'ngTagsInput',

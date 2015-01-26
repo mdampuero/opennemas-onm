@@ -51,6 +51,8 @@
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
 
+            @Common/components/opennemas/sidebar/css/sidebar.min.css,
+
             @Common/css/manager/base/*,
             @Common/css/manager/layout/*,
             @Common/css/manager/main.css"
@@ -60,11 +62,12 @@
     {block name="header-js"}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
+            var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
         </script>
     {/block}
 
 </head>
-<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl"  ng-class="{ 'collapsed': sidebar.current }" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable>
+<body id="manager" class="error-body" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
     <div class="application-loading" ng-hide="loaded">
         <div class="loading-message">
             <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -89,7 +92,7 @@
         <div class="navbar-inner">
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
-                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.toggle()">
                         <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
                     </div>
                 </div>
@@ -98,10 +101,10 @@
                         open<strong>nemas</strong>
                     </h1>
                 </a>
-                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                <div ng-mouseleave="sidebar.mouseLeave()" ng-mouseenter="sidebar.mouseEnter()">
                     <div class="overlay"></div>
                     <a class="header-logo" href="{url name=manager_welcome}">
-                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                        <h1>
                             <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
                         </h1>
                     </a>
@@ -112,9 +115,9 @@
       <!-- END TOP NAVIGATION BAR -->
     </header>
     <!-- BEGIN SIDEBAR -->
-    {include file="base/sidebar.tpl"}
-    <div class="layout-collapse-border ng-cloak" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
+    <sidebar class="sidebar" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
     <!-- END SIDEBAR -->
+
     <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
@@ -122,73 +125,75 @@
             </div>
         <!-- END PAGE CONTAINER -->
     </div>
-    <div class="container login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
-        <div class="row login-container column-seperation">
-            <div class="col-md-5 col-md-offset-1">
-                <h2>{t}Opennemas manager{/t}</h2>
-                <p>{t}Use manager account to sign in.{/t}<br>
-                <br>
-                <!--
-                <button class="btn btn-block btn-info col-md-8" type="button">
-                    <span class="pull-left"><i class="icon-facebook"></i></span>
-                    <span class="bold">Login with Facebook</span> </button>
-                <button class="btn btn-block btn-success col-md-8" type="button">
-                    <span class="pull-left"><i class="icon-twitter"></i></span>
-                    <span class="bold">Login with Twitter</span>
-                </button>
-                -->
-            </div>
-            <div class="col-md-5 "><br>
-                <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
-                    <!-- Hack to allow web browsers to remember credentials with AngularJS -->
-                    <iframe id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
-                    <div class="row">
-                        <div class="form-group col-md-10">
-                            <label class="form-label">{t}Username{/t}</label>
-                            <div class="controls">
-                                <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-10">
-                            <label class="form-label">{t}Password{/t}</label>
-                            <span class="help"></span>
-                            <div class="controls">
-                                <div class="input-with-icon right">
-                                    <i class=""></i>
-                                    <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+    <div class="login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
+        <div class="container">
+            <div class="row login-container column-seperation">
+                <div class="col-md-5 col-md-offset-1">
+                    <h2>{t}Opennemas manager{/t}</h2>
+                    <p>{t}Use manager account to sign in.{/t}<br>
+                    <br>
+                    <!--
+                    <button class="btn btn-block btn-info col-md-8" type="button">
+                        <span class="pull-left"><i class="icon-facebook"></i></span>
+                        <span class="bold">Login with Facebook</span> </button>
+                    <button class="btn btn-block btn-success col-md-8" type="button">
+                        <span class="pull-left"><i class="icon-twitter"></i></span>
+                        <span class="bold">Login with Twitter</span>
+                    </button>
+                    -->
+                </div>
+                <div class="col-md-5 "><br>
+                    <form action="/managerws/template/login:blank.tpl" class="login-form" method="post" name="loginForm" ng-submit="login()" novalidate form-autofill-fix>
+                        <!-- Hack to allow web browsers to remember credentials with AngularJS -->
+                        <iframe class="hidden" id="fake-login" ng-src="/managerws/template/login:fake_form.tpl"></iframe>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="form-label">{t}Username{/t}</label>
+                                <div class="controls">
+                                    <input autofocus class="form-control" id="_username" ng-model="username" placeholder="{t}User name{/t}" required type="text" value="{$smarty.cookies.login_username|default:""}">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" ng-if="attempts > 2">
-                        <div class="form-group col-md-10">
-                            <label class="form-label"></label>
-                            <div class="controls">
-                                <div class="control-group clearfix">
-                                    <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                        <div class="row">
+                            <div class="form-group col-md-10">
+                                <label class="form-label">{t}Password{/t}</label>
+                                <span class="help"></span>
+                                <div class="controls">
+                                    <div class="input-with-icon right">
+                                        <i class=""></i>
+                                        <input class="form-control" id="_password" ng-model="password" placeholder="{t}Password{/t}" required type="password" value="{$smarty.cookies.login_password|default:""}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group col-md-10">
-                          <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
-                              [% message.text %]
+                        <div class="row" ng-if="attempts > 2">
+                            <div class="form-group col-md-10">
+                                <label class="form-label"></label>
+                                <div class="controls">
+                                    <div class="control-group clearfix">
+                                        <div vc-recaptcha theme="clean" lang="en" key="'6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-md-10">
+                              <div class="alert alert-[% message.type %]" ng-show="message && loginForm.$pristine">
+                                  [% message.text %]
+                              </div>
                           </div>
-                      </div>
-                    </div>
-                    <input type="hidden" name="_referer" value="{$referer}">
-                    <div class="row">
-                        <div class="col-md-10">
-                            <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
-                              <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
-                              {t}Login{/t}
-                            </button>
                         </div>
-                    </div>
-                </form>
+                        <input type="hidden" name="_referer" value="{$referer}">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
+                                  <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
+                                  {t}Login{/t}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -213,7 +218,8 @@
             @Common/components/jquery/jquery.min.js,
             @Common/components/bootstrap/dist/js/bootstrap.min.js,
 
-            @Common/components/breakpoints/breakpoints.min.js,
+            @Common/components/breakpoints/breakpoints.js,
+            @Common/components/ckeditor/ckeditor.js,
             @Common/components/fastclick/lib/fastclick.js,
 
             @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
@@ -243,10 +249,12 @@
             @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
 
-            @Common/components/opennemas/*,
+            @Common/components/opennemas/angular-*,
+            @Common/components/opennemas/sidebar/js/sidebar.min.js,
 
-            @ManagerTheme/js/ManagerApp.js,
-            @ManagerTheme/js/Controllers.js,
+            @ManagerTheme/js/app.js,
+            @ManagerTheme/js/config.js,
+            @ManagerTheme/js/routing.js,
 
             @ManagerTheme/js/controllers/*,
 
