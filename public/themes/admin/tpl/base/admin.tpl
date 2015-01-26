@@ -70,7 +70,7 @@
         </script>
     {/block}
 </head>
-<body>
+<body ng-app="BackendApp">
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
