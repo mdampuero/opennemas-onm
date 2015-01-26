@@ -161,6 +161,9 @@ class SystemSettingsController extends Controller
             s::set($key, $value);
         }
 
+        // Delete caches for custom_css and frontpages
+        $this->dispatchEvent('frontpage.save_position', array('category' => 0));
+
         $this->get('session')->getFlashBag()->add('success', _('Settings saved.'));
 
         // Send the user back to the form
