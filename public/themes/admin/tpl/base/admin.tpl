@@ -28,20 +28,28 @@
     </style>
     {block name="header-css"}
         {stylesheets src="
+            @Common/components/font-awesome/css/font-awesome.min.css,
             @Common/components/bootstrap/dist/css/bootstrap.min.css,
-
             @Common/components/pace/themes/blue/pace-theme-minimal.css,
+            @Common/components/nanoscroller/bin/css/nanoscroller.css,
+            @Common/components/angular-loading-bar/build/loading-bar.min.css,
+            @Common/components/ngQuickDate/dist/ng-quick-date.css,
+            @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
+            @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
+            @Common/components/ng-tags-input/ng-tags-input.min.css,
+            @Common/components/messenger/build/css/messenger.css,
+            @Common/components/messenger/build/css/messenger-theme-flat.css,
             @Common/components/select2/select2-bootstrap.css,
 
-            @Common/components/font-awesome/css/font-awesome.min.css,
-            @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
             @Common/css/bootstrap/bootstrap-fileupload.min.css,
 
-            @Common/components/webarch/css/animate.min.css,
-            @Common/components/webarch/css/style.css,
-            @Common/components/webarch/css/responsive.css,
-            @Common/components/webarch/css/custom-icon-set.css,
-            @Common/components/webarch/css/magic_space.css,
+            @Common/src/webarch/css/animate.min.css,
+            @Common/src/webarch/css/style.css,
+            @Common/src/webarch/css/responsive.css,
+            @Common/src/webarch/css/custom-icon-set.css,
+            @Common/src/webarch/css/magic_space.css,
+
+            @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
 
             @Common/components/nanoscroller/bin/css/nanoscroller.css,
             @Common/components/angular-loading-bar/build/loading-bar.min.css,
@@ -54,12 +62,12 @@
             @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
             @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
 
-            @Common/src/sidebar/css/sidebar.min.css,
+            @Common/src/sidebar/css/sidebar.css,
 
-            @Common/src/webarch/base/*,
-            @Common/src/webarch/components/*,
-            @Common/src/webarch/layout/*,
-            @Common/src/webarch/main.css"
+            @Common/src/opennemas-webarch/base/*,
+            @Common/src/opennemas-webarch/components/*,
+            @Common/src/opennemas-webarch/layout/*,
+            @Common/src/opennemas-webarch/main.css"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 

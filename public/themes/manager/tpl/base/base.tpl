@@ -28,20 +28,9 @@
     </style>
     {block name="header-css"}
         {stylesheets src="
-            @Common/components/bootstrap/dist/css/bootstrap.min.css,
-
-            @Common/components/pace/themes/blue/pace-theme-minimal.css,
-            @Common/components/select2/select2-bootstrap.css,
-
             @Common/components/font-awesome/css/font-awesome.min.css,
-            @Common/css/bootstrap/bootstrap-fileupload.min.css,
-
-            @Common/components/webarch/css/animate.min.css,
-            @Common/components/webarch/css/style.css,
-            @Common/components/webarch/css/responsive.css,
-            @Common/components/webarch/css/custom-icon-set.css,
-            @Common/components/webarch/css/magic_space.css,
-
+            @Common/components/bootstrap/dist/css/bootstrap.min.css,
+            @Common/components/pace/themes/blue/pace-theme-minimal.css,
             @Common/components/nanoscroller/bin/css/nanoscroller.css,
             @Common/components/angular-loading-bar/build/loading-bar.min.css,
             @Common/components/ngQuickDate/dist/ng-quick-date.css,
@@ -50,12 +39,21 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
+            @Common/components/select2/select2-bootstrap.css,
 
-            @Common/src/sidebar/css/sidebar.min.css,
+            @Common/css/bootstrap/bootstrap-fileupload.min.css,
 
-            @Common/css/manager/base/*,
-            @Common/css/manager/layout/*,
-            @Common/css/manager/main.css"
+            @Common/src/webarch/css/animate.min.css,
+            @Common/src/webarch/css/style.css,
+            @Common/src/webarch/css/responsive.css,
+            @Common/src/webarch/css/custom-icon-set.css,
+            @Common/src/webarch/css/magic_space.css,
+
+            @Common/src/sidebar/css/sidebar.css,
+
+            @Common/src/opennemas-webarch/base/*,
+            @Common/src/opennemas-webarch/layout/*,
+            @Common/src/opennemas-webarch/main.css"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
@@ -258,7 +256,7 @@
 
             @ManagerTheme/js/controllers/*,
 
-            @Common/components/webarch/js/core.js,
+            @Common/src/webarch/js/core.js,
             @Common/js/manager.js
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
