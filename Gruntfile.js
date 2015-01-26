@@ -5,25 +5,26 @@ module.exports = function(grunt) {
         options: {
           cleanTargetDir: false,
           copy:           false,
+          verbose:        true,
           targetDir:      'public/assets/components',
         }
       }
     },
     symlink: {
       options: {
-        overwrite: false
+        overwrite: true
+      },
+      ckeditorAutokeywords: {
+        src:  'public/assets/src/ckeditor-autokeywords',
+        dest: 'public/assets/components/ckeditor/plugins/autokeywords'
+      },
+      ckeditorPasteSpecial: {
+        src:  'public/assets/src/ckeditor-pastespecial',
+        dest: 'public/assets/components/ckeditor/plugins/pastespecial'
       },
       imageresize: {
         src:  'public/assets/components/imageresize',
         dest: 'public/assets/components/ckeditor/plugins/imageresize'
-      },
-      ckeditorAutokeywords: {
-        src:  'public/assets/components/opennemas/ckeditor-autokeywords',
-        dest: 'public/assets/components/ckeditor/plugins/autokeywords'
-      },
-      ckeditorPasteSpecial: {
-        src:  'public/assets/components/opennemas/ckeditor-pastespecial',
-        dest: 'public/assets/components/ckeditor/plugins/pastespecial'
       },
       wordcount: {
         src:  'public/assets/components/wordcount/wordcount',
