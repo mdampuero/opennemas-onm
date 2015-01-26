@@ -1,7 +1,7 @@
-<div class="page-sidebar" id="main-menu">
+<div class="sidebar" id="main-menu">
     <div class="overlay"></div>
     <scrollable>
-        <div class="page-sidebar-wrapper">
+        <div class="sidebar-wrapper">
             {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
         </div>
     </scrollable>

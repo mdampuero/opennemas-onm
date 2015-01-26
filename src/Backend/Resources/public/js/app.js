@@ -1,5 +1,5 @@
 
-angular.module('BackendApp',[ 'BackendApp.controllers', 'BackendApp.directives',
+angular.module('BackendApp',[ 'sun.scrollable', 'BackendApp.controllers', 'BackendApp.directives',
         'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap', 'ui.sortable',
         'pascalprecht.translate' ])
     .config(function ($interpolateProvider) {

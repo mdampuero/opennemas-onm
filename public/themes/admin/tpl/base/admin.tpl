@@ -51,13 +51,15 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
-            @Common/components/bootstrap-nav-wizard/dist/bootstrap-nav-wizard.css,
+            @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
             @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
 
-            @Common/components/opennemas/webarch/base/*,
-            @Common/components/opennemas/webarch/components/*,
-            @Common/components/opennemas/webarch/layout/*,
-            @Common/components/opennemas/webarch/main.css"
+            @Common/src/sidebar/css/sidebar.min.css,
+
+            @Common/src/webarch/base/*,
+            @Common/src/webarch/components/*,
+            @Common/src/webarch/layout/*,
+            @Common/src/webarch/main.css"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
@@ -135,7 +137,7 @@
             @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
             @Common/components/select2/select2.min.js,
 
-            @Common/js/libs/modernizr.min.js,
+            @Common/components/modernizr/modernizr.js,
             @Common/js/libs/tinycon.min.js,
             @Common/js/onm/footer-functions.js,
             @AdminTheme/js/jquery/bootstrap-nav-wizard.js,
@@ -164,7 +166,7 @@
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
 
-            @Common/components/opennemas/angular-*,
+            @Common/src/opennemas/angular-*,
             @Common/components/webarch/js/core.js,
 
             @BackendBundle/js/app.js,
@@ -175,7 +177,8 @@
             @BackendBundle/js/controllers/*,
             @BackendBundle/js/services/*,
             @BackendBundle/js/filters/*,
-            @BackendBundle/js/directives/*
+            @BackendBundle/js/directives/*,
+            @Common/js/admin.js
 
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>

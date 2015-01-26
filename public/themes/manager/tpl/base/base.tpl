@@ -51,7 +51,7 @@
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
 
-            @Common/components/opennemas/sidebar/css/sidebar.min.css,
+            @Common/src/sidebar/css/sidebar.min.css,
 
             @Common/css/manager/base/*,
             @Common/css/manager/layout/*,
@@ -249,8 +249,8 @@
             @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
 
-            @Common/components/opennemas/angular-*,
-            @Common/components/opennemas/sidebar/js/sidebar.min.js,
+            @Common/src/angular-*,
+            @Common/src/sidebar/js/sidebar.min.js,
 
             @ManagerTheme/js/app.js,
             @ManagerTheme/js/config.js,
