@@ -70,13 +70,13 @@
         </script>
     {/block}
 </head>
-<body ng-app="BackendApp">
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.collapsed }">
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
-                    <div class="btn layout-collapse-toggle" ng-click="sidebar.current ? sidebar.current = 0 : (sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted)">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.collapsed ? sidebar.collapsed = 0 : (sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = sidebar.pinned)">
                         <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
                     </div>
                 </div>
@@ -85,10 +85,10 @@
                         open<strong>nemas</strong>
                     </h1>
                 </a>
-                <div ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                <div ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
                     <div class="overlay"></div>
                     <a class="header-logo" href="{url name=admin_welcome}">
-                        <h1 ng-mouseleave="sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-mouseenter="sidebar.current = 0">
+                        <h1 ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
                             <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
                         </h1>
                     </a>
@@ -101,7 +101,7 @@
 
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
-    <div class="layout-collapse-border" ng-click="sidebar.wanted = !sidebar.wanted; sidebar.forced ? sidebar.current = 1 : sidebar.current = sidebar.wanted" ng-swipe-right="sidebar.current = 0" ng-swipe-left="sidebar.current = 1"></div>
+    <div class="layout-collapse-border" ng-click="sidebar.pinned = !sidebar.pinned; sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = sidebar.pinned" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.collapsed = 1"></div>
     <!-- END SIDEBAR -->
 
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
@@ -169,15 +169,15 @@
             @Common/src/opennemas/angular-*,
             @Common/components/webarch/js/core.js,
 
-            @BackendBundle/js/app.js,
-            @BackendBundle/js/controllers.js,
-            @BackendBundle/js/services.js,
-            @BackendBundle/js/filters.js,
-            @BackendBundle/js/directives.js,
-            @BackendBundle/js/controllers/*,
-            @BackendBundle/js/services/*,
-            @BackendBundle/js/filters/*,
-            @BackendBundle/js/directives/*,
+            @AdminTheme/js/app.js,
+            @AdminTheme/js/controllers.js,
+            @AdminTheme/js/services.js,
+            @AdminTheme/js/filters.js,
+            @AdminTheme/js/directives.js,
+            @AdminTheme/js/controllers/*,
+            @AdminTheme/js/services/*,
+            @AdminTheme/js/filters/*,
+            @AdminTheme/js/directives/*,
             @Common/js/admin.js
 
         " filters="uglifyjs"}
