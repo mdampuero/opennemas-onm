@@ -59,6 +59,8 @@ EOF
 
         $this->compileTranslations();
 
+        $this->installNpmAndGruntDeps();
+
         $this->generateRoutes();
 
         $this->executeMaintenance('disable');
@@ -216,10 +218,9 @@ EOF
     }
 
     /**
-     * undocumented function
+     * Executes in a shell the provided command line
      *
      * @return void
-     * @author
      **/
     public function execProcess($processLine)
     {
@@ -235,7 +236,21 @@ EOF
     }
 
     /**
+     * Installs npm and grunt dependencies
+     *
+     * @return void
+     **/
+    public function installNpmAndGruntDeps()
+    {
+        $this->execProcess('npm install');
+
+        $this->execProcess('node_modules/.bin/grunt install');
+    }
+
+    /**
      * Generate exposed routes file to use that routes in javascript.
+     *
+     * @return void
      */
     public function generateRoutes()
     {
