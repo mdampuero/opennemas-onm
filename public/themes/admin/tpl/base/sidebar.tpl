@@ -5,7 +5,7 @@
             {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
         </div>
     </scrollable>
-    <div class="footer-widget">
+    <div class="sidebar-footer-widget">
         <ul>
             <li class="profile-info">
                 <a href="{url name=admin_acl_user_show id=me}">
