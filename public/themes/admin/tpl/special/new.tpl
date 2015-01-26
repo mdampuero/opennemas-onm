@@ -50,110 +50,6 @@
         });
     });
     </script>
-{/block}
-
-{block name="content"}
-<form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" name="formulario" id="formulario">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Specials{/t} :: {if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}
-                        </h4>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    {if !is_null($special->id)}
-                    {acl isAllowed="SPECIAL_UPDATE"}
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Update{/t}
-                    </button>
-                    {/acl}
-                    {else}
-                    {acl isAllowed="SPECIAL_CREATE"}
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                    </button>
-                    {/acl}
-                    {/if}
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_specials category=$category}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="wrapper-content">
-        {render_messages}
-        <div class="form-horizontal panel">
-            <div class="control-group">
-                <label for="title" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" required="required" class="input-xxlarge"
-                            value="{$special->title|clearslash|escape:"html"}"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
-                            value="{$special->metadata|clearslash|escape:"html"}"/>
-                    <div class="help-block">{t}List of words separated by commas.{/t}</div>
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="category" class="control-label">{t}Category{/t}</label>
-                <div class="controls">
-                    {include file="common/selector_categories.tpl" name="category" item=$special}
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="content_status" class="control-label">{t}Available{/t}</label>
-                <div class="controls">
-                    <input type="checkbox" name="content_status" id="content_status" value="1" {if $special->content_status eq 1} checked="checked"{/if}>
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="subtitle" class="control-label">{t}Subtitle{/t}</label>
-                <div class="controls">
-                    <input type="text" id="subtitle" name="subtitle" class="input-xxlarge" value="{$special->subtitle|clearslash|escape:"html"}" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="slug" class="control-label">{t}Slug{/t}</label>
-                <div class="controls">
-                    <input  type="text" id="slug" name="slug" class="input-xlarge"
-                            value="{$special->slug|clearslash|escape:"html"}" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="description" class="control-label">{t}Description{/t}</label>
-                <div class="controls">
-                    <textarea name="description" id="description" class="onm-editor">{$special->description|clearslash}</textarea>
-                </div>
-            </div>
-            {include file="special/partials/_load_images.tpl"}
-
-            {include file="special/partials/_contents_containers.tpl"}
-        </div>
-    </div>
-    <input type="hidden" id="noticias_right_input" name="noticias_right_input" value="">
-    <input type="hidden" id="noticias_left_input" name="noticias_left_input" value="">
-
-</form>
 {include file="media_uploader/media_uploader.tpl"}
 <script>
 jQuery(document).ready(function($){
@@ -190,4 +86,138 @@ jQuery(document).ready(function($){
     });
 });
 </script>
+
+{/block}
+
+{block name="content"}
+<form action="{if $special->id}{url name=admin_special_update id=$special->id}{else}{url name=admin_special_create}{/if}" method="post" name="formulario" id="formulario">
+
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Specials{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <h5>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h5>
+                </li>
+            </ul>
+        </div>
+
+        <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+                <li>
+                    <a class="btn btn-link" href="{url name=admin_specials category=$category}">
+                        <span class="fa fa-reply"></span>
+                    </a>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    {if !is_null($special->id)}
+                    {acl isAllowed="SPECIAL_UPDATE"}
+                    <button type="submit" class="btn btn-primary">
+                        <span class="fa fa-save"></span>
+                        {t}Update{/t}
+                    </button>
+                    {/acl}
+                    {else}
+                    {acl isAllowed="SPECIAL_CREATE"}
+                    <button type="submit" class="btn btn-primary">
+                        <span class="fa fa-save"></span>
+                        {t}Save{/t}
+                    </button>
+                    {/acl}
+                    {/if}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+
+    {render_messages}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="grid simple">
+                <div class="grid-body">
+                    <div class="form-group">
+                        <label for="title" class="form-label">{t}Title{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="title" name="title" required="required" class="form-control"
+                                    value="{$special->title|clearslash|escape:"html"}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subtitle" class="form-label">{t}Subtitle{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="subtitle" name="subtitle" class="form-control" value="{$special->subtitle|clearslash|escape:"html"}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="slug" class="form-label">{t}Slug{/t}</label>
+                        <div class="controls">
+                            <input  type="text" id="slug" name="slug" class="form-control"
+                                    value="{$special->slug|clearslash|escape:"html"}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="form-label">{t}Description{/t}</label>
+                        <div class="controls">
+                            <textarea name="description" id="description" class="onm-editor">{$special->description|clearslash}</textarea>
+                        </div>
+                    </div>
+
+                    {include file="special/partials/_load_images.tpl"}
+
+                    {include file="special/partials/_contents_containers.tpl"}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <div class="grid simple">
+                <div class="grid-title">
+                    {t}Attributes{/t}
+                </div>
+                <div class="grid-body">
+                    <div class="form-group">
+                        <label for="content_status" class="form-label">
+                            <input type="checkbox" name="content_status" id="content_status" value="1" {if $special->content_status eq 1} checked="checked"{/if}>
+                            {t}Available{/t}
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="metadata" class="form-label">{t}Tags{/t}</label>
+                        <span class="help">{t}List of words separated by commas.{/t}</span>
+                        <div class="controls">
+                            <input type="text" id="metadata" name="metadata" required="required" class="form-control"
+                                    value="{$special->metadata|clearslash|escape:"html"}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="form-label">{t}Category{/t}</label>
+                        <div class="controls">
+                            {include file="common/selector_categories.tpl" name="category" item=$special}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<input type="hidden" id="noticias_right_input" name="noticias_right_input" value="">
+<input type="hidden" id="noticias_left_input" name="noticias_left_input" value="">
+
+</form>
 {/block}

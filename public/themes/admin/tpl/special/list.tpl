@@ -2,125 +2,139 @@
 
 {block name="content"}
 <form action="{url name=admin_specials}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('special', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, {if $category == 'widget'}'position', 'asc'{else}'created', 'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-    <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Specials{/t}
+                    </h4>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <div class="section-picker">
+                        <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                        <div class="options">
+                            <a href="{url name=admin_specials_widget}" {if $category =='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
+                            <a href="{url name=admin_specials}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
+                    {acl isAllowed="SPECIAL_SETTINGS"}
                     <li class="quicklinks">
-                        <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Specials{/t}
-                        </h4>
+                        <a class="btn btn-link"  href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
+                            <span class="fa fa-cog"></span>
+                        </a>
                     </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    {/acl}
+
+                    {acl isAllowed="SPECIAL_WIDGET"}
+                     {if $category eq 'widget'}
+                    <li class="quicklinks">
+                        <a class="btn btn-white"  href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+                            <span class="fa fa-save"></span>
+                            {t}Save positions{/t}
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    {/if}
+                    {/acl}
+                    {acl isAllowed="SPECIAL_CREATE"}
+                    <li class="quicklinks">
+                        <a class="btn btn-primary" href="{url name=admin_special_create}">
+                            <span class="fa fa-plus"></span>
+                            {t}Create{/t}
+                        </a>
+                    </li>
+                    {/acl}
                 </ul>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
-                    <div class="options">
-                        <a href="{url name=admin_specials_widget}" {if $category =='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
-                        <a href="{url name=admin_specials}" {if $category !=='widget'}class="active"{/if}>{t}Listing{/t}</a>
-                    </div>
-                </div>
-            </div>
-            <ul class="old-button">
-                {acl isAllowed="SPECIAL_SETTINGS"}
-                    <li>
-                        <a href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                            {t}Settings{/t}
-                        </a>
-                    </li>
-                    <li class="separator"></li>
-                {/acl}
-                <li ng-if="shvs.selected.length > 0">
-                    <a href="#">
-                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                        <br/>{t}Batch actions{/t}
-                    </a>
-                    <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="SPECIAL_AVAILABLE"}
-                            <li>
-                                <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
-                                    <i class="icon-eye-open"></i>
-                                    {t}Publish{/t}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
-                                    <i class="icon-eye-close"></i>
-                                    {t}Unpublish{/t}
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')">
-                                    <i class="go-home"></i>
-                                    {t escape="off"}In home{/t}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')">
-                                    <i class="no-home"></i>
-                                    {t escape="off"}Drop from home{/t}
-                                </a>
-                            </li>
-                        {/acl}
-                        {acl isAllowed="SPECIAL_DELETE"}
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
-                                    <i class="icon-trash"></i>
-                                    {t}Delete{/t}
-                                </a>
-                            </li>
-                        {/acl}
-                    </ul>
+</div>
+
+
+<div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section pull-left">
+                <li class="quicklinks">
+                  <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                    <i class="fa fa-check fa-lg"></i>
+                  </button>
                 </li>
-                <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {acl isAllowed="SPECIAL_WIDGET"}
-                     {if $category eq 'widget'}
-                        <li>
-                            <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
-                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
-                            </a>
-                        </li>
-                    {/if}
-                {/acl}
-                {acl isAllowed="SPECIAL_CREATE"}
-                <li>
-                    <a href="{url name=admin_special_create}">
-                        <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />{t}New special{/t}
+                 <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h4>
+                        [% shvs.selected.length %] {t}items selected{/t}
+                    </h4>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                {acl isAllowed="SPECIAL_AVAILABLE"}
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
+                        <i class="icon-eye-open"></i>
+                        {t}Publish{/t}
                     </a>
                 </li>
-                {/acl}
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
+                        <i class="icon-eye-close"></i>
+                        {t}Unpublish{/t}
+                    </a>
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')">
+                        <i class="go-home"></i>
+                        {t escape="off"}In home{/t}
+                    </a>
+                </li>
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')">
+                        <i class="no-home"></i>
+                        {t escape="off"}Drop from home{/t}
+                    </a>
+                </li>
+            {/acl}
+            {acl isAllowed="SPECIAL_DELETE"}
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <a class="btn btn-link" href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                        <i class="icon-trash"></i>
+                        {t}Delete{/t}
+                    </a>
+                </li>
+            {/acl}
             </ul>
         </div>
     </div>
-    <div class="wrapper-content">
+</div>
 
-        {render_messages}
-        {if $category == 'widget'}
-            <div class="messages" ng-if="{$total_elements_widget} > 0 && shvs.total != {$total_elements_widget}">
-                <div class="alert alert-info">
-                    <button class="close" data-dismiss="alert">×</button>
-                    {t 1=$total_elements_widget}You must put %1 specials in the HOME{/t}<br>
-                </div>
-            </div>
-        {/if}
-
-        <div class="table-info clearfix">
-            <div class="pull-left">
-                <div class="form-inline">
-                    <strong>{t}FILTER:{/t}</strong>
-                    &nbsp;&nbsp;
-                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    &nbsp;&nbsp;
-                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+<div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="m-r-10 input-prepend inside search-input no-boarder">
+                    <span class="add-on">
+                        <span class="fa fa-search fa-lg"></span>
+                    </span>
+                    <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks dropdown">
+                    <select id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -145,18 +159,63 @@
                                 {/section}
                             {/section}
                     </select>
-                    &nbsp;&nbsp;
-                    <select class="select2"  name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <li class="quicklinks">
+                    <select name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
-
+                </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
                     <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
-                </div>
+                    <span class="info">
+                    {t}Results{/t}: [% shvs.total %]
+                    </span>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+
+    {render_messages}
+
+    {if $category == 'widget'}
+        <div class="messages" ng-if="{$total_elements_widget} > 0 && shvs.total != {$total_elements_widget}">
+            <div class="alert alert-info">
+                <button class="close" data-dismiss="alert">×</button>
+                {t 1=$total_elements_widget}You must put %1 specials in the HOME{/t}<br>
             </div>
         </div>
-        <div ng-include="'specials'"></div>
+    {/if}
+
+    <div class="grid simple">
+        <div class="grid-body no-padding">
+            <div ng-include="'specials'"></div>
+        </div>
+    </div>
+
 
         <script type="text/ng-template" id="specials">
         <div class="spinner-wrapper" ng-if="loading">
@@ -174,7 +233,6 @@
                     {acl isAllowed="SPECIAL_AVAILABLE"}<th class="center" style="width:35px;">{t}Published{/t}</th>{/acl}
                     {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}{/acl}
                     {acl isAllowed="SPECIAL_HOME"}<th class="center" style="width:35px;">{t}Home{/t}</th>{/acl}
-                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
@@ -187,6 +245,18 @@
                     </td>
                     <td>
                         [% content.title %]
+                        <div class="listing-inline-actions">
+                            {acl isAllowed="SPECIAL_UPDATE"}
+                            <a class="link" href="[% edit(content.id, 'admin_special_show') %]">
+                                <i class="fa fa-pencil"></i> {t}Edit{/t}
+                            </a>
+                            {/acl}
+                            {acl isAllowed="SPECIAL_DELETE"}
+                            <button class="del link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                            </button>
+                            {/acl}
+                        </div>
                     </td>
                     <td class="center">
                         [% content.category_name %]
@@ -213,21 +283,6 @@
                         <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
                     </td>
                     {/acl}
-
-                    <td class="right">
-                        <div class="btn-group">
-                            {acl isAllowed="SPECIAL_UPDATE"}
-                            <a class="btn" href="[% edit(content.id, 'admin_special_show') %]">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            {/acl}
-                            {acl isAllowed="SPECIAL_DELETE"}
-                            <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                                <i class="fa fa-trash-o"></i>
-                            </button>
-                            {/acl}
-                        </ul>
-                    </td>
 
                 </tr>
             </tbody>
