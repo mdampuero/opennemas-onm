@@ -152,8 +152,8 @@
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Author{/t}: [% shvs.extra.authors[content.fk_author].name %]
-                                <span ng-if="shvs.search. == -1">{t}All{/t}</span>
-                                <span ng-if="shvs.search. != -1">[% shvs.search.category_name %]</span>
+                                <span ng-if="shvs.search.fk_author == -1">{t}All{/t}</span>
+                                <span ng-if="shvs.search.fk_author != -1">[% shvs.search.category_name %]</span>
                             </span>
                             <span class="caret"></span>
                         </button>
