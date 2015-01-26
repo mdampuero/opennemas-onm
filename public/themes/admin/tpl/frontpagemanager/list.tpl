@@ -57,6 +57,27 @@
                     </h4>
                 </li>
             </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                         <a class="btn btn-white" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
+                             <span class="fa fa-plus"></span> {t}Add contents{/t}
+                         </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                        <a class="btn btn-white" href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
+                            <span class="fa fa-desktop"></span> {t}Preview{/t}
+                        </a>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                        <a id="button_savepositions" href="#" class="btn btn-primary"  title="{t}Save changes{/t}">
+                            <span class="fa fa-save"></span> {t}Save changes{/t}
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -73,18 +94,18 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#" id="button_multiple_delete">
-                                <i class="icon-remove"></i> {t}Remove from this frontpage{/t}
+                                <i class="fa fa-remove"></i> {t}Remove from this frontpage{/t}
                             </a>
                         </li>
                         <li>
                             <a href="#" id="button_multiple_arquive">
-                                <i class="icon-inbox"></i> {t}Arquive{/t}
+                                <i class="fa fa-inbox"></i> {t}Arquive{/t}
                             </a>
                         </li>
                         {if $category_id != 0}
                         <li>
                             <a href="#" id="button_multiple_suggest">
-                                <i class="icon-star"></i>{t}Toggle suggest{/t}
+                                <i class="fa fa-star"></i>{t}Toggle suggest{/t}
                             </a>
                         </li>
                         {/if}
@@ -92,136 +113,113 @@
 
                 </li>
 
-                <li class="separator batch-actions"></li>
-                <li>
-                    <a href="{url name=admin_article_create  category=$category}" class="admin_add" title="{t}New article{/t}">
-                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
-                        <br />{t}New article{/t}
-                    </a>
-                </li>
-
-                <li class="separator"></li>
-
-                <li>
-                    <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
-                        <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
-                    </a>
-                </li>
-                <li>
-                    <a id="button_savepositions" href="#" class="admin_add"  title="{t}Save changes{/t}">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
-                    </a>
-                </li>
-                <li>
-                     <a href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
-                         <img src="{$params.IMAGE_DIR}list-add.png" alt="" /><br />{t}Add contents{/t}
-                     </a>
-                </li>
             </ul><!-- /old-button -->
         </div><!-- /wrapper-content -->
     </div><!-- /top-action-bar -->
 
-    <div class="settings settings-panel">
-        <div class="wrapper-content">
-            <a href="#" class="close">×</a>
-            {if $available_layouts > 1}
-                <h4>{t}Default layout for this frontpage{/t}</h4>
-                {foreach from=$available_layouts key=key item=avlayout}
-                    <a class="thumbnail {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
-                       href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
-                        {$avlayout['name']}
-                    </a>
-                {/foreach}
-            {/if}
+<div class="settings settings-panel">
+    <div class="content">
+        <a href="#" class="close">×</a>
+        {if $available_layouts > 1}
+            <h4>{t}Default layout for this frontpage{/t}</h4>
+            {foreach from=$available_layouts key=key item=avlayout}
+                <a class="thumbnail {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
+                   href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
+                    {$avlayout['name']}
+                </a>
+            {/foreach}
+        {/if}
+    </div>
+</div>
+
+<div class="content">
+
+    {include file="frontpagemanager/_render_menu_categories.tpl"}
+
+    <div id="warnings-validation"></div><!-- /warnings-validation -->
+    {render_messages}
+
+    <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
+        {$layout}
+    </div><!-- /frontpagemanager -->
+
+    <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
+        <div class="spinner"></div>
+        <div class="content-provider-block-wrapper clearfix">
+            <ul>
+                {is_module_activated name="ARTICLE_MANAGER"}
+                {if empty($category) || $category eq 'home' || $category eq 0}
+                <li>
+                    <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested{/t}</a>
+                </li>
+                {else}
+                <li>
+                     <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
+                </li>
+                {/if}
+                {/is_module_activated}
+                <li>
+                    <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+                </li>
+
+                {is_module_activated name="WIDGET_MANAGER"}
+                <li>
+                    <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="OPINION_MANAGER"}
+                <li>
+                    <a href="{url name=admin_opinions_content_provider category=$category}">{t}Opinions{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="VIDEO_MANAGER"}
+                <li>
+                    <a href="{url name=admin_videos_content_provider category=$category}">{t}Videos{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="ALBUM_MANAGER"}
+                <li>
+
+                    <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="LETTER_MANAGER"}
+                <li>
+                    <a href="{url name=admin_letters_content_provider category=$category}">{t}Letter{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="POLL_MANAGER"}
+                <li>
+                    <a href="{url name=admin_polls_content_provider category=$category}">{t}Polls{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="ADS_MANAGER"}
+                <li>
+                    <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
+                </li>
+                {/is_module_activated}
+                {is_module_activated name="ADVANCED_SEARCH"}
+                <li>
+                    <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
+                </li>
+                {/is_module_activated}
+            </ul>
         </div>
-    </div>
 
-    <div class="wrapper-content">
-        {include file="frontpagemanager/_render_menu_categories.tpl"}
+    </div><!-- /content-provider -->
+</div>
 
-        <div id="warnings-validation"></div><!-- /warnings-validation -->
-        {render_messages}
-
-        <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
-            {$layout}
-        </div><!-- /frontpagemanager -->
-
-        <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
-            <div class="spinner"></div>
-            <div class="content-provider-block-wrapper clearfix">
-                <ul>
-                    {is_module_activated name="ARTICLE_MANAGER"}
-                    {if empty($category) || $category eq 'home' || $category eq 0}
-                    <li>
-                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested{/t}</a>
-                    </li>
-                    {else}
-                    <li>
-                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
-                    </li>
-                    {/if}
-                    {/is_module_activated}
-                    <li>
-                        <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
-                    </li>
-
-                    {is_module_activated name="WIDGET_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_widgets_content_provider category=$category}">{t}Widgets{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_opinions_content_provider category=$category}">{t}Opinions{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_videos_content_provider category=$category}">{t}Videos{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <li>
-
-                        <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="LETTER_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_letters_content_provider category=$category}">{t}Letter{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_polls_content_provider category=$category}">{t}Polls{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="ADS_MANAGER"}
-                    <li>
-                        <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>
-                    </li>
-                    {/is_module_activated}
-                    {is_module_activated name="ADVANCED_SEARCH"}
-                    <li>
-                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
-                    </li>
-                    {/is_module_activated}
-                </ul>
-            </div>
-
-        </div><!-- /content-provider -->
-    </div>
-
-    <input type="hidden"  id="category" name="category" value="{$category}">
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default}" />
+<input type="hidden"  id="category" name="category" value="{$category}">
+<input type="hidden" name="id" id="id" value="{$id|default}" />
 </form>
+
 {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
 {include file="frontpagemanager/modals/_modal_archive.tpl"}
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_new_version.tpl"}
+
 {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
 {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
 {/is_module_activated}
