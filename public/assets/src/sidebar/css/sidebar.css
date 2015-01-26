@@ -210,6 +210,7 @@
   margin: 16px 20px 0 0;
 }
 .sidebar .sidebar-wrapper ul li a .arrow:before {
+  font-family:"FontAwesome";
   content: "\f105";
 }
 .sidebar .sidebar-wrapper ul li a .arrow.open:before {
