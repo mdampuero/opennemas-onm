@@ -492,7 +492,9 @@ class HooksSubscriber implements EventSubscriberInterface
                 }
             }
 
-            $this->cacheHandler->delete('css|global|' . $categoryName);
+            $cacheManager = $this->container->get('template_cache_manager');
+            $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+            $cacheManager->delete('css|global|' . $categoryName);
         }
     }
 
