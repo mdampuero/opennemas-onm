@@ -280,6 +280,13 @@
                             </span>
                         </div>
                         <div class="form-group">
+                            <label class="form-label" for="activated">{t}Maximun activated users{/t}</label>
+                            <span class="help">{t}0 for unlimited users{/t}</span>
+                            <div class="controls">
+                                <input type="number" id="max_users" ng-model="instance.external.max_users" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label" for="template">{t}Minimum password level{/t}</label>
                             <div class="controls">
                                 <select ng-model="instance.external.pass_level">
@@ -291,9 +298,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="max-mailing" class="form-label">{t}Num Max emails sent by month{/t}</label>
+                            <label for="max-mailing" class="form-label">{t}Maximun number of emails sent by month{/t}</label>
                             <div class="controls">
-                                <input id="max-mailing" ng-model="instance.external.max_mailing" type="text">
+                                <input type="number" id="max-mailing" ng-model="instance.external.max_mailing">
                             </div>
                         </div>
                     </div>
