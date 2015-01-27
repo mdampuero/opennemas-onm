@@ -199,34 +199,40 @@ abstract class AssetManager
         // Prepare the assets writer
         $this->writer = new AssetWriter($this->config['root']);
 
-        // Create all-in-one asset
-        $assets = $this->af->createAsset($this->assets, $this->filters);
+
         if ($this->debug()) {
             foreach ($this->assets as &$asset) {
-                $asset = $this->createAssetSrc($this->parseAssetSrc($asset));
+                $name = substr($asset, strrpos($asset, '/') + 1);
+                $name = substr($name, 0, strrpos($name, '.'));
+
+                $parsed = $this->af->createAsset($asset, $this->filters);
+
+                // Create and set target path
+                $target = $this->config['output_path'] . '/' . $name . '.'
+                        . $this->extension;
+                $parsed->setTargetPath($target);
+
+                $cached = new AssetCache(
+                    $parsed,
+                    new FileSystemCache($this->config['build_path'])
+                );
+
+                $this->writer->writeAsset($cached);
+
+                $asset = '/' . $cached->getTargetPath();
             }
 
             $srcs = $this->assets;
         } else {
-            if ($this->config['output']) {
-                $name = substr($this->config['output'], 0, strpos($this->config['output'], '.'));
-
-                // Get target path (without file)
-                $target = $assets->getTargetPath();
-                $target = substr($target, 0, strrpos($target, '/') + 1);
-
-                // Add deploy number and extension
-                $target .= $name . '.' . $this->extension;
-
-                $assets->setTargetPath($target);
-            }
+            // Create all-in-one asset
+            $assets = $this->af->createAsset($this->assets, $this->filters);
 
             $cached = new AssetCache(
                 $assets,
                 new FileSystemCache($this->config['build_path'])
             );
 
-            $this->writer->writeAsset($cached, $this->filters);
+            $this->writer->writeAsset($cached);
 
             // Save all-in-one source path
             $srcs[] = $this->createAssetSrc($assets->getTargetPath());
