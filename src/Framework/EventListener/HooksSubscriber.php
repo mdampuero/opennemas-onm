@@ -106,7 +106,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             // Instance hooks
-            'instance.disable' => [
+            'instance.update' => [
                 ['sendVarnishRequestCleanerWithInternalName', 5],
             ],
             // Menu hooks
