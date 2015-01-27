@@ -131,7 +131,7 @@
     display: none !important;
   }
 }
-@media screen and (min-width:0\0) {
+@media screen and (min-width:0) {
   body.open-menu-right .page-container {
     position: relative;
     left: -260px;
