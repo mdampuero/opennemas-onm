@@ -185,18 +185,17 @@
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
 
-            @Common/src/angular-*,
             @Common/src/webarch/js/core.js,
 
-            @AdminTheme/js/app.js,
             @AdminTheme/js/controllers.js,
             @AdminTheme/js/services.js,
             @AdminTheme/js/filters.js,
             @AdminTheme/js/directives.js,
-            @AdminTheme/js/controllers/*,
             @AdminTheme/js/services/*,
             @AdminTheme/js/filters/*,
             @AdminTheme/js/directives/*,
+            @AdminTheme/js/controllers/*,
+            @AdminTheme/js/app.js,
             @Common/js/admin.js
 
         " filters="uglifyjs"}
