@@ -104,7 +104,7 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    {acl isAllowed="ARTICLE_AVAILABLE"}
+                    {acl isAllowed="POLL_AVAILABLE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-times fa-lg"></i>
@@ -116,7 +116,7 @@
                             </button>
                         </li>
                     {/acl}
-                    {acl isAllowed="ARTICLE_DELETE"}
+                    {acl isAllowed="POLL_DELETE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
