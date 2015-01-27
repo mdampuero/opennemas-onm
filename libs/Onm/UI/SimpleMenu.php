@@ -113,7 +113,7 @@ class SimpleMenu
         }
 
         // Render node content
-        if (\Onm\Module\ModuleManager::isActivated( $element['module_name'])
+        if (\Onm\Module\ModuleManager::isActivated($element['module_name'])
             && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
@@ -137,7 +137,7 @@ class SimpleMenu
             }
 
             $output = "<li {$class}>"
-                    .$this->getHref($element, $hasSubmenu)
+                    .$this->getHref($element, $hasSubmenu, $isCurrent || $isSubmenuCurrent)
                     .$submenuContent
                     ."</li>";
         }
@@ -179,7 +179,7 @@ class SimpleMenu
      *
      * @return string the HTML generated
      **/
-    private function getHref($element, $hasArrow)
+    private function getHref($element, $hasArrow, $isOpen)
     {
         $id       = 'submenu_'.$element['id'];
         $url      = $element['link'];
@@ -205,7 +205,12 @@ class SimpleMenu
 
         $arrow = '';
         if ($hasArrow) {
-            $arrow = "<span class='arrow' ></span>";
+            $active = '';
+
+            if ($isOpen) {
+                $active = ' open';
+            }
+            $arrow = "<span class='arrow $active'></span>";
         }
 
         $icon = '<i class="fa" ></i>';

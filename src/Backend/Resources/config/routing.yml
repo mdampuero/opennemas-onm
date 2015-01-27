@@ -84,13 +84,13 @@ admin_widgets:
     defaults: { _controller  : BackendBundle:Widgets:list }
 
 admin_widget_show:
-    path:     /widget/{id}/show
+    path:     /widgets/{id}/show
     defaults: { _controller  : BackendBundle:Widgets:show }
     options:
         expose: true
 
 admin_widget_create:
-    path:     /widget/create
+    path:     /widgets/create
     defaults: { _controller  : BackendBundle:Widgets:create }
 
 admin_widget_update:
@@ -111,13 +111,13 @@ admin_menus:
     defaults: { _controller  : BackendBundle:Menus:list }
 
 admin_menu_show:
-    path:     /menu/{id}/show
+    path:     /menus/{id}/show
     defaults: { _controller  : BackendBundle:Menus:show }
     options:
         expose: true
 
 admin_menu_create:
-    path:     /menu/create
+    path:     /menus/create
     defaults: { _controller  : BackendBundle:Menus:create }
 
 admin_menu_update:
@@ -158,13 +158,13 @@ admin_poll_create:
     defaults: { _controller  : BackendBundle:Polls:create }
 
 admin_poll_show:
-    path:     /poll/{id}/show
+    path:     /polls/{id}/show
     defaults: { _controller  : BackendBundle:Polls:show }
     options:
         expose: true
 
 admin_poll_update:
-    path:     /poll/{id}/update
+    path:     /polls/{id}/update
     defaults: { _controller  : BackendBundle:Polls:update }
 
 admin_polls_config:
@@ -189,11 +189,11 @@ admin_ad_create:
     defaults: { _controller  : BackendBundle:Ads:create }
 
 admin_ad_show:
-    path:     /ad/{id}/show
+    path:     /ads/{id}/show
     defaults: { _controller  : BackendBundle:Ads:show }
 
 admin_advertisement_show:
-    path:     /ad/{id}/show
+    path:     /ads/{id}/show
     defaults: { _controller  : BackendBundle:Ads:show }
     options:
         expose: true
@@ -220,17 +220,17 @@ admin_specials_widget:
     defaults: { _controller  : BackendBundle:Specials:widget }
 
 admin_special_create:
-    path:     /special/create
+    path:     /specials/create
     defaults: { _controller  : BackendBundle:Specials:create }
 
 admin_special_show:
-    path:     /special/{id}/show
+    path:     /specials/{id}/show
     defaults: { _controller  : BackendBundle:Specials:show }
     options:
         expose: true
 
 admin_special_update:
-    path:     /special/{id}/update
+    path:     /specials/{id}/update
     defaults: { _controller  : BackendBundle:Specials:update }
 
 admin_special_widget_save_positions:
@@ -247,11 +247,11 @@ admin_letters:
     defaults: { _controller  : BackendBundle:Letters:list }
 
 admin_letter_create:
-    path:     /letter/create
+    path:     /letters/create
     defaults: { _controller  : BackendBundle:Letters:create }
 
 admin_letter_show:
-    path:     /letter/{id}/show
+    path:     /letters/{id}/show
     defaults: { _controller  : BackendBundle:Letters:show }
     options:
         expose: true
@@ -278,11 +278,11 @@ admin_categories_config:
     defaults: { _controller  : BackendBundle:Categories:config }
 
 admin_category_create:
-    path:     /category/create
+    path:     /categories/create
     defaults: { _controller  : BackendBundle:Categories:create }
 
 admin_category_show:
-    path:     /category/{id}/show
+    path:     /categories/{id}/show
     defaults: { _controller  : BackendBundle:Categories:show }
 
 admin_category_update:
@@ -319,13 +319,13 @@ admin_image_show:
     defaults: { _controller  : BackendBundle:Images:show }
 
 admin_photo_show:
-    path:     /image/{id}/show
+    path:     /images/{id}/show
     defaults: { _controller  : BackendBundle:Images:show }
     options:
         expose: true
 
 admin_image_create:
-    path:     /image/create
+    path:     /images/create
     defaults: { _controller  : BackendBundle:Images:create }
 
 admin_image_update:
@@ -397,7 +397,7 @@ admin_albums_widget:
     defaults: { _controller  : BackendBundle:Albums:widget }
 
 admin_album_create:
-    path:     /album/create
+    path:     /albums/create
     defaults: { _controller  : BackendBundle:Albums:create }
 
 admin_album_update:
@@ -428,7 +428,7 @@ admin_covers:
     defaults: { _controller  : BackendBundle:Covers:list }
 
 admin_cover_create:
-    path:     /cover/create
+    path:     /covers/create
     defaults: { _controller  : BackendBundle:Covers:create }
 
 admin_cover_show:
@@ -642,25 +642,25 @@ admin_articles:
     defaults: { _controller  : BackendBundle:Articles:list }
 
 admin_article_create:
-    path:     /article/create
+    path:     /articles/create
     defaults: { _controller  : BackendBundle:Articles:create }
 
 admin_article_show:
-    path:     /article/{id}/show
+    path:     /articles/{id}/show
     defaults: { _controller  : BackendBundle:Articles:show }
     options:
         expose: true
 
 admin_article_update:
-    path:     /article/{id}/update
+    path:     /articles/{id}/update
     defaults: { _controller  : BackendBundle:Articles:update }
 
 admin_article_preview:
-    path:     /article/preview
+    path:     /articles/preview
     defaults: { _controller  : BackendBundle:Articles:preview }
 
 admin_article_get_preview:
-    path:     /article/get-preview
+    path:     /articles/get-preview
     defaults: { _controller  : BackendBundle:Articles:getPreview }
 
 admin_articles_content_provider_suggested:
@@ -693,11 +693,11 @@ admin_opinions_frontpage:
     defaults: { _controller  : BackendBundle:Opinions:frontpage }
 
 admin_opinion_create:
-    path:     /opinion/create
+    path:     /opinions/create
     defaults: { _controller  : BackendBundle:Opinions:create }
 
 admin_opinion_show:
-    path:     /opinion/{id}/show
+    path:     /opinions/{id}/show
     defaults: { _controller  : BackendBundle:Opinions:show }
     options:
         expose: true
@@ -982,11 +982,11 @@ admin_acl_user:
     defaults: { _controller  : BackendBundle:AclUser:list }
 
 admin_acl_user_create:
-    path:     /acl/user/create
+    path:     /acl/users/create
     defaults: { _controller  : BackendBundle:AclUser:create }
 
 admin_acl_user_show:
-    path:     /acl/user/{id}/show
+    path:     /acl/users/{id}/show
     defaults: { _controller  : BackendBundle:AclUser:show }
     options:
         expose: true
@@ -1019,13 +1019,13 @@ admin_acl_usergroups:
     defaults: { _controller  : BackendBundle:AclUserGroups:list }
 
 admin_acl_usergroup_show:
-    path:     /acl/usergroup/{id}/show
+    path:     /acl/usergroups/{id}/show
     defaults: { _controller  : BackendBundle:AclUserGroups:show }
     options:
         expose: true
 
 admin_acl_usergroups_create:
-    path:     /acl/usergroup/create
+    path:     /acl/usergroups/create
     defaults: { _controller  : BackendBundle:AclUserGroups:create }
 
 admin_acl_usergroups_update:
