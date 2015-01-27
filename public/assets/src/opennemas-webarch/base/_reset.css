@@ -25,7 +25,7 @@ i.ng-hide-add-active, .ng-hide-remove {
   display: inline-block !important;
 }
 
-@media (min-width: 900px)
+@media (min-width: 900px) {
   ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: none !important;
   }
