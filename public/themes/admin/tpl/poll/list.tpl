@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('poll', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('poll', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
@@ -321,11 +321,6 @@
         </div>
     </div>
 
-    <script type="text/ng-template" id="polls">
-
-
-    </script>
-
     <script type="text/ng-template" id="modal-delete">
         {include file="common/modals/_modalDelete.tpl"}
     </script>
@@ -334,5 +329,5 @@
         {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 
-</form>
+</div>
 {/block}
