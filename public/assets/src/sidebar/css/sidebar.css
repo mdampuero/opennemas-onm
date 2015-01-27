@@ -210,7 +210,7 @@
   margin: 16px 20px 0 0;
 }
 .sidebar .sidebar-wrapper ul li a .arrow:before {
-  font-family:"FontAwesome";
+  font-family: 'FontAwesome';
   content: "\f105";
 }
 .sidebar .sidebar-wrapper ul li a .arrow.open:before {
@@ -219,7 +219,7 @@
 .sidebar .sidebar-wrapper ul li a .title {
   display: inline-block;
   float: left;
-  height: 40px;
+  height: 50px;
   padding: 15px 0;
   -webkit-transition: all .25s;
   -moz-transition: all .25s;
@@ -230,16 +230,27 @@
   clear: both;
   display: none;
   font-weight: 300;
+  font-size: 12px;
   position: relative;
 }
-.sidebar .sidebar-wrapper ul li .sub-menu li i {
-  margin-left: 10px;
+.sidebar .sidebar-wrapper ul li .sub-menu li a {
+  height: 40px;
+}
+.sidebar .sidebar-wrapper ul li .sub-menu li a i {
+  height: 40px;
+  margin-left: 25px;
+  padding: 15px 0;
+  width: 40px;
+}
+.sidebar .sidebar-wrapper ul li .sub-menu li a .title {
+  height: 40px;
+  padding: 12px 0;
 }
 .sidebar .sidebar-wrapper ul li .sub-menu li .sub-menu {
   background-color: #282d35;
 }
 .sidebar .sidebar-wrapper ul li .sub-menu li .sub-menu li i {
-  margin-left: 20px;
+  margin-left: 50px;
 }
 .sidebar .sidebar-wrapper ul li.active {
   font-weight: 400;
@@ -254,7 +265,16 @@
   width: 50px;
 }
 .collapsed > .sidebar .sidebar-wrapper ul li .sub-menu li i {
+  font-size: 14px;
+  height: 50px;
   margin-left: 0;
+  width: 50px;
+  padding: 18px 0;
+}
+.collapsed > .sidebar .sidebar-wrapper ul li .sub-menu li .title {
+  font-size: 14px;
+  height: 50px;
+  padding: 15px 0;
 }
 .collapsed > .sidebar .sidebar-wrapper ul li .sub-menu li .sub-menu li i {
   margin-left: 0;

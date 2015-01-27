@@ -68,6 +68,7 @@
             margin: 16px 20px 0 0;
 
             &:before {
+              font-family: 'FontAwesome';
               content: "\f105";
             }
 
@@ -79,7 +80,7 @@
           .title {
             display: inline-block;
             float: left;
-            height: 40px;
+            height: 50px;
             padding: 15px 0;
 
             -webkit-transition: all .25s;
@@ -93,19 +94,32 @@
           clear: both;
           display: none;
           font-weight: 300;
+          font-size: 12px;
           position: relative;
 
           li {
-            i {
-              margin-left: 10px;
+            a {
+              height: 40px;
+
+              i {
+                height: 40px;
+                margin-left: 25px;
+                padding: 15px 0;
+                width: 40px;
+              }
+
+              .title {
+                height: 40px;
+                padding: 12px 0;
+              }
             }
 
             .sub-menu {
               background-color: lighten(@background, 6%);
 
               li {
-                  i {
-                  margin-left: 20px;
+                i {
+                  margin-left: 50px;
                 }
               }
             }
@@ -136,7 +150,17 @@
   // Remove margin for icons in sub-menus
   .sidebar-wrapper ul li .sub-menu li {
     i {
+      font-size: 14px;
+      height: 50px;
       margin-left: 0;
+      width: 50px;
+      padding: 18px 0;
+    }
+
+    .title {
+      font-size: 14px;
+      height: 50px;
+      padding: 15px 0;
     }
 
     .sub-menu li {
