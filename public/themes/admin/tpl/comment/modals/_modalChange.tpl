@@ -1,35 +1,39 @@
-<div class="modal hide fade" id="modal-comment-change">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Change comment manager{/t}</h3>
-    </div>
-    <div class="modal-body">
+<div class="modal fade" id="modal-comment-change">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{t}Change comment manager{/t}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{t}Opennemas supports multiple managers for comments. You can change to your desired manager whenever you want.{/t}</p>
+                <p>{t}Pick the method to manage comments:{/t}</p>
 
-        <p>{t}Opennemas supports multiple managers for comments. You can change to your desired manager whenever you want.{/t}</p>
-        <p>{t}Pick the method to manage comments:{/t}</p>
-
-        <ul class="comment-type-selector">
-            <li>
-                <a href="{url name=admin_comments_select type=onm}" class="clearfix">
-                    <i class="icon icon-comment"></i>
-                    {t}Built-in system{/t}
-                </a>
-            </li>
-            <li>
-                <a href="{url name=admin_comments_select type=disqus}" class="clearfix">
-                    <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" />
-                    {t}Disqus{/t}
-                </a>
-            </li>
-            <li>
-                <a href="{url name=admin_comments_select type=facebook}" class="clearfix">
-                    <i class="icon icon-facebook-sign"></i>
-                    {t}Facebook{/t}
-                </a>
-            </li>
-        </ul>
+                <div class="row">
+                    <div class="col-md-4 comment-system">
+                        <a href="{url name=admin_comments_select type=onm}">
+                            <i class="fa fa-comment fa-6x"></i>
+                            <h4>{t}Built-in system{/t}</h4>
+                        </a>
+                    </div>
+                    <div class="col-md-4 comment-system">
+                        <a href="{url name=admin_comments_select type=disqus}" class="clearfix">
+                            <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" height="78"/>
+                            <h4>{t}Disqus{/t}</h4>
+                        </a>
+                    </div>
+                    <div class="col-md-4 comment-system">
+                        <a href="{url name=admin_comments_select type=facebook}" class="clearfix">
+                            <i class="fa fa-facebook fa-6x"></i>
+                            <h4>{t}Facebook{/t}</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 <script>
 jQuery("#modal-comment-change").modal({
     backdrop: 'static', //Show a grey back drop
@@ -45,3 +49,4 @@ jQuery('.change').click(function(e) {
     e.preventDefault();
 });
 </script>
+
