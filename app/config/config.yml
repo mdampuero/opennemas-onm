@@ -61,6 +61,9 @@ opennemas:
             uglifycss:
                 bin:  /usr/local/bin/uglifycss
                 node: /usr/bin/nodejs
+            less:
+                node:  /usr/bin/nodejs
+                node_paths: [%kernel.root_dir%/../node_modules/less/node_modules/lib]
 
 # Twig Configuration
 twig:
