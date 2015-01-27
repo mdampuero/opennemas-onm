@@ -8,44 +8,54 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Polls{/t} :: {t}Settings{/t}
+                            <i class="fa fa-pie-chart fa-lg"></i>
+                            {t}Polls{/t}
                         </h4>
                     </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{t}Settings{/t}</h5>
+                    </li>
                 </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_polls}" title="{t}Go back to list{/t}" value="{t}Go back to list{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i>
+                                {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />
-                        {t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_polls}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="wrapper-content">
 
+    <div class="content">
         {render_messages}
-
-        <div class="form-horizontal panel">
-
-            <div class="control-group">
-                <label for="poll[typeValue]" class="control-label">{t}Poll section preferences{/t}</label>
-                <div class="controls">
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="" class="control-label">{t}Values type{/t}</label>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>
+                            {t}Poll section preferences{/t}
+                        </h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label class="control-label" for="poll_settings[typeValue]">
+                                {t}Values type{/t}
+                            </label>
                             <div class="controls">
                                 <select name="poll_settings[typeValue]" id="poll_settings[typeValue]" class="required">
                                     <option value="percent" {if $configs['poll_settings']['typeValue'] eq 'percent'} selected {/if}>{t}Percents{/t}</option>
@@ -53,55 +63,69 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="poll[heightPoll]" class="control-label">{t}Charts height{/t}</label>
-                            <div class="controls">
-                                <input type="number" name="poll_settings[heightPoll]" value="{$configs['poll_settings']['heightPoll']|default:"500"}" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="poll[heightPoll]">
+                                        {t}Charts height{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" name="poll_settings[heightPoll]" type="number" value="{$configs['poll_settings']['heightPoll']|default:"500"}" />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="poll[widthPoll]" class="control-label">{t}Charts width{/t}</label>
-                            <div class="controls">
-                                <input type="number" name="poll_settings[widthPoll]" value="{$configs['poll_settings']['widthPoll']|default:"600"}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="" class="control-label">{t}Poll home widget preferences{/t}</label>
-                <div class="controls">
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="poll[total_widget]" class="control-label">{t}Elements in frontpage widget{/t}</label>
-                            <div class="controls">
-                                <input type="number" name="poll_settings[total_widget]" value="{$configs['poll_settings']['total_widget']|default:"1"}" required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="poll[widthWidget]" class="control-label">{t}Chart width{/t}</label>
-                            <div class="controls">
-                                <input type="number" name="poll_settings[widthWidget]" value="{$configs['poll_settings']['widthWidget']|default:"240"}" required/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="poll[heightWidget]" class="control-label">{t}Chart height{/t}</label>
-                            <div class="controls">
-                                <input type="number" class="required" id="name" name="poll_settings[heightWidget]" value="{$configs['poll_settings']['heightWidget']|default:"240"}" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="poll[widthPoll]">
+                                        {t}Charts width{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" name="poll_settings[widthPoll]" type="number" value="{$configs['poll_settings']['widthPoll']|default:"600"}" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-        </div><!-- / -->
-
+            <div class="col-md-6">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Poll home widget preferences{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label class="form-label" for="poll[total_widget]">
+                                {t}Elements in frontpage widget{/t}
+                            </label>
+                            <div class="controls">
+                                <input name="poll_settings[total_widget]" type="number" value="{$configs['poll_settings']['total_widget']|default:"1"}" required/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="poll[widthWidget]">
+                                        {t}Chart width{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" name="poll_settings[widthWidget]" type="number" value="{$configs['poll_settings']['widthWidget']|default:"240"}" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="poll[heightWidget]">{t}Chart height{/t}</label>
+                                    <div class="controls">
+                                        <input class="form-control" id="name" name="poll_settings[heightWidget]" type="number" value="{$configs['poll_settings']['heightWidget']|default:"240"}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <input type="hidden" id="action" name="action" value="save_config" />
     </div>
 </form>

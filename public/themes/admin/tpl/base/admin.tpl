@@ -39,7 +39,7 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
-            @Common/components/select2/select2-bootstrap.css,
+            @Common/components/select2/select2.css,
 
             @Common/css/bootstrap/bootstrap-fileupload.min.css,
 

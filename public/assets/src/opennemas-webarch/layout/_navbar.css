@@ -175,21 +175,19 @@
   top: 0px;
 }
 
-.page-navbar .quick-section .dropdown .btn {
-  background: none;
-  border: none;
-  padding: 7px;
+.page-navbar .quicklinks.dropdown {
+  cursor: pointer;
+  padding: 8px 0;
 }
 
-.page-navbar .quick-section .dropdown .caret {
-  margin-top: -12px;
+.page-navbar .quicklinks.dropdown [data-toggle=dropdown] {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-weight: 300;
 }
 
-.page-navbar .quick-section .dropdown-current {
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 120px;
+.page-navbar .quicklinks.dropdown .caret {
+  margin-top: -5px;
 }
 
 .page-navbar .search-input input {

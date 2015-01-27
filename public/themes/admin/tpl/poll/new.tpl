@@ -70,153 +70,174 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Polls{/t} :: {if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}
+                            <i class="fa fa-pie-chart fa-lg"></i>
+                            {t}Polls{/t}
                         </h4>
                     </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h5>
+                    </li>
                 </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_polls category=$category}" title="{t}Go back{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i>
+                                {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_polls category=$category}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="wrapper-content contentform clearfix">
+    <div class="content">
         {render_messages}
-
-        <div class="form-vertical contentform-inner">
-            <div class="contentform-main">
-                <div class="control-group">
-                    <label class="control-label" for="title">{t}Title{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="title" name="title"
-                            value="{$poll->title|clearslash|escape:"html"}" required="required" class="input-xxlarge"/>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="subtitle">{t}Subtitle{/t}</label>
-                    <div class="controls">
-                        <input  type="text" id="subtitle" name="subtitle"
-                            value="{$poll->subtitle|clearslash}"  required="required" class="input-xxlarge" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="contentbox-container">
-                <div class="contentbox">
-                    <h3 class="title">{t}Attributes{/t}</h3>
-                    <div class="content">
-                        <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
-                        <label for="content_status">{t}Available{/t}</label>
-
-                        <div class="control-group">
-                            <label for="endtime" class="control-label">{t}Publication closed date{/t}</label>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid simple">
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label class="form-label" for="title">{t}Title{/t}</label>
                             <div class="controls">
-                                <input type="datetime" id="closetime" name="params[closetime]" value="{$poll->params['closetime']}">
+                                <input class="form-control" id="title" name="title" required="required" type="text" value="{$poll->title|clearslash|escape:"html"}"/>
                             </div>
                         </div>
-
-                        <hr class="divisor">
-
-                        {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
-                        <label for="with_comment">{t}Allow comments{/t}</label>
-                        <br>
-                        {/is_module_activated}
-
-                        <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} value="1" />
-                        <label for="favorite">{t}Favorite{/t}</label>
-
-                        <hr class="divisor">
-
-                        <div class="control-group">
-                            <label class="control-label" for="category">{t}Category{/t}</label>
+                        <div class="form-group">
+                            <label class="form-label" for="subtitle">{t}Subtitle{/t}</label>
                             <div class="controls">
-                                <select name="category" id="category"  >
-                                    {section name=as loop=$allcategorys}
-                                        <option value="{$allcategorys[as]->pk_content_category}"
-                                            {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                            {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                            <option value="{$subcat[as][su]->pk_content_category}"
-                                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                                {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/section}
-                                    {/section}
+                                <input class="form-control" id="subtitle" name="subtitle" type="text" required="required" value="{$poll->subtitle|clearslash}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="visualization">{t}Visualization format{/t}</label>
+                            <div class="controls">
+                                <select name="visualization" id="visualization" class="required">
+                                    <option value="0" {if $poll->visualization eq 0} selected {/if}>{t}Circular{/t}</option>
+                                    <option value="1" {if $poll->visualization eq 1} selected {/if}>{t}Bars{/t}</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Tags{/t}</h3>
-                    <div class="content">
-                        <div class="control-group">
+                        <div class="form-group">
+                            <label class="form-label" for="answers">{t}Allowed answers{/t}</label>
                             <div class="controls">
-                                <input  type="text" id="metadata" name="metadata" required="required" value="{$poll->metadata|clearslash|escape:"html"}"/>
+                                <div id="answers">
+                                    {foreach name=i from=$items item=answer}
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-4">
+                                                <div class="form-group">
+                                                    <input name="votes[{$answer.pk_item}]" type="hidden" value="{$answer.votes}">
+                                                    <div class="input-group ">
+                                                        <input class="form-control" name="item[{$answer.pk_item}]" type="text" value="{$answer.item}"/>
+                                                        <div class="input-group-btn">
+                                                            <div class="btn btn-danger">
+                                                                <i class="fa fa-trash-o"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-md-8">
+                                                <small class="help-block">{t}Votes{/t}:  {$answer.votes} / {$poll->total_votes}</small>
+                                            </div>
+                                        </div>
+                                    {/foreach}
+                                </div>
+                                <br>
+                                <a id="add_answer" class="btn">
+                                    <i class="icon-plus"></i>
+                                    {t}Add new answer{/t}
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="contentbox-main">
-                <div class="control-group">
-                    <label class="control-label" for="visualization">{t}Visualization format{/t}</label>
-                    <div class="controls">
-                        <select name="visualization" id="visualization" class="required">
-                            <option value="0" {if $poll->visualization eq 0} selected {/if}>{t}Circular{/t}</option>
-                            <option value="1" {if $poll->visualization eq 1} selected {/if}>{t}Bars{/t}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="answers">{t}Allowed answers{/t}</label>
-                        <div class="controls">
-                            <div id="answers">
-                                {foreach name=i from=$items item=answer}
-                                    <div class="poll_answer">
-                                        <div class="input-append" style="display:inline-block">
-                                            <input type="text" name="item[{$answer.pk_item}]" value="{$answer.item}"/>
-                                            <input type="hidden" name="votes[{$answer.pk_item}]" value="{$answer.votes}">
-                                            <div class="btn addon del">
-                                                <i class="icon-trash"></i>
-                                            </div>
-                                        </div>
-                                        <small style="display:inline-block">{t}Votes{/t}:  {$answer.votes} / {$poll->total_votes}</small>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="grid simple">
+                            <div class="grid-title">
+                                <h4>{t}Attributes{/t}</h4>
+                            </div>
+                            <div class="grid-body">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
+                                        <label for="content_status">{t}Available{/t}</label>
                                     </div>
-                                {/foreach}
                                 </div>
-                            <br>
-                            <a id="add_answer" class="btn">
-                                <i class="icon-plus"></i>
-                                {t}Add new answer{/t}
-                            </a>
+                                <div class="form-group">
+                                    <label class="form-label" for="endtime">{t}Publication closed date{/t}</label>
+                                    <div class="controls">
+                                        <input id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
+                                    </div>
+                                </div>
+                                {is_module_activated name="COMMENT_MANAGER"}
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                         <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($poll) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($poll) && $poll->with_comment eq 1)}checked{/if} value="1" />
+                                        <label for="with_comment">{t}Allow comments{/t}</label>
+                                    </div>
+                                </div>
+                                {/is_module_activated}
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} value="1" />
+                                        <label for="favorite">{t}Favorite{/t}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="form-label" for="category">{t}Category{/t}</label>
+                                        <div class="controls">
+                                            <select name="category" id="category">
+                                                {section name=as loop=$allcategorys}
+                                                    <option value="{$allcategorys[as]->pk_content_category}"
+                                                        {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                                        {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                                    {section name=su loop=$subcat[as]}
+                                                        <option value="{$subcat[as][su]->pk_content_category}"
+                                                        {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                                            {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                    {/section}
+                                                {/section}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="grid simple">
+                            <div class="grid-title">
+                                <h4>{t}Tags{/t}</h4>
+                            </div>
+                            <div class="grid-body">
+                                 <div class="form-group">
+                                    <div class="controls">
+                                        <input class="form-control" id="metadata" name="metadata" required="required" type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-
         </div>
     </div>
 </form>
