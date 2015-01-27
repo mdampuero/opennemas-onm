@@ -67,11 +67,19 @@
             @Common/src/opennemas-webarch/base/*,
             @Common/src/opennemas-webarch/components/*,
             @Common/src/opennemas-webarch/layout/*,
-            @Common/src/opennemas-webarch/main.css"
-        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
+            @Common/src/opennemas-webarch/main.css,
+
+            @AdminTheme/less/_comment.less"
+        filters="cssrewrite,less"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
     {block name="header-js"}
+         {javascripts src="
+            @Common/components/jquery/jquery.min.js,
+            @Common/components/bootstrap/dist/js/bootstrap.min.js
+        " filters="uglifyjs"}
+            <script type="text/javascript" src="{$asset_url}"></script>
+        {/javascripts}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
             var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
@@ -136,8 +144,6 @@
         <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
         {javascripts src="
-            @Common/components/jquery/jquery.min.js,
-            @Common/components/bootstrap/dist/js/bootstrap.min.js,
             @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
 
             @Common/components/breakpoints/breakpoints.js,
