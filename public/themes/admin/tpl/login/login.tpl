@@ -17,14 +17,14 @@
         {stylesheets src="
         @Common/components/bootstrap/dist/css/bootstrap.min.css,
         @Common/components/font-awesome/css/font-awesome.min.css,
-        @Common/components/webarch/css/animate.min.css,
-        @Common/components/webarch/css/style.css,
-        @Common/components/webarch/css/responsive.css,
-        @Common/components/webarch/css/custom-icon-set.css,
-        @Common/components/webarch/css/magic_space.css,
-        @AdminTheme/less/pages/_login.css
+        @Common/src/webarch/css/animate.min.css,
+        @Common/src/webarch/css/style.css,
+        @Common/src/webarch/css/responsive.css,
+        @Common/src/webarch/css/custom-icon-set.css,
+        @Common/src/webarch/css/magic_space.css,
+        @AdminTheme/less/_login.less
         "
-        filters="cssrewrite"}
+        filters="cssrewrite,less"}
         <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
         <style type="text/css">
@@ -135,7 +135,7 @@
     {javascripts
     src="@Common/js/jquery/jquery.min.js,
     @Common/js/libs/bootstrap.js,
-    @Common/js/libs/modernizr.min.js,
+    @Common/components/modernizr/modernizr.js,
     @Common/js/onm/md5.min.js,
     @Common/js/admin.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
