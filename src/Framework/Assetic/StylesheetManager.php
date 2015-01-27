@@ -13,8 +13,9 @@ namespace Framework\Assetic;
 
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
-use Assetic\Filter\UglifyCssFilter;
 use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\LessFilter;
+use Assetic\Filter\UglifyCssFilter;
 
 /**
  * Asset manager to handle stylesheets assets.
@@ -48,6 +49,15 @@ class StylesheetManager extends AssetManager
                         new UglifyCssFilter(
                             $this->config['filters']['uglifycss']['bin'],
                             $this->config['filters']['uglifycss']['node']
+                        )
+                    );
+                    break;
+                case 'less':
+                    $this->fm->set(
+                        'less',
+                        new LessFilter(
+                            $this->config['filters']['less']['node'],
+                            $this->config['filters']['less']['node_paths']
                         )
                     );
                     break;
