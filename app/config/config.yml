@@ -56,14 +56,14 @@ opennemas:
         # Filters configuration
         filters:
             uglifyjs:
-                bin:  /usr/local/bin/uglifyjs
+                bin:  %kernel.root_dir%/../node_modules/.bin/uglifyjs
                 node: /usr/bin/nodejs
             uglifycss:
-                bin:  /usr/local/bin/uglifycss
+                bin:  %kernel.root_dir%/../node_modules/.bin/uglifycss
                 node: /usr/bin/nodejs
             less:
                 node:  /usr/bin/nodejs
-                node_paths: [%kernel.root_dir%/../node_modules/less/node_modules/lib]
+                node_paths: [%kernel.root_dir%/../node_modules]
 
 # Twig Configuration
 twig:
