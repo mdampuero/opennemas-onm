@@ -214,7 +214,7 @@ abstract class AssetManager
                 $hash = substr($hash, 0, strrpos($hash, '.'));
 
                 // Create and set target path
-                $target = $this->config['output_path'] . '/' . $name . '.'
+                $target = $this->config['output_path'] . '/' . $name . '-'
                     . $hash . '.' . $this->extension;
                 $parsed->setTargetPath($target);
 
@@ -246,7 +246,6 @@ abstract class AssetManager
 
         return $srcs;
     }
-
 
     /**
      * Creates a target asset name basing on the default target path.
