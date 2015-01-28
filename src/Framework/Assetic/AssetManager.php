@@ -199,7 +199,6 @@ abstract class AssetManager
         // Prepare the assets writer
         $this->writer = new AssetWriter($this->config['root']);
 
-
         if ($this->debug()) {
             foreach ($this->assets as &$asset) {
                 $name = substr($asset, strrpos($asset, '/') + 1);
@@ -207,9 +206,16 @@ abstract class AssetManager
 
                 $parsed = $this->af->createAsset($asset, $this->filters);
 
+                // Get hash to append to filename
+                $hash = substr(
+                    $parsed->getTargetPath(),
+                    strrpos($parsed->getTargetPath(), '/') + 1
+                );
+                $hash = substr($hash, 0, strrpos($hash, '.'));
+
                 // Create and set target path
                 $target = $this->config['output_path'] . '/' . $name . '.'
-                        . $this->extension;
+                    . $hash . '.' . $this->extension;
                 $parsed->setTargetPath($target);
 
                 $cached = new AssetCache(
@@ -241,46 +247,6 @@ abstract class AssetManager
         return $srcs;
     }
 
-    /**
-     * Parses the source path for an asset.
-     * @param string $src The asset source path.
-     *
-     * @return string The real asset source path.
-     */
-    private function parseAssetSrc($src)
-    {
-        if (strpos($src, '@') === 0) {
-            $theme = substr($src, 1, strpos($src, '/') - 1);
-            $asset = substr($src, strpos($src, '/'));
-
-            switch ($theme) {
-                case 'Common':
-                    $src = $this->config['folders']['common'] . $asset;
-                    break;
-                case 'Theme':
-                    $src = $this->config['folders']['themes']
-                        . $this->themePath . $asset;
-                    break;
-                default:
-                    if (strpos($theme, 'Theme') !== false) {
-                        $theme = $this->parseThemeName($theme);
-                        $src   = $this->config['folders']['themes']
-                            . DS . $theme . $asset;
-                    } elseif (strpos($theme, 'Bundle') !== false) {
-                        $theme = $this->parseBundleName($theme);
-                        $src   = $this->config['folders']['bundles']
-                            . DS . $theme . $asset;
-                    }
-
-            }
-
-            if (!$this->debug()) {
-                $src = $this->sitePath . $src;
-            }
-        }
-
-        return $src;
-    }
 
     /**
      * Creates a target asset name basing on the default target path.
@@ -323,6 +289,47 @@ abstract class AssetManager
             } else {
                 // Static site URL
                 $src = $this->config['asset_domain'] . $port . $src;
+            }
+        }
+
+        return $src;
+    }
+
+    /**
+     * Parses the source path for an asset.
+     * @param string $src The asset source path.
+     *
+     * @return string The real asset source path.
+     */
+    private function parseAssetSrc($src)
+    {
+        if (strpos($src, '@') === 0) {
+            $theme = substr($src, 1, strpos($src, '/') - 1);
+            $asset = substr($src, strpos($src, '/'));
+
+            switch ($theme) {
+                case 'Common':
+                    $src = $this->config['folders']['common'] . $asset;
+                    break;
+                case 'Theme':
+                    $src = $this->config['folders']['themes']
+                        . $this->themePath . $asset;
+                    break;
+                default:
+                    if (strpos($theme, 'Theme') !== false) {
+                        $theme = $this->parseThemeName($theme);
+                        $src   = $this->config['folders']['themes']
+                            . DS . $theme . $asset;
+                    } elseif (strpos($theme, 'Bundle') !== false) {
+                        $theme = $this->parseBundleName($theme);
+                        $src   = $this->config['folders']['bundles']
+                            . DS . $theme . $asset;
+                    }
+
+            }
+
+            if (!$this->debug()) {
+                $src = $this->sitePath . $src;
             }
         }
 
