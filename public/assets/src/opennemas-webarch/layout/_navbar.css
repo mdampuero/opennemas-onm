@@ -124,6 +124,15 @@
   padding: 8px 12px;
 }
 
+.fa-sub {
+  color: #f00;
+  font-size: 80%;
+  margin-left: -5px;
+  margin-top: 9px;
+  position: absolute;
+  text-shadow: 0 0 1px #000;
+}
+
 .page-navbar .quick-section > li > .a,
 .page-navbar .quick-section > li > .info {
   display: block;
@@ -176,11 +185,11 @@
 }
 
 .page-navbar .quicklinks.dropdown {
-  cursor: pointer;
-  padding: 8px 0;
+  padding-top: 10px;
 }
 
 .page-navbar .quicklinks.dropdown [data-toggle=dropdown] {
+  cursor: pointer;
   font-family: 'Open Sans';
   font-size: 14px;
   font-weight: 300;
