@@ -20,7 +20,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-bookmark"></i>
                         {t}Categories{/t}
                     </h4>
                 </li>
