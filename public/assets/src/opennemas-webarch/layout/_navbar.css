@@ -184,18 +184,18 @@
   top: 0px;
 }
 
-.page-navbar .quicklinks.dropdown {
+.actions-navbar .quicklinks.dropdown {
   padding-top: 10px;
 }
 
-.page-navbar .quicklinks.dropdown [data-toggle=dropdown] {
+.actions-navbar .quicklinks.dropdown [data-toggle=dropdown] {
   cursor: pointer;
   font-family: 'Open Sans';
   font-size: 14px;
   font-weight: 300;
 }
 
-.page-navbar .quicklinks.dropdown .caret {
+.actions-navbar .quicklinks.dropdown .caret {
   margin-top: -5px;
 }
 

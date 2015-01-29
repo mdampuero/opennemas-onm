@@ -25,16 +25,16 @@ i.ng-hide-add-active, .ng-hide-remove {
   display: inline-block !important;
 }
 
-ul.nav li.dropdown > ul.dropdown-menu {
+.actions-navbar ul.nav li.dropdown > ul.dropdown-menu {
   margin-top: 10px;
 }
 
 @media (min-width: 900px) {
-  ul.nav li.dropdown:hover > ul.dropdown-menu {
+  .actions-navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: none !important;
   }
 
-  ul.nav li.dropdown.open:hover > ul.dropdown-menu {
+  .actions-navbar ul.nav li.dropdown.open:hover > ul.dropdown-menu {
     display: block !important;
   }
 }
