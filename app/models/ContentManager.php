@@ -1894,7 +1894,7 @@ class ContentManager
         $contents = array();
 
         $sql = 'SELECT * FROM contents, contents_categories '
-              .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
+              .'WHERE fk_content_type IN (1,4,7,9) '
               .'AND DATE(starttime) = "'.$date.'" '
               .'AND content_status=1 AND in_litter=0 '
               .'AND pk_fk_content = pk_content '.$where
@@ -1903,20 +1903,21 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs !== false) {
+            $er = getService('entity_repository');
             $contents = array();
             while (!$rs->EOF) {
                 if ($rs->fields['fk_content_type'] == 1) {
-                    $content = new Article($rs->fields['pk_fk_content']);
+                    $content = $er->find('Article', $rs->fields['pk_fk_content']);
                     if (!empty($content->fk_video)) {
-                        $content->video = new Video($content->fk_video);
-
-                    } else {
-                        if (!empty($content->img1)) {
-                            $content->image = new Photo($content->img1);
-                        }
+                        $content->video = $er->find('Video', $content->fk_video);
+                    } elseif (!empty($content->img1)) {
+                        $content->image = $er->find('Photo', $content->img1);
                     }
                 } else {
-                    $content = new Content($rs->fields['pk_fk_content']);
+                    $content = $er->find(
+                        \classify($rs->fields['content_type_name']),
+                        $rs->fields['pk_fk_content']
+                    );
                     $content->content_type = $content->content_type_name;
                 }
                 $contents[] = $content;
