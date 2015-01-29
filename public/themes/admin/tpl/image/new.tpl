@@ -45,7 +45,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-picture-o"></i>
                         {t}Images{/t}
                     </h4>
                 </li>
