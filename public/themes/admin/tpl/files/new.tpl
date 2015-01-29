@@ -24,13 +24,21 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa file-o"></i>
                         {t}Files{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
                 <li class="quicklinks">
-                    <h5>{if $attaches}{t}Editing file{/t}{else}{t}Creating file{/t}{/if}</h5>
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        {if $attaches}
+                            {t}Editing file{/t}
+                        {else}
+                            {t}Creating file{/t}
+                        {/if}
+                    </h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
