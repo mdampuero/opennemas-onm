@@ -120,7 +120,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-bullhorn fa-lg"></i>
+                            <i class="fa fa-bullhorn"></i>
                             {t}Advertisement{/t}
                         </h4>
                     </li>

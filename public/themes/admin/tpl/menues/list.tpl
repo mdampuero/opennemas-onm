@@ -9,7 +9,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-list-alt fa-lg"></i>
+                            <i class="fa fa-list-alt"></i>
                             {t}Menus{/t}
                         </h4>
                     </li>
