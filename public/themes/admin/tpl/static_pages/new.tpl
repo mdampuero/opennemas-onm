@@ -9,13 +9,21 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-file-o"></i>
                         {t}Static Pages{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
                 <li class="quicklinks">
-                    <h5>{if !isset($page->id)}{t}Creating static page{/t}{else}{t}Editing page{/t}{/if}</h5>
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        {if !isset($page->id)}
+                            {t}Creating static page{/t}
+                        {else}
+                            {t}Editing page{/t}
+                        {/if}
+                    </h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
@@ -46,33 +54,39 @@
                 <div class="grid-body">
 
                     <div class="form-group">
-                        <label for="name" class="form-label">{t}Title{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="title" name="title" value="{$page->title|default:""}"
-                                   maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="slug" class="form-label">{t}URL{/t}</label>
-                        <span class="help">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html</span>
-                        <div class="controls">
-                            <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
-                                   maxlength="120" tabindex="2" required="required"  class="form-control"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="body" class="form-label clearfix">
-                            <div class="pull-left">{t}Body{/t}</div>
-                            <div class="pull-right">
-                                {acl isAllowed='PHOTO_ADMIN'}
-                                <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
-                                {/acl}
-                            </div>
+                        <label for="name" class="form-label">
+                            {t}Title{/t}
                         </label>
                         <div class="controls">
-                            <textarea name="body" id="body" tabindex="5" class="onm-editor form-control" rows="10">{$page->body|default:""}</textarea>
+                            <input class="form-control" id="title" name="title" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required="required"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slug" class="form-label">
+                            {t}URL{/t}
+                        </label>
+                        <span class="help">
+                            {t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html
+                        </span>
+                        <div class="controls">
+                            <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}" maxlength="120" tabindex="2" required="required"  />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="body">
+                            {t}Body{/t}
+                        </label>
+                        {acl isAllowed='PHOTO_ADMIN'}
+                            <div class="pull-right">
+                                <a class="btn btn-mini" href="#media-uploader" data-toggle="modal" data-position="body">
+                                    <i class="fa fa-plus"></i>
+                                    {t}Insert image{/t}
+                                </a>
+                            </div>
+                        {/acl}
+                        <div class="controls">
+                            <textarea class="onm-editor form-control" id="body" name="body" rows="10" tabindex="5">{$page->body|default:""}</textarea>
                         </div>
                     </div>
                 </div>
@@ -92,11 +106,12 @@
                         </div>
                     </div>
                     {/acl}
-
                     <div class="form-group">
-                        <label class="form-label" class="title">{t}Tags{/t}</h3>
+                        <label class="form-label" class="title">
+                            {t}Tags{/t}
+                        </label>
                         <div class="controls">
-                            <input  type="text" id="metadata" name="metadata" required="required" value="{$page->metadata|clearslash|escape:"html"}" class="form-control" />
+                            <input id="metadata" name="metadata" required="required" type="text" value="{$page->metadata|clearslash|escape:"html"}" class="form-control" />
                         </div>
                     </div>
 
@@ -104,8 +119,6 @@
             </div>
         </div>
     </div>
-
-
     <input type="hidden" name="filter[title]" value="{$smarty.request.filter.title|default:""}" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
