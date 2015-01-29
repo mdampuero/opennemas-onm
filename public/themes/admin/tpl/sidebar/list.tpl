@@ -7,7 +7,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-indent fa-flip-horizontal fa-lg"></i>
                         {t}Sidebars{/t}
                     </h4>
                 </li>

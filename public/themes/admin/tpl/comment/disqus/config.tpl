@@ -8,7 +8,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-comment fa-lg"></i>
+                            <i class="fa fa-comment"></i>
                             {t}Comments{/t}
                         </h4>
                     </li>

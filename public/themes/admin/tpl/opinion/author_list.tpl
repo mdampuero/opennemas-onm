@@ -7,7 +7,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-user fa-lg"></i>
+                            <i class="fa fa-user"></i>
                             {t}Authors{/t}
                         </h4>
                     </li>

@@ -107,7 +107,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
+                            <i class="fa fa-file-text-o"></i>
                             {t}Articles{/t}
                         </h4>
                     </li>
