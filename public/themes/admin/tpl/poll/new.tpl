@@ -70,7 +70,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-pie-chart fa-lg"></i>
+                            <i class="fa fa-pie-chart"></i>
                             {t}Polls{/t}
                         </h4>
                     </li>

@@ -26,7 +26,7 @@
                 <div class="all-actions pull-right">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
-                            <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                            <a class="btn btn-link" href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
                                 <i class="fa fa-gear"></i>
                             </a>
                         </li>

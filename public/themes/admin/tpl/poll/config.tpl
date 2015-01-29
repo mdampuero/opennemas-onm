@@ -2,13 +2,13 @@
 
 {block name="content"}
 <form action="{url name=admin_polls_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-        <div class="page-navbar actions-navbar">
+    <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-pie-chart fa-lg"></i>
+                            <i class="fa fa-pie-chart"></i>
                             {t}Polls{/t}
                         </h4>
                     </li>
