@@ -1888,47 +1888,42 @@ class ContentManager
 
         $where ='';
         if (!empty($categoryID)) {
-            $where =' AND pk_fk_content_category = '.$categoryID;
+            $where = ' AND pk_fk_content_category = '.$categoryID;
         }
-        // Initialization of variables
-        $contents = array();
 
-        $sql = 'SELECT * FROM contents, contents_categories '
+        $sql = 'SELECT content_type_name, pk_content FROM contents, contents_categories '
               .'WHERE fk_content_type IN (1,4,7,9) '
               .'AND DATE(starttime) = "'.$date.'" '
               .'AND content_status=1 AND in_litter=0 '
               .'AND pk_fk_content = pk_content '.$where
               .' ORDER BY  fk_content_type ASC, starttime DESC ';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->GetAll($sql);
 
-        if ($rs !== false) {
-            $er = getService('entity_repository');
-            $contents = array();
-            while (!$rs->EOF) {
-                if ($rs->fields['fk_content_type'] == 1) {
-                    $content = $er->find('Article', $rs->fields['pk_fk_content']);
-                    if (!empty($content->fk_video)) {
-                        $content->video = $er->find('Video', $content->fk_video);
-                    } elseif (!empty($content->img1)) {
-                        $content->image = $er->find('Photo', $content->img1);
-                    }
-                } else {
-                    $content = $er->find(
-                        \classify($rs->fields['content_type_name']),
-                        $rs->fields['pk_fk_content']
-                    );
-                    $content->content_type = $content->content_type_name;
-                }
-                $contents[] = $content;
-
-                $rs->MoveNext();
-            }
-
-            return $contents;
+        if ($rs == false) {
+            return false;
         }
 
-        return false;
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = array($item['content_type_name'], $item['pk_content']);
+        }
+
+        // Get contents from repository
+        $er = getService('entity_repository');
+        $contents = $er->findMulti($ids);
+
+        // Fetch video or image for article and opinions
+        foreach ($contents as $content) {
+            if (!empty($content->fk_video)) {
+                $content->video = $er->find('Video', $content->fk_video);
+            } elseif (!empty($content->img1)) {
+                $content->image = $er->find('Photo', $content->img1);
+            }
+        }
+
+        return $contents;
+
     }
 
     /**
