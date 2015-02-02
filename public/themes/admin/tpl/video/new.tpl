@@ -99,7 +99,8 @@
                             <button class="btn btn-primary" type="submit">
                         {/acl}
                     {/if}
-                            <span class="fa fa-save"></span>{t}Save{/t}
+                            <span class="fa fa-save"></span>
+                            {t}Save{/t}
                         </button>
                     </li>
                 </ul>
