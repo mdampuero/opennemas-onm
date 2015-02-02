@@ -52,12 +52,21 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
+                        <i class="fa fa-book"></i>
                         {t}Books{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
                 <li class="quicklinks">
-                    <h5>{if !isset($book->id)}{t}Creating Book{/t}{else}{t}Editing Book{/t}{/if}</h5>
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <h5>
+                        {if !isset($book->id)}
+                            {t}Creating Book{/t}
+                        {else}
+                            {t}Editing Book{/t}
+                        {/if}
+                    </h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
@@ -79,7 +88,8 @@
                     {else}
                         {acl isAllowed="BOOK_CREATE"}
                         <button class="btn btn-primary" href="{url name=admin_books_create}" name="continue" value="1">
-                             <img src="{$params.IMAGE_DIR}save.png"><br />{t}Save{/t}
+                             <span class="fa fa-save"></span>
+                             {t}Save{/t}
                         </button>
                         {/acl}
                     {/if}
