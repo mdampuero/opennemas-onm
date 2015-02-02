@@ -17,15 +17,22 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Instance Synchronization{/t} :: {t}Settings{/t}
+                            <i class="fa fa-exchange"></i>
+                            {t}Instance Synchronization{/t}
                         </h4>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{t}Settings{/t}</h5>
                     </li>
                 </ul>
                 <div class="all-actions pull-right">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                             <a href="{url name=admin_instance_sync_create}" class="btn btn-primary" title="{t}Add site to sync{/t}">
+                                <i class="fa fa-plus"></i>
                                 {t}Add site{/t}
                             </a>
                         </li>

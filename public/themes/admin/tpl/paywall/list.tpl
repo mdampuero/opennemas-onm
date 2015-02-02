@@ -13,7 +13,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-paypal"></i>
                         {t}Paywall{/t}
                     </h4>
                 </li>

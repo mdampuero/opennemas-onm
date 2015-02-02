@@ -20,7 +20,7 @@ jQuery(document).ready(function($) {
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-tags"></i>
                         {t}Keywords{/t}
                     </h4>
                 </li>
@@ -40,6 +40,7 @@ jQuery(document).ready(function($) {
                     {acl isAllowed="PCLAVE_CREATE"}
                     <li>
                         <button class="btn btn-primary" action="submit">
+                            <i class="fa fa-save"></i>
                             {t}Save{/t}
                         </button>
                     </li>

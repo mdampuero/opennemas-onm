@@ -9,7 +9,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-tags"></i>
                         {t}Keywords{/t}
                     </h4>
                 </li>
@@ -17,7 +17,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <h4>{t}Statistics{/t}</h5>
+                    <h5>{t}Statistics{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
@@ -25,6 +25,7 @@
                     {acl isAllowed="PCLAVE_CREATE"}
                     <li>
                         <a href="{url name=admin_keyword_create}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
                             {t}Create{/t}
                         </a>
                     </li>
@@ -63,59 +64,54 @@
 
 <div class="content">
 
-	{render_messages}
+    {render_messages}
 
     <div class="grid simple">
         <div class="grid-body no-padding">
             {if count($keywords) > 0}
-    		<table class="table table-hover table-condensed">
-    			<thead>
-    				<tr>
-    					<th style="width:20px;" class="nowrap">{t}Type{/t}</th>
-    					<th scope=col>{t}Keyword{/t}</th>
-    					<th scope=col>{t}Replacement value{/t}</th>
-    					<th scope=col style="width:100px;" class="right nowrap">{t}Actions{/t}</th>
-    				</tr>
-    			</thead>
-
-    			<tbody>
-    				{foreach name=k from=$keywords|default:array() item=keyword}
-    				<tr>
-    					<td class="center nowrap">
-    						{$types[$keyword->tipo]}
-    					</td>
-    					<td>
-    						{$keyword->pclave}
-    					</td>
-    					<td>
-    						{$keyword->value|default:"-"}
-    					</td>
-
-    					<td class="right">
-    						<div class="btn-group">
-    							<a class="btn" href="{url name=admin_keyword_show id=$keyword->id}" title="{t}Edit this content{/t}">
-    	                            <i class="fa fa-pencil"></i>{t}Edit{/t}
-    	                        </a>
-    	                        <a href="{url name=admin_keyword_delete id=$keyword->id}" class="btn btn-danger" title="{t}Delete{/t}">
-    	                            <i class="fa fa-trash-o"></i>
-    	                        </a>
-    						</div>
-
-    					</td>
-    				</tr>
-    				{/foreach}
-    			</tbody>
-
-    			<tfoot>
-    				<tr>
-    					<td colspan="5" class="center">
-    						<div class="pagination">
-    							{$pagination->links}
-    						</div>
-    					</td>
-    				</tr>
-    			</tfoot>
-    		</table>
+            <table class="table table-hover no-margin">
+                <thead>
+                    <tr>
+                        <th style="width:20px;" class="nowrap">{t}Type{/t}</th>
+                        <th scope=col>{t}Keyword{/t}</th>
+                        <th scope=col>{t}Replacement value{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach name=k from=$keywords|default:array() item=keyword}
+                    <tr>
+                        <td class="center nowrap">
+                            {$types[$keyword->tipo]}
+                        </td>
+                        <td>
+                            {$keyword->pclave}
+                            <div class="listing-inline-actions">
+                                <a class="link" href="{url name=admin_keyword_show id=$keyword->id}" title="{t}Edit this content{/t}">
+                                    <i class="fa fa-pencil"></i>
+                                    {t}Edit{/t}
+                                </a>
+                                <a class="link link-danger" href="{url name=admin_keyword_delete id=$keyword->id}" title="{t}Delete{/t}">
+                                    <i class="fa fa-trash-o"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            {$keyword->value|default:"-"}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="center">
+                            <div class="pagination">
+                                {$pagination->links}
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
             {else}
             <div class="center">
                 <p>

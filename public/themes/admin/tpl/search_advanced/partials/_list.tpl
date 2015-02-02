@@ -2,7 +2,7 @@
     <div class="spinner"></div>
     <div class="spinner-text">{t}Loading{/t}...</div>
 </div>
-<table class="table table-hover table-condensed" ng-if="!loading">
+<table class="table table-hover no-margin" ng-if="!loading">
     <thead>
         <th class="title">{t}Title{/t}</th>
         <th class="center" style="width:10px;"></th>
@@ -45,11 +45,11 @@
     </tbody>
     <tfoot>
         <td colspan="3" class="center">
-            <div class="pull-left" ng-if="shvs.contents.length > 0">
+            <div class="pagination-info pull-left" ng-if="shvs.contents.length > 0">
                 {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
             </div>
             <div class="pull-right" ng-if="shvs.contents.length > 0">
-                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
             </div>
             <span ng-if="shvs.contents.length == 0">&nbsp;</span>
         </td>

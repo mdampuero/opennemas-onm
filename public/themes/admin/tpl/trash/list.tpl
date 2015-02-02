@@ -10,7 +10,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-trash-o"></i>
                         {t}Trash{/t}
                     </h4>
                 </li>
@@ -150,75 +150,66 @@
     <div class="grid simple">
 
         <div class="grid-body no-padding">
-            <div ng-include="'trash_list'"></div>
-        </div>
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table table-hover no-margin" ng-if="!loading">
+                    <thead>
+                       <tr>
+                            <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                            <th class="left">{t}Content type{/t}</th>
+                            <th class='left'>{t}Title{/t}</th>
+                            <th style="width:40px">{t}Section{/t}</th>
+                            <th class="left" style="width:110px;">{t}Date{/t}</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-if="shvs.contents.length == 0">
+                            <td class="center"colspan=6>
+                                {t}There is no elements in the trash{/t}
+                            </td>
+                        </tr>
+                        <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                            <td>
+                                <checkbox index="[% content.id %]">
+                            </td>
+                            <td>
+                                <strong>[% content.content_type_l10n_name %]</strong>
+                            </td>
+                            <td>
+                                [% content.title %]
+                                <div class="listing-inline-actions">
+                                    <a class="link pointer" ng-click="open('modal-restore-from-trash', 'backend_ws_content_restore_from_trash', $index)" type="button" title="{t}Restore{/t}">
+                                        <i class="fa fa-retweet"></i>
+                                        {t}Restore{/t}
+                                    </a>
 
+                                    <button class="link link-danger" ng-click="open('modal-remove-permanently', 'backend_ws_content_remove_permanently', $index)" type="button" title="{t}Restore{/t}">
+                                        <i class="fa fa-trash-o"></i>
+                                        {t}Remove permanently{/t}
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="left">[% content.category_name %]</td>
+                            <td class="center nowrap">
+                                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="grid-footer clearfix" ng-if="!loading && shvs.contents.length > 0">
+            <div class="pagination-info pull-left">
+                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+            </div>
+            <div class="pull-right">
+                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+            </div>
+        </div>
     </div>
-        <script type="text/ng-template" id="trash_list">
-        <div class="spinner-wrapper" ng-if="loading">
-            <div class="spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
-        </div>
-        <table class="table table-hover table-condensed" ng-if="!loading">
-            <thead>
-               <tr>
-                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th class="left">{t}Content type{/t}</th>
-                    <th class='left'>{t}Title{/t}</th>
-                    <th style="width:40px">{t}Section{/t}</th>
-                    <th class="left" style="width:110px;">{t}Date{/t}</th>
-                    <th class="nowrap center" style="width:40px;">{t}Actions{/t}</th>
-               </tr>
-            </thead>
-            <tbody>
-                <tr ng-if="shvs.contents.length == 0">
-                    <td class="center"colspan=6>
-                        {t}There is no elements in the trash{/t}
-                    </td>
-                </tr>
-                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
-                    <td>
-                        <checkbox index="[% content.id %]">
-                    </td>
-                    <td>
-                        <strong>[% content.content_type_l10n_name %]</strong>
-                    </td>
-                    <td>
-                        [% content.title %]
-                        <div class="listing-inline-actions">
-                            <a class="link pointer" ng-click="open('modal-restore-from-trash', 'backend_ws_content_restore_from_trash', $index)" type="button" title="{t}Restore{/t}">
-                                <i class="fa fa-retweet"></i>
-                                {t}Restore{/t}
-                            </a>
-
-                            <button class="link link-danger" ng-click="open('modal-remove-permanently', 'backend_ws_content_remove_permanently', $index)" type="button" title="{t}Restore{/t}">
-                                <i class="fa fa-trash-o"></i>
-                                {t}Remove permanently{/t}
-                            </button>
-                        </div>
-                    </td>
-                    <td class="left">[% content.category_name %]</td>
-                    <td class="center nowrap">
-                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="10" class="center">
-                        <div class="pull-left" ng-if="shvs.contents.length > 0">
-                            {t}Showing{/t} [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] {t}of{/t} [% shvs.total %]
-                        </div>
-                        <div class="pull-right" ng-if="shvs.contents.length > 0">
-                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
-                        </div>
-                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-        </script>
-
         <script type="text/ng-template" id="modal-restore-from-trash">
             {include file="common/modals/_modalRestoreFromTrash.tpl"}
         </script>

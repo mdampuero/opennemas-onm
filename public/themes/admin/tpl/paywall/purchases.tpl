@@ -8,7 +8,7 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-paypal"></i>
                         {t}Paywall{/t}
                     </h4>
                 </li>
@@ -16,7 +16,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <h4>{t}Purchases{/t}</h5>
+                    <h5>{t}Purchases{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
