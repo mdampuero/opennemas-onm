@@ -166,6 +166,7 @@ class Album extends Content
         $this->cover_id    = $rs->fields['cover_id'];
         $this->cover_image = new Photo($rs->fields['cover_id']);
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
+        $this->category_title = $this->loadCategoryTitle($rs->fields['pk_album']);
 
         return $this;
     }
