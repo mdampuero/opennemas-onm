@@ -14,7 +14,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
+                            <i class="fa fa-database"></i>
                             {t}Cache Manager{/t}
                         </h4>
                     </li>
@@ -32,6 +32,7 @@
                     </li>
                     <li class="quicklinks">
                         <button type="submit" class="btn btn-primary" id="delete-caches" class="delChecked">
+                            <i class="fa fa-trash"></i>
                             {t}Delete selected{/t}
                         </button>
                     </li>
@@ -112,7 +113,7 @@
             <div class="grid-body {if count($caches) > 0}no-padding{/if}">
                 {if count($caches)>0}
                 <div class="table-wrapper">
-                    <table class="table table-hover table-condensed">
+                    <table class="table table-hover no-margin">
                         <thead>
                             <tr>
                                 <th  style="width:10px;">
@@ -297,7 +298,6 @@
                             {/if}
                             {/section}
                         </tbody>
-
                         <tfoot>
                             <tr>
                                 <td colspan="8" class="center">

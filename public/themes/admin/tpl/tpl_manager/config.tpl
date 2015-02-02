@@ -9,9 +9,15 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Cache Manager{/t} :: {t}Settings{/t}
+                            <i class="fa fa-database"></i>
+                            {t}Cache Manager{/t}
                         </h4>
+                    </li>
+                    <li class="quicklins">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklins">
+                        <h5>{t}Settings{/t}</h5>
                     </li>
                 </ul>
             </div>
