@@ -140,16 +140,11 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
     }
 
     /**
-     * Import all videos from an Youtube channel
+     * Import all videos from a Youtube channel
      *
      */
     public function importYoutubeVideos()
     {
-        $this->output->writeln(
-            "<fg=yellow>*** Importing Youtube videos from ".
-            "<info>$this->channel</info> ***</fg=yellow>\n"
-        );
-
         // Get total number of videos
         $videos = simplexml_load_file(
             'http://gdata.youtube.com/feeds/base/users/'.$this->channel.
@@ -158,70 +153,110 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
         $totalVideos = $videos->children('openSearch', true)->totalResults;
         settype($totalVideos, 'integer');
 
-        $failedVideos = [];
-        $importedVideos = $notImportedVideos = 0;
-        for($i = 1; $i <= $totalVideos; $i++) {
-            // Fetch video from channel
-            $video = simplexml_load_file(
+        $this->output->writeln(
+            "<fg=yellow>*** Importing $totalVideos Youtube videos from ".
+            "<info>$this->channel</info> channel ***</fg=yellow>\n"
+        );
+
+        $maxVideosPerQuery = 50;
+        $totalqueries = ceil($totalVideos/$maxVideosPerQuery);
+
+        $failedVideosUrl = [];
+        $importedVideos = $notImportedVideos = $alreadyImported = 0;
+        for($i = 1; $i <= $totalqueries; $i++) {
+            // Fetch $maxVideosPerQuery video from channel
+            $videos = simplexml_load_file(
                 'http://gdata.youtube.com/feeds/base/users/'.$this->channel.
-                '/uploads?max-results=1&start-index='.$i
+                '/uploads?max-results='.$maxVideosPerQuery.'&start-index='.
+                ($maxVideosPerQuery*($i-1)+1)
             );
 
-            // Get video public url
-            $videoUrl = (string)$video->entry->link->attributes()['href'];
+            $this->output->writeln(
+                'http://gdata.youtube.com/feeds/base/users/'.$this->channel.
+                '/uploads?max-results='.$maxVideosPerQuery.'&start-index='.
+                ($maxVideosPerQuery*($i-1)+1)
+            );
 
-            // Get all video information
-            $videoP = new \Panorama\Video(rawurldecode($videoUrl));
-            $information = $videoP->getVideoDetails();
+            foreach ($videos->entry as $video) {
+                // Get video public url
+                $videoUrl = (string)$video->link->attributes()['href'];
 
-            // Get video title
-            $title = (string)$video->entry->title;
+                if ($this->isAlreadyImported($videoUrl)) {
+                    $alreadyImported++;
+                    continue;
+                }
 
-            // Fetch dates with format
-            $published = new \DateTime((string)$video->entry->published);
-            $date = date_format($published, 'Y-m-d H:i:s');
+                // Get all video information
+                $videoP = new \Panorama\Video(rawurldecode($videoUrl));
+                $information = $videoP->getVideoDetails();
 
-            // Generate data array for creating video in Onm instance
-            $data = [
-                'content_status' => 1,
-                'with_comment' => 1,
-                'created' => $date,
-                'starttime' => $date,
-                'category' => $this->category,
-                'fk_author' => 0,
-                'video_url' => $videoUrl,
-                'title' => $title,
-                'metadata' => \StringUtils::getTags($title),
-                'description' => (string)$video->entry->summary,
-                'author_name' => 'Youtube',
-                'information' => $information,
-                'type' => 'web-source',
-                'id' => '',
-            ];
+                // Get video title
+                $title = (string)$video->title;
 
-            $video = new \Video();
+                // Fetch dates with format
+                $published = new \DateTime((string)$video->published);
+                $date = date_format($published, 'Y-m-d H:i:s');
 
-            // Generate stats for imported videos
-            if ($video->create($data)) {
-                $importedVideos++;
-            } else {
-                $notImportedVideos++;
-                array_push($failedVideos, $videoUrl);
+                // Generate data array for creating video in Onm instance
+                $data = [
+                    'content_status' => 1,
+                    'with_comment' => 1,
+                    'created' => $date,
+                    'starttime' => $date,
+                    'category' => $this->category,
+                    'fk_author' => 0,
+                    'video_url' => $videoUrl,
+                    'title' => $title,
+                    'metadata' => \StringUtils::getTags($title),
+                    'description' => (string)$video->summary,
+                    'author_name' => 'Youtube',
+                    'information' => $information,
+                    'type' => 'web-source',
+                    'id' => '',
+                ];
+
+                $video = new \Video();
+
+                // Generate stats for imported videos
+                if ($video->create($data)) {
+                    $importedVideos++;
+                } else {
+                    $notImportedVideos++;
+                    array_push($failedVideosUrl, $videoUrl);
+                }
             }
+
+            // Try to avoid youtube query limits
+            sleep(3);
         }
 
         $this->output->writeln(
             'Imported videos: '. $importedVideos ."\n".
+            'Already imported videos: '. $alreadyImported ."\n".
             'Failed imported videos:' . $notImportedVideos ."\n"
         );
 
-        if (!empty($failedVideos)) {
-            foreach ($failedVideos as $video) {
+        if (!empty($failedVideosUrl)) {
+            foreach ($failedVideosUrl as $video) {
                 $this->output->writeln(
                     $video."\n"
                 );
             }
         }
+    }
+
+    /**
+     * Check if the video is already imported
+     *
+     * @param string Video url
+     */
+    protected function isAlreadyImported($video)
+    {
+        $sql = "SELECT count(pk_video) as total FROM contents, videos WHERE ".
+               "video_url='".$video."' AND pk_content=pk_video";
+        $rs  = $this->connection->Execute($sql);
+
+        return (bool)($rs->fields['total']);
     }
 
     /**
