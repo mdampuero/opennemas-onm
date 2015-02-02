@@ -171,12 +171,6 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
                 ($maxVideosPerQuery*($i-1)+1)
             );
 
-            $this->output->writeln(
-                'http://gdata.youtube.com/feeds/base/users/'.$this->channel.
-                '/uploads?max-results='.$maxVideosPerQuery.'&start-index='.
-                ($maxVideosPerQuery*($i-1)+1)
-            );
-
             foreach ($videos->entry as $video) {
                 // Get video public url
                 $videoUrl = (string)$video->link->attributes()['href'];
