@@ -10,43 +10,63 @@
 
 <form action="{url name=admin_importer_xmlfile_import}" method="POST" enctype="multipart/form-data">
 
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-             <div class="title"><h2>{t}XML importer{/t} :: {t}Select files{/t}</h2></div>
-            <ul class="old-button">
-                {*<li>
-                    <button type="submit" name="dryrun" value="1">
-                        <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
-                    </button>
-                </li>*}
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                        <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />{t}Remove File{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />{t}Add File{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_importer_xmlfile_config}" title="{t}Config XML Schema{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config XML Schema{/t}" ><br />
-                        {t}Config{/t}
-                    </a>
-                </li>
-            </ul>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-download"></i>
+                            {t}XML importer{/t}
+                        </h4>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{t}Select files{/t}</h5>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="#" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
+                                <i class="fa fa-times"></i>
+                                {t}Remove File{/t}
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="#" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
+                                <i class="fa fa-plus"></i>
+                                {t}Add File{/t}
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_importer_xmlfile_config}" title="{t}Config XML Schema{/t}">
+                                <i class="fa fa-gear"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            {acl isAllowed="ARTICLE_CREATE"}
+                               <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-download"></i>
+                                    {t}Import{/t}
+                                </button>
+                            {/acl}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="wrapper-content">
+    <div class="content">
 
         {render_messages}
 
