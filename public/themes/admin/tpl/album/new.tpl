@@ -132,183 +132,227 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <h4>
-                            <i class="fa fa-home fa-lg"></i>
-                            {t}Albums{/t} :: {if isset($album->id)}{t}Editing album{/t}{else}{t}Creating Album{/t}{/if}
+                            <i class="fa fa-stack-overflow"></i>
+                            {t}Albums{/t}
                         </h4>
                     </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>
+                            {if isset($album->id)}
+                                {t}Editing album{/t}
+                            {else}
+                                {t}Creating Album{/t}
+                            {/if}
+                        </h5>
+                    </li>
                 </ul>
+                <div class="all-actions pull-right">
+                    <ul class="quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_albums category=$category}" title="{t}Go back{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            {if isset($album->id)}
+                                {acl isAllowed="ALBUM_UPDATE"}
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        {t}Save{/t}
+                                    </button>
+                                {/acl}
+                            {else}
+                                {acl isAllowed="ALBUM_CREATE"}
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-save"></i>
+                                        {t}Save{/t}
+                                    </button>
+                                {/acl}
+                            {/if}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <ul class="old-button">
-                <li>
-                    {if isset($album->id)}
-                        {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
-                        </button>
-                        {/acl}
-                    {else}
-                        {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y continuar" ><br />{t}Save{/t}
-                        </button>
-                        {/acl}
-                    {/if}
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_albums category=$category}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="wrapper-content contentform">
 
+    <div class="content">
         {render_messages}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid simple">
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label class="form-label" for="title">
+                                {t}Title{/t}
+                            </label>
+                            <div class="controls">
+                                <input class="form-control" id="title" name="title" required="required" type="text" value="{$album->title|default:""}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="agency">
+                                {t}Agency{/t}
+                            </label>
+                            <div class="controls">
+                                <input class="form-control" id="agency" name="agency" type="text" value="{$album->agency|clearslash|escape:"html"}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="description">
+                                {t}Description{/t}
+                            </label>
+                            <div class="controls">
+                                <textarea class="form-control onm-editor" data-preset="simple" id="description" name="description">{$album->description|clearslash}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Attributes{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="checkbox">
+                            <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
+                            <label for="content_status">{t}Available{/t}</label>
+                        </div>
+                        {is_module_activated name="COMMENT_MANAGER"}
+                            <div class="checkbox">
+                                <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
+                                <label for="with_comment">{t}Allow comments{/t}</label>
+                            </div>
+                        {/is_module_activated}
+                        <div class="form-group">
+                            <label class="form-label">
+                                {t}Category{/t}
+                            </label>
+                            <div class="controls">
+                                {include file="common/selector_categories.tpl" name="category" item=$album}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                {t}Author{/t}
+                            </label>
+                            <div class="controls">
+                                {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                                    <select name="fk_author" id="fk_author">
+                                        {html_options options=$authors selected=$album->fk_author}
+                                    </select>
+                                {aclelse}
+                                    {if !isset($album->fk_author)}
+                                        {$smarty.session.realname}
+                                        <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
+                                    {else}
+                                        {$authors[$album->fk_author]}
+                                        <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                                    {/if}
+                                {/acl}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                {t}Tags{/t}
+                            </label>
+                            <div class="controls">
+                                <input type="text" id="metadata" name="metadata" required="required" value="{$album->metadata}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Album images{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="form-group" id="album-images">
+                            <div id="list-of-images" class="list-of-images clearfix controls">
+                                <ul>
+                                    {if !empty($photos)}
+                                    {foreach from=$photos item=photo key=key name=album_photos}
+                                    <li class="image thumbnail" id="img{$photo['photo']->pk_photo}">
+                                        <div class="overlay-image">
+                                            <div>
+                                                <ul class="image-buttons clearfix">
+                                                    <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="fa fa-pencil"></i></a></li>
+                                                    <li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <img
+                                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
+                                             data-id="{$photo['photo']->pk_photo}"
+                                             alt="{$photo->name}"/>
+                                        <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
+                                        <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
+                                    </li><!-- /image -->
+                                    {/foreach}
+                                    {/if}
+                                    <li class="image add-image thumbnail">
+                                        <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
+                                    </li><!-- /image -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Cover image{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="cover-image {if isset($album) && $album->cover_id}assigned{/if}">
+                            <div class="image-data">
+                                <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
+                                    {if !empty($album->cover_id)}
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
+                                    {/if}
+                                </a>
+                                <div class="article-resource-footer">
+                                    <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
+                                </div>
+                            </div>
+                            <div class="not-set">
+                                {t}Image not set{/t}
+                            </div>
+                            <div class="btn-group">
+                                <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                                <a href="#" class="unset btn btn-small btn-danger">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="form-vertical album-edit-form">
 
-        <div class="contentform-inner clearfix">
-            <div class="contentform-main">
 
-                <div class="control-group">
-                    <label for="title" class="control-label">{t}Title{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="title" name="title" value="{$album->title|default:""}" class="input-xxlarge" required="required"/>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="agency" class="control-label">{t}Agency{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="agency" name="agency"
-                            value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="description" class="control-label">{t}Description{/t}</label>
-                    <div class="controls">
-                        <textarea name="description" id="description" class="onm-editor" data-preset="simple">{$album->description|clearslash}</textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contentbox-container">
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Attributes{/t}</h3>
-                    <div class="content">
-                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}> <label for="content_status" >{t}Available{/t}</label>
-                        <br/>
-                        {is_module_activated name="COMMENT_MANAGER"}
-                        <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
-                        <label for="with_comment">{t}Allow comments{/t}</label>
-                        <hr class="divisor">
-                        {/is_module_activated}
-
-                        <h4>{t}Category{/t}</h4>
-                        {include file="common/selector_categories.tpl" name="category" item=$album}
-                        <br/>
-
-                        <hr class="divisor" style="margin-top:8px;">
-                        <h4>{t}Author{/t}</h4>
-                        {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                            <select name="fk_author" id="fk_author">
-                                {html_options options=$authors selected=$album->fk_author}
-                            </select>
-                        {aclelse}
-                            {if !isset($album->fk_author)}
-                                {$smarty.session.realname}
-                                <input type="hidden" name="fk_author" value="{$smarty.session.userid}">
-                            {else}
-                                {$authors[$album->fk_author]}
-                                <input type="hidden" name="fk_author" value="{$album->fk_author}">
-                            {/if}
-                        {/acl}
-                    </div>
-                </div>
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Tags{/t}</h3>
-                    <div class="content">
-                        <div class="control-group">
-                            <div class="controls">
-                                <input  type="text" id="metadata" name="metadata" required="required" value="{$album->metadata}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="contentform-main">
 
-                <div class="control-group" id="album-images">
-                    <label for="album_photos_id[]" class="control-label"><h5>{t}Album images{/t}</h5></label>
-                    <div id="list-of-images" class="list-of-images clearfix controls">
-                        <ul>
-                            {if !empty($photos)}
-                            {foreach from=$photos item=photo key=key name=album_photos}
-                            <li class="image thumbnail" id="img{$photo['photo']->pk_photo}">
-                                <div class="overlay-image">
-                                    <div>
-                                        <ul class="image-buttons clearfix">
-                                            <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="fa fa-pencil"></i></a></li>
-                                            <li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <img
-                                     src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
-                                     data-id="{$photo['photo']->pk_photo}"
-                                     alt="{$photo->name}"/>
-                                <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
-                                <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
-                            </li><!-- /image -->
-                            {/foreach}
-                            {/if}
-                            <li class="image add-image thumbnail">
-                                <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
-                            </li><!-- /image -->
-                        </ul>
-                    </div>
-                </div>
+
 
 
             </div>
 
-            <div class="contentbox-container">
-                <div class="contentbox" >
-                    <h3 class="title">{t}Cover image{/t}</h3>
-                    <div class="content cover-image {if isset($album) && $album->cover_id}assigned{/if}">
-                        <div class="image-data">
-                            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
-                                {if !empty($album->cover_id)}
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
-                                {/if}
-                            </a>
-                            <div class="article-resource-footer">
-                                <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
-                            </div>
-                        </div>
-
-                        <div class="not-set">
-                            {t}Image not set{/t}
-                        </div>
-
-                        <div class="btn-group">
-                            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-                            <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
             <input type="hidden" name="id" id="id" value="{$album->id|default:""}" />
         </div><!-- contentform-inner -->
