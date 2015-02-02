@@ -109,12 +109,12 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="{t escape="off"}In home{/t}">
+                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
                                 <i class="fa fa-home"></i>
                             </a>
                         </li>
                         <li class="quicklinks">
-                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="{t escape="off"}Drop from home{/t}">
+                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
                                 <i class="fa fa-home"></i>
                                 <i class="fa fa-times fa-sub text-danger"></i>
                             </a>
