@@ -44,6 +44,7 @@ jQuery(document).ready(function($) {
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
+                        <i class="fa fa-newspaper-o"></i>
                         {t}ePapers{/t}
                     </h4>
                 </li>
