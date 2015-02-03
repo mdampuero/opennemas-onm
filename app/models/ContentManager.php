@@ -437,9 +437,11 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
+        $em = getService('entity_repository');
+
         // iterate over all found contents and initialize them
         foreach ($contentsArray as $element) {
-            $content = new $element['content_type']($element['id']);
+            $content = $em->find($element['content_type'], $element['id']);
 
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
