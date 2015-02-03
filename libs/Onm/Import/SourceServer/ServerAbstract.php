@@ -220,7 +220,7 @@ abstract class ServerAbstract
      * @param  int   $maxAge timestamp of the max age allowed for files
      * @return array the list of files without those with age > $magAge
      **/
-    protected function _filterOldFiles($files, $maxAge)
+    protected function filterOldFiles($files, $maxAge)
     {
         if (!empty($maxAge)) {
             $files = array_filter(
