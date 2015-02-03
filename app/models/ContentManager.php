@@ -532,21 +532,20 @@ class ContentManager
             return $returnValue;
         }
 
+        $conn   = getService('dbal_connection');
         $logger = getService('application.log');
 
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
             $positions[] = array(
-                '\'' . $element['id'] . '\'',
-                '\'' . $categoryID . '\'',
-                '\'' . $element['position'] . '\'',
-                '\'' . $element['placeholder'] . '\'',
-                '\'' . $element['content_type'] . '\'',
+                $conn->quote($element['id'], \PDO::PARAM_INT),
+                $conn->quote($categoryID, \PDO::PARAM_INT),
+                $conn->quote($element['position'], \PDO::PARAM_INT),
+                $conn->quote($element['placeholder'], \PDO::PARAM_STR),
+                $conn->quote($element['content_type'], \PDO::PARAM_STR)
             );
             $contentIds[] = $element['id'];
         }
-
-        $conn = getService('dbal_connection');
 
         try {
             $conn->beginTransaction();
