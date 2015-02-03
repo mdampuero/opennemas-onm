@@ -393,32 +393,30 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
-        if (count($categories) > 0) {
-            $categoriesSQL = implode(', ', $categories);
-            $sql = 'SELECT * FROM content_positions '
-              .'WHERE `fk_category` IN ('.$categoriesSQL.') '
-              .'ORDER BY position ASC ';
-
-
-            // Fetch the id, placeholder, position, and content_type
-            // in this category's frontpage
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            while (!$rs->EOF) {
-                $contents []= array(
-                    'content_id'   => $rs->fields['pk_fk_content'],
-                    'frontpage_id' => $rs->fields['fk_category'],
-                    'position'     => $rs->fields['position'],
-                    'placeholder'  => $rs->fields['placeholder'],
-                    'params'       => unserialize($rs->fields['params']),
-                    'content_type' => $rs->fields['content_type'],
-                );
-
-                $rs->MoveNext();
-            }
+        if (count($categories) == 0) {
+            return $contents;
         }
 
-        // Return the ids array
+        $conn = getService('dbal_connection');
+
+        $categoriesSQL = implode(', ', $categories);
+        $sql = 'SELECT * FROM content_positions '
+          .'WHERE `fk_category` IN ('.$categoriesSQL.') '
+          .'ORDER BY position ASC ';
+
+        $rs = $conn->fetchAll($sql);
+
+        foreach ($rs as $content) {
+            $contents []= array(
+                'content_id'   => $content['pk_fk_content'],
+                'frontpage_id' => $content['fk_category'],
+                'position'     => $content['position'],
+                'placeholder'  => $content['placeholder'],
+                'params'       => unserialize($content['params']),
+                'content_type' => $content['content_type'],
+            );
+        }
+
         return $contents;
     }
 
@@ -437,9 +435,11 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
+        $em = getService('entity_repository');
+
         // iterate over all found contents and initialize them
         foreach ($contentsArray as $element) {
-            $content = new $element['content_type']($element['id']);
+            $content = $em->find($element['content_type'], $element['id']);
 
             // only add it to the final results if is not in litter
             if ($content->in_litter == 0) {
@@ -524,65 +524,64 @@ class ContentManager
         $categoryID,
         $elements = array()
     ) {
-        // Starting the Transaction
-        $GLOBALS['application']->conn->StartTrans();
-
         $positions = array();
         $contentIds = array();
         $returnValue = false;
-        if (count($elements) > 0) {
-            // Clean all the contents for this category after insert the new ones
-            $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
-                $categoryID
+
+        if (empty($elements)) {
+            return $returnValue;
+        }
+
+        $conn   = getService('dbal_connection');
+        $logger = getService('application.log');
+
+        // Foreach element setup the sql values statement part
+        foreach ($elements as $element) {
+            $positions[] = array(
+                $conn->quote($element['id'], \PDO::PARAM_INT),
+                $conn->quote($categoryID, \PDO::PARAM_INT),
+                $conn->quote($element['position'], \PDO::PARAM_INT),
+                $conn->quote($element['placeholder'], \PDO::PARAM_STR),
+                $conn->quote($element['content_type'], \PDO::PARAM_STR)
             );
+            $contentIds[] = $element['id'];
+        }
 
-            if (!$clean) {
-                $GLOBALS['application']->conn->RollbackTrans();
-                return false;
-            }
+        try {
+            $conn->beginTransaction();
 
-            // Foreach element setup the sql values statement part
-            foreach ($elements as $element) {
-                $positions[] = array(
-                    $element['id'],
-                    $categoryID,
-                    $element['position'],
-                    $element['placeholder'],
-                    $element['content_type'],
-                );
-                $contentIds []= $element['id'];
-            }
+            // Clean all the contents for this category after insert the new ones
+            self::clearContentPositionsForHomePageOfCategory($categoryID, $conn);
 
             // construct the final sql statement and execute it
             $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
                   . ' position, placeholder, content_type) '
-                  . 'VALUES (?,?,?,?,?)';
+                  . 'VALUES ';
 
-            $sqlPrep = $GLOBALS['application']->conn->Prepare($stmt);
-
-            $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
-
-            // Handling if there were some errors into the execution
-            if (!$rs) {
-                /* Notice log of this action */
-                $logger = getService('logger');
-                $logger->notice(
-                    'User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                    .') updated frontpage of category '.$categoryID.' with error message: '
-                    .$GLOBALS['application']->conn->ErrorMsg()
-                );
-                $returnValue = false;
-            } else {
-                // Unset suggested flag if saving content positions in frontpage
-                if ($categoryID == 0) {
-                    self::dropSuggestedFlagFromContentIdsArray($contentIds);
-                }
-                $returnValue = true;
+            foreach ($positions as $position) {
+                $stmt .= '(' . implode(',', $position) . '),';
             }
-        }
 
-        // Finishing transaction
-        $GLOBALS['application']->conn->CompleteTrans();
+            $stmt = trim($stmt, ',');
+
+            $conn->executeUpdate($stmt);
+
+            // Unset suggested flag if saving content positions in frontpage
+            if ($categoryID == 0) {
+                self::dropSuggestedFlagFromContentIdsArray($contentIds, $conn);
+            }
+
+            $conn->commit();
+            $returnValue = true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+
+            $logger->error(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') updated frontpage of category '.$categoryID.' with error message: '
+                .$e->getMessage()
+            );
+        }
 
         return $returnValue;
     }
@@ -593,9 +592,15 @@ class ContentManager
      * @param array $contentIds the list of content ids to drop the suggested flag
      *
      * @return boolean true if all went well
-     **/
-    public static function dropSuggestedFlagFromContentIdsArray($contentIds)
-    {
+     */
+    public static function dropSuggestedFlagFromContentIdsArray(
+        $contentIds,
+        $conn = false
+    ) {
+        if (!$conn) {
+            $conn = getService('dbal_connection');
+        }
+
         if (is_array($contentIds) && (count($contentIds) > 0)) {
             $contentIdsSQL = implode(', ', $contentIds);
 
@@ -603,14 +608,14 @@ class ContentManager
                  . 'SET `frontpage`=0, `changed`=? '
                  . 'WHERE `pk_content` IN ('.$contentIdsSQL.')';
             $values = array(date("Y-m-d H:i:s"));
-            $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
+            // $stmt = $conn->prepare($sql);
 
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+            if ($conn->executeUpdate($sql, $values) === false) {
                 return false;
             }
 
             /* Notice log of this action */
-            $logger = getService('logger');
+            $logger = getService('application.log');
             $logger->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid']
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
@@ -620,7 +625,6 @@ class ContentManager
         }
 
         return false;
-
     }
 
     /**
@@ -631,27 +635,22 @@ class ContentManager
     * @return boolean if all went good this will be true and viceversa
     */
     public static function clearContentPositionsForHomePageOfCategory(
-        $categoryID
+        $categoryID,
+        $conn = false
     ) {
-        // clean actual contents for the homepage of this category
-        $sql = 'DELETE FROM content_positions '
-              .'WHERE `fk_category`='.$categoryID;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        // return the value and log if there were errors
-        if (!$rs) {
-            $logger = getService('logger');
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                .') clear contents frontpage of category '.$categoryID.
-                'with error message: '.$GLOBALS['application']->conn->ErrorMsg()
-            );
-            $returnValue = false;
-        } else {
-            $returnValue = true;
+        if (!$conn) {
+            $conn = getService('dbal_connection');
         }
 
-        return $returnValue;
+        // clean actual contents for the homepage of this category
+        $sql = 'DELETE FROM content_positions WHERE `fk_category` = ' . $categoryID;
+        $conn->executeUpdate($sql);
+
+        $logger = getService('application.log');
+        $logger->info(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+            .') clear contents frontpage of category '.$categoryID
+        );
     }
 
     /**

@@ -329,7 +329,7 @@ CREATE TABLE `content_positions` (
   `params` text CHARACTER SET latin1,
   `content_type` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`pk_fk_content`,`fk_category`,`position`,`placeholder`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
