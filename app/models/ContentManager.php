@@ -593,9 +593,15 @@ class ContentManager
      * @param array $contentIds the list of content ids to drop the suggested flag
      *
      * @return boolean true if all went well
-     **/
-    public static function dropSuggestedFlagFromContentIdsArray($contentIds)
-    {
+     */
+    public static function dropSuggestedFlagFromContentIdsArray(
+        $contentIds,
+        $conn = false
+    ) {
+        if (!$conn) {
+            $conn = getService('dbal_connection');
+        }
+
         if (is_array($contentIds) && (count($contentIds) > 0)) {
             $contentIdsSQL = implode(', ', $contentIds);
 
@@ -603,14 +609,14 @@ class ContentManager
                  . 'SET `frontpage`=0, `changed`=? '
                  . 'WHERE `pk_content` IN ('.$contentIdsSQL.')';
             $values = array(date("Y-m-d H:i:s"));
-            $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
+            // $stmt = $conn->prepare($sql);
 
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+            if ($conn->executeUpdate($sql, $values) === false) {
                 return false;
             }
 
             /* Notice log of this action */
-            $logger = getService('logger');
+            $logger = getService('application.log');
             $logger->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid']
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
@@ -620,7 +626,6 @@ class ContentManager
         }
 
         return false;
-
     }
 
     /**
@@ -631,27 +636,22 @@ class ContentManager
     * @return boolean if all went good this will be true and viceversa
     */
     public static function clearContentPositionsForHomePageOfCategory(
-        $categoryID
+        $categoryID,
+        $conn = false
     ) {
-        // clean actual contents for the homepage of this category
-        $sql = 'DELETE FROM content_positions '
-              .'WHERE `fk_category`='.$categoryID;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        // return the value and log if there were errors
-        if (!$rs) {
-            $logger = getService('logger');
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                .') clear contents frontpage of category '.$categoryID.
-                'with error message: '.$GLOBALS['application']->conn->ErrorMsg()
-            );
-            $returnValue = false;
-        } else {
-            $returnValue = true;
+        if (!$conn) {
+            $conn = getService('dbal_connection');
         }
 
-        return $returnValue;
+        // clean actual contents for the homepage of this category
+        $sql = 'DELETE FROM content_positions WHERE `fk_category` = ' . $categoryID;
+        $conn->executeUpdate($sql);
+
+        $logger = getService('application.log');
+        $logger->info(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+            .') clear contents frontpage of category '.$categoryID
+        );
     }
 
     /**
