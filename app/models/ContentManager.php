@@ -524,65 +524,60 @@ class ContentManager
         $categoryID,
         $elements = array()
     ) {
-        // Starting the Transaction
-        $GLOBALS['application']->conn->StartTrans();
-
         $positions = array();
         $contentIds = array();
         $returnValue = false;
-        if (count($elements) > 0) {
-            // Clean all the contents for this category after insert the new ones
-            $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
-                $categoryID
+
+        if (empty($elements)) {
+            return $returnValue;
+        }
+
+        // Foreach element setup the sql values statement part
+        foreach ($elements as $element) {
+            $positions[] = array(
+                $element['id'],
+                $categoryID,
+                $element['position'],
+                $element['placeholder'],
+                $element['content_type'],
             );
+            $contentIds[] = $element['id'];
+        }
 
-            if (!$clean) {
-                $GLOBALS['application']->conn->RollbackTrans();
-                return false;
-            }
+        $conn = getService('dbal_connection');
 
-            // Foreach element setup the sql values statement part
-            foreach ($elements as $element) {
-                $positions[] = array(
-                    $element['id'],
-                    $categoryID,
-                    $element['position'],
-                    $element['placeholder'],
-                    $element['content_type'],
-                );
-                $contentIds []= $element['id'];
-            }
+        try {
+            $conn->beginTransaction();
+
+            // Clean all the contents for this category after insert the new ones
+            self::clearContentPositionsForHomePageOfCategory($categoryID, $conn);
 
             // construct the final sql statement and execute it
             $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
                   . ' position, placeholder, content_type) '
                   . 'VALUES (?,?,?,?,?)';
 
-            $sqlPrep = $GLOBALS['application']->conn->Prepare($stmt);
-
-            $rs = $GLOBALS['application']->conn->Execute($sqlPrep, $positions);
-
-            // Handling if there were some errors into the execution
-            if (!$rs) {
-                /* Notice log of this action */
-                $logger = getService('logger');
-                $logger->notice(
-                    'User '.$_SESSION['username'].' ('.$_SESSION['userid']
-                    .') updated frontpage of category '.$categoryID.' with error message: '
-                    .$GLOBALS['application']->conn->ErrorMsg()
-                );
-                $returnValue = false;
-            } else {
-                // Unset suggested flag if saving content positions in frontpage
-                if ($categoryID == 0) {
-                    self::dropSuggestedFlagFromContentIdsArray($contentIds);
-                }
-                $returnValue = true;
+            foreach ($positions as $position) {
+                $conn->executeUpdate($stmt, $position);
             }
-        }
 
-        // Finishing transaction
-        $GLOBALS['application']->conn->CompleteTrans();
+            // Unset suggested flag if saving content positions in frontpage
+            if ($categoryID == 0) {
+                self::dropSuggestedFlagFromContentIdsArray($contentIds, $conn);
+            }
+
+            $conn->commit();
+            $returnValue = true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+
+            $logger = getService('application.log');
+            $logger->error(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid']
+                .') updated frontpage of category '.$categoryID.' with error message: '
+                .$e->getMessage()
+            );
+        }
 
         return $returnValue;
     }
