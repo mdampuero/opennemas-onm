@@ -393,32 +393,30 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
-        if (count($categories) > 0) {
-            $categoriesSQL = implode(', ', $categories);
-            $sql = 'SELECT * FROM content_positions '
-              .'WHERE `fk_category` IN ('.$categoriesSQL.') '
-              .'ORDER BY position ASC ';
-
-
-            // Fetch the id, placeholder, position, and content_type
-            // in this category's frontpage
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            while (!$rs->EOF) {
-                $contents []= array(
-                    'content_id'   => $rs->fields['pk_fk_content'],
-                    'frontpage_id' => $rs->fields['fk_category'],
-                    'position'     => $rs->fields['position'],
-                    'placeholder'  => $rs->fields['placeholder'],
-                    'params'       => unserialize($rs->fields['params']),
-                    'content_type' => $rs->fields['content_type'],
-                );
-
-                $rs->MoveNext();
-            }
+        if (count($categories) == 0) {
+            return $contents;
         }
 
-        // Return the ids array
+        $conn = getService('dbal_connection');
+
+        $categoriesSQL = implode(', ', $categories);
+        $sql = 'SELECT * FROM content_positions '
+          .'WHERE `fk_category` IN ('.$categoriesSQL.') '
+          .'ORDER BY position ASC ';
+
+        $rs = $conn->fetchAll($sql);
+
+        foreach ($rs as $content) {
+            $contents []= array(
+                'content_id'   => $content['pk_fk_content'],
+                'frontpage_id' => $content['fk_category'],
+                'position'     => $content['position'],
+                'placeholder'  => $content['placeholder'],
+                'params'       => unserialize($content['params']),
+                'content_type' => $content['content_type'],
+            );
+        }
+
         return $contents;
     }
 
