@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Yaml;
 
 use Onm\DatabaseConnection;
 
-class DatabacheCheckSchemaCommand extends ContainerAwareCommand
+class DatabaseCheckSchemaCommand extends ContainerAwareCommand
 {
     /**
      * Path to the file with the master schema for an instance.
