@@ -532,14 +532,16 @@ class ContentManager
             return $returnValue;
         }
 
+        $logger = getService('application.log');
+
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
             $positions[] = array(
-                $element['id'],
-                $categoryID,
-                $element['position'],
-                $element['placeholder'],
-                $element['content_type'],
+                '\'' . $element['id'] . '\'',
+                '\'' . $categoryID . '\'',
+                '\'' . $element['position'] . '\'',
+                '\'' . $element['placeholder'] . '\'',
+                '\'' . $element['content_type'] . '\'',
             );
             $contentIds[] = $element['id'];
         }
@@ -555,11 +557,15 @@ class ContentManager
             // construct the final sql statement and execute it
             $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
                   . ' position, placeholder, content_type) '
-                  . 'VALUES (?,?,?,?,?)';
+                  . 'VALUES ';
 
             foreach ($positions as $position) {
-                $conn->executeUpdate($stmt, $position);
+                $stmt .= '(' . implode(',', $position) . '),';
             }
+
+            $stmt = trim($stmt, ',');
+
+            $conn->executeUpdate($stmt);
 
             // Unset suggested flag if saving content positions in frontpage
             if ($categoryID == 0) {
@@ -571,7 +577,6 @@ class ContentManager
         } catch (\Exception $e) {
             $conn->rollback();
 
-            $logger = getService('application.log');
             $logger->error(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid']
                 .') updated frontpage of category '.$categoryID.' with error message: '
