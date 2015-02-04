@@ -164,6 +164,9 @@
     </div>
 
     <div class="content">
+        <div class="btn btn-primary" media-picker="/ws/contents" selection="true" selection-multiple="true" selection-limit="5">
+            Media picker
+        </div>
         {render_messages}
         <div class="row">
             <div class="col-md-8">
