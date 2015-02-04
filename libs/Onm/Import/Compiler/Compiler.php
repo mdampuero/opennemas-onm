@@ -130,12 +130,10 @@ class Compiler
     {
         $fileListing = glob($this->syncPath.'/serversync.*.php');
 
-        if (!array_key_exists(0, $fileListing)) {
-            return [];
+        if (is_array($fileListing) && array_key_exists(0, $fileListing)) {
+            return unserialize(file_get_contents($fileListing[0]));
         }
 
-        $serverFile = $fileListing[0];
-
-        return unserialize(file_get_contents($serverFile));
+        return [];
     }
 }
