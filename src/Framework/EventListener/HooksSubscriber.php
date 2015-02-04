@@ -365,13 +365,13 @@ class HooksSubscriber implements EventSubscriberInterface
         $output ='';
 
         foreach ($availableCategories as $category) {
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-            $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned successfully.");
-            $output .= sprintf($message, $category->name);
+            // Delete RSS frontpage for category
+            $cacheManager->delete($category->name.'|RSS');
+            // Delete manual frontpage for category
+            $cacheManager->delete($category->name.'|1');
+            // Delete blog frontpage for category
+            $cacheManager->delete('frontpage|'.$category->name);
         }
-
-        return $output;
     }
 
     /**
