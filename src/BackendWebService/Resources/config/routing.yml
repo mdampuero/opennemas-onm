@@ -6,12 +6,16 @@ backend_ws_comments:
     resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
     prefix:   /
 
-backend_ws_menus:
-    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
+backend_ws_content:
+    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
     prefix:   /
 
-backend_ws_widgets:
-    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
+backend_ws_media_picker:
+    resource: @BackendWebServiceBundle/Resources/config/routing/media-picker.yml
+    prefix:   /
+
+backend_ws_menus:
+    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
     prefix:   /
 
 backend_ws_opinions:
@@ -26,6 +30,6 @@ backend_ws_usergroups:
     resource: @BackendWebServiceBundle/Resources/config/routing/usergroups.yml
     prefix:   /
 
-backend_ws_content:
-    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
+backend_ws_widgets:
+    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
     prefix:   /
