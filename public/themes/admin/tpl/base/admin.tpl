@@ -60,9 +60,9 @@
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
             @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
-            @Common/css/jquery/bootstrap-checkbox/bootstrap-checkbox.css,
 
             @Common/src/sidebar/css/sidebar.css,
+            @Common/src/angular-media-picker/less/main.less,
 
             @Common/src/opennemas-webarch/base/*,
             @Common/src/opennemas-webarch/components/*,
@@ -82,11 +82,14 @@
         {/javascripts}
         <script>
             var appVersion = '{$smarty.const.DEPLOYED_AT}';
+            var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
             var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
         </script>
     {/block}
 </head>
 <body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.collapsed }">
+
+
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -186,6 +189,9 @@
             @Common/components/angular-ui-sortable/sortable.min.js,
 
             @Common/src/webarch/js/core.js,
+            @Common/src/angular-item-service/itemService.js,
+            @Common/src/angular-routing/routing.js,
+            @Common/src/angular-media-picker/js/media-picker.js,
 
             @AdminTheme/js/controllers.js,
             @AdminTheme/js/services.js,
