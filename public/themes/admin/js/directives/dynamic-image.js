@@ -7,9 +7,16 @@ angular.module('BackendApp.directives')
             restrict: 'AE',
             link: function ($scope, $element, $attrs) {
                 var baseUrl;
-                var html = '<img ng-src="[% src %]" [% extra_parameters %]>';
+                var imgClass = '';
+                var html = '<img [class] ng-src="[% src %]" [% extra_parameters %]>';
                 var src  = $attrs['path'];
                 var extra_parameters = '';
+
+                if ($attrs['class']) {
+                    imgClass = 'class="' + $attrs['class'] + '"';
+                }
+
+                html = html.replace('[class]', imgClass);
 
                 if (src.match('@http://@')) {
                     baseUrl = '';
