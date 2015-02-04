@@ -368,7 +368,7 @@ class HooksSubscriber implements EventSubscriberInterface
             // Delete RSS frontpage for category
             $cacheManager->delete($category->name.'|RSS');
             // Delete manual frontpage for category
-            $cacheManager->delete($category->name.'|1');
+            $cacheManager->delete('category|'.$category->name.'|1');
             // Delete blog frontpage for category
             $cacheManager->delete('frontpage|'.$category->name);
         }
