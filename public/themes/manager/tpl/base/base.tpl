@@ -247,7 +247,15 @@
             @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
             @Common/components/angular-ui-select/dist/select.min.js,
 
-            @Common/src/angular-*,
+            @Common/src/angular-authentication/*,
+            @Common/src/angular-form-autofill/*,
+            @Common/src/angular-gravatar/*,
+            @Common/src/angular-history/*,
+            @Common/src/angular-http-interceptor/*,
+            @Common/src/angular-item-service/*,
+            @Common/src/angular-messenger/*,
+            @Common/src/angular-resizable/*,
+            @Common/src/angular-routing/*,
             @Common/src/sidebar/js/sidebar.min.js,
 
             @ManagerTheme/js/app.js,
