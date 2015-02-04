@@ -1,7 +1,7 @@
 
 angular.module('BackendApp',[ 'sun.scrollable', 'BackendApp.controllers', 'BackendApp.directives',
         'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap', 'ui.sortable',
-        'pascalprecht.translate' ])
+        'pascalprecht.translate', 'onm.mediaPicker', 'onm.item' ])
     .config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
