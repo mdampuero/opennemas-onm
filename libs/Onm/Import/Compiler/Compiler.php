@@ -129,6 +129,11 @@ class Compiler
     public function getElementsFromCompileFile()
     {
         $fileListing = glob($this->syncPath.'/serversync.*.php');
+
+        if (!array_key_exists(0, $fileListing)) {
+            return [];
+        }
+
         $serverFile = $fileListing[0];
 
         return unserialize(file_get_contents($serverFile));
