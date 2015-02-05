@@ -10,60 +10,43 @@ angular.module('onm.oqlEncoder', [])
         var cleaned = {};
 
         for (var name in criteria) {
-          if (name != 'union') {
-            for (var i = 0; i < criteria[name].length; i++) {
-              if (criteria[name][i]['value']
-                && criteria[name][i]['value'] != -1
-                && criteria[name][i]['value'] !== ''
-              ){
-                var values = criteria[name][i]['value'].split(' ');
+          if (typeof criteria[name] != 'undefined'
+            && criteria[name] != -1
+            && criteria[name] !== ''
+          ){
+            var operator = '=';
+            var value    = [{
+              operator: operator,
+              value:    criteria[name]
+            }];
 
-                if (name.indexOf('_like') !== -1 ) {
-                  var shortName = name.substr(0, name.indexOf('_like'));
-                  cleaned[shortName] = [];
+            cleaned[name] = [];
 
-                  for (var i = 0; i < values.length; i++) {
-                    cleaned[shortName][i] = {
-                      value:    '%' + values[i] + '%',
-                      operator: 'LIKE'
-                    };
-                  }
-                } else {
-                  cleaned[name] = [];
-                  for (var i = 0; i < values.length; i++) {
-                    if (criteria[name]['operator']) {
-                        switch(criteria[name]['operator']) {
-                          case 'like':
-                          cleaned[name][i] = {
-                            value:    '%' + values[i] + '%',
-                            operator: 'LIKE'
-                          };
-                          break;
-                          case 'regexp':
-                            cleaned[name][i] = {
-                              value:    '(^' + values[i] + ',)|('
-                                + ',' + values[i] + ',)|('
-                                + values[i] + '$)',
-                              operator: 'REGEXP'
-                            };
-                            break;
-                          default:
-                            cleaned[name][i] = {
-                              value:    values[i],
-                              operator: criteria[name]['operator']
-                            };
-                        }
-                    } else {
-                      cleaned[name][i] = {
-                        value: values[i],
-                      };
-                    }
-                  }
-                }
+            if (name.indexOf('_like') !== -1 ) {
+              var values = criteria[name].split(' ');
+
+              name  = name.substr(0, name.indexOf('_like'));
+              value = [];
+              for (var i = 0; i < values.length; i++) {
+                value.push({
+                  operator: 'LIKE',
+                  value:    '%' + values[i] + '%'
+                });
               }
             }
-          } else {
-            cleaned[name] = criteria[name];
+
+            if (name.indexOf('_regexp') !== -1 ) {
+              name = name.substr(0, name.indexOf('_regexp'));
+
+              value = [{
+                operator: 'REGEXP',
+                value: '(^' + criteria[name] + ',)|('
+                  + ',' + criteria[name] + ',)|('
+                  + criteria[name] + '$)'
+              }];
+            }
+
+            cleaned[name] = value;
           }
         };
 
