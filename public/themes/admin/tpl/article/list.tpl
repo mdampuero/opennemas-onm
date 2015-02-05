@@ -224,7 +224,7 @@
         <div class="grid simple">
             <div class="grid-body no-padding">
                 <div class="spinner-wrapper" ng-if="loading">
-                    <div class="spinner"></div>
+                    <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
                 <div class="table-wrapper">
