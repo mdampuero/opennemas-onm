@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListController', [
-  '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', '$http',
-  function($modal, $scope, itemService, routing, messenger, webStorage, $http) {
+  '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
+  function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
 
     /**
      * The criteria to search.
@@ -55,7 +55,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      *
      * @type string
      */
-    $scope.union = 'OR';
+    $scope.union = 'AND';
 
     /**
      * Goes to content edit page.
@@ -81,12 +81,6 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       // Filters used in GUI
       $scope.criteria = filters;
 
-      // // Initialize filters from URL
-      var filters = itemService.decodeFilters();
-      for (var name in filters) {
-        $scope.criteria = filters[name];
-      }
-
       if (epp) {
         $scope.pagination.epp = epp;
       }
@@ -104,6 +98,26 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       // Set sortOrder
       if (sortOrder != null) {
         $scope.orderBy.value = sortOrder;
+      }
+
+      // Initialize filters from URL
+      var queryParams = queryManager.getParams();
+
+      for (var name in queryParams.criteria) {
+        $scope.criteria[name] = queryParams.criteria[name];
+      }
+
+      // Set sortBy
+      if (queryParams.order != null) {
+        $scope.orderBy = queryParams.order;
+      }
+
+      if (queryParams.epp) {
+        $scope.pagination.epp = queryParams.epp;
+      }
+
+      if (queryParams.page) {
+        $scope.pagination.page = queryParams.page;
       }
 
       // Route for list (required by $watch)
@@ -151,15 +165,18 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       // Enable spinner
       $scope.loading = 1;
 
-      itemService.encodeFilters($scope.criteria, $scope.orderBy,
-        $scope.pagination.epp, $scope.pagination.page, $scope.union);
-
       var url = routing.generate(route, {
         contentType: $scope.criteria.content_type_name
       });
 
-      var processed_filters = itemService.cleanFilters($scope.criteria);
-      console.log($scope.criteria, processed_filters)
+      var processed_filters = oqlEncoder.encode($scope.criteria);
+      var filtersToEncode = angular.copy($scope.criteria);
+
+      delete filtersToEncode.content_type_name;
+
+      queryManager.setParams(filtersToEncode, $scope.orderBy,
+        $scope.pagination.epp, $scope.pagination.page);
+
       var postData = {
         elements_per_page: $scope.pagination.epp,
         page: $scope.pagination.page,
@@ -170,13 +187,12 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       $scope.postData = postData;
 
       $http.post(url, postData).then(function(response) {
-        $scope.total = response.total;
-        $scope.pagination.page = response.page;
-        $scope.contents = response.results;
-        $scope.map = response.map;
+        $scope.pagination.total = parseInt(response.data.total);
+        $scope.contents         = response.data.results;
+        $scope.map              = response.data.map;
 
-        if (response.hasOwnProperty('extra')) {
-          $scope.extra = response.extra
+        if (response.data.hasOwnProperty('extra')) {
+          $scope.extra = response.data.extra
         };
 
         // Disable spinner
@@ -222,7 +238,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       var url = routing.generate(
         route, {
-          contentType: $scope.contentType
+          contentType: $scope.criteria.content_type_name
         }
       );
       $http.post(url, {
@@ -319,7 +335,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       var url = routing.generate(
         route, {
-          contentType: $scope.contentType,
+          contentType: $scope.criteria.content_type_name,
           id: id
         }
       );
@@ -369,7 +385,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       var url = routing.generate(
         route, {
-          contentType: $scope.contentType
+          contentType: $scope.criteria.content_type_name
         }
       );
       $http.post(url, {
@@ -452,21 +468,31 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     }
 
     /**
+     * Refresh the list of elements when some parameter changes.
+     *
+     * @param array newValues The new values
+     * @param array oldValues The old values
+     */
+    $scope.$watch('[orderBy, pagination.epp, pagination.page]', function(newValues, oldValues) {
+      if (newValues !== oldValues) {
+        $scope.list($scope.route);
+      }
+    }, true);
+
+    /**
      * Reloads the list when filters change.
      *
      * @param  object newValues New filters values.
      * @param  object oldValues Old filters values.
      */
     var searchTimeout;
-    $scope.$watch('$scope.criteria', function(newValues, oldValues) {
+    $scope.$watch('criteria', function(newValues, oldValues) {
       if (searchTimeout) {
         $timeout.cancel(searchTimeout);
       }
 
       if (newValues !== oldValues) {
         $scope.pagination.page = 1;
-
-        itemService.encodeFilters($scope.criteria);
 
         searchTimeout = $timeout(function() {
           $scope.list($scope.route);
