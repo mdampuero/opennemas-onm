@@ -45,7 +45,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @type Object
      */
     $scope.pagination = {
-      epp: 25,
+      epp: 10,
       page: 1,
       total: 0
     }
