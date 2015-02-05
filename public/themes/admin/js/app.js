@@ -11,6 +11,8 @@ angular.module(
     'ui.sortable',
     'pascalprecht.translate',
     'onm.mediaPicker',
+    'onm.oqlEncoder',
+    'onm.queryManager',
     'onm.item',
     'checklist-model'
   ])

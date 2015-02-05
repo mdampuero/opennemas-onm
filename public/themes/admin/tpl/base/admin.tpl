@@ -189,6 +189,8 @@
             @Common/components/angular-ui-sortable/sortable.min.js,
 
             @Common/src/webarch/js/core.js,
+            @Common/src/angular-oql-encoder/oql-encoder.js,
+            @Common/src/angular-query-manager/query-manager.js,
             @Common/src/angular-item-service/itemService.js,
             @Common/src/angular-routing/routing.js,
             @Common/src/angular-media-picker/js/media-picker.js,
