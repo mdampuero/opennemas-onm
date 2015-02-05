@@ -1,6 +1,7 @@
 angular.module(
   'BackendApp',
   [
+    'webStorageModule',
     'sun.scrollable',
     'BackendApp.controllers',
     'BackendApp.directives',

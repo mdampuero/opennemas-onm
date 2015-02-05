@@ -203,7 +203,7 @@
 
             @Common/js/admin.js
 
-        " filters="uglifyjs"}
+        "}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
 
