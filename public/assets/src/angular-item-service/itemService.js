@@ -8,9 +8,9 @@
  *
  * @return Object The item service.
  */
-angular.module('onm.item', ['onm.oqlEncoder'])
+angular.module('onm.item', [/*'onm.oqlEncoder'*/])
   .factory('itemService', [
-    '$http', '$location', '$modal', 'routing', 'oqlEncoder',
+    '$http', '$location', '$modal', 'routing', /*'oqlEncoder',*/
     function($http, $location, $modal, routing, oqlEncoder) {
       /**
        * The item service.
@@ -214,7 +214,7 @@ angular.module('onm.item', ['onm.oqlEncoder'])
       itemService.list = function(route, data) {
         // Decode filters from URL and overwrite data
         var filters = itemService.decodeFilters();
-        filters.criteria = oqlEncoder.encode(filters.criteria);
+        filters.criteria = itemService.cleanFilters(filters.criteria);
 
         // Merge data with filters from URL
         if (filters.criteria && !data.criteria) {
