@@ -18,12 +18,12 @@ angular.module('onm.queryManager', [])
         var filters = {};
 
         if (params.epp) {
-          filters.epp = params.epp;
+          filters.epp = parseInt(params.epp);
           delete params.epp;
         }
 
         if (params.page) {
-          filters.page = params.page
+          filters.page = parseInt(params.page);
           delete params.page
         }
 
