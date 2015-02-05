@@ -149,7 +149,7 @@ class CategoriesController extends Controller
                 $user->addCategoryToUser($_SESSION['userid'], $category->pk_content_category);
                 $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
-                getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+                dispatchEventWithParams('category.create', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
                     'success',
@@ -283,18 +283,13 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if ($category->update($data)) {
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Category "%s" updated successfully.'), $data['title'])
             );
-
-        }
-
-        /* Limpiar la cache de portada de todas las categorias */
-        if ($data['inmenu'] == 1) {
-            dispatchEventWithParams('category.clean_all');
         }
 
         return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
@@ -323,7 +318,7 @@ class CategoriesController extends Controller
                 $_SESSION['accesscategories'] =
                     $user->getAccessCategoryIds($_SESSION['userid']);
 
-                getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+                dispatchEventWithParams('category.delete', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
                     'sucess',
@@ -419,10 +414,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInMenu($status);
 
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-
-            // Clean cache for all category frontpages
-            // dispatchEventWithParams('category.clean_all');
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -458,10 +450,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInRss($status, $id);
 
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-
-            // Limpiar la cache de portada de todas las categorias
-            // $refresh = Content::refreshFrontpageForAllCategories();
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'error',
