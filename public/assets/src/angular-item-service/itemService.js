@@ -184,11 +184,6 @@ angular.module('onm.item', ['onm.oqlEncoder'])
         if (page) {
           $location.search('page', page)
         }
-
-        $location.search('union', null);
-        if (!empty && union) {
-          $location.search('union', union)
-        }
       }
 
       /**
