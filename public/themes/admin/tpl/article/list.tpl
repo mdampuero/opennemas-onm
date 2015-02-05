@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <div class="page-navbar filters-navbar">
+    <div class="page-navbar filters-navbar ng-cloak">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section">
@@ -196,7 +196,7 @@
                     </li>
                     <li class="quicklinks">
                         <span class="info">
-                        {t}Results{/t}: [% total %]
+                        {t}Results{/t}: [% pagination.total %]
                         </span>
                     </li>
                 </ul>
@@ -227,7 +227,7 @@
                     <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <div class="table-wrapper">
+                <div class="table-wrapper ng-cloak">
                     <table class="table table-hover no-margin" ng-if="!loading">
                         <thead>
                             <th style="width:15px;">
@@ -308,7 +308,7 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix" ng-if="!loading">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pull-left pagination-info" ng-if="contents.length > 0">
                     {t}Showing{/t} [% ((page - 1) * elements_per_page > 0) ? (page - 1) * elements_per_page : 1 %]-[% (page * elements_per_page) < total ? page * elements_per_page : total %] {t}of{/t} [% total|number %]
                 </div>
