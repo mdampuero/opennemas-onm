@@ -153,6 +153,7 @@ class BooksController extends Controller
 
             if (!empty($id)) {
 
+                $book->setPosition($data['position']);
                 $book = $book->read($id);
 
                 return $this->render('book/new.tpl', array('book' => $book));
@@ -256,6 +257,7 @@ class BooksController extends Controller
         ];
 
         if ($book->update($data)) {
+            $book->setPosition($data['position']);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Book updated succesfully.')
