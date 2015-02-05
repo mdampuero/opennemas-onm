@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -38,6 +39,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -150,6 +153,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -238,7 +243,7 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' =>  $message ]);
         }
 
-        /* Notice log of this action */
+        // Notice log of this action
         $logger->info(
             'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
@@ -265,6 +270,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function pickLayoutAction(Request $request)
     {
@@ -321,6 +328,8 @@ class FrontpagesController extends Controller
      * @return Response the response instance
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function lastVersionAction(Request $request)
     {
@@ -349,6 +358,8 @@ class FrontpagesController extends Controller
      * @return void
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -379,7 +390,7 @@ class FrontpagesController extends Controller
         $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
         $this->view->assign('advertisements', $ads);
 
-        /***** GET ALL FRONTPAGE'S IMAGES *******/
+        // Get all frontpage images
         $imageIdsList = array();
         foreach ($contentsInHomepage as $content) {
             if (isset($content->img1)) {
@@ -406,9 +417,7 @@ class FrontpagesController extends Controller
         }
         $this->view->assign('column', $contentsInHomepage);
 
-        /**
-         * Getting categories
-        */
+        // Getting categories
         $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId = $ccm->get_id($categoryName);
         $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
@@ -437,6 +446,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function getPreviewAction()
     {

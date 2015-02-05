@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,9 +35,6 @@ class ImporterXmlfileController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('PAPER_IMPORT');
-
         if (is_null(s::get('xml_file_schema'))) {
             $this->get('session')->getFlashBag()->add('notice', _('Please provide XML file schema'));
 
@@ -50,6 +48,8 @@ class ImporterXmlfileController extends Controller
      * @return void
      *
      * @Security("has_role('IMPORT_XML')")
+     *
+     * @CheckModuleAccess(module="PAPER_IMPORT")
      **/
     public function defaultAction()
     {
@@ -64,6 +64,8 @@ class ImporterXmlfileController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_XML')")
+     *
+     * @CheckModuleAccess(module="PAPER_IMPORT")
      **/
     public function importAction(Request $request)
     {
@@ -195,6 +197,8 @@ class ImporterXmlfileController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_XML')")
+     *
+     * @CheckModuleAccess(module="PAPER_IMPORT")
      **/
     public function configAction(Request $request)
     {

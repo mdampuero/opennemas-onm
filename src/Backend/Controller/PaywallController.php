@@ -33,6 +33,7 @@ use PayPal\PayPalAPI\SetExpressCheckoutRequestType;
 use PayPal\PayPalAPI\RefundTransactionReq;
 use PayPal\PayPalAPI\RefundTransactionRequestType;
 use PayPal\Service\PayPalAPIInterfaceServiceService;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -50,8 +51,6 @@ class PaywallController extends Controller
      **/
     public function init()
     {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('PAYWALL');
-
         $this->times = array(
             'Day'       => _('Day'),
             'Week'      => _('Week'),
@@ -72,6 +71,8 @@ class PaywallController extends Controller
      * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function defaultAction()
     {
@@ -128,6 +129,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function usersAction(Request $request)
     {
@@ -213,6 +216,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function userListExportAction(Request $request)
     {
@@ -285,6 +290,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function purchasesListExportAction(Request $request)
     {
@@ -349,6 +356,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function purchasesAction(Request $request)
     {
@@ -417,6 +426,8 @@ class PaywallController extends Controller
      * @return void
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function settingsAction()
     {
@@ -438,6 +449,10 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function settingsSaveAction(Request $request)
     {
@@ -530,6 +545,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function validateCredentialsAction(Request $request)
     {
@@ -581,6 +598,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function setValidateIpnAction(Request $request)
     {
@@ -649,6 +668,8 @@ class PaywallController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PAYWALL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="PAYWALL")
      **/
     public function doValidateIpnAction(Request $request)
     {

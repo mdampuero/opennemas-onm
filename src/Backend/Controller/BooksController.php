@@ -16,6 +16,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +36,6 @@ class BooksController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('BOOK_MANAGER');
-
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
@@ -74,6 +72,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function listAction()
     {
@@ -96,6 +96,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function widgetAction()
     {
@@ -125,6 +127,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_CREATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -177,6 +181,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_UPDATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -210,6 +216,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_UPDATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -283,6 +291,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_DELETE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -320,6 +330,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {

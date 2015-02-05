@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -33,9 +34,6 @@ class AlbumsController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ALBUM_MANAGER');
-
         $request = $this->get('request');
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');
@@ -66,6 +64,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function listAction()
     {
@@ -78,6 +78,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function widgetAction()
     {
@@ -96,6 +98,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_CREATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -149,6 +153,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_DELETE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -196,6 +202,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -238,6 +246,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -319,6 +329,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -352,6 +364,8 @@ class AlbumsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -393,6 +407,8 @@ class AlbumsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -445,6 +461,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function configAction(Request $request)
     {
