@@ -18,67 +18,67 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            * @type string
            */
           var contentTpl = {
-            explore: '<div class="media-picker-panel" ng-class="{ \'active\': picker.isActive(\'explore\') }">\
-              <div class="media-picker-header clearfix">\
-                <h4 class="pull-left">[% picker.params.explore.header %]</h4>
-                <i class="fa fa-lg fa-times media-picker-close pull-right"></i>\
+            explore: "<div class=\"media-picker-panel\" ng-class=\"{ 'active': picker.isActive('explore') }\">\
+              <div class=\"media-picker-header clearfix\">\
+                <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
+                <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
-              <div class="media-picker-body">\
-                <div class="media-picker-bar">
-                  <ul>
-                    <li>
-                      <select name="month" ng-model="filters.date">
-                        <option value="">[% picker.params.explore.all_months %]</option>
-                        <optgroup label="[% year.name %]" ng-repeat="year in picker.params.explore.dates">
-                          <option value="[% month.value %]" ng-repeat="month in year.months">
-                            [% month.name %]
-                          </option>
-                        </optgroup>
-                      </select>
-                    </li>
-                    <li>
-                      <div class="input-group">
-                        <span class="input-group-addon">
-                          <i class="fa fa-search"></i>
-                        </span>
-                        <input ng-model="filters.search" placeholder="[% picker.params.explore.search %]" type="text"/>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="media-picker-wrapper">
-                  <div class="media-item" ng-repeat="content in contents">
-                    <div class="checkbox">
-                      <input id="[% content.id %]"  type="checkbox">
-                      <label for="[% content.id %]">
-                          <dynamic-image class="img-thumbnail" instance="' + instanceMedia + '" path="[% content.path_file + \'/\' + content.name %]" width="80" transform="zoomcrop,120,120,center,center" class="image-preview"></dynamic-image>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>\
-              <div class="media-picker-footer"></div>\
-            </div>',
-
-            upload: '<div class="media-picker-panel" ng-class="{ \'active\': picker.isActive(\'upload\') }"">\
-              <div class="media-picker-header clearfix">\
-                <h4 class="pull-left">[% picker.params.upload.header %]</h4>\
-                <i class="fa fa-lg fa-times media-picker-close pull-right"></i>\
-              </div>\
-              <div class="media-picker-body">\
-                <div class="media-picker-bar">\
+              <div class=\"media-picker-body\">\
+                <div class=\"media-picker-bar\">\
                   <ul>\
                     <li>\
-                      <button class="btn btn-default">\
-                        <i class="fa fa-plus"></i>\
+                      <select name=\"month\" ng-model=\"filters.date\">\
+                        <option value=\"\">[% picker.params.explore.all_months %]</option>\
+                        <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
+                          <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
+                            [% month.name %]\
+                          </option>\
+                        </optgroup>\
+                      </select>\
+                    </li>\
+                    <li>\
+                      <div class=\"input-group\">\
+                        <span class=\"input-group-addon\">\
+                          <i class=\"fa fa-search\"></i>\
+                        </span>\
+                        <input ng-model=\"filters.search\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
+                      </div>\
+                    </li>\
+                  </ul>\
+                </div>\
+                <div class=\"media-picker-wrapper\">\
+                  <div class=\"media-item\" ng-repeat=\"content in contents\">\
+                    <div class=\"checkbox\" ng-click=\"toggle(content)\">\
+                      <input id=\"[% content.id %]\" ng-checked=\"isSelected(content)\" type=\"checkbox\">\
+                      <label for=\"[% content.id %]\">\
+                      </label>\
+                        <dynamic-image class=\"img-thumbnail\" instance=\"" + instanceMedia + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\" class=\"image-preview\"></dynamic-image>\
+                    </div>\
+                  </div>\
+                </div>\
+              </div>\
+              <div class=\"media-picker-footer\"></div>\
+            </div>",
+
+            upload: "<div class=\"media-picker-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
+              <div class=\"media-picker-header clearfix\">\
+                <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
+                <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
+              </div>\
+              <div class=\"media-picker-body\">\
+                <div class=\"media-picker-bar\">\
+                  <ul>\
+                    <li>\
+                      <button class=\"btn btn-default\">\
+                        <i class=\"fa fa-plus\"></i>\
                         [% picker.params.upload.add %]\
                       </button>\
                     </li>\
                   </ul>\
                 </div>\
               </div>\
-              <div class="media-picker-footer"></div>\
-            </div>',
+              <div class=\"media-picker-footer\"></div>\
+            </div>",
           };
 
           /**
@@ -86,20 +86,20 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            *
            * @type string
            */
-          var pickerTpl = '<div class="media-picker">
-            <div class="media-picker-backdrop"></div>
-            <div class="media-picker-dialog" style="display: block;">\
-                <div class="media-picker-sidebar">\
+          var pickerTpl = "<div class=\"media-picker\">\
+            <div class=\"media-picker-backdrop\"></div>\
+            <div class=\"media-picker-dialog\" style=\"display: block;\">\
+                <div class=\"media-picker-sidebar\">\
                   <ul>\
-                    [sidebar]
+                    [sidebar]\
                   </ul>\
-                </div>
-                <div class="media-picker-content">\
-                  [content]
+                </div>\
+                <div class=\"media-picker-content\">\
+                  [content]\
                 </div>\
               </div>\
             </div>\
-          </div>';
+          </div>";
 
           /**
            * Template for the media picker sidebar items.
@@ -107,13 +107,13 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            * @type string
            */
           var sidebarTpl = {
-            explore: '<li ng-class="{ \'active\': picker.isActive(\'explore\') }" ng-click="picker.enable(\'explore\'); explore()">\
-              <i class="fa fa-folder"></i>Media Library\
-            </li>',
+            explore: "<li ng-class=\"{ 'active': picker.isActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
+              <i class=\"fa fa-folder\"></i>Media Library\
+            </li>",
 
-            upload: '<li ng-class="{ \'active\': picker.isActive(\'upload\') }" ng-click="picker.enable(\'upload\')">\
-              <i class="fa fa-upload"></i>Upload\
-            </li>'
+            upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload')\">\
+              <i class=\"fa fa-upload\"></i>Upload\
+            </li>"
           };
 
           /**
@@ -127,9 +127,8 @@ angular.module('onm.mediaPicker', ['onm.routing'])
               available: [ 'upload', 'explore' ]
             },
             selection: {
-              enabled:  attrs['selection'] == 'true' ? true : false,
-              limit:    attrs['selectionLimit'] ? parseInt(attrs['selectionLimit']) : 1,
-              multiple: attrs['selectionMultiple'] == 'true' ? true : false,
+              enabled: attrs['selection'] == 'true' ? true : false,
+              maxSize: attrs['maxSize'] ? parseInt(attrs['maxSize']) : 1,
             },
             src: attrs['mediaPicker'],
             status: {
@@ -223,15 +222,20 @@ angular.module('onm.mediaPicker', ['onm.routing'])
       $scope.contents = [];
 
       /**
+       * The search criteria.
+       *
+       * @type object
+       */
+      $scope.criteria = {
+        content_type_name: [ { value: 'photo' } ]
+      }
+
+      /**
        * The number of elements per page.
        *
        * @type integer
        */
       $scope.epp = 20;
-
-      $scope.filters = {
-        content_type_name: [ { value: 'photo' } ]
-      }
 
       /**
        * The current page.
@@ -239,6 +243,13 @@ angular.module('onm.mediaPicker', ['onm.routing'])
        * @type integer
        */
       $scope.page = 1;
+
+      /**
+       * The list of selected contents.
+       *
+       * @type Array
+       */
+      $scope.selected = [];
 
       /**
        * The number of elements in contents.
@@ -254,6 +265,32 @@ angular.module('onm.mediaPicker', ['onm.routing'])
         $scope.list();
       };
 
+      $scope.isSelected = function(item) {
+        return $scope.selected.indexOf(item.id) != -1;
+      }
+
+      $scope.toggle = function(item) {
+        // Selection disabled
+        if (!$scope.picker.selection.enabled) {
+          console.log($scope.selected);
+          return false;
+        }
+
+        // Remove element
+        if ($scope.selected.indexOf(item.id) != -1) {
+          $scope.selected.splice($scope.selected.indexOf(item.id), 1);
+          console.log($scope.selected);
+          return true;
+        }
+
+        // Add element
+        if ($scope.selected.length < $scope.picker.selection.maxSize) {
+          $scope.selected.push(item.id);
+        }
+
+        console.log($scope.selected);
+      }
+
       /**
        * Updates the array of contents.
        */
@@ -265,7 +302,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
             page:              $scope.page,
             sort_by:           'created',
             sort_order:        'desc',
-            search:            itemService.cleanFilters($scope.filters)
+            search:            itemService.cleanFilters($scope.criteria)
         }
 
         console.log(data);

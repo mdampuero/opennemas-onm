@@ -1,5 +1,6 @@
 .media-item .checkbox {
   label {
+    color: @selected-color;
     margin: 0;
     padding-left: 0;
     transition: all 0.2s ease-in-out;
@@ -8,27 +9,35 @@
       color: @selected-color;
       font-size: 18px;
       left: auto;
+      opacity: 0;
       right: -1.8px;
       top: -5px;
     }
 
     &:before {
+      border-color: @selected-color;
       height: 24px;
       left: auto;
       margin: 0;
+      opacity: 0;
       right: -7px;
       top: -7px;
+      transition: all .1s ease-in-out;
       width: 24px;
-      transition: all 0.2s ease-in-out;
     }
+  }
 
+  &:hover label:before {
+    opacity: 1;
   }
 
   input[type=checkbox]:checked + label {
-    color: @selected-color;
-
     &:before {
-      border-color: @selected-color;
+      opacity: 1;
+    }
+
+    &:after {
+      opacity: 1;
     }
   }
 }
