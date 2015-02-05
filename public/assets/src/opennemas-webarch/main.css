@@ -7,7 +7,6 @@
 
 .nowrap {white-space: nowrap;}
 
-
 .left { text-align:left !important; }
 .right { text-align:right !important; }
 .center { text-align:center !important; }
@@ -20,6 +19,11 @@
 }
 .btn-white:hover {
     border:1px solid #999;
+}
+
+.checkbox label, .radio label {
+  min-height: 14px;
+  margin-bottom:0;
 }
 
 /* =============================================================================

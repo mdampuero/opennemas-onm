@@ -35,7 +35,7 @@
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                      <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                      <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
                         <i class="fa fa-check fa-lg"></i>
                       </button>
                     </li>
@@ -71,7 +71,7 @@
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
                         <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
                             </button>
                         </li>

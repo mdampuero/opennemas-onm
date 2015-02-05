@@ -95,6 +95,52 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       });
     };
 
+    /**
+     * Deletes selected contents on confirmation.
+     *
+     * @param string route Route title.
+     */
+    $scope.deleteSelected = function (route) {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-delete-selected',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_contents_batch_send_to_trash',
+                { contentType: $scope.criteria.content_type_name }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
     $scope.deselectAll = function() {
       $scope.selected.contents = [];
       $scope.selected.all = 0
@@ -241,28 +287,6 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         // Disable spinner
         $scope.loading = 0;
       })
-    }
-
-    /**
-     * Opens new modal window when clicking delete button.
-     *
-     * @param  string template Template id.
-     * @param  string route    Route name.
-     * @param  int    index    Index of the selected content.
-     */
-    $scope.open = function(template, route, index) {
-      $modal.open({
-        templateUrl: template,
-        controller: 'ContentModalCtrl',
-        resolve: {
-          index: function() {
-            return index;
-          },
-          route: function() {
-            return route;
-          }
-        }
-      });
     }
 
     /**
@@ -422,7 +446,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     $scope.updateSelectedItems = function(route, name, value, loading) {
       // Load shared variable
       var contents = $scope.contents;
-      var selected = $scope.selected;
+      var selected = $scope.selected.contents;
 
       updateItemsStatus(loading, 1);
 
@@ -431,6 +455,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           contentType: $scope.criteria.content_type_name
         }
       );
+
       $http.post(url, {
         ids: selected,
         value: value
@@ -483,7 +508,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     function updateItemsStatus(loading, status, name, value) {
       // Load shared variables
       var contents = $scope.contents;
-      var selected = $scope.selected;
+      var selected = $scope.selected.contents;
 
       for (var i = 0; i < selected.length; i++) {
         var j = 0;
@@ -500,7 +525,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       // Updated shared variable
       $scope.contents = contents;
-      $scope.selected = selected;
+      $scope.selected.contents = selected;
     }
 
     /**
@@ -512,7 +537,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     function updateStatus(loading, status) {
       // Load shared variable
       var contents = $scope.contents;
-      var selected = $scope.selected;
+      var selected = $scope.selected.contents;
 
       for (var i = 0; i < selected.length; i++) {
         var j = 0;
@@ -528,7 +553,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       // Updated shared variable
       $scope.contents = contents;
-      $scope.selected = selected;
+      $scope.selected.contents = selected;
     }
 
     /**
