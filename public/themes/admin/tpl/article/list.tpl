@@ -131,9 +131,9 @@
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Status{/t}:
-                                <span ng-if="criteria.content_status == -1">{t}All{/t}</span>
-                                <span ng-if="criteria.content_status == 0">{t}Published{/t}</span>
-                                <span ng-if="criteria.content_status == 1">{t}No published{/t}</span>
+                                <span ng-if="criteria.content_status == null || criteria.content_status == -1">{t}All{/t}</span>
+                                <span ng-if="criteria.content_status == 0">{t}No published{/t}</span>
+                                <span ng-if="criteria.content_status == 1">{t}Published{/t}</span>
                             </span>
                             <span class="caret"></span>
                         </button>
@@ -313,7 +313,7 @@
                     {t}Showing{/t} [% ((page - 1) * elements_per_page > 0) ? (page - 1) * elements_per_page : 1 %]-[% (page * elements_per_page) < total ? page * elements_per_page : total %] {t}of{/t} [% total|number %]
                 </div>
                 <div class="pull-right" ng-if="contents.length > 0">
-                    <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="page" total-items="total" num-pages="pages"></pagination>
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
