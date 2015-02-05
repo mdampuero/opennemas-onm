@@ -29,6 +29,78 @@ angular.module('onm.item', [/*'onm.oqlEncoder'*/])
         $location.path(url);
       }
 
+    /**
+     * Cleans the criteria for the current listing.
+     *
+     * @param Object criteria The search criteria.
+     *
+     * @return Object The cleaned criteria.
+     *
+     * TODO: Remove cleanFilters as it is replaced by media query functions.
+     */
+    itemService.cleanFilters = function (criteria) {
+      var cleaned = {};
+
+      for (var name in criteria) {
+        if (name != 'union') {
+          for (var i = 0; i < criteria[name].length; i++) {
+            if (criteria[name][i]['value']
+              && criteria[name][i]['value'] != -1
+              && criteria[name][i]['value'] !== ''
+            ){
+              var values = criteria[name][i]['value'].split(' ');
+
+              if (name.indexOf('_like') !== -1 ) {
+                var shortName = name.substr(0, name.indexOf('_like'));
+                cleaned[shortName] = [];
+
+                for (var i = 0; i < values.length; i++) {
+                  cleaned[shortName][i] = {
+                    value:    '%' + values[i] + '%',
+                    operator: 'LIKE'
+                  };
+                }
+              } else {
+                cleaned[name] = [];
+                for (var i = 0; i < values.length; i++) {
+                  if (criteria[name]['operator']) {
+                    switch(criteria[name]['operator']) {
+                      case 'like':
+                        cleaned[name][i] = {
+                            value:    '%' + values[i] + '%',
+                            operator: 'LIKE'
+                        };
+                        break;
+                      case 'regexp':
+                        cleaned[name][i] = {
+                            value:    '(^' + values[i] + ',)|('
+                                + ',' + values[i] + ',)|('
+                                + values[i] + '$)',
+                            operator: 'REGEXP'
+                        };
+                        break;
+                      default:
+                        cleaned[name][i] = {
+                            value:    values[i],
+                            operator: criteria[name]['operator']
+                        };
+                    }
+                  } else {
+                    cleaned[name][i] = {
+                        value: values[i],
+                    };
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          cleaned[name] = criteria[name];
+        }
+      };
+
+      return cleaned;
+    }
       /**
        * Deletes a plugin given its id.
        *
@@ -210,6 +282,8 @@ angular.module('onm.item', [/*'onm.oqlEncoder'*/])
        * @param object criteria The parameters to search by.
        *
        * @return Object The response object.
+       *
+       * TODO: Remove cleanFilters usage and replace by query manager functions.
        */
       itemService.list = function(route, data) {
         // Decode filters from URL and overwrite data
