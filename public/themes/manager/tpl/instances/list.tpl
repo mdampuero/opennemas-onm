@@ -12,7 +12,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]">
+                        <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]">
                             <i class="fa fa-download fa-lg"></i>
                         </a>
                     </li>
@@ -20,7 +20,7 @@
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks">
-                        <a ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_create') %]" class="btn btn-primary">
+                        <a ng-href="[% routing.ngGenerate('manager_instance_create') %]" class="btn btn-primary">
                             <i class="fa fa-plus fa-lg"></i>
                             {t}Create{/t}
                         </a>
@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.instances.length == 0 }">
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.instances.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
@@ -51,7 +51,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_list_export}?ids=[% selected.instances.join(); %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+                    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% token %]" tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
                         <i class="fa fa-download fa-lg"></i>
                     </a>
                 </li>
@@ -134,7 +134,7 @@
     </div>
 </div>
 <div class="content">
-    <div class="row column-filters" ng-class="{ 'collapsed': columns.collapsed }">
+    <div class="row column-filters collapsed" ng-class="{ 'collapsed': columns.collapsed }">
         <div class="row">
             <div class="col-xs-12 title">
                 <h5>{t}Columns{/t}</h5>
@@ -450,7 +450,7 @@
                                     [% instance.name %]
                                 </a>
                                 <div class="listing-inline-actions">
-                                    <a class="link" ng-href="[% fosJsRouting.ngGenerate('/manager', 'manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
+                                    <a class="link" ng-href="[% routing.ngGenerate('manager_instance_show', { id: instance.id }) %]" title="{t}Edit{/t}">
                                         <i class="fa fa-pencil"></i>{t}Edit{/t}
                                     </a>
                                     <button class="link link-danger" ng-click="delete(instance)" type="button">

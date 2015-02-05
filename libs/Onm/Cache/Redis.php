@@ -8,6 +8,8 @@
  */
 namespace Onm\Cache;
 
+use Redis as RedisBase;
+
 /**
  * Redis cache driver.
  *
@@ -26,17 +28,13 @@ class Redis extends AbstractCache
      *
      * @return void
      **/
-    public function __construct()//$options
+    public function __construct($options)
     {
-        // Check if Predis library is installed
-        if (!class_exists('\Predis\Client')) {
-            throw new \Exception('Predis library not installed');
-        }
-
-        // is_string($options)
-        if (true) {
-            // $redis = new \Predis\Client($options);
-            $redis = new \Predis\Client();
+        if (array_key_exists('server', $options)
+            && array_key_exists('port', $options)
+        ) {
+            $redis = new RedisBase();
+            $redis->pconnect($options['server'], $options['port']);
 
             $this->setRedis($redis);
         }
@@ -47,17 +45,18 @@ class Redis extends AbstractCache
     /**
      * Sets the memcache instance to use.
      *
-     * @param Memcache $memcache
+     * @param Redis $redis
      */
-    public function setRedis(\Predis\Client $redis)
+    public function setRedis(RedisBase $redis)
     {
+        // $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
         $this->redis = $redis;
     }
 
     /**
      * Gets the memcache instance used by the cache.
      *
-     * @return Memcache
+     * @return Redis
      */
     public function getRedis()
     {
@@ -80,14 +79,29 @@ class Redis extends AbstractCache
      */
     protected function doFetch($id)
     {
-        $data = $this->redis->get($id);
+        if (is_array($id)) {
+            $data = $this->getRedis()->mGet($id);
 
-        $dataUnserialized = @unserialize($data);
-        if ($data !== false || $data === 'b:0;') {
-            return $data;
+            $newData = [];
+            $keystoFetch = array_values($id);
+            foreach ($keystoFetch as $key) {
+                if (array_key_exists($key, $data)) {
+                    $newData[$key] = @unserialize($data[$key]);
+                }
+            }
+
+            return $newData;
         } else {
-            return $dataUnserialized;
+            $data = $this->getRedis()->get($id);
+
+            $dataUnserialized = @unserialize($data);
+            if ($data !== false || $data === 'b:0;') {
+                return $dataUnserialized;
+            } else {
+                return $dataUnserialized;
+            }
         }
+
     }
 
     /**
@@ -95,24 +109,37 @@ class Redis extends AbstractCache
      */
     protected function doContains($id)
     {
-        return (bool) $this->redis->exists($id);
+        return (bool) $this->getRedis()->exists($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doSave($id, $data, $lifeTime = -1)
+    protected function doSave($id, $data = null, $lifeTime = 0)
     {
-        if (!is_string($data)) {
-            $data = serialize($data);
+        if (is_array($id)) {
+            $saved = $this->getRedis()->mSet($id);
+
+            // Set the expire time for this key if valid lifeTime
+            if ($lifeTime > 0) {
+                foreach (array_keys($id) as $key) {
+                    $this->redis->expire($key, $lifeTime);
+                }
+            }
+        } else {
+            if (!is_string($data)) {
+                $data = serialize($data);
+            }
+            $saved = $this->getRedis()->set($id, $data);
+
+            // Set the expire time for this key if valid lifeTime
+            if ($lifeTime > 0) {
+                $this->redis->expire($id, $lifeTime);
+            }
         }
 
-        $saved = $this->redis->set($id, $data);
 
-        // Set the expire time for this key if valid lifeTime
-        if ($lifeTime > -1) {
-            $this->redis->expire($id, $lifeTime);
-        }
+
         return $saved;
     }
 
@@ -121,6 +148,18 @@ class Redis extends AbstractCache
      */
     protected function doDelete($id)
     {
-        return $this->redis->delete($id);
+        return $this->getRedis()->delete($id);
+    }
+
+    /**
+     * Returns the serializer constant to use. If Redis is compiled with
+     * igbinary support, that is used. Otherwise the default PHP serializer is
+     * used.
+     *
+     * @return integer One of the Redis::SERIALIZER_* constants
+     */
+    protected function getSerializerValue()
+    {
+        return defined('Redis::SERIALIZER_IGBINARY') ? RedisBase::SERIALIZER_IGBINARY : RedisBase::SERIALIZER_PHP;
     }
 }

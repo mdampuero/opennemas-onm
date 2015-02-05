@@ -1,0 +1,35 @@
+.btn-white,
+.btn-white:hover {
+  border: 1px solid #d1dade;
+}
+
+.btn-default,
+.btn-default:hover {
+  border: 1px solid #d1dade;
+}
+
+.btn-info,
+.btn-info:hover {
+  border: 1px solid #152639;
+}
+
+.btn-danger,
+.btn-danger:hover {
+  border: 1px solid #f35958;
+}
+
+.btn-primary,
+.btn-primary:hover {
+  background-color: #376092 !important;
+  border: 1px solid #376092 !important;
+}
+
+.btn-success,
+.btn-success:hover {
+  border: 1px solid #1285d1;
+}
+
+.btn-warning,
+.btn-warning:hover {
+  border: 1px solid #fbb05e;
+}

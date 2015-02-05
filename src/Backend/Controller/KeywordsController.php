@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Message as m;
 
 /**
  * Handles the actions for the keywords
@@ -38,6 +37,7 @@ class KeywordsController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
     }
+
     /**
      * Lists all the keywords
      *
@@ -60,17 +60,11 @@ class KeywordsController extends Controller
         $keywordManager = new \PClave();
         $keywords = $keywordManager->find($filter);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => ITEMS_PAGE,
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($keywords),
-            )
-        );
-
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => 10,
+            'total_items'       => count($keywords),
+            'base_url'          => $this->generateUrl('admin_keywords'),
+        ]);
         $keywords = array_slice($keywords, ($page-1) * ITEMS_PAGE, ITEMS_PAGE);
 
         return $this->render(
@@ -130,7 +124,7 @@ class KeywordsController extends Controller
             $keyword = new \PClave();
             $keyword->create($data);
 
-            m::add(_('Keyword created sucessfully'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('success', _('Keyword created sucessfully'));
 
             return $this->redirect(
                 $this->generateUrl(
@@ -169,7 +163,7 @@ class KeywordsController extends Controller
         $keyword = new \PClave();
         $keyword->update($data);
 
-        m::add(_('Keyword updated sucessfully'), m::SUCCESS);
+        $this->get('session')->getFlashBag()->add('success', _('Keyword updated sucessfully'));
 
         return $this->redirect(
             $this->generateUrl(
@@ -208,7 +202,6 @@ class KeywordsController extends Controller
      **/
     public function autolinkAction(Request $request)
     {
-        // $content = json_decode($HTTP_RAW_POST_DATA)->content;
         $content = $request->request->filter('text', null, FILTER_SANITIZE_STRING);
 
         $newContent = '';

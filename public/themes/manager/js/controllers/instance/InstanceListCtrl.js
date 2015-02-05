@@ -1,20 +1,19 @@
 /**
  * Handles all actions in instances listing.
  *
- * @param Object $anchorScroll The anchor scroll service.
- * @param Object $location     The location service.
  * @param Object $modal        The modal service.
  * @param Object $scope        The current scope.
  * @param Object itemService   The item service.
- * @param Object fosJsRouting  The fosJsRouting service.
+ * @param Object routing       The routing service.
  * @param Object messenger     The messenger service.
+ * @param Object webStorage    The web storage service.
  * @param Object data          The input data.
  *
  * @return Object The instance list controller.
  */
 angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
-    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'webStorage', 'data',
-    function ($modal, $scope, itemService, fosJsRouting, messenger, webStorage, data) {
+    '$modal', '$scope', 'itemService', 'routing', 'messenger', 'webStorage', 'data',
+    function ($modal, $scope, itemService, routing, messenger, webStorage, data) {
         /**
          * The criteria to search.
          *
@@ -139,22 +138,24 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                     success: function() {
                         return function() {
                             return itemService.delete(
-                                'manager_ws_instance_delete', instance.id);
+                                'manager_ws_instance_delete',
+                                instance.id
+                            );
                         };
                     }
                 }
             });
 
             modal.result.then(function (response) {
-                if (response.data.success) {
-                    if (response.data.message) {
-                        messenger.post({
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
-                    }
+                if (response) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
 
-                    list();
+                    if (response.status == 200) {
+                        list();
+                    }
                 }
             });
         };
@@ -194,15 +195,31 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data) {
-                    for (var i = 0; i < response.data.messages.length; i++) {
+                if (response.status == 200 || response.status == 207) {
+                    list();
+
+                    $scope.selected = {
+                        all: false,
+                        instances: []
+                    };
+
+                    // Show success message
+                    if (response.data.success.ids.length > 0) {
                         messenger.post({
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
+                            message: response.data.success.message,
+                            type: 'success'
                         });
                     }
 
-                    list();
+                    // Show errors messages
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
+
+                        messenger.post(params);
+                    }
                 }
             });
         };
@@ -250,18 +267,18 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         $scope.setEnabled = function(instance, enabled) {
             instance.loading = 1;
 
-            itemService.setEnabled('manager_ws_instance_set_enabled',
-                instance.id, enabled).then(function (response) {
+            itemService.patch('manager_ws_instance_patch',
+                instance.id, { activated: enabled }).then(function (response) {
                     instance.loading = 0;
 
-                    if (response.data.success) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
+
+                    if (response.status == 200) {
                         instance.activated = enabled;
                     }
-
-                    messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
-                    });
                 });
         };
 
@@ -278,28 +295,41 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
                 }
             }
 
-            itemService.setEnabledSelected('manager_ws_instances_set_enabled',
-                $scope.selected.instances, enabled).then(function (response) {
-                    if (response.data.success) {
-                        for (var i = 0; i < $scope.instances.length; i++) {
-                            var id = $scope.instances[i].id;
-                            if ($scope.selected.instances.indexOf(id) != -1) {
-                                $scope.instances[i].activated = enabled;
-                                delete $scope.instances[i].loading;
-                            }
+            var data = {
+                selected: $scope.selected.instances,
+                activated: enabled
+            }
+
+            itemService.patchSelected('manager_ws_instances_patch', data).then(function (response) {
+                if (response.status == 200 || response.status == 207) {
+                    // Update instances changed successfully
+                    for (var i = 0; i < $scope.instances.length; i++) {
+                        var id = $scope.instances[i].id;
+
+                        if (response.data.success.ids.indexOf(id) != -1) {
+                            $scope.instances[i].activated = enabled;
+                            delete $scope.instances[i].loading;
                         }
                     }
 
-                    for (var i = 0; i < response.data.messages.length; i++) {
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
+
+                    // Show errors
+                    for (var i = 0; i < response.data.errors.length; i++) {
                         var params = {
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
+                            message: response.data.error[i].message,
+                            type:    'error'
                         };
 
                         messenger.post(params);
                     }
                 }
-            );
+            });
         };
 
         /**
@@ -429,6 +459,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
         // Get enabled columns from localStorage
         if (webStorage.local.get('instances-columns')) {
             $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        if (webStorage.local.get('token')) {
+            $scope.token = webStorage.local.get('token');
         }
     }
 ]);

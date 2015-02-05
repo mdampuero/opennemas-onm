@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
+use Onm\Settings as s;
 
 class UsersController extends ContentController
 {
@@ -131,6 +131,28 @@ class UsersController extends ContentController
         $success = array();
         $updated = array();
 
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total activated users before creating new one
+        if ($maxUsers > 0 && $enabled) {
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+            if ($createEnabled < count($ids)) {
+                return new JsonResponse(
+                    array(
+                        'messages'  => array(
+                            array(
+                                'id'      => '500',
+                                'type'    => 'error',
+                                'message' => _(
+                                    'Unable to change user backend access. You have reach the maximum allowed'
+                                ),
+                            )
+                        )
+                    )
+                );
+            }
+        }
+
         foreach ($ids as $id) {
             if (!is_null($id)) {
                 $user = new \User();
@@ -160,8 +182,8 @@ class UsersController extends ContentController
 
         return new JsonResponse(
             array(
-                'activated'  => $enabled,
-                'messages' => array_merge($success, $errors)
+                'activated' => $enabled,
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -316,6 +338,28 @@ class UsersController extends ContentController
 
         $enabled  = $request->request->getDigits('value');
         $messages = array();
+
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total activated users before creating new one
+        if ($maxUsers > 0 && $enabled) {
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+            if (!$createEnabled) {
+                return new JsonResponse(
+                    array(
+                        'messages'  => array(
+                            array(
+                                'id'      => '500',
+                                'type'    => 'error',
+                                'message' => _(
+                                    'Unable to change user backend access. You have reach the maximum allowed'
+                                ),
+                            )
+                        )
+                    )
+                );
+            }
+        }
 
         if (!is_null($id)) {
             $user = new \User();

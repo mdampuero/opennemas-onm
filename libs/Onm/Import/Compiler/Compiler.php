@@ -109,7 +109,7 @@ class Compiler
         $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$sourceId);
 
         if (!empty($path)) {
-            \FilesManager::deleteDirectoryRecursively($path);
+            \Onm\FilesManager::deleteDirectoryRecursively($path);
 
             unset($servers[$sourceId]);
 
@@ -129,8 +129,11 @@ class Compiler
     public function getElementsFromCompileFile()
     {
         $fileListing = glob($this->syncPath.'/serversync.*.php');
-        $serverFile = $fileListing[0];
 
-        return unserialize(file_get_contents($serverFile));
+        if (is_array($fileListing) && array_key_exists(0, $fileListing)) {
+            return unserialize(file_get_contents($fileListing[0]));
+        }
+
+        return [];
     }
 }

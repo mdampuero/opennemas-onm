@@ -35,7 +35,7 @@ class FrameworkStatusController extends Controller
      **/
     public function opcacheStatusAction(Request $request)
     {
-        $config = $status = $mem = $stats =  $freeKeys =  $notSupportedMessage = null;
+        $config = $status = $mem = $opcacheStats =  $freeKeys =  $notSupportedMessage = null;
         $statusKeyValues = $directivesKeyValues = $newDirs = null;
 
         if (!extension_loaded('Zend OPcache')) {
@@ -52,19 +52,50 @@ class FrameworkStatusController extends Controller
         $config = opcache_get_configuration();
         $status = opcache_get_status();
 
+        $mem          = $status['memory_usage'];
+        $opcacheStats = $status['opcache_statistics'];
+        $freeKeys     = $opcacheStats['max_cached_keys'] - $opcacheStats['num_cached_keys'];
+
+        if (!array_key_exists('scripts', $status)) {
+            $status['scripts'] = array();
+        }
+
         if (!$config['directives']['opcache.enable']) {
             $notSupportedMessage = 'Zend OPcache extension loaded but not activated [opcache.enable != true].';
         }
 
-        $mem      = $status['memory_usage'];
-        $stats    = $status['opcache_statistics'];
-        $freeKeys = $stats['max_cached_keys'] - $stats['num_cached_keys'];
-        // var_dump($status);die();
+        $statusKeyValues     = $this->getStatus($status);
+        $directivesKeyValues = $this->getDirectives($config);
+        $newDirs             = $this->getNewDirs($status['scripts'], $config);
 
+        return new JsonResponse(
+            array(
+                'not_supported_message' => $notSupportedMessage,
+                'config'                => $config,
+                'status'                => $status,
+                'mem'                   => $mem,
+                'stats'                 => $opcacheStats,
+                'free_keys'             => $freeKeys,
+                'status_key_values'     => $statusKeyValues,
+                'directive_key_values'  => $directivesKeyValues,
+                'files_key_values'      => $newDirs,
+            )
+        );
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getStatus($status)
+    {
         $statusKeyValues = array();
         if (!is_array($status)) {
             $status = array();
         }
+
         foreach ($status as $key => $value) {
             if ($key === 'scripts') {
                 continue;
@@ -117,14 +148,26 @@ class FrameworkStatusController extends Controller
             $statusKeyValues[$key] = $value;
         }
 
+        return $statusKeyValues;
+    }
+
+    /**
+     * Returns the list of OpCache directives
+     *
+     * @param  array $config the opcache configuration values
+     *
+     * @return array
+     **/
+    public function getDirectives($config)
+    {
         $directivesKeyValues = array();
         foreach ($config['directives'] as $key => $value) {
             if ($value === false) {
                 $value = 'false';
-            }
-            if ($value === true) {
+            } else {
                 $value = 'true';
             }
+
             if ($key == 'opcache.memory_consumption') {
                 $value = $this->sizeForHumans($value);
             }
@@ -132,17 +175,27 @@ class FrameworkStatusController extends Controller
             $directivesKeyValues[$key] = $value;
         }
 
-        if (!array_key_exists('scripts', $status)) {
-            $status['scripts'] = array();
-        }
+        return $directivesKeyValues;
+    }
+
+    /**
+     * Returns the list of cached binaries in opcache with its
+     * memory consumption grouped by folder
+     *
+     * @param array $scripts the list of scripts
+     * @param array $data scripts related opcache data
+     *
+     * @return array the list of cached binaries
+     **/
+    public function getNewDirs($scripts, $data)
+    {
         $dirs = array();
-        foreach ($status['scripts'] as $key => $data) {
+        foreach ($scripts as $key => $data) {
             $dirs[dirname($key)][basename($key)] = $data;
         }
         asort($dirs);
 
         $newDirs = array();
-
         foreach ($dirs as $dir => $files) {
             $memoryConsumption = 0;
             $newFiles = array();
@@ -167,24 +220,15 @@ class FrameworkStatusController extends Controller
             $newDirs []= $newDir;
         }
 
-        return new JsonResponse(
-            array(
-                'not_supported_message' => $notSupportedMessage,
-                'config'                => $config,
-                'status'                => $status,
-                'mem'                   => $mem,
-                'stats'                 => $stats,
-                'free_keys'             => $freeKeys,
-                'status_key_values'     => $statusKeyValues,
-                'directive_key_values'  => $directivesKeyValues,
-                'files_key_values'      => $newDirs,
-            )
-        );
+        return $newDirs;
     }
 
     /**
-     * Turn bytes into a human readable format
-     * @param $bytes
+     * Turns a number of bytes into a human readable format
+     *
+     * @param int $bytes the number of bytes
+     *
+     * @return string the formated number
      */
     public function sizeForHumans($bytes)
     {

@@ -9,6 +9,12 @@ manager_ws_auth_check_user:
     options:
         expose: true
 
+manager_ws_auth_fake_login:
+    path: /fake-login
+    defaults: { _controller: ManagerWebServiceBundle:Authentication:fakeLogin }
+    options:
+        expose: true
+
 manager_ws_auth_login:
     path: /login
     defaults: { _controller: ManagerWebServiceBundle:Authentication:login }

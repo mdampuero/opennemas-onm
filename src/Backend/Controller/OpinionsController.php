@@ -18,10 +18,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
+use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
-use \Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing opinions
@@ -135,14 +134,23 @@ class OpinionsController extends Controller
         }
 
         if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
-            m::add(sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
+            );
         }
 
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
-            m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numEditorial, 'editorial'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
+            );
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
-             m::add(sprintf(_("You must put %d opinions %s in the frontpage"), $numDirector, 'opinion del director'));
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
+            );
         }
 
         if (isset($opinions) && is_array($opinions)) {
@@ -186,7 +194,10 @@ class OpinionsController extends Controller
 
         // Check if opinion id exists
         if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find the opinion with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the opinion with the id "%d"'), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
@@ -196,7 +207,10 @@ class OpinionsController extends Controller
             && !Acl::check('CONTENT_OTHER_UPDATE')
             && $opinion->fk_author != $_SESSION['userid']
         ) {
-            m::add(_("You can't modify this opinion because you don't have enought privileges."));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this opinion because you don't have enought privileges.")
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
@@ -272,12 +286,18 @@ class OpinionsController extends Controller
             );
 
             if ($opinion->create($data)) {
-                m::add(_('Opinion successfully created.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Opinion successfully created.')
+                );
 
                 // Clear caches
                 dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
             } else {
-                m::add(_('Unable to create the new opinion.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to create the new opinion.')
+                );
             }
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
@@ -323,7 +343,10 @@ class OpinionsController extends Controller
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$opinion->isOwner($_SESSION['userid'])
             ) {
-                m::add(_("You can't modify this opinion because you don't have enought privileges."));
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("You can't modify this opinion because you don't have enought privileges.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_opinions'));
             }
@@ -334,7 +357,10 @@ class OpinionsController extends Controller
 
             // Check empty data
             if (count($request->request) < 1) {
-                m::add(_("Opinion data sent not valid."), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _("Opinion data sent not valid.")
+                );
 
                 return $this->redirect($this->generateUrl('admin_opinion_show', array('id' => $id)));
             }
@@ -363,7 +389,10 @@ class OpinionsController extends Controller
             );
 
             if ($opinion->update($data)) {
-                m::add(_('Opinion successfully updated.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Opinion successfully updated.')
+                );
 
                 $author = new \User($data['fk_author']);
 
@@ -377,7 +406,10 @@ class OpinionsController extends Controller
                     )
                 );
             } else {
-                m::add(_('Unable to update the opinion.'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the opinion.')
+                );
             }
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
@@ -412,10 +444,17 @@ class OpinionsController extends Controller
         $opinion = new \Opinion($id);
 
         if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find an opinion with the id "%d"'), $id)
+            );
         } else {
             $opinion->setInHome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title)
+            );
         }
 
         if ($type != 'frontpage') {
@@ -506,22 +545,14 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl(
-                    'admin_opinions_content_provider',
-                    array('category' => $categoryId)
-                ).'&page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countOpinions,
+            'base_url'          => $this->generateUrl(
+                'admin_opinions_content_provider',
+                array('category' => $categoryId)
+            ),
+        ]);
 
         return $this->render(
             'opinion/content-provider.tpl',
@@ -552,19 +583,12 @@ class OpinionsController extends Controller
         $opinions      = $em->findBy($filters, array('created' => 'desc'), $itemsPerPage, $page);
         $countOpinions = $em->countBy($filters);
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl('admin_opinions_content_provider_related').'?page=%d',
-            )
-        );
+        $pagination = $this->get('paginator')->create([
+            'elements_per_page' => $itemsPerPage,
+            'total_items'       => $countOpinions,
+            'delta'             => 1,
+            'base_url'          => $this->generateUrl('admin_opinions_content_provider_related'),
+        ]);
 
         return $this->render(
             'common/content_provider/_container-content-list.tpl',
@@ -588,7 +612,6 @@ class OpinionsController extends Controller
     public function configAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-
             $configsRAW = $request->request->get('opinion_settings');
 
             $configs = array(
@@ -606,7 +629,10 @@ class OpinionsController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
@@ -645,7 +671,10 @@ class OpinionsController extends Controller
 
         $user = new \User($id);
         if (is_null($user->id)) {
-            m::add(sprintf(_("Unable to find the author with the id '%d'"), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_("Unable to find the author with the id '%d'"), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_opinion_authors'));
         }
@@ -685,7 +714,6 @@ class OpinionsController extends Controller
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => array(3),
-                'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '', FILTER_SANITIZE_STRING),
                 'ids_category'    => array(),
                 'activated'       => 0,
                 'type'            => 0,
@@ -712,11 +740,15 @@ class OpinionsController extends Controller
                     // Set all usermeta information (twitter, rss, language)
                     $meta = $request->request->get('meta');
                     $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
+                    $meta['inrss']   = (empty($meta['inrss'])) ? 0 : 1;
                     foreach ($meta as $key => $value) {
                         $user->setMeta(array($key => $value));
                     }
 
-                    m::add(_('Author created successfully.'), m::SUCCESS);
+                    $this->get('session')->getFlashBag()->add(
+                        'success',
+                        _('Author created successfully.')
+                    );
 
                     return $this->redirect(
                         $this->generateUrl(
@@ -725,10 +757,13 @@ class OpinionsController extends Controller
                         )
                     );
                 } else {
-                    m::add(_('Unable to create the author with that information'), m::ERROR);
+                    $this->get('session')->getFlashBag()->add(
+                        'error',
+                        _('Unable to create the author with that information')
+                    );
                 }
             } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
+                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
             }
         }
 
@@ -748,7 +783,10 @@ class OpinionsController extends Controller
         $userId = $request->query->getDigits('id');
 
         if (count($request->request) < 1) {
-            m::add(_("The data send by the user is not valid."), m::ERROR);
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("The data send by the user is not valid.")
+            );
 
             return $this->redirect(
                 $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
@@ -769,7 +807,6 @@ class OpinionsController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
-            'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => 60,
             'id_user_group'   => $user->id_user_group,
             'ids_category'    => $accessCategories,
@@ -798,6 +835,7 @@ class OpinionsController extends Controller
                 // Set all usermeta information (twitter, rss, language)
                 $meta = $request->request->get('meta');
                 $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
+                $meta['inrss']   = (empty($meta['inrss'])) ? 0 : 1;
                 foreach ($meta as $key => $value) {
                     $user->setMeta(array($key => $value));
                 }
@@ -805,12 +843,18 @@ class OpinionsController extends Controller
                 // Clear caches
                 dispatchEventWithParams('author.update', array('id' => $userId));
 
-                m::add(_('Author updated successfully.'), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    _('Author updated successfully.')
+                );
             } else {
-                m::add(_('Unable to update the author with that information'), m::ERROR);
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the author with that information')
+                );
             }
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect(

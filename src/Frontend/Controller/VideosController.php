@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -109,9 +108,27 @@ class VideosController extends Controller
                 // Videos on others videos block
                 $othersVideos = $this->cm->findAll(
                     'Video',
-                    'content_status=1 ',
-                    'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
+                    'content_status=1 AND `contents_categories`.`pk_fk_content_category` <>'
+                    . $this->category . '',
+                    'ORDER BY created DESC LIMIT '.$totalVideosMoreFrontpage
                 );
+
+                // Pagination for block more videos
+                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                    array(
+                        'page'  => $this->page,
+                        'items' => $totalVideosMoreFrontpage,
+                        'total' => count($othersVideos)+1,
+                        'url'   => $this->generateUrl(
+                            'frontend_video_ajax_paginated',
+                            array(
+                                'category' => $this->category
+                            )
+                        )
+                    )
+                );
+
+                $this->view->assign('pagination', $pagination);
 
                 if (count($frontVideos) > 0) {
                     foreach ($frontVideos as &$video) {
@@ -215,7 +232,7 @@ class VideosController extends Controller
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->getDigits('video_id', '');
-        $videoID = \Content::resolveID($dirtyID);
+        $videoID = \ContentManager::resolveID($dirtyID);
 
         // Redirect to album frontpage if id_album wasn't provide
         if (is_null($videoID)) {
@@ -248,7 +265,8 @@ class VideosController extends Controller
             //Get other_videos for widget video most
             $otherVideos = $this->cm->findAll(
                 'Video',
-                ' content_status=1 AND pk_content <> '.$videoID,
+                ' content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
+                . $this->category . ' AND pk_content <> '.$videoID,
                 ' ORDER BY created DESC LIMIT 4'
             );
 
@@ -328,13 +346,17 @@ class VideosController extends Controller
      *
      * @return Response the response object
      **/
-    public function ajaxInCategoryAction()
+    public function ajaxInCategoryAction(Request $request)
     {
         // Fetch video settings
         $videosSettings = s::get('video_settings');
         $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
 
         $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
+
+        if (empty($this->category)) {
+            $this->category = $request->query->getDigits('category', 0);
+        }
 
         $videos = $this->cm->findAll(
             'Video',

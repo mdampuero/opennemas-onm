@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
@@ -56,21 +55,24 @@ class ArchiveController extends Controller
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
             $cm = new \ContentManager();
-            $this->ccm = new \ContentCategoryManager();
-            $allCategories = $this->ccm->categories;
+            $ccm = new \ContentCategoryManager();
+            $allCategories = $ccm->categories;
 
             $library  = array();
             $contents = $cm->getContentsForLibrary($date);
 
             if (!empty($contents)) {
                 foreach ($contents as $content) {
-                    $categoryID = $content->category;
-                    if (!isset($library[$categoryID])) {
-                        $library[$categoryID] = new \stdClass();
+                    if (!isset($library[$content->category])) {
+                        $library[$content->category] = new \stdClass();
                     }
-                    $library[$categoryID]->id         = $categoryID;
-                    $library[$categoryID]->title      = $allCategories[$categoryID]->title;
-                    $library[$categoryID]->contents[] = $content;
+                    $library[$content->category]->id = $content->category;
+                    if ($content->fk_content_type == 4) {
+                        $library[$content->category]->title = _('Opinion');
+                    } else {
+                        $library[$content->category]->title = $allCategories[$content->category]->title;
+                    }
+                    $library[$content->category]->contents[] = $content;
                 }
             }
 

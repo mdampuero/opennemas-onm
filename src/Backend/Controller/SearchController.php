@@ -102,24 +102,28 @@ class SearchController extends Controller
                 foreach ($rs as $content) {
                     $content = new \Content($content['pk_content']);
                     $content->content_partial_path =
-                        $content->content_type_name.'/content-provider/'.$content->content_type_name.'.tpl';
+                        $content->content_type_name.'/content-provider/'.
+                        $content->content_type_name.'.tpl';
                     $results[] = $content;
                 }
 
                 // Build the pager
-                $pagination = \Onm\Pager\Slider::create(
-                    $resultSetSize,
-                    s::get('items_per_page') ?: 20,
-                    $this->generateUrl(
+                $pagination = $this->get('paginator')->create([
+                    'elements_per_page' => 8,
+                    'total_items'       => $resultSetSize,
+                    'base_url'          => $this->generateUrl(
                         'admin_search_content_provider',
                         array('search_string' => $searchString, 'related' => $related)
-                    ).'&page=%d'
-                );
+                    ).'&page=%d',
+                ]);
+
                 $this->view->assign('pagination', $pagination->links);
             }
-            $this->view->assign('results', $results);
 
-            $this->view->assign('search_string', $searchString);
+            $this->view->assign([
+                'results' => $results,
+                'search_string' => $searchString
+            ]);
 
             if ($related == true) {
                 return $this->render(

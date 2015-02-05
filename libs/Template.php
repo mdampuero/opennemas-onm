@@ -1,5 +1,5 @@
 <?php
-use FilesManager as fm;
+use Onm\FilesManager as fm;
 
 /**
  * Template class

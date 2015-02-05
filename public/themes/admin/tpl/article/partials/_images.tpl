@@ -106,21 +106,17 @@
                     </a>
                     <div class="clearfix">
                         <div class="thumbnail article-resource-image">
-                            {if $video1->pk_video}
-                                <img src="{$video1->information['thumbnail']}"
-                                     name="{$video1->pk_video}" style="width:120px" />
-                            {else}
-                                {if isset($video1) && $video1->pk_video}
-                                    {if $video1->author_name == 'internal'}
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
-                                    {else}
-                                    <img src="{$video1->information['thumbnail']}" />
-                                    {/if}
+                            {if isset($video1) && $video1->pk_video}
+                                {if $video1->author_name == 'internal'}
+                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
                                 {else}
-                                <div class="drop-here">
-                                    {t}Drop a video to here{/t}
-                                </div>
+                                <img src="{$video1->thumb}"/>
                                 {/if}
+                            {else}
+                            <div class="drop-here">
+                                {t}Drop a video to here{/t}
+                            </div>
+                            <img src=""/>
                             {/if}
                         </div>
                         <div class="article-resource-image-info">
@@ -131,8 +127,6 @@
                         </div>
                     </div><!-- / -->
                     <div class="article-resource-footer">
-                        <!-- <label for="title">{t}Footer text for frontpage image:{/t}</label> -->
-                        <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
                         <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
                     </div>
                 </div><!-- / -->
@@ -149,12 +143,13 @@
                                 {if $video2->author_name == 'internal'}
                                 <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
                                 {else}
-                                <img src="{$video2->information['thumbnail']}"/>
+                                <img src="{$video2->thumb}"/>
                                 {/if}
                             {else}
                                 <div class="drop-here">
                                     {t}Drop a video to here{/t}
                                 </div>
+                                <img src=""/>
                             {/if}
                         </div>
                         <div class="article-resource-image-info">

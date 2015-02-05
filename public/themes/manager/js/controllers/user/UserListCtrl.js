@@ -4,15 +4,15 @@
  * @param  Object $modal       The modal service.
  * @param  Object $scope       The current scope.
  * @param  Object itemService  The item service.
- * @param  Object fosJsRouting The fosJsRouting service.
+ * @param  Object routing The routing service.
  * @param  Object messenger    The messenger service.
  * @param  Object data         The input data.
  *
  * @return Object The user list controller.
  */
 angular.module('ManagerApp.controllers').controller('UserListCtrl', [
-    '$modal', '$scope', 'itemService', 'fosJsRouting', 'messenger', 'data',
-    function ($modal, $scope, itemService, fosJsRouting, messenger, data) {
+    '$modal', '$scope', 'itemService', 'routing', 'messenger', 'data',
+    function ($modal, $scope, itemService, routing, messenger, data) {
         /**
          * The criteria to search.
          *
@@ -89,15 +89,15 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data.success) {
-                    if (response.data.message) {
-                        messenger.post({
-                            message: response.data.message.text,
-                            type:    response.data.message.type
-                        });
-                    }
+                if (response) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
 
-                    list();
+                    if (response.status == 200) {
+                        list();
+                    }
                 }
             });
         };
@@ -127,15 +127,31 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
             });
 
             modal.result.then(function (response) {
-                if (response.data) {
-                    for (var i = 0; i < response.data.messages.length; i++) {
+                if (response.status == 200 || response.status == 207) {
+                    list();
+
+                    $scope.selected = {
+                        all: false,
+                        users: []
+                    };
+
+                    // Show success message
+                    if (response.data.success.ids.length > 0) {
                         messenger.post({
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
+                            message: response.data.success.message,
+                            type: 'success'
                         });
                     }
 
-                    list();
+                    // Show errors messages
+                    for (var i = 0; i < response.data.errors.length; i++) {
+                        var params = {
+                            message: response.data.error[i].message,
+                            type:    'error'
+                        };
+
+                        messenger.post(params);
+                    }
                 }
             });
         };
@@ -213,18 +229,18 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         $scope.setEnabled = function(user, enabled) {
             user.loading = 1;
 
-            itemService.setEnabled('manager_ws_user_set_enabled',
-                user.id, enabled).then(function (response) {
+            itemService.patch('manager_ws_user_patch',
+                user.id, { activated: enabled }).then(function (response) {
                     user.loading = 0;
 
-                    if (response.data.success) {
+                    messenger.post({
+                        message: response.data,
+                        type: response.status == 200 ? 'success' : 'error'
+                    });
+
+                    if (response.status == 200) {
                         user.activated = enabled;
                     }
-
-                    messenger.post({
-                        message: response.data.message.text,
-                        type:    response.data.message.type
-                    });
                 });
         };
 
@@ -241,27 +257,41 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                 }
             }
 
-            itemService.setEnabledSelected('manager_ws_users_set_enabled',
-                $scope.selected.users, enabled).then(function (response) {
-                    if (response.data.success) {
-                        for (var i = 0; i < $scope.users.length; i++) {
-                            var id = $scope.users[i].id;
-                            if ($scope.selected.users.indexOf(id) != -1) {
-                                $scope.users[i].activated = enabled;
-                                delete $scope.users[i].loading;
-                            }
+            var data = {
+                selected: $scope.selected.users,
+                activated: enabled
+            }
+
+            itemService.patchSelected('manager_ws_users_patch', data).then(function (response) {
+                if (response.status == 200 || response.status == 207) {
+                    // Update users changed successfully
+                    for (var i = 0; i < $scope.users.length; i++) {
+                        var id = $scope.users[i].id;
+
+                        if (response.data.success.ids.indexOf(id) != -1) {
+                            $scope.users[i].activated = enabled;
+                            delete $scope.users[i].loading;
                         }
                     }
 
-                    for (var i = 0; i < response.data.messages.length; i++) {
+                    // Show success message
+                    if (response.data.success.ids.length > 0)
+                    messenger.post({
+                        message: response.data.success.message,
+                        type: 'success'
+                    });
+
+                    // Show errors
+                    for (var i = 0; i < response.data.errors.length; i++) {
                         var params = {
-                            message: response.data.messages[i].text,
-                            type:    response.data.messages[i].type
+                            message: response.data.error[i].message,
+                            type:    'error'
                         };
 
                         messenger.post(params);
                     }
-                });
+                }
+            });
         };
 
         /**
@@ -314,7 +344,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         }, true);
 
         /**
-         * Searches instances given a criteria.
+         * Searches users given a criteria.
          *
          * @return Object The function to execute past 500 ms.
          */

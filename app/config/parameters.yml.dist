@@ -103,4 +103,16 @@ parameters:
     piwik.url:   http://piwik.openhost.es
     piwik.token: b4956f6e687b28851fa8a545b6ccd85b
 
+    # JWT (RSA)
+    # public_private_key_algorithm: RS256
+    # public_key_path:              %kernel.root_dir%/jwt/rsa/public.pem
+    # private_key_path:             %kernel.root_dir%/jwt/rsa/private.pem
+    # pass_phrase:                  yourpassphrase
+
+    # JWT (Shared key)
+    shared_key_algorithm: HS512
+    shared_key:           yoursharedkey
+
+    recaptcha_private_key: 6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs
+
     sales_email: sales@openhost.es
