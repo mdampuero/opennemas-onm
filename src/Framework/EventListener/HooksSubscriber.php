@@ -57,17 +57,17 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             // Category hooks
             'category.create' => [
-                ['mockHookAction', 0],
+                ['deleteCategoriesArrayCache', 5]
             ],
             'category.update' => [
                 ['deleteCustomCss', 5],
-                ['deleteCategoryCache', 5]
+                ['deleteCategoryCache', 5],
+                ['deleteCategoriesArrayCache', 5]
             ],
             'category.delete' => [
-                ['mockHookAction', 0],
-            ],
-            'category.clean_all' => [
-                ['refreshFrontpageForAllCategories', 0]
+                ['deleteCustomCss', 5],
+                ['deleteCategoryCache', 5],
+                ['deleteCategoriesArrayCache', 5]
             ],
             // Comment hooks
             'comment.create' => [
@@ -350,31 +350,6 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Regenerate cache files for all categories homepages.
-     *
-     * @return string Explanation for which elements were deleted
-     **/
-    public function refreshFrontpageForAllCategories()
-    {
-        $cacheManager = $this->container->get('template_cache_manager');
-        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
-
-        $ccm = \ContentCategoryManager::get_instance();
-
-        $availableCategories = $ccm->categories;
-        $output ='';
-
-        foreach ($availableCategories as $category) {
-            // Delete RSS frontpage for category
-            $cacheManager->delete($category->name.'|RSS');
-            // Delete manual frontpage for category
-            $cacheManager->delete('category|'.$category->name.'|1');
-            // Delete blog frontpage for category
-            $cacheManager->delete('frontpage|'.$category->name);
-        }
-    }
-
-    /**
      * Deletes the Smarty cache when an author is updated.
      *
      * @param Event $event The event to handle.
@@ -520,7 +495,25 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $category = $event->getArgument('category');
 
+        $cacheManager = $this->container->get('template_cache_manager');
+        $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
+
+        // Delete smarty cache for RSS frontpage of category
+        $cacheManager->delete($category->name.'|RSS');
+        // Delete smarty cache for blog frontpage of category
+        $cacheManager->delete('category|'.$category->name.'|1');
+        // Delete smarty cache for manual frontpage of category
+        $cacheManager->delete('frontpage|'.$category->name);
+        // Delete object cache
         $this->cacheHandler->delete('category-' . $category->id);
+    }
+
+    /**
+     * Deletes cache for content_categories object
+     */
+    public function deleteCategoriesArrayCache()
+    {
+        $this->cacheHandler->delete(CACHE_PREFIX.'_content_categories');
     }
 
     /**
