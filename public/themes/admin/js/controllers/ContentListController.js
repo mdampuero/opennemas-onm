@@ -435,8 +435,8 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       };
 
       // Updated shared variable
-      sharedVars.set('contents', contents);
-      sharedVars.set('selected', selected);
+      $scope.contents = contents;
+      $scope.selected = selected;
     }
 
     /**
