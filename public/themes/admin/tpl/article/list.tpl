@@ -44,11 +44,19 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.length %] {t}items selected{/t}
+                            [% selected.contents.length %] {t}items selected{/t}
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                          {t}Deselect{/t}
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     {acl isAllowed="ARTICLE_AVAILABLE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -275,7 +283,7 @@
                                             </a>
                                         {/acl}
                                         {acl isAllowed="ARTICLE_DELETE"}
-                                            <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                            <button class="link link-danger" ng-click="delete(content)" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                                 {t}Delete{/t}
                                             </button>

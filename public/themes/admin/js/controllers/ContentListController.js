@@ -58,6 +58,49 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     $scope.union = 'AND';
 
     /**
+     * Confirm delete action.
+     */
+    $scope.delete = function(content) {
+      var modal = $modal.open({
+        templateUrl: 'modal-delete',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_content_send_to_trash',
+                { contentType: content.content_type_name, id: content.id }
+              );
+
+              return $http.post(url);
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    $scope.deselectAll = function() {
+      $scope.selected.contents = [];
+      $scope.selected.all = 0
+    }
+
+    /**
      * Goes to content edit page.
      *
      * @param int    id    Content id.
@@ -408,6 +451,27 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
         });
     };
+
+    /**
+     * Updates selected items current status.
+     *
+     * @param  mixed messages List of messages provided by the server.
+     */
+    function renderMessages(messages) {
+      for (var i = 0; i < messages.length; i++) {
+        var params = {
+          id: new Date().getTime() + '_' + messages[i].id,
+          message: messages[i].message,
+          type: messages[i].type
+        };
+
+        messenger.post(params);
+
+        if (messages[i].type == 'error') {
+          errors++;
+        }
+      };
+    }
 
     /**
      * Updates selected items current status.

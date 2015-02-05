@@ -39,59 +39,6 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
     };
 
     /**
-     * Deletes a content on confirmation.
-     *
-     * @param int    id    Item id.
-     * @param int    index Index of the item in the array of contents.
-     * @param string route Route title.
-     */
-    $scope.delete = function (id, index, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-
-        // Enable spinner
-        $scope.deleting = 1;
-
-        var url = fosJsRouting.generate(
-            route,
-            { contentType: sharedVars.get('contentType'), id: id }
-        );
-
-        $http.post(url).success(function(response) {
-            var errors = 0;
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
-                };
-
-                messenger.post(params);
-
-                if (response.messages[i].type == 'error') {
-                    errors++;
-                }
-            };
-
-            if (errors == 0) {
-                contents.splice(index, 1);
-                sharedVars.set('total', sharedVars.get('total') - 1);
-            };
-
-            $modalInstance.close();
-
-            // Disable spinner
-            $scope.deleting = 0;
-        }).error(function(data) {
-            // Disable spinner
-            $scope.deleting = 0;
-        });
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-    };
-
-    /**
      * Deletes selected contents on confirmation.
      *
      * @param string route Route title.
