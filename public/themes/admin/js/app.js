@@ -11,6 +11,7 @@ angular.module(
     'ui.sortable',
     'pascalprecht.translate',
     'onm.mediaPicker',
+    'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
     'onm.item',

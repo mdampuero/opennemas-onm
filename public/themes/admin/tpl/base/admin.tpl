@@ -194,6 +194,7 @@
             @Common/src/angular-item-service/itemService.js,
             @Common/src/angular-routing/routing.js,
             @Common/src/angular-media-picker/js/media-picker.js,
+            @Common/src/angular-messenger/messenger.js,
 
 
             @AdminTheme/js/app.js,

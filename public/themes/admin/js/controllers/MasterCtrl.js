@@ -7,10 +7,10 @@
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
-    '$translate', '$timeout', '$window', 'messenger', 'paginationConfig',
+    '$translate', '$timeout', '$window', 'paginationConfig',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
-        $window, messenger, paginationConfig
+        $window, paginationConfig
     ) {
         $scope.sidebar = {
             collapsed: false,
