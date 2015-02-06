@@ -1,58 +1,115 @@
 /**
  * Directive to generate a dynamic image.
  */
- angular.module('onm.dynamicImage', [])
-  .directive('dynamicImage', function ($compile, routing) {
+ angular.module('onm.dynamicImage', ['onm.routing'])
+  .provider('dynamicImage', [ 'routingProvider', function(routingProvider) {
+    /**
+     * Property with the path to the image.
+     *
+     * @type string
+     */
+    this.property = 'path_img';
+
+    /**
+     * The image folder name.
+     *
+     * @type string
+     */
+    this.imageFolder = 'images'
+
+    /**
+     * Generates an URL for a given image.
+     *
+     * @param object image         The image to generate URL from.
+     * @param string transform     The transform parameters.
+     * @param string instanceMedia The instance media folder path.
+     *
+     * @return string The generated URL.
+     */
+    this.generateUrl = function(image, transform, instanceMedia) {
+      var prefix = '';
+
+      if (typeof image == 'object') {
+        image = image[this.property];
+      }
+
+      if (!image.match('@http://@')) {
+        if (!instanceMedia) {
+          throw 'Invalid instance media folder path';
+        }
+
+        prefix = instanceMedia + this.imageFolder;
+      }
+
+      return routingProvider.generate(
+        'asset_image',
+        {
+          'real_path':  prefix + image,
+          'parameters': encodeURIComponent(transform),
+        }
+      );
+    }
+
+    /**
+     * Sets the name of the object property with the image path.
+     *
+     * @param string property The object property name.
+     */
+    this.setProperty = function(property) {
+      this.property = property;
+    }
+
+    /**
+     * Returns the current service.
+     *
+     * @return object The current service.
+     */
+    this.$get = function () {
+      return this;
+    }
+  }])
+  .directive('dynamicImage', function ($compile, dynamicImage) {
     return {
       restrict: 'AE',
       link: function ($scope, $element, $attrs) {
-        var baseUrl;
-        var imgClass = '';
-        var html = '<img [class] ng-src="[% src %]" [% extra_parameters %]>';
-        var src  = $attrs['path'];
-        var extra_parameters = '';
+        if ($attrs['ngModel']) {
+          // Add watcher to update src when scope changes
+          $scope.$watch(
+            function() {
+              var watch = $scope;
+              var keys = $attrs['ngModel'].split('.');
 
-        if ($attrs['class']) {
-          imgClass = 'class="' + $attrs['class'] + '"';
-        }
+              for (var i = 0; i < keys.length; i++) {
+                watch = watch[keys[i]];
+              };
 
-        html = html.replace('[class]', imgClass);
-
-        if (src.match('@http://@')) {
-          baseUrl = '';
-        } else if (!$attrs['base_url']) {
-          baseUrl = $attrs['instance'] + 'images';
+              return watch;
+            },
+            function(nv, ov) {
+              console.log(nv);
+              $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia);
+            }
+          );
         } else {
-          baseUrl = $attrs['base_url'] + '/';
+          $scope.src = dynamicImage.generateUrl($attrs['path'], $attrs['transform'], instanceMedia);
         }
 
-        var resource = baseUrl + src;
-        resource.replace('@(?<!:)//@', '/');
+        // Allowed attributes with this directive
+        var allowedAttributes = [ 'class', 'height', 'width' ];
 
-        if ($attrs['transform']) {
-          var params = {
-            'real_path':  baseUrl + src,
-            'parameters': encodeURIComponent($attrs['transform']),
-          };
+        var html = '<img ng-src="[% src %]" [attributes]>';
 
-          resource = routing.generate('asset_image', params);
-        } else {
-          resource = baseUrl + src;
-        }
+        var attributes = [];
+        for (var i = 0; i < allowedAttributes.length; i++) {
+          if ($attrs[allowedAttributes[i]]) {
+            attributes.push(
+              allowedAttributes[i] + '="' + $attrs[allowedAttributes[i]] + '"'
+            );
+          }
+        };
 
-        delete $attrs['src'];
-        delete $attrs['base_url'];
-        delete $attrs['transform'];
+        html = html.replace('[attributes]', attributes.join(' '));
 
-        angular.forEach($attrs, function(value, key){
-          extra_parameters = extra_parameters + ' ' + key + '="'+value+'"';
-        });
-
-        resource = resource.replace(/[/]+/g, "/");
-        $scope.src = resource;
-        $scope.extra_parameters = extra_parameters;
-
-        // Compile template and replace elements
         var e = $compile(html)($scope);
         $element.replaceWith(e);
       }
