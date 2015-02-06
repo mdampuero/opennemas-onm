@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_trash}" method="post" id="trashform"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div method="post" ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
 
 <div class="page-navbar actions-navbar">
@@ -19,12 +19,12 @@
     </div>
 </div>
 
-<div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                  <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
                     <i class="fa fa-check fa-lg"></i>
                   </button>
                 </li>
@@ -33,22 +33,30 @@
                 </li>
                 <li class="quicklinks">
                     <h4>
-                        [% shvs.selected.length %] {t}items selected{/t}
+                        [% selected.contents.length %] {t}items selected{/t}
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
-                {acl isAllowed="TRASH_ADMIN"}
                 <li class="quicklinks">
-                    <a href="#" ng-click="open('modal-batch-restore', 'backend_ws_contents_batch_restore_from_trash')">
-                        <i class="fa fa-check fa-lg"></i>
-                        {t}Restore{/t}
-                    </a>
+                    <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                      {t}Deselect{/t}
+                    </button>
                 </li>
                 <li class="quicklinks">
-                    <a href="#" ng-click="open('modal-batch-remove-permanently', 'backend_ws_contents_batch_remove_permanently')">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                    </a>
+                    <span class="h-seperate"></span>
+                </li>
+                {acl isAllowed="TRASH_ADMIN"}
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="restoreFromTrashSelected()" tooltip="{t}Restore{/t}" tooltip-placement="bottom" type="button">
+                        <i class="fa fa-retweet fa-lg"></i>
+                        {t}Restore{/t}
+                    </button>
+                </li>
+                <li class="quicklinks">
+                    <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
+                        <i class="fa fa-trash-o fa-lg"></i> {t}Remove{/t}
+                    </button>
                 </li>
                 {/acl}
             </ul>
@@ -56,7 +64,7 @@
     </div>
 </div>
 
-<div class="page-navbar filters-navbar">
+<div class="page-navbar filters-navbar ng-cloak">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section">
@@ -64,13 +72,13 @@
                     <span class="add-on">
                         <span class="fa fa-search fa-lg"></span>
                     </span>
-                    <input class="no-boarder" type="text" name="title" ng-model="shvs.search.title_like" placeholder="{t}Filter by name{/t}" />
+                    <input class="no-boarder" type="text" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name{/t}" />
                 </li>
                 <li class="quicklinks">
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <select id="content_type_name" ng-model="shvs.search.content_type_name" data-label="{t}Content Type{/t}">
+                    <select id="content_type_name" ng-model="criteria.content_type_name" data-label="{t}Content Type{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                         {is_module_activated name="ARTICLE_MANAGER"}
                         {acl isAllowed="ARTICLE_TRASH"}
@@ -139,6 +147,29 @@
                         {/acl}{/is_module_activated}
                     </select>
                 </li>
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks">
+                    <span class="info">
+                    {t}Results{/t}: [% pagination.total %]
+                    </span>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -151,14 +182,19 @@
 
         <div class="grid-body no-padding">
             <div class="spinner-wrapper" ng-if="loading">
-                <div class="spinner"></div>
+                <div class="loading-spinner"></div>
                 <div class="spinner-text">{t}Loading{/t}...</div>
             </div>
             <div class="table-wrapper">
                 <table class="table table-hover no-margin" ng-if="!loading">
                     <thead>
                        <tr>
-                            <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                            <th style="width:15px;">
+                                <div class="checkbox checkbox-default">
+                                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                    <label for="select-all"></label>
+                                </div>
+                            </th>
                             <th class="left">{t}Content type{/t}</th>
                             <th class='left'>{t}Title{/t}</th>
                             <th style="width:40px">{t}Section{/t}</th>
@@ -166,14 +202,17 @@
                        </tr>
                     </thead>
                     <tbody>
-                        <tr ng-if="shvs.contents.length == 0">
+                        <tr ng-if="contents.length == 0">
                             <td class="center"colspan=6>
                                 {t}There is no elements in the trash{/t}
                             </td>
                         </tr>
-                        <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                        <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                             <td>
-                                <checkbox index="[% content.id %]">
+                                <div class="checkbox check-default">
+                                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                    <label for="checkbox[%$index%]"></label>
+                                </div>
                             </td>
                             <td>
                                 <strong>[% content.content_type_l10n_name %]</strong>
@@ -181,12 +220,12 @@
                             <td>
                                 [% content.title %]
                                 <div class="listing-inline-actions">
-                                    <a class="link pointer" ng-click="open('modal-restore-from-trash', 'backend_ws_content_restore_from_trash', $index)" type="button" title="{t}Restore{/t}">
+                                    <a class="link pointer" ng-click="restoreFromTrash(content)" type="button" title="{t}Restore{/t}">
                                         <i class="fa fa-retweet"></i>
                                         {t}Restore{/t}
                                     </a>
 
-                                    <button class="link link-danger" ng-click="open('modal-remove-permanently', 'backend_ws_content_remove_permanently', $index)" type="button" title="{t}Restore{/t}">
+                                    <button class="link link-danger" ng-click="removePermanently(content)" type="button" title="{t}Restore{/t}">
                                         <i class="fa fa-trash-o"></i>
                                         {t}Remove permanently{/t}
                                     </button>
@@ -201,12 +240,12 @@
                 </table>
             </div>
         </div>
-        <div class="grid-footer clearfix" ng-if="!loading && shvs.contents.length > 0">
-            <div class="pagination-info pull-left">
-                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+            <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
             </div>
-            <div class="pull-right">
-                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+            <div class="pull-right" ng-if="contents.length > 0">
+                <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
             </div>
         </div>
     </div>
