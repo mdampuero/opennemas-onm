@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
@@ -78,12 +78,12 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                      <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                      <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
                         <i class="fa fa-check fa-lg"></i>
                       </button>
                     </li>
@@ -92,45 +92,53 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% shvs.selected.length %] {t}items selected{/t}
+                            [% selected.contents.length %] {t}items selected{/t}
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                          {t}Deselect{/t}
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     {acl isAllowed="ALBUM_AVAILABLE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-times fa-lg"></i>
-                            </button>
-                        </li>
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-check fa-lg"></i>
-                            </button>
-                        </li>
+                      <li class="quicklinks">
+                          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                              <i class="fa fa-times fa-lg"></i>
+                          </button>
+                      </li>
+                      <li class="quicklinks">
+                          <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                              <i class="fa fa-check fa-lg"></i>
+                          </button>
+                      </li>
+                      <li class="quicklinks">
+                          <span class="h-seperate"></span>
+                      </li>
+                      <li class="quicklinks">
+                          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+                              <i class="fa fa-home"></i>
+                          </a>
+                      </li>
+                      <li class="quicklinks">
+                          <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+                              <i class="fa fa-home"></i>
+                              <i class="fa fa-times fa-sub text-danger"></i>
+                          </a>
+                      </li>
+                    {acl isAllowed="ALBUM_DELETE"}
                         <li class="quicklinks">
                             <span class="h-seperate"></span>
                         </li>
-                        <li class="quicklinks">
-                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-home"></i>
-                            </a>
-                        </li>
-                        <li class="quicklinks">
-                            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-home"></i>
-                                <i class="fa fa-times fa-sub text-danger"></i>
-                            </a>
-                        </li>
-                        {acl isAllowed="ALBUM_DELETE"}
-                            <li class="quicklinks">
-                                <span class="h-seperate"></span>
-                            </li>
-                        {/acl}
+                    {/acl}
                     {/acl}
                     {acl isAllowed="ALBUM_DELETE"}
                         <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
                             </button>
                         </li>
@@ -148,11 +156,11 @@
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
-                        <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                        <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
-                        <select id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
                                     {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -180,13 +188,13 @@
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
-                        <select name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
-                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
+                    <input type="hidden" name="in_home" ng-model="criteria.in_home">
                 </ul>
             </div>
         </div>
@@ -204,7 +212,12 @@
                     <table class="table table-hover no-margin" ng-if="!loading">
                         <thead>
                             <tr>
-                                <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                                <th style="width:15px;">
+                                    <div class="checkbox checkbox-default">
+                                        <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                        <label for="select-all"></label>
+                                    </div>
+                                </th>
                                 <th></th>
                                 <th class="title">{t}Title{/t}</th>
                                 {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
@@ -216,13 +229,16 @@
                                 <th class="right" style="width:10px;"></th>
                             </tr>
                         </thead>
-                        <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
-                            <tr ng-if="shvs.contents.length == 0">
+                        <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
+                            <tr ng-if="contents.length == 0">
                                 <td class="empty" colspan="10">{t}No available albums.{/t}</td>
                             </tr>
-                            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+                            <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                                 <td>
-                                    <checkbox index="[% content.id %]">
+                                    <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
                                 </td>
                                 <td>
                                     <span ng-if="content.cover != ''">
@@ -241,7 +257,7 @@
                                         </a>
                                         {/acl}
                                         {acl isAllowed="ALBUM_DELETE"}
-                                        <button class="del link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                        <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
                                             <i class="fa fa-trash-o"></i> {t}Remove{/t}
                                         </button>
                                         {/acl}
@@ -286,12 +302,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix" ng-if="shvs.contents.length > 0">
+            <div class="grid-footer clearfix" ng-if="contents.length > 0">
                 <div class="pagination-info pull-left">
-                    {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
                 <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
                 </div>
             </div>
         </div>

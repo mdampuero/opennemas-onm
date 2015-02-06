@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('poll', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('poll', { content_status: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
@@ -85,12 +85,12 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                      <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                      <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
                         <i class="fa fa-check fa-lg"></i>
                       </button>
                     </li>
@@ -99,11 +99,19 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% shvs.selected.length %] {t}items selected{/t}
+                            [% selected.contents.length %] {t}items selected{/t}
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                          {t}Deselect{/t}
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     {acl isAllowed="POLL_AVAILABLE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -118,7 +126,7 @@
                     {/acl}
                     {acl isAllowed="POLL_DELETE"}
                         <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
                             </button>
                         </li>
@@ -136,13 +144,13 @@
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
-                        <input class="no-boarder" name="title" ng-model="shvs.search.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                        <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks">
-                        <select class="input-medium select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+                        <select class="input-medium select2" id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
                                     {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -169,14 +177,14 @@
                         </select>
                     </li>
                     <li class="quicklinks">
-                        <select class="select2 input-medium" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
                     <li class="quicklinks">
-                        <select class="select2 input-medium" name="status" ng-model="shvs.search.elements_per_page" data-label="{t}View{/t}">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
                             <option value="10a">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -188,7 +196,7 @@
                     </li>
                     <li class="quicklinks">
                         <span class="info">
-                        {t}Results{/t}: [% shvs.total %]
+                        {t}Results{/t}: [% pagination.total %]
                         </span>
                     </li>
                 </ul>
@@ -215,7 +223,7 @@
         {render_messages}
 
         {if $category == 'widget'}
-            <div class="messages" ng-if="{$total_elements_widget} > 0 && shvs.total != {$total_elements_widget}">
+            <div class="messages" ng-if="{$total_elements_widget} > 0 && pagination.total != {$total_elements_widget}">
                 <div class="alert alert-info">
                     <button class="close" data-dismiss="alert">×</button>
                     {t 1=$total_elements_widget}You must put %1 polls in the HOME{/t}<br>
@@ -230,9 +238,14 @@
                 </div>
                 <div class="table-wrapper" ng-if="!loading">
                     <table class="table table-hover no-margin" ng-if="!loading">
-                        <thead ng-if="shvs.contents.length > 0">
+                        <thead ng-if="contents.length > 0">
                            <tr>
-                                <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                                <th style="width:15px;">
+                                    <div class="checkbox checkbox-default">
+                                        <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                        <label for="select-all"></label>
+                                    </div>
+                                </th>
                                 <th>{t}Title{/t}</th>
                                 <th style="width:65px;" class="center">{t}Section{/t}</th>
                                 <th style="width:110px;" class="center">{t}Date{/t}</th>
@@ -249,14 +262,17 @@
                                 <th class="center" style="width:10px;"></th>
                             </tr>
                         </thead>
-                        <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
-                            <tr ng-if="shvs.contents.length == 0">
+                        <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
+                            <tr ng-if="contents.length == 0">
                                 <td class="empty" colspan="10">{t}No available polls.{/t}</td>
                             </tr>
 
-                            <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                            <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                                 <td>
-                                    <checkbox index="[% content.id %]">
+                                    <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
                                 </td>
                                 <td>
                                     [% content.title %]
@@ -268,7 +284,7 @@
                                             </a>
                                         {/acl}
                                         {acl isAllowed="POLL_DELETE"}
-                                            <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                            <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                                 {t}Delete{/t}
                                             </button>
@@ -312,11 +328,11 @@
                 </div>
             </div>
             <div class="grid-footer clearfix" ng-if="!loading">
-                <div class="pagination-info pull-left" ng-if="shvs.contents.length > 0">
-                    {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="shvs.contents.length > 0">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                <div class="pull-right" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
                 </div>
             </div>
         </div>

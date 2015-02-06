@@ -58,23 +58,23 @@
                         <span class="h-seperate"></span>
                     </li>
                     {acl isAllowed="ARTICLE_AVAILABLE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-times fa-lg"></i>
-                            </button>
-                        </li>
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-check fa-lg"></i>
-                            </button>
-                        </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                            <i class="fa fa-times fa-lg"></i>
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                            <i class="fa fa-check fa-lg"></i>
+                        </button>
+                    </li>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </button>
-                        </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </button>
+                    </li>
                     {/acl}
                 </ul>
             </div>

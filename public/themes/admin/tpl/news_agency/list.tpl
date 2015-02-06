@@ -12,7 +12,7 @@
 {/block}
 
 {block name="content"}
-<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div  ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -54,12 +54,12 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                      <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                      <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
                         <i class="fa fa-check fa-lg"></i>
                       </button>
                     </li>
@@ -68,11 +68,19 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% shvs.selected.length %] {t}items selected{/t}
+                            [% selected.contents.length %] {t}items selected{/t}
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                          {t}Deselect{/t}
+                        </button>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
                     <li>
                         <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
                             {t}Import selected{/t}
@@ -91,7 +99,7 @@
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
-                        <input class="no-boarder" name="title" ng-model="shvs.search.title" placeholder="{t}Search by title or content{/t}" type="search"/>
+                        <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title or content{/t}" type="search"/>
                     </li>
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
@@ -100,7 +108,7 @@
                         {t}from source{/t}
                     </li>
                     <li class="quicklinks">
-                        <select id="source" name="source" ng-model="shvs.search.source" data-label="{t}Source{/t}">
+                        <select id="source" name="source" ng-model="criteria.source" data-label="{t}Source{/t}">
                             <option value="*">{t}-- All --{/t}</option>
                             {html_options options=$source_names}
                         </select>
@@ -112,7 +120,7 @@
                     </li>
                     <li class="quicklinks">
                         <span class="info">
-                        {t}Results{/t}: [% shvs.total %]
+                        {t}Results{/t}: [% pagination.total %]
                         </span>
                     </li>
                 </ul>
@@ -152,7 +160,12 @@
             <table class="table table-hover table-condensed" ng-if="!loading">
                 <thead>
                     <tr>
-                        <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                        <th style="width:15px;">
+                            <div class="checkbox checkbox-default">
+                                <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                <label for="select-all"></label>
+                            </div>
+                        </th>
                         <th>{t}Title{/t}</th>
                         <th class="center">{t}Origin{/t}</th>
                         <th class="center" style='width:10px !important;'>{t}Date{/t}</th>
@@ -161,7 +174,7 @@
                 </thead>
 
                 <tbody>
-                    <tr ng-if="shvs.contents.length == 0">
+                    <tr ng-if="contents.length == 0">
                         <td colspan="7" class="center">
                             <h4>
                                 <b>{t}There is no elements to import{/t}</b>
@@ -169,9 +182,12 @@
                             <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                         </td>
                     </tr>
-                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
+                    <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
                         <td>
-                            <checkbox index="[% content.id %]">
+                            <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
                         </td>
                         <td >
                             <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
@@ -221,13 +237,13 @@
                 <tfoot>
                     <tr>
                         <td colspan="10" class="center">
-                            <div class="pull-left" ng-if="shvs.contents.length > 0">
-                                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+                            <div class="pull-left" ng-if="contents.length > 0">
+                                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
                             </div>
-                            <div class="pull-right" ng-if="shvs.contents.length > 0">
-                                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'admin_news_agency_ws')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                            <div class="pull-right" ng-if="contents.length > 0">
+                                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'admin_news_agency_ws')" page="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
                             </div>
-                            <span ng-if="shvs.contents.length == 0">&nbsp;</span>
+                            <span ng-if="contents.length == 0">&nbsp;</span>
                         </td>
                     </tr>
                 </tfoot>

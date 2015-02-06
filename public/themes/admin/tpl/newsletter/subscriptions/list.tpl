@@ -46,12 +46,12 @@
 </div>
 
 
-<!-- <div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+<!-- <div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                  <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
                     <i class="fa fa-check fa-lg"></i>
                   </button>
                 </li>
@@ -60,7 +60,7 @@
                 </li>
                 <li class="quicklinks">
                     <h4>
-                        [% shvs.selected.length %] {t}items selected{/t}
+                        [% selected.contents.length %] {t}items selected{/t}
                     </h4>
                 </li>
             </ul>

@@ -9,7 +9,7 @@
         <th class="right" style="width:10px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
-        <tr ng-if="shvs.contents.length == 0">
+        <tr ng-if="contents.length == 0">
             <td class="empty" colspan="3">
                 <div class="search-results">
                     <p>
@@ -19,7 +19,7 @@
                 </div>
             </td>
         </tr>
-        <tr ng-repeat="content in shvs.contents" ng-if="shvs.contents.length > 0">
+        <tr ng-repeat="content in contents" ng-if="contents.length > 0">
             <td style="padding:10px;">
                 <strong>[ [% content.content_type_l10n_name %] ] [% content.title %]</strong>
                 <br>
@@ -45,13 +45,13 @@
     </tbody>
     <tfoot>
         <td colspan="3" class="center">
-            <div class="pagination-info pull-left" ng-if="shvs.contents.length > 0">
-                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+            <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %]
             </div>
-            <div class="pull-right" ng-if="shvs.contents.length > 0">
-                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+            <div class="pull-right" ng-if="contents.length > 0">
+                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
             </div>
-            <span ng-if="shvs.contents.length == 0">&nbsp;</span>
+            <span ng-if="contents.length == 0">&nbsp;</span>
         </td>
     </tfoot>
 </table>

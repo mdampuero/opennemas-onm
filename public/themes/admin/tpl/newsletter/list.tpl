@@ -133,10 +133,10 @@
                 </tbody>
             </table>
             <div class="grid-footer clearfix" ng-if="!loading">
-                <div class="pull-left pagination-info" ng-if="shvs.contents.length > 0">
-                    <!-- {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %] -->
+                <div class="pull-left pagination-info" ng-if="contents.length > 0">
+                    <!-- {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %] -->
                 </div>
-                <div class="pull-right" ng-if="shvs.contents.length > 0">
+                <div class="pull-right" ng-if="contents.length > 0">
                     {$pagination|default:""}
                 </div>
             </div>

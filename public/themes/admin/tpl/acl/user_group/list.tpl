@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: ''}, 'name', 'asc', 'backend_ws_usergroups_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="#" method="post" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentListController" ng-init="init(null, { name_like: ''}, 'name', 'asc', 'backend_ws_usergroups_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -29,12 +29,12 @@
     </div>
 
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': shvs.selected.length == 0 }">
+    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="shvs.selected = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                        <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
                             <i class="fa fa-check fa-lg"></i>
                         </button>
                     </li>
@@ -43,13 +43,21 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% shvs.selected.length %] {t}items selected{/t}
+                            [% selected.contents.length %] {t}items selected{/t}
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
                     <li class="quicklinks">
+                        <li class="quicklinks">
+                            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
+                              {t}Deselect{/t}
+                            </button>
+                        </li>
                         {acl isAllowed="GROUP_DELETE"}
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
                         <a class="btn btn-link" href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
                             <i class="fa fa-trash-o"></i>
                         </a>
@@ -66,7 +74,7 @@
                 <ul class="nav quick-section">
                     <li class="m-r-10 input-prepend inside search-input no-boarder">
                         <span class="add-on"> <span class="fa fa-search fa-lg"></span> </span>
-                        <input class="no-boarder" name="name" ng-model="shvs.search.name_like" placeholder="Search by name" type="text"> </li>
+                        <input class="no-boarder" name="name" ng-model="criteria.name_like" placeholder="Search by name" type="text"> </li>
                 </ul>
             </div>
         </div>
@@ -85,20 +93,28 @@
                     <table class="table table-hover no-margin">
                         <thead>
                             <tr>
-                                <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                                <th style="width:15px;">
+                                    <div class="checkbox checkbox-default">
+                                        <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                                        <label for="select-all"></label>
+                                    </div>
+                                </th>
                                 <th>{t}Group name{/t}</th>
                                 <th class="center" style="width:10px"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-if="shvs.contents.length == 0">
+                            <tr ng-if="contents.length == 0">
                                 <td colspan="3" class="empty">
                                     {t escape=off}There is no user groups created yet or <br/>results matching your searching criteria.{/t}
                                 </td>
                             </tr>
-                            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                            <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                                 <td>
-                                    <checkbox index="[% content.id %]">
+                                    <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
                                 </td>
                                 <td>
                                     [% content.name %]
@@ -118,9 +134,9 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix" ng-if="!loading && shvs.contents.length > 0">
+            <div class="grid-footer clearfix" ng-if="!loading && contents.length > 0">
                 <div class="pagination-info pull-left">
-                    {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
                 <div class="pull-right">
                     <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="page" total-items="total" num-pages="pages"></pagination>

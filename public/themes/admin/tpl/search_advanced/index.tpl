@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentCtrl" ng-controller="ContentCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentListController" ng-controller="ContentListController" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -26,13 +26,13 @@
                     <span class="add-on">
                         <span class="fa fa-search fa-lg"></span>
                     </span>
-                    <input class="no-boarder" type="text" name="name" ng-model="shvs.search.title_like" placeholder="{t}Filter by title{/t}" />
+                    <input class="no-boarder" type="text" name="name" ng-model="criteria.title_like" placeholder="{t}Filter by title{/t}" />
                 </li>
                 <li class="quicklinks">
                     {t}CONTENT TYPE:{/t}
                 </li>
                 <li class="quicklinks">
-                    <select name="content_types[]" id="content_types" ng-model="shvs.search.content_type_name"> <!-- multiple -->
+                    <select name="content_types[]" id="content_types" ng-model="criteria.content_type_name"> <!-- multiple -->
                         {html_options options=$content_types selected=$content_types_selected}
                     </select>
                 </li>
