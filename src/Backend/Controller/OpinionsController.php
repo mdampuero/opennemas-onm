@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Module\ModuleManager;
 use Onm\Framework\Controller\Controller;
@@ -34,9 +35,6 @@ class OpinionsController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        ModuleManager::checkActivatedOrForward('OPINION_MANAGER');
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
@@ -60,6 +58,8 @@ class OpinionsController extends Controller
      * @return Response   The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function listAction($blog)
     {
@@ -83,6 +83,8 @@ class OpinionsController extends Controller
      * @return Response         The response object.
      *
      * @Security("has_role('OPINION_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function frontpageAction(Request $request)
     {
@@ -185,6 +187,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_UPDATE')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -253,6 +257,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_CREATE')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -331,6 +337,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_UPDATE')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -433,6 +441,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_HOME')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function toggleInHomeAction(Request $request)
     {
@@ -479,6 +489,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -525,6 +537,8 @@ class OpinionsController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -568,6 +582,8 @@ class OpinionsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -608,6 +624,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function configAction(Request $request)
     {
@@ -648,6 +666,9 @@ class OpinionsController extends Controller
     /**
      * Show a list of opinion authors.
      *
+     * This action is not mapped with CheckModuleAccess annotation because there
+     * is no module for authors actions and cannot be dependent of opinon module
+     *
      * @return void
      *
      * @Security("has_role('AUTHOR_ADMIN')")
@@ -659,6 +680,9 @@ class OpinionsController extends Controller
 
     /**
      * Shows the author information given its id.
+     *
+     * This action is not mapped with CheckModuleAccess annotation because there
+     * is no module for authors actions and cannot be dependent of opinon module
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
@@ -696,6 +720,9 @@ class OpinionsController extends Controller
 
     /**
      * Creates an author give some information.
+     *
+     * This action is not mapped with CheckModuleAccess annotation because there
+     * is no module for authors actions and cannot be dependent of opinon module
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
@@ -772,6 +799,9 @@ class OpinionsController extends Controller
 
     /**
      * Handles the update action for an author given its id.
+     *
+     * This action is not mapped with CheckModuleAccess annotation because there
+     * is no module for authors actions and cannot be dependent of opinon module
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
@@ -869,6 +899,8 @@ class OpinionsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function previewAction(Request $request)
     {
@@ -978,6 +1010,8 @@ class OpinionsController extends Controller
      * @return Response  The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
      */
     public function getPreviewAction()
     {

@@ -161,7 +161,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $domain = $this->instance->getMainDomain();
             }
 
-            if ($domain && $host !== $domain) {
+            if (($domain && $host !== $domain) || $request->getScheme() != 'http') {
                 $uri  = $request->getRequestUri();
                 $url = 'http://' . $domain . $port . $uri;
 

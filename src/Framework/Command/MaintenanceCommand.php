@@ -23,7 +23,11 @@ class MaintenanceCommand extends Command
             ->setName('app:maintenance')
             ->setDescription('Enables/disables the maintenance mode of the framework')->setDefinition(
                 array(
-                    new InputArgument('action', InputArgument::REQUIRED, "Whether to 'enable' or 'disable' maintenance mode"),
+                    new InputArgument(
+                        'action',
+                        InputArgument::REQUIRED,
+                        "Whether to 'enable' or 'disable' maintenance mode"
+                    ),
                 )
             )
             ->setHelp(

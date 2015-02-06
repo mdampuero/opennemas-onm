@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,22 +29,13 @@ use Onm\Settings as s;
 class CategoriesController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('CATEGORY_MANAGER');
-    }
-
-    /**
      * Lists all the available categories
      *
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_ADMIN')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function listAction()
     {
@@ -111,6 +103,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_CREATE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -149,7 +143,7 @@ class CategoriesController extends Controller
                 $user->addCategoryToUser($_SESSION['userid'], $category->pk_content_category);
                 $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
-                getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+                dispatchEventWithParams('category.create', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
                     'success',
@@ -192,6 +186,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_UPDATE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -240,6 +236,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_UPDATE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -283,18 +281,13 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if ($category->update($data)) {
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
                 sprintf(_('Category "%s" updated successfully.'), $data['title'])
             );
-
-        }
-
-        /* Limpiar la cache de portada de todas las categorias */
-        if ($data['inmenu'] == 1) {
-            dispatchEventWithParams('category.clean_all');
         }
 
         return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
@@ -308,6 +301,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_DELETE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -323,7 +318,7 @@ class CategoriesController extends Controller
                 $_SESSION['accesscategories'] =
                     $user->getAccessCategoryIds($_SESSION['userid']);
 
-                getService('cache')->delete(CACHE_PREFIX.'_content_categories');
+                dispatchEventWithParams('category.delete', ['category' => $category]);
 
                 $this->get('session')->getFlashBag()->add(
                     'sucess',
@@ -358,6 +353,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_DELETE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function emptyAction(Request $request)
     {
@@ -403,6 +400,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_AVAILABLE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function toggleAvailableAction(Request $request)
     {
@@ -419,10 +418,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInMenu($status);
 
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-
-            // Clean cache for all category frontpages
-            // dispatchEventWithParams('category.clean_all');
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -441,6 +437,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_AVAILABLE')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function toggleRssAction(Request $request)
     {
@@ -458,10 +456,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInRss($status, $id);
 
-            getService('cache')->delete(CACHE_PREFIX.'_content_categories');
-
-            // Limpiar la cache de portada de todas las categorias
-            // $refresh = Content::refreshFrontpageForAllCategories();
+            dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -480,6 +475,8 @@ class CategoriesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('CATEGORY_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="CATEGORY_MANAGER")
      **/
     public function configAction(Request $request)
     {

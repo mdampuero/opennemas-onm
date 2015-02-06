@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -35,9 +36,6 @@ class NewsAgencyController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
-
         $this->syncFrom = array(
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
@@ -74,6 +72,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function listAction(Request $request)
     {
@@ -134,25 +134,28 @@ class NewsAgencyController extends Controller
     }
 
     /**
+     * Fetches the list elements that are synced
      *
+     * @param Request $request the request object
      *
-     * @return void
-     * @author
+     * @return JsonResponse
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function webServiceAction(Request $request)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
+        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
 
         $filterSource = $filterTitle = '*';
 
         if (is_array($search)) {
             if (array_key_exists('source', $search)) {
-                $filterSource          = $search['source'][0]['value'];
+                $filterSource = $search['source'][0]['value'];
             }
             if (array_key_exists('title', $search)) {
-                $filterTitle     = $search['title'][0]['value'];
+                $filterTitle = $search['title'][0]['value'];
             }
         }
 
@@ -236,6 +239,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function showAction(Request $request)
     {
@@ -281,6 +286,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function importAction(Request $request)
     {
@@ -328,6 +335,10 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function batchImportAction(Request $request)
     {
@@ -365,6 +376,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function selectCategoryWhereToImportAction(Request $request)
     {
@@ -417,10 +430,15 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * undocumented function
+     * Get the most similar category based on category metadata of element
      *
-     * @return void
-     * @author
+     * @param Object $element the element object
+     *
+     * @return int Category id
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function getSimilarCategoryIdForElement($element)
     {
@@ -459,6 +477,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function showAttachmentAction(Request $request)
     {
@@ -521,6 +541,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function unlockAction(Request $request)
     {
@@ -544,6 +566,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function syncAction(Request $request)
     {
@@ -582,6 +606,8 @@ class NewsAgencyController extends Controller
      * @return void
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configListServersAction()
     {
@@ -604,6 +630,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configUpdateServerAction(Request $request)
     {
@@ -649,6 +677,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configShowServerAction(Request $request)
     {
@@ -674,6 +704,10 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function toogleEnabledAction(Request $request)
     {
@@ -711,6 +745,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configCreateServerAction(Request $request)
     {
@@ -772,6 +808,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configDeleteServerAction(Request $request)
     {
@@ -821,6 +859,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function removeServerFilesAction(Request $request)
     {

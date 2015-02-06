@@ -395,7 +395,7 @@ class InstanceController extends Controller
 
             if ($oldActivated != $instance->activated) {
                 dispatchEventWithParams(
-                    'instance.disable',
+                    'instance.update',
                     array('instance' => $instance->internal_name)
                 );
             }
@@ -457,7 +457,7 @@ class InstanceController extends Controller
 
                 if ($oldActivated != $instance->activated) {
                     dispatchEventWithParams(
-                        'instance.disable',
+                        'instance.update',
                         array('instance' => $instance->internal_name)
                     );
                 }
@@ -549,6 +549,11 @@ class InstanceController extends Controller
             $this->get('onm.validator.instance')->validate($instance);
             $im->persist($instance);
             $im->updateSettings($instance);
+
+            dispatchEventWithParams(
+                'instance.update',
+                array('instance' => $instance->internal_name)
+            );
 
             return new JsonResponse(_('Instance saved successfully'));
         } catch (InstanceNotFoundException $e) {

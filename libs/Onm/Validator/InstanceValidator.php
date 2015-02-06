@@ -99,7 +99,7 @@ class InstanceValidator extends Validator
         $criteria = [
             'internal_name' => [
                 [
-                    'value' => $class->internal_name . '[0-9]*',
+                    'value' => '^'.$class->internal_name . '[0-9]*$',
                     'operator' => 'REGEXP'
                 ]
             ]

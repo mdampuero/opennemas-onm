@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -29,24 +30,14 @@ use Onm\StringUtils;
  **/
 class StaticPagesController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return Response the response object
-     **/
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('STATIC_PAGES_MANAGER');
-    }
-
     /**
      * Shows a list of the static pages
      *
      * @return void
      *
      * @Security("has_role('STATIC_PAGE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
      **/
     public function listAction()
     {
@@ -61,6 +52,8 @@ class StaticPagesController extends Controller
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
      * @Security("has_role('STATIC_PAGE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -95,6 +88,8 @@ class StaticPagesController extends Controller
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
      * @Security("has_role('STATIC_PAGE_CREATE')")
+     *
+     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -105,21 +100,14 @@ class StaticPagesController extends Controller
             $staticPage = new \StaticPage();
 
             $data = array(
-                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
-                    'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                    'fk_publisher'   => $_SESSION['userid'],
-                    'category'       => 0,
-                    'id'             => 0,
-                );
-            $data = array_merge(
-                $data,
-                array(
-                    'slug'     => $staticPage->buildSlug($data['slug'], $data['id'], $data['title']),
-                    'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
-                )
+                'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
+                'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'fk_publisher'   => $_SESSION['userid'],
+                'category'       => 0,
+                'id'             => 0,
             );
 
             $staticPage->create($data);
@@ -141,6 +129,8 @@ class StaticPagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('STATIC_PAGE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="STATIC_PAGES_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -173,15 +163,9 @@ class StaticPagesController extends Controller
                     'fk_publisher'   => $_SESSION['userid'],
                     'id'             => $id,
                 );
-                $data = array_merge(
-                    $data,
-                    array(
-                        'slug'     => $staticPage->buildSlug($data['slug'], 0, $data['title']),
-                        'metadata' => \Onm\StringUtils::normalizeMetadata($data['metadata']),
-                    )
-                );
 
                 $staticPage->update($data);
+
                 $this->get('session')->getFlashBag()->add(
                     'success',
                     _("Static page updated successfully.")
@@ -205,11 +189,12 @@ class StaticPagesController extends Controller
     {
         // If the action is an Ajax request handle it, if not redirect to list
         $data = array(
-                    'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-                    'metadata' => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'id'       => $request->request->filter('id', 0, FILTER_SANITIZE_STRING),
-                );
+            'title'    => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+            'slug'     => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
+            'metadata' => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'id'       => $request->request->filter('id', 0, FILTER_SANITIZE_STRING),
+        );
+
         if ($request->isXmlHttpRequest()) {
             try {
                 $page = new \StaticPage();
@@ -222,27 +207,5 @@ class StaticPagesController extends Controller
              return new Response($output);
         }
 
-    }
-
-    /**
-     * Change metadata for one static page given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function cleanMetadataAction(Request $request)
-    {
-        $metadata = $request->request->filter('metadata', null, FILTER_SANITIZE_STRING);
-        // If the action is an Ajax request handle it, if not redirect to list
-        if ($request->isXmlHttpRequest()) {
-            try {
-                $output  = StringUtils::normalizeMetadata($metadata);
-            } catch (\Exception $e) {
-                $output = _("Can't get static page metadata.");
-            }
-        }
-
-        return new Response($output);
     }
 }

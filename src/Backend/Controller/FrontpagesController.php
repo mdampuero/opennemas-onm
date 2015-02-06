@@ -15,8 +15,10 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -37,6 +39,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -149,12 +153,17 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
-        $savedProperly     = false;
-        $validReceivedData = false;
+        $savedProperly         = false;
+        $validReceivedData     = false;
         $dataPositionsNotValid = false;
+
+        // Get application logger
+        $logger = $this->get('application.log');
 
         $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
@@ -162,119 +171,95 @@ class FrontpagesController extends Controller
         $cm = new \ContentManager();
         $oldContents = $cm->getContentsForHomepageOfCategory($category);
 
-        if ($category !== null && $category !== '') {
-            $category = (int) $category;
-
-            // Get the form-encoded places from request
-            $numberOfContents  = $request->request->getDigits('contents_count');
-            $contentsPositions = $request->request->get('contents_positions', null);
-            $lastVersion       = $request->request->get('last_version', null);
-
-            $categoryID = ($category == 'home') ? 0 : $category;
-
-            // Check if data send by user is valid
-            $validReceivedData = is_array($contentsPositions)
-                                 && count($contentsPositions) > 0
-                                 && !is_null($categoryID)
-                                 && !is_null($lastVersion)
-                                 && count($contentsPositions) === (int) $numberOfContents;
-
-            if ($validReceivedData) {
-                foreach ($contentsPositions as $params) {
-                    if (!isset($params['id'])
-                        || !isset($params['placeholder'])
-                        || !isset($params['position'])
-                        || !isset($params['content_type'])
-                        || strpos('placeholder', $params['placeholder'])
-                    ) {
-                        $validReceivedData = false;
-                        $dataPositionsNotValid = true;
-                        break;
-                    }
-                }
-            }
-
-            // Get application logger
-            $logger = $this->get('application.log');
-
-            if ($validReceivedData) {
-                $contents = array();
-                // Iterate over each element and fetch its parameters to save.
-                foreach ($contentsPositions as $params) {
-                    $contents[] = array(
-                        'id'           => $params['id'],
-                        'category'     => $categoryID,
-                        'placeholder'  => $params['placeholder'],
-                        'position'     => $params['position'],
-                        'content_type' => $params['content_type'],
-                    );
-                }
-
-                // Save contents
-                $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
-
-                /* Notice log of this action */
-                $logger->info(
-                    'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                    .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
-                );
-            } else {
-                $message = '';
-                if ($dataPositionsNotValid) {
-                    $message = '[data positions not valid]';
-                }
-                $logger->info(
-                    'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
-                    .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
-                );
-            }
-
-            $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
+        if ($category === null && $category === '') {
+            return new JsonResponse(
+                [ 'message' => _("Unable to save content positions: Data sent from the client were not valid.") ]
+            );
         }
 
-        // If this request is Ajax return properly formated result.
-        if ($savedProperly) {
-            // Save the actual date for
-            $date = new \Datetime("now");
-            $dateForDB = $date->format(\DateTime::ISO8601);
-            s::set('frontpage_'.$category.'_last_saved', $dateForDB);
+        $category = (int) $category;
 
-            $message = _("Content positions saved properly");
-            $responseData = array(
-                'message' => $message,
-                'date'    => $dateForDB,
-            );
-            $response = new Response(json_encode($responseData));
-        } else {
-            // Iterate over each element and fetch its parameters to save.
-            $oldItems = array();
-            foreach ($oldContents as $item) {
-                $oldItems[] = array(
-                    'id'           => $item->id,
-                    'category'     => $categoryID,
-                    'placeholder'  => $item->placeholder,
-                    'position'     => $item->position,
-                    'content_type' => ucfirst($item->content_type_name),
-                );
+        // Get the form-encoded places from request
+        $numberOfContents  = $request->request->getDigits('contents_count');
+        $contentsPositions = $request->request->get('contents_positions', null);
+        $lastVersion       = $request->request->get('last_version', null);
+
+        $categoryID = ($category == 'home') ? 0 : $category;
+
+        // Check if data send by user is valid
+        $validReceivedData = is_array($contentsPositions)
+             && count($contentsPositions) > 0
+             && !is_null($categoryID)
+             && !is_null($lastVersion)
+             && count($contentsPositions) === (int) $numberOfContents;
+
+        if ($validReceivedData) {
+            foreach ($contentsPositions as $params) {
+                if (!isset($params['id'])
+                    || !isset($params['placeholder'])
+                    || !isset($params['position'])
+                    || !isset($params['content_type'])
+                    || strpos('placeholder', $params['placeholder'])
+                ) {
+                    $validReceivedData = false;
+                    $dataPositionsNotValid = true;
+                    break;
+                }
             }
-
-            // Restore old frontpage
-            \ContentManager::saveContentPositionsForHomePage($categoryID, $oldItems);
-
-            if ($validReceivedData == false) {
-                $errorMessage = _("Unable to save content positions: Data sent from the client were not valid.");
-            } else {
-                $errorMessage = _("Unable to save content positions: Unknow reason");
-            }
-
-            $responseData = array(
-                'message' => $errorMessage,
-            );
-
-            $response = new Response(json_encode($responseData), 400);
         }
 
-        return $response;
+        if (!$validReceivedData) {
+            $message = _("Unable to save content positions: Data sent from the client were not valid.");
+
+            if ($dataPositionsNotValid) {
+                $message = _("Unable to save content positions: Content positions sent from the client were not valid.");
+            }
+
+            $logger->info(
+                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') was failed '.$message.' to execute'
+                .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+            );
+
+            return new JsonResponse([ 'message' =>  $message ]);
+        }
+
+        $contents = array();
+        // Iterate over each element and fetch its parameters to save.
+        foreach ($contentsPositions as $params) {
+            $contents[] = array(
+                'id'           => $params['id'],
+                'category'     => $categoryID,
+                'placeholder'  => $params['placeholder'],
+                'position'     => $params['position'],
+                'content_type' => $params['content_type'],
+            );
+        }
+
+        // Save contents
+        $savedProperly = \ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+
+        if (!$savedProperly) {
+            $message = _("Unable to save content positions: Error while saving in database.");
+            return new JsonResponse([ 'message' =>  $message ]);
+        }
+
+        // Notice log of this action
+        $logger->info(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
+        );
+
+        $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
+
+        // Save the actual date for fronpage
+        $date = new \Datetime("now");
+        $dateForDB = $date->format(\DateTime::ISO8601);
+        s::set('frontpage_'.$category.'_last_saved', $dateForDB);
+
+        return new JsonResponse([
+            'message' => _("Content positions saved properly"),
+            'date'    => $dateForDB,
+        ]);
     }
 
     /**
@@ -285,6 +270,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function pickLayoutAction(Request $request)
     {
@@ -341,6 +328,8 @@ class FrontpagesController extends Controller
      * @return Response the response instance
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function lastVersionAction(Request $request)
     {
@@ -369,6 +358,8 @@ class FrontpagesController extends Controller
      * @return void
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -399,7 +390,7 @@ class FrontpagesController extends Controller
         $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
         $this->view->assign('advertisements', $ads);
 
-        /***** GET ALL FRONTPAGE'S IMAGES *******/
+        // Get all frontpage images
         $imageIdsList = array();
         foreach ($contentsInHomepage as $content) {
             if (isset($content->img1)) {
@@ -426,9 +417,7 @@ class FrontpagesController extends Controller
         }
         $this->view->assign('column', $contentsInHomepage);
 
-        /**
-         * Getting categories
-        */
+        // Getting categories
         $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId = $ccm->get_id($categoryName);
         $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
@@ -457,6 +446,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function getPreviewAction()
     {
