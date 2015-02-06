@@ -112,7 +112,7 @@
         <div class="grid simple">
             <div class="grid-body {if count($caches) > 0}no-padding{/if}">
                 {if count($caches)>0}
-                <div class="table-wrapper">
+                <div class="table-wrapper ng-cloak">
                     <table class="table table-hover no-margin">
                         <thead>
                             <tr>

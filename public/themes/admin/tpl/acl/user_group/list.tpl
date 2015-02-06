@@ -29,7 +29,7 @@
     </div>
 
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
@@ -86,10 +86,10 @@
         <div class="grid simple">
             <div class="grid-body no-padding">
                 <div class="spinner-wrapper" ng-if="loading">
-                    <div class="spinner"></div>
+                    <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <div class="table-wrapper" ng-if="!loading">
+                <div class="table-wrapper ng-cloak">
                     <table class="table table-hover no-margin">
                         <thead>
                             <tr>
@@ -134,7 +134,7 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix" ng-if="!loading && contents.length > 0">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
                 <div class="pagination-info pull-left">
                     {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>

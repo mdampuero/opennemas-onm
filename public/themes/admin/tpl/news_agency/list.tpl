@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
@@ -154,7 +154,7 @@
 
         <script type="text/ng-template" id="contents">
             <div class="spinner-wrapper" ng-if="loading">
-                <div class="spinner"></div>
+                <div class="loading-spinner"></div>
                 <div class="spinner-text">{t}Loading{/t}...</div>
             </div>
             <table class="table table-hover table-condensed" ng-if="!loading">

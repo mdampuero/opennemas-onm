@@ -185,7 +185,7 @@
                 <div class="loading-spinner"></div>
                 <div class="spinner-text">{t}Loading{/t}...</div>
             </div>
-            <div class="table-wrapper">
+            <div class="table-wrapper ng-cloak">
                 <table class="table table-hover no-margin" ng-if="!loading">
                     <thead>
                        <tr>

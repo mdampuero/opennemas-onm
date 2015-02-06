@@ -46,7 +46,7 @@
 </div>
 
 
-<!-- <div class="page-navbar selected-navbar" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+<!-- <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">

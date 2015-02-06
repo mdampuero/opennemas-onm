@@ -63,7 +63,7 @@
         <div class="grid-body {if count($errors) != 0} no-padding{/if}">
 
 
-            <div class="table-wrapper">
+            <div class="table-wrapper ng-cloak">
                 {if count($errors) > 0}
 
                 <table class="table table-hover">

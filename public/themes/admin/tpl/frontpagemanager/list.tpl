@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <div class="page-navbar selected-navbar" ng-class="{ 'collapsed': selected.contents.length == 0 }" style="display: none;">
+    <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }" style="display: none;">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
@@ -260,7 +260,7 @@
         </div><!-- /frontpagemanager -->
 
         <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
-            <div class="spinner"></div>
+            <div class="loading-spinner"></div>
             <div class="content-provider-block-wrapper clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}

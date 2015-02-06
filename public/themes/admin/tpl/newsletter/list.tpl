@@ -132,7 +132,7 @@
                     {/foreach}
                 </tbody>
             </table>
-            <div class="grid-footer clearfix" ng-if="!loading">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pull-left pagination-info" ng-if="contents.length > 0">
                     <!-- {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total|number %] -->
                 </div>
