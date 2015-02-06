@@ -71,7 +71,7 @@
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
                         <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
                             </button>
                         </li>
@@ -283,7 +283,7 @@
                                             </a>
                                         {/acl}
                                         {acl isAllowed="ARTICLE_DELETE"}
-                                            <button class="link link-danger" ng-click="delete(content)" type="button">
+                                            <button class="link link-danger" ng-click="sendToTrash(content)" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                                 {t}Delete{/t}
                                             </button>
@@ -317,8 +317,8 @@
                 </div>
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-                <div class="pull-left pagination-info" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((page - 1) * elements_per_page > 0) ? (page - 1) * elements_per_page : 1 %]-[% (page * elements_per_page) < total ? page * elements_per_page : total %] {t}of{/t} [% total|number %]
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
                 <div class="pull-right" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
