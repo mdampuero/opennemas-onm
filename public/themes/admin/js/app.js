@@ -10,6 +10,7 @@ angular.module(
     'ui.bootstrap',
     'ui.sortable',
     'pascalprecht.translate',
+    'onm.dynamicImage',
     'onm.mediaPicker',
     'onm.messenger',
     'onm.oqlEncoder',
