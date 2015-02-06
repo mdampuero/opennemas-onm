@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -33,10 +34,6 @@ class VideosController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
-
-        /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
         $request = $this->get('request');
@@ -58,13 +55,10 @@ class VideosController extends Controller
                 'category'     => $this->category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
-                //TODO: ¿datoscat?¿
                 'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
-
-        /******************* GESTION CATEGORIAS  *****************************/
     }
 
     /**
@@ -73,6 +67,8 @@ class VideosController extends Controller
      * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function listAction()
     {
@@ -85,6 +81,8 @@ class VideosController extends Controller
      * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function widgetAction()
     {
@@ -107,6 +105,8 @@ class VideosController extends Controller
      * @return Response         The response object.
      *
      * @Security("has_role('VIDEO_CREATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -268,6 +268,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -354,6 +356,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_DELETE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -401,6 +405,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -449,6 +455,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function videoInformationAction(Request $request)
     {
@@ -482,6 +490,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function configAction(Request $request)
     {
@@ -519,6 +529,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function relationsAction(Request $request)
     {
@@ -548,6 +560,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -589,6 +603,8 @@ class VideosController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -633,6 +649,8 @@ class VideosController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -683,6 +701,8 @@ class VideosController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderGalleryAction(Request $request)
     {

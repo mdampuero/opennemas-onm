@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,22 +29,13 @@ use Onm\Settings as s;
 class AclUserGroupsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        // Check if this module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('USER_GROUP_MANAGER');
-    }
-
-    /**
      * List all the user groups
      *
      * @return Response the response object
      *
      * @Security("has_role('GROUP_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function listAction()
     {
@@ -58,6 +50,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_UPDATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -91,6 +85,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_CREATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -145,6 +141,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_UPDATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -182,6 +180,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function deleteAction(Request $request)
     {

@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +36,6 @@ class ArticlesController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
-
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
 
@@ -66,6 +64,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_PENDINGS') and has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function listAction()
     {
@@ -102,6 +102,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_CREATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -239,9 +241,7 @@ class ArticlesController extends Controller
                         34 => '34'
                     ),
                     'authors'        => $authors,
-                    'commentsConfig' => s::get('comments_config'),
-                    // TODO: clean this from here
-                    'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
+                    'commentsConfig' => s::get('comments_config')
                 )
             );
         }
@@ -255,6 +255,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -393,6 +395,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -522,6 +526,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_DELETE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -568,6 +574,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderInFrontpageAction(Request $request)
     {
@@ -619,6 +627,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderSuggestedAction(Request $request)
     {
@@ -663,6 +673,8 @@ class ArticlesController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderCategoryAction(Request $request)
     {
@@ -710,6 +722,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -763,6 +777,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -863,6 +879,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function getPreviewAction()
     {

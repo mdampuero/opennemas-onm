@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,17 +29,6 @@ use Onm\Settings as s;
 class NewsletterController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
-    }
-
-    /**
      * Lists all the available newsletters
      *
      * @param Request $request the request object
@@ -46,13 +36,14 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function listAction(Request $request)
     {
         $maxAllowed     = s::get('max_mailing');
-        $totalSendings  = $this->checkMailing();
-        $date           = s::get('last_invoice');
-        $lastInvoice    = new \DateTime($date);
+        $totalSendings  = $this->GetTotalNumberOfNewslettersSend();
+        $lastInvoice    = new \DateTime(s::get('last_invoice'));
 
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
@@ -102,6 +93,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -147,6 +140,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function showContentsAction(Request $request)
     {
@@ -171,6 +166,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function saveContentsAction(Request $request)
     {
@@ -232,6 +229,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -257,6 +256,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function saveHtmlContentAction(Request $request)
     {
@@ -283,6 +284,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function pickRecipientsAction(Request $request)
     {
@@ -343,6 +346,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function sendAction(Request $request)
     {
@@ -373,7 +378,7 @@ class NewsletterController extends Controller
         if (empty($newsletterSender)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _('Your newsletter configuration is not complete. You must complete the sender email addres.')
+                _('Your newsletter configuration is not complete. You must complete the sender email address.')
             );
 
             return $this->redirect($this->generateUrl('admin_newsletters'));
@@ -386,7 +391,7 @@ class NewsletterController extends Controller
         );
 
         $maxAllowed = s::get('max_mailing');
-        $remaining = $maxAllowed - $this->checkMailing();
+        $remaining = $maxAllowed - $this->GetTotalNumberOfNewslettersSend();
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
@@ -453,6 +458,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -488,6 +495,8 @@ class NewsletterController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function configAction(Request $request)
     {
@@ -540,7 +549,7 @@ class NewsletterController extends Controller
      *
      * @return boolean
      **/
-    public function checkModuleActivated()
+    private function checkModuleActivated()
     {
         $type     = s::get('newsletter_subscriptionType');
         $config   = s::get('newsletter_maillist');
@@ -574,97 +583,97 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Count sendings. Return total sendings in the month
+     * Count total mailing sends in current month
      *
-     * @return boolean
+     * @return int Total number of mail sent in current mount
      **/
-
-    public function checkMailing()
+    private function GetTotalNumberOfNewslettersSend()
     {
+        // Get maximum number of allowed sending mails
         $maxAllowed = s::get('max_mailing');
 
-         //change to last_invoice s::get('site_created')
-        $initDate = $this->updateLastInvoice();
+        // Get last invoice DateTime
+        $lastInvoiceDate = $this->updateLastInvoice();
 
-        if (empty($initDate)) {
-            return false;
-        }
-
+        // Get today DateTime
         $availableTimeZones = \DateTimeZone::listIdentifiers();
         $today = new \DateTime();
-        $today->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
+        $today->setTimezone(
+            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
+        );
 
+        // Get all newsletters updated between today and last invoice
         $nm = $this->get('newsletter_manager');
-        $where =  " updated >= '".$initDate->format('Y-m-d H:i:s')."'
+        $where =  " updated >= '".$lastInvoiceDate->format('Y-m-d H:i:s')."'
             AND updated <= '".$today->format('Y-m-d H:i:s')."' and sent > 0";
         list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
 
-        $total = 0;
-        $result = 0;
+        // Check if user has reached the limit of sent newsletters
+        $totalSent = 0;
         if ($nmCount > 0) {
             foreach ($newsletters as $newsletter) {
-                $total += $newsletter->sent;
+                $totalSent += $newsletter->sent;
             }
 
-            if ($maxAllowed > 0) {
-                $result = $maxAllowed - $total;
-                if ($result <= 0) {
-                    $this->get('session')->getFlashBag()->add(
-                        'error',
-                        _('You have reached the maximum of emails allowed to send')
-                    );
+            if ($maxAllowed > 0 && ($maxAllowed - $totalSent <= 0)) {
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    _('You have reached the maximum of emails allowed to send')
+                );
 
-                    return $maxAllowed;
-                }
-            } else {
-                return $total;
+                return $maxAllowed;
             }
         }
 
-        return $total;
+        return $totalSent;
     }
 
 
-    public function updateLastInvoice($date = null)
+    /**
+     * Updates last invoice date
+     *
+     * @param string $date Date of last invoice
+     *
+     * @return DateTime Last invoice
+     **/
+    private function updateLastInvoice()
     {
-
-        if ($date === null) {
-            $date = s::get('last_invoice');
-        }
-
+        // Fetch all available Timezones
         $availableTimeZones = \DateTimeZone::listIdentifiers();
-        if (empty($date)) {
-            $lastInvoice = new \DateTime();
-            $lastInvoice->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
-        } else {
-            try {
-                $lastInvoice = new \DateTime($date);
-            } catch (\Exception $e) {
-                $lastInvoice = new \DateTime();
-                $lastInvoice->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
-            }
-        }
 
+        // Generate last invoice DateTime
+        $lastInvoice = new \DateTime(s::get('last_invoice'));
+        $lastInvoice->setTimezone(
+            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
+        );
+
+        // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
-            $lastInvoice = $lastInvoice->setDate($lastInvoice->format('Y'), $lastInvoice->format('m'), 28);
+            $lastInvoice->setDate(
+                $lastInvoice->format('Y'), $lastInvoice->format('m'), 28
+            );
         }
 
-        $today     = new \DateTime();
-        $today->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
-        $checkDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
-        $checkDate->modify('+1 month');
+        // Get today DateTime
+        $today = new \DateTime();
+        $today->setTimezone(
+            new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')])
+        );
 
-        if ($today > $checkDate) {
-            while ($today > $checkDate) {
-                $checkDate->modify('+1 month');
-            }
+        // Get next invoice DateTime
+        $nextInvoiceDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
+        $nextInvoiceDate->modify('+1 month');
 
-            $lastInvoice = $checkDate->modify('-1 month');
+        // Update next invoice DateTime
+        while ($today > $nextInvoiceDate) {
+            $nextInvoiceDate->modify('+1 month');
         }
+
+        // Update last invoice DateTime
+        $lastInvoice = $nextInvoiceDate->modify('-1 month');
 
         s::set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
 
         return $lastInvoice;
-
     }
 }

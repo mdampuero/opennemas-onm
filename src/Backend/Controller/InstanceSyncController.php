@@ -16,6 +16,7 @@ namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -27,22 +28,13 @@ use Onm\Settings as s;
 class InstanceSyncController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        // Check if module is activated in this ONM instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('SYNC_MANAGER');
-    }
-
-    /**
      * Lists all the instances synced
      *
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SYNC_MANAGER")
      **/
     public function listAction()
     {
@@ -77,6 +69,8 @@ class InstanceSyncController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SYNC_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -130,6 +124,8 @@ class InstanceSyncController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SYNC_MANAGER")
      **/
     public function fetchCategoriesAction(Request $request)
     {
@@ -184,6 +180,8 @@ class InstanceSyncController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SYNC_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -244,6 +242,8 @@ class InstanceSyncController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SYNC_MANAGER")
      **/
     public function deleteAction(Request $request)
     {

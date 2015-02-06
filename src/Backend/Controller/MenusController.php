@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,8 +35,6 @@ class MenusController extends Controller
      **/
     public function init()
     {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
-
         $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
 
         if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
@@ -85,6 +84,8 @@ class MenusController extends Controller
      * @return void
      *
      * @Security("has_role('MENU_ADMIN')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function listAction()
     {
@@ -101,6 +102,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_UPDATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -182,6 +185,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_CREATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -280,6 +285,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_UPDATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function updateAction(Request $request)
     {

@@ -9,6 +9,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -30,6 +31,8 @@ class DatabaseErrorsController extends Controller
      * @return string the response
      *
      * @Security("has_role('ROLE_MASTER')")
+     *
+     * @CheckModuleAccess(module="LOG_SQL")
      **/
     public function defaultAction(Request $request)
     {
@@ -77,19 +80,11 @@ class DatabaseErrorsController extends Controller
      * @return string the response
      *
      * @Security("has_role('ROLE_MASTER')")
+     *
+     * @CheckModuleAccess(module="LOG_SQL")
      **/
     public function purgeAction()
     {
-        // TODO: this if block is redundant according to Security annotation
-        if (!Acl::isMaster()) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You don't have permissions")
-            );
-
-            return $this->redirect($this->generateUrl('admin_welcome'));
-        }
-
         $sql = "TRUNCATE TABLE `adodb_logsql`";
         $GLOBALS['application']->conn->Execute($sql);
 
