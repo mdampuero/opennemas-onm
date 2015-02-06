@@ -47,12 +47,10 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                   </ul>\
                 </div>\
                 <div class=\"media-picker-wrapper\">\
-                  <div class=\"media-item\" ng-repeat=\"content in contents\">\
-                    <div class=\"checkbox\" ng-click=\"toggle(content)\">\
-                      <input id=\"[% content.id %]\" ng-checked=\"isSelected(content)\" type=\"checkbox\">\
-                      <label for=\"[% content.id %]\">\
-                      </label>\
-                        <dynamic-image class=\"img-thumbnail\" instance=\"" + instanceMedia + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\" class=\"image-preview\"></dynamic-image>\
+                  <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
+                      <dynamic-image class=\"img-thumbnail\" instance=\""
+                        + instanceMedia
+                        + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\" class=\"image-preview\"></dynamic-image>\
                     </div>\
                   </div>\
                 </div>\
@@ -161,12 +159,23 @@ angular.module('onm.mediaPicker', ['onm.routing'])
             renderPicker: function() {
               var content = '';
               var picker  = pickerTpl;
+              var selectable = '';
+              var selection = '';
               var sidebar = '';
 
               for (var i = 0; i < this.modes.available.length; i++) {
                 sidebar += sidebarTpl[this.modes.available[i]];
                 content += contentTpl[this.modes.available[i]];
               };
+
+              // Add selection actions
+              if (this.selection.enabled) {
+                selectable = ' selectable';
+                selection  = "ng-class=\"{ 'selected': isSelected(content) }\" ng-click=\"toggle($event, content)\"";
+              }
+
+              content = content.replace('[selectable]', selectable);
+              content = content.replace('[selection]', selection);
 
               picker = picker.replace('[sidebar]', sidebar);
               picker = picker.replace('[content]', content);
@@ -249,7 +258,10 @@ angular.module('onm.mediaPicker', ['onm.routing'])
        *
        * @type Array
        */
-      $scope.selected = [];
+      $scope.selected = {
+        items:        [],
+        lastSelected: null
+      };
 
       /**
        * The number of elements in contents.
@@ -266,29 +278,38 @@ angular.module('onm.mediaPicker', ['onm.routing'])
       };
 
       $scope.isSelected = function(item) {
-        return $scope.selected.indexOf(item.id) != -1;
+        return $scope.selected.items.indexOf(item.id) != -1;
       }
 
-      $scope.toggle = function(item) {
+      $scope.toggle = function(event, item) {
+        // If shifKey
+        if (event.shiftKey) {
+          return $scope.selectionMultiple(item);
+        }
+
+        // Update last selected item
+        $scope.selected.lastSelected = item;
+
         // Selection disabled
         if (!$scope.picker.selection.enabled) {
-          console.log($scope.selected);
           return false;
         }
 
         // Remove element
-        if ($scope.selected.indexOf(item.id) != -1) {
-          $scope.selected.splice($scope.selected.indexOf(item.id), 1);
-          console.log($scope.selected);
+        if ($scope.selected.items.indexOf(item.id) != -1) {
+          $scope.selected.items.splice($scope.selected.items.indexOf(item.id), 1);
           return true;
         }
 
-        // Add element
-        if ($scope.selected.length < $scope.picker.selection.maxSize) {
-          $scope.selected.push(item.id);
+        // Empty selected if maxSize == 1 (toggle)
+        if ($scope.picker.selection.maxSize == 1) {
+          $scope.selected.items = [];
         }
 
-        console.log($scope.selected);
+        // Add element
+        if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
+          $scope.selected.items.push(item.id);
+        }
       }
 
       /**
@@ -305,8 +326,6 @@ angular.module('onm.mediaPicker', ['onm.routing'])
             search:            itemService.cleanFilters($scope.criteria)
         }
 
-        console.log(data);
-
         var url = routing.generate(
           'backend_ws_contents_list',
           { contentType: 'photo'}
@@ -322,6 +341,41 @@ angular.module('onm.mediaPicker', ['onm.routing'])
 
           $scope.loading = 0;
         });
+      }
+
+      $scope.selectionMultiple = function(item) {
+        if ($scope.selected.items.length >= $scope.picker.selection.maxSize) {
+          return false;
+        }
+
+        var start = $scope.contents.indexOf($scope.selected.lastSelected);
+        var end   = $scope.contents.indexOf(item);
+
+        // Fix for right-to-left selection
+        if (start > end) {
+          var aux = start;
+          start   = end;
+          end     = aux;
+        }
+
+        var itemsToInsert = end - start;
+        if (itemsToInsert + $scope.selected.items.length > $scope.picker.selection.maxSize) {
+          itemsToInsert = $scope.picker.selection.maxSize - $scope.selected.items.length;
+        }
+
+        // Add all items between selected
+        var i = start;
+        while (itemsToInsert > 0 && i < $scope.contents.length) {
+          if ($scope.selected.items.indexOf($scope.contents[i].id) == -1) {
+            $scope.selected.items.push($scope.contents[i].id);
+            itemsToInsert--;
+          }
+
+          i++;
+        }
+
+        // Update last selected item
+        $scope.selected.lastSelected = item;
       }
     }
   ]);
