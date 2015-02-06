@@ -2,7 +2,7 @@
  * Directive to generate a dynamic image.
  */
 angular.module('BackendApp.directives')
-    .directive('dynamicImage', function ($compile, fosJsRouting) {
+    .directive('dynamicImage', function ($compile, routing) {
         return {
             restrict: 'AE',
             link: function ($scope, $element, $attrs) {
@@ -35,7 +35,7 @@ angular.module('BackendApp.directives')
                         'parameters': encodeURIComponent($attrs['transform']),
                     };
 
-                    resource = fosJsRouting.generate('asset_image', params);
+                    resource = routing.generate('asset_image', params);
                 } else {
                     resource = baseUrl + src;
                 }
