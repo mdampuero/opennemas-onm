@@ -57,90 +57,6 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      */
     $scope.union = 'AND';
 
-    /**
-     * Confirm delete action.
-     */
-    $scope.delete = function(content) {
-      var modal = $modal.open({
-        templateUrl: 'modal-delete',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              content: content
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_content_send_to_trash',
-                { contentType: content.content_type_name, id: content.id }
-              );
-
-              return $http.post(url);
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        if (response) {
-          renderMessages(response.data.messages);
-
-          if (response.status == 200) {
-            $scope.list($scope.route);
-          }
-        }
-      });
-    };
-
-    /**
-     * Deletes selected contents on confirmation.
-     *
-     * @param string route Route title.
-     */
-    $scope.deleteSelected = function (route) {
-      // Enable spinner
-      $scope.deleting = 1;
-
-      var modal = $modal.open({
-        templateUrl: 'modal-delete-selected',
-        backdrop: 'static',
-        controller: 'modalCtrl',
-        resolve: {
-          template: function() {
-            return {
-              selected: $scope.selected
-            };
-          },
-          success: function() {
-            return function() {
-              var url = routing.generate(
-                'backend_ws_contents_batch_send_to_trash',
-                { contentType: $scope.criteria.content_type_name }
-              );
-
-              return $http.post(url, {ids: $scope.selected.contents});
-            };
-          }
-        }
-      });
-
-      modal.result.then(function(response) {
-        if (response) {
-          renderMessages(response.data.messages);
-
-          $scope.selected.total = 0;
-          $scope.selected.contents = [];
-
-          if (response.status == 200) {
-            $scope.list($scope.route);
-          }
-        }
-      });
-    };
-
     $scope.deselectAll = function() {
       $scope.selected.contents = [];
       $scope.selected.all = 0
@@ -475,6 +391,256 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         }).error(function(response) {
 
         });
+    };
+
+
+
+
+    /**
+     * Permanently removes a contents by using a confirmation dialog
+     */
+    $scope.removePermanently = function(content) {
+      var modal = $modal.open({
+        templateUrl: 'modal-remove-permanently',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_content_remove_permanently',
+                { contentType: content.content_type_name, id: content.id }
+              );
+
+              return $http.post(url);
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Permanently removes a list of contents by using a confirmation dialog
+     */
+    $scope.removePermanentlySelected = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-batch-remove-permanently',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_contents_batch_remove_permanently',
+                { contentType: 'content' }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Takes out of trash a content by using a confirmation dialog
+     */
+    $scope.restoreFromTrash = function(content) {
+      var modal = $modal.open({
+        templateUrl: 'modal-restore-from-trash',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_content_restore_from_trash',
+                { contentType: content.content_type_name, id: content.id }
+              );
+
+              return $http.post(url);
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Takes out of trash a list of contents by using a confirmation dialog
+     */
+    $scope.restoreFromTrashSelected = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-batch-restore',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_contents_batch_restore_from_trash',
+                { contentType: 'content' }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+    /**
+     * Sends a content to trash by using a confirmation dialog
+     *
+     * @param mixed content The content to send to trash.
+     */
+    $scope.sendToTrash = function(content) {
+      var modal = $modal.open({
+        templateUrl: 'modal-delete',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_content_send_to_trash',
+                { contentType: content.content_type_name, id: content.id }
+              );
+
+              return $http.post(url);
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Sends a list of selected contents to trash by using a confirmation dialog
+     */
+    $scope.sendToTrashSelected = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-delete-selected',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_contents_batch_send_to_trash',
+                { contentType: $scope.criteria.content_type_name }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
     };
 
     /**
