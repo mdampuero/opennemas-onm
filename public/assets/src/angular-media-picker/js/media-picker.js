@@ -176,6 +176,18 @@ angular.module('onm.mediaPicker', ['onm.routing'])
             },
 
             /**
+             * Closes the current media picker.
+             */
+            close: function() {
+              // Reset html and body
+              $('html, body').removeClass('media-picker-open');
+
+              // Delete the current media picker
+              $('.media-picker').remove();
+              $('.media-picker-backdrop').remove();
+            },
+
+            /**
              * Checks if the given module is currently active.
              *
              * @param string mode The mode to check.
@@ -248,12 +260,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
 
               // Hide and destroy the media picker
               e.find('.media-picker-close').bind('click', function() {
-                // Reset html and body
-                $('html, body').removeClass('media-picker-open');
-
-                // Delete the current media picker
-                $('.media-picker').remove();
-                $('.media-picker-backdrop').remove();
+                $scope.picker.close();
               });
             })
           })
