@@ -208,7 +208,10 @@ angular.module('onm.mediaPicker', ['onm.routing'])
               this.modes.active = mode;
             },
 
-            renderPicker: function() {
+            /**
+             * Renders the media picker.
+             */
+            render: function() {
               var content = '';
               var picker  = pickerTpl;
               var selectable = '';
@@ -223,7 +226,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
               // Add selection actions
               if (this.selection.enabled) {
                 selectable = ' selectable';
-                selection  = "ng-class=\"{ 'selected': isSelected(content) }\" ng-click=\"toggle($event, content)\"";
+                selection  = "ng-class=\"{ 'selected': isSelected(content) }\" ng-click=\"toggle(content, $event)\"";
               }
 
               content = content.replace('[selectable]', selectable);
@@ -234,10 +237,6 @@ angular.module('onm.mediaPicker', ['onm.routing'])
 
               return picker;
             },
-
-            render: function() {
-              return this.renderPicker();
-            }
           };
 
           elm.bind('click', function() {
