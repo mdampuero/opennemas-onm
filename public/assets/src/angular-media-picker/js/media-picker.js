@@ -91,7 +91,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                     </h4>\
                   </li>\
                 </ul>\
-                <button class=\"btn btn-primary pull-right\">\
+                <button class=\"btn btn-primary pull-right\" ng-click=\"insert()\">\
                   <i class=\"fa fa-plus\"></i>\
                   [% picker.params.explore.insert %]\
                 </button>\
@@ -267,8 +267,8 @@ angular.module('onm.mediaPicker', ['onm.routing'])
       };
     }
   ])
-  .controller('mediaPickerController', ['$http', '$scope', 'itemService', 'routing',
-    function($http, $scope, itemService, routing) {
+  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', 'itemService', 'routing',
+    function($http, $rootScope, $scope, itemService, routing) {
       /**
        * The array of contents.
        *
@@ -323,39 +323,24 @@ angular.module('onm.mediaPicker', ['onm.routing'])
         $scope.list();
       };
 
-      $scope.isSelected = function(item) {
-        return $scope.selected.items.indexOf(item.id) != -1;
+      /**
+       * Launches the media picker insert event.
+       */
+      $scope.insert = function() {
+        $rootScope.$broadcast('media-picker-insert', $scope.selected.items);
+        $scope.picker.close();
       }
 
-      $scope.toggle = function(event, item) {
-        // If shifKey
-        if (event.shiftKey) {
-          return $scope.selectionMultiple(item);
-        }
-
-        // Update last selected item
-        $scope.selected.lastSelected = item;
-
-        // Selection disabled
-        if (!$scope.picker.selection.enabled) {
-          return false;
-        }
-
-        // Remove element
-        if ($scope.selected.items.indexOf(item.id) != -1) {
-          $scope.selected.items.splice($scope.selected.items.indexOf(item.id), 1);
-          return true;
-        }
-
-        // Empty selected if maxSize == 1 (toggle)
-        if ($scope.picker.selection.maxSize == 1) {
-          $scope.selected.items = [];
-        }
-
-        // Add element
-        if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-          $scope.selected.items.push(item.id);
-        }
+      /**
+       * Checks if the given item is selected.
+       *
+       * @param object item The item to check.
+       *
+       * @return boolean True if the given item is selected. Otherwise,
+       *                 returns false.
+       */
+      $scope.isSelected = function(item) {
+        return $scope.selected.items.indexOf(item) != -1;
       }
 
       /**
@@ -389,6 +374,11 @@ angular.module('onm.mediaPicker', ['onm.routing'])
         });
       }
 
+      /**
+       * Selects multiple items from the last item selected to the given item.
+       *
+       * @param object item The selected item.
+       */
       $scope.selectionMultiple = function(item) {
         if ($scope.selected.items.length >= $scope.picker.selection.maxSize) {
           return false;
@@ -412,8 +402,8 @@ angular.module('onm.mediaPicker', ['onm.routing'])
         // Add all items between selected
         var i = start;
         while (itemsToInsert > 0 && i < $scope.contents.length) {
-          if ($scope.selected.items.indexOf($scope.contents[i].id) == -1) {
-            $scope.selected.items.push($scope.contents[i].id);
+          if ($scope.selected.items.indexOf($scope.contents[i]) == -1) {
+            $scope.selected.items.push($scope.contents[i]);
             itemsToInsert--;
           }
 
@@ -422,6 +412,43 @@ angular.module('onm.mediaPicker', ['onm.routing'])
 
         // Update last selected item
         $scope.selected.lastSelected = item;
+      }
+
+      /**
+       * Selects one item or many items if shift is clicked.
+       *
+       * @param object item  The selected item.
+       * @param object event The event object.
+       */
+      $scope.toggle = function(item, event) {
+        // If shifKey
+        if (event.shiftKey) {
+          return $scope.selectionMultiple(item);
+        }
+
+        // Update last selected item
+        $scope.selected.lastSelected = item;
+
+        // Selection disabled
+        if (!$scope.picker.selection.enabled) {
+          return false;
+        }
+
+        // Remove element
+        if ($scope.selected.items.indexOf(item) != -1) {
+          $scope.selected.items.splice($scope.selected.items.indexOf(item), 1);
+          return true;
+        }
+
+        // Empty selected if maxSize == 1 (toggle)
+        if ($scope.picker.selection.maxSize == 1) {
+          $scope.selected.items = [];
+        }
+
+        // Add element
+        if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
+          $scope.selected.items.push(item);
+        }
       }
     }
   ]);
