@@ -240,6 +240,8 @@ angular.module('onm.mediaPicker', ['onm.routing'])
           };
 
           elm.bind('click', function() {
+            $scope.reset();
+
             var url = routing.generate(
               'backend_ws_media_picker_mode',
               { mode: $scope.picker.modes.available }
@@ -372,6 +374,16 @@ angular.module('onm.mediaPicker', ['onm.routing'])
 
           $scope.loading = 0;
         });
+      }
+
+      /**
+       * Resets the selected items.
+       */
+      $scope.reset = function() {
+        $scope.selected = {
+          items:        [],
+          lastSelected: null
+        };
       }
 
       /**
