@@ -86,7 +86,6 @@
               return watch;
             },
             function(nv, ov) {
-              console.log(nv);
               $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia);
             }
           );
