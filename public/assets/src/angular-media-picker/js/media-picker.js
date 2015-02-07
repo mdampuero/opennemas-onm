@@ -28,7 +28,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                   <ul>\
                     <li>\
                       <select name=\"month\" ng-model=\"filters.date\">\
-                        <option value=\"\">[% picker.params.explore.all_months %]</option>\
+                        <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
                           <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
                             [% month.name %]\
@@ -47,15 +47,55 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                   </ul>\
                 </div>\
                 <div class=\"media-picker-wrapper\">\
-                  <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
+                  <div class=\"media-items\">\
+                    <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
                       <dynamic-image class=\"img-thumbnail\" instance=\""
                         + instanceMedia
-                        + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\" class=\"image-preview\"></dynamic-image>\
+                        + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
                     </div>\
                   </div>\
                 </div>\
+                <div class=\"media-information-sidebar\">\
+                  <h4>[% picker.params.explore.details %]</h4>\
+                  <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected\">\
+                    <div class=\"media-dimensions-overlay\">\
+                      <span class=\"media-dimensions-label\">\
+                        [% selected.lastSelected.width %]x[% selected.lastSelected.height %]\
+                      </span>\
+                    </div>\
+                    <dynamic-image class=\"img-thumbnail\" instance=\""
+                      + instanceMedia
+                      + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
+                    </dynamic-image>\
+                  </div>\
+                  <div class=\"media-information\">\
+                    <ul>\
+                      <li>[% selected.lastSelected.name %]</li>\
+                      <li>[% selected.lastSelected.created | moment %]</li>\
+                      <li>[% selected.lastSelected.size %] KB</li>\
+                    </ul>\
+                  </div>\
+                </div>\
               </div>\
-              <div class=\"media-picker-footer\"></div>\
+              <div class=\"media-picker-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
+                <ul class=\"pull-left\"  ng-if=\"selected.items.length > 0\">\
+                  <li>\
+                    <i class=\"fa fa-check fa-lg\" ng-click=\"selected.items = []\"></i>\
+                  </li>\
+                  <li>\
+                    <span class=\"h-seperate\"></span>\
+                  </li>\
+                  <li>\
+                    <h4>\
+                      [% selected.items.length + ' ' + picker.params.explore.itemsSelected %]\
+                    </h4>\
+                  </li>\
+                </ul>\
+                <button class=\"btn btn-primary pull-right\">\
+                  <i class=\"fa fa-plus\"></i>\
+                  [% picker.params.explore.insert %]\
+                </button>\
+              </div>\
             </div>",
 
             upload: "<div class=\"media-picker-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
@@ -106,11 +146,11 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            */
           var sidebarTpl = {
             explore: "<li ng-class=\"{ 'active': picker.isActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
-              <i class=\"fa fa-folder\"></i>Media Library\
+              <i class=\"fa fa-folder\"></i>[% picker.params.explore.menuItem %]\
             </li>",
 
             upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload')\">\
-              <i class=\"fa fa-upload\"></i>Upload\
+              <i class=\"fa fa-upload\"></i>[% picker.params.upload.menuItem %]\
             </li>"
           };
 
