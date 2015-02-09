@@ -74,12 +74,14 @@ class MediaPickerController extends Controller
     private function exploreMode()
     {
         return [
-            'all_months' => _('All months'),
-            'header'     => _('Pick the item to insert'),
-            'insert'     => _('Insert'),
-            'menu_item'  => _('Browser'),
-            'dates'      => $this->getDates(),
-            'search'     => _('Search by name'),
+            'allMonths'     => _('All months'),
+            'details'       => _('Thumbnail details'),
+            'header'        => _('Pick the item to insert'),
+            'insert'        => _('Insert'),
+            'itemsSelected' => _('items selected'),
+            'menuItem'      => _('Browser'),
+            'dates'         => $this->getDates(),
+            'search'        => _('Search by name'),
         ];
     }
 
@@ -92,7 +94,7 @@ class MediaPickerController extends Controller
     {
         return [
             'header'      => _('Upload new media'),
-            'menu_item'   => _('Upload'),
+            'menuItem'    => _('Upload'),
             'add'         => _('Add files...'),
             'explanation' => _('Drop files anywhere here to upload or click on the "Add Files..." button above.'),
         ];
