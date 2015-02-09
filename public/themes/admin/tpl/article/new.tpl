@@ -164,7 +164,7 @@
     </div>
 
     <div class="content">
-        <div class="btn btn-primary" media-picker="/ws/contents" selection="true" selection-multiple="true" selection-limit="5">
+        <div class="btn btn-primary" media-picker media-picker-explore-url="/ws/contents" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
             Media picker
         </div>
         {render_messages}
