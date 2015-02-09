@@ -230,11 +230,11 @@
   clear: both;
   display: none;
   font-weight: 300;
-  font-size: 12px;
+  /*font-size: 12px;*/
   position: relative;
 }
 .sidebar .sidebar-wrapper ul li .sub-menu li a {
-  height: 40px;
+  /*height: 40px;*/
 }
 .sidebar .sidebar-wrapper ul li .sub-menu li a i {
   height: 40px;
@@ -272,7 +272,7 @@
   padding: 18px 0;
 }
 .collapsed > .sidebar .sidebar-wrapper ul li .sub-menu li .title {
-  font-size: 14px;
+  /*font-size: 14px;*/
   height: 50px;
   padding: 15px 0;
 }
