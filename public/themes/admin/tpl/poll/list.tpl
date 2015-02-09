@@ -206,10 +206,10 @@
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
-                            <button class="btn btn-white" ng-click="pagination.page = pagination.page - 1" ng-disabled="pagination.page - 1 < 1" type="button">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstpage()" type="button">
                                 <i class="fa fa-chevron-left"></i>
                             </button>
-                            <button class="btn btn-white" ng-click="pagination.page = pagination.page + 1" ng-disabled="pagination.page == pagination.pages" type="button">
+                            <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
                                 <i class="fa fa-chevron-right"></i>
                             </button>
                         </div>

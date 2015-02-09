@@ -644,6 +644,34 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     };
 
     /**
+     * Moves the list to the previous page
+     */
+    $scope.goToPrevPage = function() {
+      return $scope.pagination.page = $scope.pagination.page - 1;
+    }
+
+    /**
+     * Moves the list to the next page
+     */
+    $scope.goToNextPage = function() {
+      return $scope.pagination.page = $scope.pagination.page + 1;
+    }
+
+    /**
+     * Checks if the list is in the first page
+     */
+    $scope.isFirstPage = function() {
+      return $scope.pagination.page - 1 < 1;
+    }
+
+    /**
+     * Checks if the list is in the last pages
+     */
+    $scope.isLastPage = function() {
+      return $scope.pagination.page == $scope.pagination.pages;
+    }
+
+    /**
      * Updates selected items current status.
      *
      * @param  mixed messages List of messages provided by the server.
