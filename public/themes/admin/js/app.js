@@ -1,22 +1,23 @@
 angular.module(
   'BackendApp',
   [
-    'webStorageModule',
-    'sun.scrollable',
-    'BackendApp.controllers',
-    'BackendApp.directives',
-    'BackendApp.filters',
-    'BackendApp.services',
-    'ui.bootstrap',
-    'ui.sortable',
-    'pascalprecht.translate',
+    'angularFileUpload',
+    'checklist-model',
     'onm.dynamicImage',
+    'onm.item',
     'onm.mediaPicker',
     'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
-    'onm.item',
-    'checklist-model'
+    'pascalprecht.translate',
+    'sun.scrollable',
+    'ui.bootstrap',
+    'ui.sortable',
+    'webStorageModule',
+    'BackendApp.controllers',
+    'BackendApp.directives',
+    'BackendApp.filters',
+    'BackendApp.services'
   ])
 
 angular.module('BackendApp.controllers', []);

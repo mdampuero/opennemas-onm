@@ -174,6 +174,7 @@
             @Common/components/angular/angular.min.js,
             @Common/components/angular-animate/angular-animate.min.js,
             @Common/components/angular-checklist-model/checklist-model.js,
+            @Common/components/angular-file-upload/angular-file-upload.min.js,
             @Common/components/angular-webstorage/angular-webstorage.min.js,
             @Common/components/angular-google-chart/ng-google-chart.js,
             @Common/components/angular-nanoscroller/scrollable.js,
