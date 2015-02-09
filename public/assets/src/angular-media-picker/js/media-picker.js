@@ -3,13 +3,13 @@
 *
 * Creates a media picker modal to upload/insert contents.
 */
-angular.module('onm.mediaPicker', ['onm.routing'])
+angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
   .directive('mediaPicker', ['$compile', '$http', 'routing',
     function($compile, $http, routing) {
       // Runs during compile
       return {
         controller: 'mediaPickerController',
-        restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
+        restrict: 'AC', // E = Element, A = Attribute, C = Class, M = Comment
         scope: {},
         link: function($scope, elm, attrs) {
           /**
@@ -18,13 +18,13 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            * @type string
            */
           var contentTpl = {
-            explore: "<div class=\"media-picker-panel\" ng-class=\"{ 'active': picker.isActive('explore') }\">\
-              <div class=\"media-picker-header clearfix\">\
+            explore: "<div class=\"media-picker-panel explore-panel\" ng-class=\"{ 'active': picker.isActive('explore') }\">\
+              <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
                 <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
-              <div class=\"media-picker-body\">\
-                <div class=\"media-picker-bar\">\
+              <div class=\"media-picker-panel-body\">\
+                <div class=\"media-picker-panel-topbar\">\
                   <ul>\
                     <li>\
                       <select name=\"month\" ng-model=\"filters.date\">\
@@ -46,16 +46,20 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                     </li>\
                   </ul>\
                 </div>\
-                <div class=\"media-picker-wrapper\">\
-                  <div class=\"media-items\">\
-                    <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
-                      <dynamic-image class=\"img-thumbnail\" instance=\""
-                        + instanceMedia
-                        + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                    </div>\
+                <div class=\"media-picker-panel-wrapper\">\
+                  <div class=\"media-picker-panel-content\">\
+                    <scrollable>\
+                      <div class=\"media-items\">\
+                        <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
+                          <dynamic-image class=\"img-thumbnail\" instance=\""
+                            + instanceMedia
+                            + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                        </div>\
+                      </div>\
+                    </scrollable>\
                   </div>\
                 </div>\
-                <div class=\"media-information-sidebar\">\
+                <div class=\"media-picker-panel-sidebar\">\
                   <h4>[% picker.params.explore.details %]</h4>\
                   <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected\">\
                     <div class=\"media-dimensions-overlay\">\
@@ -77,7 +81,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
                   </div>\
                 </div>\
               </div>\
-              <div class=\"media-picker-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
+              <div class=\"media-picker-panel-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
                 <ul class=\"pull-left\"  ng-if=\"selected.items.length > 0\">\
                   <li>\
                     <i class=\"fa fa-check fa-lg\" ng-click=\"selected.items = []\"></i>\
@@ -98,24 +102,67 @@ angular.module('onm.mediaPicker', ['onm.routing'])
               </div>\
             </div>",
 
-            upload: "<div class=\"media-picker-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
-              <div class=\"media-picker-header clearfix\">\
+            upload: "<div class=\"media-picker-panel upload-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
+              <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
                 <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
-              <div class=\"media-picker-body\">\
-                <div class=\"media-picker-bar\">\
+              <div class=\"media-picker-panel-body\">\
+                <div class=\"media-picker-panel-topbar\">\
                   <ul>\
-                    <li>\
-                      <button class=\"btn btn-default\">\
-                        <i class=\"fa fa-plus\"></i>\
-                        [% picker.params.upload.add %]\
-                      </button>\
-                    </li>\
+                    <li class=\"w-50\">Name</li>\
+                    <li class=\"w-25\">Size</li>\
+                    <li class=\"w-25\">Progress</li>\
                   </ul>\
                 </div>\
+                <div class=\"media-picker-panel-wrapper\">\
+                  <div class=\"media-picker-panel-content\">\
+                    <scrollable>\
+                      <div class=\"media-items\">\
+                        <table class=\"w-100\">\
+                          <tbody>\
+                            <tr ng-repeat=\"item in uploader.queue\">\
+                              <td class=\"w-50\">\
+                                [% item.file.name %]\
+                                <div class=\"inline-actions\">\
+                                  <button class=\"link link-danger\" ng-click=\"item.upload()\">\
+                                    <i class=\"fa fa-ban\"></i>\
+                                    Cancel\
+                                  </button>\
+                                </div>\
+                              </td>\
+                              <td class=\"w-25\">\
+                                [% item.file.size/1024 | number: 2 %] KB\
+                              </td>\
+                              <td class=\"w-25\">\
+                                <div class=\"progress\" style=\"margin-bottom: 0;\">\
+                                  <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
+                                </div>\
+                              </td>\
+                            </tr>\
+                          </tbody>\
+                        </table>\
+                      </div>\
+                    </scrollable>\
+                  </div>\
+                </div>\
+                <div class=\"media-picker-panel-sidebar\" nv-file-drop nv-file-over uploader=\"uploader\">\
+                  <div class=\"drop-zone-text\">\
+                    <h4>\
+                      <div>\
+                        <i class=\"fa fa-picture-o\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
+                        <i class=\"fa fa-film\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
+                        <i class=\"fa fa-file-o\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
+                      </div>\
+                      Drop files here to upload\
+                    </h4>\
+                    <h5>\
+                      or click here\
+                    </h5>\
+                  </div>\
+                  <input type=\"file\" nv-file-select uploader=\"uploader\" multiple/>\
+                </div>\
               </div>\
-              <div class=\"media-picker-footer\"></div>\
             </div>",
           };
 
@@ -149,7 +196,7 @@ angular.module('onm.mediaPicker', ['onm.routing'])
               <i class=\"fa fa-folder\"></i>[% picker.params.explore.menuItem %]\
             </li>",
 
-            upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload')\">\
+            upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload'); upload()\">\
               <i class=\"fa fa-upload\"></i>[% picker.params.upload.menuItem %]\
             </li>"
           };
@@ -160,15 +207,19 @@ angular.module('onm.mediaPicker', ['onm.routing'])
            * @type Object
            */
           $scope.picker = {
+            files: [ 'photo', 'video', 'pdf' ],
             modes: {
-              active: 'upload',
+              active: attrs['mediaPickerMode'] ? attrs['mediaPickerMode'] : 'explore',
               available: [ 'upload', 'explore' ]
             },
             selection: {
-              enabled: attrs['selection'] == 'true' ? true : false,
-              maxSize: attrs['maxSize'] ? parseInt(attrs['maxSize']) : 1,
+              enabled: attrs['mediaPickerSelection'] == 'true' ? true : false,
+              maxSize: attrs['mediaPickerMaxSize'] ? parseInt(attrs['mediaPickerMaxSize']) : 1,
             },
-            src: attrs['mediaPicker'],
+            src: {
+              explore: attrs['mediaPickerExploreUrl'],
+              upload: attrs['mediaPickerUploadUrl']
+            },
             status: {
               editing:   false,
               loading:   false,
@@ -197,6 +248,18 @@ angular.module('onm.mediaPicker', ['onm.routing'])
              */
             isActive: function(mode) {
               return this.modes.active == mode;
+            },
+
+            /**
+             * Checks if a file type can be uploaded.
+             *
+             * @param string type The file type to check.
+             *
+             * @return boolean True if the given file type can be uploaded.
+             *                 Otherwise, return false.
+             */
+            isTypeAllowed: function(type) {
+              return this.files.indexOf(type) != -1;
             },
 
             /**
@@ -269,8 +332,8 @@ angular.module('onm.mediaPicker', ['onm.routing'])
       };
     }
   ])
-  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', 'itemService', 'routing',
-    function($http, $rootScope, $scope, itemService, routing) {
+  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', 'FileUploader', 'itemService', 'routing',
+    function($http, $rootScope, $scope, FileUploader, itemService, routing) {
       /**
        * The array of contents.
        *
@@ -384,6 +447,11 @@ angular.module('onm.mediaPicker', ['onm.routing'])
           items:        [],
           lastSelected: null
         };
+
+        $scope.uploader = new FileUploader({
+            url:        $scope.picker.src.upload,
+            autoUpload: true
+        });
       }
 
       /**
