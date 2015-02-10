@@ -58,10 +58,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                             </div>\
                           </div>\
                         </div>\
-                        <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
+                        <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
                           <dynamic-image class=\"img-thumbnail\" instance=\""
                             + instanceMedia
-                            + "\" path=\"[% content.path_file + '/' + content.name %]\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                            + "\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
                         </div>\
                       </div>\
                     </scrollable>\
@@ -116,51 +116,21 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                 <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
               <div class=\"media-picker-panel-body\">\
-                <div class=\"media-picker-panel-topbar\">\
-                  <ul>\
-                    <li class=\"w-50\">Name</li>\
-                    <li class=\"w-25\">Size</li>\
-                    <li class=\"w-25\">Progress</li>\
-                  </ul>\
-                </div>\
                 <div class=\"media-picker-panel-wrapper\">\
                   <div class=\"media-picker-panel-content\">\
-                    <scrollable>\
-                      <div class=\"media-items\">\
-                        <table class=\"w-100\">\
-                          <tbody>\
-                            <tr ng-repeat=\"item in uploader.queue\">\
-                              <td class=\"w-50\">\
-                                [% item.file.name %]\
-                              </td>\
-                              <td class=\"w-25\">\
-                                [% item.file.size/1024 | number: 2 %] KB\
-                              </td>\
-                              <td class=\"w-25\">\
-                                <div class=\"progress\" style=\"margin-bottom: 0;\">\
-                                  <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
-                                </div>\
-                              </td>\
-                            </tr>\
-                          </tbody>\
-                        </table>\
-                      </div>\
-                    </scrollable>\
-                  </div>\
-                </div>\
-                <div class=\"media-picker-panel-sidebar\" nv-file-drop nv-file-over uploader=\"uploader\">\
-                  <div class=\"drop-zone-text\">\
-                    <h4>\
-                      <div>\
-                        <i class=\"fa fa-picture-o\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
-                        <i class=\"fa fa-film\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
-                        <i class=\"fa fa-file-o\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
-                      </div>\
-                      Drop files here to upload\
-                    </h4>\
-                    <h5>\
-                      or click here\
-                    </h5>\
+                    <div class=\"drop-zone-text\">\
+                      <h4>\
+                        <div>\
+                          <i class=\"fa fa-picture-o\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
+                          <i class=\"fa fa-film\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
+                          <i class=\"fa fa-file-o\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
+                        </div>\
+                        Drop files here to upload\
+                      </h4>\
+                      <h5>\
+                        or click here\
+                      </h5>\
+                    </div>\
                   </div>\
                   <input type=\"file\" nv-file-select uploader=\"uploader\" multiple/>\
                 </div>\
@@ -304,6 +274,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             },
           };
 
+          // Bind click event to open media-picker
           elm.bind('click', function() {
             $scope.reset();
 
@@ -384,6 +355,22 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       $scope.total = 0;
 
       /**
+       * The uploader object.
+       *
+       * @type FileUploader
+       */
+      $scope.uploader;
+
+      /**
+       * Adds a new item the the beginning of the array.
+       *
+       * @param Object item The item to add.
+       */
+      $scope.addItem = function(item) {
+        $scope.contents.unshift(item);
+      }
+
+      /**
        * Changes the picker to explore mode.
        */
       $scope.explore = function() {
@@ -451,20 +438,33 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         };
 
         $scope.uploader = new FileUploader({
-            url:        $scope.picker.src.upload,
-            autoUpload: true
+            url:               $scope.picker.src.upload,
+            autoUpload:        true,
         });
 
+        /**
+         * Adds an event to change to explore mode on after adding a file.
+         *
+         * @param object fileItem The added item
+         */
         $scope.uploader.onAfterAddingFile = function(fileItem) {
           $scope.picker.enable('explore');
         };
 
-        $scope.uploader.onCompleteAll = function() {
+        /**
+         * Adds an event to update the list when a file upload is completed
+         *
+         * @param object fileItem The completed item.
+         * @param object response The response content.
+         * @param string status   The response status.
+         * @param object headers  The response headers.
+         */
+        $scope.uploader.onCompleteItem = function(fileItem, response, status, headers) {
           $timeout(function() {
-            $scope.uploader.clearQueue();
-            $scope.list();
+            $scope.uploader.removeFromQueue(fileItem);
+            $scope.addItem(response);
           }, 500);
-        };
+        }
       }
 
       /**
