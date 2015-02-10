@@ -298,7 +298,7 @@
                                     {/acl}
                                 {/if}
                                 {acl isAllowed="SPECIAL_HOME"}
-                                    <td class="center">
+                                    <td class="right">
                                         <button class="btn btn-white" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                             <i class="fa fa-home" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'text-info': content.in_home == 1 }"></i>
                                             <i class="fa fa-times fa-sub" ng-if="content.in_home == 0"></i>

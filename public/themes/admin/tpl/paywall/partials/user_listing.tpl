@@ -52,8 +52,8 @@
                 <span style="color:#0000A0">{t}Registered{/t}</span>
             {/if}
         </td>
-        <td class="center">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
+        <td class="right">
+            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn btn-white" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
         </td>
         {/if}
 

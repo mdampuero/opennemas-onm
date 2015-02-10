@@ -182,7 +182,7 @@
                                 <td>
                                     [% content.renderlet %]
                                 </td>
-                                <td class="center">
+                                <td class="right">
                                     {acl isAllowed="WIDGET_AVAILABLE"}
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.content_status == '1', 'fa-times text-error': !content.loading && content.content_status == '0' }"></i>

@@ -57,7 +57,7 @@
                         </div>
                     </td>
                     <td class="server_name nowrap center">{$sync_from[$server['sync_from']]}</td>
-                    <td class="server_name center">
+                    <td class="server_name right">
                         <a class="btn" href="{url name=admin_news_agency_server_toogle id=$server['id']}" title="{t}Activate server{/t}">
                             {if $server['activated'] == 1}
                                 <i class="fa fa-check"></i>

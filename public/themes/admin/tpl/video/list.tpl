@@ -319,7 +319,7 @@
                                 </td>
                                 {/acl}
                                 {acl isAllowed="VIDEO_HOME"}
-                                <td class="center">
+                                <td class="right">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-success': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
                                         <i class="fa fa-times fa-sub text-danger" ng-if="!content.favorite_loading == 1 && content.in_home == 0"></i>

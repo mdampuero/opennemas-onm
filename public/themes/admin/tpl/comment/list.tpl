@@ -187,7 +187,7 @@
                                 <td >
                                     [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
                                 </td>
-                                <td class="center">
+                                <td class="right">
                                     {acl isAllowed="COMMENT_AVAILABLE"}
                                         <button class="btn btn-white" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button">
                                             <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.status == 'accepted', 'fa-times text-error': !content.loading && (content.status == 'pending' || content.status == 'rejected') }"></i>

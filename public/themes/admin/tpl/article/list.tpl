@@ -303,7 +303,7 @@
                                 <td class="center nowrap">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                                <td class="center">
+                                <td class="right">
                                     <span ng-if="content.category != 20">
                                     {acl isAllowed="ARTICLE_AVAILABLE"}
                                         <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
