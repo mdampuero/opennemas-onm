@@ -94,9 +94,15 @@ EOF
 
         $output->writeln("\t- From templates templates");
         $command =
-            "tsmarty2c "
-            .implode(' ', $tplFolders)
-            ." > ".$this->translationsDir."/extracted_strings.c 2>&1";
+            APPLICATION_PATH."/bin/tsmarty2c.php -o "
+            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
+            .implode(' ', $tplFolders);
+
+        echo(exec($command));
+
+        $command = "msgattrib --no-location -o "
+            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
+            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot ";
 
         echo(exec($command));
 
@@ -104,16 +110,21 @@ EOF
 
         $phpFiles = array(
             $this->themeFolder.'/tpl/widgets/*.php',
-            $this->translationsDir.'/extracted_strings.c'
         );
 
         $command =
             "xgettext "
             .implode(' ', $phpFiles)
-            ." -o ".$this->translationsDir."/".$this->translationsDomain.".pot  --from-code=UTF-8 2>&1";
+            ." -o ".$this->translationsDir."/".$this->translationsDomain."_php.pot  --from-code=UTF-8 2>&1";
 
         $commandOutput = shell_exec($command);
         echo $commandOutput;
+
+        $command = "msgcat -o ".$this->translationsDir."/".$this->translationsDomain.".pot "
+            .$this->translationsDir."/".$this->translationsDomain."_tpl.pot "
+            .$this->translationsDir."/".$this->translationsDomain."_php.pot";
+
+        $commandOutput = shell_exec($command);
     }
 
     /**
