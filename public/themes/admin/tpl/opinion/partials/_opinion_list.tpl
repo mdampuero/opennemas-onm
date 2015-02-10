@@ -147,7 +147,7 @@
                 </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
-                        <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstpage()" type="button">
+                        <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
                             <i class="fa fa-chevron-left"></i>
                         </button>
                         <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">

@@ -206,7 +206,7 @@
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
-                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstpage()" type="button">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
                                 <i class="fa fa-chevron-left"></i>
                             </button>
                             <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
@@ -259,7 +259,6 @@
                                 {acl isAllowed="POLL_HOME"}
                                 <th style="width:40px;" class="center">{t}Home{/t}</th>
                                 {/acl}
-                                <th class="center" style="width:10px;"></th>
                             </tr>
                         </thead>
                         <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
