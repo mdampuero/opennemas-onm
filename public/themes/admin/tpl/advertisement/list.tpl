@@ -124,24 +124,15 @@
                         {html_options options=$filter_options.type_advertisement selected=$filterType}
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
                 <li>
                     <select class="input-medium select2" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                         {html_options options=$filter_options.content_status selected=$filterAvailable}
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
                 <li>
                     <select class="input-medium select2" ng-model="criteria.with_script" data-label="{t}Type{/t}">
                         {html_options options=$filter_options.type}
                     </select>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks hidden-xs">
                     <select class="xmedium" ng-model="pagination.epp">
@@ -151,9 +142,6 @@
                         <option value="100">100</option>
                         <option value="500">500</option>
                     </select>
-                </li>
-                <li class="quicklinks hidden-xs">
-                    <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
                     <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
