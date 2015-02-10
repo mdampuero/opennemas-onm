@@ -29,21 +29,24 @@
                 <ul class="nav quick-section">
                     {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
                     <li class="quicklinks">
-                            <a class="btn btn-link" href="{url name=admin_news_agency_servers}">
-                                <i class="fa fa-cog"></i>
-                            </a>
+                        <a class="btn btn-link" href="{url name=admin_news_agency_servers}">
+                            <i class="fa fa-cog"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
                     </li>
                     {/acl}
                     {acl isAllowed="ONLY_MASTERS"}
                     <li>
-                        <a class="btn btn-link" href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
+                        <a class="btn btn-white" href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
                             {t}Sync with server{/t}
                         </a>
                     </li>
-                    {/acl}
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
                     </li>
+                    {/acl}
                     <li>
                         <a class="btn btn-primary" href="{url name=admin_news_agency}" id="reload_listing" title="{t}Reload list{/t}">
                             {t}Reload list{/t}
