@@ -29,10 +29,10 @@
                     <input class="no-boarder" type="text" name="name" ng-model="criteria.title_like" placeholder="{t}Filter by title{/t}" />
                 </li>
                 <li class="quicklinks">
-                    {t}CONTENT TYPE:{/t}
+                    <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <select name="content_types[]" id="content_types" ng-model="criteria.content_type_name"> <!-- multiple -->
+                    <select name="content_types[]" id="content_types" ng-model="criteria.content_type_name" class="select2" data-label="{t}Type{/t}"> <!-- multiple -->
                         {html_options options=$content_types selected=$content_types_selected}
                     </select>
                 </li>
@@ -43,7 +43,24 @@
                     <button type="submit" class="btn"><i class="fa fa-search"></i></button>
                 </li>
                 <li class="pull-right">
-                    <strong>Result:</strong> {$pagination->_totalItems} {t}users{/t}
+                    <span class="info">
+                    {t}Results{/t}: {$pagination->_totalItems} {t}users{/t}
+                    </span>
+                </li>
+            </ul>
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="h-seperate"></span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <div class="btn-group">
+                        <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
                 </li>
             </ul>
         </div>
