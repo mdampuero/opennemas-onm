@@ -329,25 +329,7 @@ class ImagesController extends Controller
 
                         $photo = new \Photo($photoId);
 
-                        $info [] = array(
-                            'id'            => $photo->id,
-                            'name'          => $photo->name,
-                            'size'          => $photo->size,
-                            'error'         => '',
-                            'delete_url'    => '',
-                            "delete_type"   => "DELETE",
-                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                                                ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                : $file['type'],
-                            'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                            'thumbnail_url' => $this->generateUrl(
-                                'asset_image',
-                                array(
-                                    'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
-                                    'parameters' => urlencode('thumbnail,150,150'),
-                                )
-                            ),
-                        );
+                        $info = $photo;
                     } catch (Exception $e) {
                         $info [] = array(
                             'error'         => $e->getMessage(),
