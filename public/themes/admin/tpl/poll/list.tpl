@@ -47,20 +47,6 @@
                 </ul>
                 <div class="all-actions pull-right">
                     <ul class="nav quick-section">
-                        {acl isAllowed="POLL_WIDGET"}
-                             {if $category eq 'widget'}
-                                <li class="quicklinks">
-                                    <a class="btn btn-link" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
-                                        <i class="fa fa-save fa-lg"></i>
-                                    </a>
-                                </li>
-                                {acl isNotAllowed="POLL_SETTINGS"}
-                                    <li class="quicklinks">
-                                        <span class="h-seperate"></span>
-                                    </li>
-                                {/acl}
-                            {/if}
-                        {/acl}
                         {acl isAllowed="POLL_SETTINGS"}
                             <li class="quicklinks">
                                 <a class="btn btn-link" href="{url name=admin_polls_config}" title="{t}Config album module{/t}">
@@ -70,6 +56,19 @@
                             <li class="quicklinks">
                                 <span class="h-seperate"></span>
                             </li>
+                        {/acl}
+                        {acl isAllowed="POLL_WIDGET"}
+                             {if $category eq 'widget'}
+                                <li class="quicklinks">
+                                    <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+                                        <i class="fa fa-save fa-lg"></i>
+                                        {t}Save positions{/t}
+                                    </a>
+                                </li>
+                                <li class="quicklinks">
+                                    <span class="h-seperate"></span>
+                                </li>
+                            {/if}
                         {/acl}
                         {acl isAllowed="POLL_CREATE"}
                             <li class="quicklinks">
