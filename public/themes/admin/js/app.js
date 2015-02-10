@@ -9,6 +9,7 @@ angular.module(
     'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
+    'onm.scroll',
     'pascalprecht.translate',
     'sun.scrollable',
     'ui.bootstrap',
