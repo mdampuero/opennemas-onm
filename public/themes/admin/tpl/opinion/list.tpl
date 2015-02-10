@@ -65,8 +65,8 @@
                             {acl isAllowed="OPINION_FRONTPAGE"}
                                 {if $home}
                                     <li>
-                                        <button class="btn btn-link" id="save_positions" title="{t}Save positions{/t}">
-                                            <i class="fa fa-save"></i>
+                                        <button class="btn btn-white" id="save_positions" title="{t}Save positions{/t}">
+                                            <i class="fa fa-save"></i> {t}Save positions{/t}
                                         </button>
                                     </li>
                                     <li class="quicklinks">
@@ -78,7 +78,7 @@
                                 <li class="quicklinks">
                                     <a class="btn btn-primary" href="{url name=admin_opinion_create}" title="{t}New opinion{/t}">
                                         <i class="fa fa-plus"></i>
-                                        {t}New opinion{/t}
+                                        {t}Create{/t}
                                     </a>
                                 </li>
                             {/acl}

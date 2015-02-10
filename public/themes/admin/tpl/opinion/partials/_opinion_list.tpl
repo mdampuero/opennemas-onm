@@ -142,9 +142,6 @@
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
                         <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
