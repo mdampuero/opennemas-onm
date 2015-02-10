@@ -48,14 +48,9 @@
                     </span>
                     <input class="no-boarder" type="text" name="name" value="{$name|default:""}" placeholder="{t}Filter by name{/t}" />
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <button type="submit" class="btn"><i class="fa fa-search"></i></button>
-                </li>
+                <li class="quicklinks"><span class="h-seperate"></span></li>
                 <li class="pull-right">
-                    <strong>Result:</strong> {$pagination->_totalItems} {t}users{/t}
+                    <strong>Result:</strong> {t 1=$pagination->_totalItems}%1 users{/t}
                 </li>
             </ul>
         </div>
