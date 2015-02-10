@@ -27,7 +27,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
+                        <a class="btn btn-link" href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
                             <span class="fa fa-reply"></span>
                             {t}Newsletters{/t}
                         </a>
