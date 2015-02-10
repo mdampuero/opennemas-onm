@@ -148,13 +148,12 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
+                                <th style='width:10px;'>{t}Image{/t}</th>
                                 <th>{t}Author{/t} - {t}Title{/t}</th>
                                 <th style='width:110px;' class="left">{t}Date{/t}</th>
-                                <th style='width:10px;'>{t}Image{/t}</th>
                                 {acl isAllowed="LETTER_AVAILABLE"}
                                 <th class="center" style='width:10px;'>{t}Available{/t}</th>
                                 {/acl}
-                                <th style='width:10px;' class="right"></th>
                            </tr>
                         </thead>
                         <tbody>
@@ -167,6 +166,12 @@
                                         <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
+                                </td>
+                                <td class="center">
+                                    <span class="thumbnail">
+                                      <i class="fa fa-picture-o fa-lg" ng-if="!content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
+                                      <img ng-if="content.image" ng-src="content.image">
+                                    </span>
                                 </td>
                                 <td>
                                     <div>
@@ -182,7 +187,7 @@
                                         {/acl}
 
                                         {acl isAllowed="LETTER_AVAILABLE"}
-                                            <a class="link" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
+                                            <a class="link pointer" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', 2, 'loading')" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
                                                 <i class="fa fa-ban"></i>
                                                 {t}Reject{/t}
                                             </a>
@@ -198,9 +203,6 @@
                                 </td>
                                 <td class="center nowrap">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                                </td>
-                                <td class="center">
-                                    <i class="fa fa-picture-o fa-lg" ng-if="content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
                                 </td>
                                 <td class="right">
                                     {acl isAllowed="LETTER_AVAILABLE"}
