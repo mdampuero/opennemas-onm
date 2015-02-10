@@ -27,7 +27,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                 <div class=\"media-picker-panel-topbar\">\
                   <ul>\
                     <li>\
-                      <select name=\"month\" ng-model=\"filters.date\">\
+                      <select name=\"month\" ng-model=\"criteria.created[0].value\">\
                         <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
                           <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
@@ -41,30 +41,28 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                         <span class=\"input-group-addon\">\
                           <i class=\"fa fa-search\"></i>\
                         </span>\
-                        <input ng-model=\"filters.search\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
+                        <input ng-model=\"criteria.title_like[0].value\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
                       </div>\
                     </li>\
                   </ul>\
                 </div>\
                 <div class=\"media-picker-panel-wrapper\">\
-                  <div class=\"media-picker-panel-content\">\
-                    <scrollable>\
-                      <div class=\"media-items\">\
-                        <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
-                          <div class=\"img-thumbnail\">\
-                            <i class=\"fa fa-picture-o fa-5x\"></i>\
-                            <div class=\"progress\" style=\"margin-bottom: 0;\">\
-                              <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
-                            </div>\
+                  <div class=\"media-picker-panel-content\" when-scrolled=\"scroll()\">\
+                    <div class=\"media-items\">\
+                      <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
+                        <div class=\"img-thumbnail\">\
+                          <i class=\"fa fa-picture-o fa-5x\"></i>\
+                          <div class=\"progress\" style=\"margin-bottom: 0;\">\
+                            <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
                           </div>\
                         </div>\
-                        <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
-                          <dynamic-image class=\"img-thumbnail\" instance=\""
-                            + instanceMedia
-                            + "\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                        </div>\
                       </div>\
-                    </scrollable>\
+                      <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
+                        <dynamic-image class=\"img-thumbnail\" instance=\""
+                          + instanceMedia
+                          + "\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                      </div>\
+                    </div>\
                   </div>\
                 </div>\
                 <div class=\"media-picker-panel-sidebar\">\
@@ -299,6 +297,12 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
               e.find('.media-picker-close').bind('click', function() {
                 $scope.picker.close();
               });
+
+              if ($scope.picker.modes.active == 'explore') {
+                $scope.explore();
+              } else {
+                $scope.upload();
+              }
             })
           })
         }
@@ -320,7 +324,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        * @type object
        */
       $scope.criteria = {
-        content_type_name: [ { value: 'photo' } ]
+        content_type_name: [ { value: 'photo' } ],
+        created: [],
+        in_litter: [ { value: '0' } ],
+        title_like: [ { value:'' } ]
       }
 
       /**
@@ -352,7 +359,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        *
        * @type integer
        */
-      $scope.total = 0;
+      $scope.total;
 
       /**
        * The uploader object.
@@ -374,7 +381,23 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        * Changes the picker to explore mode.
        */
       $scope.explore = function() {
-        $scope.list();
+        // Add a timeout to fix wrong epp calculation before full rendering
+        $timeout(function() {
+          var h = $('.explore-panel .media-picker-panel-content').outerHeight();
+          var w = $('.explore-panel .media-picker-panel-content').outerWidth();
+
+          // (Content height - padding) / (Item height + Item right margin)
+          var rows = Math.ceil((h - 20) / 135);
+
+          // (Content width - padding) / (Item width + Item right margin)
+          var cols = Math.floor((w - 20) / 135);
+
+          if (cols * rows > 0) {
+            $scope.epp = cols * rows;
+          }
+
+          $scope.list();
+        }, 100);
       };
 
       /**
@@ -400,12 +423,12 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       /**
        * Updates the array of contents.
        */
-      $scope.list = function () {
+      $scope.list = function (reset) {
         $scope.loading = 1;
 
         var data = {
             elements_per_page: $scope.epp,
-            page:              $scope.page,
+            page:              $scope.page++,
             sort_by:           'created',
             sort_order:        'desc',
             search:            itemService.cleanFilters($scope.criteria)
@@ -417,8 +440,15 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         );
 
         $http.post(url, data).then(function(response) {
-          $scope.contents = response.data.results;
-          $scope.total    = response.data.total
+          if (reset) {
+            console.log('reset');
+            $scope.contents = response.data.results;
+          } else {
+            console.log('concat');
+            $scope.contents = $scope.contents.concat(response.data.results);
+          }
+
+          $scope.total = response.data.total
 
           if (response.data.hasOwnProperty('extra')) {
             $scope.extra = response.data.extra;
@@ -432,6 +462,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        * Resets the selected items.
        */
       $scope.reset = function() {
+        $scope.contents = [];
+        $scope.total = 0;
+        $scope.page = 1;
+
         $scope.selected = {
           items:        [],
           lastSelected: null
@@ -465,6 +499,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             $scope.addItem(response);
           }, 500);
         }
+      }
+
+      $scope.scroll = function() {
+        if ($scope.total <= $scope.epp * $scope.page)
       }
 
       /**
@@ -543,5 +581,22 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
           $scope.selected.items.push(item);
         }
       }
+
+      var search;
+      $scope.$watch('criteria', function(nv, ov) {
+        if (nv == ov) {
+          return false;
+        }
+
+        if (search) {
+          $timeout.cancel(search);
+        }
+
+        search = $timeout(function() {
+          console.log($scope.criteria);
+          $scope.page = 1;
+          $scope.list(true);
+        }, 250);
+      }, true);
     }
   ]);
