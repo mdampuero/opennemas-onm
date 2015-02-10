@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    .expired { color:#DA4F49; font-weight:bold; }
-</style>
-{/block}
-
 {block name="content"}
 <form  action="{url name=admin_tpl_manager}" method="POST" id="tplform">
     <div class="page-navbar actions-navbar">
@@ -47,25 +41,8 @@
             <div class="navbar-inner">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        {t}Show{/t}
-                    </li>
-                    <li class="quicklinks"></li>
-                    <li class="m-r-10 input-prepend inside search-form no-boarder">
-                        <input type="text" name="items_page" id="items_page" value="{$itemsperpage}"
-                            size="3" maxlength="3" style="width:30px !important; text-align:right; margin-top:-2px; padding:2px 5px" />
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        {t}items/page with type{/t}
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <select name="type" id="type">
-                            <option value="" {if isset($smarty.request.type) && $smarty.request.type eq ''}selected="selected"{/if}>{t}All types{/t}</option>
+                        <select name="type" class="select2" data-label="{t}Type{/t}" id="type">
+                            <option value="" {if isset($smarty.request.type) && $smarty.request.type eq ''}selected="selected"{/if}>{t}All{/t}</option>
                             <option value="frontpages" {if isset($smarty.request.type) && ($smarty.request.type eq 'frontpages')}selected="selected"{/if}>{t}Frontpages{/t}</option>
                             <option value="articles" {if isset($smarty.request.type) && $smarty.request.type eq 'articles'}selected="selected"{/if}>{t}Article: inner{/t}</option>
                             <option value="mobilepages" {if isset($smarty.request.type) && $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>{t}Mobile: frontpages{/t}</option>
@@ -78,22 +55,21 @@
                             <option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'gallery-inner'}selected="selected"{/if}>{t}Album: inner{/t}</option>
                             <option value="poll-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'poll-frontpage'}selected="selected"{/if}>{t}Poll: frontpage{/t}</option>
                             <option value="poll-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'poll-inner'}selected="selected"{/if}>{t}Poll: inner{/t}</option>
-
                         </select>
                     </li>
                     <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        {t}and from{/t}
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <select name="section" id="section">
-                            <option value="">{t}All sections{/t}</option>
+                        <select name="section" data-label="{t}Section{/t}" id="section" class="select2">
+                            <option value="">{t}All{/t}</option>
                             {html_options options=$sections selected=$smarty.request.section|default:""}
+                        </select>
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <select class="xmedium" ng-model="pagination.epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
                         </select>
                     </li>
                     <li class="quicklinks">
