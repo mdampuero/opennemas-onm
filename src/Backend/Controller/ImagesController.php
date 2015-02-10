@@ -280,7 +280,6 @@ class ImagesController extends Controller
                 return  $response->setContent(json_encode(array()));
                 break;
             case 'POST':
-
                 // check if category, and filesizes are properly setted and category_name is valid
                 $category = $request->request->getDigits('category', 0);
                 if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
@@ -289,77 +288,23 @@ class ImagesController extends Controller
                     $category_name = $this->ccm->categories[$category]->name;
                 }
 
-                $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
+                $files = isset($_FILES) ? $_FILES : null;
                 $info = array();
 
-                $photo = new \Photo();
-                if ($upload && is_array($upload['tmp_name'])) {
-                    foreach (array_keys($upload['tmp_name']) as $index) {
+                foreach ($files as $file) {
+                    $photo = new \Photo();
 
-                        if (empty($upload['tmp_name'][$index])) {
-                            $info [] = array(
-                                'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
-                            );
-                            continue;
-                        }
-                        $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
-
-                        // Check if the image has an IPTC title an use it as original title
-                        $size = getimagesize($upload['tmp_name'][$index], $imageInfo);
-                        if (isset($imageInfo['APP13'])) {
-                            $iptc = iptcparse($imageInfo["APP13"]);
-                            if (isset($iptc['2#120'])) {
-                                $tempName = str_replace("\000", "", $iptc["2#120"][0]);
-                            }
-                        }
-
-                        $data = array(
-                            'local_file'        => $upload['tmp_name'][$index],
-                            'original_filename' => $upload['name'][$index],
-                            'title'             => $tempName,
-                            'description'       => $tempName,
-                            'fk_category'       => $category,
-                            'category'          => $category,
-                            'category_name'     => $category_name,
-                            'metadata'          => \Onm\StringUtils::getTags($tempName),
+                    if (empty($file['tmp_name'])) {
+                        $info [] = array(
+                            'error' => _('Not valid file format or the file exceeds the max allowed file size.'),
                         );
-
-                        try {
-                            $photo = new \Photo();
-                            $photoId = $photo->createFromLocalFile($data);
-
-                            $photo = new \Photo($photoId);
-
-                            $info [] = array(
-                                'id'            => $photo->id,
-                                'name'          => $photo->name,
-                                'size'          => $photo->size,
-                                'error'         => '',
-                                'delete_url'    => '',
-                                "delete_type"   => "DELETE",
-                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                                                    ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                    : $upload['type'][$index],
-                                'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
-                                'thumbnail_url' => $this->generateUrl(
-                                    'asset_image',
-                                    array(
-                                        'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
-                                        'parameters' => urlencode('thumbnail,150,150'),
-                                    )
-                                ),
-                            );
-                        } catch (Exception $e) {
-                            $info [] = array(
-                                'error'         => $e->getMessage(),
-                            );
-                        }
+                        continue;
                     }
-                } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
-                    $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
+
+                    $tempName = pathinfo($file['name'], PATHINFO_FILENAME);
 
                     // Check if the image has an IPTC title an use it as original title
-                    $size = getimagesize($upload['tmp_name'], $imageInfo);
+                    $size = getimagesize($file['tmp_name'], $imageInfo);
                     if (isset($imageInfo['APP13'])) {
                         $iptc = iptcparse($imageInfo["APP13"]);
                         if (isset($iptc['2#120'])) {
@@ -368,8 +313,8 @@ class ImagesController extends Controller
                     }
 
                     $data = array(
-                        'local_file'        => $upload['tmp_name'],
-                        'original_filename' => $upload['name'],
+                        'local_file'        => $file['tmp_name'],
+                        'original_filename' => $file['name'],
                         'title'             => $tempName,
                         'description'       => $tempName,
                         'fk_category'       => $category,
@@ -391,6 +336,9 @@ class ImagesController extends Controller
                             'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",
+                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                                                ? $_SERVER['HTTP_X_FILE_TYPE']
+                                                : $file['type'],
                             'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
                             'thumbnail_url' => $this->generateUrl(
                                 'asset_image',
@@ -399,9 +347,6 @@ class ImagesController extends Controller
                                     'parameters' => urlencode('thumbnail,150,150'),
                                 )
                             ),
-                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
-                                                ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                : $upload['type'],
                         );
                     } catch (Exception $e) {
                         $info [] = array(
@@ -409,6 +354,63 @@ class ImagesController extends Controller
                         );
                     }
                 }
+
+
+                // if ($upload && is_array($upload['tmp_name'])) {
+                // } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
+                //     $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
+
+                //     // Check if the image has an IPTC title an use it as original title
+                //     $size = getimagesize($upload['tmp_name'], $imageInfo);
+                //     if (isset($imageInfo['APP13'])) {
+                //         $iptc = iptcparse($imageInfo["APP13"]);
+                //         if (isset($iptc['2#120'])) {
+                //             $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                //         }
+                //     }
+
+                //     $data = array(
+                //         'local_file'        => $upload['tmp_name'],
+                //         'original_filename' => $upload['name'],
+                //         'title'             => $tempName,
+                //         'description'       => $tempName,
+                //         'fk_category'       => $category,
+                //         'category'          => $category,
+                //         'category_name'     => $category_name,
+                //         'metadata'          => \Onm\StringUtils::getTags($tempName),
+                //     );
+
+                //     try {
+                //         $photo = new \Photo();
+                //         $photoId = $photo->createFromLocalFile($data);
+
+                //         $photo = new \Photo($photoId);
+
+                //         $info [] = array(
+                //             'id'            => $photo->id,
+                //             'name'          => $photo->name,
+                //             'size'          => $photo->size,
+                //             'error'         => '',
+                //             'delete_url'    => '',
+                //             "delete_type"   => "DELETE",
+                //             'url'           => $this->generateUrl('admin_image_show', array('id[]' => $photo->id)),
+                //             'thumbnail_url' => $this->generateUrl(
+                //                 'asset_image',
+                //                 array(
+                //                     'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                //                     'parameters' => urlencode('thumbnail,150,150'),
+                //                 )
+                //             ),
+                //             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
+                //                                 ? $_SERVER['HTTP_X_FILE_TYPE']
+                //                                 : $upload['type'],
+                //         );
+                //     } catch (Exception $e) {
+                //         $info [] = array(
+                //             'error'         => $e->getMessage(),
+                //         );
+                //     }
+                // }
 
                 $json = json_encode($info);
                 $response->setContent($json);
