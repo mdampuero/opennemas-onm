@@ -186,9 +186,9 @@
                                                 <i class="fa fa-trash-o"></i> {t}Remove{/t}
                                             </button>
                                             {/acl}
-                                            <a href="{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]" target="_blank">
+                                            <!-- <a href="{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]" target="_blank">
                                                 <span class="fa fa-download"></span> {t}Download{/t}
-                                            </a>
+                                            </a> -->
                                         </div>
                                     </div>
                                 </td>
