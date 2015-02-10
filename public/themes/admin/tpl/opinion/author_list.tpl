@@ -118,7 +118,10 @@
                         <tbody>
                             <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                                 <td>
-                                    <checkbox type="checkbox" index="[% content.id %]">
+                                    <div class="checkbox check-default">
+                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                        <label for="checkbox[%$index%]"></label>
+                                    </div>
                                 </td>
                                 <td class="center">
                                     <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% shvs.extra.photos[content.avatar_img_id].path_file + '/' + shvs.extra.photos[content.avatar_img_id].name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
