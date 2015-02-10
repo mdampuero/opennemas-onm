@@ -160,7 +160,7 @@
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
-                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
+                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}" class="select2">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
                                     {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -186,15 +186,38 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
-                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}" class="select2">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
                     <input type="hidden" name="in_home" ng-model="criteria.in_home">
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="info">
+                        {t}Results{/t}: [% pagination.total %]
+                        </span>
+                    </li>
+                </ul>
+
+                <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks form-inline pagination-links">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
