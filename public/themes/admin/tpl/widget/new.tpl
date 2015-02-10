@@ -49,84 +49,83 @@
 
     <div class="content">
 
-        {render_messages}
+      {render_messages}
 
-        <div class="grid simple">
+      <div class="row">
+        <div class="col-sm-8">
+
+          <div class="grid simple">
             <div class="grid-body">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="form-group">
-                        <label for="metadata" class="form-label">{t}Widget name{/t}</label>
-                        <div class="controls">
-                            <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" class="form-input"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="renderlet" class="form-label">{t}Widget type{/t}</label>
-                        <div class="controls">
-                            <select name="renderlet" id="renderlet" class="form-input">
-                                <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
-                                <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
-                                <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
-                            </select>
-                        </div>
-                    </div>
+              <div class="form-group">
+                  <label for="metadata" class="form-label">{t}Widget name{/t}</label>
+                  <div class="controls">
+                      <input type="text" id="title" name="title" value="{$widget->title|default:""}" required="required" class="form-control"/>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="renderlet" class="form-label">{t}Widget type{/t}</label>
+                  <div class="controls">
+                      <select name="renderlet" id="renderlet">
+                          <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
+                          <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
+                          <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
+                      </select>
+                  </div>
+              </div>
 
-                    <div class="form-group">
-                        <label for="description" class="form-label">{t}Description{/t}</label>
-                        <div class="controls">
-                            <textarea name="description" id="description" class="input-xxlarge">{$widget->description|default:""}</textarea>
-                        </div>
-                    </div>
+              <div class="form-group">
+                  <label for="description" class="form-label">{t}Description{/t}</label>
+                  <div class="controls">
+                      <textarea name="description" id="description" class="form-control" rows="10">{$widget->description|default:""}</textarea>
+                  </div>
+              </div>
 
-                    <div class="form-group">
-                        <label for="description" class="form-label">
-                            {t}Content{/t}
-                        </label>
-                        <div class="pull-right">
-                            {acl isAllowed='PHOTO_ADMIN'}
-                            <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini insert-image" style="{if !isset($widget) || $widget->renderlet != 'html'}display:none{/if}"> + {t}Insert image{/t}</a>
-                            {/acl}
-                        </div>
-                        <div class="controls">
-                            <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:none{else}display:inline{/if}">
-                                <textarea id="widget_content" name="content" class="onm-editor">{$widget->content|default:""}</textarea>
-                            </div>
+              <div class="form-group">
+                  <label for="description" class="form-label">
+                      {t}Content{/t}
+                  </label>
+                  <div class="pull-right">
+                      {acl isAllowed='PHOTO_ADMIN'}
+                      <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini insert-image" style="{if !isset($widget) || $widget->renderlet != 'html'}display:none{/if}"> + {t}Insert image{/t}</a>
+                      {/acl}
+                  </div>
+                  <div class="controls">
+                      <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:none{else}display:inline{/if}">
+                          <textarea id="widget_content" name="content" class="onm-editor">{$widget->content|default:""}</textarea>
+                      </div>
 
-                            <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:inline{else}display:none{/if}">
-                                <select name="intelligent-type" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
-                                    {foreach from=$all_widgets item=w}
-                                    <option value="{$w}" {if isset($widget) && $widget->content == $w}selected="selected"{/if}>{$w}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
-                        </div>
+                      <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:inline{else}display:none{/if}">
+                          <select name="intelligent-type" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
+                              {foreach from=$all_widgets item=w}
+                              <option value="{$w}" {if isset($widget) && $widget->content == $w}selected="selected"{/if}>{$w}</option>
+                              {/foreach}
+                          </select>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="grid simple">
+            <div class="grid-body">
+                <div class="form-group">
+                    <label for="available" class="form-label">{t}Published{/t}</label>
+                    <div class="controls">
+                        <select name="content_status" id="content_status">
+                            <option value="1" {if isset($widget) && $widget->content_status == 1}selected="selected"{/if}>{t}Yes{/t}</option>
+                            <option value="0" {if isset($widget) && $widget->content_status == 0}selected="selected"{/if}>{t}No{/t}</option>
+                        </select>
                     </div>
                 </div>
-
-                <div class="col-sm-4">
-                    <div class="contentbox">
-                        <h3 class="title">{t}Attributes{/t}</h3>
-                        <div class="content">
-                            <div class="form-group">
-                                <label for="available" class="form-label">{t}Published{/t}</label>
-                                <div class="controls">
-                                    <select name="content_status" id="content_status">
-                                        <option value="1" {if isset($widget) && $widget->content_status == 1}selected="selected"{/if}>{t}Yes{/t}</option>
-                                        <option value="0" {if isset($widget) && $widget->content_status == 0}selected="selected"{/if}>{t}No{/t}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            {if isset($widget) && $widget->renderlet == 'intelligentwidget'}
-                                <button class="btn btn-params" type="button">
-                                   Parameters
-                                </button>
-                            {/if}
-                        </div>
-                    </div>
-                </div>
+                {if isset($widget) && $widget->renderlet == 'intelligentwidget'}
+                    <button class="btn btn-params" type="button">
+                       Parameters
+                    </button>
+                {/if}
             </div>
-            </div>
+          </div>
         </div>
     </div>
 
