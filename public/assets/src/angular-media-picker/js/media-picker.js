@@ -50,6 +50,14 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                   <div class=\"media-picker-panel-content\">\
                     <scrollable>\
                       <div class=\"media-items\">\
+                        <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
+                          <div class=\"img-thumbnail\">\
+                            <i class=\"fa fa-picture-o fa-5x\"></i>\
+                            <div class=\"progress\" style=\"margin-bottom: 0;\">\
+                              <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
+                            </div>\
+                          </div>\
+                        </div>\
                         <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents\">\
                           <dynamic-image class=\"img-thumbnail\" instance=\""
                             + instanceMedia
@@ -124,12 +132,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                             <tr ng-repeat=\"item in uploader.queue\">\
                               <td class=\"w-50\">\
                                 [% item.file.name %]\
-                                <div class=\"inline-actions\">\
-                                  <button class=\"link link-danger\" ng-click=\"item.upload()\">\
-                                    <i class=\"fa fa-ban\"></i>\
-                                    Cancel\
-                                  </button>\
-                                </div>\
                               </td>\
                               <td class=\"w-25\">\
                                 [% item.file.size/1024 | number: 2 %] KB\
@@ -332,8 +334,8 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       };
     }
   ])
-  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', 'FileUploader', 'itemService', 'routing',
-    function($http, $rootScope, $scope, FileUploader, itemService, routing) {
+  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'itemService', 'routing',
+    function($http, $rootScope, $scope, $timeout, FileUploader, itemService, routing) {
       /**
        * The array of contents.
        *
@@ -452,6 +454,17 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             url:        $scope.picker.src.upload,
             autoUpload: true
         });
+
+        $scope.uploader.onAfterAddingFile = function(fileItem) {
+          $scope.picker.enable('explore');
+        };
+
+        $scope.uploader.onCompleteAll = function() {
+          $timeout(function() {
+            $scope.uploader.clearQueue();
+            $scope.list();
+          }, 500);
+        };
       }
 
       /**
