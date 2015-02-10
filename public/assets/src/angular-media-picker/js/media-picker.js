@@ -9,7 +9,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       // Runs during compile
       return {
         controller: 'mediaPickerController',
-        restrict: 'AC', // E = Element, A = Attribute, C = Class, M = Comment
+        restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
         scope: {},
         link: function($scope, elm, attrs) {
           /**
