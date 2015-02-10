@@ -84,28 +84,10 @@ $menuXml = [
             [
                 "id"          => "opinion_manager",
                 "title"       => _("Opinions"),
-                "link"        => '#',
+                "link"        => url('admin_opinions'),
+                'icon' => 'fa fa-quote-right',
                 "module_name" => "OPINION_MANAGER",
-                'icon'        => 'fa fa-quote-right',
                 "privilege"   => "OPINION_ADMIN",
-                "submenu"     => [
-                    [
-                        "id"          => "opinion_manager",
-                        "title"       => _("Article opinions"),
-                        "link"        => url('admin_opinions'),
-                        'icon' => 'fa fa-quote-right',
-                        "module_name" => "OPINION_MANAGER",
-                        "privilege"   => "OPINION_ADMIN",
-                    ],
-                    [
-                        "id"          => "authors",
-                        "title"       => _("Authors"),
-                        "link"        => url('admin_opinion_authors'),
-                        'icon'        => 'fa fa-user',
-                        "module_name" => "OPINION_MANAGER",
-                        "privilege"   => "AUTHOR_ADMIN",
-                    ],
-                ],
             ],
             [
                 "id"          => "comment_manager",
@@ -362,6 +344,14 @@ $menuXml = [
                         "privilege"   => "USER_ADMIN",
                     ],
                 ],
+            ],
+            [
+                "id"          => "authors",
+                "title"       => _("Authors"),
+                "link"        => url('admin_opinion_authors'),
+                'icon'        => 'fa fa-user',
+                "module_name" => "OPINION_MANAGER",
+                "privilege"   => "AUTHOR_ADMIN",
             ],
             [
                 "id"          => "cache_manager",
