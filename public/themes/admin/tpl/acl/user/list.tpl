@@ -18,7 +18,7 @@
                         <li class="quicklinks">
                             <a class="btn btn-primary" href="{url name=admin_acl_user_create}">
                                 <i class="fa fa-plus"></i>
-                                {t}New user{/t}
+                                {t}Create{/t}
                             </a>
                         </li>
                     </ul>

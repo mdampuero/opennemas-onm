@@ -75,7 +75,7 @@
                             <li class="quicklinks">
                                 <a class="btn btn-primary" href="{url name=admin_poll_create}" title="{t}New poll{/t}">
                                     <i class="fa fa-plus"></i>
-                                    {t}New poll{/t}
+                                    {t}Create{/t}
                                 </a>
                             </li>
                         {/acl}

@@ -17,7 +17,7 @@
                         <li class="quicklinks">
                             <a class="btn btn-primary" href="{url name=admin_opinion_author_create}" title="{t}Create new author{/t}">
                                 <i class="fa fa-plus"></i>
-                                {t}New author{/t}
+                                {t}Create{/t}
                             </a>
                         </li>
                     </ul>

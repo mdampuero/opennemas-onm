@@ -32,7 +32,7 @@
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-primary" href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
-                            {t}New user{/t}
+                            {t}Create{/t}
                         </a>
                     </li>
             </div>
