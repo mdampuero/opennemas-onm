@@ -559,7 +559,7 @@ class AclUserController extends Controller
             return $this->render('login/recover_pass.tpl');
         } else {
             $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
+            $token = '';
             // Get user by email
             $user = new \User();
             $user->findByEmail($email);
