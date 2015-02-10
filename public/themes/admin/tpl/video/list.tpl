@@ -159,7 +159,7 @@
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks dropdown">
-                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
+                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}" class="select2">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
                                     {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -185,9 +185,8 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
-                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}" class="select2">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
@@ -277,7 +276,9 @@
                                     </div>
                                 </td>
                                 <td style="width:15px;">
-                                    <img ng-src="[% content.thumb %]" alt="" style="max-width:60px">
+                                    <div class="thumbnail">
+                                      <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
+                                    </div>
                                 </td>
                                 <td>
                                     <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong> [% content.title %]
