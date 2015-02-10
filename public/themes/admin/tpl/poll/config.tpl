@@ -44,7 +44,7 @@
     <div class="content">
         {render_messages}
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="grid simple">
                     <div class="grid-title">
                         <h4>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="grid simple">
                     <div class="grid-title">
                         <h4>{t}Poll home widget preferences{/t}</h4>
