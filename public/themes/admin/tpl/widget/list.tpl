@@ -85,11 +85,11 @@
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section">
-                    <li class="m-r-10 input-prepend inside search-form no-boarder">
+                    <li class="m-r-10 input-prepend inside search-input no-boarder">
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
-                        <input class="no-boarder" placeholder="{t}Filter by title{/t}" ng-model="criteria.title_like" type="text" style="width:250px;">
+                        <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
@@ -103,13 +103,19 @@
                         </select>
                     </li>
                     <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
                         <select class="select2" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
+                        </select>
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 xmedium" ng-model="pagination.epp">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
                         </select>
                     </li>
                     <li class="quicklinks hidden-xs">
@@ -124,6 +130,18 @@
                         <button class="btn btn-link" ng-click="refresh()">
                             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
                         </button>
+                    </li>
+                </ul>
+                <ul class="nav quick-section pull-right">
+                    <li class="quicklinks form-inline pagination-links">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </li>
                 </ul>
             </div>
