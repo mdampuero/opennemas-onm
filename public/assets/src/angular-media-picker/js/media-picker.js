@@ -428,7 +428,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
         var data = {
             elements_per_page: $scope.epp,
-            page:              $scope.page++,
+            page:              $scope.page,
             sort_by:           'created',
             sort_order:        'desc',
             search:            itemService.cleanFilters($scope.criteria)
@@ -501,8 +501,16 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         }
       }
 
+      /**
+       * Requests the next page of the list when scrolling.
+       */
       $scope.scroll = function() {
-        if ($scope.total <= $scope.epp * $scope.page)
+        if ($scope.total == $scope.contents.length) {
+          return false;
+        }
+
+        $scope.page = $scope.page + 1;
+        $scope.list();
       }
 
       /**
