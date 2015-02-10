@@ -157,67 +157,35 @@
         {render_messages}
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="grid simple">
-                    <div class="grid-title">
-                        <h4>
-                            {if $advertisement->id}
-                                {{$advertisement->title}}
-                            {else}
-                                {t}New banner{/t}
-                            {/if}
-                        </h4>
-                    </div>
                     <div class="grid-body">
-                        <h5>{t}General information{/t}</h5>
-                        <div class="control-group">
-                            <label for="title" class="control-label">{t}Title{/t}</label>
+                        <div class="form-group">
+                            <label for="title" class="form-label">{t}Title{/t}</label>
                             <div class="controls">
-                                <input  type="text" id="title" name="title" required="required" class="input-xxlarge"
+                                <input  type="text" id="title" name="title" required="required" class="form-control"
                                     value="{$advertisement->title|clearslash|escape:"html"|default:""}" />
                             </div>
                         </div>
-                        <div class="control-group" style="display:none">
-                            <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+                        <div class="form-group" style="display:none">
+                            <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                             <div class="controls">
-                                <input type="text" id="metadata" name="metadata" class="input-xxlarge" required="required"
+                                <input type="text" id="metadata" name="metadata" class="form-control" required="required"
                                     title="Metadatos" value="{$advertisement->metadata|strip|default:""}">
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label for="content_status" class="control-label">{t}Activated{/t}</label>
+                        <div class="form-group">
+                            <label for="content_status" class="form-label">{t}Activated{/t}</label>
                             <div class="controls">
                                 <input type="checkbox" name="content_status" id="content_status" value="1"
                                     {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if}
                                     {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
                             </div>
                         </div>
-                        <h5>{t}When to show this ad{/t}</h5>
-                        <div class="control-group">
-                            <label for="typ_medida" class="control-label">{t}Restrictions{/t}</label>
-                            <div class="controls">
-                                <select name="type_medida" id="type_medida">
-                                    <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
-                                    <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
-                                </select>
-                                <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
-                            </div>
-                        </div>
-                        <div class="control-group" id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">
-                            <label for="starttime" class="control-label">{t}Date range{/t}</label>
-                            <div class="controls">
-                                <label for="starttime">{t}From{/t}</label>
-                                <input type="datetime" id="starttime"  name="starttime" title="Fecha inicio publicacion"
-                                    value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
-                                <label for="endtime">{t}Until{/t}</label>
-                                <input type="datetime" id="endtime" name="endtime" title="Fecha fin publicacion"
-                                    value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
-                                <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
-                            </div>
-                        </div>
+
                         <h5>{t}Contents{/t}</h5>
-                        <div class="control-group">
-                            <label class="control-label" for="with_script">{t}Type{/t}</label>
+                        <div class="form-group">
+                            <label class="form-label" for="with_script">{t}Type{/t}</label>
                             <div class="controls">
                                 <select name="with_script" id="with_script">
                                     <option value="0" {if !isset($advertisement) || $advertisement->with_script == 0}selected="selected"{/if}>{t}Image or Flash object{/t}</option>
@@ -229,14 +197,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label for="content" class="control-label">&nbsp;</label>
+                        <div class="form-group">
                             <div class="controls content_blocks">
                                 <div id="content_type_0" style="{if !isset($advertisement) || $advertisement->with_script == 0}display:block{else}display:none{/if};">
                                     {include file="advertisement/partials/advertisement_images.tpl"}
                                 </div>
                                 <div id="content_type_1" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
-                                    <textarea name="script" id="script" class="input-xxlarge" rows="10" style="width:95%">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                                    <textarea name="script" id="script" class="form-control" rows="10" style="width:95%">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                                 </div>
                                 {if !empty($server_url)}
                                 <div id="content_type_2" style="{if isset($advertisement) && $advertisement->with_script ==2}display:block{else}display:none{/if};">
@@ -254,18 +221,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group" id="ad_dimensions" style="{if (isset($advertisement) && $advertisement->with_script != 2) || !isset($advertisement)}display:block{else}display:none{/if};">
-                            <label class="control-label"></label>
+                        <div class="form-group" id="ad_dimensions" style="{if (isset($advertisement) && $advertisement->with_script != 2) || !isset($advertisement)}display:block{else}display:none{/if};">
+                            <label class="form-label"></label>
                             <div class="controls">
                                 <div class="form-inline-block">
-                                    <div class="control-group">
-                                        <label for="params_width" class="control-label">{t}Width{/t}</label>
+                                    <div class="form-group">
+                                        <label for="params_width" class="form-label">{t}Width{/t}</label>
                                         <div class="controls">
                                             <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" {if isset($advertisement) && $advertisement->with_script != 2}required="required"{/if} min="0">
                                         </div>
                                     </div>
-                                    <div class="control-group">
-                                        <label for="params_height" class="control-label">{t}Height{/t}</label>
+                                    <div class="form-group">
+                                        <label for="params_height" class="form-label">{t}Height{/t}</label>
                                         <div class="controls">
                                             <input type="number" id="params_height" name="params_height" value="{$advertisement->params['height']}" {if isset($advertisement) && $advertisement->with_script != 2}required="required"{/if} min="0">
                                         </div>
@@ -273,22 +240,62 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group" style="{if !isset($advertisement) || (($advertisement->type_advertisement + 50) % 100) != 0}display:none{/if};">
-                            <label for="timeout" class="control-label">{t}Display banner while{/t}</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="grid simple">
+                    <div class="grid-body">
+                      <h5>{t}When to show this ad{/t}</h5>
+                        <div class="form-group">
+                            <label for="typ_medida" class="form-label">{t}Restrictions{/t}</label>
+                            <div class="controls">
+                                <select name="type_medida" id="type_medida">
+                                    <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
+                                    <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
+                                </select>
+                                <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">
+                            <label for="starttime" class="form-label">{t}Date range{/t}</label>
+                            <div class="controls">
+                                <label for="starttime">{t}From{/t}</label>
+                                <input type="datetime" id="starttime"  name="starttime" title="Fecha inicio publicacion"
+                                    value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                                <label for="endtime">{t}Until{/t}</label>
+                                <input type="datetime" id="endtime" name="endtime" title="Fecha fin publicacion"
+                                    value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                                <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="{if !isset($advertisement) || (($advertisement->type_advertisement + 50) % 100) != 0}display:none{/if};">
+                            <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
                             <div class="controls">
                                 <input type="number" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" min="0" max="100"/>
                                 <div class="help-block">{t}Amount of seconds that this banner will block all the page.{/t}</div>
                             </div>
                         </div>
-                        <div class="control-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
-                            <label for="url" class="control-label">{t}Url{/t}</label>
+                        <div class="form-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
+                            <label for="url" class="form-label">{t}Url{/t}</label>
                             <div class="controls">
-                                <input type="url" id="url" name="url" class="input-xxlarge" value="{$advertisement->url}" placeholder="http://" {if !empty($advertisement)  && ($advertisement->with_script == 0)} required="required"{/if} />
+                                <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" {if !empty($advertisement)  && ($advertisement->with_script == 0)} required="required"{/if} />
                             </div>
                         </div>
-                        <h5>{t}Where to show this ad{/t}</h5>
-                        <div class="control-group">
-                            <label for="category" class="control-label">{t}Category{/t}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Where to show this ad{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="form-group">
+                            <label for="category" class="form-label">{t}Category{/t}</label>
                             <div class="controls">
                                 <select name="category[]" id="category" required="required" multiple>
                                 {if isset($advertisement->id)}
@@ -345,20 +352,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="grid simple">
-                    <div class="grid-title">
-                        <h4>{t}Position{/t}</h4>
-                    </div>
-                    <div class="grid-body">
-                        <div class="control-group">
-                            <label for="position" class="control-label"></label>
+                        <div class="form-group">
+                            <label for="position" class="form-label"></label>
                             <div class="controls">
                                 <div id="position-adv" class="tabs">
                                     <ul>
