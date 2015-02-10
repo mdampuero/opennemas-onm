@@ -42,14 +42,14 @@
     <td class="center">
     {if $category->inmenu==1}
         {acl isAllowed="CATEGORY_AVAILABLE"}
-        <a href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=0}" title="En menu">
-            <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+        <a class="btn btn-white" href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=0}" title="En menu">
+            <i class="fa fa-check text-success fa-lg"></i>
         </a>
         {/acl}
     {else}
         {acl isAllowed="CATEGORY_AVAILABLE"}
-        <a href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=1}" title="No en menu">
-            <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+        <a class="btn btn-white" href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=1}" title="No en menu">
+            <i class="fa fa-times text-danger fa-lg"></i>
         </a>
         {/acl}
     {/if}
@@ -57,12 +57,12 @@
     {if $category->internal_category eq '1'}
     <td class="center">
         {if $category->params['inrss'] eq 1 || !isset($category->params['inrss'])}
-            <a href="{url name=admin_category_togglerss id=$category->pk_content_category status=0}" title="En rss">
-                <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+            <a class="btn btn-white" href="{url name=admin_category_togglerss id=$category->pk_content_category status=0}" title="En rss">
+                <i class="fa fa-check text-success fa-lg"></i>
             </a>
         {else}
-            <a href="{url name=admin_category_togglerss id=$category->pk_content_category status=1}" title="No en rss">
-                <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+            <a class="btn btn-white" href="{url name=admin_category_togglerss id=$category->pk_content_category status=1}" title="No en rss">
+                <i class="fa fa-times text-danger fa-lg"></i>
             </a>
         {/if}
     </td>
@@ -119,12 +119,12 @@
         <td class="center">
         {if $subcategory->internal_category eq '1'}
             {if $subcategory->inmenu==1}
-                <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=0}" title="En menu">
-                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+                <a class="btn btn-white" href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=0}" title="En menu">
+                    <i class="fa fa-check text-success fa-lg"></i>
                 </a>
             {else}
-                <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=1}" title="No en menu">
-                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+                <a class="btn btn-white" class="btn btn-white" href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=1}" title="No en menu">
+                    <i class="fa fa-times text-danger fa-lg"></i>
                 </a>
             {/if}
         {/if}
@@ -133,12 +133,12 @@
         {acl isAllowed="CATEGORY_AVAILABLE"}
         <td class="center">
             {if $subcategory->params['inrss'] eq 1 || !isset($subcategory->params['inrss'])}
-                <a href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=0}" title="En rss">
-                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
+                <a class="btn btn-white" href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=0}" title="En rss">
+                    <i class="fa fa-check text-success fa-lg"></i>
                 </a>
             {else}
-                <a href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=1}" title="No en rss">
-                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
+                <a class="btn btn-white" href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=1}" title="No en rss">
+                    <i class="fa fa-times text-danger fa-lg"></i>
                 </a>
             {/if}
         </td>

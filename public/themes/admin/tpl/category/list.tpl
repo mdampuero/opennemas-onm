@@ -1,18 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    .ui-tabs .ui-tabs-panel {
-        padding:0 !important;
-    }
-    .ui-tabs-panel, .tabs > div {
-        border:0 none !important;
-    }
-</style>
-{/block}
-
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
 
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -89,8 +77,8 @@
         </ul>
 
         <div class="tab-content">
-            <div id="global" class="tab-pane active">
-                <table class="table table-hover table-condensed">
+            <div id="global" class="tab-pane no-padding active">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -100,7 +88,6 @@
                             <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:15px;" class="nowrap">{t}Show in rss{/t}</th>
                             {/acl}
-                            <th style="width:100px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,18 +107,11 @@
                         </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="8">
-                                &nbsp;
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
              {is_module_activated name="ALBUM_MANAGER"}
-            <div id="album" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="album" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -160,17 +140,12 @@
                             </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="7"> </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             {/is_module_activated}
             {is_module_activated name="VIDEO_MANAGER"}
-            <div id="video" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="video" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -179,7 +154,6 @@
                             {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
                             {/acl}
-                            <th style="width:100px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,17 +174,12 @@
                         {/section}
 
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="7" > </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             {/is_module_activated}
             {is_module_activated name="KIOSKO_MANAGER"}
-            <div id="epapel" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="epapel" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -219,7 +188,6 @@
                             {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
                             {/acl}
-                            <th style="width:100px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -239,18 +207,12 @@
                         </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="7">
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
              {/is_module_activated}
              {is_module_activated name="POLL_MANAGER"}
-            <div id="poll" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="poll" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -259,7 +221,6 @@
                             {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
                             {/acl}
-                            <th style="width:100px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -279,18 +240,12 @@
                         </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr >
-                            <td colspan="7">
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             {/is_module_activated}
             {is_module_activated name="SPECIAL_MANAGER"}
-            <div id="special" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="special" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -319,18 +274,12 @@
                         </tr>
                         {/section}
                     </tbody>
-                    <tfoot>
-                        <tr >
-                            <td colspan="7">
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             {/is_module_activated}
             {is_module_activated name="BOOK_MANAGER"}
-            <div id="book" class="tab-pane">
-                <table class="table table-hover table-condensed">
+            <div id="book" class="tab-pane no-padding">
+                <table class="table table-hover table-condensed ">
                     <thead>
                         <tr>
                             <th>{t}Title{/t}</th>
@@ -365,7 +314,6 @@
     </div><!-- categories-tabs -->
 
 </div>
-</form>
 <!--fin wrapper-content-->
 {include file="category/modals/_modalDelete.tpl"}
 {include file="category/modals/_modalEmpty.tpl"}
