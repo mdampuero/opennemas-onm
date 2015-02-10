@@ -78,7 +78,7 @@
                     <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks">
-                    <select id="content_type_name" ng-model="criteria.content_type_name" data-label="{t}Content Type{/t}">
+                    <select id="content_type_name" ng-model="criteria.content_type_name" data-label="{t}Content Type{/t}" class="select2">
                         <option value="-1">{t}-- All --{/t}</option>
                         {is_module_activated name="ARTICLE_MANAGER"}
                         {acl isAllowed="ARTICLE_TRASH"}
@@ -195,7 +195,6 @@
                                     <label for="select-all"></label>
                                 </div>
                             </th>
-                            <th class="left">{t}Content type{/t}</th>
                             <th class='left'>{t}Title{/t}</th>
                             <th style="width:40px">{t}Section{/t}</th>
                             <th class="left" style="width:110px;">{t}Date{/t}</th>
@@ -215,11 +214,12 @@
                                 </div>
                             </td>
                             <td>
-                                <strong>[% content.content_type_l10n_name %]</strong>
-                            </td>
-                            <td>
-                                [% content.title %]
+                                <strong>[% content.content_type_l10n_name %]</strong> - [% content.title %]
                                 <div class="listing-inline-actions">
+                                    <a ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
+                                      <i class="fa fa-pencil"></i>
+                                      {t}Edit{/t}
+                                    </a>
                                     <a class="link pointer" ng-click="restoreFromTrash(content)" type="button" title="{t}Restore{/t}">
                                         <i class="fa fa-retweet"></i>
                                         {t}Restore{/t}
