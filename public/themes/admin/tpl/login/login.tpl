@@ -46,6 +46,7 @@
         <div class="wrapper">
             <div class="overlay"></div>
             <main>
+                {block name="login_content"}
                 <form method="post" autocomplete="off" action="{url name=admin_login_check}" id="loginform" name="loginform">
                     <div class="container">
                         <div class="row login-container animated fadeInUp">
@@ -69,6 +70,7 @@
                                 <div class="tiles grey p-t-20 p-b-20 text-black">
                                     <div class="row m-l-10 m-r-10">
                                         <div class="col-sm-12">
+                                            {render_messages}
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">@</span>
@@ -96,7 +98,7 @@
                                                 </div>
                                             {/if}
                                             <div class="form-group text-right">
-                                                <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
+                                                <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass btn btn-link">{t domain=base}Forgot Password?{/t}</a>
                                                 <button class="btn btn-primary" id="submit-button" tabindex="4" type="submit">
                                                 {t}Log in{/t}
                                                 </button>
@@ -110,6 +112,7 @@
                     <input type="hidden" id="_token" name="_token" value="{$token}">
                     <input type="hidden" id="_referer" name="_referer" value="{$referer}">
                 </form>
+                {/block}
             </main>
             <footer>
                 <div class="muted credit">
