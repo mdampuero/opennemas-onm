@@ -25,6 +25,18 @@
   min-height: 14px;
   margin-bottom:0;
 }
+body {
+  overflow-y: scroll;
+}
+
+.filters-navbar .pagination-links .btn {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+}
+.filters-navbar .pagination-links .btn:hover {
+  background-color:rgba(0, 0, 0, 0);
+  border: 1px solid #999;
+}
 
 /* =============================================================================
    Welcome page rules
