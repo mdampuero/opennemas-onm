@@ -9,6 +9,51 @@ use Symfony\Component\HttpFoundation\Request;
 class MediaPickerController extends Controller
 {
     /**
+     * Returns the list of media items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listAction(Request $request)
+    {
+        $epp   = $request->query->getDigits('epp', 1);
+        $date  = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+        $page  = $request->query->getDigits('page', 1);
+        $title = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
+        $type  = $request->query->filter('content_type_name', 'photo', FILTER_SANITIZE_STRING);
+
+        $filter = [ "content_type_name = '$type'", "in_litter = 0" ];
+        $order = [
+            'created' => 'desc'
+        ];
+
+        if (!empty($date)) {
+            $filter[] = "DATE_FORMAT(created, '%Y-%c') = '$date'";
+        }
+
+        if (!empty($title)) {
+            $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%')";
+        }
+
+        $em = $this->get('entity_repository');
+
+        $filter = implode(' AND ', $filter);
+
+        $results = $em->findBy($filter, $order, $epp, $page);
+        $total   = $em->countBy($filter);
+
+        return new JsonResponse(
+            array(
+                'epp'     => $epp,
+                'page'    => $page,
+                'results' => $results,
+                'total'   => $total,
+            )
+        );
+    }
+
+    /**
      * Returns the parameters needed by the media picker.
      *
      * @param  array $mode The current media picker enabled modes.
