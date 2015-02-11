@@ -92,7 +92,7 @@ class NewsletterManager extends BaseManager
                     $content = new $item->content_type($item->id);
 
                     //if is a real content include it in the contents array
-                    if (!empty($content) && is_object($content)) {
+                    if (is_object($content) && !is_null($content->id)) {
                         $content = $content->get($item->id);
                         $item->content_type = $content->content_type;
                         $item->title        = $content->title;

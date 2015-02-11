@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -27,9 +28,6 @@ class ImagesController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('IMAGE_MANAGER');
-
         $this->ccm         = \ContentCategoryManager::get_instance();
         $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
@@ -66,6 +64,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function listAction()
     {
@@ -79,6 +79,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function configAction(Request $request)
     {
@@ -120,6 +122,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function newAction()
     {
@@ -143,6 +147,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -204,6 +210,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -252,6 +260,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_DELETE')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -289,6 +299,8 @@ class ImagesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('PHOTO_CREATE')")
+     *
+     * @CheckModuleAccess(module="IMAGE_MANAGER")
      */
     public function createAction(Request $request)
     {

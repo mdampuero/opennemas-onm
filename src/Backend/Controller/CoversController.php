@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +36,6 @@ class CoversController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('KIOSKO_MANAGER');
-
         if (!defined('KIOSKO_DIR')) {
             define('KIOSKO_DIR', "kiosko".SS);
         }
@@ -70,6 +68,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function listAction()
     {
@@ -85,6 +85,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function widgetAction()
     {
@@ -107,6 +109,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -140,6 +144,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_CREATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -188,7 +194,6 @@ class CoversController extends Controller
             }
 
             $kiosko = new \Kiosko();
-            // TODO: clean the post var
             if (!$kiosko->create($coverData)) {
                 throw new \Exception(_('Unable to create the file. Try again'));
             }
@@ -219,6 +224,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -271,6 +278,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_DELETE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -308,6 +317,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -344,6 +355,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function configAction(Request $request)
     {

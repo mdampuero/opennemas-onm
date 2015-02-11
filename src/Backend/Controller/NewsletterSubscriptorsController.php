@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,17 +29,6 @@ use Onm\Settings as s;
 class NewsletterSubscriptorsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
-    }
-
-    /**
      * Lists all the newsletter subscriptors
      *
      * @param Request $request the request object
@@ -46,6 +36,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function listAction(Request $request)
     {
@@ -88,6 +80,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -150,6 +144,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -200,6 +196,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -230,6 +228,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -266,6 +266,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function toggleSubscriptionAction(Request $request)
     {
@@ -287,6 +289,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function toggleActivatedAction(Request $request)
     {
@@ -308,6 +312,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -349,6 +355,8 @@ class NewsletterSubscriptorsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
      **/
     public function batchSubscribeAction(Request $request)
     {

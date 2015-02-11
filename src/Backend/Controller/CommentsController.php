@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,9 +35,6 @@ class CommentsController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_MANAGER');
-
         $this->statuses = array(
             \Comment::STATUS_ACCEPTED => _('Accepted'),
             \Comment::STATUS_REJECTED => _('Rejected'),
@@ -52,6 +50,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function defaultAction()
     {
@@ -87,6 +87,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function selectAction(Request $request)
     {
@@ -135,6 +137,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function defaultDisqusAction()
     {
@@ -168,6 +172,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function configDisqusAction(Request $request)
     {
@@ -207,6 +213,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function defaultFacebookAction()
     {
@@ -229,6 +237,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function configFacebookAction(Request $request)
     {
@@ -272,6 +282,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function listAction()
     {
@@ -291,6 +303,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -322,6 +336,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -377,6 +393,8 @@ class CommentsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('COMMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="COMMENT_MANAGER")
      **/
     public function configAction(Request $request)
     {

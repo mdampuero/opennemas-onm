@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -38,6 +39,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      */
     public function listAction(Request $request)
     {
@@ -76,6 +79,10 @@ class AclUserController extends Controller
 
     /**
      * Shows the user information given its id
+     *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
      *
      * @param Request $request the request object
      *
@@ -158,6 +165,10 @@ class AclUserController extends Controller
 
     /**
      * Handles the update action for a user given its id
+     *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
      *
      * @param Request $request the request object
      *
@@ -281,6 +292,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_CREATE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -400,6 +413,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -430,6 +445,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -461,6 +478,10 @@ class AclUserController extends Controller
 
     /**
      * Sets a user configuration given the meta key and the meta value
+     *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
      *
      * @param Request $request the request object
      *
@@ -496,6 +517,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function toogleEnabledAction(Request $request)
     {

@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -23,22 +24,13 @@ use Onm\Settings as s;
 class WidgetsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     */
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('WIDGET_MANAGER');
-    }
-
-    /**
      * List widgets.
      *
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_ADMIN')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function listAction()
     {
@@ -53,6 +45,8 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -102,6 +96,8 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_CREATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -160,6 +156,8 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -220,6 +218,8 @@ class WidgetsController extends Controller
      *
      * @param  Request  $request the request object
      * @return Response          the response object
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {

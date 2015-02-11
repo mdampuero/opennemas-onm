@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -27,24 +28,14 @@ use Onm\Settings as s;
  **/
 class SearchController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ADVANCED_SEARCH');
-    }
-
     /**
      * Handles the search form and shows the search contents
      *
      * @return void
      *
      * @Security("has_role('SEARCH_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ADVANCED_SEARCH")
      **/
     public function defaultAction()
     {
@@ -65,6 +56,8 @@ class SearchController extends Controller
      * @return Response the response object
      *
      * #@Security("has_role('SEARCH_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ADVANCED_SEARCH")
      **/
     public function contentProviderAction(Request $request)
     {
