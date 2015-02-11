@@ -26,7 +26,7 @@
                     <div class="span3">
                         <p><i class="icon-group awesome-circles awesome-background-red"></i></p>
                         <h4>{t}Activated users{/t}</h4>
-                        <p>{$instance->users}</p>
+                        <p>{$instance->users} de {setting name="max_users"}</p>
                     </div>
                     <div class="span3">
                         <p><i class="icon-hdd awesome-circles awesome-background-purple"></i></p>
@@ -36,7 +36,7 @@
                     <div class="span3">
                         <p><i class="icon-bullhorn awesome-circles awesome-background-leaf-green"></i></p>
                         <h4>{t}Support plan{/t}</h4>
-                        <p>{$instance->support_plan}</p>
+                        <p>{$instance->support_plan}&nbsp;(<small>{$support_description}</small>)</p>
                     </div>
                 </div>
             </div>
