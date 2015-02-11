@@ -110,6 +110,15 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         }
 
         /**
+         * Initialize support plan
+         */
+        $scope.initializeSupportPlan = function() {
+            if ($scope.instance.support_plan.indexOf('SUPPORT') == -1) {
+                $scope.instance.support_plan = 'SUPPORT_NONE';
+            }
+        }
+
+        /**
          * Adds a new domain to the instance.
          */
         $scope.addDomain = function() {

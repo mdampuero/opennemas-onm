@@ -233,8 +233,8 @@
                     <div class="grid-body support-list">
                         <div class="form-group">
                             <label class="form-label">{t}Development plan{/t}</label>
-                            <div class="controls">
-                                <div class="radio col-sm-6" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}">
+                            <div class="controls" ng-init="initializeSupportPlan()">
+                                <div class="radio col-sm-6" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}" >
                                     <input id="[% support.id %]" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
                                     <label for="[% support.id %]">
                                         [% support.name %]
