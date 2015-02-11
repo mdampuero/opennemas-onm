@@ -38,18 +38,24 @@ class ClientInformationController extends Controller
     {
         // Fetch instance information
         $instance = $this->container->get('instance_manager')->current_instance;
-        // Get all modules
+        // Get all modules grouped
         $availableModules = mm::getAvailableModulesGrouped();
 
         // Process activated modules with changes
         $hasChanges = false;
         $upgradeChanges = $downgradeChanges = [];
+
         if (is_array($instance->changes_in_modules)
             && !empty($instance->changes_in_modules)
         ) {
-
-            $upgradeChanges = array_diff($instance->changes_in_modules, $instance->activated_modules);
-            $downgradeChanges = array_diff($instance->changes_in_modules, $upgradeChanges);
+            $upgradeChanges = array_diff(
+                $instance->changes_in_modules,
+                $instance->activated_modules
+            );
+            $downgradeChanges = array_diff(
+                $instance->changes_in_modules,
+                $upgradeChanges
+            );
 
             $hasChanges = true;
 
@@ -82,20 +88,30 @@ class ClientInformationController extends Controller
             }
         }
 
-        // Set support plan name
-        if ($instance->support_plan) {
-            $instance->support_plan = mm::getAvailableModules()[$instance->support_plan];
+        // Get all modules array
+        $modulesArray = mm::getAvailableModules();
+
+        // Set support plan name and description
+        $supportDescription = '';
+        if (array_key_exists($instance->support_plan, $modulesArray)) {
+            $supportDescription = mm::getModuleDescription(
+                $instance->support_plan
+            );
+            $instance->support_plan = $modulesArray[$instance->support_plan];
+        } else {
+            $instance->support_plan = $modulesArray['SUPPORT_NONE'];
         }
 
         return $this->render(
             'stats/stats_info.tpl',
             array(
-                'instance'          => $instance,
-                'upgrade'           => $upgradeChanges,
-                'downgrade'         => $downgradeChanges,
-                'available_modules' => $availableModules,
-                'plans'             => $plans,
-                'has_changes'       => $hasChanges,
+                'instance'            => $instance,
+                'upgrade'             => $upgradeChanges,
+                'downgrade'           => $downgradeChanges,
+                'available_modules'   => $availableModules,
+                'plans'               => $plans,
+                'has_changes'         => $hasChanges,
+                'support_description' => $supportDescription,
             )
         );
     }
@@ -111,7 +127,11 @@ class ClientInformationController extends Controller
     {
         // Fetch requested modules
         $modules = $request->request->get('modules');
-        $waitingUpdate = $request->request->filter('waiting-upgrade', null, FILTER_SANITIZE_STRING);
+        $waitingUpdate = $request->request->filter(
+            'waiting-upgrade',
+            null,
+            FILTER_SANITIZE_STRING
+        );
 
         if ($waitingUpdate) {
             $request->getSession()->getFlashBag()->add(
@@ -122,7 +142,9 @@ class ClientInformationController extends Controller
                 )
             );
 
-            return $this->redirect($this->generateUrl('admin_client_info_page'));
+            return $this->redirect(
+                $this->generateUrl('admin_client_info_page')
+            );
         }
 
         // Fetch instance information
