@@ -21,7 +21,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             explore: "<div class=\"media-picker-panel explore-panel\" ng-class=\"{ 'active': picker.isActive('explore') }\">\
               <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
-                <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
               <div class=\"media-picker-panel-body\">\
                 <div class=\"media-picker-panel-topbar\">\
@@ -132,7 +131,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             upload: "<div class=\"media-picker-panel upload-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
               <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
-                <i class=\"fa fa-lg fa-times media-picker-close pull-right\"></i>\
               </div>\
               <div class=\"media-picker-panel-body\">\
                 <div class=\"media-picker-panel-wrapper\">\
@@ -171,6 +169,9 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                   </ul>\
                 </div>\
                 <div class=\"media-picker-content\">\
+                  <div class=\"media-picker-close\">\
+                    <i class=\"fa fa-lg fa-times pull-right\"></i>\
+                  </div>\
                   [content]\
                 </div>\
               </div>\

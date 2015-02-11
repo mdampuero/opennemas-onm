@@ -7,9 +7,24 @@
   width: 100%;
 }
 
+.media-picker-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: @text-color;
+  cursor: pointer;
+  margin: 8px 10px;
+  padding: 10px;
+  z-index: 100;
+
+  &:hover {
+    color: darken(@text-color, 25%)
+  }
+}
+
 .media-picker-content {
   height: 100%;
-  padding-left: @width;
+  padding-left: @sidebar-width;
 }
 
 .media-picker-dialog {
