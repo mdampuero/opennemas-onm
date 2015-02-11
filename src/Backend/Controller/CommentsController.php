@@ -101,7 +101,7 @@ class CommentsController extends Controller
                     'success',
                     _("Now you are using the Opennemas comment system.")
                 );
-                return $this->redirect($this->generateUrl('admin_comments_list'));
+                return $this->redirect($this->generateUrl('admin_comments_config'));
                 break;
 
             case 'disqus':

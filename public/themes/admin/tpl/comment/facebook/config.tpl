@@ -1,13 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-.panel {
-    min-height: 0px;
-}
-</style>
-{/block}
-
 {block name="content"}
 <form action="{url name=admin_comments_facebook_config}" method="POST">
 
@@ -45,7 +37,7 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <a class="btn btn-link" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
+                            <a class="btn btn-link change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
                                 <i class="fa fa-refresh"></i>
                             </a>
                         </li>

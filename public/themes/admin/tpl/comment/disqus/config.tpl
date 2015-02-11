@@ -36,7 +36,7 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <a class="btn btn-link" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
+                            <a class="btn btn-link change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
                                 <i class="fa fa-refresh"></i>
                             </a>
                         </li>
