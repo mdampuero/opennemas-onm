@@ -92,7 +92,7 @@ instances:
             options: { default: 0, unsigned: true }
         support_plan:
             type: string
-            options: { default: 0, length: 100 }
+            options: { default: null, length: 255 }
     index:
         -
             name: PRIMARY
