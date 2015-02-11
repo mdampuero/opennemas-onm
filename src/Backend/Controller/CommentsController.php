@@ -315,7 +315,7 @@ class CommentsController extends Controller
             $comment->content = new \Content($comment->content_id);
 
             return $this->render(
-                'comment/read.tpl',
+                'comment/new.tpl',
                 array('comment' => $comment)
             );
         }
