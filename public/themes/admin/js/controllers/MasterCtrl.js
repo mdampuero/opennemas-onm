@@ -73,7 +73,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
             $scope.sidebar.collapsed = true;
           } else {
             $scope.sidebar.forced = false;
-            $scope.sidebar.collapsed = $scope.sidebar.pinned;
+            $scope.sidebar.collapsed = !$scope.sidebar.pinned;
           }
         });
     }
