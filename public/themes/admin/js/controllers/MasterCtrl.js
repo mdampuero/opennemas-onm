@@ -60,5 +60,21 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
                 $('.content').css('margin-top', margin + 'px');
             }, 1000);
         };
+
+        /**
+         * Updates the sidebar status basing on the current window width.
+         *
+         * @param integer nv The new value.
+         * @param integer ov The old value.
+         */
+        $scope.$watch('windowWidth', function(nv, ov) {
+          if (nv <= 1024) {
+            $scope.sidebar.forced = true;
+            $scope.sidebar.collapsed = true;
+          } else {
+            $scope.sidebar.forced = false;
+            $scope.sidebar.collapsed = $scope.sidebar.pinned;
+          }
+        });
     }
 ]);

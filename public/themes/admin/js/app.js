@@ -10,6 +10,7 @@ angular.module(
     'onm.oqlEncoder',
     'onm.queryManager',
     'onm.scroll',
+    'onm.resizable',
     'pascalprecht.translate',
     'sun.scrollable',
     'ui.bootstrap',

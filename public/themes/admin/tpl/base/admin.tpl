@@ -197,6 +197,7 @@
             @Common/src/angular-routing/routing.js,
             @Common/src/angular-media-picker/js/media-picker.js,
             @Common/src/angular-messenger/messenger.js,
+            @Common/src/angular-resizable/resizable.js,
             @Common/src/angular-scroll/angular-scroll.js,
 
 
