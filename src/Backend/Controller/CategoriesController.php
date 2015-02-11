@@ -421,7 +421,7 @@ class CategoriesController extends Controller
             dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
-                'error',
+                'success',
                 sprintf(_('Successfully changed availability for category with id "%d"'), $id)
             );
         }
@@ -459,7 +459,7 @@ class CategoriesController extends Controller
             dispatchEventWithParams('category.update', ['category' => $category]);
 
             $this->get('session')->getFlashBag()->add(
-                'error',
+                'success',
                 sprintf(_('Successfully changed availability for category with id "%d"'), $id)
             );
         }
