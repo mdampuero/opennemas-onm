@@ -37,6 +37,29 @@ class MediaPickerController extends Controller
     }
 
     /**
+     * Saved the description for a content.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The content id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveDescriptionAction(Request $request, $id)
+    {
+        $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
+        $sql         = "UPDATE contents SET `description`=? WHERE pk_content=?";
+
+        $conn = $this->get('dbal_connection');
+
+        try {
+            $conn->executeUpdate($sql, array($description, $id));
+            return new JsonResponse();
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), 500);
+        }
+    }
+
+    /**
      * Returns the available months registered in images.
      *
      * @return JsonResponse the object response
@@ -76,6 +99,7 @@ class MediaPickerController extends Controller
         return [
             'allMonths'     => _('All months'),
             'details'       => _('Thumbnail details'),
+            'description'   => _('Description'),
             'header'        => _('Pick the item to insert'),
             'insert'        => _('Insert'),
             'itemsSelected' => _('items selected'),

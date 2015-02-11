@@ -66,23 +66,44 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
                   </div>\
                 </div>\
                 <div class=\"media-picker-panel-sidebar\">\
-                  <h4>[% picker.params.explore.details %]</h4>\
-                  <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected\">\
-                    <div class=\"media-dimensions-overlay\">\
-                      <span class=\"media-dimensions-label\">\
-                        [% selected.lastSelected.width %]x[% selected.lastSelected.height %]\
-                      </span>\
-                    </div>\
-                    <dynamic-image class=\"img-thumbnail\" instance=\""
-                      + instanceMedia
-                      + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
-                    </dynamic-image>\
+                  <div class=\"media-picker-panel-sidebar-header\">\
+                    <h4>[% picker.params.explore.details %]</h4>\
                   </div>\
-                  <div class=\"media-information\">\
-                    <ul>\
-                      <li>[% selected.lastSelected.name %]</li>\
+                  <div class=\"media-picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
+                    <div class=\"media-thumbnail-wrapper\">\
+                      <div class=\"media-dimensions-overlay\">\
+                        <span class=\"media-dimensions-label\">\
+                          [% selected.lastSelected.width %]x[% selected.lastSelected.height %]\
+                        </span>\
+                      </div>\
+                      <dynamic-image class=\"img-thumbnail\" instance=\""
+                        + instanceMedia
+                        + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
+                      </dynamic-image>\
+                    </div>\
+                    <ul class=\"media-information\">\
+                      <li>\
+                        <a ng-href=\"[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]\" target=\"_blank\">\
+                          <strong>\
+                            [% selected.lastSelected.name %]\
+                            <i class=\"fa fa-edit\"></i>\
+                          </strong>\
+                        </a>\
+                      </li>\
                       <li>[% selected.lastSelected.created | moment %]</li>\
                       <li>[% selected.lastSelected.size %] KB</li>\
+                      <li><span class=\"v-seperate\"></span></li>\
+                      <li>\
+                        <div class=\"form-group\">\
+                          <label for=\"description\">\
+                            [% picker.params.explore.description %]\
+                            <div class=\"pull-right\">\
+                              <i class=\"fa\" ng-class=\"{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }\"></i>\
+                            </div>\
+                          </label>\
+                          <textarea id=\"description\" ng-blur=\"saveDescription(selected.lastSelected.id)\" ng-model=\"selected.lastSelected.description\" cols=\"30\" rows=\"2\"></textarea>\
+                        </div>\
+                      </li>\
                     </ul>\
                   </div>\
                 </div>\
@@ -345,9 +366,16 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       $scope.page = 1;
 
       /**
+       * The routing service.
+       *
+       * @type object
+       */
+      $scope.routing = routing;
+
+      /**
        * The list of selected contents.
        *
-       * @type Array
+       * @type object
        */
       $scope.selected = {
         items:        [],
@@ -375,7 +403,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        */
       $scope.addItem = function(item) {
         $scope.contents.unshift(item);
-      }
+      };
 
       /**
        * Changes the picker to explore mode.
@@ -406,7 +434,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       $scope.insert = function() {
         $rootScope.$broadcast('media-picker-insert', $scope.selected.items);
         $scope.picker.close();
-      }
+      };
 
       /**
        * Checks if the given item is selected.
@@ -418,7 +446,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        */
       $scope.isSelected = function(item) {
         return $scope.selected.items.indexOf(item) != -1;
-      }
+      };
 
       /**
        * Updates the array of contents.
@@ -441,10 +469,8 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
         $http.post(url, data).then(function(response) {
           if (reset) {
-            console.log('reset');
             $scope.contents = response.data.results;
           } else {
-            console.log('concat');
             $scope.contents = $scope.contents.concat(response.data.results);
           }
 
@@ -456,7 +482,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
           $scope.loading = 0;
         });
-      }
+      };
 
       /**
        * Resets the selected items.
@@ -499,7 +525,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             $scope.addItem(response);
           }, 500);
         }
-      }
+      };
 
       /**
        * Requests the next page of the list when scrolling.
@@ -511,7 +537,45 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
         $scope.page = $scope.page + 1;
         $scope.list();
-      }
+      };
+
+      /**
+       * Saves the last selected item description.
+       */
+      $scope.saveDescription = function() {
+        $scope.saving = true;
+
+        var data = { description: $scope.selected.lastSelected.description };
+        var url  = routing.generate(
+          'backend_ws_media_picker_save_description',
+          { id: $scope.selected.lastSelected.id }
+        );
+
+        $http.post(url, data).then(function(response) {
+          $scope.saving = false;
+          $scope.saved = true;
+
+          if (response.status == 200) {
+            $timeout(function() {
+              $scope.saved = false;
+            }, 2000);
+
+            return true;
+          }
+
+          if (response.status != 200) {
+            $scope.saved = false;
+            $scope.error = true;
+
+            $timeout(function() {
+              $scope.error = false;
+            }, 2000);
+
+            return false;
+          }
+        });
+
+      };
 
       /**
        * Selects multiple items from the last item selected to the given item.
@@ -551,7 +615,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Update last selected item
         $scope.selected.lastSelected = item;
-      }
+      };
 
       /**
        * Selects one item or many items if shift is clicked.
@@ -567,6 +631,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Update last selected item
         $scope.selected.lastSelected = item;
+
+        if (event.ctrlKey) {
+          return false;
+        }
 
         // Selection disabled
         if (!$scope.picker.selection.enabled) {
@@ -588,9 +656,14 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
           $scope.selected.items.push(item);
         }
-      }
+      };
 
-      var search;
+      /**
+       * Refresh the list when the criteria changes.
+       *
+       * @param array nv The new values.
+       * @param array ov The old values.
+       */
       $scope.$watch('criteria', function(nv, ov) {
         if (nv == ov) {
           return false;
@@ -601,7 +674,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         }
 
         search = $timeout(function() {
-          console.log($scope.criteria);
           $scope.page = 1;
           $scope.list(true);
         }, 250);

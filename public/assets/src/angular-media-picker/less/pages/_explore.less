@@ -2,7 +2,7 @@
   .media-picker-panel-sidebar {
     .media-thumbnail-wrapper {
       float: left;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       position: relative;
 
       .img-thumbnail {
@@ -24,18 +24,41 @@
         background-color: rgba(0,0,0,.5);
         color: #fff;
         height: 100%;
+        font-weight: 900;
         position: absolute;
         width: 100%;
       }
     }
 
     .media-information {
-      clear: both;
+      list-style: none;
+      margin: 0;
+      padding: 0;
 
-      ul {
-        list-style: none;
-        margin: 0;
+      a {
+        i {
+          opacity: 0;
+          transition: all .25s;
+        }
+
+        &:hover i {
+          opacity: 1;
+        }
+      }
+
+      li {
         padding: 0;
+        margin-bottom: 10px;
+      }
+
+      textarea {
+        width: 100%;
+      }
+
+      .v-seperate {
+        border-bottom: 1px solid #eee;
+        display: block;
+        margin: 20px 0;
       }
     }
   }

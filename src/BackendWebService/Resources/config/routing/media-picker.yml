@@ -9,3 +9,9 @@ backend_ws_media_picker_get_months:
     defaults: { _controller: BackendWebServiceBundle:MediaPicker:getMonths }
     options:
         expose: true
+
+backend_ws_media_picker_save_description:
+    path:     /picker/{id}/save-description
+    defaults: { _controller: BackendWebServiceBundle:MediaPicker:saveDescription }
+    options:
+        expose: true
