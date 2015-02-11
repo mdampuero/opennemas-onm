@@ -164,9 +164,6 @@
     </div>
 
     <div class="content">
-        <div class="btn btn-primary" media-picker media-picker-explore-url="/ws/contents" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
-            Media picker
-        </div>
         {render_messages}
         <div class="row">
             <div class="col-md-8">
@@ -246,7 +243,9 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="summary" class="btn btn-mini">{t}Insert image{/t}</a>
+                                  <div class="btn btn-default btn-mini" media-picker media-picker-explore-url="{url name=backend_ws_media_picker_list}" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
+                                    {t}Insert image{/t}
+                                  </div>
                                 </div>
                             {/acl}
                             <div class="controls">
@@ -259,7 +258,9 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini">{t}Insert image{/t}</a>
+                                    <div class="btn btn-default btn-mini" media-picker media-picker-explore-url="{url name=backend_ws_media_picker_list}" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
+                                      {t}Insert image{/t}
+                                    </div>
                                 </div>
                             {/acl}
                             <div class="controls">
