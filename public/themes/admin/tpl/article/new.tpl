@@ -111,10 +111,10 @@
                             {t}Articles{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks seperate">
+                    <li class="quicklinks seperate hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}
                         </h5>
@@ -132,7 +132,7 @@
                         </li>
                         <li class="quicklinks">
                             <a href="#" accesskey="P" id="button_preview" class="btn btn-white">
-                                <i class="fa fa-desktop"></i> {t}Preview{/t}
+                                <i class="fa fa-desktop"></i> <span class="hidden-xs">{t}Preview{/t}</span>
                             </a>
                         </li>
                         <li class="quicklinks">
@@ -168,9 +168,6 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="grid simple">
-                    <div class="grid-title">
-                        <h4>{t}Content{/t}</h4>
-                    </div>
                     <div class="grid-body">
                         <div class="form-group">
                             <label class="form-label" for="title">
@@ -249,7 +246,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea class="onm-editor form-control" data-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                                <textarea class="form-control" onmeditor onmeditor-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -264,7 +261,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" class="onm-editor form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" onmeditor onmeditor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                     </div>
@@ -274,44 +271,41 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="grid simple">
-                            <div class="grid-title">
-                                <h4>{t}Attributes{/t}</h4>
-                            </div>
                             <div class="grid-body">
                                 <div class="form-group">
                                     {acl isAllowed="ARTICLE_AVAILABLE"}
-                                        <div class="checkbox">
-                                            <input id="content_status" name="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
-                                            <label for="content_status">
-                                                {t}Available{/t}
-                                            </label>
-                                        </div>
+                                    <div class="checkbox">
+                                        <input id="content_status" name="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                                        <label for="content_status">
+                                            {t}Available{/t}
+                                        </label>
+                                    </div>
                                     {/acl}
                                     {is_module_activated name="COMMENT_MANAGER"}
-                                        <div class="checkbox">
-                                            <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" type="checkbox" value="1"/>
-                                            <label class="form-label" for="with_comment">
-                                                {t}Allow coments{/t}
-                                            </label>
-                                        </div>
+                                    <div class="checkbox">
+                                        <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" type="checkbox" value="1"/>
+                                        <label class="form-label" for="with_comment">
+                                            {t}Allow coments{/t}
+                                        </label>
+                                    </div>
                                     {/is_module_activated}
                                 </div>
                                 <div class="form-group">
                                     {acl isAllowed="ARTICLE_FRONTPAGE"}
-                                        <div class="checkbox">
-                                            <input {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} id="promoted" name="promoted_to_category_frontpage" type="checkbox" value="1"/>
-                                            <label class="form-label" for="promoted">
-                                                {t}Put in category frontpage{/t}
-                                            </label>
-                                        </div>
+                                    <div class="checkbox">
+                                        <input {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} id="promoted" name="promoted_to_category_frontpage" type="checkbox" value="1"/>
+                                        <label class="form-label" for="promoted">
+                                            {t}Put in category frontpage{/t}
+                                        </label>
+                                    </div>
                                     {/acl}
                                     {acl isAllowed="ARTICLE_HOME"}
-                                        <div class="checkbox">
-                                            <input {if (isset($article) && $article->frontpage eq '1')} checked {/if}  id="frontpage" name="frontpage" type="checkbox" value="1"/>
-                                            <label class="form-label" for="frontpage">
-                                                {t}Suggested for frontpage{/t}
-                                            </label>
-                                        </div>
+                                    <div class="checkbox">
+                                        <input {if (isset($article) && $article->frontpage eq '1')} checked {/if}  id="frontpage" name="frontpage" type="checkbox" value="1"/>
+                                        <label class="form-label" for="frontpage">
+                                            {t}Suggested for frontpage{/t}
+                                        </label>
+                                    </div>
                                     {/acl}
                                 </div>
                                 {acl isAllowed="CONTENT_OTHER_UPDATE"}
@@ -464,25 +458,8 @@
             <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
         </div>
 
-        <div id="article-form" class="tabs">
-            <ul>
-                {is_module_activated name="CRONICAS_MODULES"}
-                <li>
-                    <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
-                </li>
-                {/is_module_activated}
-                <li>
-                    <a href="#related-contents">{t}Related contents{/t}</a>
-                </li>
-            </ul>
-
-
-
-
-
-            <input type="hidden" id="action" name="action" value="{$action}" />
-            <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
-        </div><!-- tabs -->
+        <input type="hidden" id="action" name="action" value="{$action}" />
+        <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
     </div><!-- /wrapper-content contentform -->
 </form>
 {/block}
