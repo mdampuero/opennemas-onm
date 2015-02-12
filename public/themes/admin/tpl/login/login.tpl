@@ -28,12 +28,7 @@
         <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
         <style type="text/css">
-        #recaptcha_area {
-        float: left;
-        }
-        #recaptcha_privacy {
-        display:none;
-        }
+
         </style>
         {/block}
         {block name="header-js"}
@@ -73,7 +68,7 @@
                                             {render_messages}
                                             <div class="form-group">
                                                 <div class="input-group">
-                                                    <span class="input-group-addon">@</span>
+                                                    <span class="input-group-addon"><span class="fa fa-user"></span></span>
                                                     <input autofocus class="form-control" id="_username" name="_username" value="{$smarty.cookies.login_username|default:""}" placeholder="{t}Username or email{/t}" tabindex="1" type="text">
                                                 </div>
                                             </div>
@@ -86,15 +81,16 @@
                                                 </div>
                                             </div>
                                             {if $failed_login_attempts >= 3}
-                                                <div class="form-group">
-                                                    <div class="controls">
-                                                        <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
-                                                        <noscript>
-                                                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
-                                                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-                                                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-                                                        </noscript>
-                                                    </div>
+                                                <div class="form-group recaptcha-element">
+                                                  <label for="recaptcha" class="form-label">{t}Search for numbers and letters in the image and write them below:{/t}</label>
+                                                  <div class="controls">
+                                                      <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                                                      <noscript>
+                                                      <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                                                      <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                                                      <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                                                      </noscript>
+                                                  </div>
                                                 </div>
                                             {/if}
                                             <div class="form-group text-right">

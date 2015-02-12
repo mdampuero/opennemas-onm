@@ -7,12 +7,33 @@ main {
     position: relative;
 }
 
+#recaptcha_privacy {
+  display:none;
+}
+
 .login-body {
   background: url(/assets/images/moleskine.jpg) no-repeat;
   background-size: cover;
 
   iframe {
     display: none;
+  }
+
+  .form-label {
+    color:#777 !important;
+  }
+
+  #recaptcha_area {
+    margin:0 auto
+  }
+
+  .input-group-addon {
+    border:1px solid #ccc;
+    border-right:0 none
+  }
+  .input-group input {
+    border:1px solid #ccc;
+    border-left:0 none;
   }
 
   .language-selector {
