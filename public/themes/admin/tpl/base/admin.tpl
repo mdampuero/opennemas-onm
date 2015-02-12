@@ -186,6 +186,7 @@
 
             @Common/src/webarch/js/core.js,
             @Common/src/angular-dynamic-image/dynamic-image.js,
+            @Common/src/angular-onm-editor/onm-editor.js,
             @Common/src/angular-oql-encoder/oql-encoder.js,
             @Common/src/angular-query-manager/query-manager.js,
             @Common/src/angular-item-service/itemService.js,
