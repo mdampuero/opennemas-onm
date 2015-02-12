@@ -60,8 +60,12 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-home fa-lg"></i>
-                            {t}Instance Synchronization{/t} :: {t}Adding site{/t}
+                            {t}Instance Synchronization{/t}
                         </h4>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks">
+                      <h5>{t}Adding site{/t}</h5>
                     </li>
                 </ul>
                 <div class="all-actions pull-right">
@@ -76,7 +80,8 @@
                         </li>
                         <li class="quicklinks">
                             <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-save"></i> {t}Save{/t}
+                                <i class="fa fa-save"></i>
+                                {t}Save{/t}
                             </button>
                         </li>
                     </ul>
