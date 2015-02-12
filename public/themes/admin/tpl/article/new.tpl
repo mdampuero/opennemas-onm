@@ -243,7 +243,7 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                  <div class="btn btn-default btn-mini" media-picker media-picker-explore-url="{url name=backend_ws_media_picker_list}" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
+                                  <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="asdf">
                                     {t}Insert image{/t}
                                   </div>
                                 </div>
@@ -258,7 +258,7 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <div class="btn btn-default btn-mini" media-picker media-picker-explore-url="{url name=backend_ws_media_picker_list}" media-picker-selection="true" media-picker-max-size="5" media-picker-upload-url="{url name=admin_image_create category=0}">
+                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="qwer">
                                       {t}Insert image{/t}
                                     </div>
                                 </div>
