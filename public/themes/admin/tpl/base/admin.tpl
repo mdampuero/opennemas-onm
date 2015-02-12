@@ -161,12 +161,10 @@
 
             @Common/components/modernizr/modernizr.js,
             @Common/js/libs/tinycon.min.js,
-            @Common/js/onm/footer-functions.js,
             @AdminTheme/js/jquery/bootstrap-nav-wizard.js,
             @Common/js/onm/md5.min.js,
             @Common/js/onm/scripts.js,
             @Common/components/jquery-validation/dist/jquery.validate.js,
-            @Common/js/onm/jquery.onm-editor.js,
 
             @FosJsRoutingBundle/js/router.js,
             @Common/js/routes.js,
