@@ -21,6 +21,16 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 class OnmUserProvider implements UserProviderInterface
 {
     /**
+     * Initializes the OnmUserProvider.
+     *
+     * @param Onm\Database\DbalWrapper $conn The database connection.
+     */
+    public function __construct($conn)
+    {
+        $this->conn = $conn;
+    }
+
+    /**
      * Loads the user for the given username.
      *
      * This method must throw UsernameNotFoundException if the user is not
@@ -34,20 +44,24 @@ class OnmUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $user = new \User();
-
-        if ($user->checkIfExistsUserName($username)
-            || $user->checkIfExistsUserEmail($username)
-        ) {
-            $sql = 'SELECT `id` FROM users WHERE username = ? OR email = ?';
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($username, $username));
-
-            $user->read($rs->fields['id']);
-
-            return $user;
-        } else {
+        if (strpos($username, '\\')) {
             throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
         }
+
+        $user = new \User();
+        if (!$user->checkIfExistsUserName($username)
+            && !$user->checkIfExistsUserEmail($username)
+        ) {
+            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
+        }
+
+        $username = $this->conn->quote($username);
+        $sql = 'SELECT `id` FROM users WHERE username = ' . $username . ' OR email = ' . $username;
+        $results = $this->conn->fetchAssoc($sql);
+
+        $user->read($results['id']);
+
+        return $user;
     }
 
     /**
