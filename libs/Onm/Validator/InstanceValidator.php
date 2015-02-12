@@ -90,8 +90,10 @@ class InstanceValidator extends Validator
     {
         // Create internal_name from domains
         if (!$class->internal_name) {
-            $class->internal_name = explode('.', array_pop($class->domains));
-            $class->internal_name = array_pop($class->internal_name);
+            if (array_key_exists(0, $class->domains)) {
+                $class->internal_name = explode('.', $class->domains[0]);
+                $class->internal_name = array_shift($class->internal_name);
+            }
         }
 
         $class->internal_name = strtolower($class->internal_name);
