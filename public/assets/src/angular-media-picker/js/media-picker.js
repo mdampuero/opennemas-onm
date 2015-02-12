@@ -3,12 +3,12 @@
 *
 * Creates a media picker modal to upload/insert contents.
 */
-angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
+angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
   .directive('mediaPicker', ['$compile', '$http', 'routing',
     function($compile, $http, routing) {
       // Runs during compile
       return {
-        controller: 'mediaPickerController',
+        controller: 'MediaPickerController',
         restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
         scope: {},
         link: function($scope, elm, attrs) {
@@ -211,15 +211,12 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
               enabled: attrs['mediaPickerSelection'] == 'true' ? true : false,
               maxSize: attrs['mediaPickerMaxSize'] ? parseInt(attrs['mediaPickerMaxSize']) : 1,
             },
-            src: {
-              explore: attrs['mediaPickerExploreUrl'],
-              upload: attrs['mediaPickerUploadUrl']
-            },
             status: {
               editing:   false,
               loading:   false,
               uploading: false
             },
+            target: attrs['mediaPickerTarget'],
 
             /**
              * Closes the current media picker.
@@ -334,7 +331,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
       };
     }
   ])
-  .controller('mediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'itemService', 'routing',
+  .controller('MediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'itemService', 'routing',
     function($http, $rootScope, $scope, $timeout, FileUploader, itemService, routing) {
       /**
        * The array of contents.
@@ -424,7 +421,14 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
        * Launches the media picker insert event.
        */
       $scope.insert = function() {
-        $rootScope.$broadcast('media-picker-insert', $scope.selected.items);
+        $rootScope.$broadcast(
+          'MediaPicker.insert',
+          {
+            items: $scope.selected.items,
+            target: $scope.picker.target
+          }
+        );
+
         $scope.picker.close();
       };
 
@@ -495,7 +499,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
         };
 
         $scope.uploader = new FileUploader({
-            url:               $scope.picker.src.upload,
+            url:               routing.generate('admin_image_create'),
             autoUpload:        true,
         });
 
@@ -571,7 +575,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.routing'])
             return false;
           }
         });
-
       };
 
       /**

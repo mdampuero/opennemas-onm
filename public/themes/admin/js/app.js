@@ -5,7 +5,7 @@ angular.module(
     'checklist-model',
     'onm.dynamicImage',
     'onm.item',
-    'onm.mediaPicker',
+    'onm.MediaPicker',
     'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
