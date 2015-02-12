@@ -166,7 +166,6 @@
             @Common/js/onm/md5.min.js,
             @Common/js/onm/scripts.js,
             @Common/components/jquery-validation/dist/jquery.validate.js,
-            @Common/js/jquery-onm/jquery.onmvalidate.js,
             @Common/js/onm/jquery.onm-editor.js,
 
             @FosJsRoutingBundle/js/router.js,
