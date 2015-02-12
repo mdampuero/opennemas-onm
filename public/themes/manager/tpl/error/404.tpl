@@ -21,8 +21,7 @@
                           @Common/plugins/bootstrap-select2/select2.css,
 
                           @Common/plugins/bootstrap/css/bootstrap.min.css,
-                          @Common/plugins/font-awesome/css/font-awesome.min.css,
-                          @Common/css/bootstrap/bootstrap-fileupload.min.css"
+                          @Common/plugins/font-awesome/css/font-awesome.min.css
                      filters="cssrewrite"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}

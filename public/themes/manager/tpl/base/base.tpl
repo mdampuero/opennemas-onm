@@ -41,8 +41,6 @@
             @Common/components/messenger/build/css/messenger-theme-flat.css,
             @Common/components/select2/select2-bootstrap.css,
 
-            @Common/css/bootstrap/bootstrap-fileupload.min.css,
-
             @Common/src/webarch/css/animate.min.css,
             @Common/src/webarch/css/style.css,
             @Common/src/webarch/css/responsive.css,
@@ -227,7 +225,6 @@
 
             @Common/js/onm/md5.min.js,
             @Common/js/onm/scripts.js,
-            @Common/js/onm/jquery.onm-editor.js,
 
             @FosJsRoutingBundle/js/router.js,
             @Common/js/routes.js,
