@@ -148,7 +148,7 @@ class MediaPickerController extends Controller
             'header'        => _('Pick the item to insert'),
             'insert'        => _('Insert'),
             'itemsSelected' => _('items selected'),
-            'menuItem'      => _('Browser'),
+            'menuItem'      => _('Browse'),
             'dates'         => $this->getDates(),
             'search'        => _('Search by name'),
         ];
