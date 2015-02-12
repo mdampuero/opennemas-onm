@@ -41,8 +41,6 @@
             @Common/components/messenger/build/css/messenger-theme-flat.css,
             @Common/components/select2/select2.css,
 
-            @Common/css/bootstrap/bootstrap-fileupload.min.css,
-
             @Common/src/webarch/css/animate.min.css,
             @Common/src/webarch/css/style.css,
             @Common/src/webarch/css/responsive.css,
@@ -189,7 +187,6 @@
             @Common/src/webarch/js/core.js,
             @Common/src/angular-dynamic-image/dynamic-image.js,
             @Common/src/angular-oql-encoder/oql-encoder.js,
-            @Common/src/angular-onm-editor/onm-editor.js,
             @Common/src/angular-query-manager/query-manager.js,
             @Common/src/angular-item-service/itemService.js,
             @Common/src/angular-routing/routing.js,
