@@ -10,6 +10,8 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.instance = {
             domains: [],
             activated_modules: [],
+            changes_in_modules: [],
+            support_plan: 'SUPPORT_NONE',
             settings: {
                 TEMPLATE_USER: 'base'
             },
@@ -34,7 +36,12 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          *
          * @type Array
          */
-        $scope.changed_modules = angular.copy(data.instance.changes_in_modules);
+        if (data.instance) {
+            $scope.changed_modules = angular.copy(data.instance.changes_in_modules);
+        } else {
+            $scope.changed_modules = '';
+        }
+
 
         /**
          * The instance object.
