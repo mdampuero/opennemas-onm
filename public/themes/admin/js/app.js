@@ -3,7 +3,7 @@ angular.module(
   [
     'angularFileUpload',
     'checklist-model',
-    'onm.editor',
+    'onm.Editor',
     'onm.dynamicImage',
     'onm.item',
     'onm.MediaPicker',
