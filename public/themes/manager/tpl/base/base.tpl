@@ -51,7 +51,7 @@
 
             @Common/src/opennemas-webarch/base/*,
             @Common/src/opennemas-webarch/layout/*,
-            @Common/src/opennemas-webarch/main.css"
+            @Common/src/opennemas-webarch/main.less"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
