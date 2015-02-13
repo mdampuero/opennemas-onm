@@ -39,3 +39,26 @@
 .select2-container {
   width: 100%;
 }
+
+.btn-white {
+  background-color: transparent;
+  color: #505458;
+  border: 1px solid #d1dade;
+}
+.btn-white:hover {
+  border:1px solid #999;
+}
+
+.checkbox label, .radio label {
+  min-height: 14px;
+  margin-bottom:0;
+}
+.uneditable-input, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], select {
+  border-color:#d1dade;
+  &:hover, &:focus {
+    border-color:#d1dade;
+  }
+}
+.input-group-addon {
+  border-color:#d1dade;
+}
