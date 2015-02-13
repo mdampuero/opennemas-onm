@@ -212,11 +212,6 @@
   width: 200px !important;
 }
 
-.page-navbar.filters-navbar .quick-section .h-seperate {
-  width: 0;
-  border: 0 none;
-}
-
 .page-navbar.selected-navbar .quick-section .h-seperate {
   border-left: 1px solid rgba(255, 255, 255, 0.175);
 }
@@ -241,50 +236,6 @@ div[ng-view].ng-leave-active .selected-navbar,
 
 .page-navbar.selected-navbar .quicklinks .btn {
   color: #fff;
-}
-
-.filters-navbar {
-  background-color: #e5e9ec;
-  box-shadow: none;
-  margin-top: 50px;
-  padding-left: 225px;
-  padding-right: 15px;
-  position: absolute;
-  z-index: 350;
-}
-
-.filters-navbar .pagination-links .form-control {
-  border-color: #d1dade;
-  text-align: center;
-}
-
-.filters-navbar .quick-section {
-  margin: 6px;
-}
-
-.filters-navbar .quick-section:first-child {
-  margin-left: 0;
-}
-
-.filters-navbar .quick-section:last-child {
-  margin-right: 0;
-}
-
-.filters-navbar .quick-section .add-on {
-  left: 0;
-  border-radius: 2px 0 2px 0;
-  padding: 4px 8px;
-  height: 36px;
-}
-
-.filters-navbar .quick-section .add-on + input {
-  border-radius: 0 2px 2px 0;
-  line-height: 14px;
-  min-height: 36px !important;
-}
-
-.page-navbar.filters-navbar .input-prepend.inside .add-on:first-child, .input-prepend .btn:first-child {
-  left:0;
 }
 
 .column-filters {
@@ -330,11 +281,6 @@ div[ng-view].ng-leave-active .selected-navbar,
   .page-navbar.selected-navbar.collapsed {
     opacity: 0;
     top: 0px;
-  }
-
-  .filters-navbar {
-    padding-left: 15px;
-    margin-top: 100px;
   }
 
   .page-navbar.show-qr {
