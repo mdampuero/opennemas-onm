@@ -3,6 +3,7 @@ angular.module(
   [
     'angularFileUpload',
     'checklist-model',
+    'ngTouch',
     'onm.Editor',
     'onm.dynamicImage',
     'onm.item',

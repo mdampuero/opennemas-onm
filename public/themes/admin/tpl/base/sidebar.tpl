@@ -1,4 +1,4 @@
-<div class="sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
+<div class="sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned">
     <div class="overlay"></div>
     <scrollable>
         <div class="sidebar-wrapper">
