@@ -67,7 +67,6 @@
             });
         });
     </script>
-    {include file="media_uploader/media_uploader.tpl"}
     <script>
     jQuery(document).ready(function($){
         var mediapicker = $('#media-uploader').mediaPicker({
@@ -240,13 +239,13 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                  <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="asdf">
+                                  <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="summary">
                                     {t}Insert image{/t}
                                   </div>
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea class="form-control" onmeditor onmeditor-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                                <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary" rows="5">{$article->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -255,13 +254,13 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="qwer">
+                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="body">
                                       {t}Insert image{/t}
                                     </div>
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" onmeditor onmeditor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" onm-editor onm-editor-preset="standard"  class="form-control" rows="15">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                     </div>
