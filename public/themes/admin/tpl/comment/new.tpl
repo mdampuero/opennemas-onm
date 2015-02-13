@@ -67,7 +67,7 @@
         <div class="form-group">
           <label class="form-label" for="title">{t}Commented on{/t}</label>
           <div class="controls">
-            {$comment->content->title|clearslash}
+            <strong>{$comment->content->content_type_l10n_name}</strong> - {$comment->content->title|clearslash}
           </div>
         </div>
         {acl isAllowed="COMMENT_AVAILABLE"}
@@ -81,7 +81,7 @@
         <div class="form-group">
           <label class="form-label" for="body">{t}Body{/t}</label>
           <div class="controls">
-            <textarea name="body" id="body" class="onm-editor" data-preset="simple" class="form-control">{$comment->body|clearslash}</textarea>
+            <textarea ckeditor ckeditor-preset="simple" name="body" id="body" class="form-control">{$comment->body|clearslash}</textarea>
           </div>
         </div>
       </div>

@@ -179,7 +179,7 @@
                                 {t}Summary{/t}
                             </label>
                             <div class="controls">
-                                <textarea class="form-control onm-editor" id="summary" data-preset="simple" name="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                                <textarea class="form-control" onmeditor onmeditor-preset="simple" id="summary" data-preset="simple" name="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -192,7 +192,7 @@
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" class="form-control onm-editor">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" class="form-control" onmeditor onmeditor-preset="standard">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" value="{$publisher|default:""}"/>
@@ -271,7 +271,7 @@
                                         {t}Tags{/t}
                                     </label>
                                     <div class="controls">
-                                        <input class="form-control" id="metadata" name="metadata" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
+                                        <input class="form-control bootstrap-tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
                             </div>
