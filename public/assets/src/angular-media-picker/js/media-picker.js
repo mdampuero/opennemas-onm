@@ -113,7 +113,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               <div class=\"media-picker-panel-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
                 <ul class=\"pull-left\"  ng-if=\"selected.items.length > 0\">\
                   <li>\
-                    <i class=\"fa fa-check fa-lg\" ng-click=\"selected.items = []\"></i>\
+                    <i class=\"fa fa-check fa-lg\" ng-click=\"selected.ids = [];selected.items = []\"></i>\
                   </li>\
                   <li>\
                     <span class=\"h-seperate\"></span>\
@@ -368,6 +368,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        */
       $scope.selected = {
         items:        [],
+        ids:          [],
         lastSelected: null
       };
 
@@ -441,7 +442,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        *                 returns false.
        */
       $scope.isSelected = function(item) {
-        return $scope.selected.items.indexOf(item) != -1;
+        return $scope.selected.ids.indexOf(item.id) != -1;
       };
 
       /**
@@ -494,6 +495,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         $scope.page = 1;
 
         $scope.selected = {
+          ids:          [],
           items:        [],
           lastSelected: null
         };
@@ -606,6 +608,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         var i = start;
         while (itemsToInsert > 0 && i < $scope.contents.length) {
           if ($scope.selected.items.indexOf($scope.contents[i]) == -1) {
+            $scope.selected.ids.push($scope.contents[i].id);
             $scope.selected.items.push($scope.contents[i]);
             itemsToInsert--;
           }
@@ -643,6 +646,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Remove element
         if ($scope.selected.items.indexOf(item) != -1) {
+          $scope.selected.ids.splice($scope.selected.ids.indexOf(item.id), 1);
           $scope.selected.items.splice($scope.selected.items.indexOf(item), 1);
           return true;
         }
@@ -654,6 +658,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Add element
         if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
+          $scope.selected.ids.push(item.id);
           $scope.selected.items.push(item);
         }
       };
