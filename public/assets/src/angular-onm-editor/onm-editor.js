@@ -221,7 +221,7 @@ angular.module('onm.Editor', [])
           loaded = false,
           isReady = false;
 
-          var options = onmEditor.configure(attrs['onmeditorPreset']);
+          var options = onmEditor.configure(attrs['onmEditorPreset']);
 
           if (!isTextarea) {
             element.attr('contenteditable', true);
