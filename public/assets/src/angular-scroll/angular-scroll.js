@@ -7,7 +7,8 @@ angular.module('onm.scroll', [])
       var raw = elm[0];
 
       elm.bind('scroll', function() {
-        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+        if (raw.scrollTop > 0
+            && raw.scrollTop + raw.offsetHeight >= raw.scrollHeight - 1) {
           scope.$apply(attr.whenScrolled);
         }
       });
