@@ -133,7 +133,7 @@
     {block name="footer-js"}
     {javascripts
     src="@Common/js/jquery/jquery.min.js,
-    @Common/js/libs/bootstrap.js,
+    @Common/components/bootstrap/dist/js/bootstrap.min.js,
     @Common/components/modernizr/modernizr.js,
     @Common/js/onm/md5.min.js,
     @Common/js/admin.js"}
