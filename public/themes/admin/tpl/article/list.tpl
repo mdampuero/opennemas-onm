@@ -36,7 +36,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -44,19 +44,11 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="ARTICLE_AVAILABLE"}
                     <li class="quicklinks">
                         <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -84,17 +76,17 @@
     <div class="page-navbar filters-navbar ng-cloak">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
-                <ul class="nav quick-section">
+                <ul class="nav quick-section filter-components">
                     <li class="m-r-10 input-prepend inside search-input no-boarder">
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 <strong>{t}Category{/t}:</strong>
@@ -135,7 +127,7 @@
                             {/section}
                         </ul>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Status{/t}:
@@ -157,7 +149,7 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Author{/t}: [% extra.authors[content.fk_author].name %]
@@ -177,7 +169,7 @@
                             {/foreach}
                         </ul>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-sm hidden-xs">
                         <span class="a dropdown-toggle" data-toggle="dropdown">
                             <span class="dropdown-current">
                                 {t}View{/t}: [% pagination.epp %]
@@ -202,15 +194,12 @@
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
-                    </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -246,10 +235,10 @@
                             </th>
                             <th class="left" >{t}Title{/t}</th>
                             {if $category eq 'all' || $category == 0}
-                                <th class="left">{t}Section{/t}</th>
+                                <th class="left hidden-xs">{t}Section{/t}</th>
                             {/if}
-                            <th class="center" style="width:130px;">{t}Created{/t}</th>
-                            <th class="center" style="width:10px;">{t}Published{/t}</th>
+                            <th class="center hidden-xs" style="width:130px;">{t}Created{/t}</th>
+                            <th class="center hidden-xs" style="width:10px;">{t}Published{/t}</th>
                         </thead>
                         <tbody>
                             <tr ng-if="contents.length == 0">
@@ -291,7 +280,7 @@
                                     </div>
                                 </td>
                                 {if $category eq 'all' || $category == 0}
-                                <td class="left">
+                                <td class="left hidden-xs">
                                     <span ng-if="content.category_name == 'unknown'">
                                         {t}Unasigned{/t}
                                     </span>
@@ -300,10 +289,10 @@
                                     </span>
                                 </td>
                                 {/if}
-                                <td class="center nowrap">
+                                <td class="center nowrap hidden-xs">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                                <td class="right">
+                                <td class="right hidden-xs">
                                     <span ng-if="content.category != 20">
                                     {acl isAllowed="ARTICLE_AVAILABLE"}
                                         <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
@@ -318,9 +307,9 @@
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="contents.length > 0">
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>

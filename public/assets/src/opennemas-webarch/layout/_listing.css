@@ -62,3 +62,18 @@ tr:hover .listing-inline-actions {
     width: 80%;
   }
 }
+@media (max-width: 767px) {
+  .grid-footer .pagination-info {
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+  .grid-footer .pagination-wrapper {
+    text-align:center;
+    width:100%;
+    display:block;
+    float:none !important;
+  }
+}

@@ -43,8 +43,14 @@
   margin-top: 50px;
 }
 
-.page-content .filters-navbar ~ .content {
-    margin-top: 85px;
+@media (max-width: 767px) {
+  .content {
+    padding:0 !important;
+  }
+
+  .page-content .filters-navbar ~ .content {
+    margin-top: 0px;
+  }
 }
 
 .page-content .content .row > [class^=col-],
@@ -70,7 +76,7 @@
 }
 
 .collapsed .page-container .page-content .filters-navbar {
-    padding-left: 65px;
+    padding-left: 10px;
 }
 
 .table-wrapper {

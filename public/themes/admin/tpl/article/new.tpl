@@ -129,12 +129,12 @@
                         <li class="quicklinks">
                             <span class="h-seperate"></span>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <a href="#" accesskey="P" id="button_preview" class="btn btn-white">
                                 <i class="fa fa-desktop"></i> <span class="hidden-xs">{t}Preview{/t}</span>
                             </a>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <span class="h-seperate"></span>
                         </li>
                         {if isset($article->id)}

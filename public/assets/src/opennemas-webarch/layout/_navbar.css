@@ -199,19 +199,6 @@
   margin-top: -5px;
 }
 
-.page-navbar .search-input input {
-  width: 65px !important;
-
-  -webkit-transition: width .25s;
-  -moz-transition: width .25s;
-  -o-transition: width .25s;
-  transition: width .25s;
-}
-
-.page-navbar .search-input input:focus {
-  width: 200px !important;
-}
-
 .page-navbar.selected-navbar .quick-section .h-seperate {
   border-left: 1px solid rgba(255, 255, 255, 0.175);
 }
