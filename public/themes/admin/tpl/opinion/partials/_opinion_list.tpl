@@ -4,7 +4,7 @@
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
                   <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                    <i class="fa fa-check fa-lg"></i>
+                    <i class="fa fa-arrow-left fa-lg"></i>
                   </button>
                 </li>
                  <li class="quicklinks">
@@ -12,19 +12,11 @@
                 </li>
                 <li class="quicklinks">
                     <h4>
-                        [% selected.contents.length %] {t}items selected{/t}
+                        [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      {t}Deselect{/t}
-                    </button>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
                 {acl isAllowed="CONTENT_OTHER_UPDATE"}
                     {acl isAllowed="OPINION_AVAILABLE"}
                         <li class="quicklinks">
@@ -42,21 +34,21 @@
                         </li>
                     {/acl}
                     {acl isAllowed="OPINION_HOME"}
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
                                 <i class="fa fa-home"></i>
                             </a>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
                                 <i class="fa fa-home"></i>
                                 <i class="fa fa-times fa-sub text-danger"></i>
                             </a>
                         </li>
+                        <li class="quicklinks hidden-xs">
+                            <span class="h-seperate"></span>
+                        </li>
                     {/acl}
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                 {/acl}
                 {acl isAllowed="CONTENT_OTHER_DELETE"}
                     {acl isAllowed="OPINION_DELETE"}
@@ -82,30 +74,24 @@
                     </span>
                     <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li>
+                <li class="quicklinks hidden-xs">
                     <select class="select2" ng-model="criteria.blog" data-label="{t}Type{/t}">
                         <option value="-1">-- All --</option>
                         <option value="0">Opinion</option>
                         {is_module_activated name="BLOG_MANAGER"}<option value="1">Blog</option>{/is_module_activated}
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li>
+                <li class="quicklinks hidden-xs">
                     <select class="select2" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                         <option value="1">{t}Published{/t}</option>
                         <option value="0">{t}No published{/t}</option>
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li>
+                <li class="quicklinks hidden-xs">
                     <select class="select2" ng-model="criteria.author" data-label="{t}Author{/t}">
                         <option value="-1">{t}-- All authors --{/t}</option>
                         <option value="-2">{t}Director{/t}</option>
@@ -114,9 +100,6 @@
                             <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
                         {/section}
                     </select>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
                 </li>
                 <li class="quicklinks hidden-xs">
                     <select class="xmedium" ng-model="pagination.epp">
@@ -127,21 +110,13 @@
                         <option value="500">500</option>
                     </select>
                 </li>
-                <li class="quicklinks hidden-xs">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                    </button>
-                </li>
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="refresh()">
-                        <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-                    </button>
-                </li>
             </ul>
-            <ul class="nav quick-section pull-right">
+            <ul class="nav quick-section pull-right simple-pagination">
+                <li class="quicklinks hidden-xs">
+                    <span class="info">
+                    [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    </span>
+                </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
                         <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
@@ -176,11 +151,11 @@
                                 </div>
                             </th>
                             <th>{t}Author name{/t} - {t}Title{/t}</th>
-                            <th class="center">{t}Created on{/t}</th>
-                            <th class="center" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
-                            <th class="center" style="width:70px;">{t}In home{/t}</th>
+                            <th class="center hidden-xs">{t}Created on{/t}</th>
+                            <th class="center hidden-xs" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
+                            <th class="center hidden-xs" style="width:70px;">{t}In home{/t}</th>
                             <th class="center" style="width:20px;">{t}Published{/t}</th>
-                            <th class="center" style="width:20px;">{t}Favorite{/t}</th>
+                            <th class="center hidden-xs" style="width:20px;">{t}Favorite{/t}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -217,13 +192,13 @@
                                     {/acl}
                                 </div>
                             </td>
-                            <td class="center nowrap">
+                            <td class="center nowrap hidden-xs">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                            <td class="center">
+                            <td class="center hidden-xs">
                                 [% shvs.extra.views[content.id] %]
                             </td>
-                            <td class="center">
+                            <td class="center hidden-xs">
                                 {acl isAllowed="OPINION_HOME"}
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': content.in_home == 1, 'fa-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ></i>
@@ -241,7 +216,7 @@
                                     </button>
                                 {/acl}
                             </td>
-                            <td class="right">
+                            <td class="right hidden-xs">
                                 {acl isAllowed="OPINION_FAVORITE"}
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" ng-if="content.type_opinion == 0" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
@@ -262,7 +237,7 @@
             <div class="pagination-info pull-left" ng-if="contents.length > 0">
                 {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
             </div>
-            <div class="pull-right" ng-if="contents.length > 0">
+            <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                 <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_opinions_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
             </div>
         </div>

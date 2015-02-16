@@ -22,10 +22,10 @@
                                 {/if}
                             </h4>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <span class="h-seperate"></span>
                         </li>
-                        <li class="quicklinks dropdown">
+                        <li class="quicklinks dropdown hidden-xs">
                             <div data-toggle="dropdown">
                                 {if $home}
                                     {t}Opinion frontpage{/t}
@@ -66,7 +66,7 @@
                                 {if $home}
                                     <li>
                                         <button class="btn btn-white" id="save_positions" title="{t}Save positions{/t}">
-                                            <i class="fa fa-save"></i> {t}Save positions{/t}
+                                            <i class="fa fa-save"></i> <span class="hidden-xs">{t}Save positions{/t}</span>
                                         </button>
                                     </li>
                                     <li class="quicklinks">

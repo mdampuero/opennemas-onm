@@ -7,9 +7,9 @@
                     <thead>
                         <tr>
                             <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
-                            <th class="center" style="width:130px;">{t}Created on{/t}</th>
-                            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
-                            <th class="center" style="width:10px;">{t}Home{/t}</th>
+                            <th class="center hidden-xs" style="width:130px;">{t}Created on{/t}</th>
+                            <th class="center hidden-xs" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
+                            <th class="center hidden-xs" style="width:10px;">{t}Home{/t}</th>
                             <th class="right" style="width:10px;"></th>
                         </tr>
                     </thead>
@@ -28,13 +28,13 @@
                                     -
                                     {$opinion->title|clearslash}
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     {$opinion->created}
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     {$opinion->views}
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     {if $opinion->in_home == 1}
                                         <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
                                     {else}
