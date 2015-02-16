@@ -131,6 +131,7 @@
             <div class="dynamic-image-loading-overlay" ng-if="loading">\
               <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>\
             </div>\
+          [dimensions]\
         </div>';
 
         var attributes = [];
@@ -149,7 +150,18 @@
           autoscale      = 'style="height: [% height %]px; width: [% width %]px;"';
           autoscaleClass = ' autoscale';
         }
+
+        var dimensions = '';
+        if ($attrs['ngModel'] && $attrs['dimensions']) {
+          dimensions = "<div class=\"dynamic-image-dimensions-overlay\" ng-if=\"!loading\">\
+            <span class=\"dynamic-image-dimensions-label\">\
+              [% ngModel.width %]x[% ngModel.height %]\
+            </span>\
+          </div>";
+        }
+
         html = html.replace('[attributes]', attributes.join(' '));
+        html = html.replace('[dimensions]', dimensions);
         html = html.replace('[autoscale]', autoscale);
         html = html.replace('[autoscaleClass]', autoscaleClass);
 
