@@ -51,6 +51,35 @@
     }
 
     /**
+     * Returns the height and width basing on the available space.
+     *
+     * @param Object image The image object.
+     *
+     * @return Object The height and width for the available space.
+     */
+    this.getSettings = function(image) {
+      var oH = $('.dynamic-image-wrapper.autoscale').parent().height();
+      var oW = $('.dynamic-image-wrapper.autoscale').parent().width();
+      var m = 0;
+
+      if (parseInt(image.height) > parseInt(image.width)) {
+        var w = (image.width * oH) / image.height;
+
+        return {
+          height: oH,
+          width: w
+        }
+      }
+
+      var h = (image.height * oW) / image.width;
+
+      return {
+        height: h,
+        width:  oW
+      }
+    }
+
+    /**
      * Sets the name of the object property with the image path.
      *
      * @param string property The object property name.
@@ -83,6 +112,11 @@
             },
             function(nv, ov) {
               $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia);
+              if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
+                var settings = dynamicImage.getSettings(nv);
+                $scope.height = settings.height;
+                $scope.width  = settings.width;
+              }
             }
           );
         } else {
@@ -92,7 +126,12 @@
         // Allowed attributes with this directive
         var allowedAttributes = [ 'class', 'height', 'width' ];
 
-        var html = '<img ng-src="[% src %]" [attributes]>';
+        var html = '<div class="dynamic-image-wrapper[autoscaleClass]">\
+          <img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>\
+            <div class="dynamic-image-loading-overlay" ng-if="loading">\
+              <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>\
+            </div>\
+        </div>';
 
         var attributes = [];
         for (var i = 0; i < allowedAttributes.length; i++) {
@@ -103,7 +142,16 @@
           }
         };
 
+        var autoscale = '';
+        var autoscaleClass = '';
+        if ($attrs['ngModel']
+            && $attrs['autoscale'] && $attrs['autoscale'] == 'true') {
+          autoscale      = 'style="height: [% height %]px; width: [% width %]px;"';
+          autoscaleClass = ' autoscale';
+        }
         html = html.replace('[attributes]', attributes.join(' '));
+        html = html.replace('[autoscale]', autoscale);
+        html = html.replace('[autoscaleClass]', autoscaleClass);
 
         var e = $compile(html)($scope);
         $element.replaceWith(e);
