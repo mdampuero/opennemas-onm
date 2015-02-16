@@ -161,6 +161,17 @@ angular.module('onm.Editor', [])
       }
 
       /**
+       * Registers one or more resources to be loaded from an external path.
+       *
+       * @param string names    The resource names.
+       * @param string path     The path of the folder.
+       * @param string filename The resource file name.
+       */
+      this.addExternal = function(names, path, filename) {
+        CKEDITOR.plugins.addExternal(names, path, filename);
+      }
+
+      /**
        * Initializes a CKEditor.
        *
        * @param boolean replace Whether to replace the given element.
