@@ -625,14 +625,12 @@ admin_keyword_create:
 admin_keyword_show:
     path:     /keywords/{id}/show
     defaults: { _controller  : BackendBundle:Keywords:show }
+    options:
+        expose: true
 
 admin_keyword_update:
     path:     /keywords/{id}/update
     defaults: { _controller  : BackendBundle:Keywords:update }
-
-admin_keyword_delete:
-    path:     /keywords/{id}/delete
-    defaults: { _controller  : BackendBundle:Keywords:delete }
 
 admin_keyword_autolink:
     path:     /keywords/autolink

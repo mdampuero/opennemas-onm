@@ -24,8 +24,8 @@ jQuery(document).ready(function($) {
                         {t}Keywords{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
                     <h5>{if isset($keyword->id)}{t}Editing keyword{/t}{else}{t}Creating keyword{/t}{/if}</h5>
                 </li>
             </ul>
@@ -36,8 +36,8 @@ jQuery(document).ready(function($) {
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
                     {acl isAllowed="PCLAVE_CREATE"}
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li>
                         <button class="btn btn-primary" action="submit">
                             <i class="fa fa-save"></i>
@@ -45,6 +45,7 @@ jQuery(document).ready(function($) {
                         </button>
                     </li>
                     {/acl}
+                </ul>
             </div>
         </div>
     </div>

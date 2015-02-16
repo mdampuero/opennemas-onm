@@ -48,6 +48,13 @@ class PClave
     public $tipo   = null;
 
     /**
+     * The content type (required by the automated listings)
+     *
+     * @var
+     **/
+    public $content_type_name = 'pclave';
+
+    /**
      * Handler to call the method cacher
      *
      * @var MethodCacheManager
@@ -160,12 +167,19 @@ class PClave
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
+                if ($k == 'pclave') {
+                    $this->title = $v;
+                }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
+                }
+
+                if ($k == 'pclave') {
+                    $this->title = $v;
                 }
             }
         }
