@@ -30,6 +30,7 @@
         {stylesheets src="
             @Common/components/font-awesome/css/font-awesome.min.css,
             @Common/components/bootstrap/dist/css/bootstrap.min.css,
+            @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
             @Common/components/pace/themes/blue/pace-theme-minimal.css,
             @Common/components/nanoscroller/bin/css/nanoscroller.css,
             @Common/components/angular-loading-bar/build/loading-bar.min.css,
