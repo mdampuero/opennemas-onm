@@ -33,8 +33,8 @@
                     @AdminTheme/js/jquery/jquery.colorbox-min.js,
                     @AdminTheme/js/onm/article.js,
                     @AdminTheme/js/onm/content-provider.js,
-                    @AdminTheme/js/jquery-onm/jquery.inputlength.js,
-                    @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"}
+                    @AdminTheme/js/jquery-onm/jquery.inputlength.js
+                    "}
     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
@@ -59,7 +59,7 @@
 
         // Fill tags from title and category
         if (!metaTags.val()) {
-          var tags = title.val() + " " + category.data('name') + " " + metaTags.val();
+          var tags = title.val() + " " + category.data('name');
           fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
         }
       });
@@ -227,7 +227,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label clearfix" for="metadata">
+                <label class="form-label clearfix" for="body">
                   <div class="pull-left">{t}Body{/t}</div>
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
