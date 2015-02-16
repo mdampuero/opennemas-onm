@@ -1,12 +1,12 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+        <!-- @Common/js/onm/bootstrap-fileupload.min.js, -->
     {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
         @Common/js/jquery/jquery.multiselect.js,
         @Common/js/jquery/jquery.validate.min.js,
         @Common/js/jquery/localization/messages_es.js,
         @Common/js/onm/jquery.password-strength.js,
-        @Common/js/onm/bootstrap-fileupload.min.js,
         @Common/js/admin.js "}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
@@ -91,9 +91,9 @@
 {/block}
 
 {block name="header-css" append}
-{stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" css="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}">
-{/stylesheets}
+{*stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" css="cssrewrite"}
+    <!-- <link rel="stylesheet" href="{$asset_url}"> -->
+{/stylesheets*}
 {/block}
 
 {block name="content"}
