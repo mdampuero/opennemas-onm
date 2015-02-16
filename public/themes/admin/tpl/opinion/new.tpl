@@ -70,35 +70,34 @@
         });
 
     </script>
-    {include file="media_uploader/media_uploader.tpl"}
     <script>
-        var mediapicker = $('#media-uploader').mediaPicker({
-            upload_url: "{url name=admin_image_create category=0}",
-            browser_url : "{url name=admin_media_uploader_browser}",
-            months_url : "{url name=admin_media_uploader_months}",
-            maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-            // initially_shown: true,
-            handlers: {
-                'assign_content' : function( event, params ) {
-                    var mediapicker = $(this).data('mediapicker');
-                    var image_element = mediapicker.buildHTMLElement(params);
+        // var mediapicker = $('#media-uploader').mediaPicker({
+        //     upload_url: "{url name=admin_image_create category=0}",
+        //     browser_url : "{url name=admin_media_uploader_browser}",
+        //     months_url : "{url name=admin_media_uploader_months}",
+        //     maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        //     // initially_shown: true,
+        //     handlers: {
+        //         'assign_content' : function( event, params ) {
+        //             var mediapicker = $(this).data('mediapicker');
+        //             var image_element = mediapicker.buildHTMLElement(params);
 
-                    if (params['position'] == 'body') {
-                        CKEDITOR.instances.body.insertHtml(image_element);
-                    } else {
-                        var container = $('#related_media').find('.'+params['position']);
-                        var image_element = mediapicker.buildHTMLElement(params, true);
+        //             if (params['position'] == 'body') {
+        //                 CKEDITOR.instances.body.insertHtml(image_element);
+        //             } else {
+        //                 var container = $('#related_media').find('.'+params['position']);
+        //                 var image_element = mediapicker.buildHTMLElement(params, true);
 
-                        var image_data_el = container.find('.image-data');
-                        image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                        image_data_el.find('.related-element-footer').val(params.content.description);
-                        image_data_el.find('.image').html(image_element);
-                        container.addClass('assigned');
-                    };
+        //                 var image_data_el = container.find('.image-data');
+        //                 image_data_el.find('.related-element-id').val(params.content.pk_photo);
+        //                 image_data_el.find('.related-element-footer').val(params.content.description);
+        //                 image_data_el.find('.image').html(image_element);
+        //                 container.addClass('assigned');
+        //             };
 
-                }
-            }
-        });
+        //         }
+        //     }
+        // });
     </script>
 {/block}
 

@@ -50,7 +50,6 @@
         });
     });
     </script>
-{include file="media_uploader/media_uploader.tpl"}
 <script>
 jQuery(document).ready(function($){
     var mediapicker = $('#media-uploader').mediaPicker({

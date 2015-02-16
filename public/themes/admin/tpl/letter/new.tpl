@@ -5,7 +5,6 @@
     {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
-{include file="media_uploader/media_uploader.tpl"}
 <script>
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({

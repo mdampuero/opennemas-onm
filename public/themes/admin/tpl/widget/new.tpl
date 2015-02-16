@@ -252,7 +252,6 @@ jQuery(document).ready(function($) {
     });
 });
 </script>
-{include file="media_uploader/media_uploader.tpl"}
 <script>
     $(function(){
         var mediapicker = $('#media-uploader').mediaPicker({

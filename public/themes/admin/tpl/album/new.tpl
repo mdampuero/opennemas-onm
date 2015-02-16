@@ -4,7 +4,6 @@
     {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
-{include file="media_uploader/media_uploader.tpl"}
 <script>
     var mediapicker = $('#media-uploader').mediaPicker({
         upload_url: "{url name=admin_image_create category=0}",

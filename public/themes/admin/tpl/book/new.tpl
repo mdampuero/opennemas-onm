@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{include file="media_uploader/media_uploader.tpl"}
 <script type="text/javascript">
     jQuery('#title').on('change', function(e, ui) {
         fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');

@@ -163,7 +163,6 @@ jQuery(document).ready(function($){
 });
 /* ]]> */
 </script>
-{include file="media_uploader/media_uploader.tpl"}
 <script>
     var mediapicker = $('#media-uploader').mediaPicker({
         upload_url: "{url name=admin_image_create category=0}",

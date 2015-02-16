@@ -11,7 +11,6 @@
 {/block}
 
 {block name="footer-js" append}
-{include file="media_uploader/media_uploader.tpl"}
 <script type="text/javascript">
     var mediapicker = $('#media-uploader').mediaPicker({
         upload_url: "{url name=admin_image_create category=0}",
