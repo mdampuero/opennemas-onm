@@ -150,6 +150,7 @@
             @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
 
             @Common/components/breakpoints/breakpoints.js,
+            @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
             @Common/components/ckeditor/ckeditor.js,
             @Common/components/fastclick/lib/fastclick.js,
             @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
