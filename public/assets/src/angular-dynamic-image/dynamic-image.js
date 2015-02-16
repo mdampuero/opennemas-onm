@@ -166,7 +166,16 @@
         html = html.replace('[autoscaleClass]', autoscaleClass);
 
         var e = $compile(html)($scope);
+        e.find('img').bind('load', function(event) {
+          $scope.loading = false;
+          $scope.$apply();
+        });
+
         $element.replaceWith(e);
+
+        $scope.$watch('src', function(nv, ov) {
+          $scope.loading = true;
+        });
       }
     };
   });
