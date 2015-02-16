@@ -172,6 +172,21 @@ angular.module('onm.Editor', [])
       }
 
       /**
+       * Returns the CKEditor instance given its name.
+       *
+       * @param string name The CKEditor instance name.
+       *
+       * @return Object The CKEditor instance.
+       */
+      this.get = function(name) {
+        if (CKEDITOR.instances[name]) {
+          return CKEDITOR.instances[name];
+        }
+
+        return false;
+      }
+
+      /**
        * Initializes a CKEditor.
        *
        * @param boolean replace Whether to replace the given element.
@@ -189,18 +204,12 @@ angular.module('onm.Editor', [])
       }
 
       /**
-       * Returns the CKEditor instance given its name.
+       * Updates the compatible flag for the current environment.
        *
-       * @param string name The CKEditor instance name.
-       *
-       * @return Object The CKEditor instance.
+       * @param boolean compatible Compatible value.
        */
-      this.get = function(name) {
-        if (CKEDITOR.instances[name]) {
-          return CKEDITOR.instances[name];
-        }
-
-        return false;
+      this.setCompatible = function(compatible) {
+        CKEDITOR.env.isCompatible = compatible;
       }
 
       /**
