@@ -73,14 +73,21 @@
 .layout-collapse-toggle,
 .layout-collapse-toggle:hover,
 .layout-collapse-toggle:focus,
-.layout-collapse-toggle:active {
+.layout-collapse-toggle:active,
+.notifications .button {
   background: #1b1e24;
   color: #fff;
   border-radius: 0;
 }
 
 .notification-center {
-  display: none !important;
+  /*display: none !important;*/
+  display:block !important;
+}
+
+.header .header-seperation .notifcation-center {
+  margin-top:8px;
+  margin-right:8px !important;
 }
 
 @media (max-width: 767px) {
