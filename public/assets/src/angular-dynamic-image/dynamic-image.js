@@ -71,19 +71,15 @@
   .directive('dynamicImage', function ($compile, dynamicImage) {
     return {
       restrict: 'AE',
+      scope: {
+        'ngModel': '='
+      },
       link: function ($scope, $element, $attrs) {
         if ($attrs['ngModel']) {
           // Add watcher to update src when scope changes
           $scope.$watch(
             function() {
-              var watch = $scope;
-              var keys = $attrs['ngModel'].split('.');
-
-              for (var i = 0; i < keys.length; i++) {
-                watch = watch[keys[i]];
-              };
-
-              return watch;
+              return $scope.ngModel;
             },
             function(nv, ov) {
               $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia);
