@@ -8,32 +8,32 @@
 {/block}
 
 {block name="footer-js" append}
-{capture assign="language"}{setting name=site_language}{/capture}
-{assign var="lang" value=$language|truncate:2:""}
-{if !empty($lang)}
-    {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
-
-    {javascripts src="@AdminTheme/js/$js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-
-    <script>
-    jQuery(document).ready(function() {
-        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#title').on('change', function(e, ui) {
+            fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        });
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
     });
-    </script>
-{/if}
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-    });
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-});
+  </script>
 
-</script>
+  {capture assign="language"}{setting name=site_language}{/capture}
+  {assign var="lang" value=$language|truncate:2:""}
+  {if !empty($lang)}
+      {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
+
+      {javascripts src="@AdminTheme/js/$js"}
+          <script type="text/javascript" src="{$asset_url}"></script>
+      {/javascripts}
+
+      <script>
+      jQuery(document).ready(function() {
+          jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
+      });
+      </script>
+  {/if}
 {/block}
 
 {block name="content"}
@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
                         <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                         <span class="help">{t}List of words separated by commas{/t}.</span>
                         <div class="controls">
-                            <input type="text" id="metadata" name="metadata" value="{$cover->metadata|default:""}" required="required" class="form-control"/>
+                            <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$cover->metadata|default:""}"/>
                         </div>
                     </div>
                     <div class="form-group">

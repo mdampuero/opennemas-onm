@@ -10,8 +10,7 @@
     {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
         @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
         @AdminTheme/js/jquery/jquery.colorbox-min.js,
-        @AdminTheme/js/jquery-onm/jquery.inputlength.js,
-        @Common/js/jquery/jquery.tagsinput.min.js
+        @AdminTheme/js/jquery-onm/jquery.inputlength.js
         "}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
@@ -24,15 +23,19 @@
         };
 
         jQuery(document).ready(function ($){
-            var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
-
             $('#title').inputLengthControl();
 
-            $('#title input').on('change', function(e, ui) {
-                if (tags_input.val().length == 0) {
-                    fill_tags_improved($('#title input').val(), tags_input, '{url name=admin_utils_calculate_tags}');
-                }
+            $('#title').on('change', function(e, ui) {
+              var metaTags = $('#metadata');
+              var title = $('#title input');
+
+              // Fill tags from title and category
+              if (!metaTags.val()) {
+                var tags = title.val();
+                fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
+              }
             });
+
             $('#formulario').onmValidate({
                 'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
             });
@@ -69,35 +72,6 @@
             });
         });
 
-    </script>
-    <script>
-        // var mediapicker = $('#media-uploader').mediaPicker({
-        //     upload_url: "{url name=admin_image_create category=0}",
-        //     browser_url : "{url name=admin_media_uploader_browser}",
-        //     months_url : "{url name=admin_media_uploader_months}",
-        //     maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        //     // initially_shown: true,
-        //     handlers: {
-        //         'assign_content' : function( event, params ) {
-        //             var mediapicker = $(this).data('mediapicker');
-        //             var image_element = mediapicker.buildHTMLElement(params);
-
-        //             if (params['position'] == 'body') {
-        //                 CKEDITOR.instances.body.insertHtml(image_element);
-        //             } else {
-        //                 var container = $('#related_media').find('.'+params['position']);
-        //                 var image_element = mediapicker.buildHTMLElement(params, true);
-
-        //                 var image_data_el = container.find('.image-data');
-        //                 image_data_el.find('.related-element-id').val(params.content.pk_photo);
-        //                 image_data_el.find('.related-element-footer').val(params.content.description);
-        //                 image_data_el.find('.image').html(image_element);
-        //                 container.addClass('assigned');
-        //             };
-
-        //         }
-        //     }
-        // });
     </script>
 {/block}
 
@@ -167,7 +141,7 @@
                                 {t}Title{/t}
                             </label>
                             <div class="controls">
-                                <div class="input-group" id="title">
+                                <div class="input-group" id="title" >
                                     <input class="form-control" name="title" required="required" type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
                                     <span class="input-group-addon add-on"></span>
                                 </div>
@@ -178,7 +152,7 @@
                                 {t}Summary{/t}
                             </label>
                             <div class="controls">
-                                <textarea class="form-control" onmeditor onmeditor-preset="simple" id="summary" data-preset="simple" name="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
+                                <textarea class="form-control" onm-editor onm-editor-preset="simple" id="summary" name="summary">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -187,11 +161,13 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
+                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="body">
+                                      {t}Insert image{/t}
+                                    </div>
                                 </div>
                             {/acl}
                             <div class="controls">
-                                <textarea name="body" id="body" class="form-control" onmeditor onmeditor-preset="standard">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
+                                <textarea name="body" id="body" class="form-control" onm-editor onm-editor-preset="standard">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
                             </div>
                         </div>
                         <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" value="{$publisher|default:""}"/>
@@ -270,7 +246,7 @@
                                         {t}Tags{/t}
                                     </label>
                                     <div class="controls">
-                                        <input class="form-control bootstrap-tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
+                                        <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
                             </div>

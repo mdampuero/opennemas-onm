@@ -7,11 +7,9 @@
     {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function ($){
-        var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
-
         $('#title').on('change', function(e, ui) {
-            if (tags_input.val().length == 0) {
-                fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+            if (!$('#metadata').val()) {
+                fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
             }
         });
         jQuery('#closetime').datetimepicker({
@@ -230,7 +228,7 @@
                             <div class="grid-body">
                                  <div class="form-group">
                                     <div class="controls">
-                                        <input class="form-control" id="metadata" name="metadata" required="required" type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
+                                        <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
                             </div>

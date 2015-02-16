@@ -7,10 +7,6 @@
     {/javascripts}
 <script>
 jQuery(document).ready(function($) {
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-
     $('#letter-edit').tabs();
 
     $('#created').datetimepicker({
@@ -41,30 +37,8 @@ jQuery(document).ready(function($) {
         fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
 
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-                if (params['position'] == 'body' || params['position'] == 'summary') {
-                    var image_element = mediapicker.buildHTMLElement(params);
-                    CKEDITOR.instances[params['position']].insertHtml(image_element, true);
-                } else {
-                    var container = $('#related_media').find('.'+params['position']);
-                    var image_element = mediapicker.buildHTMLElement(params, true);
-
-                    var image_data_el = container.find('.image-data');
-                    image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                    image_data_el.find('.related-element-footer').val(params.content.description);
-                    image_data_el.find('.image').html(image_element);
-                    container.addClass('assigned');
-                };
-            }
-        }
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
 });
 </script>
@@ -164,7 +138,7 @@ jQuery(document).ready(function($) {
                         <div class="form-group">
                             <label for="body" class="form-label">{t}Body{/t}</label>
                             <div class="controls">
-                                <textarea name="body" id="body"   class="onm-editor form-control" rows="10">{$letter->body|clearslash}</textarea>
+                                <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -215,7 +189,7 @@ jQuery(document).ready(function($) {
                             <label for="metadata" class="form-label">{t}Tags{/t}</label>
                             <span class="help">{t}List of words separated by words.{/t}</span>
                             <div class="controls">
-                                <input type="text" id="metadata" name="metadata" required="required" class="form-control" value="{$letter->metadata|clearslash|escape:"html"}"/>
+                                <input data-role="tagsinput" id="metadata" name="metadata" required="required"  type="text" value="{$letter->metadata|clearslash|escape:"html"}"/>
                             </div>
                         </div>
                         {acl isAllowed="LETTER_AVAILABLE"}

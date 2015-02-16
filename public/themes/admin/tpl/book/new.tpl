@@ -3,30 +3,7 @@
 {block name="footer-js" append}
 <script type="text/javascript">
     jQuery('#title').on('change', function(e, ui) {
-        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-    });
-
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-
-                if (params['position'] == 'cover-image') {
-                    var container = $('.cover-image');
-                    var image_element = mediapicker.buildHTMLElement(params, true);
-                    var image_data_el = container.find('.image-data');
-                    image_data_el.find('.book-cover-image').val(params.content.pk_photo);
-                    container.addClass('assigned');
-
-                    image_data_el.find('.image').html(image_element);
-
-                }
-            }
-        }
+        fill_tags(jQuery('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
     });
 </script>
 
@@ -212,7 +189,7 @@
                     <div class="form-group">
                         <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                         <div class="controls">
-                            <input type="text" id="metadata" name="metadata" value="{$book->metadata|default:""}" required="required" class="form-control"/>
+                            <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$book->metadata|default:""}" />
                             <span class="help-block">{t}Separated by coma{/t}</span>
                         </div>
                     </div>

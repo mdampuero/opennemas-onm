@@ -1,67 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {javascripts src="@Common/js/jquery/jquery.tagsinput.min.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
 <script>
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-
-                if (params['position'] == 'cover-image') {
-                    var container = $('.cover-image');
-                    var image_element = mediapicker.buildHTMLElement(params, true);
-                    var image_data_el = container.find('.image-data');
-                    image_data_el.find('.album-frontpage-image').val(params.content.pk_photo);
-                    container.addClass('assigned');
-
-                    image_data_el.find('.image').html(image_element);
-
-                } else {
-                    params.class_image = false;
-                    var container = $('.list-of-images > ul');
-
-                    var elements = '';
-                    $.each(params.content, function(key, elem) {
-                        var temp_params = $.extend(params, { 'content': elem });
-                        var image_element = '<li class="image thumbnail" id="img'+elem.id+'" >'+
-                            '<div class="overlay-image">'+
-                                '<div>'+
-                                    '<ul class="image-buttons clearfix">'+
-                                        '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="fa fa-pencil"></i></a></li>'+
-                                        '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
-                                    '</ul>'+
-                                '</div>'+
-                            '</div>'+
-                            mediapicker.buildHTMLElement(temp_params, true)+
-                            '<textarea name="album_photos_footer[]">'+elem.description+'</textarea>'+
-                            '<input type="hidden" name="album_photos_id[]" value="'+elem.id+'">'
-                            '</li>' ;
-                        elements = elements + image_element;
-                    });
-
-                    container.find('.add-image').before(elements);
-                }
-            }
-        }
-    });
-
     jQuery(document).ready(function($){
-
-        var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
-
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
         $("#formulario").on("submit", function(event) {
-
             var frontpage_image =  $(".album-frontpage-image");
             var album_images =  $("#list-of-images .image");
             if (frontpage_image.val() == "") {
@@ -112,11 +54,18 @@
         });
 
         jQuery('#title').on('change', function(e, ui) {
-            if (tags_input.val().length == 0) {
-                fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            var metaTags = $('#metadata');
+
+            // Fill tags from title and category
+            if (!metaTags.val()) {
+                var tags = jQuery('#title').val();
+                fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
             }
         });
 
+        $('#formulario').onmValidate({
+            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
     });
     </script>
 
@@ -208,7 +157,7 @@
                                 {t}Description{/t}
                             </label>
                             <div class="controls">
-                                <textarea class="form-control onm-editor" data-preset="simple" id="description" name="description">{$album->description|clearslash}</textarea>
+                                <textarea class="form-control" id="description" name="description" onm-editor onm-editor-preset="simple">{$album->description|clearslash}</textarea>
                             </div>
                         </div>
                     </div>
@@ -263,7 +212,7 @@
                                 {t}Tags{/t}
                             </label>
                             <div class="controls">
-                                <input type="text" id="metadata" name="metadata" required="required" value="{$album->metadata}"/>
+                                <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$album->metadata}"/>
                             </div>
                         </div>
                     </div>

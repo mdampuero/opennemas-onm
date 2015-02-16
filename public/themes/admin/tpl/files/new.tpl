@@ -84,8 +84,7 @@
                     <div class="form-group">
                         <label for="description" class="form-label">{t}Description{/t}</label>
                         <div class="controls">
-                            <textarea id="description" name="description" class="form-control" required="required"
-                                            class="required">{$attaches->description|clearslash}</textarea>
+                            <textarea id="description" name="description" class="form-control" required="required" class="required">{$attaches->description|clearslash}</textarea>
                         </div>
                     </div>
 
@@ -117,7 +116,7 @@
                     <div class="form-group">
                         <label for="metadata" class="form-label">{t}Tags{/t}</label>
                         <div class="controls">
-                            <input type="text" id="metadata" name="metadata" value="{$attaches->metadata|clearslash}" class="form-control" required="required">
+                            <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$attaches->metadata|clearslash}">
                         </div>
                     </div>
                 </div>

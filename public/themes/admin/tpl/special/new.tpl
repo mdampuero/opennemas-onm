@@ -52,27 +52,6 @@
     </script>
 <script>
 jQuery(document).ready(function($){
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-                var image_element = mediapicker.buildHTMLElement(params);
-
-                var container = $('#related_media').find('.'+params['position']);
-
-                var image_data_el = container.find('.image-data');
-                image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                image_data_el.find('.related-element-footer').val(params.description);
-                image_data_el.find('.image').html(image_element);
-                container.addClass('assigned');
-            }
-        }
-    });
     $('.article_images .unset').on('click', function (e, ui) {
         e.preventDefault();
 
@@ -97,7 +76,7 @@ jQuery(document).ready(function($){
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
+                        <i class="fa fa-star fa-lg"></i>
                         {t}Specials{/t}
                     </h4>
                 </li>
@@ -170,7 +149,7 @@ jQuery(document).ready(function($){
                     <div class="form-group">
                         <label for="description" class="form-label">{t}Description{/t}</label>
                         <div class="controls">
-                            <textarea name="description" id="description" class="onm-editor">{$special->description|clearslash}</textarea>
+                            <textarea name="description" id="description" onm-editor onm-editor-preset="simple">{$special->description|clearslash}</textarea>
                         </div>
                     </div>
 
@@ -189,17 +168,18 @@ jQuery(document).ready(function($){
                 </div>
                 <div class="grid-body">
                     <div class="form-group">
-                        <label for="content_status" class="form-label">
-                            <input type="checkbox" name="content_status" id="content_status" value="1" {if $special->content_status eq 1} checked="checked"{/if}>
+                        <div class="checkbox">
+                          <input type="checkbox" name="content_status" id="content_status" value="1" {if $special->content_status eq 1} checked="checked"{/if}>
+                          <label for="content_status" class="form-label">
                             {t}Available{/t}
-                        </label>
+                          </label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="metadata" class="form-label">{t}Tags{/t}</label>
                         <span class="help">{t}List of words separated by commas.{/t}</span>
                         <div class="controls">
-                            <input type="text" id="metadata" name="metadata" required="required" class="form-control"
-                                    value="{$special->metadata|clearslash|escape:"html"}"/>
+                            <input  data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$special->metadata|clearslash|escape:"html"}"/>
                         </div>
                     </div>
                     <div class="form-group">

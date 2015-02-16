@@ -79,14 +79,14 @@
                         </label>
                         {acl isAllowed='PHOTO_ADMIN'}
                             <div class="pull-right">
-                                <a class="btn btn-mini" href="#media-uploader" data-toggle="modal" data-position="body">
+                                <div class="btn btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="summary">
                                     <i class="fa fa-plus"></i>
                                     {t}Insert image{/t}
-                                </a>
+                                </div>
                             </div>
                         {/acl}
                         <div class="controls">
-                            <textarea class="onm-editor form-control" id="body" name="body" rows="10" tabindex="5">{$page->body|default:""}</textarea>
+                            <textarea class="form-control" id="body" name="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                             {t}Tags{/t}
                         </label>
                         <div class="controls">
-                            <input id="metadata" name="metadata" required="required" type="text" value="{$page->metadata|clearslash|escape:"html"}" class="form-control" />
+                            <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$page->metadata|clearslash|escape:"html"}"/>
                         </div>
                     </div>
 
@@ -132,19 +132,13 @@
 /* <![CDATA[ */
 
 jQuery(document).ready(function($){
-
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-
     var previous = null;
 
-    var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
-
     $('#title').on('change', function(e, ui) {
-        if (tags_input.val().length == 0) {
-            fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+        if (!$('#metadata').val()) {
+            fill_tags($('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
         }
+
         var slugy = jQuery.trim(jQuery('#slug').attr('value'));
         if ((slugy.length <= 0) && (previous!=slugy)) {
 
@@ -160,26 +154,10 @@ jQuery(document).ready(function($){
         }
     });
 
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
 });
 /* ]]> */
-</script>
-<script>
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-                var image_element = mediapicker.buildHTMLElement(params);
-
-                if (params['position'] == 'body') {
-                    CKEDITOR.instances.body.insertHtml(image_element);
-                }
-            }
-        }
-    });
 </script>
 {/block}
