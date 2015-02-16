@@ -169,27 +169,12 @@
                             {/foreach}
                         </ul>
                     </li>
-                    <li class="quicklinks dropdown hidden-sm hidden-xs">
-                        <span class="a dropdown-toggle" data-toggle="dropdown">
-                            <span class="dropdown-current">
-                                {t}View{/t}: [% pagination.epp %]
-                            </span>
-                            <span class="caret"></span>
-                        </span>
-                        <ul class="dropdown-menu">
-                            <li ng-click="pagination.epp = 10">
-                                <span class="a">10</span>
-                            </li>
-                            <li ng-click="pagination.epp = 25">
-                                <span class="a">25</span>
-                            </li>
-                            <li ng-click="pagination.epp = 50">
-                                <span class="a">50</span>
-                            </li>
-                            <li ng-click="pagination.epp = 100">
-                                <span class="a">100</span>
-                            </li>
-                        </ul>
+                    <li class="quicklinks hidden-sm hidden-xs">
+                      <select name="status" ng-model="pagination.epp" data-label="{t}View:{/t}" class="select2">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                      </select>
                     </li>
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
