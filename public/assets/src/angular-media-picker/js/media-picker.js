@@ -115,7 +115,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                   </li>\
                   <li>\
                     <h4>\
-                      [% selected.items.length + ' ' + picker.params.explore.itemsSelected %]\
+                      [% selected.items.length %]\
+                      <span class=\"hidden-xs\">[% picker.params.explore.itemsSelected %]</span>\
                     </h4>\
                   </li>\
                 </ul>\
