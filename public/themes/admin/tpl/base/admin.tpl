@@ -223,10 +223,6 @@
 
         <script type="text/javascript">
         $(function() {
-            $.onmEditor({
-                language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
-            });
-
             $('.select2').select2({
                 formatSelection: function(state) {
                     var element = state.element;
