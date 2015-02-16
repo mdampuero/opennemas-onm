@@ -112,9 +112,14 @@
                         </h1>
                     </a>
                     {if count_pending_comments > 0}
-                        <a class="btn btn-link pull-right" title="{count_pending_comments} {t}Pending comments{/t}"  href="{url name=admin_comments}">
-                            <i class="fa fa-inbox fa-lg"></i><span class="badge badge-danger">{count_pending_comments}</span>
+                    <ul class="nav pull-right notifcation-center">
+                      <li class="dropdown" id="header_inbox_bar">
+                        <a title="{count_pending_comments} {t}Pending comments{/t}"  href="{url name=admin_comments}" class="dropdown-toggle">
+                          <div class="iconset top-messages"></div>
+                          <span class="badge animated bounceIn" id="msgs-badge">{count_pending_comments}</span>
                         </a>
+                      </li>
+                    </ul>
                     {/if}
                 </div>
             </div>
