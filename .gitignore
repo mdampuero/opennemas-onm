@@ -2,6 +2,7 @@
 *.sublime-*
 *~
 *.pot
+*.todo
 .development
 .deploy.php
 .maintenance
