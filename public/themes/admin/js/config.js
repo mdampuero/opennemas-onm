@@ -68,4 +68,7 @@ angular.module('BackendApp')
     // Add custom plugins
     onmEditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
     onmEditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
+
+    // Enable CKEditor for all environments (browsers)
+    onmEditorProvider.setCompatible(true);
   });
