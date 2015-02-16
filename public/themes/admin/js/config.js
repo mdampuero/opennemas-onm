@@ -60,4 +60,12 @@ angular.module('BackendApp')
     });
 
     $translateProvider.preferredLanguage('en');
+  }).config(function (onmEditorProvider) {
+    // Add external plugins
+    onmEditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
+    onmEditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
+
+    // Add custom plugins
+    onmEditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
+    onmEditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
   });
