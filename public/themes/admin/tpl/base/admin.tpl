@@ -59,8 +59,9 @@
             @Common/components/messenger/build/css/messenger-theme-flat.css,
             @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
 
-            @Common/src/sidebar/css/sidebar.css,
+            @Common/src/angular-dynamic-image/less/main.less,
             @Common/src/angular-media-picker/less/main.less,
+            @Common/src/sidebar/css/sidebar.css,
 
             @Common/src/opennemas-webarch/base/*,
             @Common/src/opennemas-webarch/components/*,
@@ -185,7 +186,7 @@
             @Common/components/angular-ui-sortable/sortable.min.js,
 
             @Common/src/webarch/js/core.js,
-            @Common/src/angular-dynamic-image/dynamic-image.js,
+            @Common/src/angular-dynamic-image/js/dynamic-image.js,
             @Common/src/angular-onm-editor/onm-editor.js,
             @Common/src/angular-oql-encoder/oql-encoder.js,
             @Common/src/angular-query-manager/query-manager.js,
