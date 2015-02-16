@@ -73,12 +73,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                   </div>\
                   <div class=\"media-picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
                     <div class=\"media-thumbnail-wrapper\">\
-                      <div class=\"media-dimensions-overlay\">\
-                        <span class=\"media-dimensions-label\">\
-                          [% selected.lastSelected.width %]x[% selected.lastSelected.height %]\
-                        </span>\
-                      </div>\
-                      <dynamic-image class=\"img-thumbnail\" instance=\""
+                      <dynamic-image autoscale=\"true\" class=\"img-thumbnail\" dimensions=\"true\" instance=\""
                         + instanceMedia
                         + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
@@ -188,11 +183,17 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            */
           var sidebarTpl = {
             explore: "<li ng-class=\"{ 'active': picker.isActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
-              <i class=\"fa fa-folder\"></i>[% picker.params.explore.menuItem %]\
+              <h5>\
+                <i class=\"fa fa-folder\"></i>\
+                [% picker.params.explore.menuItem %]\
+              </h5>\
             </li>",
 
             upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload'); upload()\">\
-              <i class=\"fa fa-upload\"></i>[% picker.params.upload.menuItem %]\
+              <h5>\
+                <i class=\"fa fa-upload\"></i>\
+                [% picker.params.upload.menuItem %]\
+              </h5>\
             </li>"
           };
 
@@ -473,7 +474,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         $http.get(url).then(function(response) {
           if (reset) {
             $scope.contents = response.data.results;
-            $scope.loading = false;
+            $scope.total    = response.data.total;
+            $scope.loading  = false;
           } else {
             $scope.contents = $scope.contents.concat(response.data.results);
           }
