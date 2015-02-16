@@ -47,6 +47,9 @@
   .content {
     padding:0 !important;
   }
+  .content > .grid {
+    border:0;
+  }
 
   .page-content .filters-navbar ~ .content {
     margin-top: 0px;
