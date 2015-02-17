@@ -106,7 +106,6 @@ class CacheManagerController extends Controller
         // Build information for each article/opinion element
         if (count($articles)>0) {
             foreach ($articles as $article) {
-
                 $articleTitles[$article->pk_content] = $article->title;
                 if ($article->fk_content_type == '4') {
                     $authorName = !empty($allAuthorsArray[$article->fk_author])
@@ -290,25 +289,25 @@ class CacheManagerController extends Controller
                         'articles-mobile'   => _('Inner Article mobile version'),
                         'opinion'           => _('Inner Opinion'),
                         'rss'               => _('RSS'),
+                        'sitemap'           => _('Sitemap'),
                         'video'             => _('Frontpage videos'),
                         'video-inner'       => _('Inner video'),
                         'gallery-frontpage' => _('Gallery frontpage'),
                         'gallery-inner'     => _('Gallery Inner'),
                         'poll-frontpage'    => _('Polls frontpage'),
                         'poll-inner'        => _('Poll inner'),
-                        'sitemap'           => _('Sitemap'),
                     ),
                     'groupIcon' => array(
-                        'frontpages'        => 'home16x16.png',
-                        'frontpage-mobile'  => 'phone16x16.png',
-                        'articles'          => 'article16x16.png',
-                        'articles-mobile'   => 'phone16x16.png',
-                        'opinion'           => 'opinion16x16.png',
-                        'rss'               => 'rss16x16.png',
-                        'video'             => 'video16x16.png',
-                        'video-inner'       => 'video16x16.png',
-                        'gallery-frontpage' => 'gallery16x16.png',
-                        'gallery-inner'     => 'gallery16x16.png',
+                        'frontpages'        => 'frontpage.png',
+                        'frontpage-mobile'  => 'mobile.png',
+                        'articles'          => 'article.png',
+                        'articles-mobile'   => 'mobile.png',
+                        'opinion'           => 'opinion.png',
+                        'rss'               => 'rss.png',
+                        'video'             => 'video.png',
+                        'video-inner'       => 'video.png',
+                        'gallery-frontpage' => 'album.png',
+                        'gallery-inner'     => 'album.png',
                         'poll-frontpage'    => 'polls.png',
                         'poll-inner'        => 'polls.png',
                         'sitemap'           => 'sitemap.png',

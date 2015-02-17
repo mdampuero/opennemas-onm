@@ -346,19 +346,22 @@ class Manager
      *
      * @return array tuple with a list of content and authors ids
      **/
-    public function getResources($items = array())
+    public function getResources(&$items)
     {
-        $pk_contents = array();
-        $pk_authors = array();
+        $pkContents = array();
+        $pkAuthor = array();
+
         foreach ($items as $item) {
             if (preg_match('/[0-9]{1,9}/', $item['resource'])) {
-                $pk_contents[] = $item['resource'];
+                $pkContents[]      = $item['resource'];
+                $item['pk_content'] = $item['resource'];
             } elseif (preg_match('/RSS([0-9]+)/', $item['resource'], $match)) {
-                $pk_authors[] = $match[1];
+                $pkAuthor[]        = $match[1];
+                $item['pk_author'] = $match[1];
             }
         }
 
-        return array($pk_contents, $pk_authors);
+        return array($pkContents, $pkAuthor);
     }
 
     /**
