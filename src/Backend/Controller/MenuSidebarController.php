@@ -39,6 +39,6 @@ class MenuSidebarController extends Controller
             return new JsonResponse($_SESSION['sidebar_pinned']);
         }
 
-        return new JsonResponse(0);
+        return new JsonResponse(1);
     }
 }
