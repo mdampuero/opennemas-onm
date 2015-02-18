@@ -109,12 +109,12 @@
                             <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
                         </h1>
                     </a>
-                    {if count_pending_comments > 0}
-                    <ul class="nav pull-right notifcation-center">
+                    {if {count_pending_comments} gt 0}
+                    <ul class="nav pull-right notifcation-center" ng-if="sidebar.collapsed == 0">
                       <li class="dropdown" id="header_inbox_bar">
-                        <a title="{count_pending_comments} {t}Pending comments{/t}"  href="{url name=admin_comments}" class="dropdown-toggle">
+                        <a href="{url name=admin_comments}" class="dropdown-toggle">
                           <div class="iconset top-messages"></div>
-                          <span class="badge animated bounceIn" id="msgs-badge">{count_pending_comments}</span>
+                          <span class="badge animated" id="msgs-badge">{count_pending_comments}</span>
                         </a>
                       </li>
                     </ul>
