@@ -164,10 +164,9 @@
 
                                     {assign var="resource" value=$caches[c].resource}
 
-                                    <img ng-src="{$params.IMAGE_DIR}template_manager/elements/[% content.type %].png" alt="[% content.type_explanation %] cache file">
+                                    <img ng-src="{$params.IMAGE_DIR}template_manager/elements/[% content.type %].png" ng-if="content.type != 'unknown'" alt="[% content.type_explanation %] cache file">
 
                                     [% content.title %]
-                                    <!-- <span ng-if="content.extra">[% content.extra %]</span> -->
 
                                     <div class="listing-inline-actions">
                                       <a class="link" href="{$smarty.const.SITE_URL}[% content.url %]" ng-if="content.extra != 'unknown'" target="_blank"><span class="fa fa-external-link"></span> {t}View page{/t}</a>
