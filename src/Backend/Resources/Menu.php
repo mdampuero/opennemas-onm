@@ -324,6 +324,7 @@ $menuXml = [
                 "id"          => "acl_manager",
                 "title"       => _("Users & Groups"),
                 "link"        => '#',
+                "icon"        => "fa fa-users",
                 "module_name" => "SETTINGS_MANAGER",
                 "privilege"   => "ONM_SETTINGS",
                 "submenu"     => [
@@ -359,7 +360,7 @@ $menuXml = [
                 "icon"        => "fa fa-database",
                 "link"        => url('admin_tpl_manager'),
                 "module_name" => "CACHE_MANAGER",
-                "privilege"   => "CACHE_ADMIN",
+                "privilege"   => "ONLY_MASTERS",
             ],
             [
                 "id"          => "log_sql",
