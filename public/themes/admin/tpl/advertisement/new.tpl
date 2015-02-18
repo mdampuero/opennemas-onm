@@ -120,7 +120,8 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-bullhorn"></i>
-                            {t}Advertisement{/t}
+                            <span class="hidden-xs">{t}Advertisements{/t}</span>
+                            <span class="visible-xs-inline">{t}Ads{/t}</span>
                         </h4>
                     </li>
                     <li class="quicklinks seperate">

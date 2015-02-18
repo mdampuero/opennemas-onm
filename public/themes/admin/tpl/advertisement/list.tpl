@@ -8,7 +8,7 @@
                 <li class="quicklinks">
                     <h4>
                     <i class="fa fa-bullhorn"></i>
-                    {t}Advertisements{/t}
+                    <span class="hidden-xs">{t}Advertisements{/t}</span> <span class="visible-xs-inline">{t}Ads{/t}</span>
                     </h4>
                 </li>
             </ul>
@@ -41,7 +41,7 @@
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
                     <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
-                    <i class="fa fa-check fa-lg"></i>
+                    <i class="fa fa-arrow-left fa-lg"></i>
                     </button>
                 </li>
                 <li class="quicklinks">
@@ -49,7 +49,7 @@
                 </li>
                 <li class="quicklinks">
                     <h4>
-                    [% selected.contents.length %] {t}items selected{/t}
+                    [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                     </h4>
                 </li>
             </ul>
@@ -116,25 +116,22 @@
                         </optgroup>
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li>
+                <li class="hidden-xs">
                     <select class="select2" name="filter[type_advertisement]" ng-model="criteria.type_advertisement" data-label="{t}Banner type{/t}">
                         {html_options options=$filter_options.type_advertisement selected=$filterType}
                     </select>
                 </li>
-                <li>
+                <li class="hidden-xs">
                     <select class="input-medium select2" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                         {html_options options=$filter_options.content_status selected=$filterAvailable}
                     </select>
                 </li>
-                <li>
+                <li class="hidden-xs hidden-sm">
                     <select class="input-medium select2" ng-model="criteria.with_script" data-label="{t}Type{/t}">
                         {html_options options=$filter_options.type}
                     </select>
                 </li>
-                <li class="quicklinks hidden-xs">
+                <li class="quicklinks hidden-xs hidden-sm">
                     <select class="xmedium" ng-model="pagination.epp">
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -143,28 +140,20 @@
                         <option value="500">500</option>
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
-                    <i class="fa fa-trash-o fa-lg"></i>
-                    </button>
-                </li>
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="refresh()">
-                    <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-                    </button>
-                </li>
             </ul>
-            <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
+            <ul class="nav quick-section pull-right simple-pagination">
+                <li class="quicklinks hidden-xs">
+                    <span class="info">
+                    [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    </span>
                 </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
                         <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
-                        <i class="fa fa-chevron-left"></i>
+                            <i class="fa fa-chevron-left"></i>
                         </button>
                         <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
-                        <i class="fa fa-chevron-right"></i>
+                            <i class="fa fa-chevron-right"></i>
                         </button>
                     </div>
                 </li>
@@ -190,9 +179,9 @@
                                 </div>
                             </th>
                             <th>{t}Title{/t}</th>
-                            <th class="title"  style="width:250px">{t}Type{/t}</th>
-                            <th class="center" style="width:30px">{t}Permanence{/t}</th>
-                            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
+                            <th class="hidden-xs hidden-sm"  style="width:250px">{t}Type{/t}</th>
+                            <th class="center hidden-xs" style="width:30px">{t}Permanence{/t}</th>
+                            <th class="center hidden-xs" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
                             {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                             <th class="center" style="width:40px;">{t}Available{/t}</th>
                             {/acl}
@@ -212,6 +201,12 @@
                                 </div>
                             </td>
                             <td style="">
+                                <span class="visible-xs visible-sm">
+                                    <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
+                                    <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
+                                    <img ng-if="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
+                                    [% map[content.type_advertisement].name %]
+                                </span>
                                 [% content.title %]
                                 <div class="listing-inline-actions">
                                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
@@ -226,21 +221,19 @@
                                     {/acl}
                                 </div>
                             </td>
-                            <td>
-                                <label>
-                                    <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
-                                    <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                                    <img ng-if="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
-                                    [% map[content.type_advertisement].name %]
-                                </label>
+                            <td class="hidden-xs hidden-sm">
+                                <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
+                                <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
+                                <img ng-if="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, png, gif){/t}" />
+                                [% map[content.type_advertisement].name %]
                             </td>
-                            <td style="text-align:center;" class="center">
+                            <td class="center hidden-xs">
                                 <span ng-if="content.type_medida == 'NULL'">{t}Undefined{/t}</span>
                                 <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
                                 <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
                                 <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
                             </td>
-                            <td style="text-align:center;">
+                            <td class="center hidden-xs">
                                 [% content.num_clic_count %]
                             </td>
                             {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
@@ -257,9 +250,9 @@
         </div>
         <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
             <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
             </div>
-            <div class="pull-right" ng-if="contents.length > 0">
+            <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                 <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
             </div>
         </div>
