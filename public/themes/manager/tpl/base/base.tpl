@@ -49,9 +49,9 @@
 
             @Common/src/sidebar/css/sidebar.css,
 
-            @Common/src/opennemas-webarch/base/*,
-            @Common/src/opennemas-webarch/layout/*,
-            @Common/src/opennemas-webarch/main.less"
+            @Common/src/opennemas-webarch/css/base/*,
+            @Common/src/opennemas-webarch/css/layout/*,
+            @Common/src/opennemas-webarch/css/main.less"
         filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
@@ -261,7 +261,7 @@
 
             @ManagerTheme/js/controllers/*,
 
-            @Common/src/webarch/js/core.js,
+            @Common/src/opennemas-webarch/js/core.js,
             @Common/js/manager.js
         " filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>

@@ -64,10 +64,10 @@
             @Common/src/angular-media-picker/less/main.less,
             @Common/src/sidebar/css/sidebar.css,
 
-            @Common/src/opennemas-webarch/base/*,
-            @Common/src/opennemas-webarch/components/*,
-            @Common/src/opennemas-webarch/layout/*,
-            @Common/src/opennemas-webarch/main.less,
+            @Common/src/opennemas-webarch/css/base/*,
+            @Common/src/opennemas-webarch/css/components/*,
+            @Common/src/opennemas-webarch/css/layout/*,
+            @Common/src/opennemas-webarch/css/main.less,
 
             @AdminTheme/less/_comment.less"
         filters="cssrewrite,less"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
@@ -192,7 +192,7 @@
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
 
-            @Common/src/webarch/js/core.js,
+            @Common/src/opennemas-webarch/js/core.js,
             @Common/src/angular-dynamic-image/js/dynamic-image.js,
             @Common/src/angular-onm-editor/onm-editor.js,
             @Common/src/angular-oql-encoder/oql-encoder.js,
