@@ -45,7 +45,6 @@
     };
 
     jQuery(document).ready(function($){
-      $('#article-form').tabs();
       $('#title, #title_int, #subtitle').inputLengthControl();
 
       $('#title_input, #category').on('change', function() {
@@ -152,19 +151,19 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" maxlength="256" name="title" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
-                    <span class="input-group-addon"></span>
+                    <input class="form-control" id="title_input" name="title" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
+                    <span class="input-group-addon add-on"></span>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="title_int">
+                <label class="form-label" for="title_int_input">
                   {t}Inner title{/t}
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
                     <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
-                    <span class="input-group-addon"></span>
+                    <span class="input-group-addon add-on"></span>
                   </div>
                 </div>
               </div>
@@ -205,7 +204,7 @@
                 <div class="controls">
                   <div class="input-group" id="subtitle">
                     <input class="form-control" name="subtitle" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
-                    <span class="input-group-addon"></span>
+                    <span class="input-group-addon add-on"></span>
                   </div>
                 </div>
               </div>
