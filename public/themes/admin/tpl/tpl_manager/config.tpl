@@ -13,10 +13,10 @@
               {t}Cache Manager{/t}
             </h4>
           </li>
-          <li class="quicklins">
+          <li class="quicklins hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklins">
+          <li class="quicklins hidden-xs">
             <h5>{t}Settings{/t}</h5>
           </li>
         </ul>
@@ -76,7 +76,7 @@
               </td>
 
               <td class="right">
-                <input type="text" size="7" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" />
+                <input type="text" size="5" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" />
               </td>
             </tr>
             {foreachelse}
