@@ -7,10 +7,10 @@
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
     '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
-    '$translate', '$timeout', '$window', 'paginationConfig',
+    '$translate', '$timeout', '$window', 'paginationConfig', 'routing',
     function (
         $filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout,
-        $window, paginationConfig
+        $window, paginationConfig, routing
     ) {
         $scope.sidebar = {
             collapsed: false,
@@ -31,12 +31,17 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         /**
          * Removes a class from body and checks if user is authenticated.
+         *
+         * @param string  language The current language.
+         * @param boolean pinned   The current sidebar pinned status.
          */
-        $scope.init = function(language) {
+        $scope.init = function(language, pinned) {
             $translate.use(language);
 
             paginationConfig.nextText     = $filter('translate')('Next');
             paginationConfig.previousText = $filter('translate')('Previous');
+
+            $scope.sidebar.pinned = pinned;
         };
 
         /**
@@ -75,6 +80,20 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
             $scope.sidebar.forced = false;
             $scope.sidebar.collapsed = !$scope.sidebar.pinned;
           }
+        });
+
+        /**
+         * Sends a request to update the sidebar pinned status in server.
+         *
+         * @param integer nv The new value.
+         * @param integer ov The old value.
+         */
+        $scope.$watch('sidebar.pinned', function(nv, ov) {
+          if (nv == ov) {
+            return;
+          }
+
+          $http.put(routing.generate('admin_menu_sidebar_set'), { pinned: nv});
         });
     }
 ]);
