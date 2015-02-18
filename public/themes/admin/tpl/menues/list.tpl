@@ -36,7 +36,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -44,19 +44,11 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="ADVERTISEMENT_DELETE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
