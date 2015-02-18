@@ -24,7 +24,7 @@
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
                         <a href="{url name=admin_tpl_manager_deleteall}" class="btn btn-white">
-                            <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove all cache{/t}</span>
+                            <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove all{/t}</span>
                         </a>
                     </li>
                 </ul>

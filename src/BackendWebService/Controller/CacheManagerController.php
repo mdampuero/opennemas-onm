@@ -65,40 +65,19 @@ class CacheManagerController extends Controller
 
         list($pkContents, $pkAuthors) = $this->cacheManager->getResources($caches);
 
-        // Fetch all authors and generate associated array
-        $ccm = \ContentCategoryManager::get_instance();
-        $allAuthors = \User::getAllUsersAuthors();
-        $allAuthorsArray = array();
-        foreach ($allAuthors as $author) {
-            $allAuthorsArray[$author->id] = $author->name;
-        }
+        unset($pkAuthors);
 
         // Initialize vars
-        $cm            = new \ContentManager();
-        $contents      = $cm->getContents($pkContents);
-        $articleTitles = array();
-        $articleUris   = array();
-
-        // Build information for author front pages
-        $authors = array();
-        if (count($pkAuthors) > 0) {
-            $authorsForContents = $author->find('id IN ('.implode(',', $pkAuthors).')');
-            foreach ($authorsForContents as $author) {
-                $authors['RSS'.$author->id] = $author->name;
-            }
-        }
-
-        // Build information for frontpages
-        $sections = array();
-        foreach ($this->cacheManager->cacheGroups as $cacheGroup) {
-            $categoryName = $ccm->getTitle($cacheGroup);
-            $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
-        }
-
+        $cm       = new \ContentManager();
+        $contents = $cm->getContents($pkContents);
+        $index = 0;
         foreach ($caches as &$cache) {
             $cache['cache_id'] = $cache["category"] . "|" . $cache["resource"];
-            $cache['tpl']      = $cache["template"] . ".tpl";
-            $this->identifyCacheType($cache, $contents, $pkAuthors);
+            $cache['tpl'] = $cache["template"] . ".tpl";
+            $cache['id']  = $cache['cache_id']."@".$cache['tpl'];
+            $this->identifyCacheType($cache, $contents);
+
+            $index++;
         }
 
         // new code
@@ -106,12 +85,7 @@ class CacheManagerController extends Controller
             array(
                 'elements_per_page' => $elementsPerPage,
                 'extra'             => array(
-                    'authors'      => $authors,
-                    'sections'     => $sections,
-                    // 'titles'       => $articleTitles,
-                    // 'contentUris'  => $articleUris,
                     'caches'       => $caches,
-                    // 'allAuthors'   => $allAuthorsArray,
                 ),
                 'page'              => $page,
                 'results'           => $caches,
@@ -133,27 +107,47 @@ class CacheManagerController extends Controller
      **/
     public function removeAction(Request $request)
     {
+        // Initialization of the template cache manager
+        $this->cacheManager = $this->get('template_cache_manager');
+        $this->cacheManager->setSmarty(new \Template(TEMPLATE_USER));
+
         $itemsSelected = $request->request->get('selected', null);
-        $itemsCacheIds = $request->request->get('cacheid');
-        $itemsTemplate = $request->request->get('tpl');
 
-        if (is_null($itemsSelected) && is_null($itemsCacheIds) && is_null($itemsTemplate)) {
-            $itemsSelected = $request->query->get('selected', null);
-            $itemsCacheIds = $request->query->get('cacheid');
-            $itemsTemplate = $request->query->get('tpl');
-        }
-
-        // If there was selected more than one item
-        // delete them if not delete only one
+        $errors = $success = [];
         if (count($itemsSelected) > 0) {
             foreach ($itemsSelected as $item) {
-                $result = $this->cacheManager->delete($itemsCacheIds[$item], $itemsTemplate[$item]);
+                list($cacheId, $tpl) = explode('@', $item);
+                $result = $this->cacheManager->delete($cacheId, $tpl);
+
+                if ($result) {
+                    $success[] = array(
+                        'id'      => $item,
+                        'message' => _('Item deleted successfully'),
+                        'type'    => 'success'
+                    );
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to delete the item "%s"'), $item),
+                        'type'    => 'error'
+                    );
+                }
             }
-        } elseif (is_string($itemsCacheIds)) {
-            $result = $this->cacheManager->delete($itemsCacheIds, $itemsTemplate);
+
+
+        } else {
+            $errors[] = array(
+                'message' => _('No items selected'),
+                'type'    => 'error'
+            );
         }
 
-        return new JsonResponse('OK', 200);
+        return new JsonResponse(
+            array(
+                'messages'  => array_merge($success, $errors),
+            )
+        );
+
     }
 
     /**
@@ -222,7 +216,7 @@ class CacheManagerController extends Controller
      *
      * @return void
      **/
-    private function identifyCacheType(&$cache, $contents, $authors)
+    private function identifyCacheType(&$cache, $contents)
     {
         $url = '';
         $title = _('Unknown cache file');

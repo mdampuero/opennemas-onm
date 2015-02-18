@@ -12,8 +12,6 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
      * Permanently removes a contents by using a confirmation dialog
      */
     $scope.removePermanently = function(content) {
-
-      console.log(content, content.cache_id, content.template);
       var modal = $modal.open({
         templateUrl: 'modal-cache-remove',
         backdrop: 'static',
@@ -26,12 +24,9 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
           },
           success: function() {
             return function() {
-              var url = routing.generate(
-                'backend_ws_cachemanager_remove',
-                { contentType: content.content_type_name, id: content.id }
-              );
+              var url = routing.generate('backend_ws_cachemanager_remove');
 
-              return $http.post(url);
+              return $http.post(url, { selected: [ content.id ] });
             };
           }
         }
@@ -39,7 +34,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           if (response.status == 200) {
             $scope.list($scope.route);
@@ -67,12 +62,9 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
           },
           success: function() {
             return function() {
-              var url = routing.generate(
-                'backend_ws_cachemanager_remove',
-                { contentType: 'content' }
-              );
+              var url = routing.generate('backend_ws_cachemanager_remove');
 
-              return $http.post(url, {ids: $scope.selected.contents});
+              return $http.post(url, { selected: $scope.selected.contents});
             };
           }
         }
@@ -80,7 +72,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           $scope.selected.total = 0;
           $scope.selected.contents = [];
