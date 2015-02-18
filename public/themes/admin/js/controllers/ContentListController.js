@@ -425,7 +425,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           if (response.status == 200) {
             $scope.list($scope.route);
@@ -507,7 +507,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           if (response.status == 200) {
             $scope.list($scope.route);
@@ -548,7 +548,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           $scope.selected.total = 0;
           $scope.selected.contents = [];
@@ -590,7 +590,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           if (response.status == 200) {
             $scope.list($scope.route);
@@ -631,7 +631,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           $scope.selected.total = 0;
           $scope.selected.contents = [];
@@ -676,7 +676,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      *
      * @param  mixed messages List of messages provided by the server.
      */
-    function renderMessages(messages) {
+    $scope.renderMessages = function(messages) {
       for (var i = 0; i < messages.length; i++) {
         var params = {
           id: new Date().getTime() + '_' + messages[i].id,
