@@ -177,15 +177,16 @@ class ImagesController extends Controller
         $photosSaved = 0;
         foreach (array_keys($photosRAW) as $id) {
             $photoData = array(
-                'id'          => filter_var($id, FILTER_SANITIZE_STRING),
-                'title'       => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
-                'description' => filter_var($_POST['description'][$id], FILTER_SANITIZE_STRING),
-                'metadata'    => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
-                'author_name' => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
-                'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
-                'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
-                'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
-                'content_status'   => 1
+                'id'             => filter_var($id, FILTER_SANITIZE_STRING),
+                'title'          => filter_var($_POST['title'][$id], FILTER_SANITIZE_STRING),
+                'description'    => filter_var($_POST['description'][$id], FILTER_SANITIZE_STRING),
+                'metadata'       => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
+                'author_name'    => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
+                'created'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
+                'starttime'      => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
+                'address'        => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
+                'category'       => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
+                'content_status' => 1
             );
 
             $photo = new \Photo($id);
