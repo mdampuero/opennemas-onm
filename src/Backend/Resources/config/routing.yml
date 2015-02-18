@@ -960,10 +960,6 @@ admin_tpl_manager_config:
     path:     /system/cachemanager/config
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
-admin_tpl_manager_delete:
-    path:     /system/cachemanager/delete
-    defaults: { _controller  : BackendBundle:CacheManager:delete }
-
 admin_tpl_manager_deleteall:
     path:     /system/cachemanager/deleteall
     defaults: { _controller  : BackendBundle:CacheManager:deleteAll }

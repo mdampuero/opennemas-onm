@@ -27,7 +27,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
           success: function() {
             return function() {
               var url = routing.generate(
-                'backend_ws_content_remove_permanently',
+                'backend_ws_cachemanager_remove',
                 { contentType: content.content_type_name, id: content.id }
               );
 
@@ -47,5 +47,48 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
         }
       });
     };
-    console.log(this);
+
+    /**
+     * Permanently removes a list of contents by using a confirmation dialog
+     */
+    $scope.removePermanentlySelected = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-cache-batch-remove',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_cachemanager_remove',
+                { contentType: 'content' }
+              );
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
 }]);

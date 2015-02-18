@@ -4,8 +4,8 @@ backend_ws_cachemanager_list:
     options:
         expose: true
 
-backend_ws_content_remove_permanently:
+backend_ws_cachemanager_remove:
     path:     /cachemanager/remove
-    defaults: { _controller: BackendWebServiceBundle:CacheManager:list }
+    defaults: { _controller: BackendWebServiceBundle:CacheManager:remove }
     options:
         expose: true

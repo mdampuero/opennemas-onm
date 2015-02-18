@@ -98,7 +98,7 @@ class CacheManagerController extends Controller
         foreach ($caches as &$cache) {
             $cache['cache_id'] = $cache["category"] . "|" . $cache["resource"];
             $cache['tpl']      = $cache["template"] . ".tpl";
-            $this->identifyCacheType($cache, $contents);
+            $this->identifyCacheType($cache, $contents, $pkAuthors);
         }
 
         // new code
@@ -118,6 +118,42 @@ class CacheManagerController extends Controller
                 'total'             => $total,
             )
         );
+    }
+
+    /**
+     * Recreates a template cache
+     *
+     * @param Request $request the request object
+     *
+     * @return string the string response
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="CACHE_MANAGER")
+     **/
+    public function removeAction(Request $request)
+    {
+        $itemsSelected = $request->request->get('selected', null);
+        $itemsCacheIds = $request->request->get('cacheid');
+        $itemsTemplate = $request->request->get('tpl');
+
+        if (is_null($itemsSelected) && is_null($itemsCacheIds) && is_null($itemsTemplate)) {
+            $itemsSelected = $request->query->get('selected', null);
+            $itemsCacheIds = $request->query->get('cacheid');
+            $itemsTemplate = $request->query->get('tpl');
+        }
+
+        // If there was selected more than one item
+        // delete them if not delete only one
+        if (count($itemsSelected) > 0) {
+            foreach ($itemsSelected as $item) {
+                $result = $this->cacheManager->delete($itemsCacheIds[$item], $itemsTemplate[$item]);
+            }
+        } elseif (is_string($itemsCacheIds)) {
+            $result = $this->cacheManager->delete($itemsCacheIds, $itemsTemplate);
+        }
+
+        return new JsonResponse('OK', 200);
     }
 
     /**
@@ -161,6 +197,7 @@ class CacheManagerController extends Controller
                 'gallery-inner'      => 'album\.tpl\.php$',
                 'poll-frontpage'     => 'poll_frontpage\.tpl\.php$',
                 'poll-inner'         => 'poll.tpl\.php$',
+                'sitemap'            => 'sitemap.*\.php'
             );
             $filter  .= $regexp[ $_REQUEST['type'] ];
             $params[] = 'type='.$_REQUEST['type'];
@@ -185,40 +222,77 @@ class CacheManagerController extends Controller
      *
      * @return void
      **/
-    private function identifyCacheType(&$cache)
+    private function identifyCacheType(&$cache, $contents, $authors)
     {
-        $url = '#notfound';
-        $title = 'Unknown cache file';
+        $url = '';
+        $title = _('Unknown cache file');
+        $isContent = false;
+        $extra = [];
 
         if (($cache['template'] == 'article')) {
             $type  = 'article';
-            $title = _('Article inner').': '." \n".var_export($cache, true);
-            $url   = '/article/bla';
-        } elseif (in_array($cache['template'], ['video_inner', 'video_frontpage', 'video_main_frontpage' ])) {
+            $title = _('Article inner').': ';
+            $isContent = true;
+        } elseif ($cache['template'] == 'mobile-article-inner') {
+            $type  = 'mobile';
+            $title = _('Mobile article inner').': ';
+            $url   .= 'mobile/';
+            $isContent = true;
+        } elseif ($cache['template'] == 'frontpage-mobile') {
+            $type  = 'mobile';
+            $title = _('Mobile frontpage').': '.$cache['category'];
+            if ($cache['category'] == 'ultimas') {
+                $url .= 'mobile/last';
+            } else {
+                $url .= 'mobile/';
+            }
+        } elseif ($cache['template'] == 'opinionmobile') {
+            $type  = 'mobile';
+            $title = _('Mobile opinion inner').': ';
+            $url   .= 'mobile/';
+            $isContent = true;
+        } elseif ($cache['template'] == 'opinion-index') {
+            $type  = 'mobile';
+            $title = _('Mobile opinion frontpage');
+            $url   .= 'mobile/opinion';
+        } elseif (in_array($cache['template'], ['video_frontpage', 'video_main_frontpage'])) {
             $type  = 'video';
-            $title = _('Video inner').': '." \n".var_export($cache, true);
-            $url   = '/article/bla';
-        } elseif (in_array($cache['template'], ['album_frontpage', 'album_frontpage'])) {
+            $title = _('Video frontpage').': '.$cache['category'];
+            $url   = 'video/'.$cache['category'];
+        } elseif (in_array($cache['template'], ['video_inner' ])) {
+            $type  = 'video';
+            $title = _('Video inner').': ';
+            $isContent = true;
+        } elseif (in_array($cache['template'], ['album_frontpage'])) {
             $type  = 'album';
-            $title = _('Album frontpage').': '." \n".var_export($cache, true);
+            $title = _('Album frontpage').': '.$cache['category'];
             $url   = '/album/bla';
         } elseif (in_array($cache['template'], ['album'])) {
             $type  = 'album';
-            $title = _('Album inner').': '." \n".var_export($cache, true);
-            $url   = '/album/bla';
-        } elseif (in_array($cache['template'], ['opinion_author_index', 'opinion_frontpage', 'opinion', 'blog_inner'])) {
+            $title = _('Album inner').': ';
+            $isContent = true;
+        } elseif (in_array($cache['template'], ['opinion_frontpage'])) {
             $type  = 'opinion';
-            $title = _('Opinion inner').': '." \n".var_export($cache, true);
-            $url   = '/opinion/bla';
+            $title = _('Opinion frontpage').': '.sprintf(_("Page %s"), $cache['resource']);
+            $url   = 'opinion/?page='.$cache['resource'];
+        } elseif ($cache['template'] == 'opinion_author_index') {
+            $type  = 'opinion';
+            $title = _('Opinion frontpage').': '.sprintf(_("Page %s"), $cache['resource']);
+            $url   = 'opinion/?page='.$cache['resource'];
+        } elseif (in_array($cache['template'], ['opinion', 'blog_inner'])) {
+            $type  = 'opinion';
+            $title = _('Opinion inner').': ';
             if ($cache['category'] == 'blog') {
-                $title = _('Blog inner').': '." \n".var_export($cache, true);
+                $title = _('Blog inner').': ';
             }
+            $isContent = true;
         } elseif (strtolower($cache['template']) == 'rss') {
             $type  = 'rss';
-            $title = _('RSS').': '." \n".var_export($cache, true);
+            $title = _('RSS').': '.$cache['category'];
             $url   = '/rss/bla';
             if ($cache['category'] == 'rssauthor') {
-                $title = _('RSS Author').': '." \n".var_export($cache, true);
+                $title = _('RSS Author').': '.$cache['resource'];
+                $url = 'rss/author/'.$cache['resource'];
             }
         } elseif (in_array($cache['template'], ['frontpage'])) {
             $type  = 'frontpage';
@@ -230,30 +304,62 @@ class CacheManagerController extends Controller
                 $url   = '/seccion/'.$cache['resource'];
                 $title .= $cache['resource'];
             }
-        } elseif (in_array($cache['template'], ['poll_frontpage', 'poll'])) {
+        } elseif (in_array($cache['template'], ['poll'])) {
             $type  = 'poll';
-            $title = _('Poll inner').': '." \n".var_export($cache, true);
-            $url   = '/poll/bla';
+            $title = _('Poll inner').': ';
+            $isContent = true;
+        } elseif ($cache['template'] == 'poll_frontpage') {
+            $type  = 'poll';
+            $title = _('Poll frontpage').': '.$cache['category'];
+            $url   = '/polls/';
         } elseif ($cache['template'] == 'custom_css') {
             $type = 'custom_css';
-            $title = _('Custom CSS: ')." \n".var_export($cache, true);
+            $title = _('Custom CSS');
+        } elseif ($cache['template'] == 'sitemap') {
+            $type = 'sitemap';
+            if (empty($cache['resource'])) {
+                $cache['resource'] = 'home';
+            }
+            switch ($cache['resource']) {
+                case 'home':
+                    $url = 'sitemap.xml.gz';
+                    break;
+
+                case 'web':
+                    $url = 'sitemapweb.xml.gz';
+                    break;
+
+                case 'news':
+                    $url = 'sitemapnews.xml.gz';
+                    break;
+            }
+            $title = _('Sitemap: ').$cache['resource'];
         } else {
             $type  = 'unknown';
-            $title = _('Unknown cache file')." \n".var_export($cache, true);
+            $url   = '#notfound';
+            $title = _('Unknown cache file');
+            $extra = var_export($cache, true);
         }
 
-        // Missed types books/covers/tags/special/static_pages/
 
-        // if ($cache["template"] == 'opinion_author_index') {
-        //     if (preg_match('/([0-9]+)_([0-9]+)/', $cache['resource'], $match)) {
-        //         $cache["authorid"] =(int)$match[1];
-        //         $cache["page"] =$match[2];
-        //     }
-        // }
+        if ($isContent) {
+            $content = array_filter($contents, function($contentItem) use ($cache) {
+                if ($contentItem->id == $cache['resource']) {
+                    return $contentItem;
+                }
+            });
+            if (count($content) > 0) {
+                $content = array_pop($content);
+                $url .= $content->uri;
+                $title .= $content->title;
+            }
+        }
 
         $cache['type']             = $type;
         $cache['url']              = $url;
         $cache['title']            = $title;
+        $cache['extra']            = $extra;
+        $cache['expires']          = date('c', $cache['expires']);
 
         return $cache;
     }
