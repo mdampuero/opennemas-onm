@@ -90,9 +90,8 @@ class CacheManagerController extends Controller
 
         if ($this->request->getMethod() == 'POST') {
             $config = array();
-
-            $cacheGroups             = $request->request->get('group');
-            $cacheGroupsCacheEnabled = $request->request->get('caching');
+            $cacheGroups             = $request->request->get('groups');
+            $cacheGroupsCacheEnabled = $request->request->get('enabled');
             $cacheGroupsLifeTime     = $request->request->get('cache_lifetime');
 
             foreach ($cacheGroups as $section) {

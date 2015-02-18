@@ -65,14 +65,14 @@
              <tr>
               <td>
                 <div class="checkbox check-default">
-                    <input id="caching[{$k|default:""}]" {if $v.caching}checked="checked"{/if} value="1" type="checkbox">
-                    <label for="checkbox[%$index%]"></label>
+                    <input name="enabled[{$k|default:""}]" id="enabled[{$k|default:""}]" {if $v.caching}checked="checked"{/if} value="1" type="checkbox">
+                    <label for="enabled[{$k|default:""}]"></label>
                 </div>
+                <input type="hidden" name="groups[]" value="{$k|default:""}">
               </td>
               <td>
                 <img src="{$params.IMAGE_DIR}template_manager/elements/{$groupIcon.$k}" title="Caché de opinión interior" />
                 {$groupName.$k|default:$k}
-                <input type="hidden" name="group[]" value="{$k|default:""}" />
               </td>
 
               <td class="right">
