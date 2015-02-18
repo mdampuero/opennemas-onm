@@ -225,20 +225,4 @@
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
-
-        <script type="text/javascript">
-        $(function() {
-            $('.select2').select2({
-                formatSelection: function(state) {
-                    var element = state.element;
-                    if ($(element).parents('.select2').data('label') != null) {
-                        return $(element).parents('.select2').data('label')
-                            + ': ' + state.text;
-                    }
-
-                    return state.text
-                }
-            });
-        })
-        </script>
     {/block}

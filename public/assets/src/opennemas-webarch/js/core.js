@@ -622,6 +622,19 @@ $('body.open-menu-left .page-content').on('touchstart', function (e) {
         $(this).find('#main-menu').removeClass('mini');
     };
 
+    // Opennemas inclusions
+    $('.select2').select2({
+        formatSelection: function(state) {
+            var element = state.element;
+            if ($(element).parents('.select2').data('label') != null) {
+                return $(element).parents('.select2').data('label')
+                    + ': ' + state.text;
+            }
+
+            return state.text
+        }
+    });
+
 })(jQuery);
 
 function blockUI(el) {
