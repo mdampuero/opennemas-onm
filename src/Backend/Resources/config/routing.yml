@@ -1101,3 +1101,17 @@ admin_getting_started_accept_terms:
 admin_getting_started_finish:
     path:     /getting-started/finish
     defaults: { _controller  : BackendBundle:GettingStarted:finishWizard }
+
+admin_menu_sidebar_set:
+    path: /sidebar
+    defaults: { _controller  : BackendBundle:MenuSidebar:set }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+admin_menu_sidebar_get:
+    path: /sidebar
+    defaults: { _controller  : BackendBundle:MenuSidebar:get }
+    methods:  [ GET ]
+    options:
+        expose: true
