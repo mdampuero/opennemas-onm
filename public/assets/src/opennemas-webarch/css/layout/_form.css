@@ -6,6 +6,10 @@
   top: 8px;
 }
 
+.controls {
+  position: relative;
+}
+
 .input-group .btn {
   padding-top: 6px;
 }
@@ -53,12 +57,14 @@
   min-height: 14px;
   margin-bottom:0;
 }
+
 .uneditable-input, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], select {
   border-color:#d1dade;
   &:hover, &:focus {
     border-color:#d1dade;
   }
 }
+
 .input-group-addon {
   border-color:#d1dade;
 }

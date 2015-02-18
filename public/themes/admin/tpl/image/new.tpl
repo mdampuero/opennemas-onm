@@ -1,38 +1,16 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  <style type="text/css">
-    .map {
-      background: white;
-      border-radius: 2px;
-    }
-    .map > div {
-      min-height:400px;
-    }
-    .iptc-exif .info {
-      display:none;
-    }
-    .iptc-exif .toggler {
-      cursor:pointer;
-    }
-    .iptc-exif .icon-plus {
-      font-size:.8em;
-      vertical-align:middle;
-    }
-    .iptc-exif .photo-static-info p {
-      margin-bottom:0;
-    }
-    .address_search_input {
-      width:435px;
-    }
-  </style>
+  {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+  " filters="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}" media="screen">
+  {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
   <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
-  {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
-                    @AdminTheme/js/onm/jquery.datepicker.js,
-                    @AdminTheme/js/libs/gmaps.js" }
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+                    @Common/components/gmaps/gmaps.js" }
     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 {/block}
@@ -96,7 +74,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 class="modal-title">{t}Pick a location for the image{/t}</h3>
+          <h4 class="modal-title">{t}Pick a location for the image{/t}</h4>
         </div>
         <div class="modal-body">
           <div id="geolocation" class="has-map">
@@ -138,11 +116,7 @@
       $('[rel="tooltip"]').tooltip({ position: 'left' });
 
       $('.date').datetimepicker({
-          hourGrid: 4,
-          showAnim: "fadeIn",
-          dateFormat: 'yy-mm-dd',
-          timeFormat: 'hh:mm:ss',
-          minuteGrid: 10
+        format: 'YYYY-MM-D HH:mm:ss'
       });
 
       $('#ui-datepicker-div').css('clip', 'auto');

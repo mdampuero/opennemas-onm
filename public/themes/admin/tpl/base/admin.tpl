@@ -69,7 +69,8 @@
             @Common/src/opennemas-webarch/css/layout/*,
             @Common/src/opennemas-webarch/css/main.less,
 
-            @AdminTheme/less/_comment.less"
+            @AdminTheme/less/_comment.less,
+            @AdminTheme/less/_image.less"
         filters="cssrewrite,less"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
     {/block}
 
