@@ -36,7 +36,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -44,16 +44,11 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
                     </li>
@@ -84,17 +79,17 @@
     <div class="page-navbar filters-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
-                <ul class="nav quick-section">
+                <ul class="nav quick-section ng-cloak">
                     <li class="m-r-10 input-prepend inside search-input no-boarder">
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select class="select2" name="type" ng-model="criteria.renderlet" data-label="{t}Type{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                             <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
@@ -102,14 +97,14 @@
                             <option value="smarty">{t}Smarty{/t}</option>
                         </select>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select class="select2" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
-                    <li class="quicklinks hidden-xs">
+                    <li class="quicklinks hidden-xs hidden-sm">
                         <select class="select2 xmedium" ng-model="pagination.epp">
                             <option value="10">10</option>
                             <option value="25">25</option>
@@ -118,21 +113,13 @@
                             <option value="500">500</option>
                         </select>
                     </li>
-                    <li class="quicklinks hidden-xs">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="refresh()">
-                            <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
-                        </button>
-                    </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
+                    </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
                             <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
@@ -166,7 +153,7 @@
                                 </div>
                             </th>
                             <th>{t}Name{/t}</th>
-                            <th style="width:70px">{t}Type{/t}</th>
+                            <th style="width:70px" class="hidden-xs">{t}Type{/t}</th>
                             <th class="center" style="width:20px">{t}Published{/t}</th>
                         </thead>
                         <tbody>
@@ -197,7 +184,7 @@
                                         {/acl}
                                     </div>
                                 </td>
-                                <td>
+                                <td class="hidden-xs">
                                     [% content.renderlet %]
                                 </td>
                                 <td class="right">
@@ -213,10 +200,10 @@
                 </div>
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-                <div class="pull-left pagination-info" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="contents.length > 0">
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
