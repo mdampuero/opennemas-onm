@@ -735,32 +735,32 @@ admin_opinions_config:
     path:     /opinions/config
     defaults: { _controller  : BackendBundle:Opinions:config }
 
-# Opinion author controller routes
+# Author controller routes
 admin_opinion_authors:
-    path:     /opinion/authors
-    defaults: { _controller  : BackendBundle:Opinions:listAuthor }
+    path:     /authors
+    defaults: { _controller  : BackendBundle:Authors:list }
 
-admin_opinion_author_show:
-    path:     /opinion/author/{id}/show
-    defaults: { _controller  : BackendBundle:Opinions:showAuthor }
+admin_author_show:
+    path:     /author/{id}/show
+    defaults: { _controller  : BackendBundle:Authors:show }
     options:
         expose: true
 
-admin_opinion_author_create:
-    path:     /opinion/authors/create
-    defaults: { _controller  : BackendBundle:Opinions:createAuthor }
+admin_author_create:
+    path:     /authors/create
+    defaults: { _controller  : BackendBundle:Authors:create }
 
-admin_opinion_author_update:
-    path:     /opinion/author/{id}/update
-    defaults: { _controller  : BackendBundle:Opinions:updateAuthor }
+admin_author_update:
+    path:     /author/{id}/update
+    defaults: { _controller  : BackendBundle:Authors:update }
 
-admin_opinion_author_delete:
-    path:     /opinion/author/{id}/delete
-    defaults: { _controller  : BackendBundle:Opinions:deleteAuthor }
+admin_author_delete:
+    path:     /author/{id}/delete
+    defaults: { _controller  : BackendBundle:Authors:delete }
 
-admin_opinion_author_batchdelete:
-    path:     /opinion/authors/batch-delete
-    defaults: { _controller  : BackendBundle:Opinions:batchDeleteAuthor }
+admin_author_batchdelete:
+    path:     /authors/batch-delete
+    defaults: { _controller  : BackendBundle:Authors:batchDelete }
 
 # Comments controller routes
 admin_comments:
