@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
-        @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
-        @Common/js/jquery/jquery.tagsinput.min.js"}
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+                      @Common/js/jquery/jquery.tagsinput.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script type="text/javascript">
@@ -12,13 +11,11 @@
                 fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
             }
         });
-        jQuery('#closetime').datetimepicker({
-            hourGrid: 4,
-            showAnim: 'fadeIn',
-            dateFormat: 'yy-mm-dd',
-            timeFormat: 'hh:mm:ss',
-            minuteGrid: 10,
+
+        $('#closetime').datetimepicker({
+          format: 'YYYY-MM-D HH:mm:ss'
         });
+
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
@@ -52,11 +49,9 @@
 {/block}
 
 {block name="header-css" append}
-<style type="text/css">
-    .poll_answer {
-        margin-bottom:5px;
-    }
-</style>
+    {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen">
+    {/stylesheets}
 {/block}
 
 

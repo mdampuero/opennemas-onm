@@ -7,7 +7,8 @@
 {/block}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/css/jquery/colorbox.css
+  {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+                    @AdminTheme/css/jquery/colorbox.css
   " filters="cssrewrite"}
     <link rel="stylesheet" href="{$asset_url}" media="screen">
   {/stylesheets}
@@ -28,8 +29,7 @@
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/onm/jquery.datepicker.js,
-                    @AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
                     @AdminTheme/js/jquery/jquery.colorbox-min.js,
                     @AdminTheme/js/onm/article.js,
                     @AdminTheme/js/onm/content-provider.js,
@@ -61,6 +61,17 @@
           var tags = title.val() + " " + category.data('name');
           fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
         }
+      });
+
+      $('#starttime, #endtime').datetimepicker({
+        format: 'YYYY-MM-D HH:mm:ss'
+      });
+
+      $("#starttime").on("dp.change",function (e) {
+          $('#endtime').data("DateTimePicker").minDate(e.date);
+      });
+      $("#endtime").on("dp.change",function (e) {
+          $('#starttime').data("DateTimePicker").maxDate(e.date);
       });
 
       $('#formulario').on('submit', function(){

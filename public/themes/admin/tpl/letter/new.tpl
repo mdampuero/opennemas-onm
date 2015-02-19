@@ -1,8 +1,13 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+    {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen">
+    {/stylesheets}
+{/block}
 
 {block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js"}
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
 <script>
@@ -10,27 +15,7 @@ jQuery(document).ready(function($) {
     $('#letter-edit').tabs();
 
     $('#created').datetimepicker({
-        hourGrid: 4,
-        showAnim: "fadeIn",
-        dateFormat: 'yy-mm-dd',
-        timeFormat: 'hh:mm:ss',
-        minuteGrid: 10,
-        onClose: function(dateText, inst) {
-            var endDateTextBox = jQuery('#created');
-            if (endDateTextBox.val() != '') {
-                var testStartDate = new Date(dateText);
-                var testEndDate = new Date(endDateTextBox.val());
-                if (testStartDate > testEndDate)
-                    endDateTextBox.val(dateText);
-            }
-            else {
-                endDateTextBox.val(dateText);
-            }
-        },
-        onSelect: function (selectedDateTime){
-            var start = jQuery(this).datetimepicker('getDate');
-            jQuery('#created').datetimepicker('option', 'minDate', new Date(start.getTime()));
-        }
+      format: 'YYYY-MM-D HH:mm:ss'
     });
 
     $('#title').on('change', function(e, ui) {
