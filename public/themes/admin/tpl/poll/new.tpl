@@ -67,10 +67,10 @@
                             {t}Polls{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>{if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h5>
                     </li>
                 </ul>
@@ -210,18 +210,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="grid simple">
-                            <div class="grid-title">
-                                <h4>{t}Tags{/t}</h4>
-                            </div>
-                            <div class="grid-body">
-                                 <div class="form-group">
+
+                                <div class="form-group">
+                                  <label for="metadata" class="form-label">{t}Tags{/t}</label>
                                     <div class="controls">
                                         <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$poll->metadata|clearslash|escape:"html"}"/>
                                     </div>

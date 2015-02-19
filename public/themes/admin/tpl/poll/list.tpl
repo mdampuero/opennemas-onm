@@ -50,7 +50,7 @@
                         {acl isAllowed="POLL_SETTINGS"}
                             <li class="quicklinks">
                                 <a class="btn btn-link" href="{url name=admin_polls_config}" title="{t}Config album module{/t}">
-                                    <i class="fa fa-gear"></i>
+                                    <i class="fa fa-gear fa-lg"></i>
                                 </a>
                             </li>
                             <li class="quicklinks">
