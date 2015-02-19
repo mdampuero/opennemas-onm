@@ -1,208 +1,206 @@
 {acl isAllowed='PHOTO_ADMIN'}
-    {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="grid simple">
-                    <div class="grid-title">
-                        <h4>{t}Image{/t}</h4>
+  {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Image{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="row">
+              <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+                <h5>{t}Frontpage image{/t}</h5>
+                <div class="form-group">
+                  <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                    <div class="img-thumbnail" ng-if="!photo1">
+                      <div class="thumbnail-empty">
+                        <i class="fa fa-picture-o fa-2x"></i>
+                        <h5>Pick an image</h5>
+                      </div>
                     </div>
-                    <div class="grid-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h5>{t}Frontpage image{/t}</h5>
-                                <div class="frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
-                                    <div class="image-data">
-                                        <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="frontpage-image" class="image thumbnail">
-                                            {if is_object($photo1)}
-                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
-                                            {/if}
-                                        </a>
-                                        <div class="article-resource-footer">
-                                            <label for="title">{t}Footer text{/t}</label>
-                                            <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
-                                            <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id" />
-                                        </div>
-                                    </div>
-
-                                    <div class="not-set">
-                                        {t}Image not set{/t}
-                                    </div>
-
-                                    <div class="btn-group">
-                                        <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
-                                        <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash-o"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>{t}Inner image{/t}</h5>
-                                <div class="inner-image {if isset($photo2) && $photo2->name}assigned{/if}">
-                                    <div class="image-data">
-                                        <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
-                                            {if is_object($photo2)}
-                                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}"/>
-                                            {/if}
-                                        </a>
-                                        <div class="article-resource-footer">
-                                            <label for="title">{t}Footer text{/t}</label>
-                                            <textarea name="img2_footer" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
-                                            <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
-                                        </div>
-                                    </div>
-                                    <div class="not-set">
-                                        {t}Image not set{/t}
-                                    </div>
-                                    <div class="btn-group">
-                                        <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="btn btn-small">{t}Set image{/t}</a>
-                                        <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash-o"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {is_module_activated name="CRONICAS_MODULES"}
-                                <div class="col-md-4">
-                                    <h5>{t}Home image{/t}</h5>
-                                    <div class="home-image {if isset($photo3) && $photo3->name}assigned{/if}">
-                                        <div class="image-data">
-                                            <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="image thumbnail">
-                                                {if is_object($photo3)}
-                                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}"/>
-                                                {/if}
-                                            </a>
-                                            <div class="article-resource-footer">
-                                                <label for="title">{t}Image footer text{/t}</label>
-                                                <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
-                                                <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id"/>
-                                            </div>
-                                        </div>
-                                        <div class="not-set">
-                                            {t}Image not set{/t}
-                                        </div>
-                                        <div class="btn-group">
-                                            <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="btn btn-small">{t}Set image{/t}</a>
-                                            <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash-o"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            {/is_module_activated}
-                        </div>
-                    </div>
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220" ng-if="photo1"></dynamic-image>
+                  </div>
                 </div>
+                <div class="form-group" ng-if="photo1">
+                  <label class="form-label" for="img1_footer">
+                    {t}Footer text{/t}
+                  </label>
+                  <div class="controls">
+                    <textarea class="form-control" name="img1_footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                    <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo1 = {json_encode($photo2)|replace:'"':'\''}"{/if}>
+                <h5>{t}Inner image{/t}</h5>
+                <div class="form-group">
+                  <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                    <div class="img-thumbnail" ng-if="!photo2">
+                      <div class="thumbnail-empty">
+                        <i class="fa fa-picture-o fa-2x"></i>
+                        <h5>Pick an image</h5>
+                      </div>
+                    </div>
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" transform="thumbnail,220,220" ng-if="photo2"></dynamic-image>
+                  </div>
+                </div>
+                <div class="form-group" ng-if="photo2">
+                  <label class="form-label" for="title">
+                    {t}Footer text{/t}
+                  </label>
+                  <div class="controls">
+                    <textarea class="form-control" name="img2_footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                    <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
+                  </div>
+                </div>
+              </div>
+
+              {is_module_activated name="CRONICAS_MODULES"}
+                <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo1 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
+                  <h5>{t}Home image{/t}</h5>
+                  <div class="form-group">
+                    <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                      <div class="img-thumbnail" ng-if="!photo3">
+                        <div class="thumbnail-empty">
+                          <i class="fa fa-picture-o fa-2x"></i>
+                          <h5>Pick an image</h5>
+                        </div>
+                      </div>
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" transform="thumbnail,220,220" ng-if="photo3"></dynamic-image>
+                    </div>
+                  </div>
+                  <div class="form-group" ng-if="photo3">
+                    <label for="params[imageHomeFooter]">
+                      {t}Image footer text{/t}
+                    </label>
+                    <div class="controls">
+                      <textarea class="form-control" name="params[imageHomeFooter]">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                      <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id"/>
+                    </div>
+                  </div>
+                </div>
+              {/is_module_activated}
             </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        {if !isset($withoutVideo)}
-            {acl isAllowed="VIDEO_ADMIN"}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="grid simple">
-                            <div class="grid-title">
-                                <h4>{t}Video{/t}</h4>
-                            </div>
-                            <div class="grid-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h5>{t}Video for frontpage{/t}</h5>
-                                        <div>
-                                            <a class="delete-button" onclick="javascript:recuperar_eliminar('video1');">
-                                                <img src="/themes/admin/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
-                                            </a>
-                                            <div class="clearfix">
-                                                <div class="thumbnail article-resource-image">
-                                                    {if $video1->pk_video}
-                                                        <img src="{$video1->information['thumbnail']}"
-                                                             name="{$video1->pk_video}" style="width:120px" />
-                                                    {else}
-                                                        {if isset($video1) && $video1->pk_video}
-                                                            {if $video1->author_name == 'internal'}
-                                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
-                                                            {else}
-                                                            <img src="{$video1->information['thumbnail']}" />
-                                                            {/if}
-                                                        {else}
-                                                        <div class="drop-here">
-                                                            {t}Drop a video to here{/t}
-                                                        </div>
-                                                        {/if}
-                                                    {/if}
-                                                </div>
-                                                <div class="article-resource-image-info">
-                                                    <div><label>{t}File name{/t}</label>     <span class="filename">{$video1->name|default:'default_img.jpg'}</span></div>
-                                                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video1->created|default:""}</span></div>
-                                                    <div><label>{t}Description{/t}</label>   <span class="description">{$video1->description|escape:'html'}</span></div>
-                                                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$video1->metadata|default:""}</span></div>
-                                                </div>
-                                            </div><!-- / -->
-                                            <div class="article-resource-footer">
-                                                <!-- <label for="title">{t}Footer text for frontpage image:{/t}</label> -->
-                                                <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
-                                                <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>{t}Video for inner article page{/t}</h5>
-                                        <div>
-                                            <a class="delete-button">
-                                                <img src="/themes/admin/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
-                                            </a>
-                                            <div class="clearfix">
-                                                <div class="thumbnail article-resource-image">
-                                                    {if isset($video2) && $video2->pk_video}
-                                                        {if $video2->author_name == 'internal'}
-                                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
-                                                        {else}
-                                                            <img src="{$video2->information['thumbnail']}"/>
-                                                        {/if}
-                                                    {else}
-                                                        <div class="drop-here">
-                                                            {t}Drop a video to here{/t}
-                                                        </div>
-                                                    {/if}
-                                                </div>
-                                                <div class="article-resource-image-info">
-                                                    <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
-                                                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
-                                                    <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
-                                                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
-                                                </div>
-                                            </div>
-                                            <div class="article-resource-footer">
-                                                <label for="title">{t}Footer text for inner video:{/t}</label>
-                                                <textarea name="footer_video2" style="width:95%" class="related-element-footer">{$article->footer_video2|clearslash|escape:'html'}</textarea>
-                                                <input type="hidden" name="fk_video2" value="{$video2->pk_video}" class="related-element-id"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>{t}Available videos{/t}</h5>
-                                        <div id="videos-container" class="photos">
-                                            <div class="input-append">
-                                                <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
-                                                       placeholder="{t}Search videos by title...{/t}"  style="width: 150px !important;"
-                                                       />
-                                                <select style="width:140px"  id="category_video" name="category_video">
-                                                    <option value="0">GLOBAL</option>
-                                                    {section name=as loop=$allcategorys}
-                                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                                        {section name=su loop=$subcat[as]}
-                                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                                        {/section}
-                                                    {/section}
-                                                </select>
-                                            </div>
-                                            <div id="videos">
-                                                <!-- Ajax -->
-                                           </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {/acl}
-        {/if}
-    {/is_module_activated}
+      {if !isset($withoutVideo)}
+          {acl isAllowed="VIDEO_ADMIN"}
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="grid simple">
+                          <div class="grid-title">
+                              <h4>{t}Video{/t}</h4>
+                          </div>
+                          <div class="grid-body">
+                              <div class="row">
+                                  <div class="col-md-4">
+                                      <h5>{t}Video for frontpage{/t}</h5>
+                                      <div>
+                                          <a class="delete-button" onclick="javascript:recuperar_eliminar('video1');">
+                                              <img src="/themes/admin/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
+                                          </a>
+                                          <div class="clearfix">
+                                              <div class="thumbnail article-resource-image">
+                                                  {if $video1->pk_video}
+                                                      <img src="{$video1->information['thumbnail']}"
+                                                           name="{$video1->pk_video}" style="width:120px" />
+                                                  {else}
+                                                      {if isset($video1) && $video1->pk_video}
+                                                          {if $video1->author_name == 'internal'}
+                                                          <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
+                                                          {else}
+                                                          <img src="{$video1->information['thumbnail']}" />
+                                                          {/if}
+                                                      {else}
+                                                      <div class="drop-here">
+                                                          {t}Drop a video to here{/t}
+                                                      </div>
+                                                      {/if}
+                                                  {/if}
+                                              </div>
+                                              <div class="article-resource-image-info">
+                                                  <div><label>{t}File name{/t}</label>     <span class="filename">{$video1->name|default:'default_img.jpg'}</span></div>
+                                                  <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video1->created|default:""}</span></div>
+                                                  <div><label>{t}Description{/t}</label>   <span class="description">{$video1->description|escape:'html'}</span></div>
+                                                  <div><label>{t}Tags{/t}</label>          <span class="tags">{$video1->metadata|default:""}</span></div>
+                                              </div>
+                                          </div><!-- / -->
+                                          <div class="article-resource-footer">
+                                              <!-- <label for="title">{t}Footer text for frontpage image:{/t}</label> -->
+                                              <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
+                                              <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <h5>{t}Video for inner article page{/t}</h5>
+                                      <div>
+                                          <a class="delete-button">
+                                              <img src="/themes/admin/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
+                                          </a>
+                                          <div class="clearfix">
+                                              <div class="thumbnail article-resource-image">
+                                                  {if isset($video2) && $video2->pk_video}
+                                                      {if $video2->author_name == 'internal'}
+                                                          <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
+                                                      {else}
+                                                          <img src="{$video2->information['thumbnail']}"/>
+                                                      {/if}
+                                                  {else}
+                                                      <div class="drop-here">
+                                                          {t}Drop a video to here{/t}
+                                                      </div>
+                                                  {/if}
+                                              </div>
+                                              <div class="article-resource-image-info">
+                                                  <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
+                                                  <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
+                                                  <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
+                                                  <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
+                                              </div>
+                                          </div>
+                                          <div class="article-resource-footer">
+                                              <label for="title">{t}Footer text for inner video:{/t}</label>
+                                              <textarea name="footer_video2" style="width:95%" class="related-element-footer">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                                              <input type="hidden" name="fk_video2" value="{$video2->pk_video}" class="related-element-id"/>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <h5>{t}Available videos{/t}</h5>
+                                      <div id="videos-container" class="photos">
+                                          <div class="input-append">
+                                              <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
+                                                     placeholder="{t}Search videos by title...{/t}"  style="width: 150px !important;"
+                                                     />
+                                              <select style="width:140px"  id="category_video" name="category_video">
+                                                  <option value="0">GLOBAL</option>
+                                                  {section name=as loop=$allcategorys}
+                                                      <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                                      {section name=su loop=$subcat[as]}
+                                                              <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                      {/section}
+                                                  {/section}
+                                              </select>
+                                          </div>
+                                          <div id="videos">
+                                              <!-- Ajax -->
+                                         </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          {/acl}
+      {/if}
+  {/is_module_activated}
+
     {is_module_activated name="IMAGE_MANAGER"}
     <script>
     jQuery(document).ready(function($){
