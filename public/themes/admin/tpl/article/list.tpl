@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <div class="page-navbar filters-navbar ng-cloak">
+    <div class="page-navbar filters-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section filter-components">
@@ -180,7 +180,7 @@
                         <span class="h-seperate"></span>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right simple-pagination">
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
                     <li class="quicklinks hidden-xs">
                         <span class="info">
                         [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
