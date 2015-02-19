@@ -12,10 +12,10 @@
                             {t}Specials{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <div data-toggle="dropdown">
                             {if $category == 'widget'}
                                 {t}Widget Home{/t}
@@ -50,7 +50,7 @@
                         {/acl}
 
                         {acl isAllowed="SPECIAL_WIDGET"}
-                         {if $category eq 'widget'}
+                        {if $category eq 'widget'}
                         <li class="quicklinks">
                             <a class="btn btn-white"  href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                                 <span class="fa fa-save"></span>
@@ -140,10 +140,10 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
@@ -170,27 +170,27 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <input type="hidden" name="in_home" ng-model="criteria.in_home">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -234,11 +234,11 @@
                                     </div>
                                 </th>
                                 <th class="title">{t}Title{/t}</th>
-                                <th style="width:65px;" class="center">{t}Section{/t}</th>
-                                <th class="center" style="width:100px;">Created</th>
+                                <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
+                                <th class="center hidden-xs hidden-sm" style="width:100px;">Created</th>
+                                {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}{/acl}
+                                {acl isAllowed="SPECIAL_HOME"}<th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>{/acl}
                                 {acl isAllowed="SPECIAL_AVAILABLE"}<th class="center" style="width:35px;">{t}Published{/t}</th>{/acl}
-                                {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}{/acl}
-                                {acl isAllowed="SPECIAL_HOME"}<th class="center" style="width:35px;">{t}Home{/t}</th>{/acl}
                             </tr>
                         </thead>
                         <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -254,6 +254,9 @@
                                 </td>
                                 <td>
                                     [% content.title %]
+                                    <div class="visible-sm small-text">
+                                      {t}Created at:{/t} [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                                    </div>
                                     <div class="listing-inline-actions">
                                         {acl isAllowed="SPECIAL_UPDATE"}
                                         <a class="link" href="[% edit(content.id, 'admin_special_show') %]">
@@ -267,22 +270,15 @@
                                         {/acl}
                                     </div>
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     [% content.category_name %]
                                 </td>
-                                <td class="center nowrap">
+                                <td class="center nowrap hidden-xs hidden-sm">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                                {acl isAllowed="SPECIAL_AVAILABLE"}
-                                    <td class="center">
-                                        <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                                            <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                                        </button>
-                                    </td>
-                                {/acl}
                                 {if $category!='widget'}
                                     {acl isAllowed="SPECIAL_FAVORITE"}
-                                        <td class="center">
+                                        <td class="center hidden-xs">
                                             <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
                                                 <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite == 0 }"></i>
                                             </button>
@@ -290,10 +286,17 @@
                                     {/acl}
                                 {/if}
                                 {acl isAllowed="SPECIAL_HOME"}
-                                    <td class="right">
+                                    <td class="right hidden-xs">
                                         <button class="btn btn-white" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                             <i class="fa fa-home" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'text-info': content.in_home == 1 }"></i>
                                             <i class="fa fa-times fa-sub" ng-if="content.in_home == 0"></i>
+                                        </button>
+                                    </td>
+                                {/acl}
+                                {acl isAllowed="SPECIAL_AVAILABLE"}
+                                    <td class="center">
+                                        <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                                            <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                                         </button>
                                     </td>
                                 {/acl}
