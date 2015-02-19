@@ -28,6 +28,10 @@
   padding: 0;
 }
 
+.grid-body .tab-content .tab-pane .tab-wrapper {
+  padding: 15px;
+}
+
 .grid-body .nav-tabs {
   background-color: #e5e9ec;
 }
