@@ -35,7 +35,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                         <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa fa-arrow-left fa-lg"></i>
                         </button>
                     </li>
                      <li class="quicklinks">
@@ -49,18 +49,10 @@
                 </ul>
                 <ul class="nav quick-section pull-right">
                     <li class="quicklinks">
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                              {t}Deselect{/t}
-                            </button>
-                        </li>
                         {acl isAllowed="GROUP_DELETE"}
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                        <a class="btn btn-link" href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
-                            <i class="fa fa-trash-o"></i>
-                        </a>
+                        <button class="btn btn-link" href="#" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </button>
                         {/acl}
                     </li>
                 </ul>
@@ -74,7 +66,33 @@
                 <ul class="nav quick-section">
                     <li class="m-r-10 input-prepend inside search-input no-boarder">
                         <span class="add-on"> <span class="fa fa-search fa-lg"></span> </span>
-                        <input class="no-boarder" name="name" ng-model="criteria.name_like" placeholder="Search by name" type="text"> </li>
+                        <input class="no-boarder" name="name" ng-model="criteria.name_like" placeholder="Search by name" type="text">
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </li>
+                </ul>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
+                    </li>
+                    <li class="quicklinks form-inline pagination-links">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -134,12 +152,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-                <div class="pagination-info pull-left">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
                     {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="page" total-items="total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
