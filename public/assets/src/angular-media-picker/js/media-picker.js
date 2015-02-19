@@ -424,10 +424,16 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        * Launches the media picker insert event.
        */
       $scope.insert = function() {
+        var items = $scope.selected.items;
+
+        if ($scope.picker.selection.maxSize == 1) {
+          items = items[0];
+        }
+
         $rootScope.$broadcast(
           'MediaPicker.insert',
           {
-            items: $scope.selected.items,
+            items: items,
             target: $scope.picker.target
           }
         );
@@ -656,6 +662,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Empty selected if maxSize == 1 (toggle)
         if ($scope.picker.selection.maxSize == 1) {
+          $scope.selected.ids   = [];
           $scope.selected.items = [];
         }
 
