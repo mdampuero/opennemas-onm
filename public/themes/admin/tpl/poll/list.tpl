@@ -19,10 +19,10 @@
                             {t}Polls{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <div data-toggle="dropdown">
                             {if $category == 'widget'}
                                 {t}Widget Home{/t}
@@ -90,7 +90,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -98,19 +98,11 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="POLL_AVAILABLE"}
                         <li class="quicklinks">
                             <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -145,10 +137,10 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select class="input-medium select2" id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
@@ -175,14 +167,14 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select class="select2 input-medium" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
                             <option value="10a">10</option>
                             <option value="25">25</option>
@@ -190,18 +182,12 @@
                             <option value="100">100</option>
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
-                    </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -246,17 +232,17 @@
                                     </div>
                                 </th>
                                 <th>{t}Title{/t}</th>
-                                <th style="width:65px;" class="center">{t}Section{/t}</th>
-                                <th style="width:110px;" class="center">{t}Date{/t}</th>
-                                <th class="center" style="width:40px">{t}Votes{/t}</th>
+                                <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
+                                <th style="width:110px;" class="center hidden-xs hidden-sm">{t}Date{/t}</th>
+                                <th class="center hidden-xs hidden-sm" style="width:40px">{t}Votes{/t}</th>
                                 {acl isAllowed="POLL_AVAILABLE"}
                                 <th style="width:40px;" class="center">{t}Published{/t}</th>
                                 {/acl}
                                 {acl isAllowed="POLL_FAVORITE"}
-                                <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                                <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
                                 {/acl}
                                 {acl isAllowed="POLL_HOME"}
-                                <th style="width:40px;" class="center">{t}Home{/t}</th>
+                                <th style="width:40px;" class="center hidden-xs">{t}Home{/t}</th>
                                 {/acl}
                             </tr>
                         </thead>
@@ -274,6 +260,7 @@
                                 </td>
                                 <td>
                                     [% content.title %]
+                                    <div class="visible-sm small-text">[% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
                                     <div class="listing-inline-actions">
                                         {acl isAllowed="POLL_UPDATE"}
                                             <a class="link" href="[% edit(content.id, 'admin_poll_show') %]">
@@ -289,13 +276,13 @@
                                         {/acl}
                                    </ul>
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     [% content.category_name %]
                                 </td>
-                                <td class="center nowrap">
-                                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                                    </td>
-                                <td class="center">
+                                <td class="center nowrap hidden-xs hidden-sm">
+                                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                                </td>
+                                <td class="center hidden-xs hidden-sm">
                                     [% content.total_votes %]
                                 </td>
                                 {acl isAllowed="POLL_AVAILABLE"}
@@ -306,14 +293,14 @@
                                 </td>
                                 {/acl}
                                 {acl isAllowed="POLL_FAVORITE"}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
                                     </button>
                                 </td>
                                 {/acl}
                                 {acl isAllowed="POLL_HOME"}
-                                    <td class="right">
+                                    <td class="right hidden-xs">
                                         <button class="btn btn-white" ng-if="content.author.meta.is_blog != 1" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                             <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading && content.in_home == 1, 'fa-home': !content.home_loading && content.in_home == 0 }"></i>
                                             <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home == 0"></i>
@@ -327,10 +314,10 @@
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="contents.length > 0">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
