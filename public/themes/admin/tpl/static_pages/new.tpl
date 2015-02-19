@@ -13,10 +13,10 @@
                         {t}Static Pages{/t}
                     </h4>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <h5>
                         {if !isset($page->id)}
                             {t}Creating static page{/t}
@@ -29,7 +29,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_staticpages}" title="{t}Go back{/t}">
+                        <a class="btn btn-link" href="{url name=admin_staticpages}" title="{t}Go back{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
