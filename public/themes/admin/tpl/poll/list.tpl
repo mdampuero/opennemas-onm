@@ -183,7 +183,7 @@
                         </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                <ul class="nav quick-section pull-right simple-pagination">
                     <li class="quicklinks hidden-xs">
                         <span class="info">
                         [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
@@ -314,7 +314,7 @@
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
                 <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
