@@ -43,7 +43,7 @@
                         {acl isAllowed="SPECIAL_SETTINGS"}
                         <li class="quicklinks">
                             <a class="btn btn-link"  href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
-                                <span class="fa fa-cog"></span>
+                                <span class="fa fa-cog fa-lg"></span>
                             </a>
                         </li>
                         <li class="quicklinks"><span class="h-seperate"></span></li>

@@ -76,12 +76,12 @@ jQuery(document).ready(function($){
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-star fa-lg"></i>
+                        <i class="fa fa-star"></i>
                         {t}Specials{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
                     <h5>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h5>
                 </li>
             </ul>
