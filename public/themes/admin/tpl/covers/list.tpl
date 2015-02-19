@@ -13,10 +13,10 @@
                             {t}ePapers{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <div data-toggle="dropdown">
                             {if $category == 'widget'}
                                 {t}Widget Home{/t}
@@ -45,19 +45,19 @@
                             {acl isAllowed="KIOSKO_ADMIN"}
                                 <li>
                                     <a class="btn btn-link" href="{url name=admin_covers_config}" title="{t}Config covers module{/t}">
-                                        <span class="fa fa-cog"></span>
+                                        <span class="fa fa-cog fa-lg"></span>
                                     </a>
                                 </li>
                             {/acl}
                         </li>
                         {acl isAllowed="KIOSKO_WIDGET"}
                         {if $category eq 'widget'}
-                        <li class="quicklinks"><span class="h-seperate"></span></li>
-                            <li>
-                                <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')"  title="{t}Save positions{/t}">
-                                    <span class="fa fa-save"></span> {t}Save positions{/t}
-                                </a>
-                            </li>
+                          <li class="quicklinks"><span class="h-seperate"></span></li>
+                          <li>
+                              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')"  title="{t}Save positions{/t}">
+                                  <span class="fa fa-save"></span> {t}Save positions{/t}
+                              </a>
+                          </li>
                         {/if}
                         {/acl}
                         <li class="quicklinks"><span class="h-seperate"></span></li>
@@ -93,39 +93,31 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="KIOSKO_AVAILABLE"}
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-check"></i>
+                            <i class="fa fa-check fa-lg"></i>
                         </a>
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-times"></i>
+                            <i class="fa fa-times fa-lg"></i>
                         </a>
                     </li>
                     {/acl}
                     {if $category neq 'widget'}
                     {acl isAllowed="KIOSKO_HOME"}
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home fa-lg"></i>
                         </a>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home fa-lg"></i>
                             <i class="fa fa-times fa-sub text-danger"></i>
                         </a>
                     </li>
@@ -137,7 +129,7 @@
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-trash-o"></i>
+                            <i class="fa fa-trash-o fa-lg"></i>
                         </a>
                     </li>
                     {/acl}
@@ -156,55 +148,52 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
-                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
-                            <option value="-1">{t}-- All --{/t}</option>
-                                {section name=as loop=$allcategorys}
-                                {assign var=ca value=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->name}">
-                                    {$allcategorys[as]->title}
-                                    {if $allcategorys[as]->inmenu eq 0}
-                                        <span class="inactive">{t}(inactive){/t}</span>
-                                    {/if}
-                                </option>
-                                {section name=su loop=$subcat[as]}
-                                {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                    <option value="{$subcat[as][su]->name}">
-                                        &rarr;
-                                        {$subcat[as][su]->title}
-                                        {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                                            <span class="inactive">{t}(inactive){/t}</span>
-                                        {/if}
-                                    </option>
-                                {/acl}
-                                {/section}
-                                {/section}
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2" id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
+                          <option value="-1">{t}-- All --{/t}</option>
+                          {section name=as loop=$allcategorys}
+                            {assign var=ca value=$allcategorys[as]->pk_content_category}
+                            <option value="{$allcategorys[as]->name}">
+                                {$allcategorys[as]->title}
+                                {if $allcategorys[as]->inmenu eq 0}
+                                    <span class="inactive">{t}(inactive){/t}</span>
+                                {/if}
+                            </option>
+
+                            {section name=su loop=$subcat[as]}
+                              {assign var=subca value=$subcat[as][su]->pk_content_category}
+                              {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                  {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                  <option value="{$subcat[as][su]->name}">
+                                      &rarr;
+                                      {$subcat[as][su]->title}
+                                      {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                                          <span class="inactive">{t}(inactive){/t}</span>
+                                      {/if}
+                                  </option>
+                              {/acl}
+                            {/section}
+
+                          {/section}
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
-                            <option value="-1"> {t}-- All --{/t} </option>
-                            <option value="1"> {t}Published{/t} </option>
-                            <option value="0"> {t}No published{/t} </option>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
                         </select>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -240,17 +229,16 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
-                                <th class="center" style="width:10px"></th>
+                                <th class="center hidden-xs hidden-sm" style="width:10px"></th>
                                 <th class="left">{t}Title{/t}</th>
                                 {if $category=='widget' || $category == 'all'}
-                                    <th class="center">{t}Section{/t}</th>
+                                    <th class="center hidden-xs">{t}Section{/t}</th>
                                 {/if}
-                                <th class="center">{t}Date{/t}</th>
-                                <th class="center">{t}Price{/t}</th>
+                                <th class="center hidden-xs">{t}Date{/t}</th>
+                                <th class="center hidden-xs">{t}Price{/t}</th>
+                                <th class="center hidden-xs" style="width:10px">{t}Favorite{/t}</th>
+                                <th class="center hidden-xs" style="width:10px">{t}Home{/t}</th>
                                 <th class="center" style="width:10px">{t}Published{/t}</th>
-                                <th class="center" style="width:10px">{t}Favorite{/t}</th>
-                                <th class="center" style="width:10px">{t}Home{/t}</th>
-                                <th class="center" style="width:10px"></th>
                             </tr>
                         </thead>
                         <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -264,11 +252,14 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs hidden-sm">
                                     <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
-                                        title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px"/>
+                                        title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail" />
                                 </td>
                                 <td class="left">
+                                    <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
+                                        title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px" class="thumbnail visible-xs visible-sm" />
+
                                     <span tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
 
                                     <div class="listing-inline-actions">
@@ -285,25 +276,18 @@
                                    </div
                                 </td>
                                 {if $category == 'widget' || $category == 'all'}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     [% content.category_name%]
                                 </td>
                                 {/if}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     [% content.date %]
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     [% content.price | number : 2 %] €
                                 </td>
                                 {acl isAllowed="KIOSKO_AVAILABLE"}
-                                <td class="center">
-                                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                                        </button>
-                                </td>
-                                {/acl}
-                                {acl isAllowed="KIOSKO_AVAILABLE"}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }"></i>
                                         <i class="fa fa-times fa-sub text-danger" ng-if="!content.favorite_loading && content.favorite != 1"></i>
@@ -311,11 +295,18 @@
                                 </td>
                                 {/acl}
                                 {acl isAllowed="KIOSKO_HOME"}
-                                <td class="right">
+                                <td class="right hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': ! content.home_loading && content.in_home == 1, 'fa-home': ! content.home_loading &&content.in_home == 0 }"></i>
                                         <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading && content.in_home != 1"></i>
                                     </button>
+                                </td>
+                                {/acl}
+                                {acl isAllowed="KIOSKO_AVAILABLE"}
+                                <td class="center">
+                                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
+                                        </button>
                                 </td>
                                 {/acl}
                             </tr>
