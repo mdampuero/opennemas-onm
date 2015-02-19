@@ -5,12 +5,6 @@
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
 jQuery(document).ready(function($){
-    $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
-
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-
     // PAssword strength checker
     var strength = $('#password').passStrength({
         userid: '#login'
