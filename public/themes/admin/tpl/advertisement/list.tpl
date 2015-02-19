@@ -228,7 +228,7 @@
                                 [% map[content.type_advertisement].name %]
                             </td>
                             <td class="center hidden-xs">
-                                <span ng-if="content.type_medida == 'NULL'">{t}Undefined{/t}</span>
+                                <span ng-if="content.type_medida == 'NULL'">{t}Not defined{/t}</span>
                                 <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
                                 <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
                                 <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
