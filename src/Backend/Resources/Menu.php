@@ -294,14 +294,6 @@ $menuXml = [
                 "module_name" => "NEWS_AGENCY_IMPORTER",
                 "privilege"   => "IMPORT_ADMIN",
             ],
-            [
-                "id"          => "xml_importer",
-                "title"       => _("XML Importer"),
-                "icon"        => "fa fa-download",
-                "link"        => url('admin_importer_xmlfile'),
-                "module_name" => "PAPER_IMPORT",
-                "privilege"   => "IMPORT_XML",
-            ],
         ],
     ],
 
