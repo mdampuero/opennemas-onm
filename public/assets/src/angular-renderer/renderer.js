@@ -1,5 +1,5 @@
 /**
-* onm.render Module
+* onm.Renderer Module
 *
 * Module to render HTML from objects.
 */
@@ -15,7 +15,7 @@ angular.module('onm.Renderer', [])
     this.renderImage = function(image, align) {
       var alt   = '';
       var align = '';
-      var html  = '<img src="' + image.path_img + '"[alt]>';
+      var html  = '<img src="' + instanceMedia + 'images' + image.path_img + '"[alt]>';
 
       if (image.description) {
         alt = ' alt="' + image.description + '"';
