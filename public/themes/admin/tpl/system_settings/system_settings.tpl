@@ -75,7 +75,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cogs fa-lg"></i>
-                {t}System settings{/t}
+                {t}Settings{/t}
               </h4>
             </li>
           </ul>
