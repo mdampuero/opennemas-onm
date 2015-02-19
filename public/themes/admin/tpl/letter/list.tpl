@@ -9,7 +9,7 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-envelope"></i>
-                            {t}Letters to the Editor{/t}
+                            <span class="hidden-xs">{t}Letters to the Editor{/t}</span> <span class="visible-xs-inline">{t}Letters{/t}</span>
                         </h4>
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -47,23 +47,15 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="LETTER_AVAILABLE"}
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-check"></i>
+                            <i class="fa fa-check fa-lg"></i>
                         </a>
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-times"></i>
+                            <i class="fa fa-times fa-lg"></i>
                         </a>
                     </li>
                     {/acl}
@@ -71,7 +63,7 @@
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
                             <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-trash-o"></i>
+                                <i class="fa fa-trash-o fa-lg"></i>
                             </a>
                         </li>
                     {/acl}
@@ -90,10 +82,10 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <select id="content_status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1">-- All --</option>
                             <option value="1">{t}Published{/t}</option>
@@ -101,19 +93,20 @@
                             <option value="2">{t}Rejected{/t}</option>
                         </select>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -148,9 +141,9 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
-                                <th style='width:10px;'>{t}Image{/t}</th>
+                                <th style='width:10px;' class="hidden-xs">{t}Image{/t}</th>
                                 <th>{t}Author{/t} - {t}Title{/t}</th>
-                                <th style='width:110px;' class="left">{t}Date{/t}</th>
+                                <th style='width:110px;' class="left hidden-xs">{t}Date{/t}</th>
                                 {acl isAllowed="LETTER_AVAILABLE"}
                                 <th class="center" style='width:10px;'>{t}Available{/t}</th>
                                 {/acl}
@@ -167,15 +160,19 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <span class="thumbnail">
                                       <i class="fa fa-picture-o fa-lg" ng-if="!content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
                                       <img ng-if="content.image" ng-src="content.image">
                                     </span>
                                 </td>
                                 <td>
+                                    <span class="thumbnail center visible-xs">
+                                      <i class="fa fa-picture-o fa-lg" ng-if="!content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
+                                      <img ng-if="content.image" ng-src="content.image">
+                                    </span>
                                     <div>
-                                        <small>[% content.author %]: [% content.email %]</small>
+                                        <small>"[% content.author %]" ([% content.email %])</small>
                                     </div>
                                     <span tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
                                     <div class="listing-inline-actions">
@@ -201,7 +198,7 @@
                                         {/acl}
                                     </div>
                                 </td>
-                                <td class="center nowrap">
+                                <td class="center nowrap hidden-xs">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
                                 <td class="right">
@@ -216,12 +213,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak" ng-if="contents.length > 0">
-                <div class="pagination-info pull-left">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
