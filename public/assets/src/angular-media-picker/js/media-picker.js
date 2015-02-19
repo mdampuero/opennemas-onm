@@ -315,7 +315,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               $('body').append(e);
 
               // Make the page non-scrollable
-              $('html, body').addClass('media-picker-open');
+              $('body').addClass('media-picker-open');
 
               // Hide and destroy the media picker
               e.find('.media-picker-close').bind('click', function() {
