@@ -9,7 +9,7 @@
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#22262e">
-    <link rel="manifest" href="manager_manifest.json">
+    <link rel="manifest" href="backend_manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="{$params.COMMON_ASSET_DIR}images/launcher-icons/IOS-60@2x.png">
