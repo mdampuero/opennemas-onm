@@ -142,14 +142,14 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td class="thumb hidden-xs">
+                                <td class="hidden-xs">
                                     <span ng-click="open('modal-image', null, $index)" class="thumbnail">
                                         <span ng-if="content.type_img == 'swf'">
                                             <object ng-data="'{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]'" ng-param="{ 'vmode': 'opaque' }"  style="width:100px;height:80px"></object>
-                                            <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$params.IMAGE_DIR}flash.gif" />
+                                            <img class="thumbnail image-preview" style="width:16px;height:16px;border:none;"  src="{$params.IMAGE_DIR}flash.gif" />
                                         </span>
                                         <span ng-if="content.type_img !== 'swf'">
-                                            <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
+                                            <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview thumbnail"></dynamic-image>
                                         </span>
                                     </span>
                                 </td>
@@ -208,12 +208,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak" ng-if="contents.length > 0">
-                <div class="pull-left">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
                     {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="3" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
