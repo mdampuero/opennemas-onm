@@ -86,7 +86,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario">
+  <form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario" ng-controller="ArticleCtrl">
 
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
