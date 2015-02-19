@@ -12,10 +12,10 @@
                             {t}Files{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <div data-toggle="dropdown">
                             {if $category == 'widget'}
                                 {t}Widget Home{/t}
@@ -79,7 +79,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -91,24 +91,15 @@
                         </h4>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    {acl isAllowed="ATTACHMENT_AVAILABLE"}
+                <ul class="nav quick-section pull-right">{acl isAllowed="ATTACHMENT_AVAILABLE"}
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-check"></i>
+                            <i class="fa fa-check fa-lg"></i>
                         </a>
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-times"></i>
+                            <i class="fa fa-times fa-lg"></i>
                         </a>
                     </li>
                     {/acl}
@@ -116,7 +107,7 @@
                     {acl isAllowed="ATTACHMENT_DELETE"}
                         <li class="quicklinks">
                             <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-trash-o"></i>
+                                <i class="fa fa-trash-o fa-lg"></i>
                             </a>
                         </li>
                     {/acl}
@@ -135,11 +126,11 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
-                        <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2" id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
                                     {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -165,29 +156,27 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
                             <option value="0"> {t}No published{/t} </option>
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <input type="hidden" name="in_home" ng-model="criteria.in_home">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -226,11 +215,11 @@
                                     </div>
                                 </th>
                                 <th>{t}Title{/t}</th>
-                                <th style="width:20px">{t}Category{/t}</th>
-                                <th class="nowrap" style="width:20px">{t}Created on{/t}</th>
+                                <th style="width:20px" class="hidden-xs">{t}Category{/t}</th>
+                                <th class="nowrap hidden-xs hidden-sm" style="width:20px">{t}Created on{/t}</th>
+                                {if $category!='widget'} <th class="center hidden-xs" style="width:20px;">{t}Favorite{/t}</th>{/if}
+                                <th class="center hidden-xs" style="width:20px;">{t}Home{/t}</th>
                                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                                {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
-                                <th class="center" style="width:20px;">{t}Home{/t}</th>
                             </tr>
                         </thead>
                         <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -248,6 +237,11 @@
                                 </td>
                                 <td>
                                     [% content.title %]
+
+                                    <div class="nowrap visible-sm">
+                                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                                    </div>
+
                                     <div class="listing-inline-actions">
                                         {acl isAllowed="ATTACHMENT_UPDATE"}
                                         <a class="link" href="[% edit(content.id, 'admin_file_show') %]">
@@ -259,12 +253,12 @@
                                             <i class="fa fa-trash-o"></i> {t}Remove{/t}
                                         </button>
                                         {/acl}
-                                        <a class="link" href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
+                                        <a class="link hidden-xs" href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
                                             <span class="fa fa-download"></span>  {t}Download{/t}
                                         </a>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="hidden-xs">
                                     <span ng-if="content.category_name">
                                         [% content.category_name %]
                                     </span>
@@ -272,19 +266,12 @@
                                         {t}Unassigned{/t}
                                     </span>
                                 </td>
-                                <td class="nowrap">
+                                <td class="nowrap hidden-xs hidden-sm">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                                {acl isAllowed="ATTACHMENT_AVAILABLE"}
-                                <td class="center">
-                                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
-                                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
-                                    </button>
-                                </td>
-                                {/acl}
                                 {if $category != 'widget'}
                                 {acl isAllowed="ATTACHMENT_AVAILABLE"}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading && content.favorite == 1, 'fa-star-o': !content.favorite_loading && content.favorite != 1 }" ></i>
                                     </button>
@@ -292,10 +279,17 @@
                                 {/acl}
                                 {/if}
                                 {acl isAllowed="ATTACHMENT_AVAILABLE"}
-                                <td class="right">
+                                <td class="right hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading && content.in_home == 1, 'fa-home': !content.home_loading && content.in_home == 0 }"></i>
                                         <i class="fa fa-times fa-sub text-danger" ng-if="!content.loading && content.in_home == 0"></i>
+                                    </button>
+                                </td>
+                                {/acl}
+                                {acl isAllowed="ATTACHMENT_AVAILABLE"}
+                                <td class="center">
+                                    <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading && content.content_status == 1, 'fa-times text-danger': !content.loading && content.content_status == 0 }"></i>
                                     </button>
                                 </td>
                                 {/acl}
@@ -304,12 +298,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak" ng-if="contents.length > 0">
-                <div class="pull-left">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
