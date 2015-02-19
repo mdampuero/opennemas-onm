@@ -42,7 +42,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -50,7 +50,7 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
@@ -83,13 +83,13 @@
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section">
-                    <li class="m-r-10 input-prepend inside search-input no-boarder">
+                    <li class="m-r-10 input-prepend inside search-input no-boarder hidden-xs">
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
                         <input autofocus class="no-boarder" ng-model="criteria.body_like" placeholder="{t}Search by body{/t}" type="text">
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
                     <li class="quicklinks">
@@ -98,18 +98,12 @@
                             {html_options options=$statuses selected=$filter_status}
                         </select>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
-                    </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -144,10 +138,9 @@
                                     <label for="select-all"></label>
                                   </div>
                                 </th>
-                                <th>{t}Author{/t}</th>
                                 <th>{t}Comment{/t}</th>
-                                <th class="wrap">{t}In response to{/t}</th>
-                                <th style='width:20px;' class="center">{t}Published{/t}</th>
+                                <th class="wrap hidden-xs">{t}In response to{/t}</th>
+                                <th style='width:10px;' class="center">{t}Published{/t}</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -159,14 +152,7 @@
                                   </div>
                                 </td>
                                 <td>
-                                    <strong>[% content.author %]</strong><br>
-                                    <small ng-if="content.author_email">
-                                        [% content.author_email %]
-                                    </small>
-                                    <br>
-                                    <small>[% content.author_ip %]</small>
-                                </td>
-                                <td class="left">
+                                    <div class="submitted-on">{t}Authored by: {/t}<strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
                                     <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
                                     <p>
                                         [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
@@ -184,7 +170,7 @@
                                         {/acl}
                                     </div>
                                 </td>
-                                <td >
+                                <td class="hidden-xs">
                                     [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
                                 </td>
                                 <td class="right">
@@ -206,9 +192,9 @@
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="contents.length > 0">
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
