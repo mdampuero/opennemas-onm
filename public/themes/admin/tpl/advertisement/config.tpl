@@ -8,8 +8,13 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-home fa-lg"></i>
-                        {t}Advertisements{/t} :: {t}Configuration{/t}
+                        <span class="hidden-xs">{t}Advertisements{/t}</span>
+                        <span class="visible-xs-inline">{t}Ads{/t}</span>
                     </h4>
+                </li>
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
+                  <h5>{t}Configuration{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">

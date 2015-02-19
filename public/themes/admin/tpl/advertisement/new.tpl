@@ -101,10 +101,6 @@
             parent.removeClass('assigned');
         });
 
-        // $('#formulario').onmValidate({
-        //     'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        // });
-
         var tabs = $('#position-adv').tabs();
         tabs.tabs('select', '{$place}');
     });
@@ -124,10 +120,10 @@
                             <span class="visible-xs-inline">{t}Ads{/t}</span>
                         </h4>
                     </li>
-                    <li class="quicklinks seperate">
+                    <li class="quicklinks seperate hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if empty($advertisement->id)}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}
                         </h5>
@@ -137,7 +133,7 @@
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                             <a class="btn btn-link" href="{url name=admin_ads}" title="{t}Go back{/t}">
-                                <i class="fa fa-reply"></i>
+                                <i class="fa fa-reply fa-lg"></i>
                             </a>
                         </li>
                         <li class="quicklinks">
