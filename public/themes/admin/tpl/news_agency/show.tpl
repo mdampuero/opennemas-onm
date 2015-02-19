@@ -37,7 +37,7 @@
                     </li>
                     <li>
                         <a class="btn btn-primary" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xml_file}" title="{t}Import{/t}">
-                        <span class="fa fa-cloud-download"></span> {t}Import{/t}
+                        <span class="fa fa-cloud-download"></span> <span class="hidden-xs">{t}Import{/t}</span>
                         </a>
                     </li>
                 </ul>

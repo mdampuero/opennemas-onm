@@ -29,11 +29,8 @@
           {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
           <li class="quicklinks">
             <a class="btn btn-link" href="{url name=admin_news_agency_servers}">
-              <i class="fa fa-cog"></i>
+              <i class="fa fa-cog fa-lg"></i>
             </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
           </li>
           {/acl}
           {acl isAllowed="ONLY_MASTERS"}
@@ -41,6 +38,9 @@
             <a class="btn btn-white" href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
               <span class="fa fa-cloud"></span> <span class="hidden-xs">{t}Sync with server{/t}</span>
             </a>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
           </li>
           {/acl}
           <li>
@@ -150,8 +150,8 @@
               </div>
             </th>
             <th>{t}Title{/t}</th>
-            <th class="center hidden-xs">{t}Origin{/t}</th>
-            <th class="center hidden-xs" style='width:10px !important;'>{t}Date{/t}</th>
+            <th class="center hidden-xs hidden-sm">{t}Origin{/t}</th>
+            <th class="center hidden-xs hidden-sm" style='width:10px !important;'>{t}Date{/t}</th>
             <th class="right hidden-xs" style="width:10px;">{t}Priority{/t}</th>
           </tr>
         </thead>
@@ -173,6 +173,7 @@
               </div>
             </td>
             <td >
+              <span class="visible-xs-block"><span class="label label-important" style="background-color:[% content.source_color %];">[% content.source_name %]</span></span>
               <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
               <small>
                 <div class="tags">
@@ -181,16 +182,13 @@
 
                 <span ng-if="content.photos.length > 0 || content.videos.length > 0">
                   <!--{t}Attachments{/t}:-->
-                  <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/gallery.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
-                  <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
+                  <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/album.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
+                  <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video.png" alt="[{t}With video{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
                 </span>
               </small>
 
-              <p class="visible-xs">
-                <span class="visible-xs">{t}Source{/t}:</span> <span class="label label-important" style="background-color:[% content.source_color %];">[% content.source_name %]</span>
-              </p>
 
-              <p class="visible-xs" title="[% content.created_time.date %] [% content.created_time.timezone %]">
+              <p class="visible-xs visible-sm" title="[% content.created_time.date %] [% content.created_time.timezone %]">
                 [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
               </p>
 
@@ -204,10 +202,10 @@
               </div>
             </td>
 
-            <td class="nowrap center hidden-xs">
+            <td class="nowrap center hidden-xs hidden-sm">
               <span class="label label-important" style="background-color:[% content.source_color %];">[% content.source_name %]</span>
             </td>
-            <td class="nowrap center hidden-xs">
+            <td class="nowrap center hidden-xs hidden-sm">
               <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
                 [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
               </span>

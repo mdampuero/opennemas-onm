@@ -12,10 +12,10 @@
                         {t}News Agency{/t}
                     </h4>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <h5>{t}Importing element{/t}</h5>
                 </li>
             </ul>
@@ -31,7 +31,7 @@
                     </li>
                     <li>
                         <button class="btn btn-primary" type="submit">
-                            <span class="fa fa-cloud-download"></span> {t}Import{/t}
+                            <span class="fa fa-cloud-download"></span> <span class="hidden-xs">{t}Import{/t}</span>
                         </button>
                     </li>
                 </ul>
@@ -44,13 +44,11 @@
     {render_messages}
 
     <div class="grid simple">
-
+        <div class="grid-title">
+          <h5>{t}You are about to import one article, please select a category where you want to import this content.{/t}</h5>
+        </div>
         <div class="grid-body">
 
-            <div class="alert alert-block alert-info fade in">
-              <button type="button" class="close" data-dismiss="alert"></button>
-              <p>{t}You are about to import one article, please select a category where to import the article{/t}</p>
-            </div>
             <div class="row">
                 <div class="col-md-7">
                     <h4>{$article->title}</h4>
@@ -60,8 +58,9 @@
                         {$article->body|clearslash|truncate:400:"..."}
                     {/if}
                 </div>
-                <div class="col-md-1" style="padding-top:50px">
-                    <span class="fa fa-chevron-right fa-4x"></span>
+                <div class="col-md-1 center">
+                    <span class="fa fa-chevron-down fa-4x visible-xs visible-sm"></span>
+                    <span class="fa fa-chevron-right fa-4x hidden-xs hidden-sm" style="padding-top:30px"></span>
                 </div>
                 <div class="col-md-4" style="padding-top:20px">
                     <div class="form-group">
