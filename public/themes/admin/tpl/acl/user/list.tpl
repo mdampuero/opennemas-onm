@@ -32,7 +32,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                         <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa fa-arrow-left fa-lg"></i>
                         </button>
                     </li>
                      <li class="quicklinks">
@@ -45,25 +45,17 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    {acl isAllowed="USER_AVAILABLE"}
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
+                        <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom">
+                            <i class="fa fa-times fa-lg"></i>
                         </button>
                     </li>
                     <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                        <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom">
+                            <i class="fa fa-check fa-lg"></i>
+                        </button>
                     </li>
-                    {acl isAllowed="USER_AVAILABLE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-times fa-lg"></i>
-                            </button>
-                        </li>
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_users_batch_set_enabled', 'activated', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-check fa-lg"></i>
-                            </button>
-                        </li>
                     {/acl}
                     {acl isAllowed="ARTICLE_DELETE"}
                         <li class="quicklinks">
@@ -86,10 +78,10 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 <strong>{t}Category{/t}:</strong>
@@ -130,7 +122,7 @@
                             {/section}
                         </ul>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Status{/t}:
@@ -152,7 +144,7 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                             <span class="dropdown-current">
                                 {t}Author{/t}: [% shvs.extra.authors[content.fk_author].name %]
@@ -172,32 +164,20 @@
                             {/foreach}
                         </ul>
                     </li>
-                    <li class="quicklinks dropdown">
-                        <span class="a dropdown-toggle" data-toggle="dropdown">
-                            <span class="dropdown-current">
-                                {t}View{/t}: [% pagination.epp %]
-                            </span>
-                            <span class="caret"></span>
-                        </span>
-                        <ul class="dropdown-menu">
-                            <li ng-click="pagination.epp = 10">
-                                <span class="a">10</span>
-                            </li>
-                            <li ng-click="pagination.epp = 25">
-                                <span class="a">25</span>
-                            </li>
-                            <li ng-click="pagination.epp = 50">
-                                <span class="a">50</span>
-                            </li>
-                            <li ng-click="pagination.epp = 100">
-                                <span class="a">100</span>
-                            </li>
-                        </ul>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -221,8 +201,11 @@
                     <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <div class="table-wrapper ng-cloak">
-                    <table class="table table-hover no-margin" ng-if="!loading">
+                <div class="ng-cloak" ng-if="contents.length == 0">
+                  <h5>{t escape=off}There is no user created yet or <br/>not results for your searching criteria.{/t}</h5>
+                </div>
+                <div class="table-wrapper ng-cloak" ng-if="!loading">
+                    <table class="table table-hover no-margin" ng-if="contents.length > 0">
                         <thead>
                             <tr>
                                 <th style="width:15px;">
@@ -231,20 +214,15 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
-                                <th></th>
+                                <th class=" hidden-xs"></th>
                                 <th class="left">{t}Full name{/t}</th>
-                                <th class="center nowrap" style="width:110px">{t}Username{/t}</th>
-                                <th class="center" >{t}E-mail{/t}</th>
-                                <th class="center" >{t}Group{/t}</th>
-                                <th class="center" >{t}Activated{/t}</th>
+                                <th class="center nowrap hidden-xs" style="width:110px">{t}Username{/t}</th>
+                                <th class="center hidden-xs hidden-sm" >{t}E-mail{/t}</th>
+                                <th class="center hidden-xs" >{t}Group{/t}</th>
+                                <th class="center hidden-xs" >{t}Activated{/t}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-if="contents.length == 0">
-                                <td colspan="8" class="empty">
-                                    {t escape=off}There is no user created yet or <br/>not results for your searching criteria.{/t}
-                                </td>
-                            </tr>
                             <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                                 <td>
                                     <div class="checkbox check-default">
@@ -252,13 +230,19 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="hidden-xs">
                                     <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% shvs.extra.photos[content.avatar_img_id].path_file + '/' + shvs.extra.photos[content.avatar_img_id].name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
 
                                     <gravatar email="[% content.email %]" image_dir="$params.IMAGE_DIR" image=true size="40" ng-if="content.avatar_img_id == 0"></gravatar>
                                 </td>
                                 <td class="left">
-                                    <strong>[% content.name %]</strong>
+                                    <strong>[% content.name %] </strong>
+                                    <span class="visible-xs visible-sm">([% content.email %])</span>
+
+                                    <div class="visible-xs">[% content.username %]</div>
+
+                                    <span ng-repeat="group in content.id_user_group" class="visible-xs">{t}Group{/t}: [% shvs.extra.groups[group].name %][% $last ? '' : ', ' %]</span>
+
                                     <div class="listing-inline-actions">
                                         <a class="link" href="[% edit(content.id, 'admin_acl_user_show') %]" title="{t}Edit user{/t}">
                                             <i class="fa fa-pencil"></i> {t}Edit{/t}
@@ -269,14 +253,14 @@
                                         </button>
                                     </div>
                                 </td>
-                                <td class="center nowrap">
+                                <td class="center nowrap hidden-xs">
                                     [% content.username %]
                                 </td>
 
-                                <td class="center">
+                                <td class="center hidden-xs hidden-sm">
                                     [% content.email %]
                                 </td>
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <span ng-repeat="group in content.id_user_group">[% shvs.extra.groups[group].name %][% $last ? '' : ', ' %]</span>
                                 </td>
                                 <td class="right">
@@ -290,11 +274,11 @@
                 </div>
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-                <div class="pull-left pagination-info" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true" on-select-page="selectPage(page, 'backend_ws_users_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
