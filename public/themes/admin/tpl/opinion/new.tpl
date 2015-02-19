@@ -98,10 +98,10 @@
                             {t}Opinions{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if $opinion->id}
                                 {t}Editing opinion{/t}
@@ -121,13 +121,13 @@
                         <li class="quicklinks">
                             <span class="h-seperate"></span>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <a class="btn btn-white" href="#" accesskey="P" id="button_preview">
                                 <i class="fa fa-desktop"></i>
                                 {t}Preview{/t}
                             </a>
                         </li>
-                        <li class="quicklinks">
+                        <li class="quicklinks hidden-xs">
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">

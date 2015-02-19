@@ -101,14 +101,12 @@
                         {/section}
                     </select>
                 </li>
-                <li class="quicklinks hidden-xs hidden-sm">
-                    <select class="xmedium" ng-model="pagination.epp">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                        <option value="500">500</option>
-                    </select>
+                <li class="quicklinks hidden-sm hidden-xs">
+                  <select name="status" ng-model="pagination.epp" data-label="{t}View:{/t}" class="select2">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                  </select>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right simple-pagination ng-cloak">
