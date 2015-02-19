@@ -13,10 +13,10 @@
                             {t}Albums{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks dropdown">
+                    <li class="quicklinks dropdown hidden-xs">
                         <div data-toggle="dropdown">
                             {if $category == 'widget'}
                                 {t}Widget home{/t}
@@ -44,7 +44,7 @@
                         {acl isAllowed="ALBUM_SETTINGS"}
                             <li class="quicklinks">
                                 <a class="btn btn-link" href="{url name=admin_albums_config}" title="{t}Config album module{/t}">
-                                    <span class="fa fa-cog"></span>
+                                    <span class="fa fa-cog fa-lg"></span>
                                 </a>
                             </li>
                             <li class="quicklinks">
@@ -97,14 +97,6 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="ALBUM_AVAILABLE"}
                       <li class="quicklinks">
                           <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -116,15 +108,15 @@
                               <i class="fa fa-check fa-lg"></i>
                           </button>
                       </li>
-                      <li class="quicklinks">
+                      <li class="quicklinks hidden-xs">
                           <span class="h-seperate"></span>
                       </li>
-                      <li class="quicklinks">
+                      <li class="quicklinks hidden-xs">
                           <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
                               <i class="fa fa-home"></i>
                           </a>
                       </li>
-                      <li class="quicklinks">
+                      <li class="quicklinks hidden-xs">
                           <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
                               <i class="fa fa-home"></i>
                               <i class="fa fa-times fa-sub text-danger"></i>
@@ -158,8 +150,8 @@
                         </span>
                         <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
                         <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}" class="select2">
                             <option value="-1">{t}-- All --{/t}</option>
                                 {section name=as loop=$allcategorys}
@@ -186,7 +178,7 @@
                                 {/section}
                         </select>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}" class="select2">
                             <option value="-1"> {t}-- All --{/t} </option>
                             <option value="1"> {t}Published{/t} </option>
@@ -194,19 +186,20 @@
                         </select>
                     </li>
                     <input type="hidden" name="in_home" ng-model="criteria.in_home">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -241,15 +234,14 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
-                                <th></th>
-                                <th class="title">{t}Title{/t}</th>
-                                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
-                                <th class="left nowrap" style="width:100px;">Created</th>
-                                <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                                <th class="hidden-xs hidden-sm"></th>
+                                <th class="title">{t}Information{/t}</th>
+                                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left hidden-xs">{t}Section{/t}</th>{/if}
+                                <th class="left nowrap hidden-xs hidden-sm" style="width:100px;">Created</th>
+                                <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
                                 <th class="center" style="width:35px;">{t}Published{/t}</th>
-                                {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                                <th class="center" style="width:35px;">{t}Home{/t}</th>
-                                <th class="right" style="width:10px;"></th>
+                                {if $category!='widget'} <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                                <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
                             </tr>
                         </thead>
                         <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
@@ -263,7 +255,7 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="hidden-xs hidden-sm">
                                     <span ng-if="content.cover != ''">
                                         <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;" class="thumbnail"/>
                                     </span>
@@ -272,7 +264,13 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <span ng-if="content.cover != ''" class="visible-xs visible-sm">
+                                        <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;" class="thumbnail"/>
+                                    </span>
                                     [% content.title %]
+                                    <div class="visible-sm">
+                                      [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                                    </div>
                                     <div class="listing-inline-actions">
                                         {acl isAllowed="ALBUM_UPDATE"}
                                         <a class="link" href="[% edit(content.id, 'admin_album_show') %]">
@@ -287,15 +285,15 @@
                                     </div>
                                 </td>
                                 {if $category=='widget' || $category=='all'}
-                                <td class="left">
+                                <td class="left hidden-xs">
                                      [% content.category_name %]
                                 </td>
                                 {/if}
 
-                                <td class="center nowrap">
+                                <td class="center nowrap hidden-xs hidden-sm">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
-                                <td class="center">[% shvs.extra.views[content.id] %]</td>
+                                <td class="center hidden-xs">[% shvs.extra.views[content.id] %]</td>
 
                                 {acl isAllowed="ALBUM_AVAILABLE"}
                                 <td class="center">
@@ -305,14 +303,14 @@
                                 </td>
                                 {/acl}
                                 {acl isAllowed="ALBUM_FAVORITE"}
-                                <td class="center">
+                                <td class="center hidden-xs">
                                     <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
                                     </button>
                                 </td>
                                 {/acl}
                                 {acl isAllowed="ALBUM_HOME"}
-                                <td class="right">
+                                <td class="right hidden-xs">
                                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
                                         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
                                         <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
