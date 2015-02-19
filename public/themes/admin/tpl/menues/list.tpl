@@ -20,7 +20,7 @@
                             {acl isAllowed="MENU_CREATE"}
                             <a href="{url name=admin_menu_create}" class="btn btn-primary">
                                 <i class="fa fa-plus"></i>
-                                {t}Create menu{/t}
+                                {t}Create{/t}
                             </a>
                             {/acl}
                         </li>
@@ -56,6 +56,48 @@
                             </button>
                         </li>
                     {/acl}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-navbar filters-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="m-r-10 input-prepend inside search-input no-boarder">
+                        <span class="add-on">
+                            <span class="fa fa-search fa-lg"></span>
+                        </span>
+                        <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                    </li>
+                    <li class="quicklinks"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </li>
+                </ul>
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
+                    </li>
+                    <li class="quicklinks form-inline pagination-links">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -120,22 +162,18 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak">
-                <div class="pull-left pagination-info" ng-if="contents.length > 0">
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
                     {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right" ng-if="contents.length > 0">
-                    <pagination class="no-margin" max-size="0" direction-links="true"  items-oer-page="pagination.epp" on-select-page="selectPage(page, 'backend_ws_menus_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
-                <span ng-if="contents.length == 0">&nbsp;</span>
             </div>
         </div>
 
     </div><!--fin wrapper-content-->
-    <script type="text/ng-template" id="menus">
 
-
-    </script>
     <script type="text/ng-template" id="modal-delete">
         {include file="common/modals/_modalDelete.tpl"}
     </script>
