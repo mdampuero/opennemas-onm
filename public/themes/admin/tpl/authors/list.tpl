@@ -31,7 +31,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -44,21 +44,13 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                  {acl isAllowed="AUTHOR_DELETE"}
                     <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
+                        <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <i class="fa fa-trash-o fa-lg"></i>
                         </button>
                     </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    {acl isAllowed="AUTHOR_DELETE"}
-                        <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </button>
-                        </li>
-                    {/acl}
+                  {/acl}
                 </ul>
             </div>
         </div>
@@ -100,7 +92,12 @@
                     <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <div class="table-wrapper ng-cloak">
+                <div ng-if="contents.length == 0">
+                    <h5>
+                      {t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
+                    </h5>
+                </div>
+                <div class="table-wrapper ng-cloak" ng-if="contents.length > 0">
                     <table class="table table-hover table-condensed" ng-if="!loading">
                         <thead>
                             <tr>
@@ -112,7 +109,7 @@
                                 </th>
                                 <th class="center" style="width:20px;">{t}Avatar{/t}</th>
                                 <th class="left">{t}Full name{/t}</th>
-                                <th class="left" >{t}Biography{/t}</th>
+                                <th class="left hidden-xs" >{t}Biography{/t}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -144,16 +141,11 @@
                                         {/acl}
                                     </div>
                                 </td>
-                                <td class="left">
+                                <td class="left hidden-xs">
                                     <span ng-if="content.is_blog == 1">
                                         <strong>Blog </strong>:
                                     </span>
                                     [% content.bio %]
-                                </td>
-                            </tr>
-                            <tr ng-if="contents.length == 0">
-                                <td colspan="7" class="empty">
-                                    {t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
                                 </td>
                             </tr>
                         </tbody>
