@@ -15,7 +15,7 @@
                 <ul class="nav quick-section">
                     <li class="quicklinks">
                         <a class="btn btn-link" title="{t}Refresh the list for getting newest error list{/t}" href="{url name=admin_databaseerrors}">
-                            {t}Refresh list{/t}
+                            <span class="fa fa-refresh"></span> <span class="hidden-xs">{t}Refresh list{/t}</span>
                         </a>
                     </li>
                     <li class="quicklinks">
@@ -23,7 +23,7 @@
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-primary" href="{url name="admin_databaseerrors_purge"}">
-                            {t}Clean{/t}
+                          <span class="fa fa-trash-o"></span> {t}Clean{/t}
                         </a>
                     </li>
                 </ul>
@@ -42,14 +42,6 @@
                             <input type="search" name="search" value="{$search}" class="input-medium" placeholder="{t}Filter{/t}">
                         </div>
                     </form>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <button type="submit" class="btn btn-link">
-                        <i class="fa fa-search"></i>
-                    </button>
                 </li>
             </ul>
         </div>
@@ -101,7 +93,10 @@
 
                  </table>
                 {else}
-                    {t}There is no SQL errors registered in database.{/t}
+                <div class="center">
+                  <h5>{t}There is no SQL errors registered in database.{/t}</h5>
+                  <p>{t}Come back later.{/t}</p>
+                </div>
                 {/if}
             </div>
         </div>
