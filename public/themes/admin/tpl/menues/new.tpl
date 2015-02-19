@@ -34,10 +34,10 @@
                             {t}Menus{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if isset($menu->name)}
                                 {t}Editing menu{/t}
@@ -69,7 +69,6 @@
     </div>
     <div class="content">
 
-        <div id="warnings-validation"></div><!-- /warnings-validation -->
         {render_messages}
 
         <div class="grid simple">
