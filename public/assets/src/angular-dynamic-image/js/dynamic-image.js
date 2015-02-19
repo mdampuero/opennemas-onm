@@ -33,7 +33,7 @@
         image = image[this.property];
       }
 
-      if (!image.match('@http://@')) {
+      if (!/http:\/\//.test(image)) {
         if (!instanceMedia) {
           throw 'Invalid instance media folder path';
         }
