@@ -91,7 +91,7 @@
                         <option value="0">{t}No published{/t}</option>
                     </select>
                 </li>
-                <li class="quicklinks hidden-xs">
+                <li class="quicklinks hidden-xs hidden-sm">
                     <select class="select2" ng-model="criteria.author" data-label="{t}Author{/t}">
                         <option value="-1">{t}-- All authors --{/t}</option>
                         <option value="-2">{t}Director{/t}</option>
@@ -101,7 +101,7 @@
                         {/section}
                     </select>
                 </li>
-                <li class="quicklinks hidden-xs">
+                <li class="quicklinks hidden-xs hidden-sm">
                     <select class="xmedium" ng-model="pagination.epp">
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -111,7 +111,7 @@
                     </select>
                 </li>
             </ul>
-            <ul class="nav quick-section pull-right simple-pagination">
+            <ul class="nav quick-section pull-right simple-pagination ng-cloak">
                 <li class="quicklinks hidden-xs">
                     <span class="info">
                     [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
@@ -151,7 +151,7 @@
                                 </div>
                             </th>
                             <th>{t}Author name{/t} - {t}Title{/t}</th>
-                            <th class="center hidden-xs">{t}Created on{/t}</th>
+                            <th class="center hidden-xs hidden-sm">{t}Created on{/t}</th>
                             <th class="center hidden-xs" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
                             <th class="center hidden-xs" style="width:70px;">{t}In home{/t}</th>
                             <th class="center" style="width:20px;">{t}Published{/t}</th>
@@ -162,9 +162,9 @@
                         <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                             <td>
                                 <div class="checkbox check-default">
-                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
-                                        <label for="checkbox[%$index%]"></label>
-                                    </div>
+                                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                    <label for="checkbox[%$index%]"></label>
+                                </div>
                             </td>
                             <td>
                                 <strong>
@@ -177,6 +177,9 @@
                                 </strong>
                                 -
                                 [% content.title %]
+                                <div class="visible-sm visible-xs small-text">
+                                  {t}Created:{/t} [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                                </div>
                                 <div class="listing-inline-actions">
                                     {acl isAllowed="OPINION_UPDATE"}
                                         <a class="link" href="[% edit(content.id, 'admin_opinion_show') %]">
@@ -192,9 +195,9 @@
                                     {/acl}
                                 </div>
                             </td>
-                            <td class="center nowrap hidden-xs">
-                                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                                </td>
+                            <td class="center nowrap hidden-xs hidden-sm">
+                                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                            </td>
                             <td class="center hidden-xs">
                                 [% shvs.extra.views[content.id] %]
                             </td>
