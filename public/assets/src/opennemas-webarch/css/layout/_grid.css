@@ -19,3 +19,22 @@
   position: absolute;
   z-index: 10;
 }
+
+.grid-body .tab-content {
+  margin: 0;
+}
+
+.grid-body .tab-content .tab-pane {
+  padding: 0;
+}
+
+.grid-body .nav-tabs {
+  background-color: #e5e9ec;
+}
+
+.grid-body .nav-tabs > li > a,
+.grid-body .nav-tabs > li.active > a,
+.grid-body .nav-tabs > li.active > a:hover,
+.grid-body .nav-tabs > li.active > a:focus {
+  border-radius: 0;
+}
