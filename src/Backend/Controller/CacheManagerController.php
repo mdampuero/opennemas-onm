@@ -41,7 +41,7 @@ class CacheManagerController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        return $this->render('tpl_manager/tpl_manager.tpl');
+        return $this->render('tpl_manager/list.tpl');
     }
 
     /**

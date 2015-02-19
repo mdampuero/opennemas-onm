@@ -92,7 +92,7 @@
                       </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right simple-pagination" ng-if="contents.length != 0">
+                <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length != 0">
                     <li class="quicklinks hidden-xs">
                         <span class="info">
                         [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
