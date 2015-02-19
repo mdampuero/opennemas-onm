@@ -36,7 +36,7 @@
     <td>
         {$category->name}
     </td>
-    <td class="center">
+    <td class="center hidden-xs">
         {$num_contents['articles']|default:0}
     </td>
     <td class="center">
@@ -55,7 +55,7 @@
     {/if}
     </td>
     {if $category->internal_category eq '1'}
-    <td class="center">
+    <td class="center hidden-xs">
         {if $category->params['inrss'] eq 1 || !isset($category->params['inrss'])}
             <a class="btn btn-white" href="{url name=admin_category_togglerss id=$category->pk_content_category status=0}" title="En rss">
                 <i class="fa fa-check text-success fa-lg"></i>
@@ -112,7 +112,7 @@
         <td>
             {$subcategory->name}
         </td>
-        <td class="center">
+        <td class="center hidden-xs">
             {$num_sub_contents[$i].articles|default:0}
         </td>
         {acl isAllowed="CATEGORY_AVAILABLE"}
@@ -131,7 +131,7 @@
         </td>
         {/acl}
         {acl isAllowed="CATEGORY_AVAILABLE"}
-        <td class="center">
+        <td class="center hidden-xs">
             {if $subcategory->params['inrss'] eq 1 || !isset($subcategory->params['inrss'])}
                 <a class="btn btn-white" href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=0}" title="En rss">
                     <i class="fa fa-check text-success fa-lg"></i>

@@ -16,7 +16,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <a class="btn btn-link" href="{url name=admin_categories_config}" class="admin_add" title="{t}Config categories module{/t}">
-                <span class="fa fa-cog"></span>
+                <span class="fa fa-cog fa-lg"></span>
               </a>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
@@ -44,10 +44,10 @@
                 <tr>
                   <th>{t}Title{/t}</th>
                   <th>{t}Internal name{/t}</th>
-                  <th style="width:15px;">{t}Articles{/t}</th>
+                  <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                   {acl isAllowed="CATEGORY_AVAILABLE"}
                   <th style="width:15px;">{t}Available{/t}</th>
-                  <th style="width:15px;" class="nowrap">{t}Show in rss{/t}</th>
+                  <th style="width:15px;" class="nowrap hidden-xs">{t}Show in rss{/t}</th>
                   {/acl}
                 </tr>
               </thead>
@@ -77,7 +77,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Articles{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
@@ -111,7 +111,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Articles{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
@@ -145,7 +145,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Advertisements{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Advertisements{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
@@ -178,7 +178,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Articles{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
@@ -211,7 +211,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Articles{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
@@ -245,7 +245,7 @@
                   <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}Internal name{/t}</th>
-                    <th style="width:15px;">{t}Articles{/t}</th>
+                    <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Available{/t}</th>
                     {/acl}
