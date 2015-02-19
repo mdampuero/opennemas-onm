@@ -60,23 +60,16 @@
     this.getSettings = function(image) {
       var oH = $('.dynamic-image-wrapper.autoscale').parent().height();
       var oW = $('.dynamic-image-wrapper.autoscale').parent().width();
-      var m = 0;
 
-      if (parseInt(image.height) > parseInt(image.width)) {
-        var w = (image.width * oH) / image.height;
+      var h = oH;
+      var w = (image.width * oH) / image.height;
 
-        return {
-          height: oH,
-          width: w
-        }
+      if (w > oW) {
+        w = oW;
+        h = (image.height * oW) / image.width;
       }
 
-      var h = (image.height * oW) / image.width;
-
-      return {
-        height: h,
-        width:  oW
-      }
+      return { height: h, width: w }
     }
 
     /**
