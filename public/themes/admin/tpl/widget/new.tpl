@@ -13,10 +13,10 @@
                             {t}Widgets{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if !isset($widget->id)}
                                 {t}Creating widget{/t}
