@@ -34,7 +34,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -47,21 +47,10 @@
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="PHOTO_DELETE"}
                     <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
-                    <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-trash-o"></i>
+                            <i class="fa fa-trash-o fa-lg"></i>
                         </a>
                     </li>
                     {/acl}
@@ -84,15 +73,20 @@
                     <li class="quicklinks">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
-                        <span class="info">
-                        {t}Results{/t}: [% pagination.total %]
-                        </span>
+                    <li class="quicklinks hidden-xs">
+                        <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                            <option value="10a">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
                     </li>
                 </ul>
-                <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
+                <ul class="nav quick-section pull-right simple-pagination">
+                    <li class="quicklinks hidden-xs">
+                        <span class="info">
+                        [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                        </span>
                     </li>
                     <li class="quicklinks form-inline pagination-links">
                         <div class="btn-group">
@@ -127,9 +121,9 @@
                                         <label for="select-all"></label>
                                     </div>
                                 </th>
-                                <th style="width:80px"></th>
-                                <th>{t}Information{/t}</th>
-                                <th>{t}Created on{/t}</th>
+                                <th style="width:80px" class="hidden-xs"></th>
+                                <th class="hidden-xs">{t}Information{/t}</th>
+                                <th class="hidden-xs hidden-sm">{t}Created on{/t}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -148,7 +142,7 @@
                                         <label for="checkbox[%$index%]"></label>
                                     </div>
                                 </td>
-                                <td class="thumb">
+                                <td class="thumb hidden-xs">
                                     <span ng-click="open('modal-image', null, $index)" class="thumbnail">
                                         <span ng-if="content.type_img == 'swf'">
                                             <object ng-data="'{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]'" ng-param="{ 'vmode': 'opaque' }"  style="width:100px;height:80px"></object>
@@ -160,9 +154,23 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <div ng-click="open('modal-image', null, $index)" class="visible-xs center">
+                                        <span ng-if="content.type_img == 'swf'" class="thumbnail">
+                                            <object ng-data="'{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]'" ng-param="{ 'vmode': 'opaque' }"  style="width:100px;height:80px"></object>
+                                            <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$params.IMAGE_DIR}flash.gif" />
+                                        </span>
+                                        <span ng-if="content.type_img !== 'swf'" class="thumbnail">
+                                            <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
+                                        </span>
+                                    </div>
+
                                     <div class="description">
                                         <span ng-if="content.description != ''">[% content.description %]</span>
                                         <span ng-if="content.description == ''">{t}No available description{/t}</span>
+                                    </div>
+
+                                    <div class="visible-xs visible-sm">
+                                      [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                     </div>
 
                                     <!-- <div class="tags">
@@ -192,7 +200,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="left nowrap">
+                                <td class="left nowrap hidden-xs hidden-sm">
                                     [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                                 </td>
                             </tr>
