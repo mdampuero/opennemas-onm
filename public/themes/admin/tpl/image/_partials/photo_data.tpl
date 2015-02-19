@@ -54,7 +54,7 @@
       <label for="date-{$photo->id}" class="form-label">{t}Date{/t}</label>
       <div class="controls">
         <input class="date" type="text" id="date-{$photo->id}" name="date[{$photo->id}]"
-        value='{$photo->date|date_format:"%Y-%m-%d %H:%M:%S"}'/>
+        value='{$photo->created|date_format:"%Y-%m-%d %H:%M:%S"}'/>
       </div>
     </div>
     <div class="form-group">

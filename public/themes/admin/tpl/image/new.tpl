@@ -119,8 +119,6 @@
         format: 'YYYY-MM-D HH:mm:ss'
       });
 
-      $('#ui-datepicker-div').css('clip', 'auto');
-
       $('.iptc-exif .toggler').on('click', function(e, ui) {
         $(this).parent().find('.info').toggle();
       });
