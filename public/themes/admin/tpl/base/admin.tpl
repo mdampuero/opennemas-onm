@@ -197,6 +197,7 @@
             @Common/src/angular-oql-encoder/oql-encoder.js,
             @Common/src/angular-query-manager/query-manager.js,
             @Common/src/angular-item-service/itemService.js,
+            @Common/src/angular-renderer/renderer.js,
             @Common/src/angular-routing/routing.js,
             @Common/src/angular-media-picker/js/media-picker.js,
             @Common/src/angular-messenger/messenger.js,

@@ -11,6 +11,7 @@ angular.module(
     'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
+    'onm.Renderer',
     'onm.scroll',
     'onm.resizable',
     'pascalprecht.translate',
