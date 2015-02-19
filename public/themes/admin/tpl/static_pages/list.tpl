@@ -35,7 +35,7 @@
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
                   <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
-                    <i class="fa fa-check fa-lg"></i>
+                    <i class="fa fa-arrow-left fa-lg"></i>
                   </button>
                 </li>
                  <li class="quicklinks">
@@ -43,39 +43,32 @@
                 </li>
                 <li class="quicklinks">
                     <h4>
-                        [% selected.contents.length %] {t}items selected{/t}
+                        [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                     </h4>
                 </li>
             </ul>
             <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                      {t}Deselect{/t}
-                    </button>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                {acl isAllowed="ARTICLE_AVAILABLE"}
+                {acl isAllowed="STATIC_PAGE_AVAILABLE"}
                 <li class="quicklinks">
                     <a class="btn btn-link" href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
-                        {t}Publish{/t}
+                        <i class="fa fa-check fa-lg"></i>
                     </a>
                 </li>
                 <li class="quicklinks">
                     <a class="btn btn-link" href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
-                        {t}Unpublish{/t}
+                        <i class="fa fa-times fa-lg"></i>
                     </a>
                 </li>
                 {/acl}
-                {acl isAllowed="ARTICLE_DELETE"}
+                {acl isAllowed="STATIC_PAGE_DELETE"}
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()">
-                            {t}Delete{/t}
+                          <i class="fa fa-trash-o fa-lg"></i>
                         </a>
                     </li>
                 {/acl}
+
             </ul>
         </div>
     </div>
@@ -92,26 +85,30 @@
                     </span>
                     <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs">
                     <span class="h-seperate"></span>
                 </li>
-                <li class="quicklinks dropdown">
+                <li class="quicklinks dropdown hidden-xs">
                     <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
-                    <span class="info">
-                    {t}Results{/t}: [% pagination.total %]
-                    </span>
+                <li class="quicklinks hidden-xs">
+                    <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+                        <option value="10a">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
                 </li>
             </ul>
-            <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
+            <ul class="nav quick-section pull-right simple-pagination">
+                <li class="quicklinks hidden-xs">
+                    <span class="info">
+                    [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                    </span>
                 </li>
                 <li class="quicklinks form-inline pagination-links">
                     <div class="btn-group">
@@ -149,7 +146,7 @@
                                 </div>
                             </th>
                             <th>{t}Title{/t}</th>
-                            <th>{t}URL{/t}</th>
+                            <th class="hidden-xs hidden-sm">{t}URL{/t}</th>
                             <!-- <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th> -->
                             <th class="center" style="width:20px;">{t}Published{/t}</th>
                         </tr>
@@ -161,12 +158,17 @@
                         <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                             <td>
                                 <div class="checkbox check-default">
-                                        <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
-                                        <label for="checkbox[%$index%]"></label>
-                                    </div>
+                                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                                    <label for="checkbox[%$index%]"></label>
+                                </div>
                             </td>
                             <td>
                                 [% content.title %]
+                                <span class="hidden-md hidden-lg">
+                                   - <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
+                                      <span class="fa fa-external-link"></span>{t}Link{/t}
+                                  </a>
+                                </span>
                                 <div class="listing-inline-actions">
                                     {acl isAllowed="STATIC_PAGE_UPDATE"}
                                     <a class="link" href="[% edit(content.id, 'admin_staticpage_show') %]">
@@ -180,7 +182,7 @@
                                     {/acl}
                                 </div>
                             </td>
-                            <td>
+                            <td class="hidden-xs hidden-sm">
                                 <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]/" target="_blank" title="{t}Open in a new window{/t}">
                                     {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% content.slug %]
                                 </a>
@@ -203,10 +205,10 @@
         </div>
         <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
             <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
             </div>
-            <div class="pull-right" ng-if="contents.length > 0">
-                <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+            <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
             </div>
         </div>
     </div>
