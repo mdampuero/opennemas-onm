@@ -43,7 +43,7 @@ class SearchController extends Controller
         unset($contentTypesAvailable['comment']);
 
         return $this->render(
-            'search_advanced/index.tpl',
+            'search_advanced/list.tpl',
             array('content_types' => $contentTypesAvailable)
         );
     }
