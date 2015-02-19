@@ -27,7 +27,7 @@
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                             <a class="btn btn-link" href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
-                                <i class="fa fa-gear"></i>
+                                <i class="fa fa-gear fa-lg"></i>
                             </a>
                         </li>
                     </ul>
@@ -128,8 +128,11 @@
                     <div class="loading-spinner"></div>
                     <div class="spinner-text">{t}Loading{/t}...</div>
                 </div>
-                <div class="table-wrapper ng-cloak">
-                    <table class="table table-hover no-margin" ng-if="!loading">
+                <div ng-if="contents.length == 0">
+                  <h5>{t}No comments matched your criteria.{/t}</h5>
+                </div>
+                <div class="table-wrapper ng-cloak" ng-if="!loading">
+                    <table class="table table-hover no-margin" ng-if="contents.length > 0">
                         <thead>
                             <tr>
                                 <th style="width:15px;">
@@ -181,18 +184,13 @@
                                     {/acl}
                                 </td>
                             </tr>
-                            <tr ng-if="contents.length == 0">
-                                <td class="empty" colspan="6">
-                                    {t}No comments matched your criteria.{/t}
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
                 <div class="pagination-info pull-left" ng-if="contents.length > 0">
-                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
+                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
                 </div>
                 <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
                     <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>

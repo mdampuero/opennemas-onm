@@ -12,8 +12,8 @@
                             {t}Comments{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
                       <h5>{t}Editing comment{/t}</h5>
                     </li>
                 </ul>
