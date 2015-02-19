@@ -80,7 +80,7 @@
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
                       <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right" type="button">
-                        <i class="fa fa-check fa-lg"></i>
+                        <i class="fa fa-arrow-left fa-lg"></i>
                       </button>
                     </li>
                      <li class="quicklinks">
@@ -88,39 +88,31 @@
                     </li>
                     <li class="quicklinks">
                         <h4>
-                            [% selected.contents.length %] {t}items selected{/t}
+                            [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
                         </h4>
                     </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
-                    <li class="quicklinks">
-                        <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="bottom" type="button">
-                          {t}Deselect{/t}
-                        </button>
-                    </li>
-                    <li class="quicklinks">
-                        <span class="h-seperate"></span>
-                    </li>
                     {acl isAllowed="SPECIAL_AVAILABLE"}
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Publish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-check"></i>
+                            <i class="fa fa-check fa-lg"></i>
                         </a>
                     </li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-times"></i>
+                            <i class="fa fa-times fa-lg"></i>
                         </a>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home fa-lg"></i>
                         </a>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-home fa-lg"></i>
                             <i class="fa fa-times fa-sub text-danger"></i>
                         </a>
                     </li>
@@ -129,7 +121,7 @@
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
                         <a class="btn btn-link" href="#" id="batch-delete" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-                            <i class="fa fa-trash-o"></i>
+                            <i class="fa fa-trash-o fa-lg"></i>
                         </a>
                     </li>
                 {/acl}
@@ -310,12 +302,12 @@
                     </table>
                 </div>
             </div>
-            <div class="grid-footer clearfix ng-cloak" ng-if="contents.length > 0">
-                <div class="pagination-info pull-left">
-                    {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+            <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+                <div class="pagination-info pull-left" ng-if="contents.length > 0">
+                    {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
                 </div>
-                <div class="pull-right">
-                    <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+                <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+                    <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
                 </div>
             </div>
         </div>
