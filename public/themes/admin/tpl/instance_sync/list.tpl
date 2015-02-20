@@ -18,13 +18,14 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-exchange"></i>
-                            {t}Instance Synchronization{/t}
+                            <span class="hidden-xs">{t}Instance Synchronization{/t}</span>
+                            <span class="visible-inline-xs">{t}Ins. Sync.{/t}</span>
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>{t}Settings{/t}</h5>
                     </li>
                 </ul>
@@ -53,8 +54,8 @@
                     <thead>
                         <tr>
                             <th>{t}Site Url{/t}</th>
-                            <th style='width:45% !important;'>{t}Categories to Sync{/t}</th>
-                            <th style="width:10% !important;">{t}Color{/t}</th>
+                            <th style='width:45% !important;' class="hidden-xs">{t}Categories to Sync{/t}</th>
+                            <th style="width:10% !important;" class="hidden-xs">{t}Color{/t}</th>
                         </tr>
                     </thead>
 
@@ -63,7 +64,12 @@
                             {foreach $config as $site => $categories}
                             <tr>
                                 <td>
-                                    {$site}
+                                    <strong>{$site}</strong>
+                                    <div class="visible-xs">{t}Categories to sync{/t}: {$categories|implode:", "}</div>
+                                    <div class="visible-xs">
+                                      <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
+                                    </div>
+
                                     <div class="listing-inline-actions">
                                         <a class="link" href="{url name=admin_instance_sync_show site_url=$site}"
                                            title="{t}Edit{/t}" class="btn">
@@ -75,10 +81,10 @@
                                         </a>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="hidden-xs">
                                     {$categories|implode:", "}
                                 </td>
-                                <td>
+                                <td class="hidden-xs">
                                     <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
                                 </td>
                             </tr>
