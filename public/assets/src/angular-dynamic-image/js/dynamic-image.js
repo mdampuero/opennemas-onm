@@ -97,6 +97,8 @@
         'ngModel': '='
       },
       link: function ($scope, $element, $attrs) {
+        var children = $element.children();
+
         if ($attrs['ngModel']) {
           // Add watcher to update src when scope changes
           $scope.$watch(
@@ -159,6 +161,8 @@
         html = html.replace('[autoscaleClass]', autoscaleClass);
 
         var e = $compile(html)($scope);
+        e.append(children);
+
         e.find('img').bind('load', function(event) {
           $scope.loading = false;
           $scope.$apply();
