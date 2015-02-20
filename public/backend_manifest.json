@@ -41,6 +41,5 @@
   ],
   "start_url": "/admin/",
   "scope": "/admin/",
-  "display": "fullscreen",
-  "orientation": "portrait"
+  "display": "fullscreen"
 }
