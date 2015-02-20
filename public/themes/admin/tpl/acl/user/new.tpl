@@ -108,10 +108,10 @@
                             Users
                         </h4>
                     </li>
-                    <li class="quicklinks seperate">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}
                         </h5>
