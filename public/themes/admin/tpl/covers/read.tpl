@@ -36,11 +36,11 @@
                     <li class="quicklinks">
                         <h4>
                             <i class="fa fa-newspaper-o"></i>
-                            {t}ePapers{/t}
+                            {t}Covers{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
                         <h5>{if !isset($cover->id)}{t}Creating ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h5>
                     </li>
                 </ul>

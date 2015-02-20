@@ -10,11 +10,11 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-home fa-lg"></i>
-                        {t}ePaper{/t}
+                        {t}Covers{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
                     <h5>{t}Settings{/t}</h5>
                 </li>
             </ul>
