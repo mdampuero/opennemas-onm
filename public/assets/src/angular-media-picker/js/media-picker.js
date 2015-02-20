@@ -137,13 +137,14 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                     <div class=\"drop-zone-text\">\
                       <h4>\
                         <div>\
-                          <i class=\"fa fa-picture-o\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
-                          <i class=\"fa fa-film\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
-                          <i class=\"fa fa-file-o\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
+                          <i class=\"fa fa-picture-o fa-2x\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
+                          <i class=\"fa fa-film fa-2x\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
+                          <i class=\"fa fa-file-o fa-2x\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
                         </div>\
-                        Drop files here to upload\
+                        <span class=\"hidden-xs\">Drop files here to upload</span>\
+                        <span class=\"visible-xs\">Click here to upload</span>\
                       </h4>\
-                      <h5>\
+                      <h5 class=\"hidden-xs\">\
                         or click here\
                       </h5>\
                     </div>\
