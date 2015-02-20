@@ -161,16 +161,19 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            */
           var pickerTpl = "<div class=\"media-picker\">\
             <div class=\"media-picker-backdrop\"></div>\
-            <div class=\"media-picker-dialog\" style=\"display: block;\">\
-                <div class=\"media-picker-sidebar\">\
+            <div class=\"media-picker-dialog\">\
+                <div class=\"media-picker-close\">\
+                  <i class=\"fa fa-lg fa-times pull-right\"></i>\
+                </div>\
+                <div class=\"media-picker-loading\" ng-if=\"loading\">\
+                  <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
+                </div>\
+                <div class=\"media-picker-sidebar\" ng-if=\"!loading\">\
                   <ul>\
                     [sidebar]\
                   </ul>\
                 </div>\
-                <div class=\"media-picker-content\">\
-                  <div class=\"media-picker-close\">\
-                    <i class=\"fa fa-lg fa-times pull-right\"></i>\
-                  </div>\
+                <div class=\"media-picker-content\" ng-if=\"!loading\">\
                   [content]\
                 </div>\
               </div>\
@@ -300,6 +303,21 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
           elm.bind('click', function() {
             $scope.reset();
 
+            var html = $scope.picker.render();
+            var e    = $compile(html)($scope);
+
+            $('body').append(e);
+
+            // Make the page non-scrollable
+            $('body').addClass('media-picker-open');
+
+            // Hide and destroy the media picker
+            e.find('.media-picker-close').bind('click', function() {
+              $scope.picker.close();
+            });
+
+            $scope.loading = true;
+
             var url = routing.generate(
               'backend_ws_media_picker_mode',
               { mode: $scope.picker.modes.available }
@@ -307,20 +325,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
             // Get the parameters for the media picker
             $http.post(url).then(function(response) {
+              $scope.loading = false;
               $scope.picker.params = response.data;
-
-              var html = $scope.picker.render();
-              var e    = $compile(html)($scope);
-
-              $('body').append(e);
-
-              // Make the page non-scrollable
-              $('body').addClass('media-picker-open');
-
-              // Hide and destroy the media picker
-              e.find('.media-picker-close').bind('click', function() {
-                $scope.picker.close();
-              });
 
               if ($scope.picker.modes.active == 'explore') {
                 $scope.explore();
