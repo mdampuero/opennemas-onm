@@ -14,7 +14,7 @@ angular.module('onm.Editor', [])
       this.defaults = {
         plugins: 'a11yhelp,about,imageresize,autogrow,autokeywords,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,pastespecial,removeformat,resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea',
         disableNativeSpellChecker: false,
-        uiColor: '#E5E9EC',
+        uiColor: '#ffffff',
         autoGrow_onStartup: true,
         autoGrow_maxHeight: 500,
         wordcount: {
