@@ -173,24 +173,26 @@
               </div>
             </td>
             <td >
-              <span class="visible-xs-block"><span class="label label-important" style="background-color:[% content.source_color %];">[% content.source_name %]</span></span>
               <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
-              <small>
-                <div class="tags">
+              <p>
+                <div class="tags small-text">
                   <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
                 </div>
 
-                <span ng-if="content.photos.length > 0 || content.videos.length > 0">
+                <span ng-if="content.photos.length > 0 || content.videos.length > 0" class=" small-text">
                   <!--{t}Attachments{/t}:-->
                   <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/album.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
                   <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video.png" alt="[{t}With video{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
                 </span>
-              </small>
-
-
-              <p class="visible-xs visible-sm" title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
               </p>
+
+              <p class="visible-xs-block visible-sm-block">
+                <span class="label label-important" style="background-color:[% content.source_color %];">[% content.source_name %]</span>
+                <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
+                  [% content.created_time | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                </span>
+              </p>
+
 
               <div class="listing-inline-actions">
                 <a class="link" href="[% content.view_url %]" title="{t}View{/t}">
