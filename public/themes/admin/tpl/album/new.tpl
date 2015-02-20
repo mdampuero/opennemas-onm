@@ -84,10 +84,10 @@
                             {t}Albums{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if isset($album->id)}
                                 {t}Editing album{/t}
@@ -145,14 +145,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="agency">
-                                {t}Agency{/t}
-                            </label>
-                            <div class="controls">
-                                <input class="form-control" id="agency" name="agency" type="text" value="{$album->agency|clearslash|escape:"html"}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="form-label" for="description">
                                 {t}Description{/t}
                             </label>
@@ -165,19 +157,20 @@
             </div>
             <div class="col-md-4">
                 <div class="grid simple">
-                    <div class="grid-title">
-                        <h4>{t}Attributes{/t}</h4>
-                    </div>
                     <div class="grid-body">
-                        <div class="checkbox">
-                            <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
-                            <label for="content_status">{t}Available{/t}</label>
+                        <div class="form-group">
+                          <div class="checkbox">
+                              <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
+                              <label for="content_status">{t}Available{/t}</label>
+                          </div>
                         </div>
                         {is_module_activated name="COMMENT_MANAGER"}
+                        <div class="form-group">
                             <div class="checkbox">
                                 <input id="with_comment" name="with_comment" type="checkbox" {if (!isset($album) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($album) && $album->with_comment eq 1)}checked{/if} value="1" />
                                 <label for="with_comment">{t}Allow comments{/t}</label>
                             </div>
+                        </div>
                         {/is_module_activated}
                         <div class="form-group">
                             <label class="form-label">
@@ -185,6 +178,14 @@
                             </label>
                             <div class="controls">
                                 {include file="common/selector_categories.tpl" name="category" item=$album}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="agency">
+                                {t}Agency{/t}
+                            </label>
+                            <div class="controls">
+                                <input class="form-control" id="agency" name="agency" type="text" value="{$album->agency|clearslash|escape:"html"}"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -225,13 +226,13 @@
                     <div class="grid-title">
                         <h4>{t}Album images{/t}</h4>
                     </div>
-                    <div class="grid-body">
+                    <div class="grid-body no-padding">
                         <div class="form-group" id="album-images">
-                            <div id="list-of-images" class="list-of-images clearfix controls">
+                            <div id="list-of-images" class="album-elements clearfix controls row">
                                 <ul>
                                     {if !empty($photos)}
                                     {foreach from=$photos item=photo key=key name=album_photos}
-                                    <li class="image thumbnail" id="img{$photo['photo']->pk_photo}">
+                                    <li class="element thumbnail col-sm-2 col-md-3" id="img{$photo['photo']->pk_photo}">
                                         <div class="overlay-image">
                                             <div>
                                                 <ul class="image-buttons clearfix">
@@ -249,7 +250,7 @@
                                     </li><!-- /image -->
                                     {/foreach}
                                     {/if}
-                                    <li class="image add-image thumbnail">
+                                    <li class="element add-image thumbnail col-sm-2 col-md-3">
                                         <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
                                     </li><!-- /image -->
                                 </ul>
