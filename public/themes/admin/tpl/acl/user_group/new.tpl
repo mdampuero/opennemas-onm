@@ -23,10 +23,10 @@
                             {t}User groups{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks seperate">
+                    <li class="quicklinks hidden-xs">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs">
                         <h5>
                             {if isset($user_group->id)}{t}Editing group{/t}{else}{t}Creating user group{/t}{/if}
                         </h5>
@@ -63,10 +63,10 @@
                 <h4>{t}Basic information{/t}</h4>
             </div>
             <div class="grid-body">
-                <div class="control-group">
-                    <label for="name" class="control-label">{t}Group name{/t}</label>
+                <div class="form-group">
+                    <label for="name" class="form-label">{t}Group name{/t}</label>
                     <div class="controls">
-                        <input type="text" id="name" name="name" value="{$user_group->name}" class="input-xxlarge" required="required"
+                        <input type="text" id="name" name="name" value="{$user_group->name}" class="form-control" required="required"
                             {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
                     </div>
                 </div>
@@ -79,10 +79,10 @@
             </div>
 
             <div class="grid-body" id="privileges">
-                <div class="controls">
+                <div class="controls row">
                     {foreach item=privileges from=$modules key=mod name=priv}
-                    {if $smarty.foreach.priv.first || $smarty.foreach.priv.index % 2 == 0}<div style="display:block; width:100%" class="clearfix">{/if}
-                        <table  class="table table-condensed table-hover" style="display:inline-block; width:49%; float:left; margin-right:2px;">
+                    <!-- {if $smarty.foreach.priv.first || $smarty.foreach.priv.index % 2 == 0}<div style="display:block; width:100%" class="clearfix">{/if} -->
+                        <table  class="table table-condensed table-hover" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" class="toggleallcheckbox"></th>
@@ -92,13 +92,9 @@
                             <tbody id="{$mod}">
                             {section name=privilege loop=$privileges}
                                 <tr>
-                                    <td style="padding:4px;" nowrap="nowrap" width="5%">
+                                    <td nowrap="nowrap" width="10px">
                                         <label for="{$privileges[privilege]->id}" style="cursor:pointer;">
-                                            {if $user_group->containsPrivilege($privileges[privilege]->id)}
-                                               <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-                                            {else}
-                                               <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-                                            {/if}
+                                          <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" {if $user_group->containsPrivilege($privileges[privilege]->id)}checked{/if}>
                                         </label>
                                     </td>
                                     <td>
@@ -108,7 +104,7 @@
                             {/section}
                             </tbody>
                         </table>
-                    {if $smarty.foreach.priv.last || $smarty.foreach.priv.index % 2 == 1}</div>{/if}
+                    <!-- {if $smarty.foreach.priv.last || $smarty.foreach.priv.index % 2 == 1}</div>{/if} -->
                     {/foreach}
                 </div>
             </div>
