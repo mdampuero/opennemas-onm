@@ -36,10 +36,10 @@
                 {t}Books{/t}
               </h4>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <h5>
                 {if !isset($book->id)}
                 {t}Creating Book{/t}
@@ -93,6 +93,13 @@
             </div>
 
             <div class="form-group">
+              <label for="description" class="form-label">{t}Description{/t}</label>
+              <div class="controls">
+                <textarea onm-editor onm-editor-preset="simple" id="description" name="description" rows="3" class="form-control">{$book->description|clearslash}</textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
               <label for="contentbox" class="form-label"></label>
               <div class="contentbox-container controls">
                 <div class="contentbox">
@@ -123,7 +130,41 @@
                 </div>
               </div>
             </div>
+          </div>
 
+          <input type="hidden" id="action" name="action" value="" />
+          <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="grid simple">
+          <div class="grid-body">
+            <div class="form-group">
+              <label for="category" class="form-label">{t}Category{/t}</label>
+              <div class="controls">
+                {include file="common/selector_categories.tpl" name="category" item=$book}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="content_status" class="form-label">{t}Available{/t}</label>
+              <div class="controls">
+                <select name="content_status" id="content_status"
+                class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
+                <option value="0" {if $book->content_status eq 0} selected {/if}>{t}No{/t}</option>
+                <option value="1" {if !isset($book) || $book->content_status eq 1} selected {/if}>{t}Yes{/t}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="metadata" class="form-label">{t}Keywords{/t}</label>
+            <span class="help">{t}Separated by comas{/t}</span>
+            <div class="controls">
+              <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$book->metadata|default:""}" />
+
+            </div>
+          </div>
 
             <div class="form-group">
               <label for="author" class="form-label">{t}Author{/t}</label>
@@ -153,47 +194,6 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="description" class="form-label">{t}Description{/t}</label>
-              <div class="controls">
-                <textarea id="description" name="description" rows="3" class="form-control">{$book->description|clearslash}</textarea>
-              </div>
-            </div>
-          </div>
-
-          <input type="hidden" id="action" name="action" value="" />
-          <input type="hidden" name="id" id="id" value="{$book->id|default:""}" />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="grid simple">
-          <div class="grid-title">{t}Attributes{/t}</div>
-          <div class="grid-body">
-            <div class="form-group">
-              <label for="category" class="form-label">{t}Category{/t}</label>
-              <div class="controls">
-                {include file="common/selector_categories.tpl" name="category" item=$book}
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="content_status" class="form-label">{t}Available{/t}</label>
-              <div class="controls">
-                <select name="content_status" id="content_status"
-                class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
-                <option value="0" {if $book->content_status eq 0} selected {/if}>{t}No{/t}</option>
-                <option value="1" {if !isset($book) || $book->content_status eq 1} selected {/if}>{t}Yes{/t}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-            <div class="controls">
-              <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$book->metadata|default:""}" />
-              <span class="help-block">{t}Separated by coma{/t}</span>
-            </div>
-          </div>
         </div>
       </div>
       </div>
