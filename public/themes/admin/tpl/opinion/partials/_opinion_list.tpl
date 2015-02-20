@@ -36,12 +36,12 @@
                     {acl isAllowed="OPINION_HOME"}
                         <li class="quicklinks hidden-xs">
                             <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-home"></i>
+                                <i class="fa fa-home fa-lg"></i>
                             </a>
                         </li>
                         <li class="quicklinks hidden-xs">
                             <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
-                                <i class="fa fa-home"></i>
+                                <i class="fa fa-home fa-lg"></i>
                                 <i class="fa fa-times fa-sub text-danger"></i>
                             </a>
                         </li>
