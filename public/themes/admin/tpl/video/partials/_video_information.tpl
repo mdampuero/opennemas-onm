@@ -15,7 +15,7 @@
 <div class="form-group">
     <label for="description" class="form-label">{t}Description{/t}</label>
     <div class="controls">
-        <textarea name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:""}</textarea>
+        <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:""}</textarea>
     </div>
 </div>
 

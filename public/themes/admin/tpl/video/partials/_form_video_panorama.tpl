@@ -7,8 +7,8 @@
                     value="{$video->video_url|default:""}" required="required" class="form-control" />
                 <span class="input-group-addon primary">
                     <span class="arrow"></span>
-                    <a href="#" id="video_url_button">
-                        {if isset($video)}{t}Update information{/t}{else}{t}Get information{/t}{/if}
+                    <a class="link" href="#" id="video_url_button">
+                        <span class="fa fa-refresh"></span> <span class="hidden-xs">{t}Get information{/t}</span>
                     </a>
                 </span>
             </div>
