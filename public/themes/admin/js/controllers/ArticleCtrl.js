@@ -22,7 +22,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      *
      * @param string image The image to remove.
      */
-    $scope.clear = function(image) {
+    $scope.removeImage = function(image) {
       delete $scope[image];
     };
 
