@@ -1,5 +1,5 @@
-<div class="sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned">
-    <div class="overlay"></div>
+<div class="sidebar" id="main-menu" ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
+    <div class="overlay" ng-click="sidebar.collapsed = 0"></div>
     <scrollable>
         <div class="sidebar-wrapper">
             {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}

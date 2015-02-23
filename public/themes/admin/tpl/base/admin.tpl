@@ -89,7 +89,7 @@
         </script>
     {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.collapsed }" {if !$smarty.session.sidebar_pinned}class="collapsed"{/if} ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}',{if $smarty.session.sidebar_pinned}true{else}false{/if})">
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.collapsed }" {if !$smarty.session.sidebar_pinned}class="collapsed"{/if} ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}',{if $smarty.session.sidebar_pinned}true{else}false{/if})" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned">
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
