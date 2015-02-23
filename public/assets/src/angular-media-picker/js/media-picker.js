@@ -25,7 +25,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               <div class=\"media-picker-panel-body\">\
                 <div class=\"media-picker-panel-topbar\">\
                   <ul>\
-                    <li>\
+                    <li ng-if=\"isTypeAllowed('image')\">\
                       <select name=\"month\" ng-model=\"date\">\
                         <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
@@ -43,6 +43,14 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                         <input ng-model=\"title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
                       </div>\
                     </li>\
+                    <li ng-if=\"isTypeAllowed('video')\">\
+                      <select name=\"category\" ng-model=\"category\">\
+                        <option value=\"\">[% picker.params.explore.allCategories %]</option>\
+                        <option value=\"[% category.id %]\" ng-repeat=\"category in picker.params.explore.categories\">\
+                          [% cateogory.name %]\
+                        </option>\
+                      </select>\
+                    </li>\
                   </ul>\
                 </div>\
                 <div class=\"media-picker-panel-wrapper\">\
@@ -59,7 +67,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                       <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
                         <dynamic-image class=\"img-thumbnail\" instance=\""
                           + instanceMedia
-                          + "\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                          + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                        <dynamic-image class=\"img-thumbnail\"  ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
                       </div>\
                     </div>\
                     <div class=\"media-items-loading\" ng-if=\"loading\">\
@@ -208,9 +217,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            * @type Object
            */
           $scope.picker = {
-            files: [ 'photo', 'video', 'pdf' ],
             modes: {
-              active: attrs['mediaPickerMode'] ? attrs['mediaPickerMode'] : 'explore',
+              active:    attrs['mediaPickerMode'] ? attrs['mediaPickerMode'] : 'explore',
               available: [ 'upload', 'explore' ]
             },
             selection: {
@@ -223,6 +231,10 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               uploading: false
             },
             target: attrs['mediaPickerTarget'],
+            types: {
+              active:    [ 'photo' ],
+              available: [ 'photo', 'video' ]
+            },
 
             /**
              * Closes the current media picker.
@@ -257,7 +269,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              *                 Otherwise, return false.
              */
             isTypeAllowed: function(type) {
-              return this.files.indexOf(type) != -1;
+              return this.types.active.indexOf(type);
             },
 
             /**
@@ -298,7 +310,29 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
               return picker;
             },
+
+            /**
+             * Sets the media picker content types.
+             *
+             * @param string type The content type.
+             */
+            setType: function(type) {
+              if (this.types.available.indexOf(type) != -1
+                  && this.types.active.indexOf(type) == -1) {
+                this.types.active.push(type);
+              }
+            }
           };
+
+          // Initialize the media picker active types
+          if (attrs['mediaPickerType']) {
+            var types = attrs['mediaPickerType'].split(',');
+            $scope.picker.types.active = [];
+
+            for (var i = 0; i < types.length; i++) {
+              $scope.picker.setType(types[i]);
+            };
+          }
 
           // Bind click event to open media-picker
           elm.bind('click', function() {
@@ -469,10 +503,11 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         }
 
         var data = {
-            epp:        $scope.epp,
-            page:       $scope.page,
-            sort_by:    'created',
-            sort_order: 'desc',
+          content_type_name: $scope.picker.types.active,
+          epp:               $scope.epp,
+          page:              $scope.page,
+          sort_by:           'created',
+          sort_order:        'desc',
         }
 
         if ($scope.title) {
