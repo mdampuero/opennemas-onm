@@ -17,16 +17,26 @@ class MediaPickerController extends Controller
      */
     public function listAction(Request $request)
     {
-        $epp   = $request->query->getDigits('epp', 1);
-        $date  = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
-        $page  = $request->query->getDigits('page', 1);
-        $title = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
-        $type  = $request->query->filter('content_type_name', 'photo', FILTER_SANITIZE_STRING);
+        $epp          = $request->query->getDigits('epp', 1);
+        $date         = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
+        $contentTypes = $request->query->filter('content_type_name', 'photo', FILTER_SANITIZE_STRING);
 
-        $filter = [ "content_type_name = '$type'", "in_litter = 0" ];
+
+        $filter = [ "in_litter = 0" ];
         $order = [
             'created' => 'desc'
         ];
+
+        if (!empty($contentTypes)) {
+            $types = [];
+            foreach ($contentTypes as $type) {
+                $types[] = "content_type_name = '$type'";
+            }
+
+            $filter[] = implode(' OR ', $types);
+        }
 
         if (!empty($date)) {
             $filter[] = "DATE_FORMAT(created, '%Y-%c') = '$date'";
@@ -35,6 +45,7 @@ class MediaPickerController extends Controller
         if (!empty($title)) {
             $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%')";
         }
+
 
         $em = $this->get('entity_repository');
 
