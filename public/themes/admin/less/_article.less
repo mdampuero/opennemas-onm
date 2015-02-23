@@ -1,5 +1,6 @@
 .thumbnail-placeholder {
   height: 250px;
+  position: relative;
 
   .img-thumbnail {
     display: block;
@@ -8,10 +9,70 @@
 
     .thumbnail-empty {
       background: #eee;
+      cursor: pointer;
       height: 100%;
       padding-top: 100px;
       text-align: center;
       width: 100%;
     }
+  }
+}
+
+.dynamic-image-placeholder {
+  height: 100%;
+  width: 100%;
+}
+
+.dynamic-image-wrapper {
+  .thumbnail-actions {
+    bottom: 0;
+    margin-top: -25px;
+    opacity: 0;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    position: absolute;
+    z-index: 100;
+
+    transition: all .25s;
+
+    .thumbnail-action {
+      background: rgba(0,0,0,.75);
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-block;
+      height: 48px;
+      line-height: 4.4em;
+      margin-right: 7px;
+      text-align: center;
+      width: 48px;
+
+      i {
+        color: #fff;
+      }
+    }
+
+    .remove-action {
+      background-color: #f35958;
+    }
+  }
+
+  .thumbnail-hidden-action {
+    bottom: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &:hover {
+    .thumbnail-actions {
+      opacity: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .dynamic-image-wrapper .thumbnail-actions {
+    opacity: 1;
   }
 }

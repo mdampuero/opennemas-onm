@@ -18,7 +18,19 @@
                         <h5>Pick an image</h5>
                       </div>
                     </div>
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220" ng-if="photo1"></dynamic-image>
+                    <div class="dynamic-image-placeholder" ng-if="photo1">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220"></dynamic-image>
+                    </div>
+                  </div>
+                  <div class="thumbnail-actions" ng-if="photo1" style="text-align: center; margin-top: 10px;">
+                    <button class="btn btn-default" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                      <i class="fa fa-camera"></i>
+                      {t}Change image{/t}
+                    </button>
+                    <button class="btn btn-danger" ng-click="removeImage('photo1')" type="button">
+                      <i class="fa fa-trash-o"></i>
+                      {t}Remove{/t}
+                    </button>
                   </div>
                 </div>
                 <div class="form-group" ng-if="photo1">
@@ -26,23 +38,33 @@
                     {t}Footer text{/t}
                   </label>
                   <div class="controls">
-                    <textarea class="form-control" name="img1_footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                    <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
                     <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id"/>
                   </div>
                 </div>
               </div>
-
               <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo1 = {json_encode($photo2)|replace:'"':'\''}"{/if}>
                 <h5>{t}Inner image{/t}</h5>
                 <div class="form-group">
-                  <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                  <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo2">
-                      <div class="thumbnail-empty">
+                      <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>Pick an image</h5>
                       </div>
                     </div>
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" transform="thumbnail,220,220" ng-if="photo2"></dynamic-image>
+                    <div class="dynamic-image-placeholder" ng-if="photo2">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" transform="thumbnail,220,220" ng-if="photo2">
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="removeImage('photo2')">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
+                          <div class="thumbnail-action" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                            <i class="fa fa-camera fa-2x"></i>
+                          </div>
+                        </div>
+                      </dynamic-image>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group" ng-if="photo2">
@@ -50,7 +72,7 @@
                     {t}Footer text{/t}
                   </label>
                   <div class="controls">
-                    <textarea class="form-control" name="img2_footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                    <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
                     <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
                   </div>
                 </div>
@@ -60,22 +82,32 @@
                 <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo1 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
                   <h5>{t}Home image{/t}</h5>
                   <div class="form-group">
-                    <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                    <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo3">
-                        <div class="thumbnail-empty">
-                          <i class="fa fa-picture-o fa-2x"></i>
+                        <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                          <i class="fa fa-picture-o "></i>
                           <h5>Pick an image</h5>
                         </div>
                       </div>
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" transform="thumbnail,220,220" ng-if="photo3"></dynamic-image>
+                      <div class="dynamic-image-placeholder" ng-if="photo3">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" transform="thumbnail,220,220">
+                          <div class="thumbnail-actions">
+                            <div class="thumbnail-action remove-action" ng-click="removeImage('photo3')">
+                              <i class="fa fa-trash-o fa-2x"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                          </div>
+                        </dynamic-image>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group" ng-if="photo3">
-                    <label for="params[imageHomeFooter]">
+                    <label class="form-label" for="params[imageHomeFooter]">
                       {t}Image footer text{/t}
                     </label>
                     <div class="controls">
-                      <textarea class="form-control" name="params[imageHomeFooter]">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                      <textarea class="form-control" name="params[imageHomeFooter]" ng-model="params[imageHomeFooter]">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
                       <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id"/>
                     </div>
                   </div>
