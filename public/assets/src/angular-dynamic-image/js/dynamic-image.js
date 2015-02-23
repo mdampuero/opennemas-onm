@@ -62,23 +62,24 @@
     /**
      * Returns the height and width basing on the available space.
      *
-     * @param Object image The image object.
+     * @param string height The image original height.
+     * @param string width  The image original width.
      *
      * @return Object The height and width for the available space.
      */
-    this.getSettings = function(image) {
+    this.getSettings = function(height, width) {
       var oH = $('.dynamic-image-wrapper.autoscale').parent().height();
       var oW = $('.dynamic-image-wrapper.autoscale').parent().width();
 
       var h = oH;
-      var w = (image.width * oH) / image.height;
+      var w = (width * oH) / height;
 
       if (w > oW) {
         w = oW;
-        h = (image.height * oW) / image.width;
+        h = (height * oW) / width;
       }
 
-      return { height: h, width: w }
+      return { height: h, width: w };
     }
 
     /**
@@ -116,8 +117,9 @@
             },
             function(nv, ov) {
               $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia, $attrs['dynamicImageProperty']);
+
               if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-                var settings = dynamicImage.getSettings(nv);
+                var settings = dynamicImage.getSettings(nv.height, nv.width);
                 $scope.height = settings.height;
                 $scope.width  = settings.width;
               }
@@ -174,6 +176,13 @@
 
         e.find('img').bind('load', function(event) {
           $scope.loading = false;
+
+          if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
+            var settings = dynamicImage.getSettings($(this).height(), $(this).width());
+            $scope.height = settings.height;
+            $scope.width  = settings.width;
+          }
+
           $scope.$apply();
         });
 
