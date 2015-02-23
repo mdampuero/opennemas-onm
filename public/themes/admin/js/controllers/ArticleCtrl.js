@@ -57,12 +57,12 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     };
 
     /**
-     * Updates scope when photo1, photo2 or photo3 change.
+     * Updates scope when photo1 changes.
      *
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('[photo1,photo2,photo3]', function(nv, ov) {
+    $scope.$watch('photo1', function(nv, ov) {
       $scope.img1        = null;
       $scope.img1_footer = null;
 
@@ -70,7 +70,15 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
         $scope.img1        = $scope.photo1.id;
         $scope.img1_footer = $scope.photo1.description;
       }
+    }, true);
 
+    /**
+     * Updates scope when photo2 changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('photo2', function(nv, ov) {
       $scope.img2        = null;
       $scope.img2_footer = null;
 
@@ -78,13 +86,53 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
         $scope.img2        = $scope.photo2.id;
         $scope.img2_footer = $scope.photo2.description;
       }
+    }, true);
 
-      $scope['params[imageHome]']       = null;
-      $scope['params[imageHomeFooter]'] = null;
+    /**
+     * Updates scope when photo3 changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('photo3', function(nv, ov) {
+      $scope.imageHome       = null;
+      $scope.imageHomeFooter = null;
 
       if ($scope.photo3) {
-        $scope['params[imageHome]']       = $scope.photo3.id;
-        $scope['params[imageHomeFooter]'] = $scope.photo3.description;
+        $scope.imageHome       = $scope.photo3.id;
+        $scope.imageHomeFooter = $scope.photo3.description;
+      }
+    }, true);
+
+    /**
+     * Updates scope when video1 changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('video1', function(nv, ov) {
+      $scope.fk_video     = null;
+      $scope.footer_video = null;
+
+      if ($scope.video1) {
+        $scope.fk_video     = $scope.video1.id;
+        $scope.footer_video = $scope.video1.description;
+      }
+    }, true);
+
+    /**
+     * Updates scope when video2 changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('video2', function(nv, ov) {
+      $scope.fk_video2     = null;
+      $scope.footer_video2 = null;
+
+      if ($scope.video2) {
+        $scope.fk_video2     = $scope.video2.id;
+        $scope.footer_video2 = $scope.video2.description;
       }
     }, true);
   }
