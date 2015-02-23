@@ -23,14 +23,19 @@
      * @param object image         The image to generate URL from.
      * @param string transform     The transform parameters.
      * @param string instanceMedia The instance media folder path.
+     * @param string property      The object property name.
      *
      * @return string The generated URL.
      */
-    this.generateUrl = function(image, transform, instanceMedia) {
+    this.generateUrl = function(image, transform, instanceMedia, property) {
       var prefix = '';
 
       if (typeof image == 'object') {
-        image = image[this.property];
+        if (property) {
+          image = image[property];
+        } else {
+          image = image[this.property];
+        }
       }
 
       if (!/http:\/\//.test(image)) {
@@ -39,6 +44,10 @@
         }
 
         prefix = instanceMedia + this.imageFolder;
+      }
+
+      if (!transform) {
+        return image;
       }
 
       return routingProvider.generate(
@@ -106,7 +115,7 @@
               return $scope.ngModel;
             },
             function(nv, ov) {
-              $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia);
+              $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia, $attrs['dynamicImageProperty']);
               if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
                 var settings = dynamicImage.getSettings(nv);
                 $scope.height = settings.height;
