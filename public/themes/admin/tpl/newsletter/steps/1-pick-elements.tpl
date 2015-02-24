@@ -1,49 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-
-.content-receiver {
-    border:1px solid #ccc;
-    border-top:0;
-}
-.container-label { position:relative; }
-.container-buttons {
-    position:absolute;
-    top:-1px;
-    right:10px;
-    display:inline-block;
-}
-.container-buttons i {
-    margin-top:0;
-    margin-left:3px;
-}
-.toolbar {
-    margin-bottom:5px;
-}
-.related-content-provider {
-    width:100%;
-}
-#newsletter-content-provider .toolbar{
-    text-align:right
-}
-.contents ul {
-    margin:0 !important;
-    width:100%;
-}
-.contents ul li {
-    margin:4px 0;
-}
-.placeholder-element {
-    min-height:24px !important;
-    background:#efefef !important;
-    border:1px dashed Gray !important;
-}
-</style>
-{/block}
-
 {block name="content"}
-
 <form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form">
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -52,21 +9,25 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Newsletter contents{/t}
+                        {t}Newsletters{/t}
                     </h4>
+                </li>
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
+                  <h5>{t}Pick contents{/t}</h5>
                 </li>
             </ul>
            <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Go back to list{/t}">
+                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks btn-group">
                         <button class="btn btn-primary" type="submit" title="{t}Next{/t}" id="next-button">
-                            {t}Next step{/t}
+                            <span class="hidden-xs">{t}Next{/t}</span>
                             <span class="fa fa-chevron-right"></span>
                         </button>
                     </li>
@@ -76,16 +37,16 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content newsletter-manager">
 
     {render_messages}
 
     <div class="grid simple">
         <div class="grid-body">
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Email subject{/t}</label>
+            <div class="form-group">
+                <label for="name" class="form-label">{t}Email subject{/t}</label>
                 <div class="controls">
-                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name}" required class="input-xlarge"/>
+                    <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control"/>
                 </div>
             </div>
         </div>

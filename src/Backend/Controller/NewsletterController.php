@@ -52,32 +52,9 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
-        $itemsPerPage = s::get('items_per_page');
-        $page         = $request->query->getDigits('page', 1);
-
-        $nm = $this->get('newsletter_manager');
-        list($count, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $itemsPerPage);
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $count,
-                'url'   => $this->generateUrl(
-                    'admin_newsletters',
-                    array(
-                        'page' => $page,
-                    )
-                )
-            )
-        );
-
         return $this->render(
             'newsletter/list.tpl',
             array(
-                'newsletters'   => $newsletters,
-                'count'         => $count,
-                'pagination'    => $pagination,
                 'totalSendings' => $totalSendings,
                 'maxAllowed'    => $maxAllowed,
                 'lastInvoice'   => $lastInvoice->format(_('Y-m-d')),
@@ -448,43 +425,6 @@ class NewsletterController extends Controller
                 'newsletter'  => $newsletter,
             )
         );
-    }
-
-    /**
-     * Deletes an newsletter given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (!empty($id)) {
-            $newsletter = new \Newsletter($id);
-            $newsletter->delete();
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Newsletter deleted successfully.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id for delete a newsletter.')
-            );
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        } else {
-            return new Response('Ok', 200);
-        }
     }
 
     /**

@@ -1,76 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-
-    #accounts-provider > div,
-    #items-recipients {
-        height:500px;
-        overflow-y: scroll;
-    }
-
-
-    #accounts-provider ul {
-        margin-top:10px;
-        display:block;
-    }
-
-    #othersMails {
-        min-height:300px;
-        margin-top:10px;
-        width:96%;
-    }
-
-    #accounts-provider ul {
-        margin:0px;
-    }
-    #accounts-provider ul,
-    #items-recipients {
-        list-style: none;
-    }
-
-    #accounts-provider ul li,
-    #items-recipients li {
-        padding:3px;
-        border:1px solid #ccc;
-        margin-bottom: 4px;
-        position:relative;
-    }
-
-    #accounts-provider ul li .icon,
-    #items-recipients li .icon {
-        position:absolute;
-        right:5px;
-        top:3px;
-        cursor: pointer;
-    }
-
-    #items-recipients li input[type=checkbox] { display:none;}
-
-    #items-recipients {
-        padding:10px;
-        display:block;
-        margin:0;
-    }
-    .placeholder-element {
-        min-height:24px !important;
-        background:#efefef !important;
-        border:1px dashed Gray !important;
-    }
-
-    #database-accounts-list {
-        margin:0px;
-        margin-top:50px !important;
-        min-height:300px;
-    }
-    #recipients {
-        border:1px solid #ccc;
-    }
-</style>
-{/block}
-
 {block name="content"}
-
 <form action="#" method="POST" name="newsletterForm" id="pick-recipients-form">
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -79,8 +9,12 @@
                 <li class="quicklinks">
                     <h4>
                         <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Recipient selection{/t}
+                        {t}Newsletters{/t}
                     </h4>
+                </li>
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
+                  <h5>{t}Recipient selection{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
@@ -94,11 +28,11 @@
                     <li class="quicklinks btn-group">
                         <a class="btn btn-primary" href="{url name=admin_newsletter_preview id=$id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
                             <span class="fa fa-chevron-left"></span>
-                            {t}Previous step{/t}
+                            <span class="hidden-xs">{t}Previous{/t}</span>
                         </a>
-                        <a class="btn btn-primary confirm-send-button" data-controls-modal="modal-confirm-send" href="#" title="{t}Next{/t}" id="next-button">
-                            {t}Send newsletter{/t}
-                            <span class="fa fa-chevron-right"></span>
+                        <a class="btn btn-info confirm-send-button" data-controls-modal="modal-confirm-send" href="#" title="{t}Next{/t}" id="next-button">
+                            <span class="fa fa-envelope"></span>
+                            <span class="hidden-xs">{t}Send{/t}</span>
                         </a>
                     </li>
                 </ul>
@@ -107,7 +41,7 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content newsletter-manager">
 
     {render_messages}
 
@@ -175,8 +109,9 @@
                 </div>
             </div>
 
-            <div class="col-md-1 center" style="padding-top:100px">
-                <span class="fa fa-chevron-right fa-3x"></span>
+            <div class="col-md-1 center">
+                <span class="fa fa-chevron-right fa-3x hidden-xs hidden-sm"  style="padding-top:100px"></span>
+                <span class="fa fa-chevron-down fa-3x visible-xs visible-sm"  style="padding-top:100px"></span>
             </div>
 
             <div class="col-md-5">

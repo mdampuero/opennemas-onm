@@ -60,6 +60,123 @@
   box-shadow: none !important;
   border-color:#d1dade !important;
 }
+
+/* Newsletter rules ============================================================ */
+
+.newsletter-manager {
+  .ok, .failed {
+    font-weight: bold;
+  }
+  .ok {
+      color: green;
+  }
+  .failed {
+      color: red;
+  }
+
+  #accounts-provider > div,
+  #items-recipients {
+      height:500px;
+      overflow-y: scroll;
+  }
+
+
+  #accounts-provider ul {
+      margin-top:10px;
+      display:block;
+  }
+
+  #othersMails {
+      min-height:300px;
+      margin-top:10px;
+      width:96%;
+  }
+
+  #accounts-provider ul {
+      margin:0px;
+  }
+  #accounts-provider ul,
+  #items-recipients {
+      list-style: none;
+  }
+
+  #accounts-provider ul li,
+  #items-recipients li {
+      padding:3px;
+      border:1px solid #ccc;
+      margin-bottom: 4px;
+      position:relative;
+  }
+
+  #accounts-provider ul li .icon,
+  #items-recipients li .icon {
+      position:absolute;
+      right:5px;
+      top:3px;
+      cursor: pointer;
+  }
+
+  #items-recipients li input[type=checkbox] { display:none;}
+
+  #items-recipients {
+      padding:10px;
+      display:block;
+      margin:0;
+  }
+  .placeholder-element {
+      min-height:24px !important;
+      background:#efefef !important;
+      border:1px dashed Gray !important;
+  }
+
+  #database-accounts-list {
+      margin:0px;
+      margin-top:50px !important;
+      min-height:300px;
+  }
+  #recipients {
+      border:1px solid #ccc;
+  }
+
+  .content-receiver {
+      border:1px solid #ccc;
+      border-top:0;
+  }
+  .container-label { position:relative; }
+  .container-buttons {
+      position:absolute;
+      top:-1px;
+      right:10px;
+      display:inline-block;
+  }
+  .container-buttons i {
+      margin-top:0;
+      margin-left:3px;
+  }
+  .toolbar {
+      margin-bottom:5px;
+  }
+  .related-content-provider {
+      width:100%;
+  }
+  #newsletter-content-provider .toolbar{
+      text-align:right
+  }
+  .contents ul {
+      margin:0 !important;
+      width:100%;
+  }
+  .contents ul li {
+      margin:4px 0;
+  }
+  .placeholder-element {
+      min-height:24px !important;
+      background:#efefef !important;
+      border:1px dashed Gray !important;
+  }
+}
+
+
 /* Settings rules ============================================================ */
 .settings-panel {
   margin-top:-5px;

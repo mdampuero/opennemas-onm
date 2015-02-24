@@ -44,15 +44,15 @@ var  newsletter_urls = {
                         {t}Newsletters{/t}
                     </h4>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
-                    <h5>{t}Creating{/t} :: {t}Preview{/t}</h5>
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
+                    <h5>{t}Preview{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Go back to list{/t}">
+                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
@@ -60,10 +60,10 @@ var  newsletter_urls = {
                     <li class="quicklinks btn-group">
                         <a href="{url name=admin_newsletter_show_contents id=$newsletter->id}" class="btn btn-primary" title="{t}Previous{/t}" id="prev-button">
                             <span class="fa fa-chevron-left"></span>
-                            {t}Previous step{/t}
+                            <span class="hidden-xs">{t}Previous{/t}</span>
                         </a>
                         <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="btn btn-primary" title="{t}Next{/t}" id="next-button">
-                            {t}Next step{/t}
+                            <span class="hidden-xs">{t}Next{/t}</span>
                             <span class="fa fa-chevron-right"></span>
                         </a>
                     </li>
@@ -73,7 +73,7 @@ var  newsletter_urls = {
     </div>
 </div>
 
-<div class="content">
+<div class="content newsletter-manager">
 
     <div class="grid simple">
         <div class="grid-body">

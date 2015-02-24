@@ -3,17 +3,6 @@
 {block name="header-css" append}
 {css_tag href="/admin.css"}
 {css_tag href="/newsletter.css" media="screen"}
-<style type="text/css">
-    .ok, .failed {
-        font-weight: bold;
-    }
-    .ok {
-        color: green;
-    }
-    .failed {
-        color: red;
-    }
-</style>
 {/block}
 
 {block name="footer-js" append}
@@ -27,15 +16,19 @@
             <ul class="nav quick-section">
                 <li class="quicklinks">
                     <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t} :: {t}Creating{/t} :: {t}Delivering report{/t}
+                        <i class="fa fa-home"></i>
+                        {t}Newsletters{/t}
                     </h4>
+                </li>
+                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                <li class="quicklinks hidden-xs">
+                  <h5>{t}Delivering report{/t}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li>
-                        <a href="{url name=admin_newsletters}" class="btn btn-primary" title="{t}Back to list{/t}">
+                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Back to list{/t}">
                             <span class="fa fa-reply"></span>
                             {t}Back to list{/t}
                         </a>
@@ -46,7 +39,8 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content newsletter-manager">
+
     {render_messages}
 
     <div class="grid simple">
