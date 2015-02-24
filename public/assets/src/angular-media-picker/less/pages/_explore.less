@@ -49,26 +49,7 @@
   }
 
   .media-picker-panel-wrapper {
-    .media-item {
-      float: left;
-      margin: 0 15px 15px 0;
-      position: relative;
-
-      .img-thumbnail {
-        height: 120px;
-        text-align: center;
-        transition: none;
-        width: 120px;
-
-        i {
-          padding: 16px 20px;
-        }
-
-        .progress {
-          margin-bottom: 0;
-        }
-      }
-
+    .media-item, .list-item {
       &.selectable {
         &:before {
           background-color: #fff;
@@ -112,6 +93,51 @@
 
           .img-thumbnail {
             background-color: @selected-color;
+          }
+        }
+      }
+    }
+
+    .media-item {
+      float: left;
+      margin: 0 15px 15px 0;
+      position: relative;
+
+      .img-thumbnail {
+        height: 120px;
+        text-align: center;
+        transition: none;
+        width: 120px;
+
+        i {
+          padding: 16px 20px;
+        }
+
+        .progress {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .list-item {
+      margin-bottom: 20px;
+      padding-left: 36px;
+      position: relative;
+
+      &.selectable {
+        cursor: pointer;
+
+        &:before {
+          left: 3.2px;
+          right: auto;
+          top: -3.2px;
+        }
+
+        &.selected {
+          &:after {
+            left: 6.2px;
+            right: auto;
+            top: -4px;
           }
         }
       }
