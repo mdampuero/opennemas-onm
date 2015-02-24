@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for the keywords
+ * Handles the actions for the cache manager
  *
  * @package Backend_Controllers
  **/
@@ -21,7 +21,7 @@ use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 
 /**
- * Handles the actions for the keywords
+ * Handles the actions for the cache manager
  *
  * @package Backend_Controllers
  **/
@@ -95,7 +95,7 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Recreates a template cache
+     * Removes a template cache
      *
      * @param Request $request the request object
      *
@@ -147,7 +147,6 @@ class CacheManagerController extends Controller
                 'messages'  => array_merge($success, $errors),
             )
         );
-
     }
 
     /**
