@@ -153,15 +153,16 @@ class MediaPickerController extends Controller
     private function exploreMode()
     {
         return [
-            'allMonths'     => _('All months'),
-            'details'       => _('Thumbnail details'),
-            'description'   => _('Description'),
-            'header'        => _('Pick the item to insert'),
-            'insert'        => _('Insert'),
-            'itemsSelected' => _('items selected'),
-            'menuItem'      => _('Browse'),
-            'dates'         => $this->getDates(),
-            'search'        => _('Search by name'),
+            'allMonths'        => _('All months'),
+            'thumbnailDetails' => _('Thumbnail details'),
+            'itemDetails'      => _('Item details'),
+            'description'      => _('Description'),
+            'header'           => _('Pick the item to insert'),
+            'insert'           => _('Insert'),
+            'itemsSelected'    => _('items selected'),
+            'menuItem'         => _('Browse'),
+            'dates'            => $this->getDates(),
+            'search'           => _('Search by name'),
         ];
     }
 
