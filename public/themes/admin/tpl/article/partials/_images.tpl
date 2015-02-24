@@ -11,7 +11,7 @@
               <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
                 <h5>{t}Frontpage image{/t}</h5>
                 <div class="form-group">
-                  <div class="thumbnail-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                  <div class="thumbnail-placeholder" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                     <div class="img-thumbnail" ng-if="!photo1">
                       <div class="thumbnail-empty">
                         <i class="fa fa-picture-o fa-2x"></i>
@@ -23,7 +23,7 @@
                     </div>
                   </div>
                   <div class="thumbnail-actions" ng-if="photo1" style="text-align: center; margin-top: 10px;">
-                    <button class="btn btn-default" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                    <button class="btn btn-default" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                       <i class="fa fa-camera"></i>
                       {t}Change image{/t}
                     </button>
@@ -48,7 +48,7 @@
                 <div class="form-group">
                   <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo2">
-                      <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>Pick an image</h5>
                       </div>
@@ -59,7 +59,7 @@
                           <div class="thumbnail-action remove-action" ng-click="removeImage('photo2')">
                             <i class="fa fa-trash-o fa-2x"></i>
                           </div>
-                          <div class="thumbnail-action" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                          <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
                             <i class="fa fa-camera fa-2x"></i>
                           </div>
                         </div>
@@ -83,7 +83,7 @@
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo3">
-                        <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>Pick an image</h5>
                         </div>
@@ -95,7 +95,7 @@
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-types="photo">
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-types="photo">
                           </div>
                         </dynamic-image>
                       </div>
@@ -133,7 +133,7 @@
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
                         <div class="img-thumbnail" ng-if="!video1">
-                          <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
                             <i class="fa fa-film fa-2x"></i>
                             <h5>Pick a video</h5>
                           </div>
@@ -144,7 +144,7 @@
                         </div>
                       </div>
                       <div class="thumbnail-actions" ng-if="video1" style="text-align: center; margin-top: 10px;position: relative;">
-                        <button class="btn btn-link" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="video" type="button">
+                        <button class="btn btn-link" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="video" type="button">
                           <i class="fa fa-film"></i>
                           {t}Change video{/t}
                         </button>
@@ -173,7 +173,7 @@
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
                         <div class="img-thumbnail" ng-if="!video2">
-                          <div class="thumbnail-empty" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
                             <i class="fa fa-film fa-2x"></i>
                             <h5>Pick a video</h5>
                           </div>
@@ -186,25 +186,23 @@
                                 {t}Remove{/t}
                               </div>
                             </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
                           </dynamic-image>
                         </div>
                       </div>
                     </div>
-                    <div>
-                      <div class="form-group" ng-if="video2">
-                        <ul>
-                          <li>{t}File name{/t}: [% video2.title %]</li>
-                          <li>{t}Creation date{/t}: [% video2.created %]</li>
-                          <li>{t}Description{/t}: [% video2.description %]</li>
-                          <li>{t}Tags{/t}: [% video2.metadata %]</li>
-                        </ul>
-                        <label class="form-label" for="title">
-                          {t}Footer text for inner video:{/t}
-                        </label>
-                        <textarea  class="form-control" name="footer_video2" ng-model="footer_video2" ng-value="footer_video2">{$article->footer_video2|clearslash|escape:'html'}</textarea>
-                        <input type="hidden" name="fk_video2" ng-value="fk_video2" class="related-element-id"/>
-                      </div>
+                    <div class="form-group" ng-if="video2">
+                      <ul>
+                        <li>{t}File name{/t}: [% video2.title %]</li>
+                        <li>{t}Creation date{/t}: [% video2.created %]</li>
+                        <li>{t}Description{/t}: [% video2.description %]</li>
+                        <li>{t}Tags{/t}: [% video2.metadata %]</li>
+                      </ul>
+                      <label class="form-label" for="title">
+                        {t}Footer text for inner video:{/t}
+                      </label>
+                      <textarea  class="form-control" name="footer_video2" ng-model="footer_video2" ng-value="footer_video2">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                      <input type="hidden" name="fk_video2" ng-value="fk_video2" class="related-element-id"/>
                     </div>
                   </div>
                 </div>
