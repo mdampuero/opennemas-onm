@@ -18,7 +18,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            * @type string
            */
           var contentTpl = {
-            explore: "<div class=\"media-picker-panel explore-panel\" ng-class=\"{ 'active': picker.isActive('explore') }\">\
+            explore: "<div class=\"media-picker-panel explore-panel\" ng-class=\"{ 'active': picker.isModeActive('explore') }\">\
               <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
               </div>\
@@ -55,8 +55,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                 </div>\
                 <div class=\"media-picker-panel-wrapper\">\
                   <div class=\"media-picker-panel-content\" when-scrolled=\"scroll()\">\
-                    <div class=\"media-items\" ng-if=\"!loading\">\
-                      <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
+                    <div class=\"items\" ng-if=\"!loading\">\
+                      <div ng-class=\"{ 'media-item': picker.views.enabled == 'thumbnail', 'list-item': picker.views.enabled == 'list-item' }\" ng-repeat=\"item in uploader.queue\">\
                         <div class=\"img-thumbnail\">\
                           <i class=\"fa fa-picture-o fa-5x\"></i>\
                           <div class=\"progress\" style=\"margin-bottom: 0;\">\
@@ -64,28 +64,47 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                           </div>\
                         </div>\
                       </div>\
-                      <div class=\"media-item[selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
-                        <dynamic-image class=\"img-thumbnail\" instance=\""
-                          + instanceMedia
-                          + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                        <dynamic-image class=\"img-thumbnail\"  ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
+                      <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
+                        <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
+                          <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
+                            <dynamic-image class=\"img-thumbnail\" instance=\""
+                              + instanceMedia
+                              + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                            <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
+                          </div>\
+                        </div>\
+                      </div>\
+                      <div ng-if=\"picker.views.enabled == 'list-item'\">\
+                        <div class=\"list-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
+                          <div>\
+                            [% content.content_type_name %] - [% content.title %]\
+                          </div>\
+                        </div>\
                       </div>\
                     </div>\
-                    <div class=\"media-items-loading\" ng-if=\"loading\">\
+                    <div class=\"items-loading\" ng-if=\"loading\">\
                       <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
                     </div>\
                   </div>\
                 </div>\
                 <div class=\"media-picker-panel-sidebar\">\
                   <div class=\"media-picker-panel-sidebar-header\">\
-                    <h4>[% picker.params.explore.details %]</h4>\
+                    <h4 ng-if=\"picker.views.enabled == 'thumbnail'\">[% picker.params.explore.thumbnailDetails %]</h4>\
+                    <h4 ng-if=\"picker.views.enabled == 'list-item'\">[% picker.params.explore.itemDetails %]</h4>\
                   </div>\
                   <div class=\"media-picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
-                    <div class=\"media-thumbnail-wrapper\">\
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo'\">\
                       <dynamic-image autoscale=\"true\" class=\"img-thumbnail\" dimensions=\"true\" instance=\""
                         + instanceMedia
                         + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
+                    </div>\
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video'\">\
+                      <dynamic-image autoscale=\"true\" class=\"img-thumbnail\" dimensions=\"true\" instance=\""
+                          + instanceMedia
+                          + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
+                      </dynamic-image>\
+                      <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
                     </div>\
                     <ul class=\"media-information\">\
                       <li>\
@@ -136,7 +155,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               </div>\
             </div>",
 
-            upload: "<div class=\"media-picker-panel upload-panel\" ng-class=\"{ 'active': picker.isActive('upload') }\">\
+            upload: "<div class=\"media-picker-panel upload-panel\" ng-class=\"{ 'active': picker.isModeActive('upload') }\">\
               <div class=\"media-picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
               </div>\
@@ -196,14 +215,14 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            * @type string
            */
           var sidebarTpl = {
-            explore: "<li ng-class=\"{ 'active': picker.isActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
+            explore: "<li ng-class=\"{ 'active': picker.isModeActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
               <h5>\
                 <i class=\"fa fa-folder\"></i>\
                 [% picker.params.explore.menuItem %]\
               </h5>\
             </li>",
 
-            upload: "<li ng-class=\"{ 'active': picker.isActive('upload') }\" ng-click=\"picker.enable('upload'); upload()\">\
+            upload: "<li ng-class=\"{ 'active': picker.isModeActive('upload') }\" ng-click=\"picker.enable('upload'); upload()\">\
               <h5>\
                 <i class=\"fa fa-upload\"></i>\
                 [% picker.params.upload.menuItem %]\
@@ -218,8 +237,9 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            */
           $scope.picker = {
             modes: {
-              active:    attrs['mediaPickerMode'] ? attrs['mediaPickerMode'] : 'explore',
-              available: [ 'upload', 'explore' ]
+              active:    [ 'explore' ],
+              available: [ 'upload', 'explore' ],
+              enabled:   [ 'explore' ],
             },
             selection: {
               enabled: attrs['mediaPickerSelection'] == 'true' ? true : false,
@@ -232,8 +252,12 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             },
             target: attrs['mediaPickerTarget'],
             types: {
-              active:    [ 'photo' ],
-              available: [ 'photo', 'video' ]
+              enabled:   [ 'photo' ],
+              available: [ 'album', 'article', 'opinion', 'photo', 'poll', 'video' ]
+            },
+            views: {
+              enabled:   attrs['mediaPickerView'] ? attrs['mediaPickerView'] : 'thumbnail',
+              available: [ 'list-item', 'thumbnail' ]
             },
 
             /**
@@ -256,20 +280,32 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              * @return boolean Returns true if the given mode is currently
              *                 active. Otherwise, returns false.
              */
-            isActive: function(mode) {
+            isModeActive: function(mode) {
               return this.modes.active == mode;
             },
 
             /**
-             * Checks if a file type can be uploaded.
+             * Checks if a mode is enabled.
              *
-             * @param string type The file type to check.
+             * @param string mode The mode to check.
              *
-             * @return boolean True if the given file type can be uploaded.
-             *                 Otherwise, return false.
+             * @return boolean True if the given mode is enabled. Otherwise,
+             *                 returns false.
              */
-            isTypeAllowed: function(type) {
-              return this.types.active.indexOf(type);
+            isModeEnabled: function(mode) {
+              return this.modes.enabled.indexOf(mode);
+            },
+
+            /**
+             * Checks if a content type is enabled.
+             *
+             * @param string type The content type to check.
+             *
+             * @return boolean True if the given content type is enabled.
+             *                 Otherwise, returns false.
+             */
+            isTypeEnabled: function(type) {
+              return this.types.enabled.indexOf(type);
             },
 
             /**
@@ -291,9 +327,9 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               var selection = '';
               var sidebar = '';
 
-              for (var i = 0; i < this.modes.available.length; i++) {
-                sidebar += sidebarTpl[this.modes.available[i]];
-                content += contentTpl[this.modes.available[i]];
+              for (var i = 0; i < this.modes.enabled.length; i++) {
+                sidebar += sidebarTpl[this.modes.enabled[i]];
+                content += contentTpl[this.modes.enabled[i]];
               };
 
               // Add selection actions
@@ -302,13 +338,25 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                 selection  = "ng-class=\"{ 'selected': isSelected(content) }\" ng-click=\"toggle(content, $event)\"";
               }
 
-              content = content.replace('[selectable]', selectable);
-              content = content.replace('[selection]', selection);
+              content = content.replace(/\[selectable\]/g, selectable);
+              content = content.replace(/\[selection\]/g, selection);
 
-              picker = picker.replace('[sidebar]', sidebar);
-              picker = picker.replace('[content]', content);
+              picker = picker.replace(/\[sidebar\]/g, sidebar);
+              picker = picker.replace(/\[content\]/g, content);
 
               return picker;
+            },
+
+            /**
+             * Sets the media picker content modes.
+             *
+             * @param string mode The content mode.
+             */
+            setMode: function(mode) {
+              if (this.modes.available.indexOf(mode) != -1
+                  && this.modes.enabled.indexOf(mode) == -1) {
+                this.modes.enabled.push(mode);
+              }
             },
 
             /**
@@ -318,16 +366,26 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              */
             setType: function(type) {
               if (this.types.available.indexOf(type) != -1
-                  && this.types.active.indexOf(type) == -1) {
-                this.types.active.push(type);
+                  && this.types.enabled.indexOf(type) == -1) {
+                this.types.enabled.push(type);
               }
             }
           };
 
-          // Initialize the media picker active types
+          // Initialize the media picker available modes
+          if (attrs['mediaPickerMode']) {
+            var modes = attrs['mediaPickerMode'].split(',');
+            $scope.picker.modes.enabled = [];
+
+            for (var i = 0; i < modes.length; i++) {
+              $scope.picker.setMode(modes[i]);
+            };
+          }
+
+          // Initialize the media picker available types
           if (attrs['mediaPickerType']) {
             var types = attrs['mediaPickerType'].split(',');
-            $scope.picker.types.active = [];
+            $scope.picker.types.enabled = [];
 
             for (var i = 0; i < types.length; i++) {
               $scope.picker.setType(types[i]);
@@ -355,7 +413,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
             var url = routing.generate(
               'backend_ws_media_picker_mode',
-              { mode: $scope.picker.modes.available }
+              { mode: $scope.picker.modes.enabled }
             );
 
             // Get the parameters for the media picker
@@ -503,7 +561,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         }
 
         var data = {
-          content_type_name: $scope.picker.types.active,
+          content_type_name: $scope.picker.types.enabled,
           epp:               $scope.epp,
           page:              $scope.page,
           sort_by:           'created',
