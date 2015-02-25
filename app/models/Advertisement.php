@@ -517,7 +517,6 @@ class Advertisement extends Content
                 $categoryBanners[$adType] = array();
                 $finalBanners[$adType] = array();
                 if (count($advs) > 1) {
-
                     foreach ($advs as $ad) {
                         if (in_array(0, $ad->fk_content_categories)) {
                             array_push($homeBanners[$adType], $ad); // Home banners
@@ -601,7 +600,6 @@ class Advertisement extends Content
             }
 
         } elseif ($this->with_script == 2) {
-
             if (in_array($this->type_advertisement, array(50,150,250,350,450,550))) {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));
                 $content = '<iframe src="'.$url.'" stye="width:800px; height:600px; overflow: hidden;" '.
@@ -613,9 +611,9 @@ class Advertisement extends Content
             }
         } elseif ($this->with_script == 3) {
             $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'>"
-                       ."<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA["
+                       ."<script type='text/javascript' data-id='{$this->id}'>"
                        ."googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });"
-                       ."// ]]> --></script></div>";
+                       ."</script></div>";
         } else {
             // Check for external advertisement Flash/Image based
             if (isset($this->extWsUrl)) {
