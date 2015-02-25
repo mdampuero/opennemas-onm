@@ -128,7 +128,7 @@
               </div>
               <div class="grid-body">
                 <div class="row">
-                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = { fk_video: '{$video1->id}', description: '{$video1->description}', thumb: '{$video1->thumb}', created: '{$video2->created}', metadata: '{$video1->metadata}' }"{/if}>
+                  <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = { id: '{$video1->id}', fk_video: '{$video1->id}', description: '{$video1->description}', thumb: '{$video1->thumb}', created: '{$video1->created}', metadata: '{$video1->metadata}' }"{/if}>
                     <h5>{t}Video for frontpage{/t}</h5>
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
@@ -168,7 +168,7 @@
                         <input type="hidden" name="fk_video" ng-value="fk_video" class="related-element-id"/>
                       </div>
                   </div>
-                  <div class="col-md-4" {if isset($video2) && $video2->title}ng-init="video2 = { fk_video: '{$video2->id}', description: '{$video2->description}', thumb: '{$video2->thumb}', created: '{$video2->created}', metadata: '{$video2->metadata}' }"{/if}>
+                  <div class="col-md-4" {if isset($video2) && $video2->title}ng-init="video2 = { id: '{$video2->id}', fk_video: '{$video2->id}', description: '{$video2->description}', thumb: '{$video2->thumb}', created: '{$video2->created}', metadata: '{$video2->metadata}' }"{/if}>
                     <h5>{t}Video for inner article page{/t}</h5>
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
