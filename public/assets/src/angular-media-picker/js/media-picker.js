@@ -5,7 +5,7 @@
 */
 angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
   .directive('mediaPicker', ['$compile', '$http', 'routing',
-    function($compile, $http, routing) {
+    function ($compile, $http, routing) {
       // Runs during compile
       return {
         controller: 'MediaPickerController',
@@ -13,7 +13,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         scope: {
           'mediaPickerTarget': '='
         },
-        link: function($scope, elm, attrs) {
+        link: function ($scope, elm, attrs) {
           /**
            * Template for the media picker content.
            *
@@ -27,8 +27,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               <div class=\"media-picker-panel-body\">\
                 <div class=\"media-picker-panel-topbar\">\
                   <ul>\
-                    <li ng-if=\"isTypeAllowed('image')\">\
-                      <select name=\"month\" ng-model=\"date\">\
+                    <li ng-if=\"isTypeEnabled('photo')\">\
+                      <select name=\"month\" ng-model=\"$parent.date\">\
                         <option value=\"\">[% picker.params.explore.allMonths %]</option>\
                         <optgroup label=\"[% year.name %]\" ng-repeat=\"year in picker.params.explore.dates\">\
                           <option value=\"[% month.value %]\" ng-repeat=\"month in year.months\">\
@@ -42,11 +42,11 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                         <span class=\"input-group-addon\">\
                           <i class=\"fa fa-search\"></i>\
                         </span>\
-                        <input ng-model=\"title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
+                        <input ng-model=\"$parent.title\" placeholder=\"[% picker.params.explore.search %]\" type=\"text\"/>\
                       </div>\
                     </li>\
-                    <li ng-if=\"isTypeAllowed('video')\">\
-                      <select name=\"category\" ng-model=\"category\">\
+                    <li ng-if=\"isTypeEnabled('video')\">\
+                      <select name=\"category\" ng-model=\"$parent.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
                         <option value=\"[% category.id %]\" ng-repeat=\"category in picker.params.explore.categories\">\
                           [% cateogory.name %]\
@@ -57,7 +57,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                 </div>\
                 <div class=\"media-picker-panel-wrapper\">\
                   <div class=\"media-picker-panel-content\" when-scrolled=\"scroll()\">\
-                    <div class=\"items\" ng-if=\"!loading\">\
+                    <div class=\"items\" ng-if=\"!searchLoading\">\
                       <div ng-class=\"{ 'media-item': picker.views.enabled == 'thumbnail', 'list-item': picker.views.enabled == 'list-item' }\" ng-repeat=\"item in uploader.queue\">\
                         <div class=\"img-thumbnail\">\
                           <i class=\"fa fa-picture-o fa-5x\"></i>\
@@ -84,7 +84,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                         </div>\
                       </div>\
                     </div>\
-                    <div class=\"items-loading\" ng-if=\"loading\">\
+                    <div class=\"items-loading\" ng-if=\"searchLoading\">\
                       <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
                     </div>\
                   </div>\
@@ -167,9 +167,9 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                     <div class=\"drop-zone-text\">\
                       <h4>\
                         <div>\
-                          <i class=\"fa fa-picture-o fa-2x\" ng-if=\"picker.isTypeAllowed('photo')\"></i>\
-                          <i class=\"fa fa-film fa-2x\" ng-if=\"picker.isTypeAllowed('video')\"></i>\
-                          <i class=\"fa fa-file-o fa-2x\" ng-if=\"picker.isTypeAllowed('pdf')\"></i>\
+                          <i class=\"fa fa-picture-o fa-2x\" ng-if=\"picker.isTypeEnabled('photo')\"></i>\
+                          <i class=\"fa fa-film fa-2x\" ng-if=\"picker.isTypeEnabled('video')\"></i>\
+                          <i class=\"fa fa-file-o fa-2x\" ng-if=\"picker.isTypeEnabled('pdf')\"></i>\
                         </div>\
                         <span class=\"hidden-xs\">Drop files here to upload</span>\
                         <span class=\"visible-xs\">Click here to upload</span>\
@@ -241,31 +241,40 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             modes: {
               active:    [ 'explore' ],
               available: [ 'upload', 'explore' ],
-              enabled:   [ 'explore' ],
+              enabled:   [ 'explore' ]
             },
             selection: {
-              enabled: attrs['mediaPickerSelection'] == 'true' ? true : false,
-              maxSize: attrs['mediaPickerMaxSize'] ? parseInt(attrs['mediaPickerMaxSize']) : 1,
+              enabled: attrs.mediaPickerSelection === 'true' ? true : false,
+              maxSize: attrs.mediaPickerMaxSize ?
+                parseInt(attrs.mediaPickerMaxSize) : 1
             },
             status: {
               editing:   false,
               loading:   false,
               uploading: false
             },
-            target: attrs['mediaPickerTarget'],
+            target: attrs.mediaPickerTarget,
             types: {
               enabled:   [ 'photo' ],
-              available: [ 'album', 'article', 'opinion', 'photo', 'poll', 'video' ]
+              available: [
+                'album',
+                'article',
+                'opinion',
+                'photo',
+                'poll',
+                'video'
+              ]
             },
             views: {
-              enabled:   attrs['mediaPickerView'] ? attrs['mediaPickerView'] : 'thumbnail',
+              enabled:   attrs.mediaPickerView ?
+                attrs.mediaPickerView : 'thumbnail',
               available: [ 'list-item', 'thumbnail' ]
             },
 
             /**
              * Closes the current media picker.
              */
-            close: function() {
+            close: function () {
               // Reset html and body
               $('html, body').removeClass('media-picker-open');
 
@@ -282,8 +291,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              * @return boolean Returns true if the given mode is currently
              *                 active. Otherwise, returns false.
              */
-            isModeActive: function(mode) {
-              return this.modes.active == mode;
+            isModeActive: function (mode) {
+              return this.modes.active === mode;
             },
 
             /**
@@ -294,7 +303,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              * @return boolean True if the given mode is enabled. Otherwise,
              *                 returns false.
              */
-            isModeEnabled: function(mode) {
+            isModeEnabled: function (mode) {
               return this.modes.enabled.indexOf(mode);
             },
 
@@ -306,8 +315,21 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              * @return boolean True if the given content type is enabled.
              *                 Otherwise, returns false.
              */
-            isTypeEnabled: function(type) {
-              return this.types.enabled.indexOf(type);
+            isTypeEnabled: function (type) {
+              return this.types.enabled.indexOf(type) !== -1;
+            },
+
+            /**
+             * Checks if a content type is enabled.
+             *
+             * @param string type The content type to check.
+             *
+             * @return boolean True if the given content type is enabled.
+             *                 Otherwise, returns false.
+             */
+            isTypeOnlyEnabled: function(type) {
+              return this.types.enabled.indexOf(type) !== -1
+                && this.types.enabled.length === 1;
             },
 
             /**
@@ -322,7 +344,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             /**
              * Renders the media picker.
              */
-            render: function() {
+            render: function () {
               var content = '';
               var picker  = pickerTpl;
               var selectable = '';
@@ -332,7 +354,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               for (var i = 0; i < this.modes.enabled.length; i++) {
                 sidebar += sidebarTpl[this.modes.enabled[i]];
                 content += contentTpl[this.modes.enabled[i]];
-              };
+              }
 
               // Add selection actions
               if (this.selection.enabled) {
@@ -354,9 +376,9 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              *
              * @param string mode The content mode.
              */
-            setMode: function(mode) {
-              if (this.modes.available.indexOf(mode) != -1
-                  && this.modes.enabled.indexOf(mode) == -1) {
+            setMode: function (mode) {
+              if (this.modes.available.indexOf(mode) !== -1
+                  && this.modes.enabled.indexOf(mode) === -1) {
                 this.modes.enabled.push(mode);
               }
             },
@@ -367,8 +389,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
              * @param string type The content type.
              */
             setType: function(type) {
-              if (this.types.available.indexOf(type) != -1
-                  && this.types.enabled.indexOf(type) == -1) {
+              if (this.types.available.indexOf(type) !== -1
+                  && this.types.enabled.indexOf(type) === -1) {
                 this.types.enabled.push(type);
               }
             }
@@ -379,26 +401,26 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             $scope.reset();
 
             // Initialize the media picker available modes
-            if (attrs['mediaPickerMode']) {
-              var modes = attrs['mediaPickerMode'].split(',');
+            if (attrs.mediaPickerMode) {
+              var modes = attrs.mediaPickerMode.split(',');
               $scope.picker.modes.enabled = [];
 
               for (var i = 0; i < modes.length; i++) {
                 $scope.picker.setMode(modes[i]);
-              };
+              }
             }
 
             // Initialize the media picker available types
-            if (attrs['mediaPickerType']) {
-              var types = attrs['mediaPickerType'].split(',');
+            if (attrs.mediaPickerType) {
+              var types = attrs.mediaPickerType.split(',');
               $scope.picker.types.enabled = [];
 
               for (var i = 0; i < types.length; i++) {
                 $scope.picker.setType(types[i]);
-              };
+              }
             }
 
-            if (attrs['mediaPickerTarget'] && $scope.mediaPickerTarget) {
+            if (attrs.mediaPickerTarget && $scope.mediaPickerTarget) {
               var target = $scope.mediaPickerTarget;
 
               if (!(target instanceof Array)) {
@@ -437,13 +459,13 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               $scope.loading = false;
               $scope.picker.params = response.data;
 
-              if ($scope.picker.modes.active == 'explore') {
+              if ($scope.picker.modes.active === 'explore') {
                 $scope.explore();
               } else {
                 $scope.upload();
               }
-            })
-          })
+            });
+          });
         }
       };
     }
@@ -541,7 +563,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
       $scope.insert = function() {
         var items = $scope.selected.items;
 
-        if ($scope.picker.selection.maxSize == 1) {
+        if ($scope.picker.selection.maxSize === 1) {
           items = items[0];
         }
 
@@ -565,7 +587,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        *                 returns false.
        */
       $scope.isSelected = function(item) {
-        return $scope.selected.ids.indexOf(item.id) != -1;
+        return $scope.selected.ids.indexOf(item.id) !== -1;
       };
 
       /**
@@ -573,7 +595,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        */
       $scope.list = function (reset) {
         if (reset) {
-          $scope.loading = true;
+          $scope.searchLoading = true;
         }
 
         var data = {
@@ -581,8 +603,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
           epp:               $scope.epp,
           page:              $scope.page,
           sort_by:           'created',
-          sort_order:        'desc',
-        }
+          sort_order:        'desc'
+        };
 
         if ($scope.title) {
           data.title = $scope.title;
@@ -596,18 +618,18 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         $http.get(url).then(function(response) {
           if (reset) {
-            $scope.contents = response.data.results;
-            $scope.total    = response.data.total;
-            $scope.loading  = false;
+            $scope.contents      = response.data.results;
+            $scope.total         = response.data.total;
+            $scope.searchLoading = false;
           } else {
             $scope.contents = $scope.contents.concat(response.data.results);
           }
 
-          $scope.total = response.data.total
+          $scope.total = response.data.total;
 
           if (response.data.hasOwnProperty('extra')) {
             $scope.extra = response.data.extra;
-          };
+          }
         });
       };
 
@@ -626,8 +648,8 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         };
 
         $scope.uploader = new FileUploader({
-            url:               routing.generate('admin_image_create'),
-            autoUpload:        true,
+            autoUpload: true,
+            url:        routing.generate('admin_image_create')
         });
 
         /**
@@ -635,7 +657,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
          *
          * @param object fileItem The added item
          */
-        $scope.uploader.onAfterAddingFile = function(fileItem) {
+        $scope.uploader.onAfterAddingFile = function () {
           $scope.picker.enable('explore');
         };
 
@@ -644,22 +666,20 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
          *
          * @param object fileItem The completed item.
          * @param object response The response content.
-         * @param string status   The response status.
-         * @param object headers  The response headers.
          */
-        $scope.uploader.onCompleteItem = function(fileItem, response, status, headers) {
+        $scope.uploader.onCompleteItem = function(fileItem, response) {
           $timeout(function() {
             $scope.uploader.removeFromQueue(fileItem);
             $scope.addItem(response);
           }, 500);
-        }
+        };
       };
 
       /**
        * Requests the next page of the list when scrolling.
        */
       $scope.scroll = function() {
-        if ($scope.total == $scope.contents.length) {
+        if ($scope.total === $scope.contents.length) {
           return false;
         }
 
@@ -683,7 +703,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
           $scope.saving = false;
           $scope.saved = true;
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $timeout(function() {
               $scope.saved = false;
             }, 2000);
@@ -691,7 +711,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             return true;
           }
 
-          if (response.status != 200) {
+          if (response.status !== 200) {
             $scope.saved = false;
             $scope.error = true;
 
@@ -725,14 +745,16 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         }
 
         var itemsToInsert = end - start;
-        if (itemsToInsert + $scope.selected.items.length > $scope.picker.selection.maxSize) {
-          itemsToInsert = $scope.picker.selection.maxSize - $scope.selected.items.length;
+        if (itemsToInsert + $scope.selected.items.length >
+            $scope.picker.selection.maxSize) {
+          itemsToInsert =
+            $scope.picker.selection.maxSize - $scope.selected.items.length;
         }
 
         // Add all items between selected
         var i = start;
         while (itemsToInsert > 0 && i < $scope.contents.length) {
-          if ($scope.selected.items.indexOf($scope.contents[i]) == -1) {
+          if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
             $scope.selected.ids.push($scope.contents[i].id);
             $scope.selected.items.push($scope.contents[i]);
             itemsToInsert--;
@@ -771,14 +793,14 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         // Remove element
         var index = $scope.selected.ids.indexOf(item.id);
-        if (index != -1) {
+        if (index !== -1) {
           $scope.selected.ids.splice(index, 1);
           $scope.selected.items.splice(index, 1);
           return true;
         }
 
         // Empty selected if maxSize == 1 (toggle)
-        if ($scope.picker.selection.maxSize == 1) {
+        if ($scope.picker.selection.maxSize === 1) {
           $scope.selected.ids   = [];
           $scope.selected.items = [];
         }
@@ -798,7 +820,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
        */
       var search;
       $scope.$watch('[date,title]', function(nv, ov) {
-        if (nv == ov) {
+        if (nv === ov) {
           return false;
         }
 

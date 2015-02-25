@@ -23,7 +23,7 @@ angular.module(
     'BackendApp.directives',
     'BackendApp.filters',
     'BackendApp.services'
-  ])
+  ]);
 
 angular.module('BackendApp.controllers', []);
 angular.module('BackendApp.directives', []);

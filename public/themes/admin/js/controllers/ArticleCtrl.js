@@ -33,16 +33,18 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array  items  The items to insert.
      */
     $scope.insertInCKEditor = function(target, items) {
+      var html;
+
       if (items instanceof Array) {
         for (var i = 0; i < items.length; i++) {
-          var html = renderer.renderImage(items[i]);
+          html = renderer.renderImage(items[i]);
           onmEditor.get(target).insertHtml(html);
-        };
+        }
 
         return;
       }
 
-      var html = renderer.renderImage(items);
+      html = renderer.renderImage(items);
       onmEditor.get(target).insertHtml(html);
     };
 
@@ -63,7 +65,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      */
     $scope.removeAlbum = function(from) {
       delete $scope[from];
-    }
+    };
 
     /**
      * Removes an item from an array of related items.
@@ -73,7 +75,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      */
     $scope.removeItem = function(from, index) {
       $scope[from].splice(index, 1);
-    }
+    };
 
     /**
      * Updates scope when photo1 changes.
@@ -164,7 +166,6 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $scope.$watch('relatedInFrontpage', function(nv, ov) {
       var items           = [];
       $scope.relatedFront = [];
-      console.log(nv)
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
