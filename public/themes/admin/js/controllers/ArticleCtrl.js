@@ -57,6 +57,25 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     };
 
     /**
+     * Removes an album.
+     *
+     * @param string from The album name in the current scope.
+     */
+    $scope.removeAlbum = function(from) {
+      delete $scope[from];
+    }
+
+    /**
+     * Removes an item from an array of related items.
+     *
+     * @param string  from  The array name in the current scope.
+     * @param integer index The index of the element to remove.
+     */
+    $scope.removeItem = function(from, index) {
+      $scope[from].splice(index, 1);
+    }
+
+    /**
      * Updates scope when photo1 changes.
      *
      * @param array nv The new values.
@@ -133,6 +152,107 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       if ($scope.video2) {
         $scope.fk_video2     = $scope.video2.id;
         $scope.footer_video2 = $scope.video2.description;
+      }
+    }, true);
+
+    /**
+     * Updates scope when relatedInFrontpage changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('relatedInFrontpage', function(nv, ov) {
+      var items           = [];
+      $scope.relatedFront = [];
+      console.log(nv)
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ id: nv[i].id, position: i });
+        }
+      }
+
+      $scope.relatedFront = angular.toJson(items);
+    }, true);
+
+    /**
+     * Updates scope when relatedInInner changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('relatedInInner', function(nv, ov) {
+      var items           = [];
+      $scope.relatedInner = [];
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ id: nv[i].id, position: i });
+        }
+      }
+
+      $scope.relatedInner = angular.toJson(items);
+    }, true);
+
+    /**
+     * Updates scope when relatedInHome changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('relatedInHome', function(nv, ov) {
+      var items          = [];
+      $scope.relatedHome = [];
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ id: nv[i].id, position: i });
+        }
+      }
+
+      $scope.relatedHome = angular.toJson(items);
+    }, true);
+
+
+    /**
+     * Updates the model when galleryForFrontpage changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('galleryForFrontpage', function(nv, ov) {
+      delete $scope.withGallery;
+
+      if (nv) {
+        $scope.withGallery = nv.id;
+      }
+    }, true);
+
+    /**
+     * Updates the model when galleryForInner changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('galleryForInner', function(nv, ov) {
+      delete $scope.withGalleryInt;
+
+      if (nv) {
+        $scope.withGalleryInt = nv.id;
+      }
+    }, true);
+
+    /**
+     * Updates the model when galleryForHome changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('galleryForHome', function(nv, ov) {
+      delete $scope.withGalleryHome;
+
+      if (nv) {
+        $scope.withGalleryHome = nv.id;
       }
     }, true);
   }
