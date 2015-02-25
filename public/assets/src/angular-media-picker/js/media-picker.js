@@ -10,7 +10,9 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
       return {
         controller: 'MediaPickerController',
         restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-        scope: {},
+        scope: {
+          'mediaPickerTarget': '='
+        },
         link: function($scope, elm, attrs) {
           /**
            * Template for the media picker content.
@@ -372,29 +374,43 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
             }
           };
 
-          // Initialize the media picker available modes
-          if (attrs['mediaPickerMode']) {
-            var modes = attrs['mediaPickerMode'].split(',');
-            $scope.picker.modes.enabled = [];
-
-            for (var i = 0; i < modes.length; i++) {
-              $scope.picker.setMode(modes[i]);
-            };
-          }
-
-          // Initialize the media picker available types
-          if (attrs['mediaPickerType']) {
-            var types = attrs['mediaPickerType'].split(',');
-            $scope.picker.types.enabled = [];
-
-            for (var i = 0; i < types.length; i++) {
-              $scope.picker.setType(types[i]);
-            };
-          }
-
           // Bind click event to open media-picker
           elm.bind('click', function() {
             $scope.reset();
+
+            // Initialize the media picker available modes
+            if (attrs['mediaPickerMode']) {
+              var modes = attrs['mediaPickerMode'].split(',');
+              $scope.picker.modes.enabled = [];
+
+              for (var i = 0; i < modes.length; i++) {
+                $scope.picker.setMode(modes[i]);
+              };
+            }
+
+            // Initialize the media picker available types
+            if (attrs['mediaPickerType']) {
+              var types = attrs['mediaPickerType'].split(',');
+              $scope.picker.types.enabled = [];
+
+              for (var i = 0; i < types.length; i++) {
+                $scope.picker.setType(types[i]);
+              };
+            }
+
+            if (attrs['mediaPickerTarget'] && $scope.mediaPickerTarget) {
+              var target = $scope.mediaPickerTarget;
+
+              if (!(target instanceof Array)) {
+                target = [ target ];
+              }
+
+              for (var i = 0; i < target.length; i++) {
+                $scope.selected.ids.push(target[i].id);
+              }
+
+              $scope.selected.items = target;
+            }
 
             var html = $scope.picker.render();
             var e    = $compile(html)($scope);
@@ -754,9 +770,10 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
         }
 
         // Remove element
-        if ($scope.selected.items.indexOf(item) != -1) {
-          $scope.selected.ids.splice($scope.selected.ids.indexOf(item.id), 1);
-          $scope.selected.items.splice($scope.selected.items.indexOf(item), 1);
+        var index = $scope.selected.ids.indexOf(item.id);
+        if (index != -1) {
+          $scope.selected.ids.splice(index, 1);
+          $scope.selected.items.splice(index, 1);
           return true;
         }
 
