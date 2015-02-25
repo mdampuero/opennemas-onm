@@ -9,6 +9,33 @@ tr:hover .listing-inline-actions {
   opacity: 1;
 }
 
+.checkbox-cell {
+  position: relative;
+  width: 45px;
+
+  .checkbox {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    label {
+      display: block;
+      height: 100%;
+      width: 100%;
+
+      &:after {
+        margin: 10px;
+      }
+
+      &:before {
+        margin: 10px;
+      }
+    }
+  }
+}
+
 .listing-inline-actions {
   margin-top: 10px;
   opacity: 0.7;

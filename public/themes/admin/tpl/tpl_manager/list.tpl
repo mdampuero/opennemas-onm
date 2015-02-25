@@ -127,7 +127,7 @@
           <table class="table table-hover no-margin">
             <thead ng-if="contents.length != 0">
               <tr>
-                <th style="width:15px;">
+                <th class="checkbox-cell">
                   <div class="checkbox checkbox-default">
                     <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                     <label for="select-all"></label>
@@ -150,7 +150,7 @@
                 </td>
               </tr>
               <tr class="cache-element" ng-repeat="content in contents">
-                <td>
+                <td class="checkbox-cell">
                   <div class="checkbox check-default">
                     <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
