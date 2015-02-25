@@ -433,21 +433,20 @@
 
       {include  file="article/partials/_images.tpl"}
 
+      <div id="related-contents">
+        {include file ="article/related/_related_list.tpl"}
+        <input type="hidden" name="relatedFront" ng-value="relatedFront"/>
+        <input type="hidden" name="relatedInner" ng-value="relatedInner"/>
+        <input type="hidden" name="relatedHome" ng-value="relatedHome"/>
+
+        <input type="hidden" name="params[withGallery]" ng-value="withGallery"/>
+        <input type="hidden" name="params[withGalleryInt]" ng-value="withGalleryInt"/>
+        <input type="hidden" name="params[withGalleryHome]" ng-value="withGalleryHome"/>
+      </div>
+
       {is_module_activated name="CRONICAS_MODULES"}
         {include file ="article/partials/_article_advanced_customize.tpl"}
       {/is_module_activated}
-
-      <div id="related-contents">
-        {include file ="article/related/_related_list.tpl"}
-        <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
-        <input type="hidden" id="relatedInner" name="relatedInner" value="" />
-
-        <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
-        <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
-
-        <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-        <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
-      </div>
 
       <input type="hidden" id="action" name="action" value="{$action}" />
       <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
