@@ -239,7 +239,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
            */
           $scope.picker = {
             modes: {
-              active:    [ 'explore' ],
+              active:    'explore',
               available: [ 'upload', 'explore' ],
               enabled:   [ 'explore' ]
             },
@@ -459,7 +459,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
               $scope.loading = false;
               $scope.picker.params = response.data;
 
-              if ($scope.picker.modes.active === 'explore') {
+              if ($scope.picker.isModeActive('explore')) {
                 $scope.explore();
               } else {
                 $scope.upload();
