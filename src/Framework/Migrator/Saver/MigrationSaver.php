@@ -494,16 +494,19 @@ class MigrationSaver
                     $category = new \ContentCategory();
                     $category->create($values);
                     $categoryId = $category->pk_content_category;
+
+                    $this->createTranslation(
+                        $values[$schema['translation']['field']],
+                        $categoryId,
+                        $schema['translation']['name'],
+                        $slug
+                    );
+
+                    $this->stats[$name]['imported']++;
+                } else {
+                    $this->stats[$name]['already_imported']++;
                 }
 
-                $this->createTranslation(
-                    $values[$schema['translation']['field']],
-                    $categoryId,
-                    $schema['translation']['name'],
-                    $slug
-                );
-
-                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -521,18 +524,20 @@ class MigrationSaver
     {
         foreach ($data as $item) {
             $values = array(
-                'pk_content'   => 0,
+                'id'           => 0,
                 'content_id'   => 0,
                 'author'       => '',
                 'author_email' => '',
+                'author_url'   => '',
                 'author_ip'    => '',
                 'date'         => date('now'),
                 'body'         => '',
                 'status'       => 'pending',
                 'agent'        => '',
                 'type'         => '',
-                'parent'       => 0,
+                'parent_id'    => 0,
                 'user_id'      => 0,
+                'content_type_referenced' => ''
             );
 
             $values = $this->merge($values, $item, $schema);
@@ -1575,7 +1580,9 @@ class MigrationSaver
         }
 
         if (empty($img)) {
-            preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result);
+            preg_match_all(
+                '@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result
+            );
             if (!empty($result[1])) {
                 $id      = $result[1][0];
                 $img     = $this->elementIsImported($id, 'image');
@@ -1594,7 +1601,11 @@ class MigrationSaver
             // $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
-        $str = preg_replace(array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"), array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody);
+        $str = preg_replace(
+            array(
+                "/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
+                array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody
+        );
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
