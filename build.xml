@@ -3,6 +3,7 @@
 <project name="OpenNemas" default="build">
 
     <property name="toolsdir" value="bin/" />
+    <property name="node_modules_dir" value="node_modules/.bin" />
     <path id="project.paths.php">
         <pathelement path="${basedir}/src/Backend" />
         <pathelement path="${basedir}/src/BackendWebService" />
@@ -17,13 +18,25 @@
         <pathelement path="${basedir}/libs/core" />
         <!-- Take a look at lint target should be updated -->
     </path>
+
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
     <pathconvert pathsep="," property="project.paths.php.comma-separated" refid="project.paths.php"/>
 
-    <target name="build" depends="prepare,lint,phpunit-ci,tools-parallel"/>
+    <path id="project.paths.js">
+        <pathelement path="${basedir}/public/assets/src" />
+        <pathelement path="${basedir}/public/js" />
+        <pathelement path="${basedir}/public/themes/admin" />
+        <pathelement path="${basedir}/public/themes/manager" />
+        <!-- Take a look at lint target should be updated -->
+    </path>
+
+    <pathconvert pathsep=" " property="project.paths.js.space-separated" refid="project.paths.js"/>
+    <pathconvert pathsep="," property="project.paths.js.comma-separated" refid="project.paths.js"/>
+
+    <target name="build" depends="prepare,phplint,jshint,phpunit-ci,tools-parallel"/>
 
     <target name="build-sequential"
-            depends="prepare,lint,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
+            depends="prepare,phplint,jshint,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="4">
@@ -69,7 +82,7 @@
         </exec>
     </target>
 
-    <target name="lint" description="Checks php files for Syntax errors">
+    <target name="phplint" description="Checks php files for Syntax errors">
         <exec executable="sh" failonerror="true">
             <arg value="-c" />
             <arg value="find ${project.paths.php.space-separated} -name *.php -print0 | xargs -0 -n1 -P0 php -l"/>
@@ -192,6 +205,15 @@
 
             <arg line="--log-junit" />
             <arg value="${basedir}/build/logs/junit.xml" />
+        </exec>
+    </target>
+
+    <target name="jshint" description="Check style in JS files">
+        <exec executable="${node_modules_dir}/jshint" failonerror="false" output="${basedir}/build/jshint.xml">
+            <arg line="-c" />
+            <arg value="${basedir}/.jshintrc" />
+            <arg line="--reporter=checkstyle" />
+            <arg line="${project.paths.js.space-separated}" />
         </exec>
     </target>
 </project>
