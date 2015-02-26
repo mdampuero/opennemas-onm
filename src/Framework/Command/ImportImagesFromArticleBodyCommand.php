@@ -271,7 +271,7 @@ EOF
         $iterations = (int)($articlesTotal/$perPage)+1;
         $i = 1;
         while ($i <= $iterations) {
-            $articles = $this->er->findBy($filter, $order);
+            $articles = $this->er->findBy($filter, $order, $perPage, 1);
             $this->output->write(
                 "Processing page $i of $iterations with ".count($articles)." articles\n"
             );
