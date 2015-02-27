@@ -14,6 +14,7 @@ angular.module(
     'onm.Renderer',
     'onm.scroll',
     'onm.resizable',
+    'onm.sidebar',
     'pascalprecht.translate',
     'sun.scrollable',
     'ui.bootstrap',

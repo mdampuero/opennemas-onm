@@ -62,7 +62,7 @@
 
             @Common/src/angular-dynamic-image/less/main.less,
             @Common/src/angular-media-picker/less/main.less,
-            @Common/src/sidebar/css/sidebar.css,
+            @Common/src/sidebar/less/main.less,
 
             @Common/src/opennemas-webarch/css/base/*,
             @Common/src/opennemas-webarch/css/components/*,
@@ -92,13 +92,13 @@
         </script>
     {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.collapsed }" {if !$smarty.session.sidebar_pinned}class="collapsed"{/if} ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}',{if $smarty.session.sidebar_pinned}true{else}false{/if})" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned">
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')" ng-swipe-right="sidebar.open()" ng-swipe-left="sidebar.close()">
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
-                    <div class="btn layout-collapse-toggle" ng-click="sidebar.collapsed ? sidebar.collapsed = 0 : (sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned)">
+                    <div class="btn layout-collapse-toggle" ng-click="sidebar.toggle()">
                         <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
                     </div>
                 </div>
@@ -107,15 +107,15 @@
                         open<strong>nemas</strong>
                     </h1>
                 </a>
-                <div ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
+                <div ng-mouseleave="sidebar.mouseLeave()" ng-mouseenter="sidebar.mouseEnter()">
                     <div class="overlay"></div>
                     <a class="header-logo pull-left" href="{url name=admin_welcome}">
-                        <h1 ng-mouseleave="sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-mouseenter="sidebar.collapsed = 0">
+                        <h1>
                             <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
                         </h1>
                     </a>
                     {if {count_pending_comments} gt 0}
-                    <ul class="nav pull-right notifcation-center" ng-if="sidebar.collapsed == 0">
+                    <ul class="nav pull-right notifcation-center" ng-if="sidebar.isCollapsed()">
                       <li class="dropdown" id="header_inbox_bar">
                         <a href="{url name=admin_comments}" class="dropdown-toggle">
                           <div class="iconset top-messages"></div>
@@ -133,7 +133,7 @@
 
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
-    <div class="layout-collapse-border" ng-click="sidebar.pinned = !sidebar.pinned; sidebar.forced ? sidebar.collapsed = 1 : sidebar.collapsed = !sidebar.pinned" ng-swipe-right="sidebar.collapsed = 0" ng-swipe-left="sidebar.collapsed = 1"></div>
+    <div class="sidebar-border" ng-click="sidebar.pin()"></div>
     <!-- END SIDEBAR -->
 
     <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
@@ -208,6 +208,8 @@
             @Common/src/angular-messenger/messenger.js,
             @Common/src/angular-resizable/resizable.js,
             @Common/src/angular-scroll/angular-scroll.js,
+            @Common/src/angular-history/history.js,
+            @Common/src/sidebar/js/sidebar.js,
 
             @AdminTheme/js/app.js,
             @AdminTheme/js/config.js,
