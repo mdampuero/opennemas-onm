@@ -16,6 +16,7 @@
   "regexp"   : true,
   "undef"    : true,
   "unused"   : true,
+  "shadow"   : true,
   "strict"   : true,
   "trailing" : false,
   "smarttabs": true,
