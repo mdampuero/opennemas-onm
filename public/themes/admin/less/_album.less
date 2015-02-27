@@ -1,0 +1,57 @@
+.album-thumbnail-sortable {
+  float: left;
+  height: 210px;
+  margin: 15px;
+  width: 160px;
+
+  .dynamic-image-placeholder {
+    height: 160px;
+    width: 160px;
+    margin: 0 auto 15px
+  }
+
+  .img-thumbnail {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  textarea {
+    border-color: transparent;
+    resize: none;
+
+    &:hover {
+      border-color: #eee;
+    }
+
+    &:focus {
+      border-color: #ddd;
+    }
+  }
+}
+
+.album-thumbnail-placeholder {
+  float: left;
+  height: 210px;
+  margin: 15px;
+  width: 160px;
+
+  .img-thumbnail {
+    display: block;
+    height: 160px;
+    width: 160px;
+  }
+
+  .thumbnail-empty {
+    background: #eee;
+    cursor: pointer;
+    height: 100%;
+    padding-top: 30px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.ui-sortable {
+  min-height: 0 !important;
+}
