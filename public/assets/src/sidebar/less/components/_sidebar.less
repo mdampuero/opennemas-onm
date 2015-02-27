@@ -98,8 +98,17 @@
           position: relative;
 
           li {
+            height: 40px;
+
+            -webkit-transition: all .25s;
+            -moz-transition: all .25s;
+            transition: all .25s;
+
             a {
               height: 40px;
+              -webkit-transition: all .25s;
+              -moz-transition: all .25s;
+              transition: all .25s;
 
               i {
                 height: 40px;
@@ -144,11 +153,17 @@
   }
 }
 
-.collapsed > .sidebar {
+.sidebar-collapsed {
   width: 50px;
 
   // Remove margin for icons in sub-menus
   .sidebar-wrapper ul li .sub-menu li {
+    height: 50px;
+
+    a {
+      height: 50px;
+    }
+
     i {
       font-size: 14px;
       height: 50px;
@@ -169,6 +184,10 @@
       }
     }
   }
+}
+
+.collapsed > .sidebar {
+  .sidebar-collapsed();
 }
 
 .collapsed.inverted  > .sidebar {
@@ -235,6 +254,10 @@
   right: 0;
 }
 
+.unpinned-on-server > .sidebar {
+  .sidebar-collapsed();
+}
+
 @media (max-width: 767px) {
   .sidebar {
     display: block;
@@ -244,8 +267,15 @@
     visibility: visible;
   }
 
-  .collapsed > .sidebar {
+  .collapsed > .sidebar,
+  .server-sidebar > .sidebar {
     width: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .server-sidebar > .sidebar {
+    .sidebar-collapsed();
   }
 }
 
