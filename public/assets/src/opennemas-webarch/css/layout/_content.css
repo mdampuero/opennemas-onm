@@ -43,19 +43,6 @@
   margin-top: 50px;
 }
 
-@media (max-width: 767px) {
-  .content {
-    padding:0 !important;
-  }
-  .content > .grid {
-    border:0;
-  }
-
-  .page-content .filters-navbar ~ .content {
-    margin-top: 0px;
-  }
-}
-
 .page-content .content .row > [class^=col-],
 .page-content .content .row > [class*= col-] {
   padding-left: 8px;
@@ -74,7 +61,10 @@
 
 .collapsed .page-container .page-content,
 .collapsed .page-container .page-content .actions-navbar,
-.collapsed .page-container .page-content .selected-navbar {
+.collapsed .page-container .page-content .selected-navbar,
+.unpinned-on-server .page-container .page-content,
+.unpinned-on-server .page-container .page-content .actions-navbar,
+.unpinned-on-server .page-container .page-content .selected-navbar {
     padding-left: 50px;
 }
 
@@ -86,7 +76,7 @@
   overflow-x: auto;
 }
 
-@media (max-width: 992px) and (min-width: 768px){
+@media (max-width: 991px) and (min-width: 768px){
   .page-content .content .row > [class^=col-],
   .page-content .content .row > [class*= col-] {
     padding-left: 15px;
@@ -95,7 +85,10 @@
 
   .collapsed .page-container .page-content,
   .collapsed .page-container .page-content .actions-navbar,
-  .collapsed .page-container .page-content .selected-navbar {
+  .collapsed .page-container .page-content .selected-navbar,
+  .server-sidebar .page-container .page-content,
+  .server-sidebar .page-container .page-content .actions-navbar,
+  .server-sidebar .page-container .page-content .selected-navbar {
     left: 0;
     padding-left: 50px;
   }
@@ -113,6 +106,17 @@
 }
 
 @media (max-width: 767px) {
+  .content {
+    padding:0 !important;
+  }
+  .content > .grid {
+    border:0;
+  }
+
+  .page-content .filters-navbar ~ .content {
+    margin-top: 0px;
+  }
+
   .page-content {
     padding-top: 50px;
   }
@@ -125,7 +129,10 @@
 
   .collapsed .page-container .page-content,
   .collapsed .page-container .page-content .actions-navbar,
-  .collapsed .page-container .page-content .selected-navbar {
+  .collapsed .page-container .page-content .selected-navbar,
+  .server-sidebar .page-container .page-content,
+  .server-sidebar .page-container .page-content .actions-navbar,
+  .server-sidebar .page-container .page-content .selected-navbar {
     left: 0;
     padding-left: 0;
   }
