@@ -47,12 +47,14 @@
             @Common/src/webarch/css/custom-icon-set.css,
             @Common/src/webarch/css/magic_space.css,
 
-            @Common/src/sidebar/css/sidebar.css,
+            @Common/src/sidebar/less/main.less,
 
             @Common/src/opennemas-webarch/css/base/*,
             @Common/src/opennemas-webarch/css/layout/*,
             @Common/src/opennemas-webarch/css/main.less"
-        filters="cssrewrite"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
+        filters="cssrewrite,less"}
+          <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
     {/block}
 
     {block name="header-js"}
