@@ -136,7 +136,7 @@
     <div class="sidebar-border" ng-click="sidebar.pin()"></div>
     <!-- END SIDEBAR -->
 
-    <div class="page-container row-fluid" ng-show="auth.status || (!auth.status && auth.modal)">
+    <div class="page-container row-fluid">
         <!-- BEGIN PAGE CONTAINER-->
             <div class="page-content">
                 <div class="view" id="view" ng-view autoscroll="true">
