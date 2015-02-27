@@ -20,70 +20,70 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        *
        * @type string
        */
-      var defaultSidebarTpl = '<div class="sidebar">\
-        <div class="spinner-wrapper">\
-          <div class="spinner">\
-            <i class="fa fa-circle-o-notch fa-3x fa-spin"></i>\
-          </div>\
-        </div>\
-      </div>';
+      var defaultSidebarTpl = '<div class="sidebar">' +
+        '<div class="spinner-wrapper">' +
+          '<div class="spinner">' +
+            '<i class="fa fa-circle-o-notch fa-3x fa-spin"></i>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
 
       /**
        * Template for the sidebar footer.
        *
        * @type string
        */
-      var footerTpl = '<div class="sidebar-footer-widget">\
-        <ul>\
-          <li class="profile-info">\
-            <a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">\
-              <div class="profile-pic">\
-                <img class="gravatar" email="[% $parent.user.email %]" image="1" size="32" width=32 height=32 >\
-              </div>\
-              <div class="username">\
-                [% $parent.user.name %]\
-              </div>\
-            </a>\
-            <div class="logout" ng-click="$parent.logout();">\
-              <i class="fa fa-power-off"></i>\
-            </div>\
-          </li>\
-        </ul>\
-      </div>';
+      var footerTpl = '<div class="sidebar-footer-widget">' +
+        '<ul>' +
+          '<li class="profile-info">' +
+            '<a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">' +
+              '<div class="profile-pic">' +
+                '<img class="gravatar" email="[% $parent.user.email %]" image="1" size="32" width=32 height=32 >' +
+              '</div>' +
+              '<div class="username">' +
+                '[% $parent.user.name %]' +
+              '</div>' +
+            '</a>' +
+            '<div class="logout" ng-click="$parent.logout();">' +
+              '<i class="fa fa-power-off"></i>' +
+            '</div>' +
+          '</li>' +
+        '</ul>' +
+      '</div>';
 
       /**
        * Template for a sidebar item.
        *
        * @type string
        */
-      var itemTpl = '<li ng-class="{\'active open\': [urls]}"[click]>\
-        <a ng-href="#">\
-          <i class="fa[icon-class]"[spinner]></i>\
-          <span class="title">[name]</span>\
-          [arrow]\
-        </a>\
-        [submenu]\
-      </li>';
+      var itemTpl = '<li ng-class="{\'active open\': [urls]}"[click]>' +
+        '<a ng-href="#">' +
+          '<i class="fa[icon-class]"[spinner]></i>' +
+          '<span class="title">[name]</span>' +
+          '[arrow]' +
+        '</a>' +
+        '[submenu]' +
+      '</li>';
 
       /**
        * Template for the sidebar.
        *
        * @type string
        */
-      var sidebarTpl = '<div class="[position][inverted]" ng-class="{ \'collapsed\': ngModel.isCollapsed() }">\
-        <div class="[class]"[id][swipeable]>\
-          <div class="overlay"></div>\
-          <scrollable>\
-            <div class="sidebar-wrapper">\
-              <ul>\
-                [items]\
-              </ul>\
-            </div>\
-          </scrollable>\
-          [footer]\
-        </div>\
-        [border]\
-      </div>';
+      var sidebarTpl = '<div class="[position][inverted]" ng-class="{ \'collapsed\': ngModel.isCollapsed() }">' +
+        '<div class="[class]"[id][swipeable]>' +
+          '<div class="overlay"></div>' +
+          '<scrollable>' +
+            '<div class="sidebar-wrapper">' +
+              '<ul>' +
+                '[items]' +
+              '</ul>' +
+            '</div>' +
+          '</scrollable>' +
+          '[footer]' +
+        '</div>' +
+        '[border]' +
+      '</div>';
 
       /**
        * Default values for sidebar.
@@ -423,7 +423,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
    * @param Object $compile   The compile service.
    * @param Object $http      The http service.
    * @param Object $location  The location service.
-   * @param Object $rootScope The angular $roooScope
+   * @param Object $rootScope The rootScope object.
    * @param Object $window    The window object.
    * @param Object routing    The routing service.
    * @param Object sidebar    The sidebar factory.
