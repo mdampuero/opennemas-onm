@@ -1,99 +1,107 @@
-/**
- * Controller to implement common actions.
- *
- * @param Object $location    The location service.
- * @param Object $scope       The current scope.
- * @param Object routing The routing service.
- */
-angular.module('BackendApp.controllers').controller('MasterCtrl', [
-    '$filter', '$http', '$location', '$modal', '$rootScope', '$scope',
-    '$translate', '$timeout', '$window', 'paginationConfig', 'routing',
-    function (
-        $filter, $http, $location, $modal, $rootScope, $scope, $translate,
-        $timeout, $window, paginationConfig, routing
-    ) {
-        $scope.sidebar = {
-            collapsed: false,
-            pinned: true,
-            forced: false
-        };
+'use strict';
 
-        /**
-         * Flag to show modal window for login only once.
-         *
-         * @type boolean
-         */
-        $scope.auth = {
-            status: true,
-            modal: false,
-            inprogress: false
-        };
+angular.module('BackendApp.controllers')
+  /**
+   * Controller to implement common actions.
+   *
+   * @param Object $filter          The filter service.
+   * @param Object $http            The http service.
+   * @param Object $location        The location service.
+   * @param Object $modal           The modal service.
+   * @param Object $rootScope       The rootScope object.
+   * @param Object $scope           The current scope.
+   * @param Object $translate       The translation service.
+   * @param Object $timeout         The timeout service.
+   * @param Object $window          The window object.
+   * @param Object paginationConfig The pagination configuration object.
+   * @param Object routing          The routing service.
+   * @param Object sidebar          The sidebar factory.
+   */
+  .controller('MasterCtrl', ['$filter', '$http', '$location', '$modal',
+    '$rootScope', '$scope', '$translate', '$timeout', '$window',
+    'paginationConfig', 'routing', 'sidebar',
+    function ($filter, $http, $location, $modal, $rootScope, $scope, $translate,
+        $timeout, $window, paginationConfig, routing, sidebar) {
+      /**
+       * The current sidebar.
+       *
+       * @type Object
+       */
+      $scope.sidebar = sidebar.init();
 
-        /**
-         * Removes a class from body and checks if user is authenticated.
-         *
-         * @param string  language The current language.
-         * @param boolean pinned   The current sidebar pinned status.
-         */
-        $scope.init = function(language, pinned) {
-            $translate.use(language);
+      /**
+       * Configures the language, translates the pagination texts and
+       * initializes the sidebar basing on the server status.
+       *
+       * @param string language The current language.
+       */
+      $scope.init = function(language) {
+        $translate.use(language);
 
-            paginationConfig.nextText     = $filter('translate')('Next');
-            paginationConfig.previousText = $filter('translate')('Previous');
+        paginationConfig.nextText     = $filter('translate')('Next');
+        paginationConfig.previousText = $filter('translate')('Previous');
 
-            $scope.sidebar.pinned = pinned;
-        };
+        if ($('body').hasClass('unpinned-on-server')) {
+          $scope.sidebar.pinned    = false;
+          $scope.sidebar.collapsed = true;
+        }
+      };
 
-        /**
-         * Scrolls the page to top.
-         */
-        $scope.scrollTop = function() {
-            $("body").animate({ scrollTop: 0 }, 250);
-        };
+      /**
+       * Scrolls the page to top.
+       */
+      $scope.scrollTop = function() {
+        $('body').animate({ scrollTop: 0 }, 250);
+      };
 
-        /**
-         * Updates the content margin-top basing on the filters-navbar height.
-         */
-        $scope.checkFiltersBar = function checkFiltersBar() {
-            $timeout(function() {
-                if ($('.view:not(.ng-leave-active) .filters-navbar').length != 1) {
-                    return false;
-                }
+      /**
+       * Updates the content margin-top basing on the filters-navbar height.
+       */
+      $scope.checkFiltersBar = function() {
+        $timeout(function() {
+          if ($('.view:not(.ng-leave-active) .filters-navbar').length !== 1) {
+            return false;
+          }
 
-                var margin = 50 + $('.filters-navbar').height() - 15;
+          var margin = 50 + $('.filters-navbar').height() - 15;
 
-                $('.content').css('margin-top', margin + 'px');
-            }, 1000);
-        };
+          $('.content').css('margin-top', margin + 'px');
+        }, 1000);
+      };
 
-        /**
-         * Updates the sidebar status basing on the current window width.
-         *
-         * @param integer nv The new value.
-         * @param integer ov The old value.
-         */
-        $scope.$watch('windowWidth', function(nv, ov) {
-          if (nv <= 1024) {
+      /**
+       * Sends a request to update the sidebar pinned status in server.
+       *
+       * @param integer nv The new value.
+       * @param integer ov The old value.
+       */
+      $scope.$watch('sidebar.pinned', function(nv, ov) {
+        if (nv === ov) {
+          return;
+        }
+
+        $http.put(routing.generate('admin_menu_sidebar_set'), {pinned: nv});
+      });
+
+      /**
+       * Updates the sidebar status basing on the current window width.
+       *
+       * @param integer nv The new values.
+       */
+      $scope.$watch('windowWidth', function(nv) {
+        $timeout(function() {
+          if (nv < 992) {
             $scope.sidebar.forced = true;
             $scope.sidebar.collapsed = true;
           } else {
             $scope.sidebar.forced = false;
             $scope.sidebar.collapsed = !$scope.sidebar.pinned;
           }
-        });
 
-        /**
-         * Sends a request to update the sidebar pinned status in server.
-         *
-         * @param integer nv The new value.
-         * @param integer ov The old value.
-         */
-        $scope.$watch('sidebar.pinned', function(nv, ov) {
-          if (nv == ov) {
-            return;
-          }
-
-          $http.put(routing.generate('admin_menu_sidebar_set'), { pinned: nv});
-        });
+          $('body').removeClass('pinned-on-server');
+          $('body').removeClass('unpinned-on-server');
+          $('body').removeClass('server-sidebar');
+        }, 100);
+      });
     }
 ]);
