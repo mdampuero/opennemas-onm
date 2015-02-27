@@ -153,6 +153,7 @@
 
         {javascripts src="
             @Common/components/jquery-ui/ui/minified/jquery-ui.min.js,
+            @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
 
             @Common/components/breakpoints/breakpoints.js,
             @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
@@ -204,7 +205,6 @@
             @Common/src/angular-messenger/messenger.js,
             @Common/src/angular-resizable/resizable.js,
             @Common/src/angular-scroll/angular-scroll.js,
-
 
             @AdminTheme/js/app.js,
             @AdminTheme/js/config.js,
