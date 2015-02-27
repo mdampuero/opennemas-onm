@@ -15,7 +15,7 @@
      *
      * @type string
      */
-    this.imageFolder = 'images'
+    this.imageFolder = 'images';
 
     /**
      * Generates an URL for a given image.
@@ -57,19 +57,20 @@
           'parameters': encodeURIComponent(transform),
         }
       );
-    }
+    };
 
     /**
      * Returns the height and width basing on the available space.
      *
-     * @param string height The image original height.
-     * @param string width  The image original width.
+     * @param string height  The image original height.
+     * @param string width   The image original width.
+     * @param Object element The element where image will be inserted.
      *
      * @return Object The height and width for the available space.
      */
-    this.getSettings = function(height, width) {
-      var oH = $('.dynamic-image-wrapper.autoscale').parent().height();
-      var oW = $('.dynamic-image-wrapper.autoscale').parent().width();
+    this.getSettings = function(height, width, element) {
+      var oH = element.parent().height();
+      var oW = element.parent().width();
 
       var h = oH;
       var w = (width * oH) / height;
@@ -80,7 +81,7 @@
       }
 
       return { height: h, width: w };
-    }
+    };
 
     /**
      * Sets the name of the object property with the image path.
@@ -89,7 +90,7 @@
      */
     this.setProperty = function(property) {
       this.property = property;
-    }
+    };
 
     /**
      * Returns the current service.
@@ -98,7 +99,7 @@
      */
     this.$get = function () {
       return this;
-    }
+    };
   }])
   .directive('dynamicImage', function ($compile, dynamicImage) {
     return {
@@ -119,7 +120,7 @@
               $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia, $attrs['dynamicImageProperty']);
 
               if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-                var settings = dynamicImage.getSettings(nv.height, nv.width);
+                var settings = dynamicImage.getSettings(nv.height, nv.width, $element);
                 $scope.height = settings.height;
                 $scope.width  = settings.width;
               }
@@ -178,9 +179,14 @@
           $scope.loading = false;
 
           if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-            var settings = dynamicImage.getSettings($(this).height(), $(this).width());
+            var image = new Image;
+            image.src = $scope.src;
+
+            var settings = dynamicImage.getSettings(image.height, image.width, e);
             $scope.height = settings.height;
             $scope.width  = settings.width;
+
+            delete image;
           }
 
           $scope.$apply();
