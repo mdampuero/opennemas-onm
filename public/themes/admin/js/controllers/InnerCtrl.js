@@ -37,6 +37,25 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     };
 
     /**
+     * Removes the given image from the scope.
+     *
+     * @param string image The image to remove.
+     */
+    $scope.removeImage = function(image) {
+      delete $scope[image];
+    };
+
+    /**
+     * Removes an item from an array of related items.
+     *
+     * @param string  from  The array name in the current scope.
+     * @param integer index The index of the element to remove.
+     */
+    $scope.removeItem = function(from, index) {
+      $scope[from].splice(index, 1);
+    };
+
+    /**
      * Insert the selected items in media picker in the target element.
      *
      * @param  Object event The event object.

@@ -9,31 +9,12 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
-     * Removes the given image from the scope.
-     *
-     * @param string image The image to remove.
-     */
-    $scope.removeImage = function(image) {
-      delete $scope[image];
-    };
-
-    /**
      * Removes an album.
      *
      * @param string from The album name in the current scope.
      */
     $scope.removeAlbum = function(from) {
       delete $scope[from];
-    };
-
-    /**
-     * Removes an item from an array of related items.
-     *
-     * @param string  from  The array name in the current scope.
-     * @param integer index The index of the element to remove.
-     */
-    $scope.removeItem = function(from, index) {
-      $scope[from].splice(index, 1);
     };
 
     /**
