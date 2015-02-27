@@ -510,11 +510,13 @@ EOF
 
             // Escape blank spaces
             $imgSource = str_replace("%20", " ", $imgSource);
+
             // Create image in onm
             $imageId = $this->processImage(
                 html_entity_decode($imgSource),
                 $article->category_name,
-                $this->localDir
+                $this->localDir,
+                $article->created
             );
 
             // Update articles body
@@ -562,7 +564,7 @@ EOF
      * @param Image $image  Image to process.
      * @param string $category  Category for this image.
      */
-    public function processImage($image, $category, $localDir = false)
+    public function processImage($image, $category, $localDir = false, $date = false)
     {
         $dir = '/tmp/import_images/';
 
@@ -608,7 +610,14 @@ EOF
         );
 
         $photo = new \Photo();
-        $photoId = $photo->createFromLocalFile($data);
+
+        // Create photo with date if exists
+        if ($date) {
+            $date = new \DateTime($date);
+            $photoId = $photo->createFromLocalFile($data, $date->format("/Y/m/d/"));
+        } else {
+            $photoId = $photo->createFromLocalFile($data);
+        }
 
         return $photoId;
     }
