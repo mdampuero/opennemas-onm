@@ -69,17 +69,20 @@
             @Common/src/opennemas-webarch/css/layout/*,
             @Common/src/opennemas-webarch/css/main.less,
 
+            @AdminTheme/less/_album.less,
             @AdminTheme/less/_article.less,
             @AdminTheme/less/_comment.less,
             @AdminTheme/less/_image.less"
-        filters="cssrewrite,less"}<link rel="stylesheet" type="text/css" href="{$asset_url}">{/stylesheets}
+        filters="cssrewrite,less"}
+            <link rel="stylesheet" type="text/css" href="{$asset_url}">
+        {/stylesheets}
     {/block}
 
     {block name="header-js"}
-         {javascripts src="
+        {javascripts src="
             @Common/components/jquery/jquery.min.js,
-            @Common/components/bootstrap/dist/js/bootstrap.min.js
-        " filters="uglifyjs"}
+            @Common/components/bootstrap/dist/js/bootstrap.min.js"
+        filters="uglifyjs"}
             <script type="text/javascript" src="{$asset_url}"></script>
         {/javascripts}
         <script>
