@@ -1,52 +1,49 @@
-(function() {
-  'use strict';
+'use strict';
 
+angular.module('BackendApp.controllers')
   /**
    * Handle actions for article inner.
-   */
-  angular.module('BackendApp.controllers').controller('AlbumCtrl', [
-    '$controller', '$rootScope', '$scope',
-    function($controller, $rootScope, $scope) {
+  */
+  .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope',
+  function($controller, $rootScope, $scope) {
+    // Initialize the super class and extend it.
+    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
-      // Initialize the super class and extend it.
-      $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    /**
+     * Parse the photos from template and initialize the scope properly
+     *
+     * @param Object photos The album photos.
+     */
+    $scope.parsePhotos = function(photos) {
+      $scope.footers = [];
+      $scope.ids     = [];
+      $scope.photos  = [];
 
-      /**
-       * Parse the photos from template and initialize the scope properly
-       *
-       * @param Object photos The album photos.
-       */
-      $scope.parsePhotos = function(photos) {
-        $scope.footers = [];
-        $scope.ids     = [];
-        $scope.photos  = [];
+      for (var i = 0; i < photos.length; i++) {
+        $scope.footers.push(photos[i].description);
+        $scope.ids.push(photos[i].id);
+        $scope.photos.push(photos[i].photo);
+      }
+    };
 
-        for (var i = 0; i < photos.length; i++) {
-          $scope.footers.push(photos[i].description);
-          $scope.ids.push(photos[i].id);
-          $scope.photos.push(photos[i].photo);
-        }
-      };
+    /**
+     * Updates the ids and footers when photos change.
+     *
+     * @param Object nv The new values.
+     * @param Object ov The old values.
+     */
+    $scope.$watch('photos', function(nv, ov) {
+      if (nv === ov) {
+        return false;
+      }
 
-      /**
-       * Updates the ids and footers when photos change.
-       *
-       * @param Object nv The new values.
-       * @param Object ov The old values.
-       */
-      $scope.$watch('photos', function(nv, ov) {
-        if (nv === ov) {
-          return false;
-        }
+      $scope.footers = [];
+      $scope.ids     = [];
 
-        $scope.footers = [];
-        $scope.ids     = [];
-
-        for (var i = 0; i < nv.length; i++) {
-          $scope.footers.push(nv[i].description);
-          $scope.ids.push(nv[i].id);
-        }
-      }, true);
-    }
-  ]);
-})();
+      for (var i = 0; i < nv.length; i++) {
+        $scope.footers.push(nv[i].description);
+        $scope.ids.push(nv[i].id);
+      }
+    }, true);
+  }
+]);

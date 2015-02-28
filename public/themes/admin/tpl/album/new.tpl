@@ -252,6 +252,7 @@
           </div>
         </div>
       </div>
+      <input type="hidden" name="album_frontpage_image" id="album_frontpage_image" ng-value="cover.id" />
       <input type="hidden" name="id" id="id" value="{$album->id|default:""}" />
     </div>
   </form>
