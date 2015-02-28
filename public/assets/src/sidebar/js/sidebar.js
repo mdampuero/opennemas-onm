@@ -510,12 +510,12 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
               }
 
               if (!visible) {
-                  item.find('.arrow').first().addClass('open');
+                item.find('.arrow').first().addClass('open');
 
-                  // Open sub-menu
-                  submenu.slideDown(200, function() {
-                    item.addClass('open');
-                  });
+                // Open sub-menu
+                submenu.slideDown(200, function() {
+                  item.addClass('open');
+                });
               }
 
               e.preventDefault();
@@ -524,7 +524,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
             dft.replaceWith(e);
 
             if ($scope.ngModel.pinnable) {
-               e.find('.sidebar-border').on('click', function () {
+              e.find('.sidebar-border').on('click', function () {
                 $scope.ngModel.pin();
                 $scope.$apply();
               });
