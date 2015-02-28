@@ -1,8 +1,35 @@
+'use strict';
+
 /**
- * Directive to generate a dynamic image.
+ * Module to load images dynamically.
  */
  angular.module('onm.dynamicImage', ['onm.routing'])
+  /**
+   * Service to load images from objects.
+   *
+   * @param Object routingProvider The routing service.
+   */
   .provider('dynamicImage', [ 'routingProvider', function(routingProvider) {
+    /**
+     * Template for the dynamic image.
+     *
+     * @type string
+     */
+    var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
+      '<img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>' +
+        '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
+          '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
+        '</div>' +
+      '[dimensions]' +
+    '</div>';
+
+    /**
+     * Allowed attributes with this directive.
+     *
+     * @type array
+     */
+    this.allowedAttributes = ['class', 'height', 'width'];
+
     /**
      * Property with the path to the image.
      *
@@ -30,7 +57,7 @@
     this.generateUrl = function(image, transform, instanceMedia, property) {
       var prefix = '';
 
-      if (typeof image == 'object') {
+      if (typeof image === 'object') {
         if (property) {
           image = image[property];
         } else {
@@ -84,6 +111,49 @@
     };
 
     /**
+     * Returns the HTML for the current image.
+     *
+     * @param Object options The image options.
+     *
+     * @return string The HTML code for the current image.
+     */
+    this.render = function(options) {
+      var html = dynamicImageTpl;
+
+      var attributes = [];
+      for (var i = 0; i < this.allowedAttributes.length; i++) {
+        var name = this.allowedAttributes[i];
+
+        if (options[name]) {
+          attributes.push(name + '="' + options[name] + '"');
+        }
+      }
+
+      var autoscale = '';
+      var autoscaleClass = '';
+      if (options.ngModel && options.autoscale && options.autoscale === 'true') {
+        autoscale      = 'style="height: [% height %]px; width: [% width %]px;"';
+        autoscaleClass = ' autoscale';
+      }
+
+      var dimensions = '';
+      if (options.ngModel && options.dimensions) {
+        dimensions = '<div class="dynamic-image-dimensions-overlay" ng-if="!loading">' +
+          '<span class="dynamic-image-dimensions-label">' +
+            '[% ngModel.width %]x[% ngModel.height %]' +
+          '</span>' +
+        '</div>';
+      }
+
+      html = html.replace('[attributes]', attributes.join(' '));
+      html = html.replace('[dimensions]', dimensions);
+      html = html.replace('[autoscale]', autoscale);
+      html = html.replace('[autoscaleClass]', autoscaleClass);
+
+      return html;
+    };
+
+    /**
      * Sets the name of the object property with the image path.
      *
      * @param string property The object property name.
@@ -101,103 +171,69 @@
       return this;
     };
   }])
-  .directive('dynamicImage', function ($compile, dynamicImage) {
+
+  /**
+   * Directive to load images dynamically from a given source.
+   *
+   * @param Object $compile     The compile service.
+   * @param Object dynamicImage The dynamicImage service.
+   */
+  .directive('dynamicImage', ['$compile', 'dynamicImage',
+    function ($compile, dynamicImage) {
     return {
       restrict: 'AE',
       scope: {
         'ngModel': '='
       },
-      link: function ($scope, $element, $attrs) {
-        var children = $element.children();
+      link: function ($scope, element, attrs) {
+        var children = element.children();
+        var html     = dynamicImage.render(attrs);
 
-        if ($attrs['ngModel']) {
+        var e = $compile(html)($scope);
+        e.append(children);
+
+        // Auto-scale image basing on the available space and real size
+        e.find('img').bind('load', function() {
+          $scope.loading = false;
+
+          if (attrs.autoscale && attrs.autoscale === 'true') {
+            var image = new Image();
+            image.src = $scope.src;
+
+            var settings = dynamicImage.getSettings(image.height, image.width, e);
+            $scope.height = settings.height;
+            $scope.width  = settings.width;
+          }
+
+          $scope.$apply();
+        });
+
+        element.replaceWith(e);
+
+        if (attrs.ngModel) {
           // Add watcher to update src when scope changes
           $scope.$watch(
             function() {
               return $scope.ngModel;
             },
-            function(nv, ov) {
-              $scope.src = dynamicImage.generateUrl(nv, $attrs['transform'], instanceMedia, $attrs['dynamicImageProperty']);
+            function(nv) {
+              $scope.src = dynamicImage.generateUrl(nv, attrs.transform, instanceMedia, attrs.dynamicImageProperty);
 
-              if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-                var settings = dynamicImage.getSettings(nv.height, nv.width, $element);
+              if (attrs.autoscale && attrs.autoscale === 'true') {
+                var settings = dynamicImage.getSettings(nv.height, nv.width, element);
                 $scope.height = settings.height;
                 $scope.width  = settings.width;
               }
             }
           );
         } else {
-          $scope.src = dynamicImage.generateUrl($attrs['path'], $attrs['transform'], instanceMedia);
+          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform, instanceMedia);
         }
 
-        // Allowed attributes with this directive
-        var allowedAttributes = [ 'class', 'height', 'width' ];
-
-        var html = '<div class="dynamic-image-wrapper[autoscaleClass]">\
-          <img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>\
-            <div class="dynamic-image-loading-overlay" ng-if="loading">\
-              <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>\
-            </div>\
-          [dimensions]\
-        </div>';
-
-        var attributes = [];
-        for (var i = 0; i < allowedAttributes.length; i++) {
-          if ($attrs[allowedAttributes[i]]) {
-            attributes.push(
-              allowedAttributes[i] + '="' + $attrs[allowedAttributes[i]] + '"'
-            );
-          }
-        };
-
-        var autoscale = '';
-        var autoscaleClass = '';
-        if ($attrs['ngModel']
-            && $attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-          autoscale      = 'style="height: [% height %]px; width: [% width %]px;"';
-          autoscaleClass = ' autoscale';
-        }
-
-        var dimensions = '';
-        if ($attrs['ngModel'] && $attrs['dimensions']) {
-          dimensions = "<div class=\"dynamic-image-dimensions-overlay\" ng-if=\"!loading\">\
-            <span class=\"dynamic-image-dimensions-label\">\
-              [% ngModel.width %]x[% ngModel.height %]\
-            </span>\
-          </div>";
-        }
-
-        html = html.replace('[attributes]', attributes.join(' '));
-        html = html.replace('[dimensions]', dimensions);
-        html = html.replace('[autoscale]', autoscale);
-        html = html.replace('[autoscaleClass]', autoscaleClass);
-
-        var e = $compile(html)($scope);
-        e.append(children);
-
-        e.find('img').bind('load', function(event) {
-          $scope.loading = false;
-
-          if ($attrs['autoscale'] && $attrs['autoscale'] == 'true') {
-            var image = new Image;
-            image.src = $scope.src;
-
-            var settings = dynamicImage.getSettings(image.height, image.width, e);
-            $scope.height = settings.height;
-            $scope.width  = settings.width;
-
-            delete image;
-          }
-
-          $scope.$apply();
-        });
-
-        $element.replaceWith(e);
-
-        $scope.$watch('src', function(nv, ov) {
+        $scope.$watch('src', function() {
           $scope.loading = true;
         });
       }
     };
-  });
-
+    }
+  ]);
