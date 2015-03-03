@@ -70,7 +70,7 @@
                         <span class="add-on">
                             <span class="fa fa-search fa-lg"></span>
                         </span>
-                        <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+                        <input class="no-boarder" name="name" ng-model="criteria.name_like" placeholder="{t}Search by name{/t}" type="text"/>
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks hidden-xs">
