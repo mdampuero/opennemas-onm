@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="btn del">
-        <i class="icon-trash"></i>
+        <i class="fa fa-trash"></i>
     </div>
 </div>
 </script>
@@ -218,7 +218,7 @@
                                     </div>
                                 </div>
                                 <div class="btn del">
-                                    <i class="icon-trash"></i>
+                                    <i class="fa fa-trash"></i>
                                 </div>
                             </div>
                             {foreachelse}
