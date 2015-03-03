@@ -62,7 +62,7 @@
                             {if $server['activated'] == 1}
                                 <i class="fa fa-check"></i>
                             {else}
-                                <i class="fa fa-remove"></i>
+                                <i class="fa fa-times"></i>
                             {/if}
                         </a>
                     </td>

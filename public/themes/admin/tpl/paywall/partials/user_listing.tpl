@@ -29,14 +29,14 @@
             {if isset($user->meta['last_login'])}
                 {datetime date=$user->meta['last_login']}
             {else}
-                <span class="icon-remove"></span>
+                <span class="fa fa-times"></span>
             {/if}
         </td>
         <td class="center">
             {if isset($user->meta['paywall_time_limit'])}
                 {datetime date=$user->meta['paywall_time_limit']}
             {else}
-                <span class="icon-remove"></span>
+                <span class="fa fa-times"></span>
             {/if}
         </td>
         {if $show_edit_button}
