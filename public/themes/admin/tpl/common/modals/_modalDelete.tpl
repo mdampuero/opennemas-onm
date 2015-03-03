@@ -2,12 +2,11 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
   <h4 class="modal-title">
       <i class="fa fa-trash-o"></i>
-      {t}Delete item{/t}
+      {t}Send to trash{/t}
   </h4>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want delete "[% template.content.title %]"?{/t}</p>
-
+    <p>{t escape=off}Are you sure that do you want send to the trash "[% template.content.title %]"?{/t}</p>
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>

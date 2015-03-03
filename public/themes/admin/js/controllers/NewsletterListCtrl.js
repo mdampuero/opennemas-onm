@@ -36,7 +36,7 @@ angular.module('BackendApp.controllers').controller('NewsletterListCtrl', [
         if (response) {
           $scope.renderMessages(response.data.messages);
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
