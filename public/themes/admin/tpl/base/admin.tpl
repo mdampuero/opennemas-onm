@@ -168,6 +168,7 @@
             @Common/components/moment/min/moment-with-locales.min.js,
             @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
             @Common/components/select2/select2.min.js,
+            @Common/components/swfobject/swfobject/swfobject.js,
 
             @Common/components/modernizr/modernizr.js,
             @Common/js/libs/tinycon.min.js,
@@ -193,6 +194,7 @@
             @Common/components/angular-touch/angular-touch.min.js,
             @Common/components/angular-translate/angular-translate.min.js,
             @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+            @Common/components/angular-swfobject/angular-swfobject.js,
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
 

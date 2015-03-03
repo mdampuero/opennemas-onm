@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-  {javascripts src="@AdminTheme/js/swfobject.js"}
-    <script type="text/javascript" src="{$asset_url}"></script>
-  {/javascripts}
-{/block}
-
 {block name="header-css" append}
   {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
                     @AdminTheme/css/jquery/colorbox.css
