@@ -11,7 +11,7 @@
                         {section name=d loop=$contentsRight}
                             <li class="" data-type="{$contentsRight[d]->content_type}" data-id="{$contentsRight[d]->pk_content}">
                                 {$contentsRight[d]->created|date_format:"%d-%m-%Y"}:{$contentsRight[d]->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
+                                <span class="icon"><i class="fa fa-trash"></i></span>
                             </li>
                         {/section}
                     </ul>
@@ -24,7 +24,7 @@
                         {section name=d loop=$contentsLeft}
                             <li class="" data-type="{$contentsLeft[d]->content_type}" data-id="{$contentsLeft[d]->pk_content}">
                                 {$contentsLeft[d]->created|date_format:"%d-%m-%Y"}:{$contentsLeft[d]->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
+                                <span class="icon"><i class="fa fa-trash"></i></span>
                             </li>
                         {/section}
                         </ul>

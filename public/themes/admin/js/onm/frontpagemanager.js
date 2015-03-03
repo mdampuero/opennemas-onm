@@ -699,8 +699,4 @@ jQuery(function($) {
         }
     });
 
-    $('#pick-layout, .settings-panel .close').click('click', function(e, ui) {
-        $('.settings-panel').slideToggle();
-    });
-
 });

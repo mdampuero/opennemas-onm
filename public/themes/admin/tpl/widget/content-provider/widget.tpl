@@ -8,7 +8,7 @@
     </div>
     <div class="content-action-buttons btn-group">
         <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="icon-cog"></i>
+            <i class="fa fa-cog"></i>
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu pull-right">
@@ -19,18 +19,18 @@
             </li>
             <li>
                 <a href="#" title="{t}Delete{/t}" class="drop-element">
-                    <i class="icon-remove"></i> {t}Remove from this frontpage{/t}
+                    <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
                 </a>
             </li>
             <li>
                 <a title="{t}Remove from all frontpages{/t}" href="#" class="arquive">
-                    <i class="icon-inbox"></i> {t}Arquive{/t}
+                    <i class="fa fa-inbox"></i> {t}Arquive{/t}
                 </a>
             </li>
             <li class="divider"></li>
             <li>
                 <a href="{url name=admin_widget_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
-                    <i class="icon-trash"></i> {t}Send to trash{/t}
+                    <i class="fa fa-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
         </ul>
