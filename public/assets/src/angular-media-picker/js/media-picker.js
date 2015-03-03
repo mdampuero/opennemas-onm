@@ -106,7 +106,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                           + instanceMedia
                           + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
-                      <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
+                      <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
                     </div>\
                     <ul class=\"media-information\">\
                       <li>\
