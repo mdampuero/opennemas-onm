@@ -142,7 +142,7 @@
                                         <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
                                             <i class="fa fa-pencil"></i>{t}Edit{/t}
                                         </a>
-                                        <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_menu_delete', $index)" type="button">
+                                        <button class="link link-danger" ng-click="removeMenu(content)" type="button">
                                             <i class="fa fa-trash-o"></i>{t}Delete{/t}
                                         </button>
                                     </div>
@@ -174,7 +174,7 @@
 
     </div><!--fin wrapper-content-->
 
-    <script type="text/ng-template" id="modal-delete">
+    <script type="text/ng-template" id="modal-remove-permanently">
         {include file="common/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">

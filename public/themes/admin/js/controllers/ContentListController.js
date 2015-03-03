@@ -393,8 +393,43 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         });
     };
 
+    /**
+     * Permanently removes a contents by using a confirmation dialog
+     */
+    $scope.removeMenu = function(content) {
+      var modal = $modal.open({
+        templateUrl: 'modal-remove-permanently',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              content: content
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate(
+                'backend_ws_menu_delete',
+                { id: content.id }
+              );
 
+              return $http.post(url);
+            };
+          }
+        }
+      });
 
+      modal.result.then(function(response) {
+        if (response) {
+          $scope.renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
 
     /**
      * Permanently removes a contents by using a confirmation dialog
