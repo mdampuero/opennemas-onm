@@ -3,7 +3,7 @@
 /**
  * Module to load images dynamically.
  */
- angular.module('onm.dynamicImage', ['onm.routing'])
+ angular.module('onm.dynamicImage', ['swfobject', 'onm.routing'])
   /**
    * Service to load images from objects.
    *
@@ -17,9 +17,20 @@
      */
     var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
       '<img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>' +
-        '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
-          '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
-        '</div>' +
+      '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
+        '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
+      '</div>' +
+      '[dimensions]' +
+    '</div>';
+
+    /**
+     * Template for the dynamic image.
+     *
+     * @type string
+     */
+    var dynamicSwfTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
+      '<swf-object [attributes] swf-params="{wmode: \'opaque\'}" swf-url="[% src %]" swf-width="[% width %]" swf-height="[% height %]"></swf-object>' +
+      '<div class="swf-overlay"></div>' +
       '[dimensions]' +
     '</div>';
 
@@ -73,8 +84,8 @@
         prefix = instanceMedia + this.imageFolder;
       }
 
-      if (!transform) {
-        return image;
+      if (!transform || /.*\.swf/.test(image)) {
+        return prefix + image;
       }
 
       return routingProvider.generate(
@@ -89,36 +100,60 @@
     /**
      * Returns the height and width basing on the available space.
      *
-     * @param string height  The image original height.
-     * @param string width   The image original width.
-     * @param Object element The element where image will be inserted.
+     * @param integer height    The image original height.
+     * @param integer width     The image original width.
+     * @param integer maxHeight The available height.
+     * @param integer maxWidth  The available width.
      *
      * @return Object The height and width for the available space.
      */
-    this.getSettings = function(height, width, element) {
-      var oH = element.parent().height();
-      var oW = element.parent().width();
+    this.getSettings = function(height, width, maxHeight, maxWidth) {
+      var h = maxHeight;
+      var w = (width * maxHeight) / height;
 
-      var h = oH;
-      var w = (width * oH) / height;
-
-      if (w > oW) {
-        w = oW;
-        h = (height * oW) / width;
+      if (w > maxWidth) {
+        w = maxWidth;
+        h = (height * maxWidth) / width;
       }
 
       return { height: h, width: w };
     };
 
     /**
+     * Checks if the image is a flash object.
+     *
+     * @param object image    The image to check.
+     * @param string property The object property name.
+     *
+     * @return boolean True if the given image is a flash object. Otherwise,
+     *                 returns false
+     */
+    this.isFlash = function(image, property) {
+      if (typeof image === 'object') {
+        if (property) {
+          image = image[property];
+        } else {
+          image = image[this.property];
+        }
+      }
+
+      return /.*\.swf/.test(image);
+    };
+
+    /**
      * Returns the HTML for the current image.
      *
      * @param Object options The image options.
+     * @param Object model   The image object.
      *
      * @return string The HTML code for the current image.
      */
-    this.render = function(options) {
+    this.render = function(options, model) {
       var html = dynamicImageTpl;
+
+      if (this.isFlash(model)) {
+        html = dynamicSwfTpl;
+      }
 
       var attributes = [];
       for (var i = 0; i < this.allowedAttributes.length; i++) {
@@ -137,7 +172,7 @@
       }
 
       var dimensions = '';
-      if (options.ngModel && options.dimensions) {
+      if (options.ngModel && options.dimensions && options.dimensions === 'true') {
         dimensions = '<div class="dynamic-image-dimensions-overlay" ng-if="!loading">' +
           '<span class="dynamic-image-dimensions-label">' +
             '[% ngModel.width %]x[% ngModel.height %]' +
@@ -145,10 +180,10 @@
         '</div>';
       }
 
-      html = html.replace('[attributes]', attributes.join(' '));
-      html = html.replace('[dimensions]', dimensions);
-      html = html.replace('[autoscale]', autoscale);
-      html = html.replace('[autoscaleClass]', autoscaleClass);
+      html = html.replace(/\[attributes\]/g, attributes.join(' '));
+      html = html.replace(/\[dimensions\]/g, dimensions);
+      html = html.replace(/\[autoscale\]/g, autoscale);
+      html = html.replace(/\[autoscaleClass\]/g, autoscaleClass);
 
       return html;
     };
@@ -186,29 +221,44 @@
         'ngModel': '='
       },
       link: function ($scope, element, attrs) {
-        var children = element.children();
-        var html     = dynamicImage.render(attrs);
+        var maxHeight = element.height();
+        var maxWidth  = element.width();
+
+        if (!maxWidth || !maxHeight) {
+          maxHeight = element.parent().height();
+          maxWidth  = element.parent().width();
+        }
+
+        var children  = element.children();
+        var html      = dynamicImage.render(attrs, $scope.ngModel);
+
+        if (dynamicImage.isFlash($scope.ngModel)) {
+          var settings = dynamicImage.getSettings($scope.ngModel.height,
+            $scope.ngModel.width, maxHeight, maxWidth);
+
+          $scope.height = settings.height;
+          $scope.width  = settings.width;
+        }
 
         var e = $compile(html)($scope);
-        e.append(children);
 
         // Auto-scale image basing on the available space and real size
         e.find('img').bind('load', function() {
           $scope.loading = false;
 
-          if (attrs.autoscale && attrs.autoscale === 'true') {
+          if (!$scope.height && !$scope.width) {
             var image = new Image();
             image.src = $scope.src;
 
-            var settings = dynamicImage.getSettings(image.height, image.width, e);
+            var settings = dynamicImage.getSettings(image.height, image.width,
+              maxHeight, maxWidth);
+
             $scope.height = settings.height;
             $scope.width  = settings.width;
           }
 
           $scope.$apply();
         });
-
-        element.replaceWith(e);
 
         if (attrs.ngModel) {
           // Add watcher to update src when scope changes
@@ -217,22 +267,30 @@
               return $scope.ngModel;
             },
             function(nv) {
-              $scope.src = dynamicImage.generateUrl(nv, attrs.transform, instanceMedia, attrs.dynamicImageProperty);
+              $scope.src = dynamicImage.generateUrl(nv, attrs.transform,
+                attrs.instance, attrs.dynamicImageProperty);
 
               if (attrs.autoscale && attrs.autoscale === 'true') {
-                var settings = dynamicImage.getSettings(nv.height, nv.width, element);
+                var settings = dynamicImage.getSettings($scope.ngModel.height,
+                  $scope.ngModel.width, maxHeight, maxWidth);
+
                 $scope.height = settings.height;
                 $scope.width  = settings.width;
               }
             }
           );
         } else {
-          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform, instanceMedia);
+          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform, attrs.instance);
         }
 
-        $scope.$watch('src', function() {
-          $scope.loading = true;
+        $scope.$watch('src', function(nv) {
+          if (!dynamicImage.isFlash(nv)) {
+            $scope.loading = true;
+          }
         });
+
+        e.append(children);
+        element.replaceWith(e);
       }
     };
     }
