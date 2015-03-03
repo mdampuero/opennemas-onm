@@ -11,6 +11,6 @@
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="confirm();" ng-disabled="loading">{t}Yes, delete{/t}</button>
+    <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading">{t}Yes, delete{/t}</button>
     <button class="btn secondary" ng-click="close()" ng-disabled="loading">{t}No{/t}</button>
 </div>
