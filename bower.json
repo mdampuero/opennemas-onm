@@ -68,7 +68,7 @@
     "jquery.sparkline": "~2.1.*",
     "jquery.tagsinput": "~1.3.*",
     "jquery2": "jquery#2.1.1",
-    "jqueryui-touch-punch": "~0.2.*",
+    "jqueryui-touch-punch": "*",
     "jqvmap": "stable",
     "jvectormap": "~2.0.*",
     "messenger": "~1.4.*",
