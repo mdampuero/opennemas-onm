@@ -150,7 +150,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
                                 </li>
@@ -178,7 +178,7 @@
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
                             </li>
@@ -207,7 +207,7 @@
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
                             </li>
@@ -235,7 +235,7 @@
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </div>
                             </li>
@@ -266,7 +266,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
                                 </li>
@@ -293,7 +293,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
                                  </li>
@@ -326,7 +326,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                         </div>
                                 </li>
@@ -357,7 +357,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
                                 </li>
@@ -392,7 +392,7 @@
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
                                         </div>
                                         </div>
                                 </li>

@@ -41,7 +41,7 @@
     <div class="input-append">
         <input type="text" name="item[]" value=""/>
         <div class="btn addon del">
-            <i class="icon-trash"></i>
+            <i class="fa fa-trash"></i>
         </div>
     </div>
 </div>

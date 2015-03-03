@@ -143,7 +143,7 @@
                             <input type="text" name="items[]" value="{$item}"/>
                             <input type="text" name="values[]" value="{$value}">
                             <div class="btn addon del">
-                                <i class="icon-trash"></i>
+                                <i class="fa fa-trash"></i>
                             </div>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
         <input type="text" name="items[]" value=""/>
         <input type="text" name="values[]" value=""/>
         <div class="btn addon del">
-            <i class="icon-trash"></i>
+            <i class="fa fa-trash"></i>
         </div>
     </div>
 </div>

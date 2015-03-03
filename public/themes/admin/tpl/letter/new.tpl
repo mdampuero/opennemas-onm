@@ -155,7 +155,7 @@ jQuery(document).ready(function($) {
 
                                                     <div class="btn-group">
                                                         <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
-                                                        <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                                                        <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </div>
                                             </li>
