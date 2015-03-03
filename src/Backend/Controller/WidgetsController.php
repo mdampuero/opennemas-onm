@@ -119,7 +119,7 @@ class WidgetsController extends Controller
             );
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
-                $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+                $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
             }
 
             try {
