@@ -51,7 +51,7 @@
                 <ul class="nav quick-section pull-right">
                     {acl isAllowed="ADVERTISEMENT_DELETE"}
                         <li class="quicklinks">
-                            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                            <button class="btn btn-link" ng-click="removeSelectedMenus()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
                                 <i class="fa fa-trash-o fa-lg"></i>
                             </button>
                         </li>
@@ -177,7 +177,7 @@
     <script type="text/ng-template" id="modal-remove-permanently">
         {include file="common/modals/_modalDelete.tpl"}
     </script>
-    <script type="text/ng-template" id="modal-delete-selected">
+    <script type="text/ng-template" id="modal-batch-remove-permanently">
         {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 </div>

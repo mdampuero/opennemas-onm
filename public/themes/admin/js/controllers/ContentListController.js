@@ -394,7 +394,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     };
 
     /**
-     * Permanently removes a contents by using a confirmation dialog
+     * Permanently removes a menu by using a confirmation dialog
      */
     $scope.removeMenu = function(content) {
       var modal = $modal.open({
@@ -423,6 +423,47 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       modal.result.then(function(response) {
         if (response) {
           $scope.renderMessages(response.data.messages);
+
+          if (response.status == 200) {
+            $scope.list($scope.route);
+          }
+        }
+      });
+    };
+
+    /**
+     * Permanently removes a list of contents by using a confirmation dialog
+     */
+    $scope.removeSelectedMenus = function () {
+      // Enable spinner
+      $scope.deleting = 1;
+
+      var modal = $modal.open({
+        templateUrl: 'modal-batch-remove-permanently',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = routing.generate('backend_ws_menus_batch_delete');
+
+              return $http.post(url, {ids: $scope.selected.contents});
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          $scope.renderMessages(response.data.messages);
+
+          $scope.selected.total = 0;
+          $scope.selected.contents = [];
 
           if (response.status == 200) {
             $scope.list($scope.route);
@@ -501,7 +542,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       modal.result.then(function(response) {
         if (response) {
-          renderMessages(response.data.messages);
+          $scope.renderMessages(response.data.messages);
 
           $scope.selected.total = 0;
           $scope.selected.contents = [];
