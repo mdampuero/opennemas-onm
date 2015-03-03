@@ -65,7 +65,7 @@
                             <span class="icon-plus"></span> {t}Add Container{/t}
                         </button>
                         <button class="btn" title="{t}Clean containers{/t}" id="clean-button">
-                            <i class="icon-remove"></i> {t}Clean contents{/t}
+                            <i class="fa fa-times"></i> {t}Clean contents{/t}
                         </button>
                     </div>
 
@@ -76,7 +76,7 @@
                                 <div class="container-buttons">
                                     <i class="fa fa-chevron-up"></i>
                                     <i class="fa fa-pencil"></i>
-                                    <i class="fa fa-remove"></i>
+                                    <i class="fa fa-times"></i>
                                     <i class="fa fa-trash-o"></i>
                                 </div>
                             </div>
@@ -96,8 +96,8 @@
                                             <i class="icon-chevron-down"></i>
                                         {/if}
                                         <i class="fa fa-pencil"></i>
-                                        <i class="icon-remove"></i>
-                                        <i class="icon-trash"></i>
+                                        <i class="fa fa-times"></i>
+                                        <i class="fa fa-trash"></i>
                                     </div>
                                 </div>
                                 <ul class="content-receiver"
@@ -109,7 +109,7 @@
                                             {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
                                             data-title="{$contents[d]->title|clearslash|clean_for_html_attributes}" data-type="{$contents[d]->content_type}" >
                                             {$contents[d]->type} {$contents[d]->title|clean_for_html_attributes}
-                                            <span class="icon"><i class="icon-trash"></i></span>
+                                            <span class="icon"><i class="fa fa-trash"></i></span>
                                         </li>
                                         {/if}
                                     {/section}

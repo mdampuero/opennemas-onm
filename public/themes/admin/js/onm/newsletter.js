@@ -101,13 +101,13 @@ $('div#newsletter-container').on('click', '.container-label .icon-chevron-down, 
     $(this).toggleClass('icon-chevron-down icon-chevron-up');
 });
 
-$('div#newsletter-container').on('click', '.container-label .icon-trash', function(e) {
+$('div#newsletter-container').on('click', '.container-label .fa-trash', function(e) {
     $(this).closest('div.container-receiver').remove();
 
     e.preventDefault();
 });
 
-$('div#newsletter-container').on('click', '.icon-remove', function() {
+$('div#newsletter-container').on('click', '.fa-times', function() {
     $(this).closest('.container-receiver').find('li').each(function (){
         $(this).remove();
     });
@@ -141,7 +141,7 @@ $('#modal-add-label a.btn.save').on('click', function(e) {
             '" class="container-receiver active"><div class="container-label"><span>' +
             label + '</span> <div class="container-buttons btn-group">' +
             ' <i class="icon-chevron-down"></i><i class="fa fa-pencil"></i>' +
-            ' <i class="icon-trash"></i> <i class="icon-clean"></i> </div> </div>' +
+            ' <i class="fa fa-trash"></i> <i class="icon-clean"></i> </div> </div>' +
             ' <ul class="content-receiver"> </ul> </div>');
 
 
@@ -340,7 +340,7 @@ $('#parse-and-add').on('click', function (e, ui) {
                     'data-email' : item,
                     'data-name' : item,
                     'class' : 'account'
-                }).html(item).append('<i class="icon icon-trash"></i>');
+                }).html(item).append('<i class="fa fa-trash"></i>');
                 $('#items-recipients').append(item);
             }
         });

@@ -66,7 +66,7 @@
                             {foreach name=d from=$mailList item=mail}
                             <li class="account"  data-email="{$mail->email}"  data-name="{$mail->name}">
                                 {$mail->name}:{$mail->email}
-                                <i class="icon icon-trash"></i>
+                                <i class="fa fa-trash"></i>
                             </li>
                             {/foreach}
                         </ul>
@@ -87,7 +87,7 @@
                                     <label>
                                         <input type="checkbox">
                                         {$account->name}:{$account->email}
-                                        <i class="icon icon-trash"></i>
+                                        <i class="fa fa-trash"></i>
                                     </label>
                                 </li>
                             {/foreach}

@@ -205,7 +205,7 @@
                                     data-title="{$user->email}"
                                     data-url="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
                                     title="{t}Delete user{/t}">
-                                    <i class="icon-white icon-trash"></i>
+                                    <i class="icon-white fa fa-trash"></i>
                                 </a>
                             </div>
                         </td>
