@@ -7,6 +7,22 @@
         <link rel="stylesheet" href="{$asset_url}">
     {/stylesheets}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
+    <style>
+      @media (max-width: 767px) {
+        .page-content .filters-navbar ~ .content {
+          margin-top: 60px;
+        }
+        #frontpagemanager {
+          zoom:0.7 !important;
+        }
+      }
+      @media (max-width:900px) {
+        #frontpagemanager {
+          zoom:0.7 !important;
+        }
+      }
+
+    </style>
 {/block}
 
 {block name="footer-js" append}
@@ -55,7 +71,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="get" name="formulario" id="formulario">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
@@ -67,10 +83,10 @@
                             {t}Frontpages{/t}
                         </h4>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs hidden-sm">
                         <span class="h-seperate"></span>
                     </li>
-                    <li class="quicklinks">
+                    <li class="quicklinks hidden-xs hidden-sm">
                         <h5>
                             {if $category eq 0}
                                 {t}Home{/t}
@@ -83,14 +99,14 @@
                         </h5>
                     </li>
                 </ul>
-                <div class="all-actions pull-right">
+                <div class="all-actions pull-right hidden-xs">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
                              <a class="btn btn-white" href="#" id="button_addnewcontents" title="{t}Add contents{/t}">
-                                 <span class="fa fa-plus"></span> {t}Add contents{/t}
+                                 <span class="fa fa-plus"></span> <span class="hidden-xs">{t}Add contents{/t}</span>
                              </a>
                         </li>
-                        <li class="quicklinks"><span class="h-seperate"></span></li>
+                        <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
                             <a class="btn btn-white" href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
                                 <span class="fa fa-desktop"></span> {t}Preview{/t}
@@ -99,7 +115,7 @@
                         <li class="quicklinks"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
                             <a id="button_savepositions" href="#" class="btn btn-primary"  title="{t}Save changes{/t}">
-                                <span class="fa fa-save"></span> {t}Save changes{/t}
+                                <span class="fa fa-save"></span> <span class="hidden-xs">{t}Save changes{/t}</span>
                             </a>
                         </li>
                     </ul>
@@ -129,7 +145,7 @@
                 <ul class="nav quick-section pull-right">
                     <li class="quicklinks">
                         <a href="#" id="button_multiple_delete">
-                            <i class="fa fa-remove"></i> {t}Remove from this frontpage{/t}
+                            <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
                         </a>
                     </li>
                     <li class="quicklinks">
@@ -149,11 +165,14 @@
         </div>
     </div>
 
-    <div class="page-navbar filters-navbar">
+    <div class="page-navbar filters-navbar hidden-xs">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <ul class="nav quick-section">
-                    {acl hasCategoryAccess=0}
+                <li class="quicklinks">
+                  <span class="info">Managing frontpage:</span>
+                </li>
+                    <!-- {acl hasCategoryAccess=0}
                         <li class="quicklinks">
                             <a class="btn btn-link" href="{url name=admin_frontpage_list category=home}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
                         </li>
@@ -186,80 +205,74 @@
                             {/acl}
                         {/if}
                     {/foreach}
-                </ul>
-                <ul class="nav quick-section pull-right">
+                    -->
+
                     <li class="quicklinks">
-                        <select name="category" id="categoryItem">
-                            {acl hasCategoryAccess=0}
-                            <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
-                            {/acl}
-                            {section name=as loop=$allcategorys}
-                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->pk_content_category}"
-                                    {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                    {if $category eq $allcategorys[as]->pk_content_category} selected ="selected" {/if} >
-                                        {t 1=$allcategorys[as]->title}%1{/t}
-                                </option>
-                                {/acl}
-                                {section name=su loop=$subcat[as]}
-                                    {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                    <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                        {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
-                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
-                                    </option>
-                                    {/acl}
-                                {/section}
-                            {/section}
+                      <select name="category" id="categoryItem">
+                          {acl hasCategoryAccess=0}
+                          <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
+                          {/acl}
+                          {section name=as loop=$allcategorys}
+                              {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                              <option value="{$allcategorys[as]->pk_content_category}"
+                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                  {if $category eq $allcategorys[as]->pk_content_category} selected ="selected" {/if} >
+                                      {t 1=$allcategorys[as]->title}%1{/t}
+                              </option>
+                              {/acl}
+                              {section name=su loop=$subcat[as]}
+                                  {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                  <option value="{$subcat[as][su]->pk_content_category}"
+                                      {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                      {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
+                                      &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
+                                  </option>
+                                  {/acl}
+                              {/section}
+                          {/section}
                         </select>
                     </li>
+                </ul>
+                <ul class="nav quick-section pull-right">
                     {is_module_activated name="FRONTPAGES_LAYOUT"}
-                        <li class="quicklinks">
-                            <span class="h-seperate"></span>
-                        </li>
-                         <li class="quicklinks">
-                            <div class="btn-group" id="frontpage-settings">
-                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="icon-cog"></i>
-                                    <span class="caret"></span>
-                                </a>
-                                {if $available_layouts > 1}
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a tabindex="-1" href="#" id="pick-layout">{t}Pick layout{/t}</a></li>
-                                </ul>
-                                {/if}
-                            </div>
-                        </li>
+                      <li class="quicklinks">
+                          <span class="h-seperate"></span>
+                      </li>
+                       <li class="quicklinks">
+                          <div class="btn-group" id="frontpage-settings">
+                              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                  <i class="fa fa-cog"></i>
+                                  <span class="caret"></span>
+                              </a>
+                              {if $available_layouts > 1}
+                              <ul class="dropdown-menu pull-right">
+                                  <li><a tabindex="-1" href="#" id="pick-layout">{t}Pick layout{/t}</a></li>
+                              </ul>
+                              {/if}
+                          </div>
+                      </li>
                     {/is_module_activated}
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="settings settings-panel">
-        <div class="content">
-            <a href="#" class="close">×</a>
-            {if $available_layouts > 1}
-                <h4>{t}Default layout for this frontpage{/t}</h4>
-                {foreach from=$available_layouts key=key item=avlayout}
-                    <a class="thumbnail {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
-                       href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
-                        {$avlayout['name']}
-                    </a>
-                {/foreach}
-            {/if}
-        </div>
-    </div>
-
     <div class="content">
         <div id="warnings-validation"></div><!-- /warnings-validation -->
+
         {render_messages}
 
-        <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
+        <div class="grid simple visible-xs">
+          <div class="grid-body center">
+            <h5>{t escape=off}The frontpage manager is currently <strong>unavaible for your screen size</strong>{/t}</h5>
+          </div>
+        </div>
+
+        <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix hidden-xs">
             {$layout}
         </div><!-- /frontpagemanager -->
 
-        <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
+        <div id="content-provider" class="clearfix hidden-xs ng-cloak" title="{t}Available contents{/t}">
             <div class="loading-spinner"></div>
             <div class="content-provider-block-wrapper clearfix">
                 <ul>
@@ -316,12 +329,37 @@
                     {/is_module_activated}
                     {is_module_activated name="ADVANCED_SEARCH"}
                     <li>
-                        <a href="{url name=admin_search_content_provider related=0}"><i class="icon-search"></i></a>
+                        <a href="{url name=admin_search_content_provider related=0}"><i class="fa fa-search"></i></a>
                     </li>
                     {/is_module_activated}
                 </ul>
             </div>
         </div><!-- /content-provider -->
+    </div>
+
+    <div class="settings settings-panel">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+        <h4 class="modal-title">
+          {t}Change the layout of this frontpage{/t}
+        </h4>
+      </div>
+      <div class="modal-body">
+        {if $available_layouts > 1}
+          <h4></h4>
+            {foreach from=$available_layouts key=key item=avlayout}
+              <a class="thumbnail {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
+                href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
+                {$avlayout['name']}
+              </a>
+            {/foreach}
+        {/if}
+      </div>
+      <!-- <div class="modal-footer">
+        <span class="loading" ng-if="deleting == 1"></span>
+        <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading">{t}Yes, delete{/t}</button>
+        <button class="btn secondary" ng-click="close()" ng-disabled="loading">{t}No{/t}</button>
+      </div> -->
     </div>
 
     <input type="hidden"  id="category" name="category" value="{$category}">
