@@ -11,26 +11,26 @@
               <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
                 <h5>{t}Frontpage image{/t}</h5>
                 <div class="form-group">
-                  <div class="thumbnail-placeholder" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                  <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo1">
-                      <div class="thumbnail-empty">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>Pick an image</h5>
                       </div>
                     </div>
                     <div class="dynamic-image-placeholder" ng-if="photo1">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220"></dynamic-image>
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
+                          <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                            <i class="fa fa-camera fa-2x"></i>
+                          </div>
+                        </div>
+                        <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                      </dynamic-image>
                     </div>
-                  </div>
-                  <div class="thumbnail-actions" ng-if="photo1" style="text-align: center; margin-top: 10px;">
-                    <button class="btn btn-default" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
-                      <i class="fa fa-camera"></i>
-                      {t}Change image{/t}
-                    </button>
-                    <button class="btn btn-danger" ng-click="removeImage('photo1')" type="button">
-                      <i class="fa fa-trash-o"></i>
-                      {t}Remove{/t}
-                    </button>
                   </div>
                 </div>
                 <div class="form-group" ng-if="photo1">
@@ -63,6 +63,7 @@
                             <i class="fa fa-camera fa-2x"></i>
                           </div>
                         </div>
+                        <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo"></div>
                       </dynamic-image>
                     </div>
                   </div>
@@ -94,9 +95,11 @@
                             <div class="thumbnail-action remove-action" ng-click="removeImage('photo3')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
+                             <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                              <i class="fa fa-camera fa-2x"></i>
+                            </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-types="photo">
-                          </div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-type="photo"></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -139,19 +142,18 @@
                           </div>
                         </div>
                         <div class="dynamic-image-placeholder" ng-if="video1">
-                          <dynamic-image autoscale="true" class="img-thumbnail" dynamic-image-property="thumb" ng-model="video1">
+                          <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video1">
+                            <div class="thumbnail-actions">
+                              <div class="thumbnail-action remove-action" ng-click="removeImage('video1')">
+                                <i class="fa fa-trash-o fa-2x"></i>
+                              </div>
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                                <i class="fa fa-film fa-2x"></i>
+                              </div>
+                            </div>
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
                           </dynamic-image>
                         </div>
-                      </div>
-                      <div class="thumbnail-actions" ng-if="video1" style="text-align: center; margin-top: 10px;position: relative;">
-                        <button class="btn btn-link" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="video" type="button">
-                          <i class="fa fa-film"></i>
-                          {t}Change video{/t}
-                        </button>
-                        <button class="btn btn-link" ng-click="removeImage('video1')" type="button" style="color: #f35958;">
-                          <i class="fa fa-times"></i>
-                          {t}Remove{/t}
-                        </button>
                       </div>
                     </div>
                     <div class="form-group" ng-if="video1">
@@ -179,11 +181,13 @@
                           </div>
                         </div>
                         <div class="dynamic-image-placeholder" ng-if="video2">
-                          <dynamic-image autoscale="true" class="img-thumbnail" dynamic-image-property="thumb" ng-model="video2">
-                            <div class="thumbnail-actions" style="left: 5px; background: rgba(0,0,0,.75); right: 5px; bottom: 5px; padding: 0;">
-                              <div ng-click="removeImage('video2')" style="padding: 8px; color: #fff; cursor: pointer; display: inline-block;">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                                {t}Remove{/t}
+                          <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video2">
+                            <div class="thumbnail-actions">
+                              <div class="thumbnail-action remove-action" ng-click="removeImage('video2')">
+                                <i class="fa fa-trash-o fa-2x"></i>
+                              </div>
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                                <i class="fa fa-film fa-2x"></i>
                               </div>
                             </div>
                             <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
