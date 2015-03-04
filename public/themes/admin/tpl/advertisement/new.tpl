@@ -296,7 +296,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="position"></label>
+                <label class="form-label" for="position">
+                  {t}Page type{/t}
+                </label>
                 <div class="controls">
                   <select name="position" id="position" ng-model="position">
                     <option value="publi-portada">{t}Frontpage{/t}</option>
