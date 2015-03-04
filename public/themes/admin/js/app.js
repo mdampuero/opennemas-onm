@@ -17,6 +17,7 @@ angular.module(
     'onm.sidebar',
     'pascalprecht.translate',
     'sun.scrollable',
+    'swfobject',
     'ui.bootstrap',
     'ui.sortable',
     'webStorageModule',
