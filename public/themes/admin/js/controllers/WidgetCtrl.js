@@ -4,7 +4,6 @@
 angular.module('BackendApp.controllers').controller('WidgetCtrl', [
   '$controller', '$rootScope', '$scope',
   function($controller, $rootScope, $scope) {
-
     'use strict';
 
     // Initialize the super class and extend it.
@@ -13,19 +12,22 @@ angular.module('BackendApp.controllers').controller('WidgetCtrl', [
     $scope.addParameter = function () {
       $scope.params.push({name: '', value: ''});
     };
+
+    $scope.removeParameter = function (index) {
+      $scope.params.splice(index, 1);
+    };
+
     /**
      * Parse the params from template and initialize the scope properly
      *
      * @param Object params The album params.
      */
     $scope.parseParams = function(params) {
-      $scope.params = [];
       console.log(params);
-
-      if (params > 0) {
-        for (var i = 0; i < params.length; i++) {
-          $scope.params.push({ name: params.name, value: params.value});
-        }
+      if (params == null) {
+        $scope.params = [];
+      } else {
+        $scope.params = params;
       }
     };
 
@@ -40,7 +42,12 @@ angular.module('BackendApp.controllers').controller('WidgetCtrl', [
         return false;
       }
 
-      $scope.parsedParams = JSON.stringify($scope.params);
+      $scope.parsedParams = [];
+      for (var i = $scope.params.length - 1; i >= 0; i--) {
+        $scope.parsedParams.push({name: $scope.params[i].name, value: $scope.params[i].value});
+      }
+
+      $scope.parsedParams = JSON.stringify($scope.parsedParams.reverse());
     }, true);
   }
 ]);

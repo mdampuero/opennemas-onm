@@ -62,6 +62,8 @@ class WidgetsController extends Controller
             if (!is_array($widget->params)) {
                 $widget->params = array();
             }
+        } else {
+            $widget->params = [];
         }
         if (is_null($widget->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -103,8 +105,6 @@ class WidgetsController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $post   = $request->request;
-            $items  = $post->get('items', array());
-            $values = $post->get('values', array());
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
@@ -115,9 +115,8 @@ class WidgetsController extends Controller
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
                 'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
-                'params'         => array_combine($items, $values),
+                'params'          => json_decode($post->get('parsedParams', null)),
             );
-
             if ($widgetData['renderlet'] == 'intelligentwidget') {
                 $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
             }
@@ -133,7 +132,7 @@ class WidgetsController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
-            return $this->redirect($this->generateUrl('admin_widgets'));
+            return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
 
         } else {
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
@@ -173,9 +172,6 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
-        $items  = $post->get('items', array());
-        $values = $post->get('values', array());
-
         $widgetData = array(
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
@@ -186,8 +182,17 @@ class WidgetsController extends Controller
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
             'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
-            'params'          => array_combine($items, $values),
+            'params'          => json_decode($post->get('parsedParams', null)),
         );
+
+        if (count($widgetData['params']) > 0) {
+            $newParams = [];
+            foreach ($widgetData['params'] as $param) {
+                $newParams []= ['name' => $param->name, 'value' => $param->value];
+            }
+            $widgetData['params'] = $newParams;
+        }
+
         if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
             $widgetData['content'] = $widgetData['intelligentType'];
         }
