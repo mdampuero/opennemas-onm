@@ -258,7 +258,7 @@
                       <div class="checkbox">
                         <input id="content_status" name="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
                         <label for="content_status">
-                          {t}Available{/t}
+                          {t}Published{/t}
                         </label>
                       </div>
                     </div>
