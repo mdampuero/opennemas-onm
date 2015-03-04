@@ -59,13 +59,15 @@ class KeywordsController extends Controller
 
         $keywordManager = new \PClave();
         $keywords = $keywordManager->find($filter);
+        $itemsPerPage = s::get('items_per_page');
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => 10,
+            'elements_per_page' => $itemsPerPage,
             'total_items'       => count($keywords),
             'base_url'          => $this->generateUrl('admin_keywords'),
         ]);
-        $keywords = array_slice($keywords, ($page-1) * ITEMS_PAGE, ITEMS_PAGE);
+
+        $keywords = array_slice($keywords, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         return $this->render(
             'keywords/list.tpl',
