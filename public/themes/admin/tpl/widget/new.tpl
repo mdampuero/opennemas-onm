@@ -73,14 +73,14 @@
                   </div>
               </div>
 
-              <div class="form-group" ng-show="">
+              <div class="form-group ng-cloak">
                   <label for="description" class="form-label">{t}Description{/t}</label>
                   <div class="controls">
-                      <textarea name="description" id="description" class="form-control" rows="10" ng-model="description">{$widget->description|default:""}</textarea>
+                      <textarea name="description" id="description" class="form-control" rows="4" ng-model="description">{$widget->description|default:""}</textarea>
                   </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group ng-cloak">
                   <label for="description" class="form-label">
                       {t}Content{/t}
                   </label>
