@@ -1,19 +1,31 @@
 'use strict';
 
 /**
- * Module to load images dynamically.
+ * @ngdoc module
+ * @name  onm.dynamicImage
+ *
+ * @requires swfobject
+ * @requires onm.routing
+ *
+ * @description
+ *   The `onm.dynamicImage` module provides a service and a directive to load
+ *   images dynamically.
  */
  angular.module('onm.dynamicImage', ['swfobject', 'onm.routing'])
   /**
-   * Service to load images from objects.
+   * @ngdoc service
+   * @name  DynamicImage
    *
-   * @param Object routingProvider The routing service.
+   * @requires routingProvider
+   *
+   * @description
+   *   Service to load images from objects.
    */
-  .provider('dynamicImage', [ 'routingProvider', function(routingProvider) {
+  .provider('DynamicImage', [ 'routingProvider', function(routingProvider) {
     /**
      * Template for the dynamic image.
      *
-     * @type string
+     * @type {String}
      */
     var dynamicImageTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
       '<img ng-class="{ loading: loading }" ng-src="[% src %]" [attributes][autoscale]>' +
@@ -26,7 +38,7 @@
     /**
      * Template for the dynamic image.
      *
-     * @type string
+     * @type {String}
      */
     var dynamicSwfTpl = '<div class="dynamic-image-wrapper[autoscaleClass]">' +
       '<swf-object [attributes] swf-params="{wmode: \'opaque\'}" swf-url="[% src %]" swf-width="[% width %]" swf-height="[% height %]"></swf-object>' +
@@ -37,33 +49,43 @@
     /**
      * Allowed attributes with this directive.
      *
-     * @type array
+     * @memberof DynamicImage
+     * @name     allowedAttributes
+     * @type     {Array}
      */
     this.allowedAttributes = ['class', 'height', 'width'];
 
     /**
      * Property with the path to the image.
      *
-     * @type string
+     * @memberof DynamicImage
+     * @name     property
+     * @type     {String}
      */
     this.property = 'path_img';
 
     /**
      * The image folder name.
      *
-     * @type string
+     * @memberof DynamicImage
+     * @name     property
+     * @type     {String}
      */
     this.imageFolder = 'images';
 
     /**
-     * Generates an URL for a given image.
+     * @function generateUrl
+     * @memberof DynamicImage
      *
-     * @param object image         The image to generate URL from.
-     * @param string transform     The transform parameters.
-     * @param string instanceMedia The instance media folder path.
-     * @param string property      The object property name.
+     * @description
+     *   Generates an URL for a given image.
      *
-     * @return string The generated URL.
+     * @param {Object} image         The image to generate URL from.
+     * @param {String} transform     The transform parameters.
+     * @param {String} instanceMedia The instance media folder path.
+     * @param {String} property      The object property name.
+     *
+     * @return {String} The generated URL.
      */
     this.generateUrl = function(image, transform, instanceMedia, property) {
       var prefix = '';
@@ -102,14 +124,18 @@
     };
 
     /**
-     * Returns the height and width basing on the available space.
+     * @function getSettings
+     * @memberof DynamicImage
      *
-     * @param integer height    The image original height.
-     * @param integer width     The image original width.
-     * @param integer maxHeight The available height.
-     * @param integer maxWidth  The available width.
+     * @description
+     *   Returns the height and width basing on the available space.
      *
-     * @return Object The height and width for the available space.
+     * @param {integer} height    The image original height.
+     * @param {integer} width     The image original width.
+     * @param {integer} maxHeight The available height.
+     * @param {integer} maxWidth  The available width.
+     *
+     * @return {Object} The height and width for the available space.
      */
     this.getSettings = function(height, width, maxHeight, maxWidth) {
       var h = maxHeight;
@@ -124,13 +150,17 @@
     };
 
     /**
-     * Checks if the image is a flash object.
+     * @function isFlash
+     * @memberof DynamicImage
      *
-     * @param object image    The image to check.
-     * @param string property The object property name.
+     * @description
+     *   Checks if the image is a flash object.
      *
-     * @return boolean True if the given image is a flash object. Otherwise,
-     *                 returns false
+     * @param {Object} image    The image to check.
+     * @param {String} property The object property name.
+     *
+     * @return {boolean} True if the given image is a flash object. Otherwise,
+     *                   returns false
      */
     this.isFlash = function(image, property) {
       if (typeof image === 'object') {
@@ -145,12 +175,16 @@
     };
 
     /**
-     * Returns the HTML for the current image.
+     * @function render
+     * @memberof DynamicImage
+     *
+     * @description
+     *   Returns the HTML for the current image.
      *
      * @param Object options The image options.
      * @param Object model   The image object.
      *
-     * @return string The HTML code for the current image.
+     * @return String The HTML code for the current image.
      */
     this.render = function(options, model) {
       var html = dynamicImageTpl;
@@ -193,16 +227,24 @@
     };
 
     /**
-     * Sets the name of the object property with the image path.
+     * @function setProperty
+     * @memberof DynamicImage
      *
-     * @param string property The object property name.
+     * @description
+     *   Sets the name of the object property with the image path.
+     *
+     * @param String property The object property name.
      */
     this.setProperty = function(property) {
       this.property = property;
     };
 
     /**
-     * Returns the current service.
+     * @function $get
+     * @memberof DynamicImage
+     *
+     * @description
+     *   Returns the current service.
      *
      * @return object The current service.
      */
@@ -212,88 +254,110 @@
   }])
 
   /**
-   * Directive to load images dynamically from a given source.
+   * @ngdoc directive
+   * @name  dynamicImage
    *
-   * @param Object $compile     The compile service.
-   * @param Object dynamicImage The dynamicImage service.
+   * @requires $compile
+   * @requires DynamicImage
+   *
+   * @description
+   *   Directive to load images dynamically from a given source.
+   *
+   *  ###### Attributes:
+   *  - **autoescale**: ***Optional***. Creates an overlay with the image dimensions.
+   *  - **instance**: The name of the instance where photo is from.
+   *    - ***Required*** for internal resources.
+   *    - ***Optional*** (ignored) for external resources.
+   *  - **ng-model**: ***Required***. The object or string to load dynamically.
+   *  - **transform**: ***Optional***. The transformation to apply to the image.
+   *
+   *
+   * @example
+   * // Load an internal image from an object with autoscale
+   * <dynamic-image autoscale="true" class="img-thumbnail" instance="c-default" ng-model="photo">
+   * </dynamic-image>
+   * @example
+   * // Load an image dynamically from an external source with an overlay for its dimensions
+   * <dynamic-image ng-model="http://www.example.com/sample-image.jpg" dimensions="true">
+   * </dynamic-image>
    */
-  .directive('dynamicImage', ['$compile', 'dynamicImage',
-    function ($compile, dynamicImage) {
-    return {
-      restrict: 'AE',
-      scope: {
-        'ngModel': '='
-      },
-      link: function ($scope, element, attrs) {
-        var maxHeight = element.height();
-        var maxWidth  = element.width();
+  .directive('dynamicImage', ['$compile', 'DynamicImage',
+    function ($compile, DynamicImage) {
+      return {
+        restrict: 'AE',
+        scope: {
+          'ngModel': '='
+        },
+        link: function ($scope, element, attrs) {
+          var maxHeight = element.height();
+          var maxWidth  = element.width();
 
-        if (!maxWidth || !maxHeight) {
-          maxHeight = element.parent().height();
-          maxWidth  = element.parent().width();
-        }
-
-        var children  = element.children();
-        var html      = dynamicImage.render(attrs, $scope.ngModel);
-
-        // Try to calculate height and width before compiling for flash
-        if ($scope.ngModel && dynamicImage.isFlash($scope.ngModel) &&
-            $scope.ngModel.height && $scope.ngModel.width) {
-
-          var settings = dynamicImage.getSettings($scope.ngModel.height,
-            $scope.ngModel.width, maxHeight, maxWidth);
-
-          $scope.height = settings.height;
-          $scope.width  = settings.width;
-        }
-
-        if (attrs.ngModel) {
-          // Add watcher to update src when scope changes
-          $scope.$watch('ngModel', function(nv) {
-            $scope.src = dynamicImage.generateUrl(nv, attrs.transform,
-              attrs.instance, attrs.property);
-          });
-        } else {
-          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform,
-            attrs.instance, attrs.property);
-        }
-
-        $scope.$watch('src', function(nv) {
-          if (!dynamicImage.isFlash(nv)) {
-            $scope.loading = true;
+          if (!maxWidth || !maxHeight) {
+            maxHeight = element.parent().height();
+            maxWidth  = element.parent().width();
           }
-        });
 
-        var e = $compile(html)($scope);
+          var children  = element.children();
+          var html      = DynamicImage.render(attrs, $scope.ngModel);
 
-        // Remove loading spinner and scale image on load
-        e.find('img').bind('load', function() {
-          $scope.loading = false;
+          // Try to calculate height and width before compiling for flash
+          if ($scope.ngModel && DynamicImage.isFlash($scope.ngModel) &&
+              $scope.ngModel.height && $scope.ngModel.width) {
 
-          if (attrs.autoscale && attrs.autoscale === 'true') {
-            var image = new Image();
-            image.src = $scope.src;
-
-            var h = image.height;
-            var w = image.width;
-
-            if ($scope.ngModel.height && $scope.ngModel.width) {
-              h = $scope.ngModel.height;
-              w = $scope.ngModel.width;
-            }
-
-            var settings = dynamicImage.getSettings(h, w, maxHeight, maxWidth);
+            var settings = DynamicImage.getSettings($scope.ngModel.height,
+              $scope.ngModel.width, maxHeight, maxWidth);
 
             $scope.height = settings.height;
             $scope.width  = settings.width;
           }
 
-          $scope.$apply();
-        });
+          if (attrs.ngModel) {
+            // Add watcher to update src when scope changes
+            $scope.$watch('ngModel', function(nv) {
+              $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
+                attrs.instance, attrs.property);
+            });
+          } else {
+            $scope.src = DynamicImage.generateUrl(attrs.path, attrs.transform,
+              attrs.instance, attrs.property);
+          }
 
-        e.append(children);
-        element.replaceWith(e);
-      }
-    };
+          $scope.$watch('src', function(nv) {
+            if (!DynamicImage.isFlash(nv)) {
+              $scope.loading = true;
+            }
+          });
+
+          var e = $compile(html)($scope);
+
+          // Remove loading spinner and scale image on load
+          e.find('img').bind('load', function() {
+            $scope.loading = false;
+
+            if (attrs.autoscale && attrs.autoscale === 'true') {
+              var image = new Image();
+              image.src = $scope.src;
+
+              var h = image.height;
+              var w = image.width;
+
+              if ($scope.ngModel.height && $scope.ngModel.width) {
+                h = $scope.ngModel.height;
+                w = $scope.ngModel.width;
+              }
+
+              var settings = DynamicImage.getSettings(h, w, maxHeight, maxWidth);
+
+              $scope.height = settings.height;
+              $scope.width  = settings.width;
+            }
+
+            $scope.$apply();
+          });
+
+          e.append(children);
+          element.replaceWith(e);
+        }
+      };
     }
   ]);
