@@ -79,7 +79,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                             <dynamic-image class=\"img-thumbnail\" instance=\""
                               + instanceMedia
                               + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                            <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\" width=\"80\"></dynamic-image>\
+                            <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
                           </div>\
                         </div>\
                       </div>\
@@ -109,10 +109,7 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                       </dynamic-image>\
                     </div>\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video'\">\
-                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
-                          + instanceMedia
-                          + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
-                      </dynamic-image>\
+                      <dynamic-image autoscale=\"true\" ng-model=\"selected.lastSelected\" property=\"thumb\"></dynamic-image>\
                     </div>\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"isFlash(selected.lastSelected)\">\
                       <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
