@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-    });
-    </script>
-{/block}
-
 {block name="content"}
 <form action="{if isset($user_group->id)}{url name="admin_acl_usergroups_update" id=$user_group->id}{else}{url name="admin_acl_usergroups_create"}{/if}" method="post">
 

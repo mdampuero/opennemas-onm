@@ -6,9 +6,6 @@
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script type="text/javascript">
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
     $('[rel=tooltip]').tooltip();
     var menu_messages = {
         remember_save: "{t}Please, remember save changes after finish.{/t}"

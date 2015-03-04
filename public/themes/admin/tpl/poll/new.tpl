@@ -16,10 +16,6 @@
           format: 'YYYY-MM-D HH:mm:ss'
         });
 
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
         $('#answers').on('click', '.del', function() {
             var button = $(this);
             log(button)

@@ -20,7 +20,7 @@
         // initially_shown: true,
         handlers: {
             'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
+                var mediapicker   = $(this).data('mediapicker');
                 var image_element = mediapicker.buildHTMLElement(params);
 
                 var container = $('#related_media').find('.'+params['position']);
@@ -37,12 +37,6 @@
         fill_tags: '{url name=admin_utils_calculate_tags}'
     }
 
-    jQuery(document).ready(function($){
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-    });
-
     $('#title').on('change', function(e, ui) {
         fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
@@ -50,7 +44,7 @@
     $('.article_images .unset').on('click', function (e, ui) {
         e.preventDefault();
 
-        var parent = jQuery(this).closest('.contentbox');
+        var parent = $(this).closest('.contentbox');
 
         parent.find('.related-element-id').val('');
         parent.find('.image').html('');
@@ -92,15 +86,18 @@
                     {if isset($video->id)}
                         {acl isAllowed="VIDEO_UPDATE"}
                             <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-save"></span>
+                                {t}Save{/t}
+                            </button>
                         {/acl}
                     {else}
                         {acl isAllowed="VIDEO_CREATE"}
                             <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-save"></span>
+                                {t}Save{/t}
+                            </button>
                         {/acl}
                     {/if}
-                            <span class="fa fa-save"></span>
-                            {t}Save{/t}
-                        </button>
                     </li>
                 </ul>
             </div>
@@ -170,7 +167,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <lable for="metadata" class="form-label">{t}Tags{/t}</h3>
+                        <label for="metadata" class="form-label">{t}Tags{/t}</label>
                         <div class="controls">
                             <input  type="text" id="metadata" name="metadata" required="required" value="{$video->metadata}" class="form-control" />
                         </div>

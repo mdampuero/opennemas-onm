@@ -1,15 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-});
-</script>
-{/block}
-
 {block name="content"}
 <form id="formulario" name="formulario" action="{if $keyword->id}{url name=admin_keyword_update id=$keyword->id}{else}{url name=admin_keyword_create}{/if}" method="POST">
 

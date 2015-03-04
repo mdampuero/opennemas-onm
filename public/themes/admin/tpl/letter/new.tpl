@@ -21,10 +21,6 @@ jQuery(document).ready(function($) {
     $('#title').on('change', function(e, ui) {
         fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
-
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
 });
 </script>
 {/block}

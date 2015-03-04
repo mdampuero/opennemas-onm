@@ -58,10 +58,6 @@
 
             btn.find('i').toggleClass('fa-unlock-alt');
         });
-
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
     });
     </script>
 {/block}

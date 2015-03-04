@@ -71,10 +71,6 @@
       $('#formulario').on('submit', function(){
         save_related_contents();
       });
-
-      $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-      });
     });
   </script>
 {/block}

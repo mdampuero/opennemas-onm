@@ -38,10 +38,6 @@
 
         $('#user-editing-form').tabs();
 
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
         // Show/hide privilege tab depending on userType backend/frontend
         if($('select#usertype').val() == '1') {
             $('#id_user_group').removeAttr('required');

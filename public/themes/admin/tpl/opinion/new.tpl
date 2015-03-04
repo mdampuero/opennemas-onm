@@ -47,9 +47,6 @@
               }
             });
 
-            $('#formulario').onmValidate({
-                'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-            });
             $('#type_opinion').on('change', function() {
                 var selected = $(this).find('option:selected').val();
                 if (selected != 0) {

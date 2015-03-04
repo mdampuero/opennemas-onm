@@ -154,11 +154,6 @@
     {script_tag src="/onm/content-provider.js"}
     {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
     <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('#newsletter-pick-elements-form').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-    });
     {if $with_html}
     var has_contents = true;
     {else}

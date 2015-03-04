@@ -165,10 +165,6 @@
 
     <script type="text/javascript">
     jQuery(document).ready(function($) {
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
         $('.check-pass').on('click', function(e, ui){
             e.preventDefault();
             var passInput = $('#password');

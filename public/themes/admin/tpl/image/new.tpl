@@ -374,10 +374,6 @@
         jQuery("#modal-image-location").modal('hide');
         e.preventDefault();
       });
-
-      $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-      });
     });
   </script>
 {/block}
