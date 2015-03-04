@@ -143,15 +143,9 @@
                                     </div>
                                 </td>
                                 <td class="hidden-xs">
-                                    <span ng-click="open('modal-image', null, $index)" class="thumbnail">
-                                        <span ng-if="content.type_img == 'swf'">
-                                            <object ng-data="'{$MEDIA_IMG_URL}[% content.path_file %][% content.name %]'" ng-param="{ 'vmode': 'opaque' }"  style="width:100px;height:80px"></object>
-                                            <img class="thumbnail image-preview" style="width:16px;height:16px;border:none;"  src="{$params.IMAGE_DIR}flash.gif" />
-                                        </span>
-                                        <span ng-if="content.type_img !== 'swf'">
-                                            <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview thumbnail"></dynamic-image>
-                                        </span>
-                                    </span>
+                                    <div ng-click="open('modal-image', null, $index)" style="width: 120px; height: 120px;">
+                                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
+                                    </div>
                                 </td>
                                 <td>
                                     <div ng-click="open('modal-image', null, $index)" class="visible-xs center">
