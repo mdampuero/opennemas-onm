@@ -1,12 +1,16 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}" media="screen">
+  {/stylesheets}
+{/block}
+
 {block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
-        @AdminTheme/js/onm/jquery.datepicker.js"}
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
-{/block}
-{block name="footer-js" append}
+
     <script type="text/javascript">
     var advertisement_urls = {
         calculate_tags : '{url name=admin_utils_calculate_tags}'
@@ -15,15 +19,7 @@
     <script>
 
     jQuery(document).ready(function($) {
-
-        $('#formulario').on('change', '#type_medida', function(e, ui){
-            var selected_option = $("#type_medida option:selected").attr('value');
-            if (selected_option == 'DATE') {
-                $('#porfecha').show();
-            } else {
-                $('#porfecha').hide();
-            }
-        }).on('change', '#title', function(e, ui) {
+        $('#formulario').on('change', '#title', function(e, ui) {
             fill_tags(jQuery('#title').val(),'#metadata', advertisement_urls.calculate_tags);
         }).on('click', '#related_media .unset', function (e, ui) {
             e.preventDefault();
@@ -37,8 +33,16 @@
             parent.removeClass('assigned');
         });
 
-        var tabs = $('#position-adv').tabs();
-        tabs.tabs('select', '{$place}');
+        $('#starttime, #endtime').datetimepicker({
+          format: 'YYYY-MM-D HH:mm:ss'
+        });
+
+        $("#starttime").on("dp.change",function (e) {
+            $('#endtime').data("DateTimePicker").minDate(e.date);
+        });
+        $("#endtime").on("dp.change",function (e) {
+            $('#starttime').data("DateTimePicker").maxDate(e.date);
+        });
     });
     </script>
 {/block}
@@ -113,15 +117,6 @@
                   title="Metadatos" type="text" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
-              <div class="form-group">
-                <div class="checkbox">
-                  <input type="checkbox" name="content_status" id="content_status" value="1"
-                  {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
-                  <label class="form-label" for="content_status">
-                    {t}Activated{/t}
-                  </label>
-                </div>
-              </div>
               <h5>{t}Contents{/t}</h5>
               <div class="form-group">
                 <label class="form-label" for="with_script">
@@ -182,14 +177,22 @@
               </div>
             </div>
           </div>
-
         </div>
         <div class="col-md-4">
           <div class="grid simple">
             <div class="grid-body">
+              <div class="form-group">
+                <div class="checkbox">
+                  <input type="checkbox" name="content_status" id="content_status" value="1"
+                  {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
+                  <label class="form-label" for="content_status">
+                    {t}Activated{/t}
+                  </label>
+                </div>
+              </div>
               <h5>{t}When to show this ad{/t}</h5>
               <div class="form-group">
-                <label for="typ_medida" class="form-label">{t}Restrictions{/t}</label>
+                <label for="type_medida" class="form-label">{t}Restrictions{/t}</label>
                 <div class="controls">
                   <select name="type_medida" id="type_medida">
                     <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
@@ -198,7 +201,7 @@
                   <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
                 </div>
               </div>
-              <div class="form-group" id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">
+              <div class="form-group" id="porfecha" ng-show="type_medida == 'DATE'">
                 <label for="starttime" class="form-label">{t}Date range{/t}</label>
                 <div class="controls">
                   <label for="starttime">{t}From{/t}</label>
@@ -293,79 +296,80 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="position" class="form-label"></label>
+                <label class="form-label" for="position"></label>
                 <div class="controls">
-                  <div id="position-adv" class="tabs">
-                    <ul>
-                      <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
-                      <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                      {is_module_activated name="VIDEO_MANAGER"}
-                      <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
-                      <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
-                      {/is_module_activated}
-                      {is_module_activated name="OPINION_MANAGER"}
-                      <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
-                      <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
-                      {/is_module_activated}
-                      {is_module_activated name="ALBUM_MANAGER"}
-                      <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
-                      <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
-                      {/is_module_activated}
-                      {is_module_activated name="POLL_MANAGER"}
-                      <li><a href="#publi-poll">{t}Poll{/t}</a></li>
-                      <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
-                      {/is_module_activated}
-                      {is_module_activated name="NEWSLETTER_MANAGER"}
-                      <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
-                      {/is_module_activated}
-                      <li><a href="#publi-others">{t}Others{/t}</a></li>
-                    </ul>
-
-                    <div id="publi-portada">
+                  <select name="position" id="position" ng-model="position">
+                    <option value="publi-portada">{t}Frontpage{/t}</option>
+                    <option value="publi-interior">{t}Inner article{/t}</option>
+                    {is_module_activated name="VIDEO_MANAGER"}
+                      <option value="publi-video">{t}Video frontpage{/t}</option>
+                      <option value="publi-video-interior">{t}Inner video{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="OPINION_MANAGER"}
+                      <option value="publi-opinion">{t}Opinion frontpage{/t}</option>
+                      <option value="publi-opinion-interior">{t}Inner opinion{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
+                      <option value="publi-gallery">{t}Galleries{/t}</option>
+                      <option value="publi-gallery-inner">{t}Gallery Inner{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="POLL_MANAGER"}
+                      <option value="publi-poll">{t}Poll{/t}</option>
+                      <option value="publi-poll-inner">{t}Poll Inner{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="NEWSLETTER_MANAGER"}
+                      <option value="publi-newsletter">{t}Newsletter{/t}</option>
+                    {/is_module_activated}
+                    <option value="publi-others">{t}Others{/t}</option>
+                  </select>
+                </div>
+              </div>
+                <div class="controls">
+                  <div id="position-adv">
+                    <div ng-show="position == 'publi-portada'">
                       {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
-
-                    <div id="publi-interior">
+                    <div ng-show="position == 'publi-interior'">
                       {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                     </div>
                     {is_module_activated name="VIDEO_MANAGER"}
-                    <div id="publi-video">
-                      {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                    </div>
-                    <div id="publi-video-interior">
-                      {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
-                    </div>
+                      <div ng-show="position == 'publi-video'">
+                        {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                      </div>
+                      <div ng-show="position == 'publi-video-interior'">
+                        {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
+                      </div>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
-                    <div id="publi-opinion">
-                      {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                    </div>
-                    <div id="publi-opinion-interior">
-                      {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
-                    </div>
+                      <div ng-show="position == 'publi-opinion'">
+                        {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
+                      </div>
+                      <div ng-show="position == 'publi-opinion-interior'">
+                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
+                      </div>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
-                    <div id="publi-gallery">
-                      {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                    </div>
-                    <div id="publi-gallery-inner">
-                      {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
-                    </div>
+                      <div ng-show="position == 'publi-gallery'">
+                        {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
+                      </div>
+                      <div ng-show="position == 'publi-gallery-inner'">
+                        {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
+                      </div>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                    <div id="publi-poll">
-                      {include file="advertisement/partials/advertisement_positions_poll.tpl"}
-                    </div>
-                    <div id="publi-poll-inner">
-                      {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
-                    </div>
+                      <div ng-show="position == 'publi-poll'">
+                        {include file="advertisement/partials/advertisement_positions_poll.tpl"}
+                      </div>
+                      <div ng-show="position == 'publi-poll-inner'">
+                        {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                      </div>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <div id="publi-newsletter">
-                      {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
-                    </div>
+                      <div ng-show="position == 'publi-newsletter'">
+                        {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                      </div>
                     {/is_module_activated}
-                    <div id="publi-others">
+                    <div ng-show="position == 'publi-others'">
                       {foreach $themeAds as $adId => $ad}
                       <tr>
                         <td colspan="2">
