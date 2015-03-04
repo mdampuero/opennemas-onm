@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', 'onmEditor', 'renderer',
-  function($rootScope, $scope, onmEditor, renderer) {
+  '$rootScope', '$scope', '$timeout', 'onmEditor', 'renderer',
+  function($rootScope, $scope, $timeout, onmEditor, renderer) {
     /**
      * Inserts an array of items in a CKEditor instance.
      *
@@ -33,7 +33,13 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
      * @param array  items  The new property value.
      */
     $scope.insertInModel = function(target, items) {
+      $scope.loaded = false;
       $scope[target] = items;
+
+      // Trick to force dynamic image re-rendering
+      $timeout(function() {
+        $scope.loaded = true;
+      }, 0);
     };
 
     /**
