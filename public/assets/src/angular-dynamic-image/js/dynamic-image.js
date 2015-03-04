@@ -68,6 +68,10 @@
     this.generateUrl = function(image, transform, instanceMedia, property) {
       var prefix = '';
 
+      if (!image) {
+        return '';
+      }
+
       if (typeof image === 'object') {
         if (property) {
           image = image[property];
@@ -76,7 +80,7 @@
         }
       }
 
-      if (!/http:\/\//.test(image)) {
+      if (!/^http/.test(image)) {
         if (!instanceMedia) {
           throw 'Invalid instance media folder path';
         }
@@ -268,11 +272,14 @@
             },
             function(nv) {
               $scope.src = dynamicImage.generateUrl(nv, attrs.transform,
-                attrs.instance, attrs.dynamicImageProperty);
+                attrs.instance, attrs.property);
 
               if (attrs.autoscale && attrs.autoscale === 'true') {
-                var settings = dynamicImage.getSettings($scope.ngModel.height,
-                  $scope.ngModel.width, maxHeight, maxWidth);
+                var image = new Image();
+                image.src = $scope.src;
+
+                var settings = dynamicImage.getSettings(image.height,
+                  image.width, maxHeight, maxWidth);
 
                 $scope.height = settings.height;
                 $scope.width  = settings.width;
@@ -280,7 +287,8 @@
             }
           );
         } else {
-          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform, attrs.instance);
+          $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform,
+            attrs.instance, attrs.property);
         }
 
         $scope.$watch('src', function(nv) {
