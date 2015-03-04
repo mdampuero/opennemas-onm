@@ -1,15 +1,28 @@
 'use strict';
 
 /**
-* Module to create a media picker to upload/insert items.
-*/
-angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm.routing'])
+ * @ngdoc module
+ * @name  onm.mediaPicker
+ *
+ * @requires angularFileUpload
+ * @requires onm.DynamicImage
+ * @requires onm.routing
+ *
+ * @description
+ *   The `onm.MediaPicker` module provides a service and a controller to upload
+ *   and select images from a modal window.
+ */
+angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm.routing'])
   /**
-   * Directive to create and display the media picker modal window.
+   * @ngdoc directive
+   * @name  mediaPicker
    *
-   * @param Object $compile The compiler service.
-   * @param Object $http    The http service.
-   * @param Object routing  The routing service.
+   * @requires $compile
+   * @requires $http
+   * @requires routing
+   *
+   * @description
+   *   Directive to create and display the media picker modal window.
    */
   .directive('mediaPicker', ['$compile', '$http', 'routing',
     function ($compile, $http, routing) {
@@ -481,19 +494,23 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
   ])
 
   /**
-   * Controller to handle media picker actions.
+   * @ngdoc controller
+   * @name  MediaPickerCtrl
    *
-   * @param  Object $http        The http service.
-   * @param  Object $rootScope   The rootScope object.
-   * @param  Object $scope       The current scope.
-   * @param  Object $timeout     The timeout service.
-   * @param  Object FileUploader The uploader object.
-   * @param  Object dynamicImage The dynamic image service.
-   * @param  Object itemService  The item service.
-   * @param  Object routing      The routing service.
+   * @description
+   *   Controller to handle media picker actions.
+   *
+   * @param {Object} $http        The http service.
+   * @param {Object} $rootScope   The rootScope object.
+   * @param {Object} $scope       The current scope.
+   * @param {Object} $timeout     The timeout service.
+   * @param {Object} FileUploader The uploader object.
+   * @param {Object} dynamicImage The dynamic image service.
+   * @param {Object} itemService  The item service.
+   * @param {Object} routing      The routing service.
    */
-  .controller('MediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'dynamicImage', 'itemService', 'routing',
-    function($http, $rootScope, $scope, $timeout, FileUploader, dynamicImage, itemService, routing) {
+  .controller('MediaPickerCtrl', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'dynamicImage', 'itemService', 'routing',
+    function($http, $rootScope, $scope, $timeout, FileUploader, DynamicImage, itemService, routing) {
       /**
        * The array of contents.
        *

@@ -7,7 +7,7 @@ angular.module(
     'onm.Editor',
     'onm.dynamicImage',
     'onm.item',
-    'onm.MediaPicker',
+    'onm.mediaPicker',
     'onm.messenger',
     'onm.oqlEncoder',
     'onm.queryManager',
