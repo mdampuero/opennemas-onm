@@ -27,6 +27,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $url = "http://".SITE.'/'.$content->uri;
 
         // Generate tags
+        $output []= '<meta property="og:type"        content="website" />';
         $output []= '<meta property="og:title"       content="'.$title.'" />';
         $output []= '<meta property="og:description" content="'.$summary.'" />';
         $output []= '<meta property="og:url"         content="'.$url.'" />';
