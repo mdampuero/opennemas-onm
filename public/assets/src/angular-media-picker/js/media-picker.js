@@ -500,49 +500,49 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
    * @description
    *   Controller to handle media picker actions.
    *
-   * @param {Object} $http        The http service.
-   * @param {Object} $rootScope   The rootScope object.
-   * @param {Object} $scope       The current scope.
-   * @param {Object} $timeout     The timeout service.
-   * @param {Object} FileUploader The uploader object.
-   * @param {Object} dynamicImage The dynamic image service.
-   * @param {Object} itemService  The item service.
-   * @param {Object} routing      The routing service.
+   * @requires $http
+   * @requires $rootScope
+   * @requires $scope
+   * @requires $timeout
+   * @requires FileUploader
+   * @requires dynamicImage
+   * @requires itemService
+   * @requires routing
    */
   .controller('MediaPickerCtrl', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'DynamicImage', 'itemService', 'routing',
     function($http, $rootScope, $scope, $timeout, FileUploader, DynamicImage, itemService, routing) {
       /**
        * The array of contents.
        *
-       * @type array
+       * @type {Array}
        */
       $scope.contents = [];
 
       /**
        * The number of elements per page.
        *
-       * @type integer
+       * @type {integer}
        */
       $scope.epp = 20;
 
       /**
        * The current page.
        *
-       * @type integer
+       * @type {integer}
        */
       $scope.page = 1;
 
       /**
        * The routing service.
        *
-       * @type object
+       * @type {Object}
        */
       $scope.routing = routing;
 
       /**
        * The list of selected contents.
        *
-       * @type object
+       * @type {Object}
        */
       $scope.selected = {
         items:        [],
@@ -553,19 +553,23 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       /**
        * The number of elements in contents.
        *
-       * @type integer
+       * @type {integer}
        */
       $scope.total;
 
       /**
        * The uploader object.
        *
-       * @type FileUploader
+       * @type {FileUploader}
        */
       $scope.uploader;
 
       /**
-       * Adds a new item the the beginning of the array.
+       * @function addItem
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Adds a new item the the beginning of the array.
        *
        * @param Object item The item to add.
        */
@@ -574,7 +578,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Changes the picker to explore mode.
+       * @function explore
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Changes the picker to explore mode.
        */
       $scope.explore = function() {
         // Add a timeout to fix wrong epp calculation before full rendering
@@ -597,7 +605,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Launches the media picker insert event.
+       * @function insert
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Launches the media picker insert event.
        */
       $scope.insert = function() {
         var items = $scope.selected.items;
@@ -617,16 +629,32 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
         $scope.picker.close();
       };
 
+      /**
+       * @function isFlash
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Checks if an item is a flash object.
+       *
+       * @param {Object} item The item to check.
+       *
+       * @return {Boolean} True if the item is a flash object. Otherwise, return
+       *                   false.
+       */
       $scope.isFlash = function(item) {
-        return dynamicImage.isFlash(item);
-      }
+        return DynamicImage.isFlash(item);
+      };
 
       /**
-       * Checks if the given item is selected.
+       * @function isSelected
+       * @memberof MediaPickerCtrl
        *
-       * @param object item The item to check.
+       * @description
+       *   Checks if the given item is selected.
        *
-       * @return boolean True if the given item is selected. Otherwise,
+       * @param {Object} item The item to check.
+       *
+       * @return {boolean} True if the given item is selected. Otherwise,
        *                 returns false.
        */
       $scope.isSelected = function(item) {
@@ -634,7 +662,13 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Updates the array of contents.
+       * @function list
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Updates the array of contents.
+       *
+       * @param {boolean} reset Whether to reset the list or append more items.
        */
       $scope.list = function (reset) {
         if (reset) {
@@ -677,7 +711,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Resets the selected items.
+       * @function reset
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Resets the selected items.
        */
       $scope.reset = function() {
         $scope.contents = [];
@@ -719,7 +757,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Requests the next page of the list when scrolling.
+       * @function scroll
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Requests the next page of the list when scrolling.
        */
       $scope.scroll = function() {
         if ($scope.total === $scope.contents.length) {
@@ -731,7 +773,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Saves the last selected item description.
+       * @function saveDescription
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Saves the last selected item description.
        */
       $scope.saveDescription = function() {
         $scope.saving = true;
@@ -768,9 +814,13 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Selects multiple items from the last item selected to the given item.
+       * @function selectionMultiple
+       * @memberof MediaPickerCtrl
        *
-       * @param object item The selected item.
+       * @description
+       *   Selects multiple items from the last item selected to the given item.
+       *
+       * @param {Object} item The selected item.
        */
       $scope.selectionMultiple = function(item) {
         if ($scope.selected.items.length >= $scope.picker.selection.maxSize) {
@@ -811,10 +861,14 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       };
 
       /**
-       * Selects one item or many items if shift is clicked.
+       * @function toggle
+       * @memberof MediaPickerCtrl
        *
-       * @param object item  The selected item.
-       * @param object event The event object.
+       * @description
+       *   Selects one item or many items if shift is clicked.
+       *
+       * @param {Object} item  The selected item.
+       * @param {Object} event The event object.
        */
       $scope.toggle = function(item, event) {
         // If shifKey
