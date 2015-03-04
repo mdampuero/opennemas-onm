@@ -28,7 +28,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
     function ($compile, $http, routing) {
       // Runs during compile
       return {
-        controller: 'MediaPickerController',
+        controller: 'MediaPickerCtrl',
         restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
         scope: {
           'mediaPickerTarget': '='
@@ -509,7 +509,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
    * @param {Object} itemService  The item service.
    * @param {Object} routing      The routing service.
    */
-  .controller('MediaPickerCtrl', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'dynamicImage', 'itemService', 'routing',
+  .controller('MediaPickerCtrl', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'DynamicImage', 'itemService', 'routing',
     function($http, $rootScope, $scope, $timeout, FileUploader, DynamicImage, itemService, routing) {
       /**
        * The array of contents.
