@@ -2,8 +2,7 @@
 
 {block name="footer-js" append}
     {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
-        @AdminTheme/js/onm/jquery.datepicker.js,
-        @AdminTheme/js/swfobject.js"}
+        @AdminTheme/js/onm/jquery.datepicker.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
 {/block}
