@@ -104,18 +104,19 @@
                   </div>
               </div>
               <div  class="form-group ng-cloak" ng-show="renderlet == 'intelligentwidget'">
-                <label for="params">{t}Parameters{/t}</label>
-                <div class="form-inline" id="params">
-                    {foreach $widget->params as $item => $value}
-                    <div class="form-group">
-                      <label for="" class="sr-only">{t}Parameter name{/t}</label>
+                <label for="params" ng-if="params.length > 0">{t}Parameters{/t}</label>
+                <div id="params">
+                    <input type="hidden" name="params" ng-model="parsed_params" ng-model="parsedParams" ng-init="parseParams({json_encode($photos)|replace:'"':'\''})">
+                    <div class="form-inline ng-cloak" ng-repeat="param in params">
+                      <div class="form-group">
+                        <label for="" class="sr-only">{t}Parameter name{/t}</label>
+                        [% param.name %]
+                        <input type="text" name="items[]" ng-value="param.name" placeholder="{t}Parameter name{/t}" />
+                        <input type="text" name="values[]" ng-value="param.value"  placeholder="{t}Parameter value{/t}">
 
-                      <input type="text" name="items[]" value="{$item}" placeholder="{t}Parameter name{/t}" />
-                      <input type="text" name="values[]" value="{$value}"  placeholder="{t}Parameter value{/t}">
-
-                      <div class="btn addon del"><i class="fa fa-trash"></i></div>
+                        <button ng-click="removeParameter(param)" class="btn addon del" ng-click=""><i class="fa fa-trash"></i></button>
+                      </div>
                     </div>
-                    {/foreach}
                 </div>
                 <br>
                 <a id="add_param" class="btn" ng-click="addParameter()">
@@ -131,12 +132,11 @@
           <div class="grid simple">
             <div class="grid-body">
                 <div class="form-group">
-                    <label for="available" class="form-label">{t}Published{/t}</label>
-                    <div class="controls">
-                        <select name="content_status" id="content_status" ng-model="content_status">
-                            <option value="1" {if isset($widget) && $widget->content_status == 1}selected="selected"{/if}>{t}Yes{/t}</option>
-                            <option value="0" {if isset($widget) && $widget->content_status == 0}selected="selected"{/if}>{t}No{/t}</option>
-                        </select>
+                    <div class="checkbox">
+                      <input id="content_status" name="content_status" {if (isset($widget) && $widget->content_status eq 1)}checked{/if}  value="1" type="checkbox"/>
+                      <label for="content_status">
+                        {t}Published{/t}
+                      </label>
                     </div>
                 </div>
             </div>
