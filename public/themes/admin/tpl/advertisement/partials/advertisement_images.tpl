@@ -1,3 +1,16 @@
+<div class="thumbnail-placeholder" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+  <div class="img-thumbnail" ng-if="!photo1">
+    <div class="thumbnail-empty">
+      <i class="fa fa-picture-o fa-2x"></i>
+      <h5>Pick an image</h5>
+    </div>
+  </div>
+  <div class="dynamic-image-placeholder" ng-if="photo1">
+    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" flash="" transform="thumbnail,220,220"></dynamic-image>
+  </div>
+</div>
+
+
 <div id="related_media">
     <ul class="related_images thumbnails clearfix">
         <li class="contentbox ad-image {if isset($photo1) && $photo1->name}assigned{/if}">
