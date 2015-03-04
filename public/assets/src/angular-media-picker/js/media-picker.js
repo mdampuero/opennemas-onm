@@ -1,9 +1,16 @@
+'use strict';
+
 /**
-* onm.media-picker Module
-*
-* Creates a media picker modal to upload/insert contents.
+* Module to create a media picker to upload/insert items.
 */
-angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
+angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm.routing'])
+  /**
+   * Directive to create and display the media picker modal window.
+   *
+   * @param Object $compile The compiler service.
+   * @param Object $http    The http service.
+   * @param Object routing  The routing service.
+   */
   .directive('mediaPicker', ['$compile', '$http', 'routing',
     function ($compile, $http, routing) {
       // Runs during compile
@@ -95,18 +102,23 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
                     <h4 ng-if=\"picker.views.enabled == 'list-item'\">[% picker.params.explore.itemDetails %]</h4>\
                   </div>\
                   <div class=\"media-picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo'\">\
-                      <dynamic-image autoscale=\"true\" class=\"img-thumbnail\" dimensions=\"true\" instance=\""
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)\">\
+                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
                         + instanceMedia
                         + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
                     </div>\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video'\">\
-                      <dynamic-image autoscale=\"true\" class=\"img-thumbnail\" dimensions=\"true\" instance=\""
+                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
                           + instanceMedia
                           + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
-                      <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
+                    </div>\
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"isFlash(selected.lastSelected)\">\
+                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
+                          + instanceMedia
+                          + "\" ng-model=\"selected.lastSelected\">\
+                      </dynamic-image>\
                     </div>\
                     <ul class=\"media-information\">\
                       <li>\
@@ -470,8 +482,21 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
       };
     }
   ])
-  .controller('MediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'itemService', 'routing',
-    function($http, $rootScope, $scope, $timeout, FileUploader, itemService, routing) {
+
+  /**
+   * Controller to handle media picker actions.
+   *
+   * @param  Object $http        The http service.
+   * @param  Object $rootScope   The rootScope object.
+   * @param  Object $scope       The current scope.
+   * @param  Object $timeout     The timeout service.
+   * @param  Object FileUploader The uploader object.
+   * @param  Object dynamicImage The dynamic image service.
+   * @param  Object itemService  The item service.
+   * @param  Object routing      The routing service.
+   */
+  .controller('MediaPickerController', ['$http', '$rootScope', '$scope', '$timeout', 'FileUploader', 'dynamicImage', 'itemService', 'routing',
+    function($http, $rootScope, $scope, $timeout, FileUploader, dynamicImage, itemService, routing) {
       /**
        * The array of contents.
        *
@@ -577,6 +602,10 @@ angular.module('onm.MediaPicker', ['angularFileUpload', 'onm.routing'])
 
         $scope.picker.close();
       };
+
+      $scope.isFlash = function(item) {
+        return dynamicImage.isFlash(item);
+      }
 
       /**
        * Checks if the given item is selected.
