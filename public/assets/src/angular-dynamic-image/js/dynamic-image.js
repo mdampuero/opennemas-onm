@@ -236,7 +236,10 @@
         var children  = element.children();
         var html      = dynamicImage.render(attrs, $scope.ngModel);
 
-        if (dynamicImage.isFlash($scope.ngModel)) {
+        // Try to calculate height and width before compiling for flash
+        if ($scope.ngModel && dynamicImage.isFlash($scope.ngModel) &&
+            $scope.ngModel.height && $scope.ngModel.width) {
+
           var settings = dynamicImage.getSettings($scope.ngModel.height,
             $scope.ngModel.width, maxHeight, maxWidth);
 
@@ -244,48 +247,12 @@
           $scope.width  = settings.width;
         }
 
-        var e = $compile(html)($scope);
-
-        // Auto-scale image basing on the available space and real size
-        e.find('img').bind('load', function() {
-          $scope.loading = false;
-
-          if (!$scope.height && !$scope.width) {
-            var image = new Image();
-            image.src = $scope.src;
-
-            var settings = dynamicImage.getSettings(image.height, image.width,
-              maxHeight, maxWidth);
-
-            $scope.height = settings.height;
-            $scope.width  = settings.width;
-          }
-
-          $scope.$apply();
-        });
-
         if (attrs.ngModel) {
           // Add watcher to update src when scope changes
-          $scope.$watch(
-            function() {
-              return $scope.ngModel;
-            },
-            function(nv) {
-              $scope.src = dynamicImage.generateUrl(nv, attrs.transform,
-                attrs.instance, attrs.property);
-
-              if (attrs.autoscale && attrs.autoscale === 'true') {
-                var image = new Image();
-                image.src = $scope.src;
-
-                var settings = dynamicImage.getSettings(image.height,
-                  image.width, maxHeight, maxWidth);
-
-                $scope.height = settings.height;
-                $scope.width  = settings.width;
-              }
-            }
-          );
+          $scope.$watch('ngModel', function(nv) {
+            $scope.src = dynamicImage.generateUrl(nv, attrs.transform,
+              attrs.instance, attrs.property);
+          });
         } else {
           $scope.src = dynamicImage.generateUrl(attrs.path, attrs.transform,
             attrs.instance, attrs.property);
@@ -295,6 +262,33 @@
           if (!dynamicImage.isFlash(nv)) {
             $scope.loading = true;
           }
+        });
+
+        var e = $compile(html)($scope);
+
+        // Remove loading spinner and scale image on load
+        e.find('img').bind('load', function() {
+          $scope.loading = false;
+
+          if (attrs.autoscale && attrs.autoscale === 'true') {
+            var image = new Image();
+            image.src = $scope.src;
+
+            var h = image.height;
+            var w = image.width;
+
+            if ($scope.ngModel.height && $scope.ngModel.width) {
+              h = $scope.ngModel.height;
+              w = $scope.ngModel.width;
+            }
+
+            var settings = dynamicImage.getSettings(h, w, maxHeight, maxWidth);
+
+            $scope.height = settings.height;
+            $scope.width  = settings.width;
+          }
+
+          $scope.$apply();
         });
 
         e.append(children);
