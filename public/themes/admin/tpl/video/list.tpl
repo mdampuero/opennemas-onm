@@ -64,7 +64,7 @@
                         {acl isAllowed="VIDEO_CREATE"}
                         <li class="quicklinks">
                             <a class="btn btn-primary" href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
-                                <span class="fa fa-save"></span>
+                                <span class="fa fa-plus"></span>
                                 {t}Create{/t}
                             </a>
                         </li>
