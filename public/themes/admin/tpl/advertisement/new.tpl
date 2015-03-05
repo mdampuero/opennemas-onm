@@ -228,7 +228,7 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  <select name="category[]" id="category" required="required" multiple>
+                  <select class="select2" name="category[]" id="category" required="required" multiple>
                     {if isset($advertisement->id)}
                     <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                     <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
