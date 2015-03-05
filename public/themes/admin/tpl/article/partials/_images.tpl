@@ -4,18 +4,18 @@
       <div class="col-md-12">
         <div class="grid simple">
           <div class="grid-title">
-            <h4>{t}Image{/t}</h4>
+            <h4>{t}Images assigned{/t}</h4>
           </div>
           <div class="grid-body">
             <div class="row">
               <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
-                <h5>{t}Frontpage image{/t}</h5>
+                <h5>{t}Image to show in frontpages{/t}</h5>
                 <div class="form-group">
                   <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo1">
                       <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                         <i class="fa fa-picture-o fa-2x"></i>
-                        <h5>Pick an image</h5>
+                        <h5>{t}Pick an image{/t}</h5>
                       </div>
                     </div>
                     <div class="dynamic-image-placeholder" ng-if="photo1">
@@ -38,19 +38,19 @@
                     {t}Footer text{/t}
                   </label>
                   <div class="controls">
-                    <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                    <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
                     <input type="hidden" name="img1" ng-value="[% img1 %]"/>
                   </div>
                 </div>
               </div>
               <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo2 = {json_encode($photo2)|replace:'"':'\''}"{/if}>
-                <h5>{t}Inner image{/t}</h5>
+                <h5>{t}Image to show in inner{/t}</h5>
                 <div class="form-group">
                   <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo2">
                       <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
                         <i class="fa fa-picture-o fa-2x"></i>
-                        <h5>Pick an image</h5>
+                        <h5>{t}Pick an image{/t}</h5>
                       </div>
                     </div>
                     <div class="dynamic-image-placeholder" ng-if="photo2">
@@ -73,12 +73,13 @@
                     {t}Footer text{/t}
                   </label>
                   <div class="controls">
-                    <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                    <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{if isset($article->img2_footer)}{$article->img2_footer|clearslash|escape:'html'}{/if}</textarea>
                     <input type="hidden" name="img2" ng-value="[% img2 %]"/>
                   </div>
                 </div>
               </div>
               {is_module_activated name="CRONICAS_MODULES"}
+                {if $article->content_type_name == 'article'}
                 <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
                   <h5>{t}Home image{/t}</h5>
                   <div class="form-group">
@@ -86,7 +87,7 @@
                       <div class="img-thumbnail" ng-if="!photo3">
                         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
                           <i class="fa fa-picture-o fa-2x"></i>
-                          <h5>Pick an image</h5>
+                          <h5>{t}Pick an image{/t}</h5>
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-if="photo3">
@@ -114,6 +115,7 @@
                     </div>
                   </div>
                 </div>
+                {/if}
               {/is_module_activated}
             </div>
           </div>
