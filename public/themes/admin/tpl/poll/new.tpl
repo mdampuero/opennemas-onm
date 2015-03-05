@@ -32,27 +32,22 @@
 
     });
     </script>
-<script id="poll-template" type="text/x-handlebars-template">
-<div class="poll_answer">
-    <div class="input-append">
-        <input type="text" name="item[]" value=""/>
-        <div class="btn addon del">
-            <i class="fa fa-trash"></i>
-        </div>
-    </div>
-</div>
-</script>
 {/block}
 
 {block name="header-css" append}
     {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
         <link rel="stylesheet" href="{$asset_url}" media="screen">
     {/stylesheets}
+    <style>
+    .poll-type {
+      margin-left:15px;
+    }
+    </style>
 {/block}
 
 
 {block name="content"}
-<form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post" id="formulario">
+<form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -112,42 +107,44 @@
                         <div class="form-group">
                             <label class="form-label" for="visualization">{t}Visualization format{/t}</label>
                             <div class="controls">
-                                <select name="visualization" id="visualization" class="required">
-                                    <option value="0" {if $poll->visualization eq 0} selected {/if}>{t}Circular{/t}</option>
-                                    <option value="1" {if $poll->visualization eq 1} selected {/if}>{t}Bars{/t}</option>
-                                </select>
+                              <label for="visualization_bars" class="col-md-6">
+                                <input type="radio" name="visualization" value="0" ng-model="visualization" class="required" id="visualization_bars"{if $poll->visualization eq 0} checked {/if}>
+                                <div class="fa fa-bar-chart fa-4x"></div>
+                                <div class="poll-type">{t}Bars{/t}</div>
+                              </label>
+                              <label for="visualization_pie" class="col-md-6">
+                                <input type="radio" name="visualization" value="1" ng-model="visualization" class="required" id="visualization_pie"{if $poll->visualization eq 1} checked {/if}>
+                                <div class="fa fa-pie-chart fa-4x"></div>
+                                <div class="poll-type">{t}Circular{/t}</div>
+                              </label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="answers">{t}Allowed answers{/t}</label>
+                            <label class="form-label" for="answers">{t}Answers{/t}</label>
                             <div class="controls">
+                                <input type="hidden" id="parsedAnswers" name="parsedAnswers" ng-model="parsedAnswers" ng-value="parsedAnswers" ng-init="parseAnswers({json_encode($items)|replace:'"':'\''})">
                                 <div id="answers">
-                                    {foreach name=i from=$items item=answer}
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-4">
-                                                <div class="form-group">
-                                                    <input name="votes[{$answer.pk_item}]" type="hidden" value="{$answer.votes}">
-                                                    <div class="input-group ">
-                                                        <input class="form-control" name="item[{$answer.pk_item}]" type="text" value="{$answer.item}"/>
-                                                        <div class="input-group-btn">
-                                                            <div class="btn btn-danger">
-                                                                <i class="fa fa-trash-o"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div class="ng-cloak" ng-repeat="answer in answers track by $index">
+                                        <div>
+                                            <div class="form-group">
+
+                                              <div class="input-group" style="width: 100%">
+                                                <input class="form-control" name="item[]" type="text" ng-value="answer.item" ng-model="answer.item" class="form-control" required="required" />
+                                                <div class="input-group-btn">
+                                                  <button type="button" class="btn btn-default">
+                                                    <small ng-if="answer.votes > 0">{t}Votes{/t}:  [% answer.votes %] / {$poll->total_votes}</small>
+                                                    <small ng-if="answer.votes <= 0">{t}No votes{/t}</small>
+                                                  </button>
+                                                  <button title="{t}Remove poll answer{/t}" class="btn btn-danger" ng-click="removeAnswer($index)"><i class="fa fa-trash-o"></i></button>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-8">
-                                                <small class="help-block">{t}Votes{/t}:  {$answer.votes} / {$poll->total_votes}</small>
+                                              </div>
+
                                             </div>
                                         </div>
-                                    {/foreach}
+                                    </div>
                                 </div>
                                 <br>
-                                <a id="add_answer" class="btn">
-                                    <i class="icon-plus"></i>
-                                    {t}Add new answer{/t}
-                                </a>
+                                <button type="button" ng-click="addAnswer()" class="btn"><i class="fa fa-plus"></i> {t}Add new answer{/t}</a>
                             </div>
                         </div>
                     </div>
@@ -164,13 +161,7 @@
                                 <div class="form-group">
                                     <div class="checkbox">
                                         <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
-                                        <label for="content_status">{t}Available{/t}</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="endtime">{t}Publication closed date{/t}</label>
-                                    <div class="controls">
-                                        <input id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
+                                        <label for="content_status">{t}Published{/t}</label>
                                     </div>
                                 </div>
                                 {is_module_activated name="COMMENT_MANAGER"}
@@ -185,6 +176,12 @@
                                     <div class="checkbox">
                                         <input id="favorite" name="favorite" type="checkbox" {if $poll->favorite eq 1}checked="checked"{/if} value="1" />
                                         <label for="favorite">{t}Favorite{/t}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="endtime">{t}Publication closed date{/t}</label>
+                                    <div class="controls">
+                                        <input id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
                                     </div>
                                 </div>
                                 <div class="form-group">

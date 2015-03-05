@@ -125,7 +125,7 @@ class PollsController extends Controller
                 'visualization'  => $request->request->getDigits('visualization', 0),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'item'           => $request->request->get('item'),
+                'item'           => json_decode($request->request->get('parsedAnswers')),
                 'params'         => $request->request->get('params'),
             );
             $poll = $poll->create($data);
@@ -137,10 +137,7 @@ class PollsController extends Controller
                 );
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_poll_show',
-                        array('id' => $poll->id)
-                    )
+                    $this->generateUrl('admin_poll_show', ['id' => $poll->id])
                 );
             } else {
                 $this->get('session')->getFlashBag()->add(
@@ -149,10 +146,7 @@ class PollsController extends Controller
                 );
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_polls',
-                        array('category' => $data['category'])
-                    )
+                    $this->generateUrl('admin_polls', ['category' => $data['category']])
                 );
             }
 
@@ -234,19 +228,18 @@ class PollsController extends Controller
 
 
         $data = array(
-            'id'            => $id,
-            'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-            'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
-            'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'favorite'      => $request->request->getDigits('favorite', 0),
-            'with_comment'  => $request->request->getDigits('with_comment', 0),
-            'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'available'     => $request->request->getDigits('available', 0),
-            'item'          => $request->request->get('item'),
-            'votes'         => $request->request->get('votes'),
-            'params'        => $request->request->get('params'),
+            'id'             => $id,
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'visualization'  => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'favorite'       => $request->request->getDigits('favorite', 0),
+            'with_comment'   => $request->request->getDigits('with_comment', 0),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->getDigits('content_status', 0),
+            'item'           => json_decode($request->request->get('parsedAnswers')),
+            'params'         => $request->request->get('params'),
         );
 
         if ($poll->update($data)) {
