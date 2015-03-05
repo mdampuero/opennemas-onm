@@ -21,6 +21,12 @@
         </li>
         {/is_module_activated}
 
+        {is_module_activated name="VIDEO_MANAGER"}
+        <li>
+            <a href="{url name=admin_videos_content_provider_related category=$category}">{t}Videos{/t}</a>
+        </li>
+        {/is_module_activated}
+
         {is_module_activated name="POLL_MANAGER"}
         <li>
             <a href="{url name=admin_polls_content_provider_related category=$category}">{t}Polls{/t}</a>
