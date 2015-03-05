@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-{stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
-<link rel="stylesheet" href="{$asset_url}" media="screen">
-{/stylesheets}
-{/block}
-
 {block name="footer-js" append}
 {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
 <script type="text/javascript" src="{$asset_url}"></script>

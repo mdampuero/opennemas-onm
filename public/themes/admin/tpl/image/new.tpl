@@ -1,12 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
-  " filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}" media="screen">
-  {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
   <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,

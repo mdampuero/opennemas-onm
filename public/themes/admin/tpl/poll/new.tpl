@@ -35,9 +35,6 @@
 {/block}
 
 {block name="header-css" append}
-    {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" filters="cssrewrite"}
-        <link rel="stylesheet" href="{$asset_url}" media="screen">
-    {/stylesheets}
     <style>
     .poll-type {
       margin-left:15px;

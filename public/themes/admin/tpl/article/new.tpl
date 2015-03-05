@@ -1,9 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
-                    @AdminTheme/css/jquery/colorbox.css
-  " filters="cssrewrite"}
+  {stylesheets src="@AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
     <link rel="stylesheet" href="{$asset_url}" media="screen">
   {/stylesheets}
 

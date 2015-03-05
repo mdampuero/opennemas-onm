@@ -34,6 +34,7 @@
             @Common/components/pace/themes/blue/pace-theme-minimal.css,
             @Common/components/nanoscroller/bin/css/nanoscroller.css,
             @Common/components/angular-loading-bar/build/loading-bar.min.css,
+            @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
             @Common/components/ngQuickDate/dist/ng-quick-date.css,
             @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
             @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
