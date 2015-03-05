@@ -127,10 +127,10 @@
                 <div class="ng-cloak" ng-show="!with_script || with_script == 0">
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
-                <div class="ng-cloak" ng-show="with_script == '1'">
+                <div class="ng-cloak" ng-show="with_script == 1">
                   <textarea name="script" id="script" class="form-control" rows="10" >{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
-                <div class="ng-cloak" ng-show="server_url && with_script == '2'">
+                <div class="ng-cloak" ng-show="'{$server_url}' && with_script == 2">
                   <label for="openx_zone">{t}Open X zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
@@ -143,7 +143,7 @@
                   <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
                 </div>
               </div>
-              <div class="row" id="ad_dimensions" ng-if="with_script != '2'">
+              <div class="row" id="ad_dimensions" ng-if="with_script != 2">
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label class="form-label" for="params_width">
