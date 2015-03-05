@@ -1,5 +1,5 @@
 /**
- * Handle actions for article inner.
+ * Handle actions for widget inner form.
  */
 angular.module('BackendApp.controllers').controller('WidgetCtrl', [
   '$controller', '$rootScope', '$scope',
@@ -9,10 +9,20 @@ angular.module('BackendApp.controllers').controller('WidgetCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+    /**
+     * Adds an empty parameter to the parameters list
+     *
+     * @param Object answers The poll answers.
+     */
     $scope.addParameter = function () {
       $scope.params.push({name: '', value: ''});
     };
 
+    /**
+     * Removes a parameter from the list given its index
+     *
+     * @param int the parameter index in the list of parameters
+     */
     $scope.removeParameter = function (index) {
       $scope.params.splice(index, 1);
     };
@@ -20,7 +30,7 @@ angular.module('BackendApp.controllers').controller('WidgetCtrl', [
     /**
      * Parse the params from template and initialize the scope properly
      *
-     * @param Object params The album params.
+     * @param Object params The widget params.
      */
     $scope.parseParams = function(params) {
       console.log(params);
@@ -32,7 +42,7 @@ angular.module('BackendApp.controllers').controller('WidgetCtrl', [
     };
 
     /**
-     * Updates the ids and footers when params change.
+     * Updates internal parsedParameters parameter when parameters change.
      *
      * @param Object nv The new values.
      * @param Object ov The old values.
