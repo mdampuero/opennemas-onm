@@ -21,16 +21,6 @@
     jQuery(document).ready(function($) {
         $('#formulario').on('change', '#title', function(e, ui) {
             fill_tags(jQuery('#title').val(),'#metadata', advertisement_urls.calculate_tags);
-        }).on('click', '#related_media .unset', function (e, ui) {
-            e.preventDefault();
-
-            var parent = jQuery(this).closest('.contentbox');
-
-            parent.find('.related-element-id').val('');
-            parent.find('.related-element-footer').val('');
-            parent.find('.image').html('');
-
-            parent.removeClass('assigned');
         });
 
         $('#starttime, #endtime').datetimepicker({
@@ -134,18 +124,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <div ng-if="!with_script || with_script == 0">
+                <div ng-show="!with_script || with_script == 0">
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
-                <div ng-if="with_script == '1'">
+                <div ng-show="with_script == '1'">
                   <textarea name="script" id="script" class="form-control" rows="10" >{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
-                <div ng-if="server_url && with_script == '2'">
+                <div ng-show="server_url && with_script == '2'">
                   <label for="openx_zone"><span class="label label-important">Beta</span> {t}Open X zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
                 </div>
-                <div ng-if="with_script == 3">
+                <div ng-show="with_script == 3">
                   <label for="googledfp_zone_id">
                     <span class="label label-important">Beta</span>
                     {t}Google DFP unit id{/t}
