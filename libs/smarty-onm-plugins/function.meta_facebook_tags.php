@@ -43,7 +43,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $photo = $smarty->tpl_vars['photo']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photo->path_file.'/'.$photo->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        } elseif (isset($content->author->photo->path_img) && !empty($content->author->photo->path_img)) {
+        } elseif (isset($content->author->photo->path_img) &&
+                !empty($content->author->photo->path_img) &&
+                $content->content_type_name == 'opinion'
+        ) {
             // Author
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
@@ -53,6 +56,9 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
         } elseif (isset($content->thumb) && !empty($content->thumb)) {
             // Video
+            if (strpos($content->thumb, 'http://')  === false) {
+                $content->thumb = SITE_URL.$content->thumb;
+            }
             $output []= '<meta property="og:image" content="'.$content->thumb.'" />';
         } elseif (array_key_exists('default_image', $params)) {
             // Default
