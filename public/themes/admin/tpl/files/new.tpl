@@ -83,19 +83,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="path" class="form-label">{t}Path{/t}</label>
-                        <div class="controls">
-                            {if !is_null($attaches)}
-                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}</a>
-                            <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
-                            {else}
-                            <input type="file" id="path" name="path" value="" required="required" />
-                            {/if}
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
         </div>
@@ -112,6 +99,18 @@
                         <label for="metadata" class="form-label">{t}Tags{/t}</label>
                         <div class="controls">
                             <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$attaches->metadata|clearslash}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="path" class="form-label">{t}File path{/t}</label>
+                        <div class="controls">
+                            {if !is_null($attaches)}
+                            <a class="btn btn-white" target="_blank" href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}"><span class="fa fa-download"></span> {t}Download{/t}</a>
+                            <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required="required" readonly="readonly">
+                            {else}
+                            <input type="file" id="path" name="path" value="" required="required" />
+                            {/if}
                         </div>
                     </div>
                 </div>
