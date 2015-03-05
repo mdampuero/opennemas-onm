@@ -301,15 +301,15 @@
                 </label>
                 <div class="controls">
                   <select name="position" id="position" ng-model="position">
-                    <option value="publi-portada">{t}Frontpage{/t}</option>
-                    <option value="publi-interior">{t}Inner article{/t}</option>
+                    <option value="publi-frontpage">{t}Frontpage{/t}</option>
+                    <option value="publi-inner">{t}Inner article{/t}</option>
                     {is_module_activated name="VIDEO_MANAGER"}
                       <option value="publi-video">{t}Video frontpage{/t}</option>
-                      <option value="publi-video-interior">{t}Inner video{/t}</option>
+                      <option value="publi-video-inner">{t}Inner video{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
                       <option value="publi-opinion">{t}Opinion frontpage{/t}</option>
-                      <option value="publi-opinion-interior">{t}Inner opinion{/t}</option>
+                      <option value="publi-opinion-inner">{t}Inner opinion{/t}</option>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
                       <option value="publi-gallery">{t}Galleries{/t}</option>
@@ -328,26 +328,26 @@
               </div>
                 <div class="controls">
                   <div id="position-adv">
-                    <div ng-show="position == 'publi-portada'">
+                    <div ng-show="position == 'publi-frontpage'">
                       {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
-                    <div ng-show="position == 'publi-interior'">
-                      {include file="advertisement/partials/advertisement_positions_interior.tpl"}
+                    <div ng-show="position == 'publi-inner'">
+                      {include file="advertisement/partials/advertisement_positions_inner.tpl"}
                     </div>
                     {is_module_activated name="VIDEO_MANAGER"}
                       <div ng-show="position == 'publi-video'">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-video-interior'">
-                        {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
+                      <div ng-show="position == 'publi-video-inner'">
+                        {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
                       <div ng-show="position == 'publi-opinion'">
                         {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-opinion-interior'">
-                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
+                      <div ng-show="position == 'publi-opinion-inner'">
+                        {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
@@ -373,17 +373,16 @@
                     {/is_module_activated}
                     <div ng-show="position == 'publi-others'">
                       {foreach $themeAds as $adId => $ad}
-                      <tr>
-                        <td colspan="2">
-                          <label>
-                            {$ad['name']}
-                            <input type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
-                          </label>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2"><hr/></td>
-                      </tr>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="radio">
+                              <input id="{$adId}" type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
+                              <label for="ad-{$adId}">
+                                {$ad['name']}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       {/foreach}
                     </div>
                   </div><!-- /position-adv -->
