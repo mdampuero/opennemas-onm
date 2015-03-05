@@ -23,8 +23,31 @@ class ImportImagesFromArticleBodyCommand extends ContainerAwareCommand
         $this
             ->setDefinition(
                 array(
-                    new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to import images from', '*'),
-                    new InputOption('wordpress', 'w', InputOption::VALUE_NONE, 'Import images from wordpress'),
+                    new InputOption(
+                        'instance',
+                        'i',
+                        InputOption::VALUE_REQUIRED,
+                        'Instance to import images from',
+                        '*'
+                    ),
+                    new InputOption(
+                        'wordpress',
+                        'w',
+                        InputOption::VALUE_NONE,
+                        'Import images from wordpress'
+                    ),
+                    new InputOption(
+                        'joomla',
+                        'j',
+                        InputOption::VALUE_NONE,
+                        'Import images from joomla'
+                    ),
+                    new InputOption(
+                        'directory',
+                        'd',
+                        InputOption::VALUE_REQUIRED,
+                        'Directory where images are'
+                    ),
                 )
             )
             ->setName('import:images')
@@ -45,6 +68,8 @@ EOF
         // Get instance name from prompt
         $instance = $input->getOption('instance');
         $isWordpress = $input->getOption('wordpress');
+        $isJoomla = $input->getOption('joomla');
+        $this->localDir = $input->getOption('directory');
 
         // Set input/output interface
         $this->input = $input;
@@ -126,6 +151,8 @@ EOF
         // Check if wordpress option is selected and import
         if ($isWordpress) {
             $this->importImagesWP();
+        } elseif ($isJoomla) {
+            $this->importImagesJoomla();
         } else {
             $this->importImages();
         }
@@ -221,6 +248,42 @@ EOF
         }
     }
 
+    /**
+     * Import all images from articles in Joomla
+     */
+    public function importImagesJoomla()
+    {
+        // Sql order, limit and filters
+        $order  = array('created' => 'DESC');
+        $filter = array(
+            'content_type_name' => array(array('value' => 'article')),
+            'body'              => array(array('value' => '%<img%', 'operator' => 'LIKE'))
+        );
+
+        // Get entity repository
+        $this->er = getService('entity_repository');
+
+        // Count total articles
+        $articlesTotal = $this->er->countBy($filter);
+
+        // Fetch articles paginated
+        $perPage = 20;
+        $iterations = (int)($articlesTotal/$perPage)+1;
+        $i = 1;
+        while ($i <= $iterations) {
+            $articles = $this->er->findBy($filter, $order, $perPage, 1);
+            $this->output->write(
+                "Processing page $i of $iterations with ".count($articles)." articles\n"
+            );
+
+            // Process
+            $this->processArticlesJoomla($articles);
+
+            $i++;
+            unset($articles);
+            gc_collect_cycles();
+        }
+    }
 
     /**
      * Process articles to extract images from wordpress contents
@@ -301,7 +364,7 @@ EOF
                 );
             }
 
-            // Set sql's for updating articles images
+            // Set sql's for updating articles summary
             $sql = 'UPDATE  `articles` SET  `summary` = \''.$summary.'\'
                     WHERE  `pk_article` = '.$article->id;
 
@@ -411,12 +474,97 @@ EOF
     }
 
     /**
+     * Process articles from joomla to extract images
+     *
+     * @param array $articles  Articles to process.
+     * @param string $field  Field to process.
+     */
+    public function processArticlesJoomla($articles)
+    {
+        foreach ($articles as $key => $article) {
+            // Regular expresion to extract image src and caption
+            $regex = '@<span.*src=["|\'](.+?)["|\'].*\/>.*">[<strong>]*(.+?)'.
+                     '<\/s[pan|trong]*><\/s[pan|trong]*>[<\/span>]*@';
+            preg_match(
+                $regex,
+                $article->body,
+                $result
+            );
+
+            if (!array_key_exists(0, $result)) {
+                // Regular expresion to extract only image src
+                $regex = '@<img.*src=["|\'](.+?)["|\'].*\/>@';
+                preg_match($regex, $article->body, $result);
+                // Get image src
+                $imgSource = $result[1];
+                $footer = '';
+                // Replace body to remove image code
+                $body = preg_replace($regex, '', $article->body);
+            } else {
+                // Get image src and footer
+                $imgSource = $result[1];
+                $footer = $result[2];
+                // Replace body to remove image code
+                $body = preg_replace($regex, '', $article->body);
+            }
+
+            // Escape blank spaces
+            $imgSource = str_replace("%20", " ", $imgSource);
+
+            // Create image in onm
+            $imageId = $this->processImage(
+                html_entity_decode($imgSource),
+                $article->category_name,
+                $this->localDir,
+                $article->created
+            );
+
+            // Update articles body
+            $sql = 'UPDATE `contents` SET `body` = ? WHERE `pk_content` = ?';
+
+            $rs = $this->connection->Execute($sql, [$body, $article->id]);
+            if ($rs == false) {
+                $this->output->writeln(
+                    "\tArticle ".$article->id." body not updated"
+                );
+            }
+
+            // Set image to article and update
+            if ($imageId !== false) {
+                // Set sql's for updating articles images
+                $sql = 'UPDATE  `articles` SET  `img1` = '.$imageId.',
+                        `img1_footer` = \''.$footer.'\',
+                        `img2` = '.$imageId.',
+                        `img2_footer` = \''.$footer.'\' WHERE  `pk_article` = '.
+                        $article->id;
+
+                $rs = $this->connection->Execute($sql);
+                if ($rs == false) {
+                    $this->output->writeln(
+                        "\tArticle ".$article->id.
+                        " not updated with image ".$imageId
+                    );
+                }
+            }
+
+            unset($body);
+            unset($sql);
+            unset($result);
+            unset($regex);
+            unset($imageSrc);
+            unset($footer);
+            gc_collect_cycles();
+            $this->output->writeln("\tArticle ".($key+1)." of ".count($articles)." processed");
+        }
+    }
+
+    /**
      * Process image and store it in opennemas instance
      *
      * @param Image $image  Image to process.
      * @param string $category  Category for this image.
      */
-    public function processImage($image, $category)
+    public function processImage($image, $category, $localDir = false, $date = false)
     {
         $dir = '/tmp/import_images/';
 
@@ -425,21 +573,34 @@ EOF
             mkdir($dir, 0777, true);
         }
 
-        // Get file info
-        $filePath = pathinfo($image);
-
-        // Save image in local from url
-        $isCopied = @copy($image, $dir.$filePath['basename']);
-        if (!$isCopied) {
-            $this->output->writeln("\tImage ".$image." not copied");
-            return false;
+        if ($localDir) {
+            // Set localFile path
+            $localfile = $localDir.'/'.$image;
+            // Check if image exists
+            if (!file_exists($localfile)) {
+                $this->output->writeln("\tImage ".$image." not exists");
+                return false;
+            }
+            // Get file info
+            $filePath = pathinfo($localfile);
+        } else {
+            // Get file info
+            $filePath = pathinfo($image);
+            // Save image in local from url
+            $isCopied = @copy($image, $dir.$filePath['basename']);
+            if (!$isCopied) {
+                $this->output->writeln("\tImage ".$image." not copied");
+                return false;
+            }
+            // Set localFile path
+            $localFile = $dir.$filePath['basename'];
         }
 
         // Building information for the photo image
         $data = array(
             'title'             => $filePath['filename'],
             'description'       => '',
-            'local_file'        => $dir.$filePath['basename'],
+            'local_file'        => $localfile,
             'fk_category'       => $category,
             'category_name'     => $category,
             'category'          => $category,
@@ -449,7 +610,14 @@ EOF
         );
 
         $photo = new \Photo();
-        $photoId = $photo->createFromLocalFile($data);
+
+        // Create photo with date if exists
+        if ($date) {
+            $date = new \DateTime($date);
+            $photoId = $photo->createFromLocalFile($data, $date->format("/Y/m/d/"));
+        } else {
+            $photoId = $photo->createFromLocalFile($data);
+        }
 
         return $photoId;
     }

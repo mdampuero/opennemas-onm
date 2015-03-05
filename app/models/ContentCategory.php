@@ -116,7 +116,9 @@ class ContentCategory
     public function create($data)
     {
         // Generate slug for category
-        $data['name'] = StringUtils::getTitle(strtolower($data['title']));
+        $data['name'] = StringUtils::getTitle(
+            StringUtils::normalizeName(strtolower($data['title']))
+        );
 
         // Unserialize params
         $data['params'] = serialize($data['params']);
@@ -217,7 +219,6 @@ class ContentCategory
         }
 
         if ($data['subcategory']) {
-
             //Miramos sus subcategorias y se las añadimos a su nuevo padre
             $sql = "UPDATE content_categories SET `fk_content_category`=?
                     WHERE fk_content_category=" . ($data['id']);

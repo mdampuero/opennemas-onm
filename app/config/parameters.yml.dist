@@ -79,6 +79,8 @@ parameters:
 
     password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
 
+    disable_robots: false
+
     varnish:
         header_name: X-Varnish-Ban
         servers:

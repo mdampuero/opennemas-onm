@@ -11,7 +11,6 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
 
     // Only generate tags if is a content page
     if (array_key_exists('content', $smarty->tpl_vars)) {
-
         $content = $smarty->tpl_vars['content']->value;
 
         // Set content data for facebook tags
@@ -24,31 +23,39 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             }
         }
         $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
+        $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
         $url = "http://".SITE.'/'.$content->uri;
 
         // Generate tags
-        $output []= '<meta property="og:title"       content="'.$content->title.'" />';
+        $output []= '<meta property="og:type"        content="website" />';
+        $output []= '<meta property="og:title"       content="'.$title.'" />';
         $output []= '<meta property="og:description" content="'.$summary.'" />';
         $output []= '<meta property="og:url"         content="'.$url.'" />';
         $output []= '<meta property="og:site_name"   content="'.s::get('site_name').'" />';
 
-        if (array_key_exists('photoInt', $smarty->tpl_vars)) { // Articles
+        if (array_key_exists('photoInt', $smarty->tpl_vars)) {
+            // Articles
             $photoInt = $smarty->tpl_vars['photoInt']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photoInt->path_file.'/'.$photoInt->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        } elseif (array_key_exists('photo', $smarty->tpl_vars)) { // Opinions
+        } elseif (array_key_exists('photo', $smarty->tpl_vars)) {
+            // Opinions
             $photo = $smarty->tpl_vars['photo']->value;
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$photo->path_file.'/'.$photo->name;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        } elseif (isset($content->author->photo->path_img) && !empty($content->author->photo->path_img)) { // Author
+        } elseif (isset($content->author->photo->path_img) && !empty($content->author->photo->path_img)) {
+            // Author
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.$content->author->photo->path_img;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        } elseif (isset($content->cover) && !empty($content->cover)) { // Album
+        } elseif (isset($content->cover) && !empty($content->cover)) {
+            // Album
             $imageUrl = MEDIA_IMG_ABSOLUTE_URL.'/'.$content->cover;
             $output []= '<meta property="og:image" content="'.$imageUrl.'" />';
-        } elseif (isset($content->thumb) && !empty($content->thumb)) { // Video
+        } elseif (isset($content->thumb) && !empty($content->thumb)) {
+            // Video
             $output []= '<meta property="og:image" content="'.$content->thumb.'" />';
-        } elseif (array_key_exists('default_image', $params)) { // Default
+        } elseif (array_key_exists('default_image', $params)) {
+            // Default
             $output []= '<meta property="og:image" content="'.$params['default_image'].'" />';
         }
     }

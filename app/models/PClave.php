@@ -276,12 +276,7 @@ class PClave
                     break;
             }
 
-            // WARNING: utf8
-            $regexp = '(\W)(' . preg_quote($term->pclave) . '|' .
-            preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT))
-            .')(?!(</a>|&|"))(\W)';
-
-            $regexp = '@' . preg_replace('@/@', '\/', $regexp).'@i';
+            $regexp = '@'.htmlentities($term->pclave).'@';
 
             $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
         }
