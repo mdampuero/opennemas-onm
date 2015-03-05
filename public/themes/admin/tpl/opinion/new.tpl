@@ -195,7 +195,7 @@
                                     <div class="checkbox">
                                         <input id="content_status" name="content_status" type="checkbox" {if $opinion->content_status eq 1}checked="checked"{/if}/>
                                         <label for="content_status">
-                                            {t}Available{/t}
+                                            {t}Published{/t}
                                         </label>
                                     </div>
                                 </div>
