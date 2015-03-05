@@ -137,6 +137,7 @@
                 <div ng-if="!with_script || with_script == 0">
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
+<<<<<<< HEAD
                 <div ng-if="with_script == '1'">
                   <textarea name="script" id="script" class="form-control" rows="10" >{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
@@ -144,6 +145,21 @@
                   <label for="openx_zone"><span class="label label-important">Beta</span> {t}Open X zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
+=======
+                {if !empty($server_url)}
+                <div id="content_type_2" style="{if isset($advertisement) && $advertisement->with_script ==2}display:block{else}display:none{/if};">
+                    <label for="openx_zone">{t}Open X zone id{/t}</label>
+                    <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
+
+                    <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
+                </div>
+                {/if}
+                <div id="content_type_3" style="{if isset($advertisement) && $advertisement->with_script ==3}display:block{else}display:none{/if};">
+                    <label for="googledfp_zone_id">{t}Google DFP unit id{/t}</label>
+                    <input type="text" name="googledfp_unit_id" value="{$advertisement->params['googledfp_unit_id']}">
+
+                    <div class="help-block">{t 1=$server_url}Google DFP uses an unit ID to identify an advertisement. Please fill the zone id from your Google DFP panel{/t}</div>
+>>>>>>> develop
                 </div>
                 <div ng-if="with_script == 3">
                   <label for="googledfp_zone_id">

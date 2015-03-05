@@ -33,7 +33,14 @@ class RobotsController extends Controller
      **/
     public function indexAction()
     {
-        $content = "User-Agent: *
+        $disableRobots = $this->container->getParameter('disable_robots');
+
+        if ($disableRobots) {
+            $content = "User-Agent: *
+Disallow: /
+";
+        } else {
+            $content = "User-Agent: *
 Disallow: /admin/
 Allow: /
 
@@ -46,6 +53,8 @@ Sitemap: ".SITE_URL."sitemapweb.xml.gz
 Sitemap: ".SITE_URL."sitemapvideo.xml.gz
 Sitemap: ".SITE_URL."sitemapimage.xml.gz
 ";
+        }
+
         return new Response(
             $content,
             200,
