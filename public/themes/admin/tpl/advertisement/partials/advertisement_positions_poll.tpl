@@ -1,90 +1,96 @@
-<table id="ads_type_poll">
-<tbody>
-    <tr>
-        <td colspan="2">
-            <label>
-                Banner Intersticial - {t}Polls{/t} (800X600)
-                <input type="radio" name="type_advertisement" value="850" {if isset($advertisement) && $advertisement->type_advertisement == 850}checked="checked" {/if}/>
-            </label>
-        </td>
-        <td rowspan="7">
-            <div id="advertisement-mosaic-poll">
-                <div id="advertisement-mosaic-frame-poll"></div>
-                <img src="{$params.IMAGE_DIR}/advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"><hr /></td>
-    </tr>
-    <tr>
-        <td>
-            <label>
-                 Left Skyscraper (160 x 600)
-                <input type="radio" name="type_advertisement" value="891" {if isset($advertisement) && $advertisement->type_advertisement == 891}checked="checked" {/if}/>
-            </label>
-        </td>
-        <td>
-            <label>
-                 Right Skyscraper (160 x 600)
-                <input type="radio" name="type_advertisement" value="892" {if isset($advertisement) && $advertisement->type_advertisement == 892}checked="checked" {/if}/>
-            </label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"><hr /></td>
-    </tr>
-    <tr>
-        <td>
-            <label>
-                Big Banner Top (728X90)
-                <input type="radio" name="type_advertisement" value="801" {if isset($advertisement) && $advertisement->type_advertisement == 801}checked="checked" {/if}/>
-            </label>
-        </td>
-        <td>
-            <label>
-                Banner Top Right (234X90)
-                <input type="radio" name="type_advertisement" value="802" {if isset($advertisement) && $advertisement->type_advertisement == 802}checked="checked" {/if}/>
-            </label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"><hr /></td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <label>
-                Banner1 Column Right (I) (300X*)
-                <input type="radio" name="type_advertisement" value="803" {if isset($advertisement) && $advertisement->type_advertisement == 803}checked="checked" {/if}/>
-            </label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <label>
-                Banner2 Column Right(II) (300X*)
-                <input type="radio" name="type_advertisement" value="805" {if isset($advertisement) && $advertisement->type_advertisement == 805}checked="checked" {/if}/>
-            </label>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"><hr /></td>
-    </tr>
-    <tr>
-        <td>
-            <label>
-                Big Banner Bottom (728X90)
-                <input type="radio" name="type_advertisement" value="809" {if isset($advertisement) && $advertisement->type_advertisement == 809}checked="checked" {/if}/>
-            </label>
-        </td>
-        <td>
-            <label>
-                Banner Bottom Right (234X90)
-                <input type="radio" name="type_advertisement" value="810" {if isset($advertisement) && $advertisement->type_advertisement == 810}checked="checked" {/if}/>
-            </label>
-        </td>
-        <td>&nbsp;</td>
-    </tr>
-</tbody>
-</table>
-
+<div class="col-md-9">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="radio">
+        <input id="poll-frontpage-banner-intersticial-800x600"name="type_advertisement" type="radio" value="850" {if isset($advertisement) && $advertisement->type_advertisement == 850}checked="checked" {/if}/>
+        <label for="poll-frontpage-banner-intersticial-800x600">
+          Banner Intersticial - {t}Polls{/t} (800x600)
+        </label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-left-skyscraper-160x600"name="type_advertisement" type="radio" value="891" {if isset($advertisement) && $advertisement->type_advertisement == 891}checked="checked" {/if}/>
+        <label for="poll-frontpage-left-skyscraper-160x600">
+          Left Skyscraper (160x600)
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-right-skyscraper-160x600"name="type_advertisement" type="radio" value="892" {if isset($advertisement) && $advertisement->type_advertisement == 892}checked="checked" {/if}/>
+        <label for="poll-frontpage-right-skyscraper-160x600">
+          Right Skyscraper (160x600)
+        </label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-big-banner-top-728x90"name="type_advertisement" type="radio" value="801" {if isset($advertisement) && $advertisement->type_advertisement == 801}checked="checked" {/if}/>
+        <label for="poll-frontpage-big-banner-top-728x90">
+          Big Banner Top (728x90)
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-banner-top-right-234x90"name="type_advertisement" type="radio" value="802" {if isset($advertisement) && $advertisement->type_advertisement == 802}checked="checked" {/if}/>
+        <label for="poll-frontpage-banner-top-right-234x90">
+          Banner Top Right (234x90)
+        </label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="radio" colspan="2">
+        <input id="poll-frontpage-banner1-column-right-I-300x*"name="type_advertisement" type="radio" value="803" {if isset($advertisement) && $advertisement->type_advertisement == 803}checked="checked" {/if}/>
+        <label for="poll-frontpage-banner1-column-right-I-300x*">
+          Banner1 Column Right (I) (300x*)
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="radio" colspan="2">
+        <input id="poll-frontpage-banner2-column-right-II-300x*"name="type_advertisement" type="radio" value="805" {if isset($advertisement) && $advertisement->type_advertisement == 805}checked="checked" {/if}/>
+        <label for="poll-frontpage-banner2-column-right-II-300x*">
+          Banner2 Column Right(II) (300x*)
+        </label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-big-banner-bottom-728x90"name="type_advertisement" type="radio" value="809" {if isset($advertisement) && $advertisement->type_advertisement == 809}checked="checked" {/if}/>
+        <label for="poll-frontpage-big-banner-bottom-728x90">
+          Big Banner Bottom (728x90)
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="radio">
+        <input id="poll-frontpage-banner-bottom-right-234x90"name="type_advertisement" type="radio" value="810" {if isset($advertisement) && $advertisement->type_advertisement == 810}checked="checked" {/if}/>
+        <label for="poll-frontpage-banner-bottom-right-234x90">
+          Banner Bottom Right (234x90)
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-3">
+  <div id="advertisement-mosaic-poll">
+    <div id="advertisement-mosaic-frame-poll"></div>
+    <img src="{$params.IMAGE_DIR}/advertisement/right2Ads.png" width="240" usemap="#mapGallery" />
+  </div>
+</div>
