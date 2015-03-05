@@ -62,6 +62,7 @@
       </div>
     </div>
   </div>
+
   <div class="content">
     {render_messages}
     <div class="row">
@@ -115,8 +116,7 @@
                 <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
               </div>
             </div>
-            <!--
-            {acl isAllowed='PHOTO_ADMIN'}
+            <!--<input type="date" name="" value="" placeholder="">{acl isAllowed='PHOTO_ADMIN'}
             {is_module_activated name="IMAGE_MANAGER"}
             <div id="related_media" class="form-group">
               <label for="special-image" class="form-label">{t}Image for Special{/t}</label>
@@ -146,10 +146,8 @@
               </div>
             </div>
             {/is_module_activated}
-            {/acl}
-            -->
+            {/acl}-->
 
-          </div>
         </div>
       </div>
       <div class="col-md-4">

@@ -9,8 +9,6 @@
     var advertisement_urls = {
         calculate_tags : '{url name=admin_utils_calculate_tags}'
     }
-    </script>
-    <script>
 
     jQuery(document).ready(function($) {
         $('#formulario').on('change', '#title', function(e, ui) {

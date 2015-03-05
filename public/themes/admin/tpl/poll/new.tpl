@@ -1,47 +1,31 @@
 {extends file="base/admin.tpl"}
 {block name="footer-js" append}
-    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-                      @Common/js/jquery/jquery.tagsinput.min.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-    <script type="text/javascript">
-    jQuery(document).ready(function ($){
-        $('#title').on('change', function(e, ui) {
-            if (!$('#metadata').val()) {
-                fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
-            }
-        });
-
-        $('#closetime').datetimepicker({
-          format: 'YYYY-MM-D HH:mm:ss'
-        });
-
-        $('#answers').on('click', '.del', function() {
-            var button = $(this);
-            log(button)
-            button.closest('.poll_answer').each(function(){
-                log($(this));
-                $(this).remove();
-            });
-        })
-
-        $('#add_answer').on('click', function(){
-            var source = $('#poll-template').html();
-            $('#answers').append(source);
-        });
-
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+                    @Common/js/jquery/jquery.tagsinput.min.js"}
+      <script type="text/javascript" src="{$asset_url}"></script>
+  {/javascripts}
+  <script type="text/javascript">
+  $(document).ready(function ($){
+    $('#title').on('change', function(e, ui) {
+        if (!$('#metadata').val()) {
+            fill_tags($('#title').val(), $('#metadata'), '{url name=admin_utils_calculate_tags}');
+        }
     });
-    </script>
+
+    $('#closetime').datetimepicker({
+      format: 'YYYY-MM-D HH:mm:ss'
+    });
+  });
+  </script>
 {/block}
 
 {block name="header-css" append}
-    <style>
-    .poll-type {
-      margin-left:15px;
-    }
-    </style>
+  <style>
+  .poll-type {
+    margin-left:15px;
+  }
+  </style>
 {/block}
-
 
 {block name="content"}
 <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post"  ng-controller="PollCtrl">
