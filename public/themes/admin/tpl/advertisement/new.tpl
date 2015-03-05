@@ -98,13 +98,13 @@
                   <input class="form-control" id="title" name="title" required="required" type="text" value="{$advertisement->title|clearslash|escape:"html"|default:""}"/>
                 </div>
               </div>
-              <div class="form-group" style="display:none">
+              <div class="hidden">
                 <label for="metadata" class="form-label">
                   {t}Keywords{/t}
                 </label>
                 <div class="controls">
                   <input class="form-control" id="metadata" name="metadata" required="required"
-                  title="Metadatos" type="text" value="{$advertisement->metadata|strip|default:""}">
+                  title="Metadatos" type="hidden" value="{$advertisement->metadata|strip|default:""}">
                 </div>
               </div>
               <h5>{t}Contents{/t}</h5>
@@ -124,18 +124,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <div ng-show="!with_script || with_script == 0">
+                <div class="ng-cloak" ng-show="!with_script || with_script == 0">
                   {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
-                <div ng-show="with_script == '1'">
+                <div class="ng-cloak" ng-show="with_script == '1'">
                   <textarea name="script" id="script" class="form-control" rows="10" >{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
-                <div ng-show="server_url && with_script == '2'">
+                <div class="ng-cloak" ng-show="server_url && with_script == '2'">
                   <label for="openx_zone"><span class="label label-important">Beta</span> {t}Open X zone id{/t}</label>
                   <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
                   <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
                 </div>
-                <div ng-show="with_script == 3">
+                <div class="ng-cloak" ng-show="with_script == 3">
                   <label for="googledfp_zone_id">
                     <span class="label label-important">Beta</span>
                     {t}Google DFP unit id{/t}
@@ -184,14 +184,14 @@
               <div class="form-group">
                 <label for="type_medida" class="form-label">{t}Restrictions{/t}</label>
                 <div class="controls">
-                  <select name="type_medida" id="type_medida">
+                  <select name="type_medida" id="type_medida" ng-model="type_medida">
                     <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
                     <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
                   </select>
                   <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
                 </div>
               </div>
-              <div class="form-group" id="porfecha" ng-show="type_medida == 'DATE'">
+              <div class="form-group ng-cloak" id="porfecha" ng-show="type_medida == 'DATE'">
                 <label for="starttime" class="form-label">{t}Date range{/t}</label>
                 <div class="controls">
                   <label for="starttime">{t}From{/t}</label>
@@ -318,50 +318,50 @@
               </div>
                 <div class="controls">
                   <div id="position-adv">
-                    <div ng-show="position == 'publi-frontpage'">
+                    <div class="ng-cloak" ng-show="position == 'publi-frontpage'">
                       {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
-                    <div ng-show="position == 'publi-inner'">
+                    <div class="ng-cloak" ng-show="position == 'publi-inner'">
                       {include file="advertisement/partials/advertisement_positions_inner.tpl"}
                     </div>
                     {is_module_activated name="VIDEO_MANAGER"}
-                      <div ng-show="position == 'publi-video'">
+                      <div class="ng-cloak" ng-show="position == 'publi-video'">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-video-inner'">
+                      <div class="ng-cloak" ng-show="position == 'publi-video-inner'">
                         {include file="advertisement/partials/advertisement_positions_video_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="OPINION_MANAGER"}
-                      <div ng-show="position == 'publi-opinion'">
+                      <div class="ng-cloak" ng-show="position == 'publi-opinion'">
                         {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-opinion-inner'">
+                      <div class="ng-cloak" ng-show="position == 'publi-opinion-inner'">
                         {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
-                      <div ng-show="position == 'publi-gallery'">
+                      <div class="ng-cloak" ng-show="position == 'publi-gallery'">
                         {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-gallery-inner'">
+                      <div class="ng-cloak" ng-show="position == 'publi-gallery-inner'">
                         {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                      <div ng-show="position == 'publi-poll'">
+                      <div class="ng-cloak" ng-show="position == 'publi-poll'">
                         {include file="advertisement/partials/advertisement_positions_poll.tpl"}
                       </div>
-                      <div ng-show="position == 'publi-poll-inner'">
+                      <div class="ng-cloak" ng-show="position == 'publi-poll-inner'">
                         {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
                       </div>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
-                      <div ng-show="position == 'publi-newsletter'">
+                      <div class="ng-cloak" ng-show="position == 'publi-newsletter'">
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                       </div>
                     {/is_module_activated}
-                    <div ng-show="position == 'publi-others'">
+                    <div class="ng-cloak" ng-show="position == 'publi-others'">
                       {foreach $themeAds as $adId => $ad}
                         <div class="row">
                           <div class="col-md-12">
