@@ -123,7 +123,7 @@
     </div>
     <hr>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="radio">
           <input id="inner-big-banner-bottom-I-728x90" name="type_advertisement" type="radio" value="109" {if $advertisement->type_advertisement == 109}checked="checked" {/if}/>
           <label for="inner-big-banner-bottom-I-728x90">
@@ -131,9 +131,7 @@
           </label>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="radio">
           <input id="inner-banner-bottom-right-I-234x90" name="type_advertisement" type="radio" value="110" {if $advertisement->type_advertisement == 110}checked="checked" {/if}/>
           <label for="inner-banner-bottom-right-I-234x90">
