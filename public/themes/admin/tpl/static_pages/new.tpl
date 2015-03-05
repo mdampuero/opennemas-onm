@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" id="formulario">
+<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" ng-controller="InnerCtrl">
 
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -58,7 +58,7 @@
                             {t}Title{/t}
                         </label>
                         <div class="controls">
-                            <input class="form-control" id="title" name="title" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required="required"/>
+                            <input class="form-control" id="title" name="title" type="text" value="{$page->title|default:""}" maxlength="120" tabindex="1" required="required" ng-model="title"/>
                         </div>
                     </div>
 
@@ -67,10 +67,10 @@
                             {t}URL{/t}
                         </label>
                         <span class="help">
-                            {t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html
+                            {t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/[% slug %].html"><span class="fa fa-external-link"></span></a>
                         </span>
                         <div class="controls">
-                            <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}" maxlength="120" tabindex="2" required="required"  />
+                            <input class="form-control" id="slug" name="slug" type="text" value="{$page->slug|default:""}"  ng-model="slug" maxlength="120" tabindex="2" required="required"  />
                         </div>
                     </div>
                     <div class="form-group">
@@ -79,14 +79,14 @@
                         </label>
                         {acl isAllowed='PHOTO_ADMIN'}
                             <div class="pull-right">
-                                <div class="btn btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="summary">
+                                <div class="btn btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
                                     <i class="fa fa-plus"></i>
                                     {t}Insert image{/t}
                                 </div>
                             </div>
                         {/acl}
                         <div class="controls">
-                            <textarea class="form-control" id="body" name="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
+                            <textarea class="form-control" name="body" id="body" onm-editor onm-editor-preset="standard" rows="10" tabindex="5">{$page->body|default:""}</textarea>
                         </div>
                     </div>
                 </div>
