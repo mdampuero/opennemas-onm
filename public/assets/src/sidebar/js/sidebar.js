@@ -400,6 +400,28 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         };
 
         /**
+         * Closes the sidebar on small devices with a swipe event.
+         */
+        sidebar.swipeClose = function() {
+          if ($window.innerWidth >= this.threshold) {
+            return false;
+          }
+
+          sidebar.close();
+        };
+
+        /**
+         * Open the sidebar on small devices with a swipe event.
+         */
+        sidebar.swipeOpen = function() {
+          if ($window.innerWidth >= this.threshold) {
+            return false;
+          }
+
+          sidebar.open();
+        };
+
+        /**
          * Toggles the sidebar.
          */
         sidebar.toggle = function() {
