@@ -10,6 +10,7 @@
   "immed"    : true,
   "indent"   : 2,
   "latedef"  : true,
+  "maxerr"   : 1000,
   "newcap"   : true,
   "noarg"    : true,
   "quotmark" : "single",
