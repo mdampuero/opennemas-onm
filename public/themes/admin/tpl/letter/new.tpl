@@ -18,7 +18,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" name="formulario" id="formulario">
+<form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -75,48 +75,14 @@
                 <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="form-control" />
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">{t}Author information{/t}</label>
-              <div class="controls">
-                <div class="form-inline-block">
-                  <div class="form-group">
-                    <label for="author" class="form-label">{t}Nickname{/t}</label>
-                    <div class="controls">
-                      <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="email" class="form-label">{t}Email{/t}</label>
-                    <div class="controls">
-                      <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="form-control" />
-                    </div>
-                  </div>
-                </div>
-                <div class="form-inline-block">
-                  {foreach $letter->params as $key => $value}
-                  <div class="form-group">
-                    <label for="{$key}" class="form-label">{t}{$key|capitalize}{/t}</label>
-                    <div class="controls">
-                      <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly class="form-control" />
-                    </div>
-                  </div>
-                  {/foreach}
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="created" class="form-label">{t}Created at{/t}</label>
-              <div class="controls">
-                <input type="text" id="created" name="created" value="{$letter->created}"class="form-control" />
-              </div>
-            </div>
+
             <div class="form-group">
               <label for="body" class="form-label">{t}Body{/t}</label>
               <div class="controls">
                 <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
               </div>
             </div>
-            <!--<input type="date" name="" value="" placeholder="">{acl isAllowed='PHOTO_ADMIN'}
+            {*<!--<input type="date" name="" value="" placeholder="">{acl isAllowed='PHOTO_ADMIN'}
             {is_module_activated name="IMAGE_MANAGER"}
             <div id="related_media" class="form-group">
               <label for="special-image" class="form-label">{t}Image for Special{/t}</label>
@@ -146,15 +112,45 @@
               </div>
             </div>
             {/is_module_activated}
-            {/acl}-->
-
+            {/acl}-->*}
+            <h4>{t}Author information{/t}</h4>
+            <div class="row">
+              <div class="form-inline-block">
+                <div class="form-group col-md-6">
+                  <label for="author" class="form-label">{t}Nickname{/t}</label>
+                  <div class="controls">
+                    <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="email" class="form-label">{t}Email{/t}</label>
+                  <div class="controls">
+                    <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-inline-block">
+              {foreach $letter->params as $key => $value}
+              <div class="form-group">
+                <label for="{$key}" class="form-label">{t}{$key|capitalize}{/t}</label>
+                <div class="controls">
+                  <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly class="form-control" />
+                </div>
+              </div>
+              {/foreach}
+            </div>
+            <div class="form-group">
+              <label for="created" class="form-label">{t}Created at{/t}</label>
+              <div class="controls">
+                <input type="text" id="created" name="created" value="{$letter->created}"class="form-control" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="grid simple">
-          <div class="grid-title">
-            {t}Parameters{/t}
-          </div>
           <div class="grid-body">
             {acl isAllowed="LETTER_AVAILABLE"}
             <div class="form-group">
@@ -210,15 +206,6 @@
                       <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
                     </dynamic-image>
                   </div>
-                </div>
-              </div>
-              <div class="form-group" ng-if="photo1">
-                <label class="form-label" for="img1_footer">
-                  {t}Footer text{/t}
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
-                  <input type="hidden" name="img1" ng-value="[% img1 %]"/>
                 </div>
               </div>
             </div>
