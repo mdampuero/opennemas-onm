@@ -70,6 +70,27 @@ angular.module('BackendApp.controllers')
       };
 
       /**
+       * Opens a new modal window.
+       *
+       * @param {String} name The modal name.
+       */
+      $scope.open = function(name) {
+        $modal.open({
+          templateUrl: name,
+          backdrop: 'static',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() {
+              return null;
+            },
+            success: function() {
+              return null;
+            }
+          }
+        });
+      };
+
+      /**
        * Sends a request to update the sidebar pinned status in server.
        *
        * @param integer nv The new value.
