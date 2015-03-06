@@ -4,10 +4,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
-  '$controller', '$http', '$modal', '$scope', 'routing',
-  function($controller, $http, $modal, $scope, routing) {
-
-
+  '$controller', '$http', '$modal', '$scope',
+  function($controller, $http, $modal, $scope) {
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -26,28 +24,6 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
         }
       });
-
-
-
-
-      // return;
-      // $.ajax({
-      //     type: 'POST',
-      //     url: frontpage_urls.preview_frontpage,
-      //     ,
-      //     beforeSend: function(xhr) {
-      //         $('#warnings-validation').html(
-      //             "<div class='alert alert-notice'>" +
-      //                 "<button class='close' data-dismiss='alert'>×</button>" +
-      //                 "Generating frontpage. Please wait..." +
-      //             "</div>"
-      //         );
-      //     },
-      //     success: function() {
-      //         $.colorbox();
-      //         $('#warnings-validation').html('');
-      //     }
-      // });
     };
   }
 ]);

@@ -42,7 +42,24 @@ function check_available_new_version() {
     });
 }
 
+    function get_contents_in_frontpage() {
+      var els = [];
 
+      $('div.placeholder').each(function() {
+        var placeholder = $(this).data('placeholder');
+        $(this).find('div.content-provider-element').each(function(index) {
+          els.push({
+            'id' : $(this).data('content-id'),
+            'content_type': $(this).data('class'),
+            'placeholder': placeholder,
+            'position': index,
+            'params': {}
+          });
+        });
+      });
+
+      return els;
+    }
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
