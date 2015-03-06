@@ -8,7 +8,7 @@
   <script type="text/javascript">
     jQuery(document).ready(function($) {
       $('#date').datetimepicker({
-        format: 'YYYY-MM-D HH:mm:ss'
+        format: 'YYYY-MM-D'
       });
 
       $('#title').on('change', function(e, ui) {
@@ -67,6 +67,15 @@
                 </div>
               </div>
               <div class="form-group">
+                <label for="date" class="form-label">{t}Date{/t}</label>
+                <div class="controls">
+                  <div class="input-group">
+                    <input class="form-control" type="text" id="date" name="date" value="{$cover->created}" required="required" placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
+                    <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="price" class="form-label">{t}Price{/t}</label>
                 <span class="help">{t}Split decimals with a dot{/t}.</span>
                 <div class="controls">
@@ -80,12 +89,6 @@
                     <option value="0" {if empty($cover) || $cover->type==0}selected{/if}>{t}Item{/t}</option>
                     <option value="1" {if $cover->type==1}selected{/if}>{t}Subscription{/t}</option>
                   </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="date" class="form-label">{t}Date{/t}</label>
-                <div class="controls">
-                  <input type="text" id="date" name="date" value="{$cover->created}" required="required" class="form-control"/>
                 </div>
               </div>
               <div class="form-group">
@@ -107,29 +110,18 @@
         <div class="col-md-4">
           <div class="grid simple">
             <div class="grid-body">
+
               <div class="form-group">
-                <label for="content_status" class="form-label">{t}Available{/t}</label>
-                <div class="controls">
-                  <select name="content_status" id="content_status" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                    <option value="0" {if $cover->content_status==0}selected{/if}>{t}No{/t}</option>
-                    <option value="1" {if empty($cover) || $cover->content_status==1}selected{/if}>{t}Yes{/t}</option>
-                  </select>
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="content_status" name="content_status" {if $cover->content_status eq 1}checked="checked"{/if}>
+                  <label for="content_status">{t}Published{/t}</label>
                 </div>
               </div>
+
               <div class="form-group">
-                <label for="favorite" class="form-label">{t}Favorite{/t}</label>
-                <div class="controls">
-                  <select name="favorite" id="favorite" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                    <option value="0" {if $cover->favorite==0}selected{/if}>{t}No{/t}</option>
-                    <option value="1" {if empty($cover) || $cover->favorite==1}selected{/if}>{t}Yes{/t}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="metadata" class="form-label">{t}Keywords{/t}</label>
-                <span class="help">{t}List of words separated by commas{/t}.</span>
-                <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$cover->metadata|default:""}"/>
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="favorite" name="favorite" {if $cover->favorite eq 1}checked="checked"{/if}>
+                  <label for="favorite">{t}Favorite{/t}</label>
                 </div>
               </div>
               <div class="form-group">
@@ -142,11 +134,18 @@
                       {/acl}
                       {section name=su loop=$subcat[as]}
                         {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                          <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                          <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;L&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
                         {/acl}
                       {/section}
                     {/section}
                   </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="metadata" class="form-label">{t}Keywords{/t}</label>
+                <span class="help">{t}List of words separated by commas{/t}.</span>
+                <div class="controls">
+                  <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$cover->metadata|default:""}"/>
                 </div>
               </div>
             </div>

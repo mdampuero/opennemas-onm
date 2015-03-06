@@ -123,7 +123,7 @@
               <div class="form-group">
                 <div class="checkbox">
                   <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
-                  <label for="content_status">{t}Available{/t}</label>
+                  <label for="content_status">{t}Published{/t}</label>
                 </div>
               </div>
               {is_module_activated name="COMMENT_MANAGER"}
