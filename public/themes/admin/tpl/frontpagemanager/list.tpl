@@ -2,8 +2,9 @@
 
 {block name="header-css" append}
     {stylesheets src="@AdminTheme/css/bp/screen.css,
+        @AdminTheme/less/_frontpage.less,
         @AdminTheme/css/frontpagemanager.css,
-        @AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
+        @AdminTheme/css/jquery/colorbox.css" filters="cssrewrite,less"}
         <link rel="stylesheet" href="{$asset_url}">
     {/stylesheets}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
@@ -239,16 +240,8 @@
                           <span class="h-seperate"></span>
                       </li>
                        <li class="quicklinks">
-                          <div class="btn-group" id="frontpage-settings">
-                              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                  <i class="fa fa-cog"></i>
-                                  <span class="caret"></span>
-                              </a>
-                              {if $available_layouts > 1}
-                              <ul class="dropdown-menu pull-right">
-                                  <li><a tabindex="-1" href="#" id="pick-layout">{t}Pick layout{/t}</a></li>
-                              </ul>
-                              {/if}
+                          <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
+                            <i class="fa fa-cog"></i>
                           </div>
                       </li>
                     {/is_module_activated}
@@ -336,37 +329,32 @@
             </div>
         </div><!-- /content-provider -->
     </div>
-
-    <div class="settings settings-panel">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
-        <h4 class="modal-title">
-          {t}Change the layout of this frontpage{/t}
-        </h4>
-      </div>
-      <div class="modal-body">
-        {if $available_layouts > 1}
-          <h4></h4>
-            {foreach from=$available_layouts key=key item=avlayout}
-              <a class="thumbnail {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
-                href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
-                {$avlayout['name']}
-              </a>
-            {/foreach}
-        {/if}
-      </div>
-      <!-- <div class="modal-footer">
-        <span class="loading" ng-if="deleting == 1"></span>
-        <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading">{t}Yes, delete{/t}</button>
-        <button class="btn secondary" ng-click="close()" ng-disabled="loading">{t}No{/t}</button>
-      </div> -->
-    </div>
-
     <input type="hidden"  id="category" name="category" value="{$category}">
     <input type="hidden" name="id" id="id" value="{$id|default}" />
 </form>
 
-
+<script type="text/ng-template" id="modal-layout">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+    <h4 class="modal-title">
+      {t}Change the layout of this frontpage{/t}
+    </h4>
+  </div>
+  <div class="modal-body clearfix">
+    {if $available_layouts > 1}
+      {foreach from=$available_layouts key=key item=avlayout}
+          <a class="layout-type {if $avlayout['name'] eq $layout_theme['name']}active{/if}"
+          href="{url name=admin_frontpage_pick_layout category=$category layout=$key}">
+          {$avlayout['name']}
+        </a>
+      {/foreach}
+    {/if}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
+  </div>
+</div>
+</script>
 
 
 {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
