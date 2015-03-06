@@ -99,7 +99,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                       <div ng-if=\"picker.views.enabled == 'list-item'\">\
                         <div class=\"list-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
                           <div>\
-                            [% content.content_type_name %] - [% content.title %]\
+                            [% content.content_type_l10n_name %] - [% content.title %]\
                           </div>\
                         </div>\
                       </div>\
