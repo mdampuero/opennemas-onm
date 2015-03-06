@@ -111,24 +111,7 @@ function remove_element(element) {
     });
 }
 
-function get_contents_in_frontpage() {
-    var els = [];
 
-    jQuery('div.placeholder').each(function() {
-        var placeholder = jQuery(this).data('placeholder');
-        jQuery(this).find('div.content-provider-element').each(function(index) {
-            els.push({
-                'id' : jQuery(this).data('content-id'),
-                'content_type': jQuery(this).data('class'),
-                'placeholder': placeholder,
-                'position': index,
-                'params': {}
-            });
-        });
-
-    });
-    return els;
-}
 
 function show_save_frontpage_dialog() {
     jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
@@ -634,34 +617,6 @@ jQuery(function($) {
                 );
             });
         }
-    });
-
-    $('#button_previewfrontpage').on('click', function(e, ui) {
-        e.preventDefault();
-        var contents = get_contents_in_frontpage();
-        var category = $(this).data('category-name');
-        var encodedContents = JSON.stringify(get_contents_in_frontpage());
-
-        $.ajax({
-            type: 'POST',
-            url: frontpage_urls.preview_frontpage,
-            data: {
-                'contents': encodedContents,
-                'category_name': category
-            },
-            beforeSend: function(xhr) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        "Generating frontpage. Please wait..." +
-                    "</div>"
-                );
-            },
-            success: function() {
-                $.colorbox({href: frontpage_urls.get_preview_frontpage, iframe : true, width: '95%', height: '95%'});
-                $('#warnings-validation').html('');
-            }
-        });
     });
 
     $('#button_multiple_delete').on('click', function(e,ui) {

@@ -72,7 +72,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario">
+<form action="#" method="get" name="formulario" id="formulario" ng-controller="FrontpageCtrl">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
@@ -109,9 +109,10 @@
                         </li>
                         <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
-                            <a class="btn btn-white" href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">
-                                <span class="fa fa-desktop"></span> {t}Preview{/t}
-                            </a>
+                            <button class="btn btn-white" id="button_previewfrontpage" title="{t}Preview frontpage with actual content positions{/t}" ng-click="preview('{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}')" type="button">
+                              <span class="fa fa-desktop"></span>
+                              {t}Preview{/t}
+                            </button>
                         </li>
                         <li class="quicklinks"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
@@ -335,7 +336,7 @@
 
 <script type="text/ng-template" id="modal-layout">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
     <h4 class="modal-title">
       {t}Change the layout of this frontpage{/t}
     </h4>
@@ -352,6 +353,20 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
+  </div>
+</div>
+</script>
+
+<script type="text/ng-template" id="modal-preview">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+    <h4 class="modal-title">
+      {t}Change the layout of this frontpage{/t}
+    </h4>
+  </div>
+  <div class="modal-body clearfix">
+    <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
+    <iframe ng-src="[% src %]" frameborder="0" ng-if="preview"></iframe>
   </div>
 </div>
 </script>

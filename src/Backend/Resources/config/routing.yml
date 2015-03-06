@@ -42,10 +42,14 @@ admin_frontpage_savepositions:
 admin_frontpage_preview:
     path:     /frontpages/{category}/preview
     defaults: { _controller  : BackendBundle:Frontpages:preview }
+    options:
+        expose: true
 
 admin_frontpage_get_preview:
     path:     /frontpages/{category}/get-preview
     defaults: { _controller  : BackendBundle:Frontpages:getPreview }
+    options:
+        expose: true
 
 admin_frontpage_pick_layout:
     path:     /frontpages/{category}/pick-layout
