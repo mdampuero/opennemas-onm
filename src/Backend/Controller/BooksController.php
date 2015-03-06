@@ -136,41 +136,37 @@ class BooksController extends Controller
             $this->view->assign('category', $this->category);
 
             return $this->render('book/new.tpl');
-
-        } else {
-
-            $data = array(
-                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'cover_id'    => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
-                'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getInt('category', 0),
-                'position'    => $request->request->getInt('position', 1),
-                'content_status'   => $request->request->getInt('content_status', 0),
-            );
-
-            $book = new \Book();
-            $id   = $book->create($data);
-
-            if (!empty($id)) {
-
-                $book->setPosition($data['position']);
-                $book = $book->read($id);
-
-                return $this->render('book/new.tpl', array('book' => $book));
-
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Unable to create the new book.")
-                );
-            }
-
-            return $this->render('book/new.tpl');
         }
+
+        $data = [
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'cover_id'       => $request->request->getInt('book_cover_id'),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getInt('category', 0),
+            'position'       => $request->request->getInt('position', 1),
+            'content_status' => $request->request->getInt('content_status', 0),
+        ];
+
+        $book = new \Book();
+        $id   = $book->create($data);
+
+        if (!empty($id)) {
+            $book->setPosition($data['position']);
+            $book = $book->read($id);
+
+            return $this->render('book/new.tpl', array('book' => $book));
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Unable to create the new book.")
+            );
+        }
+
+        return $this->render('book/new.tpl');
     }
 
     /**
@@ -255,15 +251,15 @@ class BooksController extends Controller
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'cover_id'       => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
+            'cover_id'       => $request->request->getInt('book_image_id'),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category'),
-            'position'       => $request->request->getInt('position'),
-            'content_status' => $request->request->getInt('content_status'),
+            'category'       => $request->request->getInt('category', 0),
+            'position'       => $request->request->getInt('position', 1),
+            'content_status' => $request->request->getInt('content_status', 0),
         ];
-
+var_dump($data);die();
         if ($book->update($data)) {
             $book->setPosition($data['position']);
             $this->get('session')->getFlashBag()->add(
