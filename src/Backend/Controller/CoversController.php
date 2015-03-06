@@ -128,7 +128,7 @@ class CoversController extends Controller
         }
 
         return $this->render(
-            'covers/read.tpl',
+            'covers/new.tpl',
             array(
                 'cover'          => $cover,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
@@ -150,7 +150,7 @@ class CoversController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('covers/read.tpl');
+            return $this->render('covers/new.tpl');
         }
 
         $postInfo = $request->request;
