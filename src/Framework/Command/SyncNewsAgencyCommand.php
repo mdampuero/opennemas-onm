@@ -80,7 +80,13 @@ EOF
         \Application::load();
         \Application::initDatabase($dbConn);
 
-        $servers = \Onm\Settings::get('news_agency_config');
+        $sm = $this->getContainer()->get('setting_repository');
+        $sm->setConfig([
+            'database' => $database,
+            'cache_prefix' => $instance->internal_name
+        ]);
+
+        $servers = $sm->get('news_agency_config');
 
         $syncParams = array('cache_path' => CACHE_PATH);
         $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
