@@ -29,6 +29,10 @@ i.ng-hide-add-active, .ng-hide-remove {
   margin-top: 10px;
 }
 
+.form-group .form-label {
+  margin-right: 0;
+}
+
 @media (min-width: 900px) {
   .actions-navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: none !important;
