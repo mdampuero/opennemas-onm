@@ -163,7 +163,7 @@ jQuery(document).ready(function($) {
             <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$site_color|default:"#000"|trim}">
               &nbsp;&nbsp;&nbsp;&nbsp;
             </span>
-            <input class="form-control" size="6" type="text" id="color" name="color" value="{$site_color|default:"#000"|trim}">
+            <input class="form-control" size="6" type="text" id="color" name="site_color" value="{$site_color|default:"#000"|trim}">
             <span class="input-group-btn">
               <button class="btn btn-default reset-button">
                 {t}Reset color{/t}

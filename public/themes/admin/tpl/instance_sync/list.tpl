@@ -5,7 +5,6 @@
         border-top-right-radius: 3px !important;
         border-bottom-right-radius: 3px !important;
         display:block;
-
     }
 </style>
 {/block}
@@ -91,15 +90,6 @@
                             {/foreach}
                         {/foreach}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4">
-                                <div class="pagination">
-                                    {$pagination->links|default:"&nbsp;"}
-                                </div>
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
                 {else}
                 <div class="center">
