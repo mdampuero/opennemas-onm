@@ -7,6 +7,10 @@
   border-radius: 0;
 }
 
+.modal-content .nav-tabs li a {
+  border-radius: 0;
+}
+
 .modal-footer {
   background: none;
 }
@@ -50,4 +54,12 @@
 
 .modal-header .close {
   margin-top: 2px;
+  padding-left: 12px;
+}
+
+.modal-title .content-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
