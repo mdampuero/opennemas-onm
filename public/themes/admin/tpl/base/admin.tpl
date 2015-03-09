@@ -134,7 +134,7 @@
 
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
-    <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()"></div>
+    <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>
     <!-- END SIDEBAR -->
 
     <div class="page-container row-fluid">
