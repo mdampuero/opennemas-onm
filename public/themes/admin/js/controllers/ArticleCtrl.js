@@ -144,7 +144,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i });
+          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
         }
       }
 
@@ -163,7 +163,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i });
+          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
         }
       }
 
@@ -182,7 +182,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
 
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
-          items.push({ id: nv[i].id, position: i });
+          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
         }
       }
 
