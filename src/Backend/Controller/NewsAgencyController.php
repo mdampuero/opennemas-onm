@@ -492,22 +492,21 @@ class NewsAgencyController extends Controller
         $content = null;
         if ($element->hasPhotos()) {
             foreach ($element->getPhotos() as $photo) {
-
                 if ($photo->getId() == $attachmentId) {
-
                     $filePath = null;
-                    if (strpos($photo->getFilePath(), 'http://') !== false) {
+
+                    // Try to get image from local
+                    if (is_file($repository->syncPath.DS.$sourceId.DS.$photo->getName())) {
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
+                    }
+
+                    if (!$filePath && strpos($photo->getFilePath(), 'http://') !== false) {
                         $filePath = $photo->getFilePath();
                     }
 
                     // Get image from FTP
                     if (!$filePath) {
                         $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
-                    }
-
-                    // If no image from FTP check HTTP
-                    if (!$filePath) {
-                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
 
                     $content = @file_get_contents($filePath);
