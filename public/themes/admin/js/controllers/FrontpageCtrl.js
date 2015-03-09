@@ -1,11 +1,11 @@
-'use strict';
-
 /**
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
   '$controller', '$http', '$modal', '$scope', 'routing',
   function($controller, $http, $modal, $scope, routing) {
+    'use strict';
+
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 

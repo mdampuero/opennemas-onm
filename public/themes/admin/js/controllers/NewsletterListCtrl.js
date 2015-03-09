@@ -4,6 +4,7 @@
 angular.module('BackendApp.controllers').controller('NewsletterListCtrl', [
   '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager', '$controller',
   function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager, $controller) {
+    'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentListController', {$scope: $scope}));

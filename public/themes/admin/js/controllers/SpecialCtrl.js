@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Handle actions for article inner.
  */
@@ -7,6 +5,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
   '$controller', '$rootScope', '$scope',
   function($controller, $rootScope, $scope) {
     'use strict';
+
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 

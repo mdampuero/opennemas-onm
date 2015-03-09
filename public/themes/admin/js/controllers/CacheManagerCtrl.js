@@ -4,6 +4,7 @@
 angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
   '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager', '$controller',
   function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager, $controller) {
+    'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentListController', {$scope: $scope}));
@@ -77,7 +78,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
           $scope.selected.total = 0;
           $scope.selected.contents = [];
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }

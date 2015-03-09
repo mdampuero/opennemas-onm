@@ -1,11 +1,11 @@
-'use strict';
-
 angular.module('BackendApp.controllers')
   /**
    * Handle actions for article inner.
   */
   .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope',
   function($controller, $rootScope, $scope) {
+    'use strict';
+
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 

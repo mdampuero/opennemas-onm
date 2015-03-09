@@ -4,6 +4,8 @@
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
   '$rootScope', '$scope', '$timeout', 'onmEditor', 'renderer',
   function($rootScope, $scope, $timeout, onmEditor, renderer) {
+    'use strict';
+
     /**
      * Inserts an array of items in a CKEditor instance.
      *

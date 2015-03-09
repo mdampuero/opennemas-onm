@@ -16,10 +16,10 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('book_cover', function(nv, ov) {
-      $scope.book_cover_id        = null;
+      $scope.book_cover_id = null;
 
       if ($scope.book_cover) {
-        $scope.book_cover_id        = $scope.book_cover.id;
+        $scope.book_cover_id = $scope.book_cover.id;
       }
     }, true);
   }

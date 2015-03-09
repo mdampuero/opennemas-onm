@@ -4,6 +4,7 @@
 angular.module('BackendApp.controllers').controller('ContentListController', [
   '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
   function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
+    'use strict';
 
     /**
      * The criteria to search.
@@ -48,7 +49,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       epp: 10,
       page: 1,
       total: 0
-    }
+    };
 
     /**
      * Default join operator for filters.
@@ -60,7 +61,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     $scope.deselectAll = function() {
       $scope.selected.contents = [];
       $scope.selected.all = 0
-    }
+    };
 
     /**
      * Goes to content edit page.
@@ -72,7 +73,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       return routing.generate(route, {
         id: id
       });
-    }
+    };
 
     /**
      * Initializes the content type for the current list.
@@ -82,7 +83,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(content_name, filters, sortBy, sortOrder, route, lang, epp) {
+    $scope.init = function(contentName, filters, sortBy, sortOrder, route, lang, epp) {
       // Filters used in GUI
       $scope.criteria = filters;
 
@@ -91,8 +92,9 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       }
 
       // Add content_type_name if it isn't a list of all content types
-      if (content_name != null && content_name != 'content') {
-        $scope.criteria.content_type_name = content_name;
+      if (contentName !== null && contentName !== 'content'
+      ) {
+        $scope.criteria.content_type_name = contentName;
       }
 
       // Set sortBy
@@ -129,7 +131,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       $scope.route = route;
 
       $scope.list(route);
-    }
+    };
 
     /**
      * Checks if the listing is ordered by the given field name.
@@ -141,7 +143,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      */
     $scope.isOrderedBy = function(name) {
       var i = 0;
-      while (i < $scope.orderBy.length && $scope.orderBy[i].name != name) {
+      while (i < $scope.orderBy.length && $scope.orderBy[i].name !== name) {
         i++;
       }
 
@@ -158,7 +160,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @param string id The group id.
      */
     $scope.isSelected = function(id) {
-      return $scope.selected.contents.indexOf(id) != -1;
+      return $scope.selected.contents.indexOf(id) !== -1;
     };
 
     /**
@@ -174,7 +176,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         contentType: $scope.criteria.content_type_name
       });
 
-      var processed_filters = oqlEncoder.encode($scope.criteria);
+      var processedFilters = oqlEncoder.encode($scope.criteria);
       var filtersToEncode = angular.copy($scope.criteria);
 
       delete filtersToEncode.content_type_name;
@@ -187,8 +189,9 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         page: $scope.pagination.page,
         sort_by: $scope.orderBy.name,
         sort_order: $scope.orderBy.value,
-        search: processed_filters
-      }
+        search: processedFilters
+      };
+
       $scope.postData = postData;
 
       $http.post(url, postData).then(function(response) {
@@ -197,13 +200,13 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         $scope.map              = response.data.map;
 
         if (response.data.hasOwnProperty('extra')) {
-          $scope.extra = response.data.extra
-        };
+          $scope.extra = response.data.extra;
+        }
 
         // Disable spinner
         $scope.loading = 0;
-      })
-    }
+      });
+    };
 
     /**
      * Saves the content positions in widget.
@@ -217,7 +220,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       for (var i = 0; i < contents.length; i++) {
         ids.push(contents[i].id);
-      };
+      }
 
       var url = routing.generate(
         route, {
@@ -239,9 +242,9 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           };
 
           messenger.post(params);
-        };
+        }
       }).error(function(response) {});
-    }
+    };
 
     /**
      * Selects/unselects all instances.
@@ -262,7 +265,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @param  int page Page number.
      */
     $scope.selectPage = function(page, route) {
-      if (page != $scope.pagination.page) {
+      if (page !== $scope.pagination.page) {
         $scope.pagination.page = page;
         // $location.search('page', page);
         $scope.list(route);
@@ -275,8 +278,8 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @param  Object event The even object.
      */
     $scope.searchByKeypress = function(event) {
-      if (event.keyCode == 13) {
-        if ($scope.pagination.page != 1) {
+      if (event.keyCode === 13) {
+        if ($scope.pagination.page !== 1) {
           $scope.pagination.page = 1;
         } else {
           $scope.list($scope.route);
@@ -285,19 +288,19 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     };
 
     $scope.sort = function(field) {
-      if ($scope.sort_by == field) {
-        if ($scope.sort_order == 'asc') {
+      if ($scope.sort_by === field) {
+        if ($scope.sort_order === 'asc') {
           $scope.sort_order = 'desc';
         } else {
           $scope.sort_order = 'asc';
         }
       } else {
         $scope.sort_by = field;
-        $scope.sort_order == 'asc';
+        $scope.sort_order === 'asc';
       }
 
       $scope.list($scope.route);
-    }
+    };
 
     /**
      * Updates an item.
@@ -326,7 +329,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       $http.post(url, {
         value: value
       }).success(function(response) {
-        if (response[name] != null) {
+        if (response[name] !== null) {
           contents[index][name] = response[name];
         }
 
@@ -338,7 +341,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           };
 
           messenger.post(params);
-        };
+        }
 
         // Disable spinner
         contents[index][loading] = 0;
@@ -361,7 +364,6 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      */
     $scope.updateSelectedItems = function(route, name, value, loading) {
       // Load shared variable
-      var contents = $scope.contents;
       var selected = $scope.selected.contents;
 
       updateItemsStatus(loading, 1);
@@ -387,10 +389,8 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
             };
 
             messenger.post(params);
-          };
-        }).error(function(response) {
-
-        });
+          }
+        }).error(function(response) { });
     };
 
     /**
@@ -424,7 +424,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         if (response) {
           $scope.renderMessages(response.data.messages);
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -465,7 +465,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           $scope.selected.total = 0;
           $scope.selected.contents = [];
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -503,7 +503,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         if (response) {
           $scope.renderMessages(response.data.messages);
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -547,7 +547,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           $scope.selected.total = 0;
           $scope.selected.contents = [];
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -585,7 +585,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         if (response) {
           $scope.renderMessages(response.data.messages);
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -629,12 +629,13 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           $scope.selected.total = 0;
           $scope.selected.contents = [];
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
       });
     };
+
     /**
      * Sends a content to trash by using a confirmation dialog
      *
@@ -668,7 +669,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
         if (response) {
           $scope.renderMessages(response.data.messages);
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -712,7 +713,7 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
           $scope.selected.total = 0;
           $scope.selected.contents = [];
 
-          if (response.status == 200) {
+          if (response.status === 200) {
             $scope.list($scope.route);
           }
         }
@@ -723,29 +724,33 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * Moves the list to the previous page
      */
     $scope.goToPrevPage = function() {
-      return $scope.pagination.page = $scope.pagination.page - 1;
-    }
+      $scope.pagination.page = $scope.pagination.page - 1;
+
+      return $scope.pagination.page;
+    };
 
     /**
      * Moves the list to the next page
      */
     $scope.goToNextPage = function() {
-      return $scope.pagination.page = $scope.pagination.page + 1;
-    }
+      $scope.pagination.page = $scope.pagination.page + 1;
+
+      return $scope.pagination.page;
+    };
 
     /**
      * Checks if the list is in the first page
      */
     $scope.isFirstPage = function() {
       return $scope.pagination.page - 1 < 1;
-    }
+    };
 
     /**
      * Checks if the list is in the last pages
      */
     $scope.isLastPage = function() {
-      return $scope.pagination.page == $scope.pagination.pages;
-    }
+      return $scope.pagination.page === $scope.pagination.pages;
+    };
 
     /**
      * Updates selected items current status.
@@ -753,6 +758,8 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
      * @param  mixed messages List of messages provided by the server.
      */
     $scope.renderMessages = function(messages) {
+      var errors = 0;
+
       for (var i = 0; i < messages.length; i++) {
         var params = {
           id: new Date().getTime() + '_' + messages[i].id,
@@ -762,11 +769,11 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
         messenger.post(params);
 
-        if (messages[i].type == 'error') {
+        if (messages[i].type === 'error') {
           errors++;
         }
-      };
-    }
+      }
+    };
 
     /**
      * Updates selected items current status.
@@ -783,15 +790,15 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
       for (var i = 0; i < selected.length; i++) {
         var j = 0;
 
-        while (j < contents.length && contents[j].id != selected[i]) {
+        while (j < contents.length && contents[j].id !== selected[i]) {
           j++;
         }
 
         if (j < contents.length) {
-          contents[j][loading] = status
+          contents[j][loading] = status;
           contents[j][name] = value;
         }
-      };
+      }
 
       // Updated shared variable
       $scope.contents = contents;
@@ -811,15 +818,15 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
 
       for (var i = 0; i < selected.length; i++) {
         var j = 0;
-        while (j < contents.length && contents[j].id != selected[i]) {
+        while (j < contents.length && contents[j].id !== selected[i]) {
           j++;
         }
 
         if (j < contents.length) {
           contents[j].status = status;
-          contents[j].loading = loading
+          contents[j].loading = loading;
         }
-      };
+      }
 
       // Updated shared variable
       $scope.contents = contents;
