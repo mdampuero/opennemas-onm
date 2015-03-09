@@ -113,7 +113,7 @@ class InstanceSyncController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_instance_sync'));
+        return $this->redirect($this->generateUrl('admin_instance_sync_show', ['site_url' => $siteUrl]));
     }
 
     /**
@@ -167,7 +167,8 @@ class InstanceSyncController extends Controller
             'instance_sync/partials/_list_categories.tpl',
             array(
                 'categories_checked' => $categoriesChecked,
-                'categories'         => $availableCategories
+                'categories'         => $availableCategories,
+                'loading'            => true,
             )
         );
     }

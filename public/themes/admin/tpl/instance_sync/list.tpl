@@ -19,7 +19,7 @@
                         <h4>
                             <i class="fa fa-exchange"></i>
                             <span class="hidden-xs">{t}Instance Synchronization{/t}</span>
-                            <span class="visible-inline-xs">{t}Ins. Sync.{/t}</span>
+                            <span class="visible-xs-inline-block">{t}Ins. Sync.{/t}</span>
                         </h4>
                     </li>
                     <li class="quicklinks hidden-xs">
@@ -45,7 +45,7 @@
 
     <div class="content">
 
-	{render_messages}
+	     {render_messages}
 
         <div class="grid simple">
             <div class="grid-body {if count($elements) >0}no-padding{/if}">

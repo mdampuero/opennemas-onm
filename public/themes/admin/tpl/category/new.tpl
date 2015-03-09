@@ -4,29 +4,6 @@
   {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
   <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
-
-  <style type="text/css">
-    div#match-color {
-      cursor: pointer;
-    }
-    .match_viewer {
-      height:28px;
-      border: 1px solid #B5B8C8;
-      border-right:0 !important;
-      width:30px !important;
-      display:inline-block;
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      float: left;
-      margin-left:-2px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
-    }
-
-    .colorpicker {
-      z-index: 10;
-    }
-
-  </style>
 {/block}
 
 {block name="footer-js" append}

@@ -65,6 +65,79 @@
   cursor:not-allowed;
 }
 
+
+div#match-color {
+  cursor: pointer;
+}
+.match_viewer {
+  height:28px;
+  border: 1px solid #B5B8C8;
+  border-right:0 !important;
+  width:30px !important;
+  display:inline-block;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  float: left;
+  margin-left:-2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+.colorpicker {
+  z-index: 10;
+}
+
+/* Messages displayed from server ============================================== */
+.content .messages {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  margin-bottom:-1px;
+  min-height: 50px;
+  padding-left: 210px;
+}
+.content .messages > * {
+  margin-bottom:0;
+  padding:15px;
+}
+.content .messages .alert {
+  border:0 !important;
+  border-radius:0px;
+}
+.content .messages .alert .close {
+  background:none;
+  color: White;
+  opacity: 1;
+  font-weight: bold;
+  display: block;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 8px 10px 7px 7px;
+  margin: 8px 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  padding: 0;
+  height: auto;
+  width: auto;
+  margin: 0;
+  margin-top: -5px;
+}
+
+body.collapsed .messages {
+  padding-left: 50px;
+}
+.content .messages .alert-notice {
+  color: #505458;
+  background-color: #FDE46F;
+  // text-shadow:1px 1px 1px rgba(0,0,0, 0.4);
+}
+.content .messages .alert-notice .close {
+  color:#ce8f22;
+}
+
 /* Newsletter rules ============================================================ */
 
 .newsletter-manager {
