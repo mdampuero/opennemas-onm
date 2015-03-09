@@ -1,40 +1,13 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
-    <link rel="stylesheet" href="{$asset_url}" media="screen">
-  {/stylesheets}
-
-  <style type="text/css">
-    div#content-provider .content-provider-block .content-provider-element {
-      margin: 5px;
-      border: 1px solid #AAA;
-      padding: 5px;
-      background: white;
-    }
-
-    .content-provider-element .content-action-buttons,
-    .content-provider-element input[type="checkbox"] {
-      display:none;
-    }
-  </style>
-{/block}
-
 {block name="footer-js" append}
   {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-                    @AdminTheme/js/jquery/jquery.colorbox-min.js,
-                    @AdminTheme/js/onm/article.js,
-                    @AdminTheme/js/onm/content-provider.js,
                     @AdminTheme/js/jquery-onm/jquery.inputlength.js
                     "}
     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
   <script>
-    var article_urls = {
-      preview : '{url name=admin_article_preview}',
-      get_preview : '{url name=admin_article_get_preview}'
-    };
 
     jQuery(document).ready(function($){
       $('#title, #title_int, #subtitle').inputLengthControl();
@@ -106,8 +79,9 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks hidden-xs">
-                <a href="#" accesskey="P" id="button_preview" class="btn btn-white">
-                  <i class="fa fa-desktop"></i> <span class="hidden-xs">{t}Preview{/t}</span>
+                <button class="btn btn-white" id="button_preview" ng-click="preview()" type="button">
+                  <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
+                  <span class="hidden-xs">{t}Preview{/t}</span>
                 </a>
               </li>
               <li class="quicklinks hidden-xs">
@@ -439,5 +413,17 @@
       <input type="hidden" id="action" name="action" value="{$action}" />
       <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
     </div><!-- /wrapper-content contentform -->
+
+    <script type="text/ng-template" id="modal-preview">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+        <h4 class="modal-title">
+          {t}Preview{/t}
+        </h4>
+      </div>
+      <div class="modal-body clearfix no-padding">
+        <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
+      </div>
+    </script>
   </form>
 {/block}

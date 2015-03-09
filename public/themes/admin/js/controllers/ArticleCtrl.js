@@ -2,11 +2,44 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ArticleCtrl', [
-  '$controller', '$rootScope', '$scope',
-  function($controller, $rootScope, $scope) {
+  '$controller', '$http', '$modal', '$rootScope', '$scope', 'routing',
+  function($controller, $http, $modal, $rootScope, $scope, routing) {
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+    /**
+     * Opens a modal with the preview of the article.
+     */
+    $scope.preview = function() {
+      $scope.loading = true;
+
+      var data = {'contents': $('#formulario').serializeArray()};
+      var url  = routing.generate('admin_article_preview');
+
+      $http.post(url, data).success(function() {
+        $modal.open({
+          templateUrl: 'modal-preview',
+          windowClass: 'modal-fullscreen',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() {
+              return {
+                src: routing.generate('admin_article_get_preview')
+              };
+            },
+            success: function() {
+              return null;
+            }
+          }
+        });
+
+        $scope.loading = false;
+      }).error(function() {
+        $scope.loading = false;
+      });
+
+    };
 
     /**
      * Removes an album.

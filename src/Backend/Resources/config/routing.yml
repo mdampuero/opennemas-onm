@@ -662,10 +662,14 @@ admin_article_update:
 admin_article_preview:
     path:     /articles/preview
     defaults: { _controller  : BackendBundle:Articles:preview }
+    options:
+        expose: true
 
 admin_article_get_preview:
     path:     /articles/get-preview
     defaults: { _controller  : BackendBundle:Articles:getPreview }
+    options:
+        expose: true
 
 admin_articles_content_provider_suggested:
     path:     /articles/content-provider-suggested
