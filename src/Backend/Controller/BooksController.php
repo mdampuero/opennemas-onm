@@ -251,7 +251,7 @@ class BooksController extends Controller
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'cover_id'       => $request->request->getInt('book_image_id'),
+            'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
@@ -259,7 +259,7 @@ class BooksController extends Controller
             'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
         ];
-var_dump($data);die();
+
         if ($book->update($data)) {
             $book->setPosition($data['position']);
             $this->get('session')->getFlashBag()->add(
