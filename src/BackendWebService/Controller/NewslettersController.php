@@ -45,15 +45,14 @@ class NewslettersController extends Controller
 
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
-        // $search          = $request->request->get('search','');
+        $search          = $request->request->get('search', '');
 
-        // if (array_key_exists('title', $search)) {
-        //     $title = 'title LIKE '.(string) $search['title'][0]['value'];
-        // } else {
-        //     $title = '1 = 1';
-        // }
-
-        list($total, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $elementsPerPage);
+        if (array_key_exists('title', $search)) {
+            $titleFilter = 'title LIKE \''.(string) $search['title'][0]['value'].'\'';
+        } else {
+            $titleFilter = '1 = 1';
+        }
+        list($total, $newsletters) = $nm->find($titleFilter, 'created DESC', $page, $elementsPerPage);
 
         // new code
         return new JsonResponse(

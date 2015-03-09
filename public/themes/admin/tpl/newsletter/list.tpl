@@ -7,10 +7,10 @@
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <h4>
-              <i class="fa fa-home fa-lg"></i>
-              {t}Newsletters{/t}
-            </h4>
+              <h4>
+                <i class="fa fa-home fa-lg"></i>
+                {t}Newsletters{/t}
+              </h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -39,18 +39,45 @@
       </div>
     </div>
   </div>
+
+  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section pull-left">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+              <i class="fa fa-arrow-left fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+            </h4>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section filter-components">
           <li class="m-r-10 input-prepend inside search-input no-boarder">
-            <span class="info">
-              {if $maxAllowed gt 0}
-                {t 1=$lastInvoice 2=$totalSendings 3=$maxAllowed}%2 newsletter sents from %1 (%3 allowed){/t}
-              {else}
-                {t 1=$lastInvoice 2=$totalSendings}%2 newsletter sents from %1 {/t}
-              {/if}
+            <span class="add-on">
+              <span class="fa fa-search fa-lg"></span>
             </span>
+            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by subject{/t}" type="text"/>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
@@ -82,12 +109,13 @@
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
           <div class="loading-spinner"></div>
-          <div class="spinner-text">{t}Loading{/t}...</div>
+          <div class="spinner-text">{t}Loading…{/t}</div>
+        </div>
+        <div ng-if="!loading && contents.length == 0" class="ng-cloak center">
+          <h4>{t}There is no newsletters yet{/t}</h4>
+          <h5>{t}or your search criteria doesn't match anything.{/t}</h5>
         </div>
         <div class="table-wrapper ng-cloak">
-          <div ng-if="!loading && contents.length == 0">
-              {t}There is no newsletters yet.{/t}
-          </div>
           <table class="table table-hover no-margin" ng-if="!loading">
             <thead>
               <tr ng-if="contents.length > 0">
@@ -160,6 +188,25 @@
   </div>
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-batch-remove-permanently">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+        <h4 class="modal-title">
+            <i class="fa fa-trash-o"></i>
+            {t}Remove permanently selected items{/t}
+        </h4>
+      </div>
+      <div class="modal-body">
+          <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+          <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
+      </div>
+      <div class="modal-footer">
+          <span class="loading" ng-if="deleting == 1"></span>
+          <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
+          <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+      </div>
   </script>
 </div>
 {/block}

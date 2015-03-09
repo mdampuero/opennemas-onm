@@ -42,8 +42,9 @@ class NewsletterController extends Controller
     public function listAction(Request $request)
     {
         $maxAllowed     = s::get('max_mailing');
-        $totalSendings  = $this->GetTotalNumberOfNewslettersSend();
+        $totalSendings  = $this->getTotalNumberOfNewslettersSend();
         $lastInvoice    = new \DateTime(s::get('last_invoice'));
+        $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
@@ -52,14 +53,27 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
-        return $this->render(
-            'newsletter/list.tpl',
-            array(
-                'totalSendings' => $totalSendings,
-                'maxAllowed'    => $maxAllowed,
-                'lastInvoice'   => $lastInvoice->format(_('Y-m-d')),
-            )
-        );
+        if ($maxAllowed > 0) {
+            $message = sprintf(
+                _('%s newsletter sent from %d (%d allowed).'),
+                (int) $totalSendings,
+                $lastInvoiceText,
+                (int) $maxAllowed
+            );
+        } elseif ($totalSendings == 0) {
+            $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
+        } else {
+            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
+        }
+
+        if (!empty($message)) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                $message
+            );
+        }
+
+        return $this->render('newsletter/list.tpl');
     }
 
     /**
@@ -368,7 +382,7 @@ class NewsletterController extends Controller
         );
 
         $maxAllowed = s::get('max_mailing');
-        $remaining = $maxAllowed - $this->GetTotalNumberOfNewslettersSend();
+        $remaining = $maxAllowed - $this->getTotalNumberOfNewslettersSend();
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
@@ -527,7 +541,7 @@ class NewsletterController extends Controller
      *
      * @return int Total number of mail sent in current mount
      **/
-    private function GetTotalNumberOfNewslettersSend()
+    private function getTotalNumberOfNewslettersSend()
     {
         // Get maximum number of allowed sending mails
         $maxAllowed = s::get('max_mailing');

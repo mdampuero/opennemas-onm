@@ -53,7 +53,7 @@ jQuery(document).ready(function($){
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Go back to list{/t}">
+                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>

@@ -233,7 +233,7 @@ $menuXml = [
             [
                 "id"          => "newsletter_manager",
                 "title"       => _("Newsletter"),
-                "icon"        => "fa fa-rss",
+                "icon"        => "fa fa-envelope",
                 "link"        => url('admin_newsletters'),
                 "module_name" => "NEWSLETTER_MANAGER",
                 "privilege"   => "NEWSLETTER_ADMIN",
