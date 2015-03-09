@@ -1,25 +1,12 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {stylesheets src="@AdminTheme/css/jquery/colorbox.css" filters="cssrewrite"}
-        <link rel="stylesheet" href="{$asset_url}" media="screen">
-    {/stylesheets}
-{/block}
-
 {block name="footer-js" append}
     {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-                      @AdminTheme/js/jquery/jquery.colorbox-min.js,
-                      @AdminTheme/js/jquery-onm/jquery.inputlength.js
-        "}
+                      @AdminTheme/js/jquery-onm/jquery.inputlength.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script>
         $('.tabs').tabs();
-
-        var opinions_urls = {
-            preview : '{url name=admin_opinion_preview}',
-            get_preview : '{url name=admin_opinion_get_preview}'
-        };
 
         jQuery(document).ready(function ($){
             $('#starttime, #endtime').datetimepicker({
@@ -53,29 +40,6 @@
                 } else {
                     $('#author').show();
                 }
-            });
-            $('#button_preview').on('click', function(e, ui) {
-                e.preventDefault();
-
-                CKEDITOR.instances.body.updateElement();
-                CKEDITOR.instances.summary.updateElement();
-
-                var form = $('#formulario');
-                var contents = form.serializeArray();
-
-                $.ajax({
-                    type: 'POST',
-                    url: opinions_urls.preview,
-                    data: {
-                        'contents': contents
-                    },
-                    success: function(data) {
-                        $.colorbox({ href: opinions_urls.get_preview, iframe : true, width: '95%', height: '95%' });
-                        $('#warnings-validation').html('');
-                    }
-                });
-
-                return false;
             });
         });
 
@@ -118,10 +82,10 @@
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks hidden-xs">
-                            <a class="btn btn-white" href="#" accesskey="P" id="button_preview">
-                                <i class="fa fa-desktop"></i>
+                            <button class="btn btn-white" id="button_preview" ng-click="preview('admin_opinion_preview', 'admin_opinion_get_preview')" type="button">
+                                <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
                                 {t}Preview{/t}
-                            </a>
+                            </button>
                         </li>
                         <li class="quicklinks hidden-xs">
                             <span class="h-seperate"></span>
@@ -298,5 +262,16 @@
         </div>
     </div>
 </div>
+    <script type="text/ng-template" id="modal-preview">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+        <h4 class="modal-title">
+          {t}Preview{/t}
+        </h4>
+      </div>
+      <div class="modal-body clearfix no-padding">
+        <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
+      </div>
+    </script>
 </form>
 {/block}

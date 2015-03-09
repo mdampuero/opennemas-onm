@@ -713,10 +713,14 @@ admin_opinion_show:
 admin_opinion_preview:
     path:     /opinion/preview
     defaults: { _controller  : BackendBundle:Opinions:preview }
+    options:
+        expose: true
 
 admin_opinion_get_preview:
     path:     /opinion/get-preview
     defaults: { _controller  : BackendBundle:Opinions:getPreview }
+    options:
+        expose: true
 
 admin_opinion_update:
     path:     /opinion/{id}/update
