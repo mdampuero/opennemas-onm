@@ -4,8 +4,14 @@ backend_ws_keywords_list:
     options:
         expose: true
 
-backend_ws_pclave_remove_permanently:
-    path:     /pclaves/{id}/remove
-    defaults: { _controller: BackendWebServiceBundle:Keywords:removePermanently }
+backend_ws_keywords_batch_delete:
+    path:     /pclaves/batch-delete
+    defaults: { _controller: BackendWebServiceBundle:Keywords:batchDelete }
+    options:
+        expose: true
+
+backend_ws_keyword_delete:
+    path:     /pclaves/{id}/delete
+    defaults: { _controller: BackendWebServiceBundle:Keywords:delete }
     options:
         expose: true

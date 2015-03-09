@@ -1,34 +1,33 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('keywords', { title_like: '' }, 'created', 'desc', 'backend_ws_keywords_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-
-  <div class="page-navbar actions-navbar">
-    <div class="navbar navbar-inverse">
-      <div class="navbar-inner">
-        <ul class="nav quick-section">
-          <li class="quicklinks">
-            <h4>
-              <i class="fa fa-tags"></i>
-              {t}Keywords{/t}
-            </h4>
-          </li>
-        </ul>
-        <div class="all-actions pull-right">
+  <div ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('keywords', { title_like: '' }, 'created', 'desc', 'backend_ws_keywords_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
           <ul class="nav quick-section">
-            {acl isAllowed="PCLAVE_CREATE"}
-            <li>
-              <a href="{url name=admin_keyword_create}" class="btn btn-primary">
-                <i class="fa fa-plus"></i>
-                {t}Create{/t}
-              </a>
+            <li class="quicklinks">
+              <h4>
+                <i class="fa fa-tags"></i>
+                {t}Keywords{/t}
+              </h4>
             </li>
-            {/acl}
+          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              {acl isAllowed="PCLAVE_CREATE"}
+                <li>
+                  <a href="{url name=admin_keyword_create}" class="btn btn-primary">
+                    <i class="fa fa-plus"></i>
+                    {t}Create{/t}
+                  </a>
+                </li>
+              {/acl}
+            </ul>
           </div>
         </div>
       </div>
     </div>
-<!--
     <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -49,15 +48,14 @@
           </ul>
           <ul class="nav quick-section pull-right">
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
-              <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
+              <button class="btn btn-link" ng-click="deleteSelectedKeywords()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+                <i class="fa fa-trash-o fa-lg"></i>
               </button>
             </li>
           </ul>
         </div>
       </div>
-    </div> -->
-
+    </div>
     <div class="page-navbar filters-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -89,11 +87,8 @@
         </div>
       </div>
     </div>
-
     <div class="content">
-
       {render_messages}
-
       <div class="grid simple">
         <div class="grid-body no-padding">
           <div class="spinner-wrapper" ng-if="loading">
@@ -105,10 +100,10 @@
               <thead ng-if="contents.length != 0">
                 <tr>
                   <th style="width:15px;">
-                    <!-- <div class="checkbox checkbox-default">
+                    <div class="checkbox checkbox-default">
                       <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                       <label for="select-all"></label>
-                    </div> -->
+                    </div>
                   </th>
                   <th>{t}Keyword{/t}</th>
                   <th class="hidden-xs"></th>
@@ -121,10 +116,10 @@
                 </tr>
                 <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                   <td>
-                    <!-- <div class="checkbox check-default">
+                    <div class="checkbox check-default">
                       <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
-                    </div> -->
+                    </div>
                   </td>
                   <td>
                     [% content.pclave %]
@@ -146,7 +141,7 @@
                         <i class="fa fa-pencil"></i>
                         {t}Edit{/t}
                       </a>
-                      <button class="link link-danger" ng-click="removePermanently(content)" type="button">
+                      <button class="link link-danger" ng-click="deleteKeyword(content)" type="button">
                         <i class="fa fa-trash-o"></i>
                         {t}Delete{/t}
                       </button>
@@ -180,45 +175,42 @@
           </div>
         </div>
       </div>
-
     </div>
     <script type="text/ng-template" id="modal-remove-permanently">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
-          <h4 class="modal-title">
-            <i class="fa fa-trash-o"></i>
-            {t}Permanently remove item{/t}
+        <h4 class="modal-title">
+          <i class="fa fa-trash-o"></i>
+          {t}Permanently remove item{/t}
         </h4>
       </div>
       <div class="modal-body">
-          <p>{t escape=off}Are you sure that do you want remove "[% template.content.title %]"?{/t}</p>
-          <p class="alert alert-error">{t} You will not be able to restore it back.{/t}</p>
+        <p>{t escape=off}Are you sure that do you want remove "[% template.content.title %]"?{/t}</p>
+        <p class="alert alert-error">{t} You will not be able to restore it back.{/t}</p>
       </div>
       <div class="modal-footer">
-          <span class="loading" ng-if="deleting == 1"></span>
-          <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove{/t}</button>
-          <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
+        <span class="loading" ng-if="deleting == 1"></span>
+        <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove{/t}</button>
+        <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
       </div>
     </script>
-
     <script type="text/ng-template" id="modal-batch-remove-permanently">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
-          <h4 class="modal-title">
-              <i class="fa fa-trash-o"></i>
-              {t}Remove permanently selected items{/t}
-          </h4>
-        </div>
-        <div class="modal-body">
-            <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
-            <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
-        </div>
-        <div class="modal-footer">
-            <span class="loading" ng-if="deleting == 1"></span>
-            <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
-            <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
-        </div>
-
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+        <h4 class="modal-title">
+          <i class="fa fa-trash-o"></i>
+          {t}Remove permanently selected items{/t}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+        <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
+      </div>
+      <div class="modal-footer">
+        <span class="loading" ng-if="deleting == 1"></span>
+        <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
+        <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+      </div>
     </script>
-</div>
+  </div>
 {/block}

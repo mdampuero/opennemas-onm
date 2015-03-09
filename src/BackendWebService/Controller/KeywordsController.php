@@ -79,7 +79,7 @@ class KeywordsController extends Controller
      *
      * @CheckModuleAccess(module="KEYWORD_MANAGER")
      */
-    public function removePermanentlyAction($id)
+    public function deleteAction($id)
     {
         $errors  = array();
         $success = array();
@@ -114,6 +114,62 @@ class KeywordsController extends Controller
         return new JsonResponse(
             array(
                 'messages'  => array_merge($success, $errors),
+            )
+        );
+    }
+
+    /**
+     * Deletes multiple menus at once give them ids
+     *
+     * @param  Request      $request     The request object.
+     * @return JsonResponse              The response object.
+     */
+    public function batchDeleteAction(Request $request)
+    {
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        $ids = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $keyword = new \PClave();
+                $keyword->read($id);
+
+                if (!is_null($keyword->id)) {
+                    $deleted = $keyword->delete($id);
+
+                    if ($deleted) {
+                        $updated++;
+                    } else {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
+                            'type'    => 'error'
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    );
+                }
+            }
+        }
+
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'messages' => array_merge($success, $errors)
             )
         );
     }
