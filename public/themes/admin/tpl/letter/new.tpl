@@ -135,7 +135,7 @@
               <label for="metadata" class="form-label">{t}Tags{/t}</label>
               <span class="help">{t}List of words separated by words.{/t}</span>
               <div class="controls">
-                <input data-role="tagsinput" id="metadata" name="metadata" required="required"  type="text" value="{$letter->metadata|clearslash|escape:"html"}"/>
+                <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="hidden" value="{$letter->metadata|clearslash|escape:"html"}"/>
               </div>
             </div>
             <div class="form-group">
@@ -155,14 +155,14 @@
             <div class="row">
               <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
                 <div class="form-group">
-                  <div class="thumbnail-placeholder">
+                  <div class="thumbnail-placeholder ng-cloak">
                     <div class="img-thumbnail" ng-if="!photo1">
                       <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>{t}Pick an image{/t}</h5>
                       </div>
                     </div>
-                    <div class="dynamic-image-placeholder" ng-if="photo1">
+                    <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
                       <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
                       <div class="thumbnail-actions">
                         <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
@@ -174,43 +174,11 @@
                       </div>
                       <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
                     </dynamic-image>
+                    <input type="hidden" name="img1" ng-value="img1"/>
                   </div>
                 </div>
               </div>
             </div>
-
-
-            {*<!--<input type="date" name="" value="" placeholder="">{acl isAllowed='PHOTO_ADMIN'}
-            {is_module_activated name="IMAGE_MANAGER"}
-            <div id="related_media" class="form-group">
-              <label for="special-image" class="form-label">{t}Image for Special{/t}</label>
-              <div class="controls">
-                <ul class="related-images thumbnails">
-                  <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
-                    <h3 class="title">{t}Frontpage image{/t}</h3>
-                    <div class="content">
-                      <div class="image-data">
-                        <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
-                          <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
-                        </a>
-                        <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
-                      </div>
-
-                      <div class="not-set">
-                        {t}Image not set{/t}
-                      </div>
-
-                      <div class="btn-group">
-                        <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
-                        <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            {/is_module_activated}
-            {/acl}-->*}
           </div>
         </div>
       </div>
