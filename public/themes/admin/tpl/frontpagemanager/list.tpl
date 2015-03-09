@@ -35,14 +35,12 @@
         var frontpage_urls = {
             list:                  '{url name=admin_frontpage_list}',
             save_positions:        '{url name=admin_frontpage_savepositions}',
-            preview_frontpage:     '{url name=admin_frontpage_preview category=$category}',
             toggle_suggested:      '{url name=admin_content_toggle_suggested}',
             quick_info:            '{url name=admin_content_quick_info}',
             set_arquived:          '{url name=admin_content_set_archived}',
             send_to_trash:         '{url name=admin_content_send_to_trash}',
             customize_content:     '{url name=admin_content_update_property}',
-            check_version:         '{url name=admin_frontpage_last_version category=$category}',
-            get_preview_frontpage: '{url name=admin_frontpage_get_preview category=$category}',
+            check_version:         '{url name=admin_frontpage_last_version category=$category}'
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -383,7 +381,7 @@
 {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 
 {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
-{include file="frontpagemanager/modals/_modal_customize_content.tpl"}
+  {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
 {/is_module_activated}
 
 {/block}
