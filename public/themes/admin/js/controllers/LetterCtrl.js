@@ -1,7 +1,7 @@
 /**
  * Handle actions for poll inner form.
  */
-angular.module('BackendApp.controllers').controller('LetterCtarl', [
+angular.module('BackendApp.controllers').controller('LetterCtrl', [
   '$controller', '$rootScope', '$scope',
   function($controller, $rootScope, $scope) {
     'use strict';
@@ -16,10 +16,10 @@ angular.module('BackendApp.controllers').controller('LetterCtarl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo1', function(nv, ov) {
-      $scope.img1        = null;
+      $scope.img1 = null;
 
       if ($scope.photo1) {
-        $scope.img1        = $scope.photo1.id;
+        $scope.img1 = $scope.photo1.id;
       }
     }, true);
   }
