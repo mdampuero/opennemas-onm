@@ -3,7 +3,7 @@
     <label for="site_color" class="form-label">{t}Available categories for sync{/t}</label>
     <div class="controls">
       {foreach name=d from=$categories item=category}
-      <div class="col-xs-6">
+      <div class="col-sm-6">
         <div class="checkbox">
           <input id="categories_{$category->link}" name="categories[]" {if in_array($category->link, $categories_checked)}checked="checked"{/if} value="{$category->link}" type="checkbox"/>
           <label for="categories_{$category->link}">
@@ -13,7 +13,7 @@
       </div>
       {if !empty($category->submenu)}
       {foreach name=d from=$category->submenu item=subcategory}
-      <div class="col-xs-6">
+      <div class="col-sm-6">
         <div class="checkbox" style="margin-left:10px">
           <input id="categories_{$category->link}" name="categories[]" {if in_array($subcategory->link, $categories_checked)}checked="checked"{/if} value="{$subcategory->link}" type="checkbox"/>
           <label for="categories_{$category->link}">
