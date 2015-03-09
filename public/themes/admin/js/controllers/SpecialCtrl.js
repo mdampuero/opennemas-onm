@@ -27,23 +27,57 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     };
 
     /**
-     * Updates the ids and footers when photos change.
+     * Updates scope when photo1 changes.
      *
-     * @param Object nv The new values.
-     * @param Object ov The old values.
+     * @param array nv The new values.
+     * @param array ov The old values.
      */
-    $scope.$watch('photos', function(nv, ov) {
-      if (nv === ov) {
-        return false;
+    $scope.$watch('photo1', function(nv, ov) {
+      $scope.img1        = null;
+
+      if ($scope.photo1) {
+        $scope.img1 = $scope.photo1.id;
+      }
+    }, true);
+
+        /**
+     * Updates scope when relatedInFrontpage changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('contentsLeft', function(nv, ov) {
+      console.log(nv);
+      var items          = [];
+      $scope.relatedLeft = [];
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+        }
       }
 
-      $scope.footers = [];
-      $scope.ids     = [];
+      $scope.relatedLeft = angular.toJson(items);
+    }, true);
 
-      for (var i = 0; i < nv.length; i++) {
-        $scope.footers.push(nv[i].description);
-        $scope.ids.push(nv[i].id);
+    /**
+     * Updates scope when relatedInInner changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('contentsRight', function(nv, ov) {
+      console.log(nv);
+      var items           = [];
+      $scope.relatedRight = [];
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ id: nv[i].id, position: i, content_type: nv[i].content_type_name });
+        }
       }
+
+      $scope.relatedRight = angular.toJson(items);
     }, true);
   }
 ]);
