@@ -10,12 +10,15 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
 
     /**
      * Opens a modal with the preview of the article.
+     *
+     * @param {String} previewUrl    The URL to generate the preview.
+     * @param {String} getPreviewUrl The URL to get the preview.
      */
-    $scope.preview = function() {
+    $scope.preview = function(previewUrl, getPreviewUrl) {
       $scope.loading = true;
 
       var data = {'contents': $('#formulario').serializeArray()};
-      var url  = routing.generate('admin_article_preview');
+      var url  = routing.generate(previewUrl);
 
       $http.post(url, data).success(function() {
         $modal.open({
@@ -25,7 +28,7 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
           resolve: {
             template: function() {
               return {
-                src: routing.generate('admin_article_get_preview')
+                src: routing.generate(getPreviewUrl)
               };
             },
             success: function() {
@@ -38,7 +41,6 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       }).error(function() {
         $scope.loading = false;
       });
-
     };
 
     /**

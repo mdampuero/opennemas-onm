@@ -79,10 +79,10 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks hidden-xs">
-                <button class="btn btn-white" id="button_preview" ng-click="preview()" type="button">
+                <button class="btn btn-white" id="button_preview" ng-click="preview('admin_article_preview', 'admin_article_get_preview')" type="button">
                   <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }" ></i>
                   <span class="hidden-xs">{t}Preview{/t}</span>
-                </a>
+                </button>
               </li>
               <li class="quicklinks hidden-xs">
                 <span class="h-seperate"></span>
