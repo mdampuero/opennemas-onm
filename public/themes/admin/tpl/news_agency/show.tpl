@@ -151,11 +151,5 @@
             </div>
         </div>
     </div>
-
-    {if $imported}
-    <div class="already_imported">
-        {t}This article was imported before. Take care of it.{/t}
-    </div><!-- / -->
-    {/if}
 </div>
 {/block}

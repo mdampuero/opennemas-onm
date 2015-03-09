@@ -73,8 +73,8 @@
         </ul>
         <ul class="nav quick-section pull-right">
           <li>
-            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
-              {t}Import selected{/t}
+            <a href="#" class="btn btn-link" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
+              {t}Import{/t}
             </a>
           </li>
         </ul>

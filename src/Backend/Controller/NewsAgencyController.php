@@ -98,19 +98,10 @@ class NewsAgencyController extends Controller
         );
 
         $message = '';
-        if ($minutesFromLastSync > 100) {
-            $message = _('A long time ago from synchronization.');
-        } elseif ($minutesFromLastSync > 10) {
-            $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
-        }
-        if ($message) {
+        if ($minutesFromLastSync > 10) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                $message
-                . _(
-                    'Try syncing the news list from server by clicking '
-                    .'in "Sync with server" button above'
-                )
+                sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync)
             );
         }
 
@@ -268,12 +259,17 @@ class NewsAgencyController extends Controller
                 $this->generateUrl('admin_news_agency', array('page' => $page))
             );
         }
+        if ($alreadyImported) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('This content was imported before. You may cause a content duplication while importing it.')
+            );
+        }
 
         return $this->render(
             'news_agency/show.tpl',
             array(
                 'element'  => $element,
-                'imported' => $alreadyImported,
             )
         );
     }
