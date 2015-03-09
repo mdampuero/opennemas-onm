@@ -109,8 +109,8 @@
                         </li>
                         <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
                         <li class="quicklinks">
-                            <button class="btn btn-white" id="button_previewfrontpage" title="{t}Preview frontpage with actual content positions{/t}" ng-click="preview('{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}')" type="button">
-                              <span class="fa fa-desktop"></span>
+                            <button class="btn btn-white" id="button_previewfrontpage" ng-click="preview('{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}')" title="{t}Preview frontpage with actual content positions{/t}" type="button">
+                              <span class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></span>
                               {t}Preview{/t}
                             </button>
                         </li>
@@ -361,14 +361,17 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
     <h4 class="modal-title">
-      {t}Change the layout of this frontpage{/t}
+      {t}Preview{/t}
+      {if $category eq 0}
+        ({t}Home{/t})
+    {else}
+        ({$datos_cat[0]->title})
+    {/if}
     </h4>
   </div>
-  <div class="modal-body clearfix">
-    <i class="fa fa-circle-o-notch fa-spin" ng-if="loading"></i>
-    <iframe ng-src="[% src %]" frameborder="0" ng-if="preview"></iframe>
+  <div class="modal-body clearfix no-padding">
+    <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
   </div>
-</div>
 </script>
 
 
