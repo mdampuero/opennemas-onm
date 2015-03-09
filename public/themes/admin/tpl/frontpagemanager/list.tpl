@@ -131,7 +131,7 @@
             <div class="navbar-inner">
                 <ul class="nav quick-section pull-left">
                     <li class="quicklinks">
-                      <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                      <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
                         <i class="fa fa-check fa-lg"></i>
                       </button>
                     </li>
@@ -172,9 +172,9 @@
             <div class="navbar-inner">
                 <ul class="nav quick-section">
                 <li class="quicklinks">
-                  <span class="info">Managing frontpage:</span>
+                  <span class="info">{t}Managing frontpage:{/t}</span>
                 </li>
-                    <!-- {acl hasCategoryAccess=0}
+                    {*<!-- {acl hasCategoryAccess=0}
                         <li class="quicklinks">
                             <a class="btn btn-link" href="{url name=admin_frontpage_list category=home}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
                         </li>
@@ -207,7 +207,7 @@
                             {/acl}
                         {/if}
                     {/foreach}
-                    -->
+                    -->*}
 
                     <li class="quicklinks">
                       <select name="category" id="categoryItem">
