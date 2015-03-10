@@ -8,7 +8,7 @@
         <h5>{t}Articles in left column{/t}</h5>
         <div class="ng-cloak" ui-sortable ng-model="contentsLeft">
           <div class="related-item" ng-repeat="content in contentsLeft">
-            <div class="related-item-info">[% content.content_type_name %] - [% content.title %]</div>
+            <div class="related-item-info">[% content.content_type_l10n_name %] - [% content.title %]</div>
             <button class="btn btn-white" ng-click="removeItem('contentsLeft', $index)">
               <i class="fa fa-times text-danger"></i>
             </button>
@@ -22,7 +22,7 @@
         <h5>{t}Articles in right column{/t}</h5>
         <div class="ng-cloak" ui-sortable ng-model="contentsRight">
           <div class="related-item" ng-repeat="content in contentsRight">
-            <div class="related-item-info">[% content.content_type_name %] - [% content.title %]</div>
+            <div class="related-item-info">[% content.content_type_l10n_name %] - [% content.title %]</div>
             <button class="btn btn-white" ng-click="removeItem('contentsRight', $index)">
               <i class="fa fa-times text-danger"></i>
             </button>
