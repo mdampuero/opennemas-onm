@@ -478,7 +478,7 @@ angular.module('onm.picker')
         }
 
         $rootScope.$broadcast(
-          'contentPicker.insert',
+          'ContentPicker.insert',
           {
             items: items,
             target: $scope.picker.target
