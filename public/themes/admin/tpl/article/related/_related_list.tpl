@@ -14,7 +14,7 @@
             </button>
           </div>
         </div>
-        <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="10" media-picker-target="relatedInFrontpage" media-picker-type="album,article,opinion,poll,video" media-picker-view="list-item">
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInFrontpage">
           <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add contents{/t}</h5>
         </div>
       </div>
@@ -28,7 +28,7 @@
             </button>
           </div>
         </div>
-        <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="10" media-picker-target="relatedInInner" media-picker-type="album,article,opinion,poll,video" media-picker-view="list-item">
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInInner">
           <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add contents{/t}</h5>
         </div>
       </div>
@@ -45,7 +45,7 @@
               </button>
             </div>
           </div>
-          <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="10" media-picker-target="relatedInHome" media-picker-type="album,article,opinion,poll,video" media-picker-view="list-item">
+          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInHome">
             <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add contents{/t}</h5>
           </div>
         </div>
@@ -57,7 +57,7 @@
               <i class="fa fa-times text-danger"></i>
             </button>
           </div>
-          <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="galleryForFrontpage" media-picker-type="album" media-picker-view="list-item">
+          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForFrontpage" content-picker-type="album">
             <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add gallery{/t}</h5>
           </div>
         </div>
@@ -71,7 +71,7 @@
               <i class="fa fa-times text-danger"></i>
             </button>
           </div>
-          <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="galleryForInner" media-picker-type="album" media-picker-view="list-item">
+          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForInner" content-picker-type="album">
             <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add gallery{/t}</h5>
           </div>
         </div>
@@ -83,7 +83,7 @@
               <i class="fa fa-times text-danger"></i>
             </button>
           </div>
-          <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="1" media-picker-target="galleryForHome" media-picker-type="album" media-picker-view="list-item">
+          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForHome" content-picker-type="album">
             <h5 style="cursor: pointer; margin: 0; padding: 20px 0; text-align: center;">{t}Add gallery{/t}</h5>
           </div>
         </div>
