@@ -126,9 +126,11 @@ class NewsletterManager extends BaseManager
                         if ($content->content_type == '4') {
                             $item->author = new \User($content->fk_author);
                         }
-
+                        //Fetch video thumbnails
+                        if ($content->content_type == '9') {
+                            $item->thumb = $content->getThumb();
+                        }
                     }
-
                 }
             }
         }
