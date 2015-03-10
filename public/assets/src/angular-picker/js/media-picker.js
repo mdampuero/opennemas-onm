@@ -1,18 +1,6 @@
 'use strict';
 
-/**
- * @ngdoc module
- * @name  onm.mediaPicker
- *
- * @requires angularFileUpload
- * @requires onm.DynamicImage
- * @requires onm.routing
- *
- * @description
- *   The `onm.MediaPicker` module provides a service and a controller to upload
- *   and select images from a modal window.
- */
-angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm.routing'])
+angular.module('onm.picker')
   /**
    * @ngdoc directive
    * @name  mediaPicker
@@ -40,12 +28,12 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
            * @type string
            */
           var contentTpl = {
-            explore: "<div class=\"media-picker-panel explore-panel\" ng-class=\"{ 'active': picker.isModeActive('explore') }\">\
-              <div class=\"media-picker-panel-header clearfix\">\
+            explore: "<div class=\"picker-panel explore-panel\" ng-class=\"{ 'active': picker.isModeActive('explore') }\">\
+              <div class=\"picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.explore.header %]</h4>\
               </div>\
-              <div class=\"media-picker-panel-body\">\
-                <div class=\"media-picker-panel-topbar\">\
+              <div class=\"picker-panel-body\">\
+                <div class=\"picker-panel-topbar\">\
                   <ul>\
                     <li ng-if=\"isTypeEnabled('photo')\">\
                       <select name=\"month\" ng-model=\"$parent.date\">\
@@ -69,17 +57,17 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                       <select name=\"category\" ng-model=\"$parent.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
                         <option value=\"[% category.id %]\" ng-repeat=\"category in picker.params.explore.categories\">\
-                          [% cateogory.name %]\
+                          [% category.name %]\
                         </option>\
                       </select>\
                     </li>\
                   </ul>\
                 </div>\
-                <div class=\"media-picker-panel-wrapper\">\
-                  <div class=\"media-picker-panel-content\" when-scrolled=\"scroll()\">\
+                <div class=\"picker-panel-wrapper\">\
+                  <div class=\"picker-panel-content\" when-scrolled=\"scroll()\">\
                     <div class=\"items\" ng-if=\"!searchLoading\">\
                       <div ng-if=\"uploader.queue.length > 0\">\
-                        <div ng-class=\"{ 'media-item': picker.views.enabled == 'thumbnail', 'list-item': picker.views.enabled == 'list-item' }\" ng-repeat=\"item in uploader.queue\">\
+                        <div ng-repeat=\"item in uploader.queue\">\
                           <div class=\"img-thumbnail\">\
                             <i class=\"fa fa-picture-o fa-5x\"></i>\
                             <div class=\"progress\" style=\"margin-bottom: 0;\">\
@@ -88,22 +76,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                           </div>\
                         </div>\
                       </div>\
-                      <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
-                        <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
-                          <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
-                            <dynamic-image class=\"img-thumbnail\" instance=\""
-                              + instanceMedia
-                              + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
-                            <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
-                          </div>\
-                        </div>\
-                      </div>\
-                      <div ng-if=\"picker.views.enabled == 'list-item'\">\
-                        <div class=\"list-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
-                          <div>\
-                            [% content.content_type_l10n_name %] - [% content.title %]\
-                          </div>\
-                        </div>\
+                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
+                        <dynamic-image class=\"img-thumbnail\" instance=\""
+                          + instanceMedia
+                          + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
+                        <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
                       </div>\
                     </div>\
                     <div class=\"items-loading\" ng-if=\"searchLoading\">\
@@ -111,12 +88,11 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                     </div>\
                   </div>\
                 </div>\
-                <div class=\"media-picker-panel-sidebar\">\
-                  <div class=\"media-picker-panel-sidebar-header\">\
-                    <h4 ng-if=\"picker.views.enabled == 'thumbnail'\">[% picker.params.explore.thumbnailDetails %]</h4>\
-                    <h4 ng-if=\"picker.views.enabled == 'list-item'\">[% picker.params.explore.itemDetails %]</h4>\
+                <div class=\"picker-panel-sidebar\">\
+                  <div class=\"picker-panel-sidebar-header\">\
+                    <h4>[% picker.params.explore.thumbnailDetails %]</h4>\
                   </div>\
-                  <div class=\"media-picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
+                  <div class=\"picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)\">\
                       <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
                         + instanceMedia
@@ -159,7 +135,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                   </div>\
                 </div>\
               </div>\
-              <div class=\"media-picker-panel-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
+              <div class=\"picker-panel-footer\" ng-class=\"{ 'collapsed': selected.items.length == 0 }\">\
                 <ul class=\"pull-left\"  ng-if=\"selected.items.length > 0\">\
                   <li>\
                     <i class=\"fa fa-check fa-lg\" ng-click=\"selected.ids = [];selected.items = []\"></i>\
@@ -181,13 +157,13 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
               </div>\
             </div>",
 
-            upload: "<div class=\"media-picker-panel upload-panel\" ng-class=\"{ 'active': picker.isModeActive('upload') }\">\
-              <div class=\"media-picker-panel-header clearfix\">\
+            upload: "<div class=\"picker-panel upload-panel\" ng-class=\"{ 'active': picker.isModeActive('upload') }\">\
+              <div class=\"picker-panel-header clearfix\">\
                 <h4 class=\"pull-left\">[% picker.params.upload.header %]</h4>\
               </div>\
-              <div class=\"media-picker-panel-body\">\
-                <div class=\"media-picker-panel-wrapper\">\
-                  <div class=\"media-picker-panel-content\">\
+              <div class=\"picker-panel-body\">\
+                <div class=\"picker-panel-wrapper\">\
+                  <div class=\"picker-panel-content\">\
                     <div class=\"drop-zone-text\">\
                       <h4>\
                         <div>\
@@ -214,21 +190,21 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
            *
            * @type string
            */
-          var pickerTpl = "<div class=\"media-picker\">\
-            <div class=\"media-picker-backdrop\"></div>\
-            <div class=\"media-picker-dialog\">\
-                <div class=\"media-picker-close\" ng-click=\"close()\">\
+          var pickerTpl = "<div class=\"picker\">\
+            <div class=\"picker-backdrop\"></div>\
+            <div class=\"picker-dialog\">\
+                <div class=\"picker-close\" ng-click=\"close()\">\
                   <i class=\"fa fa-lg fa-times pull-right\"></i>\
                 </div>\
-                <div class=\"media-picker-loading\" ng-if=\"loading\">\
+                <div class=\"picker-loading\" ng-if=\"loading\">\
                   <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
                 </div>\
-                <div class=\"media-picker-sidebar\" ng-if=\"!loading\">\
+                <div class=\"picker-sidebar\" ng-if=\"!loading\">\
                   <ul>\
                     [sidebar]\
                   </ul>\
                 </div>\
-                <div class=\"media-picker-content\" ng-if=\"!loading\">\
+                <div class=\"picker-content\" ng-if=\"!loading\">\
                   [content]\
                 </div>\
               </div>\
@@ -289,22 +265,17 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                 'video'
               ]
             },
-            views: {
-              enabled:   attrs.mediaPickerView ?
-                attrs.mediaPickerView : 'thumbnail',
-              available: [ 'list-item', 'thumbnail' ]
-            },
 
             /**
              * Closes the current media picker.
              */
             close: function () {
               // Reset html and body
-              $('html, body').removeClass('media-picker-open');
+              $('html, body').removeClass('picker-open');
 
               // Delete the current media picker
-              $('.media-picker').remove();
-              $('.media-picker-backdrop').remove();
+              $('.picker').remove();
+              $('.picker-backdrop').remove();
             },
 
             /**
@@ -420,7 +391,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
             }
           };
 
-          // Bind click event to open media-picker
+          // Bind click event to open the picker
           elm.bind('click', function() {
             $scope.reset();
 
@@ -432,6 +403,10 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
               for (var i = 0; i < modes.length; i++) {
                 $scope.picker.setMode(modes[i]);
               }
+            }
+
+            if (attrs.mediaPickerModeActive) {
+              $scope.picker.enable(attrs.mediaPickerModeActive);
             }
 
             // Initialize the media picker available types
@@ -464,7 +439,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
             $('body').append(e);
 
             // Make the page non-scrollable
-            $('body').addClass('media-picker-open');
+            $('body').addClass('picker-open');
 
             $scope.loading = true;
 
@@ -598,8 +573,8 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
       $scope.explore = function() {
         // Add a timeout to fix wrong epp calculation before full rendering
         $timeout(function() {
-          var h = $('.explore-panel .media-picker-panel-content').outerHeight();
-          var w = $('.explore-panel .media-picker-panel-content').outerWidth();
+          var h = $('.explore-panel .picker-panel-content').outerHeight();
+          var w = $('.explore-panel .picker-panel-content').outerWidth();
 
           // (Content height - padding) / (Item height + Item right margin)
           var rows = Math.ceil((h - 20) / 135);
