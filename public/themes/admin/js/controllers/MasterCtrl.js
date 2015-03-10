@@ -71,14 +71,16 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @param {String} name The modal name.
      */
-    $scope.open = function(name) {
+    $scope.open = function(name, selected) {
       $modal.open({
         templateUrl: name,
         backdrop: 'static',
         controller: 'modalCtrl',
         resolve: {
           template: function() {
-            return null;
+            return {
+              selected: selected
+            };
           },
           success: function() {
             return null;
