@@ -62,7 +62,7 @@
             @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
 
             @Common/src/angular-dynamic-image/less/main.less,
-            @Common/src/angular-media-picker/less/main.less,
+            @Common/src/angular-picker/less/main.less,
             @Common/src/sidebar/less/main.less,
 
             @Common/src/opennemas-webarch/css/base/*,
@@ -207,7 +207,9 @@
             @Common/src/angular-item-service/itemService.js,
             @Common/src/angular-renderer/renderer.js,
             @Common/src/angular-routing/routing.js,
-            @Common/src/angular-media-picker/js/media-picker.js,
+            @Common/src/angular-picker/js/picker.js,
+            @Common/src/angular-picker/js/content-picker.js,
+            @Common/src/angular-picker/js/media-picker.js,
             @Common/src/angular-messenger/messenger.js,
             @Common/src/angular-resizable/resizable.js,
             @Common/src/angular-scroll/angular-scroll.js,
