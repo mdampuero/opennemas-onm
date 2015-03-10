@@ -15,7 +15,7 @@
                 <div class="all-actions pull-right">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
-                            <a class="btn btn-primary" href="{url name=admin_opinion_author_create}" title="{t}Create new author{/t}">
+                            <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}">
                                 <i class="fa fa-plus"></i>
                                 {t}Create{/t}
                             </a>
@@ -129,7 +129,7 @@
                                     [% content.name %]
                                     <div class="listing-inline-actions">
                                         {acl isAllowed="AUTHOR_UPDATE"}
-                                            <a class="link" href="[% edit(content.id, 'admin_opinion_author_show') %]" title="{t}Edit user{/t}">
+                                            <a class="link" href="[% edit(content.id, 'admin_author_show') %]" title="{t}Edit user{/t}">
                                                 <i class="fa fa-pencil"></i> {t}Edit{/t}
                                             </a>
                                         {/acl}
