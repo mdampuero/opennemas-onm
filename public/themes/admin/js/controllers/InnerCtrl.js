@@ -78,6 +78,21 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       $scope.insertInModel(args.target, args.items);
     });
 
+    /**
+     * Insert the selected items in media picker in the target element.
+     *
+     * @param  Object event The event object.
+     * @param  Object args  The event arguments.
+     */
+    $rootScope.$on('ContentPicker.insert', function (event, args) {
+      if (/editor.*/.test(args.target)) {
+        var target = args.target.replace('editor.', '');
+        return $scope.insertInCKEditor(target, args.items);
+      }
+
+      $scope.insertInModel(args.target, args.items);
+    });
+
     // Initialize the scope with the input/select values.
     $('input, select').each(function() {
       var name = $(this).attr('name');
