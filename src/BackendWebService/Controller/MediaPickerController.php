@@ -156,7 +156,41 @@ class MediaPickerController extends Controller
      */
     private function exploreMode()
     {
+        $contentTypes = \ContentManager::getContentTypes();
+        $contentTypesFiltered = array();
+
+        foreach ($contentTypes as $contentType) {
+            switch ($contentType['name']) {
+                case 'advertisement':
+                    $moduleName = 'ads';
+                    break;
+                case 'attachment':
+                    $moduleName = 'file';
+                    break;
+                case 'photo':
+                    $moduleName = 'image';
+                    break;
+                case 'static_page':
+                    $moduleName = 'static_pages';
+                    break;
+                default:
+                    $moduleName = $contentType['name'];
+                    break;
+            }
+            $moduleName = strtoupper($moduleName.'_MANAGER');
+
+            if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
+                \Onm\Module\ModuleManager::isActivated($moduleName)
+            ) {
+                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
+            }
+        }
+
+        $ccm = \ContentCategoryManager::get_instance();
+
         return [
+            'allCategories'    => _('All categories'),
+            'allContentTypes'  => _('All content types'),
             'allMonths'        => _('All months'),
             'thumbnailDetails' => _('Thumbnail details'),
             'itemDetails'      => _('Item details'),
@@ -165,8 +199,10 @@ class MediaPickerController extends Controller
             'insert'           => _('Insert'),
             'itemsSelected'    => _('items selected'),
             'menuItem'         => _('Browse'),
-            'dates'            => $this->getDates(),
             'search'           => _('Search by name'),
+            'categories'       => $ccm->findAll(),
+            'contentTypes'     => $contentTypesFiltered,
+            'dates'            => $this->getDates(),
         ];
     }
 
