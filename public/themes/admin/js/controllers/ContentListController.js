@@ -913,6 +913,15 @@ angular.module('BackendApp.controllers').controller('ContentListController', [
     }
 
     /**
+     * Reloads the image list on media picker close event.
+     */
+    $scope.$on('MediaPicker.close', function() {
+      if ($scope.criteria.content_type_name === 'photo') {
+        $scope.list($scope.route);
+      }
+    });
+
+    /**
      * Refresh the list of elements when some parameter changes.
      *
      * @param array newValues The new values
