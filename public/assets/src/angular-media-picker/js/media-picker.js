@@ -217,7 +217,7 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
           var pickerTpl = "<div class=\"media-picker\">\
             <div class=\"media-picker-backdrop\"></div>\
             <div class=\"media-picker-dialog\">\
-                <div class=\"media-picker-close\">\
+                <div class=\"media-picker-close\" ng-click=\"close()\">\
                   <i class=\"fa fa-lg fa-times pull-right\"></i>\
                 </div>\
                 <div class=\"media-picker-loading\" ng-if=\"loading\">\
@@ -466,11 +466,6 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
             // Make the page non-scrollable
             $('body').addClass('media-picker-open');
 
-            // Hide and destroy the media picker
-            e.find('.media-picker-close').bind('click', function() {
-              $scope.picker.close();
-            });
-
             $scope.loading = true;
 
             var url = routing.generate(
@@ -579,6 +574,18 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
         if ($scope.picker.isTypeEnabled(item.content_type_name)) {
           $scope.contents.unshift(item);
         }
+      };
+
+      /**
+       * @function close
+       * @memberof MediaPickerCtrl
+       *
+       * @description
+       *   Closes the media picker and launches the media picker close event.
+       */
+      $scope.close = function() {
+        $rootScope.$broadcast('MediaPicker.close');
+        $scope.picker.close();
       };
 
       /**
