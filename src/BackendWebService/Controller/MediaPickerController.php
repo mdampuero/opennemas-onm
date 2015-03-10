@@ -22,6 +22,7 @@ class MediaPickerController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
         $contentTypes = $request->query->filter('content_type_name', 'photo', FILTER_SANITIZE_STRING);
+        $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
 
         $filter = [ "in_litter = 0" ];
@@ -35,7 +36,7 @@ class MediaPickerController extends Controller
                 $types[] = "content_type_name = '$type'";
             }
 
-            $filter[] = implode(' OR ', $types);
+            $filter[] = '(' . implode(' OR ', $types) . ')';
         }
 
         if (!empty($date)) {
@@ -46,6 +47,9 @@ class MediaPickerController extends Controller
             $filter[] = "(description LIKE '%$title%' OR title LIKE '%$title%')";
         }
 
+        if (!empty($category)) {
+            $filter[] = "(category_name = '$category')";
+        }
 
         $em = $this->get('entity_repository');
 
