@@ -78,16 +78,18 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
                 <div class=\"media-picker-panel-wrapper\">\
                   <div class=\"media-picker-panel-content\" when-scrolled=\"scroll()\">\
                     <div class=\"items\" ng-if=\"!searchLoading\">\
-                      <div ng-class=\"{ 'media-item': picker.views.enabled == 'thumbnail', 'list-item': picker.views.enabled == 'list-item' }\" ng-repeat=\"item in uploader.queue\">\
-                        <div class=\"img-thumbnail\">\
-                          <i class=\"fa fa-picture-o fa-5x\"></i>\
-                          <div class=\"progress\" style=\"margin-bottom: 0;\">\
-                            <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
+                      <div ng-if=\"uploader.queue.length > 0\">\
+                        <div ng-class=\"{ 'media-item': picker.views.enabled == 'thumbnail', 'list-item': picker.views.enabled == 'list-item' }\" ng-repeat=\"item in uploader.queue\">\
+                          <div class=\"img-thumbnail\">\
+                            <i class=\"fa fa-picture-o fa-5x\"></i>\
+                            <div class=\"progress\" style=\"margin-bottom: 0;\">\
+                              <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
+                            </div>\
                           </div>\
                         </div>\
                       </div>\
                       <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
-                        <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
+                        <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
                           <div ng-if=\"picker.views.enabled == 'thumbnail'\">\
                             <dynamic-image class=\"img-thumbnail\" instance=\""
                               + instanceMedia
@@ -574,7 +576,9 @@ angular.module('onm.mediaPicker', ['angularFileUpload', 'onm.dynamicImage', 'onm
        * @param Object item The item to add.
        */
       $scope.addItem = function(item) {
-        $scope.contents.unshift(item);
+        if ($scope.picker.isTypeEnabled(item.content_type_name)) {
+          $scope.contents.unshift(item);
+        }
       };
 
       /**
