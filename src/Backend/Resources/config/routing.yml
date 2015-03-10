@@ -592,30 +592,12 @@ admin_newsletter_subscriptor_create:
 admin_newsletter_subscriptor_show:
     path:     /newsletters/subscriptor/{id}/show
     defaults: { _controller  : BackendBundle:NewsletterSubscriptors:show }
+    options:
+        expose: true
 
 admin_newsletter_subscriptor_update:
     path:     /newsletters/subscriptor/{id}/update
     defaults: { _controller  : BackendBundle:NewsletterSubscriptors:update }
-
-admin_newsletter_subscriptor_delete:
-    path:     /newsletters/subscriptor/{id}/delete
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:delete }
-
-admin_newsletter_subscriptor_toggle_subscription:
-    path:     /newsletters/subscriptor/{id}/toggle-subscription
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:toggleSubscription }
-
-admin_newsletter_subscriptor_toggle_activated:
-    path:     /newsletters/subscriptor/{id}/toggle-activated
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:toggleActivated }
-
-admin_newsletter_subscriptor_batch_delete:
-    path:     /newsletters/subscriptors/batch-delete
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:batchDelete }
-
-admin_newsletter_subscriptors_batch_subscribe:
-    path:     /newsletters/subscriptors/batch-subscribe
-    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:batchSubscribe }
 
 # Keywork controller routes
 admin_keywords:

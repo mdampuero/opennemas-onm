@@ -574,8 +574,6 @@ class ContentController extends Controller
             );
         }
 
-
-
         return new JsonResponse(
             array(
                 'content_status' => $status,

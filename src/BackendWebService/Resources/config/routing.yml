@@ -42,6 +42,10 @@ backend_ws_newsletter:
     resource: @BackendWebServiceBundle/Resources/config/routing/newsletter.yml
     prefix:   /
 
+backend_ws_newsletter_subscriptor:
+    resource: @BackendWebServiceBundle/Resources/config/routing/newsletter_subscriptors.yml
+    prefix:   /
+
 backend_ws_content:
     resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
     prefix:   /

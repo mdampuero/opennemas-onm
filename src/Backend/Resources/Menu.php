@@ -232,7 +232,7 @@ $menuXml = [
             ],
             [
                 "id"          => "newsletter_manager",
-                "title"       => _("Newsletter"),
+                "title"       => _("Newsletters"),
                 "icon"        => "fa fa-envelope",
                 "link"        => url('admin_newsletters'),
                 "module_name" => "NEWSLETTER_MANAGER",

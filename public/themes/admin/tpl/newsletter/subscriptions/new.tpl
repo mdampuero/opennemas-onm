@@ -17,21 +17,21 @@
                     <h5>{if !is_object($user)}
                         {t}Creating subscriptor{/t}
                     {else}
-                        {t 1=$user->name}Editing subscriptor "%1"{/t}
+                        {t}Editing subscriptor{/t}
                     {/if}</h5>
                 </li>
             </ul>
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a href="{url name=admin_newsletter_subscriptors}" title="{t}Go back to newsletter manager{/t}">
+                        <a href="{url name=admin_newsletter_subscriptors}" title="{t}Go back to list{/t}" class="btn btn-link">
                             <span class="fa fa-reply"></span>
-                            {t}Newsletters{/t}
                         </a>
                     </li>
                     <li class="quicklinks"><span class="h-seperate"></span></li>
                     <li class="quicklinks">
                         <button type="submit" class="btn btn-primary">
+                          <span class="fa fa-save"></span>
                             {t}Save{/t}
                         </button>
                     </li>
@@ -78,24 +78,28 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="subscribed" class="form-label">{t}Subscribed{/t}</label>
+                        <label for="subscribed" class="form-label">
+                          {t}Subscribed{/t}
+                          <div class="help">{t}If is subscribed, the user email address will be available on the account provider{/t}</div>
+                        </label>
                         <div class="controls">
                             <select name="subscription" id="subscribed">
                                 <option value="1" {if is_null($user->subscription) || $user->subscription eq 1 }selected="selected"{/if}>{t}Yes{/t}</option>
                                 <option value="0" {if (isset($user->subscription)) && $user->subscription eq 0}selected="selected"{/if}>{t}No{/t}</option>
                             </select>
-                            <div class="help-block">{t}If is subscribed, the user email address will be available on the account provider{/t}</div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="subscribed" class="form-label">{t}Activated{/t}</label>
+                        <label for="subscribed" class="form-label">
+                          {t}Activated{/t}
+                          <div class="help">{t}If is activated means that the user is ready to receive newsletters{/t}</div>
+                        </label>
                         <div class="controls">
                             <select name="status" id="activated">
                                 <option value="2" {if is_null($user) || $user->status eq 2}selected="selected"{/if}>{t}Yes{/t}</option>
                                 <option value="3" {if $user->status eq 3 || $user->status eq 1}selected="selected"{/if}>{t}No{/t}</option>
                             </select>
-                            <div class="help-block">{t}If is activated means that the user is ready to receive newsletters{/t}</div>
                         </div>
                     </div>
 

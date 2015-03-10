@@ -7,43 +7,43 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_newsletter_subscriptors}" name="formulario" id="formulario">
+<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: 0 }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
-<div class="page-navbar actions-navbar">
+  <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t}
-                    </h4>
-                </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-                <li class="quicklinks">
-                    <h5>{t}Subscriptions{/t}</h5>
-                </li>
-            </ul>
-            <div class="all-actions pull-right">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <a class="btn btn-link" href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
-                            <span class="fa fa-reply"></span>
-                            {t}Newsletters{/t}
-                        </a>
-                    </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks">
-                        <a href="{url name=admin_newsletter_subscriptor_create}" class="btn btn-primary" accesskey="N">
-                            <span class="fa fa-plus"></span>
-                            {t}Create{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-home fa-lg"></i>
+              {t}Newsletters{/t}
+            </h4>
+          </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
+          <li class="quicklinks">
+            <h5>{t}Subscriptions{/t}</h5>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <a class="btn btn-white" href="{url name=admin_newsletters}" title="{t}Go back to newsletter manager{/t}">
+                <span class="fa fa-reply"></span>
+                <span class="hidden-xs">{t}Newsletters{/t}</span>
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <a href="{url name=admin_newsletter_subscriptor_create}" class="btn btn-primary" accesskey="N">
+                <span class="fa fa-plus"></span>
+                {t}Create{/t}
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
 <!-- <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
@@ -51,7 +51,7 @@
         <div class="navbar-inner">
             <ul class="nav quick-section pull-left">
                 <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="selected.contents = []; selected.all = 0" tooltip="Clear selection" tooltip-placement="right"type="button">
+                  <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
                     <i class="fa fa-check fa-lg"></i>
                   </button>
                 </li>
@@ -85,153 +85,141 @@
             </ul>
         </div>
     </div>
-</div> -->
+  </div> -->
 
-<div class="page-navbar filters-navbar">
+  <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="m-r-10 input-prepend inside search-input no-boarder">
-                    <span class="add-on">
-                        <span class="fa fa-search fa-lg"></span>
-                    </span>
-                    <input class="no-boarder" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" placeholder="{t}Search by name{/t}" type="search"/>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <select name="filters[subscription]" id="filters_subscription">
-                        <option value="-1">{t}All{/t}</option>
-                        <option value="1"{if $smarty.request.filters.subscription==1} selected="selected"{/if}>{t}Subscribed{/t}</option>
-                        <option value="0"{if isset($smarty.request.filters.subscription) && $smarty.request.filters.subscription==0} selected="selected"{/if}>{t}No subscribed{/t}</option>
-                    </select>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <button type="submit" class="btn btn-search">{t}Filter{/t}</button>
-                </li>
-                <li class="quicklinks">
-                    <span class="info">
-                        {t}Results{/t}: {$pager->_totalItems}
-                    </span>
-                </li>
-            </ul>
-            <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks form-inline pagination-links">
-                    <div class="btn-group">
-                        <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
-                            <i class="fa fa-chevron-left"></i>
-                        </button>
-                        <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
-                            <i class="fa fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </li>
-                <input type="hidden" name="page" id="filters_page" value="{$smarty.request.page|default:'1'}" />
-            </ul>
-        </div>
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="m-r-10 input-prepend inside search-input no-boarder">
+            <span class="add-on">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name or email{/t}" type="search"/>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <select name="filters[subscription]" id="filters_subscription" class="select2" ng-model="criteria.subscription">
+              <option value="-1">{t}All{/t}</option>
+              <option value="1">{t}Subscribed{/t}</option>
+              <option value="0">{t}No subscribed{/t}</option>
+            </select>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks hidden-xs">
+            <span class="info">
+              [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+            </span>
+          </li>
+          <li class="quicklinks form-inline pagination-links">
+            <div class="btn-group">
+              <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
+                <i class="fa fa-chevron-left"></i>
+              </button>
+              <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
+                <i class="fa fa-chevron-right"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="content">
+  <div class="content">
 
     {render_messages}
 
     <div class="grid simple">
-        <div class="grid-body no-padding">
-
-            <table class="table table-hover table-condensed">
-                <thead>
-                    <tr>
-                        <th style="width:10px"><input type="checkbox" class="toggleallcheckbox" style="cursor:pointer;" /></th>
-                        <th>{t}Name{/t}</th>
-                        <th>{t}Email{/t}</th>
-                        <th class="left">{t}Status{/t}</th>
-                        <th class="center" style="width:10px">{t}Activated{/t}</th>
-                        <th class="center" style="width:10px">{t}Subscribed{/t}</th>
-                        <th class="center nowrap" style="width:10px">{t}Actions{/t}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach name=c from=$users item=user}
-                     <tr>
-                        <td class="center">
-                            <input type="checkbox" class="minput" name="cid[]" value="{$user->id}" style="cursor:pointer;" />
-                        </td>
-                        <td class="left">
-                            {$user->firstname}&nbsp;{$user->lastname} {$user->name}
-                        </td>
-                        <td class="left">
-                            {$user->email}
-                        </td>
-                        <td class="left">
-                            {if      $user->status eq 0} {t}Mail sent.Waiting for user{/t}
-                            {elseif  $user->status eq 1} {t}Accepted by user{/t}
-                            {elseif  $user->status eq 2} {t}Accepted by administrator{/t}
-                            {elseif  $user->status eq 3} {t}Disabled by administrator{/t}
-                            {/if}
-                        </td>
-                        <td class="center">
-                            {if $user->status eq 0 || $user->status eq 3}
-                                <a href="{url name=admin_newsletter_subscriptor_toggle_activated id=$user->id}" class="newsletterFlag">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" title="Habilitar" /></a>
-                            {else}
-                                <a href="{url name=admin_newsletter_subscriptor_toggle_activated id=$user->id}" class="newsletterFlag">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" title="Deshabilitar" /></a>
-                            {/if}
-                        </td>
-                        <td class="center">
-                            <a href="{url name=admin_newsletter_subscriptor_toggle_subscription id=$user->id}" class="newsletterFlag">
-                            {if $user->subscription eq 0}
-                                <img src="{$params.IMAGE_DIR}subscription_0-16x16.png" title="Suscribir" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}subscription_1-16x16.png" title="Anular suscripción" />
-                            {/if}
-                            </a>
-                        </td>
-                        <td class="right nowrap">
-                            <div class="btn-group">
-                                <a href="{url name=admin_newsletter_subscriptor_show id=$user->id}" title="{t}Edit user{/t}" class="btn">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a  href ="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
-                                    class="del btn btn-danger"
-                                    data-title="{$user->email}"
-                                    data-url="{url name=admin_newsletter_subscriptor_delete id=$user->id}"
-                                    title="{t}Delete user{/t}">
-                                    <i class="icon-white fa fa-trash"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {foreachelse}
-                    <tr>
-                        <td class="empty" colspan="7">{t}There is no subscriptors yet{/t}</td>
-                    </tr>
-                    {/foreach}
-                </tbody>
-
-                <tfoot>
-                    <tr>
-                        <td colspan="7" class="center">
-                            <div class="pagination">
-                                {$pager->links|default:""}
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-
+      <div class="grid-body no-padding">
+        <div class="spinner-wrapper" ng-if="loading">
+          <div class="loading-spinner"></div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
+        <div class="table-wrapper ng-cloak">
+          <table class="table table-hover no-margin" ng-if="!loading">
+            <thead>
+              <thead>
+                <tr>
+                  <th style="width:5px">
+                    <div class="checkbox checkbox-default">
+                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                      <label for="select-all"></label>
+                    </div>
+                  </th>
+                  <th>{t}Name{/t}</th>
+                  <th>{t}Email{/t}</th>
+                  <th class="left">{t}Status{/t}</th>
+                  <th class="center" style="width:10px">{t}Activated{/t}</th>
+                  <th class="center" style="width:10px">{t}Subscribed{/t}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-if="contents.length == 0">
+                  <td class="empty" colspan="10">{t}No available subscriptors.{/t}</td>
+                </tr>
+                <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                  <td class="checkbox-cell">
+                    <div class="checkbox check-default">
+                      <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                      <label for="checkbox[%$index%]"></label>
+                    </div>
+                  </td>
+                  <td class="left">
+                    [% content.firstname %]&nbsp;[% content.lastname %] [% content.name %]
+                    <span class="visible-xs">([% content.email %])</span>
+                    <div class="listing-inline-actions">
+                      <a class="link" href="[% edit(content.id, 'admin_newsletter_subscriptor_show') %]" title="{t}Edit user{/t}">
+                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      </a>
+                      <button type="button" class="link link-danger" title="{t}Delete user{/t}" ng-click="removePermanently(content)">
+                        <i class="icon-white fa fa-trash"></i> {t}Remove{/t}
+                      </button>
+                  </div>
+                </td>
+                <td class="left hidden-xs">
+                  [% content.email %]
+                </td>
+                <td class="left">
+                  <span ng-if="content.status == 0">{t}Mail sent.Waiting for user{/t}</span>
+                  <span ng-if="content.status == 1">{t}Accepted by user{/t}</span>
+                  <span ng-if="content.status == 2">{t}Accepted by administrator{/t}</span>
+                  <span ng-if="content.status == 3">{t}Disabled by administrator{/t}</span>
+                </td>
+                <td class="center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_newsletter_subscriptor_toggle_activated', 'status', content.status != 1 ? 1 : 0, 'loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && (content.status == '1' || content.status == '2'), 'fa-times text-error': !content.loading && (content.status == '0' || content.status == '3') }"></i>
+                  </button>
+                </td>
+                <td class="center">
+                  <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_newsletter_subscriptor_toggle_subscription', 'subscription', content.subscription != 1 ? 1 : 0, 'loading_sub')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading_sub, 'fa-check text-success' : !content.loading_sub && content.subscription == '1', 'fa-times text-error': !content.loading_sub && content.subscription == '0' }"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
+          <div class="pagination-info pull-left" ng-if="contents.length > 0">
+            {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+          </div>
+          <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+            <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-
-    </div>
-</form>
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/modals/_modalDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-delete-selected">
+    {include file="common/modals/_modalBatchDelete.tpl"}
+  </script>
+</div>
 {/block}
