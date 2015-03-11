@@ -265,7 +265,10 @@
     padding-top:0
   }
   .page-navbar.actions-navbar, .page-navbar.selected-navbar {
-    top: 0px !important;
+    top: 0px;
+  }
+  .page-navbar.selected-navbar.collapsed {
+    top:-50px;
   }
   .page-navbar {
     background:#22252d;
