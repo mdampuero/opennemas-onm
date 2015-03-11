@@ -257,52 +257,15 @@
   display:none;
 }
 @media (max-width: 767px) {
+  /* When in phone mode hide some elements and put some colors in navbars */
   header.header {
     display:none;
-  }
-  .sidebar {
-    margin-top:0;
   }
   .page-content {
     padding-top:0
   }
   .page-navbar.actions-navbar, .page-navbar.selected-navbar {
     top: 0px !important;
-  }
-  .sidebar .header-logo {
-    display:block !important;
-    background: #22252d;
-    width:100%;
-  }
-  .sidebar .header-logo h1 {
-    font-size: 1.8em;
-    padding: 0 16px;
-    margin: 0;
-    color: white;
-  }
-  .sidebar-toggler-phone {
-    display: block;
-    position: fixed;
-    left: 210px;
-    top: 0px;
-    height:50px;
-    padding: 8px 20px;
-    margin-left: -20px;
-    z-index: 410;
-    color:#505458;
-    font-size: 1.7em;
-  }
-  .sidebar-tobbler-phone.ng-cloak {
-    left:0 !important;
-    display:block;
-  }
-  .sidebar-toggler-phone .symbol {
-    line-height: 1.6em;
-    width:8px;
-    overflow:hidden;
-  }
-  .collapsed .sidebar-toggler-phone {
-    left: 0;
   }
   .page-navbar {
     background:#22252d;
@@ -319,5 +282,47 @@
   }
   .page-navbar .quick-section .h-seperate {
     border-left: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  /* Now apply some styles to the sidebar and the sidebar-toggle button */
+  .sidebar {
+    margin-top:0;
+    overflow: visible;
+    padding-bottom:50px;
+  }
+  .sidebar .sidebar-footer-widget {
+    position:absolute;
+    bottom:0;
+  }
+  .sidebar .header-logo {
+    display:block !important;
+    background: #22252d;
+    width:100%;
+  }
+  .sidebar .header-logo h1 {
+    font-size: 1.8em;
+    padding: 0 17px;
+    margin: 0;
+    color: white;
+  }
+  .sidebar-toggler-phone {
+    display: block;
+    position: absolute;
+    right: -7px;
+    top: 0px;
+    height:50px;
+    padding: 8px 20px;
+    margin-right: -20px;
+    z-index: 500;
+    color:White;
+    font-size: 1.7em;
+  }
+  .collapsed .sidebar-toggler-phone {
+    /*left: 0;*/
+  }
+  .sidebar-toggler-phone .symbol {
+    line-height: 1.6em;
+    width:8px;
+    overflow:hidden;
   }
 }
