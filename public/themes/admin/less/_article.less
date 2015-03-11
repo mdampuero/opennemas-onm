@@ -60,22 +60,40 @@
 }
 
 .related-item {
-  margin-bottom: 10px;
   position: relative;
 
   .related-item-info {
-    cursor: pointer;
-    margin-bottom: 10px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
     overflow: hidden;
-    padding: 9px 50px 9px 0;
+    padding: 15px 50px 15px 0;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:hover {
+      background: #e5e9ec;
+    }
+
+    .sort-icon {
+      border-left: 2px dotted #ccc;
+      display: inline-block;
+      height: 10px;
+      margin: 0 10px 0 10px;
+      width: 2px;
+    }
+  }
+
+  &.ui-sortable-helper {
+    .related-item-info {
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
+    }
   }
 
   .btn {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 5px;
   }
 }
 
