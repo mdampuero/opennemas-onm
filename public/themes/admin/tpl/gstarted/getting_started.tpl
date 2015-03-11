@@ -38,6 +38,7 @@
             <label for="accept-terms">
               {t}Accept the terms of use{/t}
             </label>
+            <div class="arrow"></div>
           </div>
         </div>
         <div class="wizard-button">
