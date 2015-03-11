@@ -140,7 +140,15 @@
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
-      <table class="table table-hover table-condensed ng-cloak" ng-if="!loading">
+      <div ng-if="!loading && contents.length == 0">
+        <div class="center">
+          <h4>
+            <b>{t}There is no elements to import{/t}</b>
+          </h4>
+          <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
+        </div>
+      </div>
+      <table class="table table-hover table-condensed ng-cloak" ng-if="!loading && contents.length > 0">
         <thead>
           <tr>
             <th class="checkbox-cell">
@@ -157,14 +165,6 @@
         </thead>
 
         <tbody>
-          <tr ng-if="contents.length == 0">
-            <td colspan="7" class="center">
-              <h4>
-                <b>{t}There is no elements to import{/t}</b>
-              </h4>
-              <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
-            </td>
-          </tr>
           <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
             <td class="checkbox-cell">
               <div class="checkbox check-default">
@@ -227,12 +227,12 @@
         </tbody>
       </table>
     </div>
-    <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-      <div class="pagination-info pull-left" ng-if="contents.length > 0">
+    <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="pagination-info pull-left">
         {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
       </div>
-      <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
-      <pagination class="no-margin" max-size="3" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+      <div class="pull-right pagination-wrapper">
+        <pagination class="no-margin" max-size="3" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
       </div>
     </div>
   </div>
