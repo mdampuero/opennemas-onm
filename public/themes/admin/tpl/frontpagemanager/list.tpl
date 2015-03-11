@@ -208,7 +208,7 @@
                     -->*}
 
                     <li class="quicklinks">
-                      <select name="category" id="categoryItem">
+                      <select name="category" id="categoryItem" class="select2">
                           {acl hasCategoryAccess=0}
                           <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
                           {/acl}
