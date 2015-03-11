@@ -40,7 +40,7 @@
                     <a href="{url name=admin_comments_select type=facebook}">
                         <h4>Facebook</h4>
                     </a>
-                    {t escape=off}Integrate Opennemas with the <a href="http://www.disqus.com/">Facebook comment system</a> and use their online tools to manage your website comments.{/t}
+                    {t escape=off}Integrate Opennemas with the <a href="https://developers.facebook.com/docs/plugins/comments/">Facebook comment system</a> and use their online tools to manage your website comments.{/t}
                   </div>
               </div>
             </div>

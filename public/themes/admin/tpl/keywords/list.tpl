@@ -131,7 +131,7 @@
                         <span class="fa fa-link"></span> {t}Internal search to keyword{/t}
                       </span>
                       <span ng-if="extra.types[content.tipo] == 'Email'">
-                        <span class="fa fa-envelope"></span> {t}Link to send emai to{/t}
+                        <span class="fa fa-envelope"></span> {t}Link to send email to{/t}
                       </span>
                       [% content.value %]
                     </p>
@@ -155,7 +155,7 @@
                       <span class="fa fa-link"></span> {t}Internal search to keyword{/t}
                     </span>
                     <span ng-if="extra.types[content.tipo] == 'Email'">
-                      <span class="fa fa-envelope"></span> {t}Link to send emai to{/t}
+                      <span class="fa fa-envelope"></span> {t}Link to send email to{/t}
                     </span>
                   </td>
                   <td class="hidden-xs">
