@@ -83,10 +83,6 @@ IntersticialBanner.prototype = {
     },
 
     render: function() {
-        if($.browser.IE) {
-            $(this.rootDocument).ready($.proxy(this, "_hideSelectElementBugIE", [true]));
-        }
-
         try {
             var container = this.rootElement;
 
@@ -114,10 +110,6 @@ IntersticialBanner.prototype = {
     },
 
     close: function() {
-        // Set cookie
-
-        this._hideSelectElementBugIE(false);
-
         //$(this.element).css({display: 'none'});
         $(this.element).fadeOut();
     },
@@ -125,7 +117,6 @@ IntersticialBanner.prototype = {
     gotoPubli: function(event) {
         event.stopPropagation(); // stop event
         event.preventDefault();
-
 
         window.open('/ads/' + this.publiId + '.html', '_blank');
 
@@ -135,18 +126,5 @@ IntersticialBanner.prototype = {
     show: function() {
         this._hideSelectElementBugIE(true);
         $(this.element).css({display: ''});
-    },
-
-    _hideSelectElementBugIE: function(hide) {
-        if($.browser.msie) {
-            var selects = this.rootDocument.getElementsByTagName('select');
-            for(var i=0; i<selects.length; i++) {
-                if(hide) {
-                    selects[i].style.display = 'none';
-                } else {
-                    selects[i].style.display = '';
-                }
-            }
-        }
     }
 };
