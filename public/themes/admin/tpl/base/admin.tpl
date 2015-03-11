@@ -59,7 +59,6 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
-            @Common/components/bootstrap-nav-wizard/dist/bootstrap-nav-wizard.css,
 
             @Common/src/angular-dynamic-image/less/main.less,
             @Common/src/angular-picker/less/main.less,
