@@ -59,7 +59,7 @@
             @Common/components/ng-tags-input/ng-tags-input.min.css,
             @Common/components/messenger/build/css/messenger.css,
             @Common/components/messenger/build/css/messenger-theme-flat.css,
-            @Common/components/bootstrap-nav-wizard/bootstrap-nav-wizard.css,
+            @Common/components/bootstrap-nav-wizard/dist/bootstrap-nav-wizard.css,
 
             @Common/src/angular-dynamic-image/less/main.less,
             @Common/src/angular-picker/less/main.less,
@@ -73,7 +73,8 @@
             @AdminTheme/less/_album.less,
             @AdminTheme/less/_article.less,
             @AdminTheme/less/_comment.less,
-            @AdminTheme/less/_image.less"
+            @AdminTheme/less/_image.less,
+            @AdminTheme/less/_wizard.less"
         filters="cssrewrite,less"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}
@@ -94,6 +95,7 @@
     {/block}
 </head>
 <body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')">
+  {block name="body"}
     <header class="header navbar navbar-inverse">
         <!-- BEGIN TOP NAVIGATION BAR -->
         <div class="navbar-inner">
@@ -146,6 +148,8 @@
         <!-- END PAGE CONTAINER -->
     </div>
 
+  {/block}
+
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
         <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
@@ -172,7 +176,6 @@
 
             @Common/components/modernizr/modernizr.js,
             @Common/js/libs/tinycon.min.js,
-            @AdminTheme/js/jquery/bootstrap-nav-wizard.js,
             @Common/js/onm/md5.min.js,
             @Common/js/onm/scripts.js,
             @Common/components/jquery-validation/dist/jquery.validate.js,
