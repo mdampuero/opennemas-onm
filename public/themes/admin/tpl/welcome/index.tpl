@@ -1,6 +1,5 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="footer-js" append}
 <script>
     $('body').on('click', '.dismiss', function(e, ui) {
@@ -52,7 +51,7 @@
                     <ul class="actions">
                         {is_module_activated name="ARTICLE_MANAGER"}
                         {acl isAllowed="ARTICLE_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_article_create}" title="{t}New article{/t}" class="thumbnail">
                                 <i class="fa fa-file-o fa-3x"></i>{t}New article{/t}
                             </a>
@@ -61,7 +60,7 @@
                         {/is_module_activated}
                         {is_module_activated name="OPINION_MANAGER"}
                         {acl isAllowed="OPINION_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" class="thumbnail">
                                 <i class="fa fa-comment-o fa-3x"></i>{t}New opinion{/t}
                             </a>
@@ -70,7 +69,7 @@
                         {/is_module_activated}
                         {is_module_activated name="IMAGE_MANAGER"}
                         {acl isAllowed="PHOTO_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_image_new}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-image fa-3x"></i>{t}Upload images{/t}
                             </a>
@@ -80,7 +79,7 @@
 
                         {is_module_activated name="ALBUM_MANAGER"}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_album_create}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-stack-overflow fa-3x"></i>{t}New Album{/t}
                             </a>
@@ -90,7 +89,7 @@
 
                         {is_module_activated name="VIDEO_MANAGER"}
                         {acl isAllowed="VIDEO_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-video-camera fa-3x"></i>{t}Upload video{/t}
                             </a>
@@ -100,7 +99,7 @@
 
                         {is_module_activated name="STATIC_PAGES_MANAGER"}
                         {acl isAllowed="STATIC_PAGE_CREATE"}
-                        <li>
+                        <li class="col-xs-6 col-sm-4 col-md-3">
                             <a href="{url name=admin_staticpages_create}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-file-text-o fa-3x"></i>{t}Static page{/t}
                             </a>
@@ -113,7 +112,7 @@
 
             <div class="grid simple merchant">
                 <div class="grid-title">
-                    <h4>{t}Upgrade your site{/t}</h4>
+                    <h4>{t}Want more features?{/t}</h4>
                 </div>
                 <div class="grid-body">
                     <p>{t}We have two ways to add functionality to you site.{/t}</p>
