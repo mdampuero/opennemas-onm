@@ -44,17 +44,21 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="date-{$photo->id}" class="form-label">{t}Date{/t}</label>
+      <div class="controls">
+        <div class="input-group">
+          <input class="form-control" class="date" type="text" id="date-{$photo->id}" name="date[{$photo->id}]" value='{$photo->created|date_format:"%Y-%m-%d %H:%M:%S"}'/>
+          <span class="input-group-addon add-on">
+            <span class="fa fa-calendar"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
       <label for="author_name[{$photo->id}]" class="form-label">{t}Copyright{/t}</label>
       <div class="controls">
         <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
         value='{$photo->author_name|clearslash}'/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="date-{$photo->id}" class="form-label">{t}Date{/t}</label>
-      <div class="controls">
-        <input class="date" type="text" id="date-{$photo->id}" name="date[{$photo->id}]"
-        value='{$photo->created|date_format:"%Y-%m-%d %H:%M:%S"}'/>
       </div>
     </div>
     <div class="form-group">

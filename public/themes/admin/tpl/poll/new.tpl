@@ -162,7 +162,12 @@
                                 <div class="form-group">
                                     <label class="form-label" for="endtime">{t}Publication closed date{/t}</label>
                                     <div class="controls">
-                                        <input id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
+                                      <div class="input-group">
+                                        <input class="form-control" id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
+                                        <span class="input-group-addon add-on">
+                                          <span class="fa fa-calendar"></span>
+                                        </span>
+                                      </div>
                                     </div>
                                 </div>
                                 <div class="form-group">

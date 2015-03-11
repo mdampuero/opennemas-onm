@@ -162,7 +162,12 @@
             <div class="form-group">
               <label for="starttime" class="form-label">{t}Date{/t}</label>
               <div class="controls">
-                <input type="datetime" id="date" name="starttime" value="{$book->starttime}">
+                <div class="input-group">
+                  <input class="form-control" type="datetime" id="date" name="starttime" value="{$book->starttime}">
+                  <span class="input-group-addon add-on">
+                    <span class="fa fa-calendar"></span>
+                  </span>
+                </div>
               </div>
             </div>
 

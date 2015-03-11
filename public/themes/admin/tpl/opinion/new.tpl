@@ -237,7 +237,12 @@
                                         {t}Publication start date{/t}
                                     </label>
                                     <div class="controls">
-                                        <input id="starttime" name="starttime" type="datetime" value="{$opinion->starttime}">
+                                        <div class="input-group">
+                                          <input class="form-control" id="starttime" name="starttime" type="datetime" value="{$opinion->starttime}" type="datetime" >
+                                          <span class="input-group-addon add-on">
+                                            <span class="fa fa-calendar"></span>
+                                          </span>
+                                        </div>
                                         <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
                                     </div>
                                 </div>
@@ -246,7 +251,12 @@
                                         {t}Publication end date{/t}
                                     </label>
                                     <div class="controls">
-                                        <input id="endtime" name="endtime" type="datetime" value="{$opinion->endtime}">
+                                      <div class="input-group">
+                                        <input class="form-control" id="endtime" name="endtime" type="datetime" value="{$opinion->endtime}" type="datetime">
+                                        <span class="input-group-addon add-on">
+                                          <span class="fa fa-calendar"></span>
+                                        </span>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
