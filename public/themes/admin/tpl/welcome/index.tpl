@@ -45,7 +45,7 @@
         <div class="col-sm-6">
             <div class="grid simple add-contents">
                 <div class="grid-title">
-                    <h4>{t}Add content to your site{/t}</h4>
+                    <h4>{t}Add contents to your site{/t}</h4>
                 </div>
                 <div class="grid-body">
                     <ul class="actions">
@@ -70,7 +70,7 @@
                         {is_module_activated name="IMAGE_MANAGER"}
                         {acl isAllowed="PHOTO_CREATE"}
                         <li class="col-xs-6 col-sm-4 col-md-3">
-                            <a href="{url name=admin_image_new}" title="{t}Media manager{/t}" class="thumbnail">
+                            <a href="{url name=admin_image}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-image fa-3x"></i>{t}Upload images{/t}
                             </a>
                         </li>
@@ -146,7 +146,7 @@
                     <h4><i class="fa fa-youtube-play"></i>{t}Need Help?{/t}</h4>
                 </div>
                 <div class="grid-body">
-                    <p>{t}We have created a lot of videos that will teach you to perform from easy tasks to the advanced ones.{/t}</p>
+                    <p>{t}We have created a lot of videos that will teach you to perform easy tasks and advanced tasks.{/t}</p>
 
                     <div id="myCarousel" class="carousel slide clearfix" data-interval="">
                         <!-- Carousel items -->
