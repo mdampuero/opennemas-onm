@@ -72,8 +72,7 @@
             @AdminTheme/less/_album.less,
             @AdminTheme/less/_article.less,
             @AdminTheme/less/_comment.less,
-            @AdminTheme/less/_image.less,
-            @AdminTheme/less/_wizard.less"
+            @AdminTheme/less/_image.less"
         filters="cssrewrite,less"}
             <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}

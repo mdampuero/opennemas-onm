@@ -1,4 +1,11 @@
 {extends file="base/admin.tpl"}
+
+{block name="header-css" append}
+  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}
+    <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="body"}
   <div class="wizard-wrapper">
     <div class="wizard-container welcome" ng-class="{ 'active': !step || step == 1 }">
