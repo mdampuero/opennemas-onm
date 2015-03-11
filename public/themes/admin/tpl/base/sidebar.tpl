@@ -1,5 +1,4 @@
 <div class="sidebar" id="main-menu" ng-mouseenter="sidebar.mouseEnter()" ng-mouseleave="sidebar.mouseLeave()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()">
-  <div class="sidebar-toggler-phone ng-cloak" ng-click="sidebar.toggle()"><span class="fa fa-bars symbol"></span></div>
   <div class="overlay" ng-click="sidebar.collapsed = 0"></div>
   <scrollable>
     <div class="sidebar-wrapper">

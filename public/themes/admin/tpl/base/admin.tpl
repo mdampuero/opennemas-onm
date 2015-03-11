@@ -133,6 +133,7 @@
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
     <div class="sidebar-border" ng-click="sidebar.pin()" ng-mouseenter="sidebar.mouseEnter()" ng-mouseleave="sidebar.mouseLeave()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>
+    <div class="sidebar-toggler-phone ng-cloak" ng-click="sidebar.toggle()"><span class="fa fa-bars symbol"></span></div>
     <!-- END SIDEBAR -->
 
     <div class="page-container row-fluid">
