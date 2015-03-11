@@ -48,7 +48,7 @@
         <div class="col-sm-6">
           <div class="grid simple">
             <div class="grid-title">
-              <h4><span class="fa fa-users"></span>{t}Premium users{/t}</h4>
+              <h4><span class="fa fa-users"></span> {t}Premium users{/t}</h4>
             </div>
             <div class="grid-body">
               <div class="statistic-element">
