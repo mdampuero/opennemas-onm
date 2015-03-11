@@ -56,17 +56,20 @@
 
         <div class="grid simple" id="newsletter-contents">
             <div class="grid-title">
-                <div>{t}Drag elements from the right column to include them into the newsletter{/t}</div>
+                <div class="pull-left">{t}Drag elements from the right column to include them into the newsletter{/t}</div>
+                <div class="pull-right">
+                  <button id="button-add-container" class="btn">
+                      <span class="icon-plus"></span> {t}Add Container{/t}
+                  </button>
+                  <button class="btn" title="{t}Clean containers{/t}" id="clean-button">
+                      <i class="fa fa-times"></i> {t}Clean contents{/t}
+                  </button>
+                </div>
             </div>
             <div class="grid-body">
-                <div id="newsletter-container" class="column-receiver col-md-6">
+                <div id="newsletter-container" class="column-receiver col-md-8" style="margin:0 auto; float:none">
                     <div class="btn-group toolbar">
-                        <button id="button-add-container" class="btn">
-                            <span class="icon-plus"></span> {t}Add Container{/t}
-                        </button>
-                        <button class="btn" title="{t}Clean containers{/t}" id="clean-button">
-                            <i class="fa fa-times"></i> {t}Clean contents{/t}
-                        </button>
+
                     </div>
 
                     {if empty($newsletterContent)}
@@ -114,12 +117,18 @@
                                         {/if}
                                     {/section}
                                 </ul>
+
+                                <button type="button" class="btn btn-white" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInInner" media-picker-type="album,article,opinion,poll,video">
+                                  <span class="fa fa-add"></span>
+                                  {t}Add contents{/t}
+                                </button>
+
                             </div>
                         {/section}
                     {/if}
 
                 </div>
-
+{*
                 <div id="newsletter-content-provider" class="col-md-6">
                     <div class="btn-group toolbar">
                         <a id="button-check-all" href="#" class="btn"  title="{t}Check All{/t}">
@@ -131,19 +140,14 @@
                     </div>
                     {include file="newsletter/_partials/container_contents.tpl"}
                 </div>
+*}
             </div>
         </div>
     </div>
 
+    <input type="hidden" id="content_ids" name="content_ids">
+    <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
 
-        <div class="newsletter-contents">
-
-
-
-
-            <input type="hidden" id="content_ids" name="content_ids">
-            <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
-        </div>
     </div>
 </div>
 </form>
