@@ -76,22 +76,16 @@
                         <option value="2" {if ($type eq "2")}selected{/if}>{t}Expired{/t}</option>
                     </select>
                 </li>
-                <li class="quicklinks">
-                    <button type="submit" class="btn"><i class="fa fa-search"></i></button>
-                </li>
-                <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <strong>Result:</strong> {$pagination->_totalItems} {t}users{/t}
-                </li>
             </ul>
-
-            <div class="pull-right">
-                <a href="{url name=admin_paywall_users_list_export type=$smarty.request.type order=$smarty.request.order searchname=$smarty.request.searchname}">
+            <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="info">{t 1=$pagination->_totalItems}%1 users{/t}</span>
+                </li>
+                <li class="quicklinks form-inline pagination-links">
+                    <a class="btn btn-primary" href="{url name=admin_paywall_users_list_export type=$smarty.request.type order=$smarty.request.order searchname=$smarty.request.searchname}">
                     {t}Export list{/t}
                 </a>
-            </div>
+            </ul>
         </div>
     </div>
 </div>

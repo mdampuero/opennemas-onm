@@ -51,7 +51,7 @@
                     </span>
                     <input class="no-boarder" name="searchname" value="{$smarty.request.searchname|default:""}" placeholder="{t}Filter by name or email{/t}" type="text"/>
                 </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
+                <!-- <li class="quicklinks"><span class="h-seperate"></span></li>
                 <li class="quicklinks">{t}Sort by{/t}</li>
                 <li class="quicklinks">
                     <div class="input-append">
@@ -62,14 +62,14 @@
                             <option value="name" {if ($order eq "name")}selected{/if}>{t}Full name{/t}</option>
                         </select>
                     </div>
-                </li>
-                <li class="quicklinks">
-                    <span class="info">
-                        Result: {$pagination->_totalItems} {t}purchases{/t}
-                    </span>
-                </li>
+                </li> -->
             </ul>
             <ul class="nav quick-section pull-right">
+                <li class="quicklinks">
+                    <span class="info">
+                        {t 1=$pagination->_totalItems}%1 purchases{/t}
+                    </span>
+                </li>
                 <li class="quicklinks">
                     <span class="h-seperate"></span>
                 </li>

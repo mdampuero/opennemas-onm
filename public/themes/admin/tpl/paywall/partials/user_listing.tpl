@@ -1,3 +1,4 @@
+{if count($users) > 0}
 <table class="table table-condensed">
     {if count($users) > 0}
     <thead>
@@ -58,10 +59,6 @@
         {/if}
 
     </tr>
-    {foreachelse}
-    <tr>
-        <td class="center" colspan="11">{t}No users with paywall{/t}</td>
-    </tr>
     {/foreach}
     </tbody>
     {if count($users) > 0}
@@ -76,3 +73,9 @@
     </tfoot>
     {/if}
 </table>
+<a href="{url name=admin_paywall_users}" class="btn btn-white">{t}Show all…{/t}</a>
+{else}
+<div class="center">
+  {t}No paywall users yet.{/t}
+</div>
+{/if}
