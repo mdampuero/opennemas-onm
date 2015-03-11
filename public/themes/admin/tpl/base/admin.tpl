@@ -100,7 +100,7 @@
             <div class="header-seperation">
                 <div class="layout-collapse pull-left">
                     <div class="btn layout-collapse-toggle" ng-click="sidebar.toggle()">
-                        <i class="fa fa-bars fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': changing.dashboard || changing.instances || changing.commands ||  changing.cache || changing.users || changing.groups }"></i>
+                        <i class="fa fa-bars fa-lg"></i>
                     </div>
                 </div>
                 <a class="header-static-logo" href="{url name=admin_welcome}">
@@ -127,13 +127,12 @@
                     {/if}
                 </div>
             </div>
-        <!-- END TOP NAVIGATION MENU -->
-        </div>
-      <!-- END TOP NAVIGATION BAR -->
-    </header>
+        </div> <!-- END TOP NAVIGATION MENU -->
+    </header> <!-- END TOP NAVIGATION BAR -->
 
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
+    <div class="sidebar-toggler-phone ng-cloak" ng-click="sidebar.toggle()"><span class="fa fa-bars symbol"></span></div>
     <div class="sidebar-border" ng-click="sidebar.pin()" ng-mouseenter="sidebar.mouseEnter()" ng-mouseleave="sidebar.mouseLeave()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>
     <!-- END SIDEBAR -->
 

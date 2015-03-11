@@ -2,6 +2,11 @@
   <div class="overlay" ng-click="sidebar.collapsed = 0"></div>
   <scrollable>
     <div class="sidebar-wrapper">
+      <a class="header-logo pull-left" href="{url name=admin_welcome}">
+          <h1>
+              <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
+          </h1>
+      </a>
       {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
     </div>
   </scrollable>
