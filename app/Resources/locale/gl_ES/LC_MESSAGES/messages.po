@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-19 10:59+0100\n"
+"POT-Creation-Date: 2015-03-11 15:33+0100\n"
 "PO-Revision-Date: 2015-01-19 11:10+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -19,6 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
+
+msgid "Advertisement"
+msgstr "Publicidade"
 
 msgid "Album"
 msgstr "Álbum"
@@ -53,9 +56,6 @@ msgstr "Campo «%s» non válido"
 
 msgid "Database error."
 msgstr "Erro de base de datos."
-
-msgid "Advertisement"
-msgstr "Publicidade"
 
 msgid "Opinion"
 msgstr "Artigo de opinión"
@@ -315,6 +315,11 @@ msgstr "Video non dispoñíbel"
 msgid "Widget %s not available"
 msgstr "Widget %s non dispoñíbel"
 
+msgid ""
+"You have reach the maximun users allowed. If you want to create more users, "
+"please contact us."
+msgstr ""
+
 #, php-format
 msgid "Unable to find the user with the id '%d'"
 msgstr "Non se puido atopar unha foto con identificador «%d»"
@@ -328,8 +333,13 @@ msgstr "Os datos enviados do usuario non son válidos."
 msgid "User data updated successfully."
 msgstr "Datos do usuario actualizados correctamente."
 
-msgid "Unable to update the user with the submitted information."
+msgid "Unable to update the user with that information"
 msgstr "Non se puido actualizar o usuario coa información fornecida"
+
+msgid ""
+"Unable to change user backend access. You have reached the max number of "
+"users."
+msgstr ""
 
 msgid "User created successfully."
 msgstr "Usuario creado correctamente."
@@ -360,15 +370,6 @@ msgstr ""
 msgid "Unable to find an user with that email."
 msgstr ""
 "Non se puido atopar un usuario con este enderezo de correo electrónico."
-
-#, php-format
-msgid "Username reminder for %s"
-msgstr "Recordatorio do nome de usuario para %s"
-
-msgid "Unable to send the email to recover your username. Please try it later."
-msgstr ""
-"Non se puido enviar o correo electrónico de recuperación de nome de usuario. "
-"Téntao máis tarde."
 
 msgid ""
 "Unable to find the password reset request.  Please check the url we sent you "
@@ -520,6 +521,22 @@ msgid "Login token is not valid. Try to authenticate again."
 msgstr "O teu token de inicio de sesión non é válido. Téntao de novo."
 
 #, php-format
+msgid "Unable to find the author with the id '%d'"
+msgstr "Non se puido atopar o autor co identificador «%d»"
+
+msgid "Author created successfully."
+msgstr "Autor creado correctamente."
+
+msgid "Unable to create the author with that information"
+msgstr "Non se puido crear o autor coa información fornecida"
+
+msgid "Author updated successfully."
+msgstr "Datos do autor actualizados correctamente."
+
+msgid "Unable to update the author with that information"
+msgstr "Non se puido actualizar o autor coa información fornecida"
+
+#, php-format
 msgid "You must put %d books in the HOME widget"
 msgstr "Débense ter %d libros para o Widget de portada"
 
@@ -547,9 +564,6 @@ msgstr ""
 "Produciuse un erro ao subir o ficheiro. Por favor, contacte co administrador "
 "do sistema."
 
-msgid "FRONTPAGE"
-msgstr "PORTADA"
-
 msgid "Cache configuration saved successfully."
 msgstr "Configuración de caché gardada correctamente."
 
@@ -571,6 +585,9 @@ msgstr "Opinión: interior"
 msgid "RSS"
 msgstr "RSS"
 
+msgid "Sitemap"
+msgstr "Mapa do sitio"
+
 msgid "Frontpage videos"
 msgstr "Video: portada"
 
@@ -588,9 +605,6 @@ msgstr "Enquisas: portada"
 
 msgid "Poll inner"
 msgstr "Enquisa:interior"
-
-msgid "Sitemap"
-msgstr "Mapa do sitio"
 
 msgid "Category created successfully."
 msgstr "Categoria creada correctamente."
@@ -734,9 +748,6 @@ msgstr "Capa «%s» foi eliminada correctamente."
 msgid "You must give an id to delete the cover."
 msgstr "Debes fornecer un identificador para eliminar unha portada."
 
-msgid "You don't have permissions"
-msgstr "Non tes permisos"
-
 msgid "SQL errors registered in database cleaned sucessfully."
 msgstr "Errores SQL registrados en la base de datos limpiados correctamente."
 
@@ -777,17 +788,26 @@ msgstr "Artigo actualizado correctamente."
 msgid "There was a problem while saving the file information."
 msgstr "Produciuse un erro ao gardar a información do ficheiro."
 
-msgid "Content positions saved properly"
-msgstr "Posicións dos contidos gardadas correctamente"
-
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
 msgstr ""
 "Non se puideron gardar as posicións dos contidos: Os datos que enviou o "
 "navegaador non son válidos."
 
-msgid "Unable to save content positions: Unknow reason"
+#, fuzzy
+msgid ""
+"Unable to save content positions: Content positions sent from the client "
+"were not valid."
+msgstr ""
+"Non se puideron gardar as posicións dos contidos: Os datos que enviou o "
+"navegaador non son válidos."
+
+#, fuzzy
+msgid "Unable to save content positions: Error while saving in database."
 msgstr "Non se puideron gardar as posicións dos contidos: Razón descoñecida"
+
+msgid "Content positions saved properly"
+msgstr "Posicións dos contidos gardadas correctamente"
 
 #, php-format
 msgid "Layout %s seleted."
@@ -795,9 +815,6 @@ msgstr "Disposición %s seleccionada."
 
 msgid "Layout or category not valid."
 msgstr "Disposición ou categoría non válida."
-
-msgid "Image module settings saved successfully."
-msgstr "Configuracións do módulo «Imaxes» gardadas correctamente."
 
 msgid "Please provide a image id for show it."
 msgstr "Forneza un identificador dunha imaxe para mostrala."
@@ -815,38 +832,6 @@ msgstr "Non se puido atopar a foto co identificador «%d»"
 
 msgid "Not valid file format or the file exceeds the max allowed file size."
 msgstr "O ficheiro non é válido ou excede o tamaño máximo permitido."
-
-msgid ""
-"<div><p>Unable to find any image matching your search criteria.</p></div>"
-msgstr ""
-"<div><p>Non se puido atopar ningún contido que coincida co teu criterio de "
-"busca.</p></div>"
-
-msgid "Please provide XML file schema"
-msgstr "Fornece un esquema de ficheiro XML"
-
-msgid "Form was sent in the wrong way."
-msgstr "O formulario enviouse de forma incorrecta."
-
-#, php-format
-msgid ""
-"There was an error while uploading «%s» - «%s». Check its size before send "
-"it."
-msgstr ""
-"Produciuse un erro ao subir «%s» - «%s». Comprobe o teu tamaño antes de "
-"envialo."
-
-msgid "Can't read the file. Please check xml file."
-msgstr "Non é posibel ler o ficheiro. Comprobe o ficheiro XML."
-
-msgid "Can't read file. Please check xml file."
-msgstr "Non é posíbel ler o ficheiro. Comprobe o ficheiro XML."
-
-msgid "Importer XML configuration saved successfully"
-msgstr "Configuración do importador de XML gardada correctamente"
-
-msgid "There was an error while saving importer XML configuration"
-msgstr "Produciuse un erro ao gardar a configuración do importador de XML"
 
 msgid "Configuration saved successfully"
 msgstr "Configuración de caché gardada correctamente."
@@ -958,23 +943,18 @@ msgid ""
 msgstr ""
 "Completa a configuración para comenzar a usar o módulo de Boletín de novas"
 
-msgid "A long time ago from synchronization."
-msgstr "A última sincronización foi fai certo tempo."
-
 #, php-format
 msgid "Last sync was %d minutes ago."
 msgstr "A última sincronización foi fai %d minuto/s."
 
-msgid ""
-"Try syncing the news list from server by clicking in \"Sync with server\" "
-"button above"
-msgstr ""
-"Tenta actualizar a lista de novas desde o servidor premendo o botón "
-"«Sincronizar co servidor» de arriba."
-
 #, php-format
 msgid "Unable to find an element with the id \"%d\""
 msgstr "Non se puido atopar o elemento co identificador «%d»"
+
+msgid ""
+"This content was imported before. You may cause a content duplication while "
+"importing it."
+msgstr ""
 
 #, php-format
 msgid "%s item(s) imported successfully"
@@ -1017,12 +997,25 @@ msgid "Y-m-d"
 msgstr "d-m-Y"
 
 #, php-format
+msgid "%s newsletter sent from %d (%d allowed)."
+msgstr ""
+
+#, fuzzy, php-format
+msgid "No newsletter sent from %s."
+msgstr "Remitente do Boletín"
+
+#, fuzzy, php-format
+msgid "%d newsletter sent from %s."
+msgstr "Remitente do Boletín"
+
+#, php-format
 msgid "Sorry, newsletter \"%d\" was been sent previously"
 msgstr "Desculpe, o boletin de novas «%d» xa foi enviado anteriormente"
 
+#, fuzzy
 msgid ""
 "Your newsletter configuration is not complete. You must complete the sender "
-"email addres."
+"email address."
 msgstr ""
 "A configuración do boletin de novas non está completa. Vai ao panel de "
 "configuración e completa o formulario"
@@ -1033,17 +1026,8 @@ msgstr "Non se puido enviar o teu correo"
 msgid "Max sents reached."
 msgstr "Alcanzouse o número máximo de envios."
 
-msgid "Newsletter deleted successfully."
-msgstr "Boletin de novas eliminado correctamente."
-
-msgid "You must give an id for delete a newsletter."
-msgstr "Debe fornecer un identificador para eliminar un boletin de novas."
-
 msgid "Newsletter module settings saved successfully."
 msgstr "Configuración do módulo de boletin de novas gardada correctamente."
-
-msgid "Please fill the sender email address in the module configuration."
-msgstr "Complete o enderezo de correo-e do emisor na configuración do módulo."
 
 msgid "Please fill the mail list email address in the module configuration."
 msgstr "Completa o enderezo do correo-e na configuración do módulo."
@@ -1077,30 +1061,6 @@ msgstr "Non se puido actualizar a información da subscrición"
 #, php-format
 msgid "Unable to find the user with the id \"%d\""
 msgstr "Non se puido atopar o usuario co identificador «%d»"
-
-#, php-format
-msgid "Subscritor with id \"%d\" deleted sucessfully"
-msgstr "Subscrición co identificador «%d» eliminada correctamente"
-
-#, php-format
-msgid "Unable to delete the subscriptor with the id %d."
-msgstr "Non se puido eliminar a subscrición co identificador %d."
-
-#, php-format
-msgid "Successfully deleted %d subscriptors."
-msgstr "Elimináronse %d subscricións correctamente"
-
-msgid "Please specify a subscriptor id for delete it."
-msgstr "Especifique un identificador dun subscritor para eliminalo."
-
-#, php-format
-msgid "Successfully changed subscribed state for %d subscriptors."
-msgstr "Estado de subscrición cambiado correctamente para %d subscritores."
-
-msgid "Please specify a subscriptor id for change its subscribed state it."
-msgstr ""
-"Especifique o identificador dun subscritor para cambiar o estado da súa "
-"subscrición."
 
 #, php-format
 msgid "You must put %d opinions %s in the frontpage "
@@ -1139,22 +1099,6 @@ msgstr "Estado de «En Portada» cambiado correctamente para a opinión «%s»"
 
 msgid "Unable to save the positions."
 msgstr "Non se puideron gardar as posicións."
-
-#, php-format
-msgid "Unable to find the author with the id '%d'"
-msgstr "Non se puido atopar o autor co identificador «%d»"
-
-msgid "Author created successfully."
-msgstr "Autor creado correctamente."
-
-msgid "Unable to create the author with that information"
-msgstr "Non se puido crear o autor coa información fornecida"
-
-msgid "Author updated successfully."
-msgstr "Datos do autor actualizados correctamente."
-
-msgid "Unable to update the author with that information"
-msgstr "Non se puido actualizar o autor coa información fornecida"
 
 msgid "Day"
 msgstr "Dia"
@@ -1267,9 +1211,6 @@ msgstr "Páxina estática actualizada correctamente."
 msgid "Can't get static page title. Check the title"
 msgstr "No foi posibel obter o titulo da páxina estática. Comprobe o titulo"
 
-msgid "Can't get static page metadata."
-msgstr "Non se puideron obter os metadatos da páxina estática."
-
 msgid "English"
 msgstr "Inglés"
 
@@ -1357,7 +1298,11 @@ msgstr "Produciuse un erro ao actualizar o widget."
 msgid "Widget updated successfully."
 msgstr "Widget actualizado correctamente."
 
-msgid "Web site"
+msgid "Welcome"
+msgstr "Benvido"
+
+#, fuzzy
+msgid "Website"
 msgstr "Sitio web"
 
 msgid "Frontpage Manager"
@@ -1383,12 +1328,6 @@ msgstr "Artigos"
 
 msgid "Opinions"
 msgstr "Artigos de opinión"
-
-msgid "Article opinions"
-msgstr "Artigos de opinión"
-
-msgid "Authors"
-msgstr "Autores"
 
 msgid "Comments"
 msgstr "Comentarios"
@@ -1435,6 +1374,9 @@ msgstr "Busca global"
 msgid "Trash"
 msgstr "Lixo"
 
+msgid "Newsletters"
+msgstr "Boletins de novas"
+
 msgid "Keywords"
 msgstr "Palabras chave"
 
@@ -1456,14 +1398,11 @@ msgstr "Sincronización de instancias"
 msgid "News Agency"
 msgstr "Axencias de novas"
 
-msgid "XML Importer"
-msgstr "Importador de XML"
+msgid "Configuration"
+msgstr "Configuración"
 
 msgid "Settings"
 msgstr "Preferencias"
-
-msgid "General"
-msgstr "Xeral"
 
 msgid "Users & Groups"
 msgstr "Usuarios e grupos"
@@ -1474,11 +1413,26 @@ msgstr "Usuarios"
 msgid "User Groups"
 msgstr "Grupos de usuarios"
 
+msgid "Authors"
+msgstr "Autores"
+
 msgid "Cache manager"
 msgstr "Xestor de caché"
 
 msgid "SQL error log"
 msgstr "Rexistro de erros de SQL"
+
+msgid "Help & Support"
+msgstr ""
+
+msgid "FAQ"
+msgstr "Preguntas frecuentes"
+
+msgid "Contact support"
+msgstr "Contactar con soporte"
+
+msgid "Could not find user. Sorry!"
+msgstr "Non se puido atopar o usuario."
 
 msgid ""
 "Unable to find an associated user to that social account. Notice that first "
@@ -1487,8 +1441,90 @@ msgstr ""
 "Non se puido atopar un usuario asociado á conta da rede social. Teña en "
 "conta que primeiro ten que asociala coa súa conta de usuario en Opennemas."
 
-msgid "Could not find user. Sorry!"
-msgstr "Non se puido atopar o usuario."
+msgid "Item deleted successfully"
+msgstr "Elemento eliminado correctamente"
+
+#, fuzzy, php-format
+msgid "Unable to delete the item \"%s\""
+msgstr "Non se puido eliminar o elemento co identificador «%d»"
+
+#, fuzzy
+msgid "No items selected"
+msgstr "elementos seleccionados"
+
+#, fuzzy
+msgid "Unknown cache file"
+msgstr "Ficheiro de caché de enquisa"
+
+#, fuzzy
+msgid "Article inner"
+msgstr "Artigo: interior"
+
+#, fuzzy
+msgid "Mobile article inner"
+msgstr "Ficheiro de caché de artigo interior de móbil"
+
+#, fuzzy
+msgid "Mobile frontpage"
+msgstr "Portadas de móbil:"
+
+#, fuzzy
+msgid "Mobile opinion inner"
+msgstr "Opinión: interior"
+
+#, fuzzy
+msgid "Mobile opinion frontpage"
+msgstr "Portada de opinión"
+
+msgid "Video frontpage"
+msgstr "Portada de vídeo"
+
+#, fuzzy
+msgid "Video inner"
+msgstr "Video: interior"
+
+#, fuzzy
+msgid "Album frontpage"
+msgstr "Álbum: portada"
+
+#, fuzzy
+msgid "Album inner"
+msgstr "Álbum: interior"
+
+msgid "Opinion frontpage"
+msgstr "Portada de opinión"
+
+#, fuzzy, php-format
+msgid "Page %s"
+msgstr "(Páxina %1)"
+
+#, fuzzy
+msgid "Opinion inner"
+msgstr "Opinión: interior"
+
+#, fuzzy
+msgid "Blog inner"
+msgstr "Nome do blogue"
+
+#, fuzzy
+msgid "RSS Author"
+msgstr "Autor"
+
+#, fuzzy
+msgid "Homepage"
+msgstr "Imaxe para inicio"
+
+#, fuzzy
+msgid "Poll frontpage"
+msgstr "Enquisas: portada"
+
+#, fuzzy
+msgid "Custom CSS"
+msgstr "Personalizado"
+
+#, fuzzy
+msgid "Sitemap: "
+msgstr "Mapa do sitio"
 
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
@@ -1509,9 +1545,6 @@ msgstr "Non se puido actualizar o elemento co identificador «%d»"
 #, php-format
 msgid "%d item(s) updated successfully"
 msgstr "%d elemento(s) actualizado(s) correctamente"
-
-msgid "Item deleted successfully"
-msgstr "Elemento eliminado correctamente"
 
 msgid "Item updated successfully"
 msgstr "Elemento actualizado correctamente"
@@ -1563,6 +1596,96 @@ msgstr ""
 msgid "Positions saved successfully"
 msgstr "Posicións gardadas correctamente"
 
+msgid "All categories"
+msgstr "Tódalas categorías"
+
+#, fuzzy
+msgid "All content types"
+msgstr "Todos os contidos"
+
+msgid "All months"
+msgstr "Todos os meses"
+
+msgid "Thumbnail details"
+msgstr "Detalles da miniatura"
+
+#, fuzzy
+msgid "Item details"
+msgstr "Detalles da miniatura"
+
+msgid "Description"
+msgstr "Descrición"
+
+msgid "Pick the item to insert"
+msgstr "Seleccione o elemento a insertar"
+
+msgid "Insert"
+msgstr "Inserir"
+
+msgid "items selected"
+msgstr "elementos seleccionados"
+
+msgid "Browse"
+msgstr "Examinar"
+
+msgid "Search by name"
+msgstr "Filtrar por nome"
+
+msgid "Upload new media"
+msgstr "Subir novo multimedia"
+
+msgid "Upload"
+msgstr "Subir"
+
+msgid "Add files..."
+msgstr "Engadir ficheiros…"
+
+msgid ""
+"Drop files anywhere here to upload or click on the \"Add Files...\" button "
+"above."
+msgstr ""
+"Solte ficheiros aquí para subilos ou prema no botón «Engadir ficheiros…» de "
+"arriba."
+
+#, php-format
+msgid "Subscritor with id \"%d\" deleted sucessfully"
+msgstr "Subscrición co identificador «%d» eliminada correctamente"
+
+#, fuzzy
+msgid "You must provide an id to delete a newsletter subscriptor."
+msgstr "Debe fornecer un identificador para eliminar un boletin de novas."
+
+#, php-format
+msgid "Unable to delete the subscriptor with the id %d."
+msgstr "Non se puido eliminar a subscrición co identificador %d."
+
+#, php-format
+msgid "Successfully deleted %d subscriptors."
+msgstr "Elimináronse %d subscricións correctamente"
+
+msgid "Please specify a subscriptor id for delete it."
+msgstr "Especifique un identificador dun subscritor para eliminalo."
+
+#, php-format
+msgid "Successfully changed subscribed state for %d subscriptors."
+msgstr "Estado de subscrición cambiado correctamente para %d subscritores."
+
+msgid "Please specify a subscriptor id for change its subscribed state it."
+msgstr ""
+"Especifique o identificador dun subscritor para cambiar o estado da súa "
+"subscrición."
+
+msgid "Newsletter deleted successfully."
+msgstr "Boletin de novas eliminado correctamente."
+
+#, fuzzy, php-format
+msgid "Unable to delete the newsletter \"%s\""
+msgstr "Non se puido eliminar o elemento co identificador «%s»"
+
+#, fuzzy
+msgid "You must provide an id for delete a newsletter."
+msgstr "Debe fornecer un identificador para eliminar un boletin de novas."
+
 #, php-format
 msgid "Unable to delete the item with the id \"%s\""
 msgstr "Non se puido eliminar o elemento co identificador «%s»"
@@ -1578,6 +1701,10 @@ msgstr "%s elemento(s) eliminado(s) correctamente"
 msgid "Selected items deleted successfully"
 msgstr "Elementos seleccionados eliminados correctamente"
 
+msgid ""
+"Unable to change user backend access. You have reach the maximum allowed"
+msgstr ""
+
 #, php-format
 msgid "Unable to delete the item with the id \"%d\""
 msgstr "Non se puido eliminar o elemento co identificador «%d»."
@@ -1588,10 +1715,6 @@ msgstr "Non se puido atopar o elemento co identificador «%d»"
 
 msgid "Application upgraded"
 msgstr "Aplicativo actualizado"
-
-#, php-format
-msgid "Homepage for category %s cleaned successfully."
-msgstr "A portadilla da categoría %s foi limpada correctamente."
 
 msgid "Already voted."
 msgstr "Xa votaches antes."
@@ -1688,12 +1811,6 @@ msgstr "Xa votaches nesta enquisa anteriormente."
 msgid "You can't vote this poll, it is closed."
 msgstr "A enquisa está pechada, non podes votar."
 
-msgid "Problem with IP verification!"
-msgstr "Houbo un problema coa verificación da túa IP!"
-
-msgid "You have voted this new previously."
-msgstr "Xa votaches anteriormente."
-
 msgid "You have been subscribed to the newsletter."
 msgstr "Subscribicheste ao boletin de novas."
 
@@ -1761,6 +1878,10 @@ msgstr ""
 msgid "There was an error while creating your user account."
 msgstr "Produciuse un erro ao crear a túa conta de usuario."
 
+#, php-format
+msgid "Username reminder for %s"
+msgstr "Recordatorio do nome de usuario para %s"
+
 msgid ""
 "Unable to find the password reset request. Please check the url we sent you "
 "in the email."
@@ -1799,30 +1920,6 @@ msgstr "Arrincando a imprenta…"
 msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando a máquina de Gutenberg…"
 
-msgid "Instances"
-msgstr "Instancias"
-
-msgid "Instance Manager"
-msgstr "Xestor de instancias"
-
-msgid "Framework"
-msgstr "Framework"
-
-msgid "Commands"
-msgstr "Ordes"
-
-msgid "Status"
-msgstr "Estado"
-
-msgid "Opcache status"
-msgstr "Estado de Opcache"
-
-msgid "Instance domains cannot be empty"
-msgstr "Os dominios da instancia non poden quedar valeiros"
-
-msgid "An instance with that domain already exists"
-msgstr "Xa existe unha instancia con ese dominio"
-
 msgid "Instance saved successfully"
 msgstr "Instancia gardada correctamente"
 
@@ -1843,24 +1940,36 @@ msgstr "Non se puido atopar a instancia co identificador «%s»"
 msgid "Error while deleting instance with id \"%s\""
 msgstr "Non se puido eliminar a instancia co identificador «%s»"
 
+#, fuzzy
+msgid "Unable to find the instances for the given criteria"
+msgstr "Non foi posíbel atopar unha instancia co identificador «%d»"
+
 #, php-format
 msgid "%s instances deleted successfully."
 msgstr "%s instancias eliminadas correctamente."
-
-msgid "Instance updated successfully."
-msgstr "Instancia actualizada correctamente."
-
-#, php-format
-msgid "Error while updating instance with id \"%s\""
-msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
 
 #, php-format
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
-#, php-format
-msgid "Error while updating the instance with id \"%s\""
-msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
+msgid "Dashboard"
+msgstr "Taboleiro"
+
+msgid "Instances"
+msgstr "Instancias"
+
+msgid "Framework"
+msgstr "Framework"
+
+msgid "Commands"
+msgstr "Ordes"
+
+#, fuzzy
+msgid "OpCache Status"
+msgstr "Estado de Opcache"
+
+msgid "User groups"
+msgstr "Grupos de usuarios"
 
 msgid "User saved successfully"
 msgstr "Usuario gardado con éxito"
@@ -1871,6 +1980,10 @@ msgstr "Usuario eliminado con éxito"
 #, php-format
 msgid "Unable to delete the user with the id \"%d\""
 msgstr "Non se puido eliminar o usuario co identificador «%d»."
+
+#, fuzzy
+msgid "Unable to find users for the given criteria"
+msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
 
 #, php-format
 msgid "%s users deleted successfully."
@@ -1887,21 +2000,30 @@ msgstr "Produciuse un erro ao actualizar o usuario co identificador «%s»"
 msgid "Unable to find the user with id \"%s\""
 msgstr "Non se puido atopar o usuario co identificador «%s»"
 
+#, fuzzy
+msgid "Unable to find the users for the given criteria"
+msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
+
 #, php-format
 msgid "%s users updated successfully."
 msgstr "%s usuarios actualizados correctamente."
 
-msgid "Unable to update the user with that information"
-msgstr "Non se puido actualizar o usuario coa información fornecida"
+#, fuzzy
+msgid "Unable to find the current user"
+msgstr "Non se puido atopar o usuario co identificador «%s»"
 
 msgid "User group name cannot be empty"
 msgstr "O nome do grupo de usuarios non pode quedar baleiro"
 
+msgid "Unable to create a new usergroup"
+msgstr "No se puido crear un novo grupo de usuarios"
+
 msgid "User group saved successfully"
 msgstr "Grupo de usuario gardado correctamente"
 
-msgid "Unable to create a new usergroup"
-msgstr "No se puido crear un novo grupo de usuarios"
+#, fuzzy
+msgid "Unable to find user groups for the given criteria"
+msgstr "Non foi posíbel atopar unha categoría co identificador fornecido."
 
 #, php-format
 msgid "%s user groups deleted successfully."
@@ -1996,8 +2118,8 @@ msgstr "Log SQL"
 msgid "News Agency importer"
 msgstr "Importador de novas de axencias"
 
-msgid "Paper import"
-msgstr "Importador desde papel"
+msgid "Promotional bar"
+msgstr ""
 
 msgid "Schedules"
 msgstr "Planificación"
@@ -2013,9 +2135,6 @@ msgstr "Páxinas estáticas"
 
 msgid "Instance synchronization"
 msgstr "Sincronización de instancias"
-
-msgid "User groups"
-msgstr "Grupos de usuarios"
 
 msgid "UserVoice integration"
 msgstr "Integración de UserVoice"
@@ -2059,6 +2178,25 @@ msgstr ""
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
 
+#, fuzzy
+msgid "Create free newspaper"
+msgstr "Crear novo usuario"
+
+#, fuzzy
+msgid "Opennemas homepage"
+msgstr "Xestor de opennemas"
+
+#, fuzzy
+msgid "Help Desk"
+msgstr "Axuda"
+
+#, fuzzy
+msgid "About us"
+msgstr "Sobre"
+
+msgid "The best Internet service for your online digital newspaper"
+msgstr ""
+
 msgid "Just now"
 msgstr "Xusto agora"
 
@@ -2101,159 +2239,33 @@ msgstr "hai 1 mes"
 msgid "%d months ago"
 msgstr "hai %d meses"
 
-msgid "News agency importer"
-msgstr "Importador de novas de axencias"
+msgid "Cache Manager"
+msgstr "Xestor de caché"
 
-msgid "Article information"
-msgstr "Información de artigo"
-
-msgid "Import"
-msgstr "Importar"
-
-msgid "Go back to list"
-msgstr "Volver á lista"
-
-msgid "Sync list  with server"
-msgstr "Sincronizar lista co servidor"
-
-msgid "Priority:"
-msgstr "Prioridade:"
-
-msgid "Date:"
-msgstr "Data:"
-
-msgid "Pretitle:"
-msgstr "Antetitulo:"
-
-msgid "Summary:"
-msgstr "Resumo:"
-
-msgid "Body:"
-msgstr "Corpo:"
-
-msgid "Photos:"
-msgstr "Fotos:"
-
-msgid "People:"
-msgstr "Persoas:"
-
-msgid "Place:"
-msgstr "Lugar:"
-
-msgid "Associated Docs:"
-msgstr "Documentos asociados:"
-
-msgid "Categories:"
-msgstr "Categorias:"
-
-msgid "Level:"
-msgstr "Nivel:"
-
-msgid "Redactors:"
-msgstr "Redactores:"
-
-msgid "XML file importer"
-msgstr "Importador de XML"
-
-msgid "Module configuration"
-msgstr "Configuración do módulo"
+msgid "Go back"
+msgstr "Atrás"
 
 msgid "Save"
 msgstr "Gardar"
 
-msgid "Title:"
-msgstr "Titulo:"
+msgid "Cache group"
+msgstr "Grupo de caché"
 
-msgid "Inner title"
-msgstr "Titulo interior:"
+msgid "Expire time"
+msgstr "Tempo de expiración"
 
-msgid "Agency:"
-msgstr "Axencia:"
+msgid "seconds"
+msgstr "segundos"
 
-msgid "Created:"
-msgstr "Creado:"
+msgid "There is no cache configuration available"
+msgstr "Non hai ningunha configuración de caché dispoñíbel"
 
-msgid "Metadata:"
-msgstr "Metadatos:"
-
-msgid "Description:"
-msgstr "Descrición:"
-
-msgid "Section:"
-msgstr "Sección:"
-
-msgid "Image:"
-msgstr "Imaxe:"
-
-msgid "Image Footer:"
-msgstr "Pé da imaxe:"
-
-msgid "Ignored labels:"
-msgstr "Etiquetas ignoradas:"
-
-msgid "Important labels:"
-msgstr "Etiquetas importantes:"
-
-msgid "Definition values"
-msgstr "Valores de definición"
-
-msgid ""
-"Define the names of labels in the xml files that you want to fill in article "
-"fields"
-msgstr ""
-"Debes definir os nomes das etiquetas no ficheiro XML que completarán os "
-"campos do artigo"
-
-msgid "The name can be one attribute or one label in XML file"
-msgstr "O nome pode ser un atributo ou unha etiqueta no ficheiro XML"
-
-msgid "Use ignored labels separated with commas"
-msgstr "Especifica as etiquetas ignoradas separadas por comas"
-
-msgid "Check important labels for write with bolder font"
-msgstr "Comprobar as etiquetas importantes a escribir en letra negra"
-
-msgid "XML importer"
-msgstr "Importador de XML"
-
-msgid "Select files"
-msgstr "Seleccionar ficheiros"
-
-msgid "Check"
-msgstr "Comprobar"
-
-msgid "Remove File"
+#, fuzzy
+msgid "Remove all"
 msgstr "Eliminar ficheiro"
 
-msgid "Add File"
-msgstr "Engadir ficheiro"
-
-msgid "Config XML Schema"
-msgstr "Esquema de configuración XML"
-
-msgid "Config"
-msgstr "Configuración"
-
-msgid "Cache Manager"
-msgstr "Xestor de caché"
-
-msgid "Delete cache"
-msgstr "Eliminar caché"
-
-msgid "Get updated cache list"
-msgstr "Obter lista de cachés actualizada"
-
-msgid "Refresh list"
-msgstr "Recargar lista"
-
-msgid "Configurar cachés"
-msgstr "Configurar cachés"
-
-msgid "Show"
-msgstr "Mostrar"
-
-msgid "items/page with type"
-msgstr "elementos/páxina co tipo"
+msgid "Type"
+msgstr "Tipo"
 
 msgid "All types"
 msgstr "Tódolos tipos"
@@ -2288,20 +2300,18 @@ msgstr "Enquisa: portada"
 msgid "Poll: inner"
 msgstr "Enquisa: interior"
 
-msgid "and from"
-msgstr "e desde"
+#, fuzzy
+msgid "View:"
+msgstr "Ver"
 
-msgid "All sections"
-msgstr "Toda as seccións"
+msgid "of"
+msgstr "de"
 
-msgid "Update list"
-msgstr "Actualizar lista"
+msgid "Loading"
+msgstr "Cargando"
 
 msgid "Resource"
 msgstr "Recurso"
-
-msgid "Created on"
-msgstr "Creado o"
 
 msgid "Valid until"
 msgstr "Válido até"
@@ -2309,129 +2319,55 @@ msgstr "Válido até"
 msgid "Size"
 msgstr "Tamaño"
 
-msgid "Actions"
-msgstr "Accións"
+msgid "No cache files were generated for now."
+msgstr ""
 
-msgid "Article inner cache file"
-msgstr "Ficheiro de caché de artigo interior"
-
-msgid "Video inner cache file"
-msgstr "Ficheiro de caché de vídeo interior"
-
-msgid "Album cache file"
-msgstr "Ficheiro de caché de álbum"
-
-msgid "Opinion author index cache file"
-msgstr "Fichero de caché de portada de autor de opinión"
-
-msgid "Mobile article inner cache file"
-msgstr "Ficheiro de caché de artigo interior de móbil"
-
-msgid "Mobile frontpage cache file"
-msgstr "Ficheiro de caché de portada de móbil"
-
-msgid "Category frontpage cache file"
-msgstr "Ficheiro de caché de portada de categoría"
-
-msgid "Poll cache file"
-msgstr "Ficheiro de caché de enquisa"
-
-msgid "RSS cache file"
-msgstr "Ficheiro de cache de RSS"
-
-msgid "RSS Opinion author cache file "
-msgstr "Fichero de caché de RSS de autor de opinión"
-
-msgid "Section Frontpage cache file"
-msgstr "Ficheiro de caché de portada de sección"
-
-msgid "Video: frontpage %1"
-msgstr "Video: portada %1"
-
-msgid "Video: main frontpage"
-msgstr "Video: portada principal"
-
-msgid "Frontpage %1"
-msgstr "Portada %1"
-
-msgid "Opinion of Author \"%1\""
-msgstr "Opinión de autor %1"
-
-msgid "(Page %1)"
-msgstr "(Páxina %1)"
-
-msgid "Album %1"
-msgstr "Álbum %1"
-
-msgid "Album Frontpage"
-msgstr "Álbume: portada"
-
-msgid "Poll %1"
-msgstr "Enquisa %1"
-
-msgid "RSS:"
-msgstr "RSS:"
-
-msgid "Mobile frontpage: "
-msgstr "Portadas de móbil:"
-
-msgid "Frontpage: "
-msgstr "Portada:"
-
-msgid "Delete cache file"
-msgstr "Eliminar ficheiro de caché"
-
+#, fuzzy
 msgid ""
-"Ohh, there is <strong>no cache file</strong>\n"
-"                in the system."
-msgstr "Ohh, non hai <strong>ningún ficheiro de caché</strong> no sistema."
-
-msgid ""
-"Visit some pages in\n"
-"                <a href=\"%1\" title=\"Visit your site\">your site</a>\n"
-"                "
+"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>  "
+"and come back here"
 msgstr ""
 "Visita algunas páginas de <a href=\"%1\" title=\"Visit your site\">su sitio "
 "web</a>"
 
-msgid "Delete caches"
-msgstr "Eliminar cachés"
+#, fuzzy
+msgid "View page"
+msgstr "Nova páxina"
 
-msgid "You must select some elements."
-msgstr "Debes seleccionar algún elemento."
+msgid "Delete cache file"
+msgstr "Eliminar ficheiro de caché"
 
-msgid "Accept"
-msgstr "Aceptar"
+msgid "Showing"
+msgstr "Mostrando"
 
 msgid "Delete cache elements"
 msgstr "Eliminar elementos da caché"
 
-msgid "Are you sure you want to delete <span>%num%</span> cache elements?"
-msgstr "Tes certeza que queres eliminar <span>%num%</span> elementos da caché?"
+#, fuzzy
+msgid ""
+"Are you sure you want to delete [% template.selected.length %] cache "
+"elements?"
+msgstr "Tes certeza que queres eliminar [% selected %] elemento(s)?"
 
-msgid "Yes, delete all"
+#, fuzzy
+msgid "Yes, remove all"
 msgstr "Si, eliminalos todos"
 
 msgid "No"
 msgstr "Non"
 
-msgid "Cancel"
-msgstr "Cancelar"
+#, fuzzy
+msgid "Delete cache element"
+msgstr "Eliminar elementos da caché"
 
-msgid "Go back"
-msgstr "Atrás"
+#, fuzzy
+msgid ""
+"Are you sure you want to delete the cache element \"[% template.content."
+"title %]\"."
+msgstr "Tes certeza que queres eliminar a instancia «[% title %]»?"
 
-msgid "Cache group"
-msgstr "Grupo de caché"
-
-msgid "Expire time"
-msgstr "Tempo de expiración"
-
-msgid "seconds"
-msgstr "segundos"
-
-msgid "There is no cache configuration available"
-msgstr "Non hai ningunha configuración de caché dispoñíbel"
+msgid "Yes, remove"
+msgstr "Si, eliminar"
 
 msgid "Instance not activated - Opennemas"
 msgstr "Instancia non activada - Opennemas"
@@ -2448,6 +2384,12 @@ msgstr ""
 
 msgid "Delete subscriptions"
 msgstr "Eliminar subscricións"
+
+msgid "You must select some elements."
+msgstr "Debes seleccionar algún elemento."
+
+msgid "Accept"
+msgstr "Aceptar"
 
 msgid "Delete subscriptor"
 msgstr "Eliminar subscritor"
@@ -2468,6 +2410,9 @@ msgstr "Eliminar vídeos"
 msgid "Are you sure you want to delete those <span>%num%</span> subscriptors?"
 msgstr "Tes certeza que queres eliminar <span>%num%</span> subscritores?"
 
+msgid "Yes, delete all"
+msgstr "Si, eliminalos todos"
+
 msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
 "span> subscriptors?"
@@ -2478,11 +2423,12 @@ msgstr ""
 msgid "Creating subscriptor"
 msgstr "Crear subscritor"
 
-msgid "Editing subscriptor \"%1\""
+#, fuzzy
+msgid "Editing subscriptor"
 msgstr "Editando o subscritor «%1»"
 
-msgid "Update"
-msgstr "Actualizar"
+msgid "Go back to list"
+msgstr "Volver á lista"
 
 msgid "Surname"
 msgstr "Nome"
@@ -2493,15 +2439,15 @@ msgstr "Apelido"
 msgid "Subscribed"
 msgstr "Subscrito"
 
-msgid "Yes"
-msgstr "Si"
-
 msgid ""
 "If is subscribed, the user email address will be available on the account "
 "provider"
 msgstr ""
 "Se está subscrito, o enderezo de correo do usuario estará dispoñíbel no "
 "fornecedor de contas"
+
+msgid "Yes"
+msgstr "Si"
 
 msgid "Activated"
 msgstr "Activado"
@@ -2512,8 +2458,9 @@ msgstr "Se está activado significa que o usuario recibirá boletins de novas"
 msgid "Subscriptions"
 msgstr "Suscricións"
 
-msgid "New"
-msgstr "Novo"
+#, fuzzy
+msgid "Go back to newsletter manager"
+msgstr "Ir ao xestor multimedia"
 
 msgid "Unsubscribe"
 msgstr "Anular a subscrición"
@@ -2521,14 +2468,9 @@ msgstr "Anular a subscrición"
 msgid "Subscribe"
 msgstr "Subscribir"
 
-msgid "Newsletters"
-msgstr "Boletins de novas"
-
-msgid "Subscriptors"
-msgstr "Subscritores"
-
-msgid "Search by name"
-msgstr "Filtrar por nome"
+#, fuzzy
+msgid "Search by name or email"
+msgstr "Filtrar por nome ou correo"
 
 msgid "All"
 msgstr "Todos"
@@ -2536,8 +2478,18 @@ msgstr "Todos"
 msgid "No subscribed"
 msgstr "Non subscrito"
 
-msgid "Filter"
-msgstr "Filtrar"
+msgid "Status"
+msgstr "Estado"
+
+#, fuzzy
+msgid "No available subscriptors."
+msgstr "Descrición non dispoñíbel"
+
+msgid "Edit user"
+msgstr "Editar usuario"
+
+msgid "Delete user"
+msgstr "Eliminar usuario"
 
 msgid "Mail sent.Waiting for user"
 msgstr "Correo enviado. Agardando polo usuario"
@@ -2550,15 +2502,6 @@ msgstr "Aceptado polo administrador"
 
 msgid "Disabled by administrator"
 msgstr "Desactivado polo administrador"
-
-msgid "Edit user"
-msgstr "Editar usuario"
-
-msgid "Delete user"
-msgstr "Eliminar usuario"
-
-msgid "There is no subscriptors yet"
-msgstr "Ainda non hai ningún subscritor."
 
 msgid "Update Container label"
 msgstr "Actualizar a etiqueta contenedora"
@@ -2584,6 +2527,9 @@ msgstr "Este boletin de novas vai enviarse. Estás seguro?"
 msgid "Send"
 msgstr "Enviar"
 
+msgid "Cancel"
+msgstr "Cancelar"
+
 msgid "Potential lose of the actual generated HTML."
 msgstr "Posibel perda do HTML xerado actualmente."
 
@@ -2604,17 +2550,12 @@ msgstr "Gardar cambios"
 msgid "You must save a changes or back to list"
 msgstr "Debes gardar os cambios ou volver á lista"
 
-msgid "Newsletter contents"
-msgstr "Contidos do boletin"
+#, fuzzy
+msgid "Pick contents"
+msgstr "Todos os contidos"
 
 msgid "Next"
 msgstr "Seguinte"
-
-msgid "Next step"
-msgstr "Seguinte paso"
-
-msgid "Back to list"
-msgstr "Volver á lista"
 
 msgid "Email subject"
 msgstr "Asunto da mensaxe"
@@ -2634,6 +2575,9 @@ msgstr "Limpar contidos"
 msgid "In Frontpage"
 msgstr "En portada"
 
+msgid "Add contents"
+msgstr "Engadir contidos"
+
 msgid "Check All"
 msgstr "Marcar todo"
 
@@ -2643,8 +2587,21 @@ msgstr "Engadir elementos seleccionados"
 msgid "Add selected contents"
 msgstr "Engadir contidos seleccionados"
 
-msgid "Delivered newsletter report"
+#, fuzzy
+msgid "Delivering report"
 msgstr "Informe de envio do boletin"
+
+msgid "Back to list"
+msgstr "Volver á lista"
+
+#, fuzzy
+msgid "Newsletter sending report"
+msgstr "Remitente do Boletín"
+
+msgid ""
+"Your newsletter was sent to the list of mails. Please find below the "
+"detailed report for each email and its status."
+msgstr ""
 
 msgid "OK"
 msgstr "Correcto"
@@ -2655,14 +2612,8 @@ msgstr "Fallido"
 msgid "Recipient selection"
 msgstr "Selección de destinatarios"
 
-msgid "Send newsletter"
-msgstr "Enviar boletin"
-
 msgid "Previous"
 msgstr "Anterior"
-
-msgid "Prev step"
-msgstr "Seguinte paso"
 
 msgid "Please select your desired persons to sent the newsletter to."
 msgstr "Seleccione as persoas ás que quere enviarlle o boletin de novas."
@@ -2696,9 +2647,6 @@ msgstr "Destinatarios"
 msgid "Preview"
 msgstr "Previsualizar"
 
-msgid "Previous step"
-msgstr "Paso anterior"
-
 msgid ""
 "Before using newsletter you have to fill the <a href=\"%1#external\"  target="
 "\"_blank\">reCaptcha keys on system settings</a>"
@@ -2706,17 +2654,14 @@ msgstr ""
 "Antes de usar o boletin de novas debes completar a <a href=\"%1#external\"  "
 "target=\"_blank\">configuración de reCaptcha do sistema</a>"
 
-msgid "Configuration"
-msgstr "Configuración"
-
 msgid "Newsletter subject"
-msgstr "Asunto do boletin de novas"
-
-msgid "Your newsletter subject"
 msgstr "Asunto do boletin de novas"
 
 msgid "The subject of the emails in this newsletter"
 msgstr "O asunto dos correos electrónicos neste boletin de novas."
+
+msgid "Your newsletter subject"
+msgstr "Asunto do boletin de novas"
 
 msgid "Email from"
 msgstr "Remitente do correo "
@@ -2727,12 +2672,6 @@ msgstr "Emisor do correo"
 msgid "Newsletter links points to"
 msgstr "O boletin de novas apunta a"
 
-msgid "Point to inner"
-msgstr "Ligar ao interior"
-
-msgid "Point to frontpage"
-msgstr "Ligar á portada"
-
 msgid ""
 "You can choose if you prefer that the links of the contents of the "
 "newsletter point within the content or contents on the frontpage"
@@ -2740,23 +2679,29 @@ msgstr ""
 "Podes seleccionar se queres que as ligazóns dos contidos no boletin apunten "
 "ao contido ou á portada principal"
 
+msgid "Point to inner"
+msgstr "Ligar ao interior"
+
+msgid "Point to frontpage"
+msgstr "Ligar á portada"
+
 msgid "Newsletter type"
 msgstr "Tipo de boletin"
+
+#, fuzzy
+msgid ""
+"Whether to manage new subscriptions by an external maillist or using the <a "
+"href=\"%1\" target=\"_blank\"> Opennemas-managed list of subscribers</a>."
+msgstr ""
+"Escolle se queres recibir os novos subscritores nun correo de verificación "
+"ou usar a táboa <a href=\"%1\" target=\"_blank\">de subscritores desde o "
+"aplicativo</a>."
 
 msgid "External Send"
 msgstr "Envio externo"
 
 msgid "Internal Send"
 msgstr "Envio interno"
-
-msgid ""
-"You can choose if receive new subscriptions with a checking email or using "
-"the <a href=\"%1\" target=\"_blank\"> table of subscribers from the "
-"application</a>."
-msgstr ""
-"Escolle se queres recibir os novos subscritores nun correo de verificación "
-"ou usar a táboa <a href=\"%1\" target=\"_blank\">de subscritores desde o "
-"aplicativo</a>."
 
 msgid "Mailing list address"
 msgstr "Enderezo da rolda de correo"
@@ -2774,17 +2719,26 @@ msgstr "Enderezo de correo electrónico no que recibir as novas subscricións"
 msgid "Articles in Frontpage"
 msgstr "Artigos en portada"
 
-msgid "New newsletter"
-msgstr "Novo boletin"
-
 msgid "Config newsletter module"
 msgstr "Configuración do módulo de boletin de novas"
 
-msgid " Since %1 you have sent %2 of %3 allowed"
-msgstr "Dende %1 enviaronse %2 de %3 permitidos"
+msgid "Subscriptors"
+msgstr "Subscritores"
 
-msgid " Since %1 you have sent %2 emails"
-msgstr "Dende %1 enviaronse %2 emails"
+#, fuzzy
+msgid "Search by subject"
+msgstr "Filtrar por nome"
+
+#, fuzzy
+msgid "Loading…"
+msgstr "Cargando"
+
+#, fuzzy
+msgid "There is no newsletters yet"
+msgstr "Ainda non hai ningún boletin."
+
+msgid "or your search criteria doesn't match anything."
+msgstr ""
 
 msgid "Title"
 msgstr "Titulo"
@@ -2798,144 +2752,30 @@ msgstr "Actualizado"
 msgid "Sendings"
 msgstr "Envio"
 
-msgid "There is no newsletters yet."
-msgstr "Ainda non hai ningún boletin."
+#, fuzzy
+msgid "Created on:"
+msgstr "Creado o"
 
-msgid "Upload"
-msgstr "Subir"
+#, fuzzy
+msgid "Show contents"
+msgstr "Todos os contidos"
 
-msgid "Browse"
-msgstr "Examinar"
+msgid "Remove permanently selected items"
+msgstr "Eliminar de forma permanente os elementos seleccionados"
 
-msgid "Pick the item to insert"
-msgstr "Seleccione o elemento a insertar"
-
-msgid "All months"
-msgstr "Todos os meses"
-
-msgid "Search"
-msgstr "Buscar"
-
-msgid "Insert"
-msgstr "Inserir"
-
-msgid "Upload new media"
-msgstr "Subir novo multimedia"
-
-msgid "Add files..."
-msgstr "Engadir ficheiros…"
-
+#, fuzzy
 msgid ""
-"Drop files anywhere here to upload or click on the \"Add Files...\" button "
-"above."
+"Are you sure you want to remove permanently [% template.selected.contents."
+"length %] item(s)?"
 msgstr ""
-"Solte ficheiros aquí para subilos ou prema no botón «Engadir ficheiros…» de "
-"arriba."
+"Tes certeza que queres eliminar de forma permanente [% selected.length %] "
+"contidos seleccionados?"
 
-msgid "File is too big"
-msgstr "O ficheiro é demasiado grande"
+msgid " You will not be able to restore them back."
+msgstr "Non poderás restauralos de volta."
 
-msgid "File is too small"
-msgstr "O ficheiro é demasiado pequeno"
-
-msgid "Filetype not allowed"
-msgstr "Tipo de ficheiro non permitido"
-
-msgid "Max number of files exceeded"
-msgstr "Superouse o número máximo de ficheiros"
-
-msgid "Uploaded bytes exceed file size"
-msgstr "Os bytes subidos exceden o tamaño de ficheiro"
-
-msgid "Empty file upload result"
-msgstr "Resultado de subida de ficheiro baleiro"
-
-msgid "Uploading files"
-msgstr "Subindo ficheiros"
-
-msgid "Clear"
-msgstr "Limpar"
-
-msgid "Thumbnail details"
-msgstr "Detalles da miniatura"
-
-msgid "Edit image"
-msgstr "Editar imaxe"
-
-msgid "Delete image"
-msgstr "Eliminar imaxe"
-
-msgid "Saving..."
-msgstr "Gardando…"
-
-msgid "Saved"
-msgstr "Gardado"
-
-msgid "Error saving"
-msgstr "Erro ao gardar"
-
-msgid "Description"
-msgstr "Descrición"
-
-msgid "Alignment"
-msgstr "Aliñamento"
-
-msgid "Left"
-msgstr "Esquerda"
-
-msgid "Right"
-msgstr "Dereita"
-
-msgid "None"
-msgstr "Ningún"
-
-msgid "Start"
-msgstr "Iniciar"
-
-msgid "Error"
-msgstr "Erro"
-
-msgid "Uploaded"
-msgstr "Subido"
-
-msgid "New ePaper"
-msgstr "Novo ePapel"
-
-msgid "Editing ePaper"
-msgstr "Edición de ePapel"
-
-msgid "Go Back"
-msgstr "Atrás"
-
-msgid "List of words separated by commas"
-msgstr "Lista de palabras separadas por comas"
-
-msgid "Price"
-msgstr "Prezo"
-
-msgid "Split decimals with a dot"
-msgstr "Divide os decimais con un punto"
-
-msgid "Type"
-msgstr "Tipo"
-
-msgid "Item"
-msgstr "Elemento"
-
-msgid "Subscription"
-msgstr "Suscrición"
-
-msgid "%1"
-msgstr "%1"
-
-msgid "Available"
-msgstr "Dispoñibel"
-
-msgid "Favorite"
-msgstr "Favorito"
-
-msgid "Date"
-msgstr "Data"
+msgid "Yes, remove them all"
+msgstr "Si, eliminalos todos"
 
 msgid "Delete newsstands"
 msgstr "Eliminiar kioskos"
@@ -2952,20 +2792,56 @@ msgstr "Eliminar kioskos"
 msgid "Are you sure you want to delete <span>%num%</span> kioskos?"
 msgstr "Tes certeza que queres eliminar <span>%num%</span> kioskos?"
 
-msgid "Save and exit"
-msgstr "Gardar e sair"
+msgid "Covers"
+msgstr "Portadas"
 
-msgid "Separated by commas"
-msgstr "Separadas por comas"
+#, fuzzy
+msgid "Creating ePaper"
+msgstr "Creando carta"
 
-msgid "Upload PDF"
-msgstr "Subir PDF"
+msgid "Editing ePaper"
+msgstr "Edición de ePapel"
 
-msgid "ePaper"
-msgstr "ePapel"
+msgid "Go Back"
+msgstr "Atrás"
+
+msgid "Date"
+msgstr "Data"
+
+#, fuzzy
+msgid "Click here to pick a date"
+msgstr "Prema para estabelecer unha data"
+
+msgid "Price"
+msgstr "Prezo"
+
+msgid "Split decimals with a dot"
+msgstr "Divide os decimais con un punto"
+
+msgid "Item"
+msgstr "Elemento"
+
+msgid "Subscription"
+msgstr "Suscrición"
+
+msgid "Favorite"
+msgstr "Favorito"
+
+msgid "%1"
+msgstr "%1"
+
+msgid "List of words separated by commas"
+msgstr "Lista de palabras separadas por comas"
 
 msgid "Order newsstand frontpage by"
 msgstr "Ordenar portada de Kiosko segundo"
+
+msgid "Select if order newsstand's frontpage by dates or by section."
+msgstr ""
+"Seleccione se quere ordenar a portada de kioskos por datas ou por seccións"
+
+msgid "Grouped by date is recommended for weekly newspapers."
+msgstr "Agrupado por datas é o recomendábel para periódicos semanais."
 
 msgid "Sections"
 msgstr "Categorias"
@@ -2976,16 +2852,6 @@ msgstr "Datas"
 msgid "Grouped by date"
 msgstr "Agrupadas por data"
 
-msgid "Select if order newsstand's frontpage by dates or by section."
-msgstr ""
-"Seleccione se quere ordenar a portada de kioskos por datas ou por seccións"
-
-msgid "Grouped by date is recommended for weekly newspapers."
-msgstr "Agrupado por datas é o recomendábel para periódicos semanais."
-
-msgid "ePapers"
-msgstr "ePapeis"
-
 msgid "Widget Home"
 msgstr "Widget de portada"
 
@@ -2995,8 +2861,11 @@ msgstr "Listado"
 msgid "Config covers module"
 msgstr "Configuración do módulo «Portadas»"
 
-msgid "Batch actions"
-msgstr "Accións en lote"
+msgid "Save positions"
+msgstr "Gardar posicións"
+
+msgid "New cover"
+msgstr "Nova portada"
 
 msgid "Publish"
 msgstr "Publicar"
@@ -3010,23 +2879,14 @@ msgstr "En portada"
 msgid "Drop from home"
 msgstr "Sacar de portada"
 
-msgid "Save positions"
-msgstr "Gardar posicións"
-
-msgid "New cover"
-msgstr "Nova portada"
-
-msgid "FILTER:"
-msgstr "FILTRAR:"
-
 msgid "Search by title"
 msgstr "Buscar por titulo"
 
 msgid "(inactive)"
 msgstr "(inactivo)"
 
-msgid "Loading"
-msgstr "Cargando"
+msgid "View"
+msgstr "Ver"
 
 msgid "Section"
 msgstr "Sección"
@@ -3039,12 +2899,6 @@ msgstr "Non hai portadas dispoñibeis"
 
 msgid "Last editor"
 msgstr "Último editor"
-
-msgid "Showing"
-msgstr "Mostrando"
-
-msgid "of"
-msgstr "de"
 
 msgid "Creating widget"
 msgstr "Creando widget"
@@ -3067,12 +2921,6 @@ msgstr "HTML"
 msgid "Smarty"
 msgstr "Smarty"
 
-msgid "Attributes"
-msgstr "Atributos"
-
-msgid "Tags"
-msgstr "Etiquetas"
-
 msgid "Content"
 msgstr "Contido"
 
@@ -3082,17 +2930,16 @@ msgstr "Inserir imaxe"
 msgid "Parameters"
 msgstr "Parámetros"
 
-msgid "Use this option only if you are avanced user"
-msgstr "Use esta opción só se é un usuario avanzado"
+#, fuzzy
+msgid "Parameter name"
+msgstr "Parámetros"
+
+#, fuzzy
+msgid "Parameter value"
+msgstr "Parámetros"
 
 msgid "Add parameter"
 msgstr "Engadir parámetro"
-
-msgid "Close"
-msgstr "Pechar"
-
-msgid "Write a tag and press Enter..."
-msgstr "Escribe unha etiqueta e preme Intro…"
 
 msgid "Edit '%1'"
 msgstr "Editar «%1»"
@@ -3109,11 +2956,11 @@ msgstr "Arquivar"
 msgid "Send to trash"
 msgstr "Enviar ao lixo"
 
-msgid "New widget"
-msgstr "Novo widget"
+msgid "Disable"
+msgstr "Desactivado"
 
-msgid "Search by title:"
-msgstr "Buscar por titulo"
+msgid "Enable"
+msgstr "Activado"
 
 msgid "IntelligentWidget"
 msgstr "IntelligentWidget"
@@ -3127,47 +2974,14 @@ msgstr "Editar widget «[% content.title %]»"
 msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
-msgid "Go to admin main page"
-msgstr "Ir á páxina principal do administrador"
-
-msgid "Search..."
-msgstr "Buscar…"
-
-msgid "Pending comments"
-msgstr "Comentarios pendentes"
-
-msgid "Help"
-msgstr "Axuda"
-
-msgid "FAQ"
-msgstr "Preguntas frecuentes"
-
-msgid "Contact support"
-msgstr "Contactar con soporte"
+msgid "Show/hide sidebar"
+msgstr ""
 
 msgid "Photo"
 msgstr "Foto"
 
-msgid "Edit my profile"
-msgstr "Editar o meu perfil"
-
 msgid "Do you really want to exit from backend?"
 msgstr "Tes certeza que queres sair do panel de administración?"
-
-msgid "Logout from control panel"
-msgstr "Sair do panel de administración"
-
-msgid "Log out"
-msgstr "Sair da sesión"
-
-msgid "About"
-msgstr "Sobre"
-
-msgid "Privacy Policy"
-msgstr "Politica de privacidade"
-
-msgid "Legal"
-msgstr "Información legal"
 
 msgid "Delete letters"
 msgstr "Eliminar cartas"
@@ -3187,11 +3001,8 @@ msgstr "Editar carta"
 msgid "Creating letter"
 msgstr "Creando carta"
 
-msgid "Metadata"
-msgstr "Metadatos"
-
-msgid "List of words separated by words."
-msgstr "Lista de palabras separadas por comas."
+msgid "Body"
+msgstr "Corpo"
 
 msgid "Author information"
 msgstr "Información do autor"
@@ -3202,23 +3013,22 @@ msgstr "Alcume"
 msgid "Created at"
 msgstr "Creado en"
 
-msgid "Body"
-msgstr "Corpo"
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgid "List of words separated by words."
+msgstr "Lista de palabras separadas por comas."
 
 msgid "Related url"
 msgstr "Url relacionado"
 
-msgid "Image for Special"
-msgstr "Imaxe para o especial"
+#, fuzzy
+msgid "Image assigned"
+msgstr "Tamaño da imaxe"
 
-msgid "Frontpage image"
-msgstr "Imaxe de portada"
-
-msgid "Image not set"
-msgstr "Imaxe non estabelecida"
-
-msgid "Set image"
-msgstr "Estabelecer imaxe"
+#, fuzzy
+msgid "Pick an image"
+msgstr "Selecciona a localización da a imaxe"
 
 msgid "Texto"
 msgstr "Texto"
@@ -3232,11 +3042,11 @@ msgstr "Personalizar en portada"
 msgid "Customize content"
 msgstr "Personalizar contido"
 
-msgid "New letter"
-msgstr "Nova carta"
-
 msgid "Author"
 msgstr "Autor"
+
+msgid "Available"
+msgstr "Dispoñibel"
 
 msgid "No available letters."
 msgstr "No hai cartas dispoñibeis."
@@ -3244,17 +3054,11 @@ msgstr "No hai cartas dispoñibeis."
 msgid "Media element (jpg, png, gif)"
 msgstr "Elemento multimedia (jpg, png, gif)"
 
-msgid "Publish/Unpublish"
-msgstr "Publicar/despublicar"
-
 msgid "Reject"
 msgstr "Rexeitar"
 
-msgid "Hide password"
-msgstr "Ocultar contrasinal"
-
-msgid "Show password"
-msgstr "Mostrar contrasinal"
+msgid "Publish/Unpublish"
+msgstr "Publicar/despublicar"
 
 msgid "News agency"
 msgstr "Axencias de novas"
@@ -3268,35 +3072,11 @@ msgstr "Engadir orixe"
 msgid "Source name"
 msgstr "Nome da orixe"
 
-msgid "Url"
-msgstr "URL"
-
-msgid "The server url for this source. Example: ftp://server.com/path"
-msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
-
-msgid "Username"
-msgstr "Nome de usuario"
-
-msgid "Password"
-msgstr "Contrasinal"
-
-msgid "Agency"
-msgstr "Axencia"
-
-msgid "When importing elements this will be the signature"
-msgstr "Ao importar elementos esta será a firma"
-
-msgid "Import authors"
-msgstr "Importar autores"
-
-msgid ""
-"Activate this if you want to import the author of the elements if available"
-msgstr ""
-"Activa esta opción se queres importar o autor dos elementos, se está "
-"dispoñible"
-
 msgid "Color"
 msgstr "Cor"
+
+msgid "Color to distinguish between other agencies"
+msgstr "Cor para distinguir entre as distintas axencias de novas"
 
 msgid "Dark Gray"
 msgstr "Gris escuro"
@@ -3334,8 +3114,43 @@ msgstr "Vermello"
 msgid "Purple"
 msgstr "Violeta"
 
-msgid "Color to distinguish between other agencies"
-msgstr "Cor para distinguir entre as distintas axencias de novas"
+#, fuzzy
+msgid "Connection"
+msgstr "Conectar"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "The server url for this source. Example: ftp://server.com/path"
+msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
+
+msgid "Username"
+msgstr "Nome de usuario"
+
+msgid "Password"
+msgstr "Contrasinal"
+
+msgid "Show password"
+msgstr "Mostrar contrasinal"
+
+#, fuzzy
+msgid "Sync parameters"
+msgstr "Parámetros"
+
+msgid "Agency"
+msgstr "Axencia"
+
+msgid "When importing elements this will be the signature"
+msgstr "Ao importar elementos esta será a firma"
+
+msgid "Import authors"
+msgstr "Importar autores"
+
+msgid ""
+"Activate this if you want to import the author of the elements if available"
+msgstr ""
+"Activa esta opción se queres importar o autor dos elementos, se está "
+"dispoñible"
 
 msgid "Sync elements newer than"
 msgstr "Sincronizar elementos máis actuais que"
@@ -3347,29 +3162,64 @@ msgstr ""
 "Estabelece esta preferencia para obter os elementos desde unha data fixa."
 "<br>Menos tempo implica sincronizacións máis rápidas."
 
+msgid "Hide password"
+msgstr "Ocultar contrasinal"
+
 msgid "Add server"
 msgstr "Engadir servidor"
 
 msgid "Sync from"
 msgstr "Sincronizar desde"
 
-msgid "Activate server"
-msgstr "Activar servidor"
-
 msgid "Removes the synchronized files for this source"
 msgstr "Elimina os ficheiros sincronizados para esta orixe"
 
-msgid "This article was imported before. Take care of it."
-msgstr "Este artigo foi importado con anterioridade."
+#, fuzzy
+msgid "Remove local files"
+msgstr "Eliminar ficheiro"
 
-msgid "Basic information"
-msgstr "Información básica"
+msgid "Activate server"
+msgstr "Activar servidor"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Pretitle:"
+msgstr "Antetitulo:"
+
+msgid "Priority:"
+msgstr "Prioridade:"
+
+msgid "Priority"
+msgstr "Prioridade"
+
+msgid "Urgent"
+msgstr "Urxente"
+
+msgid "Important"
+msgstr "Importante"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Basic"
+msgstr "Básica"
+
+msgid "Date:"
+msgstr "Data:"
+
+msgid "Summary:"
+msgstr "Resumo:"
+
+msgid "Attachments"
+msgstr "Anexos"
+
+msgid ""
+"This agency element has some attachments that could be imported with it."
+msgstr ""
 
 msgid "Photos"
 msgstr "Fotos"
-
-msgid "Other attachments"
-msgstr "Outros anexos"
 
 msgid "Files:"
 msgstr "Ficheiros:"
@@ -3402,20 +3252,18 @@ msgstr "Descargando artigos desde as axencias de novas, por favor agarde…"
 msgid "Stop sync"
 msgstr "Deter sincronización"
 
-msgid "Batch import"
-msgstr "Importar en lote"
-
 msgid "Sync with server"
 msgstr "Sincronizar co servidor"
 
 msgid "Reload list"
 msgstr "Recargar listado"
 
-msgid "Filter by title or content"
-msgstr "Filtrar por titulo ou contido"
+msgid "Batch import"
+msgstr "Importar en lote"
 
-msgid "and in"
-msgstr "e en"
+#, fuzzy
+msgid "Search by title or content"
+msgstr "Filtrar por titulo ou contido"
 
 msgid "Source"
 msgstr "Orixe"
@@ -3432,36 +3280,27 @@ msgstr ""
 "Actualiza esta lista desde o servidor premendo o botón «Sincronizar co "
 "servidor» desde a barra de ferramentas superior."
 
-msgid "Priority"
-msgstr "Prioridade"
-
-msgid "Urgent"
-msgstr "Urxente"
-
-msgid "Important"
-msgstr "Importante"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Basic"
-msgstr "Básica"
-
-msgid "Attachments"
-msgstr "Anexos"
-
 msgid "With image"
 msgstr "Con imaxes"
 
 msgid "This new has attached images"
 msgstr "Esta nova ten imaxes asociadas"
 
-msgid "View"
-msgstr "Ver"
+msgid "With video"
+msgstr "Con vídeos"
 
+#, fuzzy
+msgid "View contents"
+msgstr "Limpar contidos"
+
+#, fuzzy
+msgid "Importing element"
+msgstr "Importando artigo"
+
+#, fuzzy
 msgid ""
-"You are about to import one article, please select a category where to "
-"import the article"
+"You are about to import one article, please select a category where you want "
+"to import this content."
 msgstr ""
 "Estás a piques de importar un artigo, selecciona unha categoría onde "
 "importar o artigo"
@@ -3475,11 +3314,13 @@ msgstr "Editando ficheiro"
 msgid "Creating file"
 msgstr "Creando ficheiro"
 
-msgid "Path"
-msgstr "Ruta"
+#, fuzzy
+msgid "File path"
+msgstr "Nome de ficheiro"
 
-msgid "WIDGET HOME"
-msgstr "Widget de Portada"
+#, fuzzy
+msgid "Download"
+msgstr "Url de descarga"
 
 msgid "Files (#)"
 msgstr "Ficheiros (nº)"
@@ -3490,17 +3331,15 @@ msgstr "Tamaño (MB)"
 msgid "TOTAL"
 msgstr "TOTAL"
 
-msgid "Special elements"
-msgstr "Elementos do especial"
+#, fuzzy
+msgid "New file"
+msgstr "Novo artigo"
 
-msgid "Upload file"
-msgstr "Subir ficheiro"
+msgid "Created on"
+msgstr "Creado o"
 
 msgid "No available files."
 msgstr "No hai ficheiros dispoñibeis."
-
-msgid "[Link]"
-msgstr "[Ligazón]"
 
 msgid "Unassigned"
 msgstr "Sen asignar"
@@ -3523,29 +3362,41 @@ msgstr "Creando enquisa"
 msgid "Subtitle"
 msgstr "Subtitulo"
 
-msgid "Publication closed date"
-msgstr "Data de final de publicación"
-
-msgid "Allow comments"
-msgstr "Permitir comentarios"
-
 msgid "Visualization format"
 msgstr "Formato de visualización"
-
-msgid "Circular"
-msgstr "Circular"
 
 msgid "Bars"
 msgstr "Barras"
 
-msgid "Allowed answers"
+msgid "Circular"
+msgstr "Circular"
+
+#, fuzzy
+msgid "Answers"
 msgstr "Respostas permitidas"
 
 msgid "Votes"
 msgstr "Votos"
 
+#, fuzzy
+msgid "No votes"
+msgstr "Votos"
+
+#, fuzzy
+msgid "Remove poll answer"
+msgstr "Eliminar ficheiro"
+
 msgid "Add new answer"
 msgstr "Engadir nova resposta"
+
+msgid "Attributes"
+msgstr "Atributos"
+
+msgid "Allow comments"
+msgstr "Permitir comentarios"
+
+msgid "Publication closed date"
+msgstr "Data de final de publicación"
 
 msgid "Poll section preferences"
 msgstr "Preferencias das enquisas"
@@ -3592,26 +3443,13 @@ msgstr "No hai enquisas dispoñibeis."
 msgid "Delete advertisements"
 msgstr "Publicidade publicidades"
 
-msgid "Remove permanently selected items"
-msgstr "Eliminar de forma permanente os elementos seleccionados"
-
-msgid ""
-"Are you sure you want to remove permanently [% selected.length %] item(s)?"
-msgstr ""
-"Tes certeza que queres eliminar de forma permanente [% selected.length %] "
-"contidos seleccionados?"
-
-msgid " You will not be able to restore them back."
-msgstr "Non poderás restauralos de volta."
-
-msgid "Yes, remove them all"
-msgstr "Si, eliminalos todos"
-
 msgid "Permanently remove item"
 msgstr "Eliminar de forma permanente o elemento"
 
+#, fuzzy
 msgid ""
-"Are you sure that do you want remove permanently from trash \"[% title %]\"?"
+"Are you sure that do you want remove permanently from trash \"[% template."
+"content.title %]\"?"
 msgstr ""
 "Tes certeza que queres enviar eliminar de forma permanente do lixo \"[% "
 "title %]\"?"
@@ -3619,25 +3457,28 @@ msgstr ""
 msgid " You will not be able to restore it back."
 msgstr "Non poderá restauralos de novo."
 
-msgid "Yes, remove"
-msgstr "Si, eliminar"
-
-msgid "Delete item"
-msgstr "Eliminar elemento"
-
-msgid "Are you sure that do you want delete \"[% title %]\"?"
-msgstr "Tes certeza que queres eliminar «<span>[% title %]</span>»?"
+#, fuzzy
+msgid ""
+"Are you sure that do you want send to the trash \"[% template.content.title "
+"%]\"?"
+msgstr "Tes certeza que queres restaurar do lixo «[% title %]»?"
 
 msgid "Delete selected items"
 msgstr "Eliminar os elementos seleccionados"
 
-msgid "Are you sure you want to delete [% selected %] item(s)?"
+#, fuzzy
+msgid ""
+"Are you sure you want to delete [% template.selected.contents.length %] "
+"item(s)?"
 msgstr "Tes certeza que queres eliminar [% selected %] elemento(s)?"
 
 msgid "Restore item"
 msgstr "Restaurar elemento"
 
-msgid "Are you sure that do you want restore from trash \"[% title %]\"?"
+#, fuzzy
+msgid ""
+"Are you sure that do you want restore from trash \"[% template.content.title "
+"%]\"?"
 msgstr "Tes certeza que queres restaurar do lixo «[% title %]»?"
 
 msgid "Yes, restore"
@@ -3670,9 +3511,6 @@ msgstr "No hai contidos dispoñibeis"
 msgid "Categories"
 msgstr "Categorias"
 
-msgid "All categories"
-msgstr "Tódalas categorías"
-
 msgid "Unknown"
 msgstr "Descoñecido"
 
@@ -3688,23 +3526,14 @@ msgstr "Editando grupo"
 msgid "Creating user group"
 msgstr "Creando grupo de usuario"
 
+msgid "Basic information"
+msgstr "Información básica"
+
 msgid "Group name"
 msgstr "Nome do grupo"
 
 msgid "Privileges"
 msgstr "Privilexios"
-
-msgid "New Privilege"
-msgstr "Novo privilexio"
-
-msgid "New User Group"
-msgstr "Novo grupo de usuarios"
-
-msgid "New user group"
-msgstr "Nuevo grupo de usuario"
-
-msgid "Filter by name or email"
-msgstr "Filtrar por nome ou correo"
 
 msgid ""
 "There is no user groups created yet or <br/>results matching your searching "
@@ -3713,8 +3542,12 @@ msgstr ""
 "Ainda non hai ningún grupo de usuario creado <br/>ou o teu criterio de busca "
 "non coincide con ningún grupo de usuario."
 
-msgid "Delete this user"
-msgstr "Eliminar este usuario"
+msgid "Edit user group"
+msgstr "Editar grupo de usuarios"
+
+#, fuzzy
+msgid "Delete this user group"
+msgstr "Eliminar grupo de usuarios"
 
 msgid "Editing user group"
 msgstr "Editando grupo de usuarios"
@@ -3728,8 +3561,11 @@ msgstr "Crear usuario"
 msgid "User info"
 msgstr "Información do usuario"
 
-msgid "Social Networks"
-msgstr "Redes sociais"
+msgid "Display name"
+msgstr "Nome en pantalla"
+
+msgid "User name"
+msgstr "Nome do usuario"
 
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
@@ -3749,12 +3585,6 @@ msgstr "Cambiar"
 msgid "Remove image"
 msgstr "Eliminar imaxe"
 
-msgid "Display name"
-msgstr "Nome en pantalla"
-
-msgid "User name"
-msgstr "Nome do usuario"
-
 msgid "Blog Url"
 msgstr "Url do blogue"
 
@@ -3767,11 +3597,29 @@ msgstr "Biografia"
 msgid "Confirm password"
 msgstr "Confirmar contrasinal"
 
+msgid "Social Networks"
+msgstr "Redes sociais"
+
 msgid "Facebook"
 msgstr "Facebook"
 
 msgid "Twitter"
 msgstr "Twitter"
+
+msgid "Paywall time limit:"
+msgstr "Limite de tiempo del paywall:"
+
+msgid "User group"
+msgstr "Grupo de usuarios"
+
+msgid "User group:"
+msgstr "Grupos de usuarios:"
+
+msgid "Master"
+msgstr "Mestre"
+
+msgid "HOME"
+msgstr "Portada"
 
 msgid "User type"
 msgstr "Tipo de usuario"
@@ -3788,35 +3636,15 @@ msgstr "Idioma do usuario"
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
-msgid "User group:"
-msgstr "Grupos de usuarios:"
+#, fuzzy
+msgid "No Published"
+msgstr "Non publicado"
 
-msgid "Master"
-msgstr "Mestre"
-
-msgid "HOME"
-msgstr "Portada"
-
-msgid "Paywall time limit:"
-msgstr "Limite de tiempo del paywall:"
-
-msgid "Enable"
-msgstr "Activado"
-
-msgid "Disable"
-msgstr "Desactivado"
-
-msgid "Create new user"
-msgstr "Crear novo usuario"
-
-msgid "New user"
-msgstr "Novo usuario"
-
-msgid "--All--"
-msgstr "--Todos--"
-
-msgid "Group"
-msgstr "Grupo"
+msgid ""
+"There is no user created yet or <br/>not results for your searching criteria."
+msgstr ""
+"Ainda non hai ningún usuario creado ainda <br/>ou o teu criterio de busca "
+"non coincide con ningún usuario."
 
 msgid "Full name"
 msgstr "Nome completo"
@@ -3824,11 +3652,8 @@ msgstr "Nome completo"
 msgid "E-mail"
 msgstr "Correo electrónico"
 
-msgid ""
-"There is no user created yet or <br/>not results for your searching criteria."
-msgstr ""
-"Ainda non hai ningún usuario creado ainda <br/>ou o teu criterio de busca "
-"non coincide con ningún usuario."
+msgid "Group"
+msgstr "Grupo"
 
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
@@ -3855,32 +3680,14 @@ msgstr ""
 "Produciuse un erro ao subir o realizar a busca, recargua esta lapela "
 "cambiando a outra."
 
-msgid "Please fill the form for searching contents"
-msgstr "Completa o formulario para buscar contidos"
-
-msgid "We cant find any content with your search criteria."
-msgstr "Non se puido atopar ningún contido co teu criterio de busca."
-
-msgid "Your search \"<b>%1</b>\" didn't return any element."
-msgstr "O teu criterio \"<b>%1</b>\" non devolveu ningún resultado."
-
-msgid "Suggestions:"
-msgstr "Suxestións:"
-
-msgid "Check if all the words are written correctly."
-msgstr "Comproba se todas as palabras están escritas correctamente."
-
-msgid "Use other words."
-msgstr "Usa outras palabras"
-
-msgid "Use more general search criteria."
-msgstr "Usa un criterio de busca máis xenérico."
-
 msgid "Global search"
 msgstr "Busca global"
 
-msgid "CONTENT TYPE:"
-msgstr "TIPO DE CONTIDO:"
+msgid "Filter by title"
+msgstr "Filtrar por título"
+
+msgid "Please fill the form for searching contents"
+msgstr "Completa o formulario para buscar contidos"
 
 msgid "Add an external link item."
 msgstr "Engadir ligazón externa."
@@ -3891,6 +3698,9 @@ msgid ""
 msgstr ""
 "Completa o formulario de embaixo co titulo e a URL externa que queres "
 "engadir ao menú."
+
+msgid "Title:"
+msgstr "Titulo:"
 
 msgid "URL:"
 msgstr "URL:"
@@ -3910,7 +3720,13 @@ msgstr "Creando menú"
 msgid "Position"
 msgstr "Posición"
 
-msgid "Menu components"
+msgid ""
+"(If your theme has defined positions for menus you can assign one menu to "
+"each of them)"
+msgstr ""
+
+#, fuzzy
+msgid "Menu contents"
 msgstr "Compoñentes do menú"
 
 msgid ""
@@ -3989,17 +3805,14 @@ msgstr "Ligazón"
 msgid "Menu link..."
 msgstr "Ligazón do menú…"
 
-msgid "New menu"
-msgstr "Novo menú"
+msgid "Update"
+msgstr "Actualizar"
 
 msgid "Position assigned"
 msgstr "Posición asignada"
 
 msgid "Unasigned"
 msgstr "Sen asignar"
-
-msgid "Edit page '[% content.name %]'"
-msgstr "Editar páxina '[% content.name %]'"
 
 msgid "Creating static page"
 msgstr "Creando páxina estática"
@@ -4013,12 +3826,6 @@ msgstr "O compoñente slug da url"
 msgid "Create new page"
 msgstr "Crear nova páxina"
 
-msgid "New static page"
-msgstr "Nova páxina estática"
-
-msgid "New page"
-msgstr "Nova páxina"
-
 msgid "Views"
 msgstr "Vistas"
 
@@ -4028,17 +3835,8 @@ msgstr "Non hai ningunha páxina estática."
 msgid "Open in a new window"
 msgstr "Abrir nunha nova xanela"
 
-msgid "System settings"
-msgstr "Configuracións do sistema"
-
-msgid "SEO"
-msgstr "SEO"
-
-msgid "Internal"
-msgstr "Interno"
-
-msgid "External Services"
-msgstr "Servizos externos"
+msgid "General"
+msgstr "Xeral"
 
 msgid "Site name"
 msgstr "Nome do sitio"
@@ -4058,6 +3856,15 @@ msgstr "Cor do sitio"
 msgid "Color used for links, menus and some widgets."
 msgstr "Cor usado para as ligazóns, menús e algúns widgets."
 
+msgid "Footer text"
+msgstr "Texto do pé da páxina"
+
+msgid ""
+"Text showed at the bottom of your page. Usually used for copyright notice."
+msgstr ""
+"Texto que se mostra na parte inferior da súa páxina. Normalmente usado para "
+"o copyright."
+
 msgid "Use custom logo"
 msgstr "Usar logotipo personalizado"
 
@@ -4070,14 +3877,8 @@ msgstr "Favico"
 msgid "Site Mobile logo"
 msgstr "Logotipo do sitio para móbil"
 
-msgid "Footer text"
-msgstr "Texto do pé da páxina"
-
-msgid ""
-"Text showed at the bottom of your page. Usually used for copyright notice."
-msgstr ""
-"Texto que se mostra na parte inferior da súa páxina. Normalmente usado para "
-"o copyright."
+msgid "SEO"
+msgstr "SEO"
 
 msgid "SEO options"
 msgstr "Opcións de SEO"
@@ -4099,6 +3900,9 @@ msgstr "Google Web Master Tools"
 
 msgid "Bing Web Master Tools"
 msgstr "Bing Web Master Tools"
+
+msgid "Internal"
+msgstr "Interno"
 
 msgid "Cookies agreement"
 msgstr "Aceptación de cookies"
@@ -4153,16 +3957,9 @@ msgstr "Módulo de formulario"
 msgid "Contact email"
 msgstr "Correo-e de contacto"
 
-msgid "Sessions"
-msgstr "Sesións"
-
-msgid "Max session lifetime"
-msgstr "Tempo de expiración máximo para as sesións"
-
-msgid "Minutes after a user session is considered as invalid."
-msgstr ""
-"Minutos despois dos cales unha sesión de usuarios se considera como non "
-"válida."
+#, fuzzy
+msgid "External services"
+msgstr "Servizos externos"
 
 msgid "Google Services"
 msgstr "Servizos de Google"
@@ -4172,18 +3969,6 @@ msgstr "Url da páxina de Google+"
 
 msgid "If you have a <b>Google+ page</b>, please complete this input."
 msgstr "Se tes unha <b>páxina en Google+</b>, completa este campo."
-
-msgid "Google Maps API key"
-msgstr "Chave da API de Google Maps"
-
-msgid ""
-"You can get your Google <strong>Maps</strong> API Key from <a href=\"http://"
-"code.google.com/apis/maps/signup.html\" target=\"_blank\">Google maps sign "
-"up website</a>."
-msgstr ""
-"Podes obter as túas chaves de API de Google <strong>Maps</strong> desde <a "
-"href=\"http://code.google.com/apis/maps/signup.html\" target=\"_blank\">o "
-"sitio web Google Maps sign up</a>."
 
 msgid "Google Search API key:"
 msgstr "Chave da API de Google Search:"
@@ -4197,6 +3982,31 @@ msgstr ""
 "\"http://www.google.com/cse/manage/create\" target=\"_blank\">o sitio web "
 "Google Search sign up</a>."
 
+msgid "Publication name in Google News"
+msgstr "Nome da publicación en Google News"
+
+msgid "Google Maps API key"
+msgstr "Chave da API de Google Maps"
+
+msgid ""
+"You can get your Google <strong>Maps</strong> API Key from <a href=\"http://"
+"code.google.com/apis/maps/signup.html\" target=\"_blank\">Google maps sign "
+"up website</a>."
+msgstr ""
+"Podes obter as túas chaves de API de Google <strong>Maps</strong> desde <a "
+"href=\"http://code.google.com/apis/maps/signup.html\" target=\"_blank\">o "
+"sitio web Google Maps sign up</a>."
+
+msgid "YouTube Page Url"
+msgstr "Url da páxina de Youtube"
+
+msgid ""
+"If you have a <b>Youtube page</b>, please complete the form with your "
+"youtube page url."
+msgstr ""
+"Se tes unha <b>páxina en Youtube</b>, completa o formulario coa URL da "
+"páxina de Youtube."
+
 msgid "Google Analytics API key"
 msgstr "Chave da API de Google Analytics"
 
@@ -4209,19 +4019,6 @@ msgstr ""
 "\"https://www.google.com/analytics/\" target=\"_blank\">o sitio web de "
 "GAnalytics</a> baixo a lista da Vista previa (deberia ser algo semellante a "
 "UA-123456-7)."
-
-msgid "Publication name in Google News"
-msgstr "Nome da publicación en Google News"
-
-msgid "YouTube Page Url"
-msgstr "Url da páxina de Youtube"
-
-msgid ""
-"If you have a <b>Youtube page</b>, please complete the form with your "
-"youtube page url."
-msgstr ""
-"Se tes unha <b>páxina en Youtube</b>, completa o formulario coa URL da "
-"páxina de Youtube."
 
 msgid "Facebook Page Url"
 msgstr "Url da páxina de Facebook"
@@ -4253,12 +4050,29 @@ msgstr "Chave secreta"
 msgid "Twitter Page"
 msgstr "Páxina en Twitter"
 
+#, fuzzy
 msgid ""
 "If you also have a <b>twitter page</b>, add your profile name on the form. "
-"<br/>Default will be set with Opennemas."
+"Default will be set with Opennemas."
 msgstr ""
 "Se tes unha <b>páxina en Twitter</b>, engade o teu nome de perfil no "
 "formulario.<br/>Por omisión usarase o de OpenNeMas."
+
+msgid "Paypal Settings"
+msgstr "Opcións de Paypal"
+
+msgid "Account email:"
+msgstr "Correo-e da conta:"
+
+msgid ""
+"You can get your PayPal account email from <a href=\"https://www.paypal.com/"
+"us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
+"This must be a business account for receiving payments"
+msgstr ""
+"Podes obter a túa conta de correo-e de Paypal desde <a href=\"https://www."
+"paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank"
+"\">PayPal</a>. Debe ser unha conta de empresa para recibir as notificacións "
+"de pagos."
 
 msgid "Opennemas News Agency"
 msgstr "Axencia de novas Opennemas"
@@ -4266,17 +4080,24 @@ msgstr "Axencia de novas Opennemas"
 msgid "User"
 msgstr "Usuario"
 
-msgid "Piwik Statistics"
-msgstr "Estatisticas de Piwik"
+msgid "Recaptcha"
+msgstr "Recaptcha"
 
-msgid "Page ID"
-msgstr "ID da páxina"
+msgid "Public key"
+msgstr "Chave pública"
 
-msgid "Server URL"
-msgstr "URL do servidor"
+msgid ""
+"Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/"
+"admin#whyrecaptcha\" target=\"_blank\">this page</a>."
+msgstr ""
+"Pode obter as túas chaves de reCAPTCHA desde <a href=\"https://www.google."
+"com/recaptcha/whyrecaptcha\" target=\"_blank\">esta páxina</a>."
 
-msgid "User token auth"
-msgstr "Token de autenticación do usuario"
+msgid "Used when we want to test if the user is an human and not a robot."
+msgstr "Usado cando queres comprobar se un usuario é un humano e non un robot."
+
+msgid "Private key"
+msgstr "Chave privada"
 
 msgid "OJD Statistics"
 msgstr "Estadisticas de OJD"
@@ -4300,40 +4121,41 @@ msgstr ""
 "Se xa tes o <b>servizo de estatisticas de comScore</b>, engade o teu "
 "identificador de páxina"
 
-msgid "Recaptcha"
-msgstr "Recaptcha"
+msgid "Editing author"
+msgstr "Editando autor"
 
-msgid "Public key"
-msgstr "Chave pública"
+msgid "Creating author"
+msgstr "Creando autor"
+
+msgid "Twitter user"
+msgstr "Usuario de Twitter"
+
+msgid "View as Blog"
+msgstr "Ver como Blog"
+
+msgid "If this option is activated page author will be showed as blog"
+msgstr "Se esta opción está activada a páxina de autor mostrarase como un blog"
+
+msgid "Other Blog Url"
+msgstr "Outro url do blog"
+
+msgid "Show in RSS"
+msgstr "Mostrar en RSS"
+
+msgid "If this option is activated this author will be showed in rss"
+msgstr "Se esta opción está activada este autor mostrarase no RSS"
+
+msgid "Create new author"
+msgstr "Crear novo autor"
 
 msgid ""
-"Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/"
-"admin#whyrecaptcha\" target=\"_blank\">this page</a>."
+"There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
-"Pode obter as túas chaves de reCAPTCHA desde <a href=\"https://www.google."
-"com/recaptcha/whyrecaptcha\" target=\"_blank\">esta páxina</a>."
+"Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
+"coincide con ningún usuario."
 
-msgid "Used when we want to test if the user is an human and not a robot."
-msgstr "Usado cando queres comprobar se un usuario é un humano e non un robot."
-
-msgid "Private key"
-msgstr "Chave privada"
-
-msgid "Paypal Settings"
-msgstr "Opcións de Paypal"
-
-msgid "Account email:"
-msgstr "Correo-e da conta:"
-
-msgid ""
-"You can get your PayPal account email from <a href=\"https://www.paypal.com/"
-"us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
-"This must be a business account for receiving payments"
-msgstr ""
-"Podes obter a túa conta de correo-e de Paypal desde <a href=\"https://www."
-"paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank"
-"\">PayPal</a>. Debe ser unha conta de empresa para recibir as notificacións "
-"de pagos."
+msgid "Avatar"
+msgstr "Avatar"
 
 msgid "Delete video"
 msgstr "Eliminar vídeo"
@@ -4347,10 +4169,16 @@ msgstr "Creando vídeo"
 msgid "Editing video"
 msgstr "Editando vídeo"
 
-msgid "Pick the method to add the video:"
+#, fuzzy
+msgid "Pick type"
+msgstr "tipo"
+
+#, fuzzy
+msgid "Pick the method to add the video"
 msgstr "Selecciona o método para engadir o vídeo:"
 
-msgid "Upload file from my computer"
+#, fuzzy
+msgid "Upload a file from my computer"
 msgstr "Subir un vídeo desde o meu computador"
 
 msgid "Link video from other web video services"
@@ -4376,12 +4204,6 @@ msgstr "Orixes de vídeo permitidas:"
 
 msgid "Pick a file to upload"
 msgstr "Selecciona un ficheiro para subir"
-
-msgid "List of words separated by commas."
-msgstr "Lista de palabras separadas por comas"
-
-msgid "Service:"
-msgstr "Servizo:"
 
 msgid "Other information"
 msgstr "Outra información"
@@ -4412,6 +4234,12 @@ msgstr "Escribe o código HTML"
 
 msgid "Video Cover"
 msgstr "Captura do vídeo"
+
+msgid "Image not set"
+msgstr "Imaxe non estabelecida"
+
+msgid "Set image"
+msgstr "Estabelecer imaxe"
 
 msgid "Video type and file URLs"
 msgstr "Tipo de vídeo e URLs aos ficheiros"
@@ -4452,8 +4280,9 @@ msgstr "Captura do vídeo"
 msgid "Total in widget home"
 msgstr "Elementos no widget de portada"
 
+#, fuzzy
 msgid ""
-" Use  total in widget home for define how many videos can see in widgets in "
+"Use  total in widget home for define how many videos can see in widgets in "
 "newspaper frontpage"
 msgstr ""
 "Usa «total en widget de portada» para definir cantos vídeos se poder ver nos "
@@ -4495,11 +4324,11 @@ msgstr ""
 "Usa «Total na galeria de vídeos» para definir cantos vídeos queres que se "
 "mostren na galeria ao editar ou crear un artigo"
 
+msgid "Widget home"
+msgstr "Widget de portada"
+
 msgid "Config video module"
 msgstr "Configuración do módulo «Video»"
-
-msgid "New video"
-msgstr "Novo vídeo"
 
 msgid "You must put %1 videos in the HOME"
 msgstr "Debes ter %d vídeos na portada"
@@ -4539,9 +4368,6 @@ msgstr "Si, aceptar"
 
 msgid "Logged in users"
 msgstr "Usuarios conectados"
-
-msgid "Welcome"
-msgstr "Benvido"
 
 msgid "Terms of use"
 msgstr "Termos de uso"
@@ -4655,7 +4481,8 @@ msgstr "Comezar"
 msgid "or dismiss"
 msgstr "ou omitir"
 
-msgid "Add content to your site"
+#, fuzzy
+msgid "Add contents to your site"
 msgstr "Engade contidos ao teu sitio"
 
 msgid "New article"
@@ -4676,8 +4503,8 @@ msgstr "Novo álbum"
 msgid "Upload video"
 msgstr "Subir vídeo"
 
-msgid "Upgrade your site"
-msgstr "Mellora o teu sitio"
+msgid "Want more features?"
+msgstr ""
 
 msgid "We have two ways to add functionality to you site."
 msgstr "Hai dúas formas de engadir funcionalidade no teu sitio."
@@ -4700,9 +4527,10 @@ msgstr "Contacta connosco"
 msgid "Need Help?"
 msgstr "Precisas axuda?"
 
+#, fuzzy
 msgid ""
-"We have created a lot of videos that will teach you to perform from easy "
-"tasks to the advanced ones."
+"We have created a lot of videos that will teach you to perform easy tasks "
+"and advanced tasks."
 msgstr ""
 "Creamos unha morea de vídeos que che axudarán a levar a cabo tarefas doadas "
 "e tamén as máis avanzadas."
@@ -4724,38 +4552,14 @@ msgstr ""
 msgid "Online documentation"
 msgstr "Documentación en liña"
 
+msgid "Ads"
+msgstr "Anuncios"
+
 msgid "Creating banner"
 msgstr "Creando banner"
 
 msgid "Editing banner"
 msgstr "Edición de banner"
-
-msgid "General information"
-msgstr "Información xeral"
-
-msgid "When to show this ad"
-msgstr "Cando mostrar esta publicidade"
-
-msgid "Restrictions"
-msgstr "Restricións"
-
-msgid "Without limits"
-msgstr "Sen limites"
-
-msgid "Date range"
-msgstr "Rango de datas"
-
-msgid "Show this ad if satisfy one condition"
-msgstr "Mostra esta publicidade só se cumpre unha condición"
-
-msgid "From"
-msgstr "Desde"
-
-msgid "Until"
-msgstr "Até"
-
-msgid "Show this ad within a range of dates."
-msgstr "Mostra esta publicidade durante un rango de datas."
 
 msgid "Image or Flash object"
 msgstr "Imaxe ou obxecto Flash"
@@ -4796,6 +4600,30 @@ msgstr "Ancho"
 msgid "Height"
 msgstr "Alto"
 
+msgid "When to show this ad"
+msgstr "Cando mostrar esta publicidade"
+
+msgid "Restrictions"
+msgstr "Restricións"
+
+msgid "Without limits"
+msgstr "Sen limites"
+
+msgid "Date range"
+msgstr "Rango de datas"
+
+msgid "Show this ad if satisfy one condition"
+msgstr "Mostra esta publicidade só se cumpre unha condición"
+
+msgid "From"
+msgstr "Desde"
+
+msgid "Until"
+msgstr "Até"
+
+msgid "Show this ad within a range of dates."
+msgstr "Mostra esta publicidade durante un rango de datas."
+
 msgid "Display banner while"
 msgstr "Mostrar a publicidade durante"
 
@@ -4807,14 +4635,12 @@ msgstr ""
 msgid "Where to show this ad"
 msgstr "Onde mostrar esta publicidade"
 
+#, fuzzy
+msgid "Page type"
+msgstr "Tipo do widget"
+
 msgid "Inner article"
 msgstr "Artigo interior"
-
-msgid "Video frontpage"
-msgstr "Portada de vídeo"
-
-msgid "Opinion frontpage"
-msgstr "Portada de opinión"
 
 msgid "Inner opinion"
 msgstr "Interior de opinión"
@@ -4834,7 +4660,8 @@ msgstr "Publicidade"
 msgid "Flash based"
 msgstr "Baseado en Flash"
 
-msgid "Overide default click handler."
+#, fuzzy
+msgid "Override default click handler"
 msgstr "Sobrescribir o xestor de clic predeterminado."
 
 msgid ""
@@ -4846,9 +4673,6 @@ msgstr ""
 "web. Se queres sobrescribir este enderezo co especificado arriba debes "
 "marcar isto."
 
-msgid "Select image"
-msgstr "Seleccionar imaxe"
-
 msgid "Floating ads (for drop them into columns)"
 msgstr "Publicidades flotantes (para arrastrar en columnas)"
 
@@ -4858,8 +4682,8 @@ msgstr "Probar publicidade JavaScript"
 msgid "Close window"
 msgstr "Pechar xanela"
 
-msgid "Ads :: Configuration"
-msgstr "Publicidade :: Configuración"
+msgid "Close"
+msgstr "Pechar"
 
 msgid "Cookie lifetime for intersticials"
 msgstr "Tempo de vida da cookie para os intersticiais"
@@ -4870,6 +4694,10 @@ msgid ""
 msgstr ""
 "Esta opción indica canto tempo debe pasar para que se volva a mostrar o "
 "intersticial en portada."
+
+#, fuzzy
+msgid "(in minutes)"
+msgstr "minutos"
 
 msgid "Allow generic advertisement"
 msgstr "Permitir publicidade xenérica"
@@ -4889,8 +4717,8 @@ msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
 msgstr ""
 "A URL do servidor de publicidade (i.e. http://ads.servidordeexemplo.net/)."
 
-msgid "Config ads module"
-msgstr "Configuración do módulo «Publicidade»"
+msgid "Special elements"
+msgstr "Elementos do especial"
 
 msgid "HOMEPAGE"
 msgstr "PORTADA"
@@ -4922,8 +4750,8 @@ msgstr "Multimedia FLASH"
 msgid "Media flash element (swf)"
 msgstr "Elemento multimedia Flash (swf)"
 
-msgid "Undefined"
-msgstr "Indefinida"
+msgid "Not defined"
+msgstr "Non definido"
 
 msgid "Clicks:"
 msgstr "Clics:"
@@ -4931,29 +4759,48 @@ msgstr "Clics:"
 msgid "Viewed:"
 msgstr "Visto:"
 
-msgid "Adding site to synchronization"
-msgstr "Engadindo sitio á sincronización"
+#, fuzzy
+msgid "Instance Synchronization"
+msgstr "Sincronización de instancias"
 
-msgid "Clients list"
-msgstr "Lista de clientes"
+msgid "Ins. Sync."
+msgstr ""
+
+#, fuzzy
+msgid "Adding site"
+msgstr "Editando ficheiro"
 
 msgid "Site URL"
 msgstr "URL do sitio"
 
+#, fuzzy
+msgid "http://example.com"
+msgstr "http://www.exemplo.com/ruta/ao/ficheiro.mp4"
+
 msgid "Connect"
 msgstr "Conectar"
+
+msgid "Reset color"
+msgstr "Restabelecer cor"
 
 msgid "Available categories for sync"
 msgstr "Categorias dispoñibeis para sincronizar"
 
-msgid "There is no elements to sync"
-msgstr "Non hai ningún elemento para sincronizar"
+msgid "No elements to sync in this server"
+msgstr ""
 
-msgid "Check if the given site url is correct."
-msgstr "Comproba se o URL fornecido é correcto."
+msgid "The given url has no elements to sync or it is not an Opennemas server."
+msgstr ""
+
+msgid "Click \"Connect\" to fetch the external site categories to sync."
+msgstr ""
 
 msgid "Add site to sync"
 msgstr "Engadir sitio para sincronizar"
+
+#, fuzzy
+msgid "Add site"
+msgstr "Engadir ficheiro"
 
 msgid "Site Url"
 msgstr "URL do sitio"
@@ -4961,7 +4808,12 @@ msgstr "URL do sitio"
 msgid "Categories to Sync"
 msgstr "Categorias a sincronizar"
 
-msgid "There are no synchorinize settings available"
+#, fuzzy
+msgid "Categories to sync"
+msgstr "Categorias a sincronizar"
+
+#, fuzzy
+msgid "There are no synchronize settings available"
 msgstr "No hai ningunha configuración de sincronización dispoñíbel"
 
 msgid "Try adding one site to synchronize on the config button above."
@@ -4969,11 +4821,17 @@ msgstr ""
 "Engade un sitio para sincronizar empregando o botón de configuración de "
 "arriba."
 
+msgid "Refresh the list for getting newest error list"
+msgstr "Actualizar a lista para obter a lista de erros actualizada"
+
+msgid "Refresh list"
+msgstr "Recargar lista"
+
 msgid "Clean"
 msgstr "Limpar"
 
-msgid "Refresh the list for getting newest error list"
-msgstr "Actualizar a lista para obter a lista de erros actualizada"
+msgid "Filter"
+msgstr "Filtrar"
 
 msgid "Error explanation"
 msgstr "Explicación do erro"
@@ -4983,6 +4841,9 @@ msgstr "Tempo de execución"
 
 msgid "There is no SQL errors registered in database."
 msgstr "Non hai ningún erro SQL rexistrado na base de datos."
+
+msgid "Come back later."
+msgstr ""
 
 msgid "Edit uploaded"
 msgstr "Editar elementos subidos"
@@ -5027,11 +4888,35 @@ msgstr "O tamaño de ficheiro máximo para subir é <strong>%1 MB</strong>."
 msgid "Only image files (<strong>JPG, GIF, PNG</strong>) are allowed."
 msgstr "Só se permiten ficheiros de imaxe (<strong>JPG, GIF, PNG</strong>)."
 
+msgid "File is too big"
+msgstr "O ficheiro é demasiado grande"
+
+msgid "File is too small"
+msgstr "O ficheiro é demasiado pequeno"
+
+msgid "Filetype not allowed"
+msgstr "Tipo de ficheiro non permitido"
+
+msgid "Max number of files exceeded"
+msgstr "Superouse o número máximo de ficheiros"
+
+msgid "Uploaded bytes exceed file size"
+msgstr "Os bytes subidos exceden o tamaño de ficheiro"
+
+msgid "Empty file upload result"
+msgstr "Resultado de subida de ficheiro baleiro"
+
 msgid "Iniciar"
 msgstr "Iniciar"
 
+msgid "Error"
+msgstr "Erro"
+
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
+
+msgid "Delete image"
+msgstr "Eliminar imaxe"
 
 msgid "Are you sure you want to delete <span>%num%</span> images?"
 msgstr "Tes certeza que queres eliminar <span>%num%</span> imaxes?"
@@ -5049,9 +4934,6 @@ msgstr "Editar imaxes"
 msgid "Editing image"
 msgstr "Editando imaxe"
 
-msgid "Go back to listing"
-msgstr "Volver á lista"
-
 msgid "Pick a location for the image"
 msgstr "Selecciona a localización da a imaxe"
 
@@ -5060,69 +4942,6 @@ msgstr "Xeolocalizar foto coa miña posición"
 
 msgid "Assign location"
 msgstr "Asignar localización"
-
-msgid "Search images"
-msgstr "Buscar imaxes"
-
-msgid "Search result"
-msgstr "Resultado da busca"
-
-msgid "Please fill the form of<br> the side to search images"
-msgstr "Completa o formulario do<br> lado para buscar imaxes"
-
-msgid "Image name"
-msgstr "Nome da imaxe"
-
-msgid "Date period:"
-msgstr "Rango de datas:"
-
-msgid "To"
-msgstr "Ate"
-
-msgid "Width (px.)"
-msgstr "Ancho (px.)"
-
-msgid "Min"
-msgstr "Minimo"
-
-msgid "Max"
-msgstr "Máximo"
-
-msgid "Height (px.)"
-msgstr "Alto (px.)"
-
-msgid "Weight (kB)"
-msgstr "Peso (kb)"
-
-msgid "Type:"
-msgstr "Tipo:"
-
-msgid "Color:"
-msgstr "Cor:"
-
-msgid " - All types - "
-msgstr "- Tódolos tipos -"
-
-msgid "Black and white"
-msgstr "Branco e negro"
-
-msgid "Author:"
-msgstr "Autor:"
-
-msgid "Main image thumbnails"
-msgstr "Miniatura principal da imaxe"
-
-msgid "Frontpage image thumbnails"
-msgstr "Miniatura das imaxes para portada"
-
-msgid "Width:"
-msgstr "Largura:"
-
-msgid "Height:"
-msgstr "Altura:"
-
-msgid "Inner article image thumbnails"
-msgstr "Miniatura de artigo interior da imaxe"
 
 msgid "Original filename:"
 msgstr "Nome do ficheiro orixinal:"
@@ -5166,33 +4985,37 @@ msgstr "Non hai imaxes dispoñibeis para esta busca"
 msgid "No available description"
 msgstr "Descrición non dispoñíbel"
 
-msgid "No tags"
-msgstr "Sen etiquetas"
-
 msgid "Image preview"
 msgstr "Tamaño da imaxe"
 
 msgid "Filename"
 msgstr "Nome de ficheiro"
 
+msgid "No tags"
+msgstr "Sen etiquetas"
+
+msgid "Author:"
+msgstr "Autor:"
+
 msgid "No available images with your search criteria"
 msgstr ""
 "Non hai ningunha imaxe dispoñíbel que coincida co teu criterio de busca"
 
-msgid "Content Type"
-msgstr "Tipo de contido"
-
-msgid "Covers"
-msgstr "Portadas"
-
 msgid "Restore"
 msgstr "Restaurar"
 
-msgid "Content type"
+msgid "Filter by name"
+msgstr "Filtrar por nome"
+
+msgid "Content Type"
 msgstr "Tipo de contido"
 
 msgid "There is no elements in the trash"
 msgstr "Non hai ningún elemento no lixo"
+
+#, fuzzy
+msgid "Remove permanently"
+msgstr "Eliminar de forma permanente os elementos seleccionados"
 
 msgid "Creating article"
 msgstr "Creando artigo"
@@ -5200,11 +5023,17 @@ msgstr "Creando artigo"
 msgid "Editing article"
 msgstr "Editar artigo"
 
-msgid "Customize"
-msgstr "Personalizar"
+msgid "Inner title"
+msgstr "Titulo interior:"
 
-msgid "Related contents"
-msgstr "Contidos relacionados"
+msgid "Signature"
+msgstr "Sinatura"
+
+msgid "Pretitle"
+msgstr "Antetitulo"
+
+msgid "Summary"
+msgstr "Resumo"
 
 msgid "Allow coments"
 msgstr "Permitir comentarios"
@@ -5214,6 +5043,9 @@ msgstr "Poñer en portada de categoría"
 
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
+
+msgid "Slug"
+msgstr "Slug"
 
 msgid "Schedule"
 msgstr "Planificación"
@@ -5230,18 +5062,6 @@ msgstr "Data de final de publicación"
 msgid "Only available for subscribers"
 msgstr "Só dispoñíbel para subscritores"
 
-msgid "Signature"
-msgstr "Sinatura"
-
-msgid "Pretitle"
-msgstr "Antetitulo"
-
-msgid "Summary"
-msgstr "Resumo"
-
-msgid "Slug"
-msgstr "Slug"
-
 msgid "Suggest this element to home"
 msgstr "Suxerir este elemento á portada"
 
@@ -5254,38 +5074,8 @@ msgstr "Non suxerir este elemento á portada"
 msgid "Unsuggest to home"
 msgstr "Non suxerir a portada"
 
-msgid "Inner image"
-msgstr "Imaxe para interior"
-
-msgid "Home image"
-msgstr "Imaxe para inicio"
-
-msgid "Image footer text"
-msgstr "Pé da imaxe"
-
-msgid "Image or video for frontpage:"
-msgstr "Imaxe ou vídeo para portada:"
-
-msgid "Video for frontpage"
-msgstr "Video para a portada"
-
-msgid "Image for inner article page:"
-msgstr "Imaxe para páxina de artigo interior:"
-
-msgid "Video for inner article page"
-msgstr "Video para a páxina de artigo interior"
-
-msgid "Drop a video to here"
-msgstr "Arrastre un vídeo aquí"
-
-msgid "Footer text for inner video:"
-msgstr "Texto inferior para o vídeo interior:"
-
-msgid "Available videos"
-msgstr "Videos dispoñibeis"
-
-msgid "Search videos by title..."
-msgstr "Buscar vídeos polo titulo…"
+msgid "Customize"
+msgstr "Personalizar"
 
 msgid "Settings for frontpage"
 msgstr "Preferencias para a portada"
@@ -5302,8 +5092,38 @@ msgstr "Preferencias para a portada principal"
 msgid "Title for home frontpage"
 msgstr "Titulo para a portada principal"
 
+#, fuzzy
+msgid "Images assigned"
+msgstr "Tamaño da imaxe"
+
+#, fuzzy
+msgid "Image to show in frontpages"
+msgstr "Disposición da imaxe en portada"
+
+#, fuzzy
+msgid "Image to show in inner"
+msgstr "Posición da imaxe"
+
+msgid "Home image"
+msgstr "Imaxe para inicio"
+
+msgid "Image footer text"
+msgstr "Pé da imaxe"
+
+msgid "Video for frontpage"
+msgstr "Video para a portada"
+
+msgid "Footer text for inner video:"
+msgstr "Texto inferior para o vídeo interior:"
+
+msgid "Video for inner article page"
+msgstr "Video para a páxina de artigo interior"
+
 msgid "No available articles."
 msgstr "No hai artigos dispoñibeis."
+
+msgid "Related contents"
+msgstr "Contidos relacionados"
 
 msgid "Related in frontpage"
 msgstr "Relacionado en portada"
@@ -5320,6 +5140,10 @@ msgstr "Albúm para portada"
 msgid "Only one album"
 msgstr "Só un álbum"
 
+#, fuzzy
+msgid "Add gallery"
+msgstr "Engadir ficheiro"
+
 msgid "Gallery for inner"
 msgstr "Galería para interior"
 
@@ -5332,6 +5156,28 @@ msgstr "Creando especial"
 msgid "Editing special"
 msgstr "Editando especial"
 
+msgid "List of words separated by commas."
+msgstr "Lista de palabras separadas por comas"
+
+msgid "Image for Special"
+msgstr "Imaxe para o especial"
+
+#, fuzzy
+msgid "Special contents"
+msgstr "Elementos do especial"
+
+#, fuzzy
+msgid "Articles in left column"
+msgstr "Información de artigo"
+
+#, fuzzy
+msgid "Click here to add contents"
+msgstr "Preme en seguinte para continuar"
+
+#, fuzzy
+msgid "Articles in right column"
+msgstr "Artigos en portada"
+
 msgid "Image for Special:"
 msgstr "Imaxe para o especial:"
 
@@ -5343,6 +5189,12 @@ msgstr "Dimensións:"
 
 msgid "Weight:"
 msgstr "Peso:"
+
+msgid "Created:"
+msgstr "Creado:"
+
+msgid "Description:"
+msgstr "Descrición:"
 
 msgid "Default image:"
 msgstr "Imaxe predeterminada:"
@@ -5376,14 +5228,15 @@ msgstr ""
 msgid "Config special module"
 msgstr "Configuración do módulo «Especiais»"
 
-msgid "New special"
-msgstr "Nova sección"
-
 msgid "You must put %1 specials in the HOME"
 msgstr "Debe ter %d especiais na portada"
 
 msgid "No available specials."
 msgstr "Non hai especiais dispoñibeis."
+
+#, fuzzy
+msgid "Created at:"
+msgstr "Creado en"
 
 msgid "Delete category"
 msgstr "Eliminar categoría"
@@ -5404,26 +5257,11 @@ msgstr "Editando categoría"
 msgid "Creating category"
 msgstr "Creando categoría"
 
-msgid "Show in RSS"
-msgstr "Mostrar en RSS"
-
-msgid "Category available for"
-msgstr "Categoria dispoñíbel para"
-
-msgid "All contents"
-msgstr "Todos os contidos"
+msgid "Config categories module"
+msgstr "Configurar o módulo «Categorías»"
 
 msgid "Subsection of"
 msgstr "Subsección de"
-
-msgid "Reset color"
-msgstr "Restabelecer cor"
-
-msgid "Category logo"
-msgstr "Logo da categoría"
-
-msgid "Image logo:"
-msgstr "Imaxe de logotipo:"
 
 msgid "Subsections"
 msgstr "Subseccións"
@@ -5434,20 +5272,47 @@ msgstr "Nome interno"
 msgid "In menu"
 msgstr "No menú"
 
-msgid "Show change headers and color in frontpages:"
+msgid "Actions"
+msgstr "Accións"
+
+msgid "Category available for"
+msgstr "Categoria dispoñíbel para"
+
+msgid "All contents"
+msgstr "Todos os contidos"
+
+msgid "ePaper"
+msgstr "ePapel"
+
+msgid "Category logo"
+msgstr "Logo da categoría"
+
+msgid "Image logo:"
+msgstr "Imaxe de logotipo:"
+
+#, fuzzy
+msgid "Change image headers and colors in frontpages"
 msgstr "Mostrar cabeceiras e cores nas portadas:"
+
+msgid ""
+"Enable this if you want to use a custom image and color in your category "
+"frontpages"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
 
 msgid "Delete all the contents in this category"
 msgstr "Eliminar todos os contidos nesta categoría"
 
-msgid "New category"
-msgstr "Nova categoría"
-
-msgid "Config categories module"
-msgstr "Configurar o módulo «Categorías»"
-
 msgid "For articles"
 msgstr "Para artigos"
+
+msgid "Show in rss"
+msgstr "Mostrar no RSS"
+
+msgid "No available categories for listing"
+msgstr "Non hai ningunha categoría dispoñíbel para mostrar"
 
 msgid "For albums"
 msgstr "Para álbums"
@@ -5466,24 +5331,6 @@ msgstr "Para especiais"
 
 msgid "For books"
 msgstr "Para libros"
-
-msgid "Show in rss"
-msgstr "Mostrar no RSS"
-
-msgid "No available categories for listing"
-msgstr "Non hai ningunha categoría dispoñíbel para mostrar"
-
-msgid "Editing comment"
-msgstr "Editando comentario"
-
-msgid "Submitted on"
-msgstr "Enviado o"
-
-msgid "Sent from IP address"
-msgstr "Enviado desde o enderezo IP"
-
-msgid "Commented on"
-msgstr "Comentado en"
 
 msgid "Delete comments"
 msgstr "Eliminar comentarios"
@@ -5504,8 +5351,22 @@ msgstr "Selecciona o método para a xestión de comentarios:"
 msgid "Built-in system"
 msgstr "Sistema integrado"
 
-msgid "Disqus"
-msgstr "Disqus"
+msgid ""
+"Opennemas has simple but effective comment system that requires zero "
+"configuration."
+msgstr ""
+
+msgid ""
+"Integrate Opennemas with the <a href=\"http://www.disqus.com/\">Disqus "
+"comment system</a> and use their powerful system to manage your website "
+"comments."
+msgstr ""
+
+msgid ""
+"Integrate Opennemas with the <a href=\"https://developers.facebook.com/docs/"
+"plugins/comments/\">Facebook comment system</a> and use their online tools "
+"to manage your website comments."
+msgstr ""
 
 msgid "Delete comment"
 msgstr "Eliminar comentario"
@@ -5513,16 +5374,26 @@ msgstr "Eliminar comentario"
 msgid "Are you sure you want to delete <span>%num%</span> comments?"
 msgstr "Tes certeza que queres eliminar <span>%num%</span>  comentarios?"
 
+msgid "Editing comment"
+msgstr "Editando comentario"
+
+msgid "Submitted on"
+msgstr "Enviado o"
+
+msgid "Sent from IP address"
+msgstr "Enviado desde o enderezo IP"
+
+msgid "Commented on"
+msgstr "Comentado en"
+
+msgid "Disqus"
+msgstr "Disqus"
+
 msgid "Change comments module"
 msgstr "Cambiar módulo de comentarios"
 
-msgid "Change system"
-msgstr "Cambiar sistema"
-
-msgid "Change manager"
-msgstr "Cambiar xestor"
-
-msgid "Set your Disqus configuration:"
+#, fuzzy
+msgid "Set your Disqus configuration"
 msgstr "Define a túa configuración de Disqus:"
 
 msgid ""
@@ -5536,8 +5407,8 @@ msgid ""
 "You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
 "applications/\" target=\"_blank\">here</a>"
 msgstr ""
-"Pode obter as súas chaves de Disqus desde <a href=\""
-"http://disqus.com/api/applications/\" target=\"_blank\">aquí</a>"
+"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">aquí</a>"
 
 msgid "Disqus module configuration"
 msgstr "Configuración do módulo «Disqus»"
@@ -5554,9 +5425,6 @@ msgid ""
 msgstr ""
 "Para poder moderar os comentarios do teu sitio en Facebook debes crear e "
 "configurar aquí o teu <strong>Id de aplicación de Facebook</strong>."
-
-msgid "facebook module configuration"
-msgstr "Configuración do módulo «Facebook»"
 
 msgid "Config facebook module"
 msgstr "Configuración do módulo «Facebook»"
@@ -5611,29 +5479,18 @@ msgstr "Configurar módulo «Comentarios»"
 msgid "Search by body"
 msgstr "Buscar por contido"
 
-msgid "In response to"
-msgstr "En resposta a"
-
-msgid "Submitted on:"
-msgstr "Enviado o:"
-
 msgid "No comments matched your criteria."
 msgstr "Non hai ningún comentario que coincida co teu criterio."
 
-msgid "Create new author"
-msgstr "Crear novo autor"
+msgid "In response to"
+msgstr "En resposta a"
 
-msgid "New author"
-msgstr "Novo autor"
+#, fuzzy
+msgid "Authored by: "
+msgstr "Autor:"
 
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid ""
-"There is no users created yet or <br/>your search don't match your criteria"
-msgstr ""
-"Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
-"coincide con ningún usuario."
+msgid "Submitted on:"
+msgstr "Enviado o:"
 
 msgid "Delete opinions"
 msgstr "Eliminar opinións"
@@ -5659,27 +5516,6 @@ msgstr "Opinión de editorial"
 msgid "Director's letter"
 msgstr "Carta do director"
 
-msgid "Editing author"
-msgstr "Editando autor"
-
-msgid "Creating author"
-msgstr "Creando autor"
-
-msgid "Twitter user"
-msgstr "Usuario de Twitter"
-
-msgid "View as Blog"
-msgstr "Ver como Blog"
-
-msgid "If this option is activated page author will be showed as blog"
-msgstr "Se esta opción está activada a páxina de autor mostrarase como un blog"
-
-msgid "Other Blog Url"
-msgstr "Outro url do blog"
-
-msgid "If this option is activated this author will be showed in rss"
-msgstr "Se esta opción está activada este autor mostrarase no RSS"
-
 msgid "Director Articles"
 msgstr "Artigos do director"
 
@@ -5704,13 +5540,6 @@ msgstr "Nome do autor"
 msgid "There is no opinions yet."
 msgstr "Aínda non hai ningún artigo de opinión."
 
-msgid "Invalid image: the filename name contains spaces or special chars."
-msgstr ""
-"Imaxe non válida: o nome do ficheiro contén espazos ou caracteres especiais."
-
-msgid "Upload photo"
-msgstr "Subir imaxe"
-
 msgid "Director opinions in Opinion frontpage"
 msgstr "Número de artigos do director a mostrar na portada de opinión"
 
@@ -5729,7 +5558,8 @@ msgstr "Opinións a mostrar na portada de opinión"
 msgid "How many opinions opinions will be shown in the opinion frontpage."
 msgstr "Cantas opinións se mostrarán na portada de opinión."
 
-msgid "Author opinions in frontpage opinion widget:"
+#, fuzzy
+msgid "Author opinions in frontpage opinion widget"
 msgstr "Opinións de autores no widget de portada de opinión:"
 
 msgid "How many author opinions will be shown in the widget."
@@ -5740,16 +5570,16 @@ msgstr ""
 msgid "Order blog's frontpage by"
 msgstr "Ordenar portada de blogues segundo"
 
+msgid "Select if order blogs's frontpages by created date or bloggers name."
+msgstr ""
+"Seleccione se quere ordenar a portada de blogues por data de creación ou por "
+"nome do autor."
+
 msgid "Created Date"
 msgstr "Data de creación"
 
 msgid "Blogger"
 msgstr "Autor de blog"
-
-msgid "Select if order blogs's frontpages by created date or bloggers name."
-msgstr ""
-"Seleccione se quere ordenar a portada de blogues por data de creación ou por "
-"nome do autor."
 
 msgid "Config opinion module"
 msgstr "Configuración do módulo de opinión"
@@ -5766,6 +5596,18 @@ msgstr "%1 non existe."
 msgid "Do you want to register %1?"
 msgstr "Desexa rexistrar %1?"
 
+msgid "About"
+msgstr "Sobre"
+
+msgid "Help"
+msgstr "Axuda"
+
+msgid "Privacy Policy"
+msgstr "Politica de privacidade"
+
+msgid "Legal"
+msgstr "Información legal"
+
 msgid "We already have being informed of this error: %1"
 msgstr "Xa fomos informados deste erro: %1"
 
@@ -5781,26 +5623,32 @@ msgstr "Editando palabra chave"
 msgid "Creating keyword"
 msgstr "Creando palabra chave"
 
-msgid "Save and continue"
-msgstr "Gardar e continuar"
-
 msgid "Value"
 msgstr "Valor"
-
-msgid "Search keyworks containing "
-msgstr "Buscar palabras clave que conteñen"
 
 msgid "Keyword"
 msgstr "Palabra clave"
 
-msgid "Replacement value"
-msgstr "Valor de substitución"
+msgid "No available keywords yet."
+msgstr "Aínda non hai ningunha palabra chave."
+
+#, fuzzy
+msgid "External link to "
+msgstr "Engadir ligazón externa"
+
+#, fuzzy
+msgid "Internal search to keyword"
+msgstr "Busca interna"
+
+msgid "Link to send email to"
+msgstr ""
 
 msgid "Edit this content"
 msgstr "Editar este contido"
 
-msgid "No available keywords yet."
-msgstr "Aínda non hai ningunha palabra chave."
+#, fuzzy
+msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
+msgstr "Tes certeza que queres eliminar «<span>[% title %]</span>»?"
 
 msgid "Delete albums"
 msgstr "Eliminar álbums"
@@ -5808,8 +5656,9 @@ msgstr "Eliminar álbums"
 msgid "Delete album"
 msgstr "Eliminar álbum"
 
-msgid "Edit image properties"
-msgstr "Editar propiedades da imaxe"
+#, fuzzy
+msgid "Are you sure that do you want delete \"[% content.name %]\"?"
+msgstr "Tes certeza que queres eliminar «<span>[% title %]</span>»?"
 
 msgid "Are you sure you want to delete <span>%num%</span> albums?"
 msgstr "Tes certeza que queres eliminar <span>%num%</span> álbums?"
@@ -5822,9 +5671,6 @@ msgstr "Comproba que incluiches cando menos unha imaxe neste álbum"
 
 msgid "Assign an image as a cover image"
 msgstr "Debes asignar unha imaxe como imaxe principal"
-
-msgid "Drop"
-msgstr "Quitar"
 
 msgid "Editing album"
 msgstr "Editando álbum"
@@ -5854,12 +5700,6 @@ msgstr "Tamaño da portada no widget de álbums (ancho x alto)"
 msgid "Order album's frontpage by"
 msgstr "Ordenar portada de álbums segundo"
 
-msgid "Most views"
-msgstr "Máis vistos"
-
-msgid "Favorites"
-msgstr "Favoritos"
-
 msgid ""
 "Select if order album's frontpage by most views or albums checked as "
 "favorites."
@@ -5867,13 +5707,20 @@ msgstr ""
 "Seleccione se quere ordenar o widget de álbums por máis vistos ou por "
 "favoritos."
 
+msgid "Most views"
+msgstr "Máis vistos"
+
+msgid "Favorites"
+msgstr "Favoritos"
+
 msgid "Time of the last album most viewed (days)"
 msgstr "Data do último álbum máis visto (dias):"
 
 msgid "Total in album frontpage"
 msgstr "Elementos na portada de álbums"
 
-msgid " Use this to define how many albums can see in the album frontpage. "
+#, fuzzy
+msgid "Use this to define how many albums can see in the album frontpage."
 msgstr ""
 "Use isto para definir cantos álbumes quere mostrar na portada de álbumes"
 
@@ -5882,12 +5729,6 @@ msgstr "Número máximo de álbums na sección «máis álbums» da portada/widg
 
 msgid "Total number of album on more albums section in album home frontpage"
 msgstr "Número máximo de álbums na sección «máis álbums» da portada principal"
-
-msgid "Widget home"
-msgstr "Widget de portada"
-
-msgid "Other"
-msgstr "Outro"
 
 msgid "New album"
 msgstr "Novo álbum"
@@ -6027,6 +5868,9 @@ msgstr ""
 "Isto eliminará de forma temporal todos os contidos pero logo terá que gardar "
 "a portada."
 
+msgid "Drop"
+msgstr "Quitar"
+
 msgid "Arquive these elements"
 msgstr "Arquivar estes elementos"
 
@@ -6049,7 +5893,8 @@ msgstr "Suxerir elemento á portada"
 msgid "Drop suggestion to frontpage"
 msgstr "Eliminar suxestión de portada"
 
-msgid "Are you sure that to suggest this elemento to frontpage?"
+#, fuzzy
+msgid "Are you sure that to suggest this element to frontpage?"
 msgstr "Tes certeza que queres suxerir este elemento á portada?"
 
 msgid "Are you sure that to drop suggestion of this element of frontpage?"
@@ -6061,26 +5906,26 @@ msgstr "Si, suxerir"
 msgid "Drop suggest"
 msgstr "Eliminar suxestión"
 
-msgid "Pick layout"
-msgstr "Seleccionar disposición"
-
 msgid "Please, remember save positions after finish."
 msgstr "Lembra gardar as posicións despois de rematar."
 
 msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
 msgstr "Non se puido cargar esta lapela. Tentaremos arranxalo canto antes."
 
-msgid "Toggle suggest"
-msgstr "Trocar suxerido"
-
 msgid "Preview frontpage with actual content positions"
 msgstr "Previsualizar portada coas posicións de contidos actuais"
 
-msgid "Add contents"
-msgstr "Engadir contidos"
+msgid "Toggle suggest"
+msgstr "Trocar suxerido"
 
-msgid "Default layout for this frontpage"
-msgstr "Disposición predeterminada para esta portada"
+#, fuzzy
+msgid "Managing frontpage:"
+msgstr "Xestionar portada"
+
+msgid ""
+"The frontpage manager is currently <strong>unavaible for your screen size</"
+"strong>"
+msgstr ""
 
 msgid "Available contents"
 msgstr "Contidos dispoñibeis"
@@ -6094,26 +5939,24 @@ msgstr "Outros nesta categoría"
 msgid "Latest articles"
 msgstr "Últimos artigos"
 
+#, fuzzy
+msgid "Change the layout of this frontpage"
+msgstr "Disposición predeterminada para esta portada"
+
 msgid "Premium users"
 msgstr "Usuarios premium"
 
-msgid "users"
-msgstr "usuarios"
-
-msgid "Export list"
-msgstr "Exportar listado"
-
-msgid "Filter by name"
-msgstr "Filtrar por nome"
-
-msgid "Order by"
-msgstr "Orde por"
+msgid "Create new user"
+msgstr "Crear novo usuario"
 
 msgid "Last login"
 msgstr "Último inicio de sesión"
 
 msgid "End of subscription"
 msgstr "Fin da suscrición"
+
+msgid "--All--"
+msgstr "--Todos--"
 
 msgid "Paid"
 msgstr "Pagado"
@@ -6124,30 +5967,44 @@ msgstr "Rexistrado"
 msgid "Expired"
 msgstr "Expirado"
 
-msgid "Purchases listing"
-msgstr "Listado de compras"
+msgid "users"
+msgstr "usuarios"
 
-msgid "purchases"
+msgid "Export list"
+msgstr "Exportar listado"
+
+#, fuzzy
+msgid "Purchases"
 msgstr "compras"
+
+msgid "Filter by name or email"
+msgstr "Filtrar por nome ou correo"
+
+msgid "Sort by"
+msgstr ""
 
 msgid "Payment date"
 msgstr "Data de pago"
 
-msgid "Paypal API authentication"
-msgstr "Autenticación da API de Paypal"
+msgid "purchases"
+msgstr "compras"
 
+#, fuzzy
 msgid ""
 "In order to <strong>connect Opennemas with Paypal</strong> you have to fill "
-"your Paypal API credentials below:"
+"your Paypal API credentials below"
 msgstr ""
 "Para <strong>conectar Opennemas con Paypal </strong> debes cubrir as túas "
 "credenciais da API de PayPal a continuación:"
 
-msgid "If you don't have these identification params click on the next link"
-msgstr ""
-"Se non tes estes parámetros de identificación preme na seguinte ligazón"
+msgid "Paypal API authentication"
+msgstr "Autenticación da API de Paypal"
 
-msgid "Obtain your Paypal identification data"
+msgid "Get this parameters from your "
+msgstr ""
+
+#, fuzzy
+msgid "Paypal identification data"
 msgstr "Obter os meus datos de identificación de Paypal"
 
 msgid "Use the testing environment Sandbox"
@@ -6158,15 +6015,6 @@ msgstr "Modo real (recomendado)"
 
 msgid "Testing mode"
 msgstr "Modo de probas"
-
-msgid "Validate here your Paypal API credentials in the selected mode"
-msgstr "Valida aquí as túas credenciais de API Paypal no modo seleccionado"
-
-msgid "Validate"
-msgstr "Validar"
-
-msgid "Checking"
-msgstr "Comprobando"
 
 msgid ""
 "Paypal allows you to enable a testing environment where <strong>all the "
@@ -6185,6 +6033,15 @@ msgstr ""
 
 msgid "More information"
 msgstr "Máis información"
+
+msgid "Validate here your Paypal API credentials in the selected mode"
+msgstr "Valida aquí as túas credenciais de API Paypal no modo seleccionado"
+
+msgid "Validate"
+msgstr "Validar"
+
+msgid "Checking"
+msgstr "Comprobando"
 
 msgid "Currency & taxes"
 msgstr "Moeda e impostos"
@@ -6301,7 +6158,8 @@ msgstr "Id da compra"
 msgid "Amount"
 msgstr "Cantidade"
 
-msgid "No purchases available"
+#, fuzzy
+msgid "No purchases were made yet."
 msgstr "Ningunha compra dispoñible"
 
 msgid "No users with paywall"
@@ -6310,14 +6168,14 @@ msgstr "Non hai usuarios con paywall"
 msgid "Subscribed users"
 msgstr "Usuarios rexistrados"
 
-msgid "Purchases last month"
-msgstr "Compras do mes pasado"
-
 msgid "Show all…"
 msgstr "Mostrar todo…"
 
 msgid "Lastest purchases"
 msgstr "Últimas compras"
+
+msgid "Purchases last month"
+msgstr "Compras do mes pasado"
 
 msgid "We've sent an e-mail to"
 msgstr "Enviámosche un correo electrónico a"
@@ -6336,25 +6194,35 @@ msgstr ""
 "Se usas filtrado de correo electrónico ou un software anti-spam, asegúrate "
 "de que o noso correo non está sendo filtrado ou bloqueado."
 
+msgid "Reset <strong>password</strong>"
+msgstr ""
+
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
 "Escribe o teu enderezo de correo e preme «Enviar» para recuperar o teu "
 "contrasinal."
 
+#, fuzzy
+msgid "Go back to login"
+msgstr "Volver á lista"
+
 msgid "Submit"
 msgstr "Enviar"
-
-msgid "Log in"
-msgstr "Iniciar sesión"
 
 msgid "Username or email"
 msgstr "Nome de usuario ou correo-e"
 
+msgid "Search for numbers and letters in the image and write them below:"
+msgstr ""
+
 msgid "Forgot Password?"
 msgstr "Esqueceches o contrasinal?"
 
-msgid "or use"
-msgstr "ou usa"
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+msgid "Go to admin main page"
+msgstr "Ir á páxina principal do administrador"
 
 msgid "Recover password"
 msgstr "Recuperar contrasinal"
@@ -6477,7 +6345,8 @@ msgstr "Creando libro"
 msgid "Editing Book"
 msgstr "Editando libro"
 
-msgid "Separated by coma"
+#, fuzzy
+msgid "Separated by comas"
 msgstr "Separadas por comas"
 
 msgid "New book"
@@ -6486,8 +6355,8 @@ msgstr "Novo libro"
 msgid "No available books."
 msgstr "No hai libros dispoñibeis."
 
-msgid "Edit user group"
-msgstr "Editar grupo de usuarios"
+msgid "New user group"
+msgstr "Nuevo grupo de usuario"
 
 msgid "This field is required"
 msgstr "Este campo é obligatorio"
@@ -6503,9 +6372,6 @@ msgstr "[% section.title %]"
 
 msgid "Users groups"
 msgstr "Grupos de usuarios"
-
-msgid "items selected"
-msgstr "elementos seleccionados"
 
 msgid "Clear selection"
 msgstr "Limpar selección"
@@ -6542,11 +6408,8 @@ msgstr "Xestor de opennemas"
 msgid "Use manager account to sign in."
 msgstr "Use unha conta do xestor para iniciar sesión."
 
-msgid "Dashboard"
-msgstr "Taboleiro"
-
-msgid "OPCache Status"
-msgstr "Estado de Opcache"
+msgid "Log out"
+msgstr "Sair da sesión"
 
 msgid "Delete instance"
 msgstr "Eliminar instancia"
@@ -6622,6 +6485,9 @@ msgstr "Estatícas detalladas"
 msgid "Scripts"
 msgstr "Scripts"
 
+msgid "Path"
+msgstr "Ruta"
+
 msgid "Memory"
 msgstr "Memoria"
 
@@ -6674,9 +6540,6 @@ msgstr "Nome do propietario"
 msgid "Created from"
 msgstr "Creado o"
 
-msgid "Not defined"
-msgstr "Non definido"
-
 msgid "Media size"
 msgstr "Tamaño do media"
 
@@ -6722,6 +6585,14 @@ msgstr "Alfanumérico, sen espacios"
 msgid "Database"
 msgstr "Base de datos"
 
+#, fuzzy
+msgid "Maximun activated users"
+msgstr "Activar usuario"
+
+#, fuzzy
+msgid "0 for unlimited users"
+msgstr "Usuarios conectados"
+
 msgid "Minimum password level"
 msgstr "Nivel minimo de contrasinal"
 
@@ -6737,8 +6608,12 @@ msgstr "Bo"
 msgid "Strong"
 msgstr "Forte"
 
-msgid "Num Max emails sent by month"
+#, fuzzy
+msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de correos-e por mes"
+
+msgid "Piwik Statistics"
+msgstr "Estatisticas de Piwik"
 
 msgid "Page ID:"
 msgstr "ID da páxina:"
@@ -6791,9 +6666,6 @@ msgstr "#"
 
 msgid "There is no available instances yet"
 msgstr "Ainda non hai ningunha instancia"
-
-msgid "Ads"
-msgstr "Anuncios"
 
 msgid "No rank"
 msgstr "Sen calificar"
@@ -6856,11 +6728,680 @@ msgstr "Axuda e FAQ"
 msgid "Privacy"
 msgstr "Privacidade"
 
-msgid "User group"
-msgstr "Grupo de usuarios"
+msgid "New user"
+msgstr "Novo usuario"
 
 msgid "All groups"
 msgstr "Todos os grupos"
+
+#~ msgid "Unable to update the user with the submitted information."
+#~ msgstr "Non se puido actualizar o usuario coa información fornecida"
+
+#~ msgid ""
+#~ "Unable to send the email to recover your username. Please try it later."
+#~ msgstr ""
+#~ "Non se puido enviar o correo electrónico de recuperación de nome de "
+#~ "usuario. Téntao máis tarde."
+
+#~ msgid "FRONTPAGE"
+#~ msgstr "PORTADA"
+
+#~ msgid "You don't have permissions"
+#~ msgstr "Non tes permisos"
+
+#~ msgid "Image module settings saved successfully."
+#~ msgstr "Configuracións do módulo «Imaxes» gardadas correctamente."
+
+#~ msgid ""
+#~ "<div><p>Unable to find any image matching your search criteria.</p></div>"
+#~ msgstr ""
+#~ "<div><p>Non se puido atopar ningún contido que coincida co teu criterio "
+#~ "de busca.</p></div>"
+
+#~ msgid "Please provide XML file schema"
+#~ msgstr "Fornece un esquema de ficheiro XML"
+
+#~ msgid "Form was sent in the wrong way."
+#~ msgstr "O formulario enviouse de forma incorrecta."
+
+#~ msgid ""
+#~ "There was an error while uploading «%s» - «%s». Check its size before "
+#~ "send it."
+#~ msgstr ""
+#~ "Produciuse un erro ao subir «%s» - «%s». Comprobe o teu tamaño antes de "
+#~ "envialo."
+
+#~ msgid "Can't read the file. Please check xml file."
+#~ msgstr "Non é posibel ler o ficheiro. Comprobe o ficheiro XML."
+
+#~ msgid "Can't read file. Please check xml file."
+#~ msgstr "Non é posíbel ler o ficheiro. Comprobe o ficheiro XML."
+
+#~ msgid "Importer XML configuration saved successfully"
+#~ msgstr "Configuración do importador de XML gardada correctamente"
+
+#~ msgid "There was an error while saving importer XML configuration"
+#~ msgstr "Produciuse un erro ao gardar a configuración do importador de XML"
+
+#~ msgid "A long time ago from synchronization."
+#~ msgstr "A última sincronización foi fai certo tempo."
+
+#~ msgid ""
+#~ "Try syncing the news list from server by clicking in \"Sync with server\" "
+#~ "button above"
+#~ msgstr ""
+#~ "Tenta actualizar a lista de novas desde o servidor premendo o botón "
+#~ "«Sincronizar co servidor» de arriba."
+
+#~ msgid "Please fill the sender email address in the module configuration."
+#~ msgstr ""
+#~ "Complete o enderezo de correo-e do emisor na configuración do módulo."
+
+#~ msgid "Can't get static page metadata."
+#~ msgstr "Non se puideron obter os metadatos da páxina estática."
+
+#~ msgid "Article opinions"
+#~ msgstr "Artigos de opinión"
+
+#~ msgid "XML Importer"
+#~ msgstr "Importador de XML"
+
+#~ msgid "Homepage for category %s cleaned successfully."
+#~ msgstr "A portadilla da categoría %s foi limpada correctamente."
+
+#~ msgid "Problem with IP verification!"
+#~ msgstr "Houbo un problema coa verificación da túa IP!"
+
+#~ msgid "You have voted this new previously."
+#~ msgstr "Xa votaches anteriormente."
+
+#~ msgid "Instance Manager"
+#~ msgstr "Xestor de instancias"
+
+#~ msgid "Opcache status"
+#~ msgstr "Estado de Opcache"
+
+#~ msgid "Instance domains cannot be empty"
+#~ msgstr "Os dominios da instancia non poden quedar valeiros"
+
+#~ msgid "An instance with that domain already exists"
+#~ msgstr "Xa existe unha instancia con ese dominio"
+
+#~ msgid "Instance updated successfully."
+#~ msgstr "Instancia actualizada correctamente."
+
+#~ msgid "Error while updating instance with id \"%s\""
+#~ msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
+
+#~ msgid "Error while updating the instance with id \"%s\""
+#~ msgstr "Produciuse un erro ao actualizar a instancia co identificador «%s»"
+
+#~ msgid "Paper import"
+#~ msgstr "Importador desde papel"
+
+#~ msgid "News agency importer"
+#~ msgstr "Importador de novas de axencias"
+
+#~ msgid "Sync list  with server"
+#~ msgstr "Sincronizar lista co servidor"
+
+#~ msgid "Body:"
+#~ msgstr "Corpo:"
+
+#~ msgid "Photos:"
+#~ msgstr "Fotos:"
+
+#~ msgid "People:"
+#~ msgstr "Persoas:"
+
+#~ msgid "Place:"
+#~ msgstr "Lugar:"
+
+#~ msgid "Associated Docs:"
+#~ msgstr "Documentos asociados:"
+
+#~ msgid "Categories:"
+#~ msgstr "Categorias:"
+
+#~ msgid "Level:"
+#~ msgstr "Nivel:"
+
+#~ msgid "Redactors:"
+#~ msgstr "Redactores:"
+
+#~ msgid "XML file importer"
+#~ msgstr "Importador de XML"
+
+#~ msgid "Module configuration"
+#~ msgstr "Configuración do módulo"
+
+#~ msgid "Agency:"
+#~ msgstr "Axencia:"
+
+#~ msgid "Metadata:"
+#~ msgstr "Metadatos:"
+
+#~ msgid "Section:"
+#~ msgstr "Sección:"
+
+#~ msgid "Image:"
+#~ msgstr "Imaxe:"
+
+#~ msgid "Image Footer:"
+#~ msgstr "Pé da imaxe:"
+
+#~ msgid "Ignored labels:"
+#~ msgstr "Etiquetas ignoradas:"
+
+#~ msgid "Important labels:"
+#~ msgstr "Etiquetas importantes:"
+
+#~ msgid "Definition values"
+#~ msgstr "Valores de definición"
+
+#~ msgid ""
+#~ "Define the names of labels in the xml files that you want to fill in "
+#~ "article fields"
+#~ msgstr ""
+#~ "Debes definir os nomes das etiquetas no ficheiro XML que completarán os "
+#~ "campos do artigo"
+
+#~ msgid "The name can be one attribute or one label in XML file"
+#~ msgstr "O nome pode ser un atributo ou unha etiqueta no ficheiro XML"
+
+#~ msgid "Use ignored labels separated with commas"
+#~ msgstr "Especifica as etiquetas ignoradas separadas por comas"
+
+#~ msgid "Check important labels for write with bolder font"
+#~ msgstr "Comprobar as etiquetas importantes a escribir en letra negra"
+
+#~ msgid "XML importer"
+#~ msgstr "Importador de XML"
+
+#~ msgid "Select files"
+#~ msgstr "Seleccionar ficheiros"
+
+#~ msgid "Check"
+#~ msgstr "Comprobar"
+
+#~ msgid "Config XML Schema"
+#~ msgstr "Esquema de configuración XML"
+
+#~ msgid "Config"
+#~ msgstr "Configuración"
+
+#~ msgid "Delete cache"
+#~ msgstr "Eliminar caché"
+
+#~ msgid "Get updated cache list"
+#~ msgstr "Obter lista de cachés actualizada"
+
+#~ msgid "Configurar cachés"
+#~ msgstr "Configurar cachés"
+
+#~ msgid "Show"
+#~ msgstr "Mostrar"
+
+#~ msgid "items/page with type"
+#~ msgstr "elementos/páxina co tipo"
+
+#~ msgid "and from"
+#~ msgstr "e desde"
+
+#~ msgid "All sections"
+#~ msgstr "Toda as seccións"
+
+#~ msgid "Update list"
+#~ msgstr "Actualizar lista"
+
+#~ msgid "Article inner cache file"
+#~ msgstr "Ficheiro de caché de artigo interior"
+
+#~ msgid "Video inner cache file"
+#~ msgstr "Ficheiro de caché de vídeo interior"
+
+#~ msgid "Album cache file"
+#~ msgstr "Ficheiro de caché de álbum"
+
+#~ msgid "Opinion author index cache file"
+#~ msgstr "Fichero de caché de portada de autor de opinión"
+
+#~ msgid "Mobile frontpage cache file"
+#~ msgstr "Ficheiro de caché de portada de móbil"
+
+#~ msgid "Category frontpage cache file"
+#~ msgstr "Ficheiro de caché de portada de categoría"
+
+#~ msgid "RSS cache file"
+#~ msgstr "Ficheiro de cache de RSS"
+
+#~ msgid "RSS Opinion author cache file "
+#~ msgstr "Fichero de caché de RSS de autor de opinión"
+
+#~ msgid "Section Frontpage cache file"
+#~ msgstr "Ficheiro de caché de portada de sección"
+
+#~ msgid "Video: frontpage %1"
+#~ msgstr "Video: portada %1"
+
+#~ msgid "Video: main frontpage"
+#~ msgstr "Video: portada principal"
+
+#~ msgid "Frontpage %1"
+#~ msgstr "Portada %1"
+
+#~ msgid "Opinion of Author \"%1\""
+#~ msgstr "Opinión de autor %1"
+
+#~ msgid "Album %1"
+#~ msgstr "Álbum %1"
+
+#~ msgid "Album Frontpage"
+#~ msgstr "Álbume: portada"
+
+#~ msgid "Poll %1"
+#~ msgstr "Enquisa %1"
+
+#~ msgid "RSS:"
+#~ msgstr "RSS:"
+
+#~ msgid "Frontpage: "
+#~ msgstr "Portada:"
+
+#~ msgid ""
+#~ "Ohh, there is <strong>no cache file</strong>\n"
+#~ "                in the system."
+#~ msgstr "Ohh, non hai <strong>ningún ficheiro de caché</strong> no sistema."
+
+#~ msgid "Delete caches"
+#~ msgstr "Eliminar cachés"
+
+#~ msgid "Are you sure you want to delete <span>%num%</span> cache elements?"
+#~ msgstr ""
+#~ "Tes certeza que queres eliminar <span>%num%</span> elementos da caché?"
+
+#~ msgid "New"
+#~ msgstr "Novo"
+
+#~ msgid "There is no subscriptors yet"
+#~ msgstr "Ainda non hai ningún subscritor."
+
+#~ msgid "Newsletter contents"
+#~ msgstr "Contidos do boletin"
+
+#~ msgid "Next step"
+#~ msgstr "Seguinte paso"
+
+#~ msgid "Send newsletter"
+#~ msgstr "Enviar boletin"
+
+#~ msgid "Prev step"
+#~ msgstr "Seguinte paso"
+
+#~ msgid "Previous step"
+#~ msgstr "Paso anterior"
+
+#~ msgid "New newsletter"
+#~ msgstr "Novo boletin"
+
+#~ msgid " Since %1 you have sent %2 of %3 allowed"
+#~ msgstr "Dende %1 enviaronse %2 de %3 permitidos"
+
+#~ msgid " Since %1 you have sent %2 emails"
+#~ msgstr "Dende %1 enviaronse %2 emails"
+
+#~ msgid "Search"
+#~ msgstr "Buscar"
+
+#~ msgid "Uploading files"
+#~ msgstr "Subindo ficheiros"
+
+#~ msgid "Clear"
+#~ msgstr "Limpar"
+
+#~ msgid "Edit image"
+#~ msgstr "Editar imaxe"
+
+#~ msgid "Saving..."
+#~ msgstr "Gardando…"
+
+#~ msgid "Saved"
+#~ msgstr "Gardado"
+
+#~ msgid "Error saving"
+#~ msgstr "Erro ao gardar"
+
+#~ msgid "Alignment"
+#~ msgstr "Aliñamento"
+
+#~ msgid "Left"
+#~ msgstr "Esquerda"
+
+#~ msgid "Right"
+#~ msgstr "Dereita"
+
+#~ msgid "None"
+#~ msgstr "Ningún"
+
+#~ msgid "Start"
+#~ msgstr "Iniciar"
+
+#~ msgid "Uploaded"
+#~ msgstr "Subido"
+
+#~ msgid "New ePaper"
+#~ msgstr "Novo ePapel"
+
+#~ msgid "Save and exit"
+#~ msgstr "Gardar e sair"
+
+#~ msgid "Upload PDF"
+#~ msgstr "Subir PDF"
+
+#~ msgid "ePapers"
+#~ msgstr "ePapeis"
+
+#~ msgid "Batch actions"
+#~ msgstr "Accións en lote"
+
+#~ msgid "FILTER:"
+#~ msgstr "FILTRAR:"
+
+#~ msgid "Use this option only if you are avanced user"
+#~ msgstr "Use esta opción só se é un usuario avanzado"
+
+#~ msgid "Write a tag and press Enter..."
+#~ msgstr "Escribe unha etiqueta e preme Intro…"
+
+#~ msgid "New widget"
+#~ msgstr "Novo widget"
+
+#~ msgid "Search by title:"
+#~ msgstr "Buscar por titulo"
+
+#~ msgid "Search..."
+#~ msgstr "Buscar…"
+
+#~ msgid "Pending comments"
+#~ msgstr "Comentarios pendentes"
+
+#~ msgid "Edit my profile"
+#~ msgstr "Editar o meu perfil"
+
+#~ msgid "Logout from control panel"
+#~ msgstr "Sair do panel de administración"
+
+#~ msgid "Metadata"
+#~ msgstr "Metadatos"
+
+#~ msgid "Frontpage image"
+#~ msgstr "Imaxe de portada"
+
+#~ msgid "New letter"
+#~ msgstr "Nova carta"
+
+#~ msgid "This article was imported before. Take care of it."
+#~ msgstr "Este artigo foi importado con anterioridade."
+
+#~ msgid "Other attachments"
+#~ msgstr "Outros anexos"
+
+#~ msgid "and in"
+#~ msgstr "e en"
+
+#~ msgid "WIDGET HOME"
+#~ msgstr "Widget de Portada"
+
+#~ msgid "Upload file"
+#~ msgstr "Subir ficheiro"
+
+#~ msgid "[Link]"
+#~ msgstr "[Ligazón]"
+
+#~ msgid "Delete item"
+#~ msgstr "Eliminar elemento"
+
+#~ msgid "New Privilege"
+#~ msgstr "Novo privilexio"
+
+#~ msgid "New User Group"
+#~ msgstr "Novo grupo de usuarios"
+
+#~ msgid "Delete this user"
+#~ msgstr "Eliminar este usuario"
+
+#~ msgid "We cant find any content with your search criteria."
+#~ msgstr "Non se puido atopar ningún contido co teu criterio de busca."
+
+#~ msgid "Your search \"<b>%1</b>\" didn't return any element."
+#~ msgstr "O teu criterio \"<b>%1</b>\" non devolveu ningún resultado."
+
+#~ msgid "Suggestions:"
+#~ msgstr "Suxestións:"
+
+#~ msgid "Check if all the words are written correctly."
+#~ msgstr "Comproba se todas as palabras están escritas correctamente."
+
+#~ msgid "Use other words."
+#~ msgstr "Usa outras palabras"
+
+#~ msgid "Use more general search criteria."
+#~ msgstr "Usa un criterio de busca máis xenérico."
+
+#~ msgid "CONTENT TYPE:"
+#~ msgstr "TIPO DE CONTIDO:"
+
+#~ msgid "New menu"
+#~ msgstr "Novo menú"
+
+#~ msgid "Edit page '[% content.name %]'"
+#~ msgstr "Editar páxina '[% content.name %]'"
+
+#~ msgid "New static page"
+#~ msgstr "Nova páxina estática"
+
+#~ msgid "System settings"
+#~ msgstr "Configuracións do sistema"
+
+#~ msgid "Sessions"
+#~ msgstr "Sesións"
+
+#~ msgid "Max session lifetime"
+#~ msgstr "Tempo de expiración máximo para as sesións"
+
+#~ msgid "Minutes after a user session is considered as invalid."
+#~ msgstr ""
+#~ "Minutos despois dos cales unha sesión de usuarios se considera como non "
+#~ "válida."
+
+#~ msgid "Page ID"
+#~ msgstr "ID da páxina"
+
+#~ msgid "Server URL"
+#~ msgstr "URL do servidor"
+
+#~ msgid "User token auth"
+#~ msgstr "Token de autenticación do usuario"
+
+#~ msgid "Service:"
+#~ msgstr "Servizo:"
+
+#~ msgid "New video"
+#~ msgstr "Novo vídeo"
+
+#~ msgid "Upgrade your site"
+#~ msgstr "Mellora o teu sitio"
+
+#~ msgid "General information"
+#~ msgstr "Información xeral"
+
+#~ msgid "Select image"
+#~ msgstr "Seleccionar imaxe"
+
+#~ msgid "Ads :: Configuration"
+#~ msgstr "Publicidade :: Configuración"
+
+#~ msgid "Config ads module"
+#~ msgstr "Configuración do módulo «Publicidade»"
+
+#~ msgid "Undefined"
+#~ msgstr "Indefinida"
+
+#~ msgid "Adding site to synchronization"
+#~ msgstr "Engadindo sitio á sincronización"
+
+#~ msgid "Clients list"
+#~ msgstr "Lista de clientes"
+
+#~ msgid "There is no elements to sync"
+#~ msgstr "Non hai ningún elemento para sincronizar"
+
+#~ msgid "Check if the given site url is correct."
+#~ msgstr "Comproba se o URL fornecido é correcto."
+
+#~ msgid "Go back to listing"
+#~ msgstr "Volver á lista"
+
+#~ msgid "Search images"
+#~ msgstr "Buscar imaxes"
+
+#~ msgid "Search result"
+#~ msgstr "Resultado da busca"
+
+#~ msgid "Please fill the form of<br> the side to search images"
+#~ msgstr "Completa o formulario do<br> lado para buscar imaxes"
+
+#~ msgid "Image name"
+#~ msgstr "Nome da imaxe"
+
+#~ msgid "Date period:"
+#~ msgstr "Rango de datas:"
+
+#~ msgid "To"
+#~ msgstr "Ate"
+
+#~ msgid "Width (px.)"
+#~ msgstr "Ancho (px.)"
+
+#~ msgid "Min"
+#~ msgstr "Minimo"
+
+#~ msgid "Max"
+#~ msgstr "Máximo"
+
+#~ msgid "Height (px.)"
+#~ msgstr "Alto (px.)"
+
+#~ msgid "Weight (kB)"
+#~ msgstr "Peso (kb)"
+
+#~ msgid "Type:"
+#~ msgstr "Tipo:"
+
+#~ msgid "Color:"
+#~ msgstr "Cor:"
+
+#~ msgid " - All types - "
+#~ msgstr "- Tódolos tipos -"
+
+#~ msgid "Black and white"
+#~ msgstr "Branco e negro"
+
+#~ msgid "Main image thumbnails"
+#~ msgstr "Miniatura principal da imaxe"
+
+#~ msgid "Frontpage image thumbnails"
+#~ msgstr "Miniatura das imaxes para portada"
+
+#~ msgid "Width:"
+#~ msgstr "Largura:"
+
+#~ msgid "Height:"
+#~ msgstr "Altura:"
+
+#~ msgid "Inner article image thumbnails"
+#~ msgstr "Miniatura de artigo interior da imaxe"
+
+#~ msgid "Content type"
+#~ msgstr "Tipo de contido"
+
+#~ msgid "Inner image"
+#~ msgstr "Imaxe para interior"
+
+#~ msgid "Image or video for frontpage:"
+#~ msgstr "Imaxe ou vídeo para portada:"
+
+#~ msgid "Image for inner article page:"
+#~ msgstr "Imaxe para páxina de artigo interior:"
+
+#~ msgid "Drop a video to here"
+#~ msgstr "Arrastre un vídeo aquí"
+
+#~ msgid "Available videos"
+#~ msgstr "Videos dispoñibeis"
+
+#~ msgid "Search videos by title..."
+#~ msgstr "Buscar vídeos polo titulo…"
+
+#~ msgid "New special"
+#~ msgstr "Nova sección"
+
+#~ msgid "New category"
+#~ msgstr "Nova categoría"
+
+#~ msgid "Change system"
+#~ msgstr "Cambiar sistema"
+
+#~ msgid "Change manager"
+#~ msgstr "Cambiar xestor"
+
+#~ msgid "facebook module configuration"
+#~ msgstr "Configuración do módulo «Facebook»"
+
+#~ msgid "New author"
+#~ msgstr "Novo autor"
+
+#~ msgid "Invalid image: the filename name contains spaces or special chars."
+#~ msgstr ""
+#~ "Imaxe non válida: o nome do ficheiro contén espazos ou caracteres "
+#~ "especiais."
+
+#~ msgid "Upload photo"
+#~ msgstr "Subir imaxe"
+
+#~ msgid "Save and continue"
+#~ msgstr "Gardar e continuar"
+
+#~ msgid "Search keyworks containing "
+#~ msgstr "Buscar palabras clave que conteñen"
+
+#~ msgid "Replacement value"
+#~ msgstr "Valor de substitución"
+
+#~ msgid "Edit image properties"
+#~ msgstr "Editar propiedades da imaxe"
+
+#~ msgid "Other"
+#~ msgstr "Outro"
+
+#~ msgid "Pick layout"
+#~ msgstr "Seleccionar disposición"
+
+#~ msgid "Order by"
+#~ msgstr "Orde por"
+
+#~ msgid "Purchases listing"
+#~ msgstr "Listado de compras"
+
+#~ msgid "If you don't have these identification params click on the next link"
+#~ msgstr ""
+#~ "Se non tes estes parámetros de identificación preme na seguinte ligazón"
+
+#~ msgid "or use"
+#~ msgstr "ou usa"
+
+#~ msgid "Separated by coma"
+#~ msgstr "Separadas por comas"
 
 #~ msgid "Comment saved successfully."
 #~ msgstr "Comentario gardado correctamente."
@@ -6977,9 +7518,6 @@ msgstr "Todos os grupos"
 #~ msgid "Session expire time:"
 #~ msgstr "Tempo de expiración da sesión:"
 
-#~ msgid "minutes"
-#~ msgstr "minutos"
-
 #~ msgid "or"
 #~ msgstr "ou"
 
@@ -6988,9 +7526,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "and group:"
 #~ msgstr "e grupo"
-
-#~ msgid "Activate user"
-#~ msgstr "Activar usuario"
 
 #~ msgid "Framework status"
 #~ msgstr "Estado do framework"
@@ -7003,9 +7538,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "You must select some instances."
 #~ msgstr "Debes seleccionar algunha instancia."
-
-#~ msgid "Are you sure that do you want delete the instance \"[% title %]\"?"
-#~ msgstr "Tes certeza que queres eliminar a instancia «[% title %]»?"
 
 #~ msgid "Batch activate"
 #~ msgstr "Activar en lote"
@@ -7164,9 +7696,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "Instance %d deleted successfully."
 #~ msgstr "Instancia %d eliminada correctamente."
-
-#~ msgid "Unable to find the instance with the id %d"
-#~ msgstr "Non foi posíbel atopar unha instancia co identificador «%d»"
 
 #~ msgid "Instance internal name is already in use."
 #~ msgstr "O nome interno da instancia xa está en uso."
@@ -7690,9 +8219,6 @@ msgstr "Todos os grupos"
 #~ msgid "All sources"
 #~ msgstr "Todas as orixes"
 
-#~ msgid "With video"
-#~ msgstr "Con vídeos"
-
 #~ msgid "This new has attached videos"
 #~ msgstr "Esta nova ten vídeos asociados"
 
@@ -7737,9 +8263,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "Active users in backend"
 #~ msgstr "Usuarios activos no panel de administración"
-
-#~ msgid "Connected users"
-#~ msgstr "Usuarios conectados"
 
 #~ msgid "Pendiente"
 #~ msgstr "Pendente"
@@ -7804,17 +8327,11 @@ msgstr "Todos os grupos"
 #~ msgid "There is no polls yet."
 #~ msgstr "Non hai ningún enquérito aínda."
 
-#~ msgid "Filter by title"
-#~ msgstr "Filtrar por título"
-
 #~ msgid "Modify"
 #~ msgstr "Modificar"
 
 #~ msgid "There is no static pages."
 #~ msgstr "Non hai páxinas estáticas"
-
-#~ msgid "type"
-#~ msgstr "tipo"
 
 #~ msgid "and group"
 #~ msgstr "e grupo"
@@ -8086,9 +8603,6 @@ msgstr "Todos os grupos"
 #~ msgid "You have been sent mail ."
 #~ msgstr "Enviouse o numero máximo de envios permitidos"
 
-#~ msgid "Newsletter sender"
-#~ msgstr "Remitente do Boletín"
-
 #~ msgid "image"
 #~ msgstr "imaxe"
 
@@ -8109,9 +8623,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "Welcome to %1"
 #~ msgstr "Benvida a %1"
-
-#~ msgid "Go to multimedia manager"
-#~ msgstr "Ir ao xestor multimedia"
 
 #~ msgid "Create new opinion"
 #~ msgstr "Crear nova opinión"
@@ -8405,9 +8916,6 @@ msgstr "Todos os grupos"
 #~ msgid "Editing opinion author"
 #~ msgstr "Editando autor de opinión"
 
-#~ msgid "Blog name"
-#~ msgstr "Nome do blogue"
-
 #~ msgid "Author photos"
 #~ msgstr "Fotos do autor"
 
@@ -8533,9 +9041,6 @@ msgstr "Todos os grupos"
 
 #~ msgid "Config Import EFE"
 #~ msgstr "Configurar o importador de EFE"
-
-#~ msgid "Importing article"
-#~ msgstr "Importando artigo"
 
 #~ msgid "There are new comments to moderate"
 #~ msgstr "Non hai ningún comentario a moderar"
