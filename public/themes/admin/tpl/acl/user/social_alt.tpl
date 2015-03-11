@@ -48,7 +48,7 @@
           <i class="fa fa-{$resource} fa-3x"></i>
         </button>
         <p>
-          {t}Associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}
+          {t}Click here to associate your {if $resource == 'facebook'}Facebook{else}Twitter{/if} account to login into Opennemas with it.{/t}
         </p>
       {else}
         <p>Only the user can connect their social accounts with Opennemas.</p>
