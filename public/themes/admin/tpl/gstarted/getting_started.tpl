@@ -7,7 +7,7 @@
 {/block}
 
 {block name="body"}
-  <div class="wizard-wrapper">
+  <div class="wizard-wrapper" ng-controller="GettingStartedCtrl">
     <div class="wizard-container welcome" ng-class="{ 'active': !step || step == 1 }">
       <div class="wizard-content">
         <div class="wizard-title">
@@ -34,7 +34,7 @@
         <div class="terms-wrapper">
           <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
           <div class="checkbox">
-            <input name="accept-terms" id="accept-terms" ng-model="termsAccepted" type="checkbox" data-url="{url name='admin_getting_started_accept_terms'}">
+            <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" type="checkbox">
             <label for="accept-terms">
               {t}Accept the terms of use{/t}
             </label>
@@ -123,36 +123,36 @@
     </div>
     <div class="wizard-footer">
       <div class="wizard-footer-wrapper">
-        <div class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="step = 1">
+        <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="step = 1">
           <div class="wizard-orb">
             <h4>1</h4>
           </div>
           <h5>{t}Welcome!{/t}</h5>
-        </div>
-        <div class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="step = 2">
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="step = 2">
           <div class="wizard-orb">
             <h4>2</h4>
           </div>
           <h5>{t}Terms & conditions{/t}</h5>
-        </div>
-        <div class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="step = 3">
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="step = 3" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>3</h4>
           </div>
           <h5>{t}Getting help{/t}</h5>
-        </div>
-        <div class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="step = 4">
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="step = 4" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>4</h4>
           </div>
           <h5>{t}Social Network{/t}</h5>
-        </div>
-        <div class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="step = 5">
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="step = 5" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>5</h4>
           </div>
           <h5>{t}Ready!{/t}</h5>
-        </div>
+        </button>
       </div>
     </div>
   </div>

@@ -207,9 +207,13 @@
 }
 
 .wizard-step {
+  background: none;
+  border: 0;
   cursor: pointer;
   float: left;
   margin-right: 20px;
+  outline: none;
+  position: relative;
   text-align: center;
   width: 180px;
 
@@ -224,6 +228,24 @@
       h4 {
         color: #fff;
       }
+    }
+
+    &:after {
+      background: lighten(#1b1e24, 10%);
+      border-radius: 4px;
+      border: 1px solid lighten(#1b1e24, 10%);
+      content: "";
+      height: 4px;
+      left: 0;
+      margin-left: -70px;
+      margin-top: -24px;
+      position: absolute;
+      top: 50%;
+      width: 120px;
+    }
+
+    &:first-child:after {
+      content: none;
     }
   }
 }
