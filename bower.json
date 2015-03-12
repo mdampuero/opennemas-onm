@@ -30,7 +30,6 @@
     "blueimp-file-upload": "9.9.*",
     "bootstrap": "~3.3.*",
     "bootstrap-checkbox": "https://github.com/extremeFE/bootstrap-checkbox.git",
-    "bootstrap-nav-wizard": "~0.0.3",
     "bootstrap-tagsinput": "~0.4.*",
     "bootstrap-wysiwyg": "*",
     "bootstrap2": "bootstrap#2.3.2",
