@@ -177,7 +177,7 @@ label {
                             <label for="meta[inrss]" class="control-label">{t}Show in RSS{/t}</label>
                             <div class="controls">
                                 <label>
-                                    <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on'} checked="checked"{/if}>
+                                    <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on' || $user->meta['inrss'] eq '1'} checked="checked"{/if}>
                                     {t}If this option is activated this author will be showed in rss{/t}
                                 </label>
                             </div>
