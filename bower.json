@@ -24,6 +24,7 @@
     "angular-translate": "~2.5.*",
     "angular-ui-select": "~0.*",
     "angular-ui-sortable": "~0.*",
+    "angular-ui-tree": "~2.1.*",
     "angular-webstorage": "~0.*",
     "autoNumeric": "~1.9.*",
     "blockui": "2.70",

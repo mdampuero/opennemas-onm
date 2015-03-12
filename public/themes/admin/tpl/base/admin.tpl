@@ -198,6 +198,7 @@
             @Common/components/angular-swfobject/angular-swfobject.js,
             @Common/components/angular-ui-select/dist/select.min.js,
             @Common/components/angular-ui-sortable/sortable.min.js,
+            @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
 
             @Common/src/opennemas-webarch/js/core.js,
             @Common/src/angular-dynamic-image/js/dynamic-image.js,
