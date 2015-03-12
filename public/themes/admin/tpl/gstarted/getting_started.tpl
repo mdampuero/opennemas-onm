@@ -28,7 +28,7 @@
     </div>
     <div class="wizard-container terms-and-conditions" ng-class="{ 'active': step == 2 }">
       <div class="wizard-content">
-        <p class="p-t-15">
+        <p>
           {t}In order to use Opennemas you must accept the terms of use{/t}
         </p>
         <div class="terms-wrapper">
