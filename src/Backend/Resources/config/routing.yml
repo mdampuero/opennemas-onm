@@ -1087,6 +1087,8 @@ admin_getting_started:
 admin_getting_started_accept_terms:
     path:     /getting-started/accept-terms
     defaults: { _controller  : BackendBundle:GettingStarted:acceptTerms }
+    options:
+        expose: true
 
 admin_getting_started_finish:
     path:     /getting-started/finish
