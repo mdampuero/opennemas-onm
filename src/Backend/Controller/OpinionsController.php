@@ -842,6 +842,7 @@ class OpinionsController extends Controller
             'ids_category'    => $accessCategories,
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
             'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
+            'activated'       => $user->activated,
         );
 
         $file = $request->files->get('avatar');
