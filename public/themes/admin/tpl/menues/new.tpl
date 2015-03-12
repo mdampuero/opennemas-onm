@@ -1,5 +1,14 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="
+    @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
+    @AdminTheme/less/_menu.less
+  " filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="footer-js" append}
     {javascripts src="@AdminTheme/js/jquery/jquery.nestedSortable.js,
         @AdminTheme/js/onm/menues.js"}
@@ -13,14 +22,8 @@
     </script>
 {/block}
 
-{block name="header-css" append}
-    {stylesheets src="@AdminTheme/css/managerMenu.css" filters="cssrewrite"}
-        <link rel="stylesheet" href="{$asset_url}" media="screen, projection">
-    {/stylesheets}
-{/block}
-
 {block name="content"}
-<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario">
+<form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -97,318 +100,66 @@
             <div class="grid-title">
                 <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
             </div>
-            <div class="grid-body">
+            <div class="grid-body" ng-init="menu = {json_encode($menu)|replace:'"':'\''}">
                 <p>{t}Pick elements from the right column and drag them to the left column to include them as elements of this menu.{/t}</p>
-                <div class="wrapper-menu-items pull-left" style="width:60%" >
-                    <ol id="menuelements" class="nested-sortable">
-                    {if isset($menu) && is_array($menu->items) && count($menu->items) > 0}
-                        {foreach from=$menu->items item=menuItem}
-                            {include file="menues/partials/_menu_item.tpl" menuItem=$menuItem}
-                        {/foreach}
-                    {/if}
-                    </ol>
+                <div ui-tree data-max-depth="2">
+                  <ol ui-tree-nodes="" ng-model="menu.items">
+                    <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'"></li>
+                  </ol>
                 </div>
-
-
-                <div id="elements-provider"  style="width:39%" class="pull-right">
-
-                    <h3 href="#external-link">{t}External link{/t}</h3>
-                    <div id="external-link" style="border:1px solid #CCCCCC;padding: 14px;">
-                        <form action="#" name="external-link">
-                            <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
-                            <p>
-                                <label>{t}Title:{/t}</label>
-                                <input type="text" name="external-link-title" value="" id="external-link-title" size="60">
-                            </p>
-                            <p>
-                                <label>{t}URL:{/t}</label>
-                                <input type="text" name="external-link-link" value="" id="external-link-link" size="60"> <br>
-                            </p>
-                            <a class="onm-button" id="add-external-link">{t}Add{/t}</a>
-                        </form>
-                    </div>
-
-
-                    {if count($categories) > 0}
-                    <h3 href="#listado">{t}Frontpages{/t}</h3>
-                    <div id="listado">
-                        <ul id='availableCategories' class="elementsContainer">
-                            {foreach $categories as $category}
-                                <li id="cat_{$category->pk_content_category}"
-                                    data-title="{$category->title}"
-                                    data-type="category"
-                                    data-link="{$category->name}"
-                                    data-item-id="{$category->pk_content_category}"
-                                    class="drag-category"
-                                    pk_menu="">
-                                    <div>
-                                        <span class="type">{t}Frontpage{/t}:</span>
-                                        <span class="menu-title">{$category->title}</span>
-                                        <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            {/foreach}
-                        </ul>
-                    </div>
-                    {/if}
-
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    {if count($albumCategories) > 0}
-                    <h3 href="#listadoAlbum">{t}Album Categories{/t}</h3>
-                    <div id="listadoAlbum">
-                        <ul id='albumCategories' class="elementsContainer">
-                            {section name=as loop=$albumCategories}
-                            <li id="album_{$albumCategories[as]->pk_content_category}"
-                                data-title="{$albumCategories[as]->title}"
-                                data-type="albumCategory"
-                                data-link="{$albumCategories[as]->name}"
-                                data-item-id="{$albumCategories[as]->pk_content_category}"
-                                class="drag-category"
-                                pk_menu="">
-                                <div>
-                                    <span class="type">{t}Album category{/t}:</span>
-                                    <span class="menu-title">{$albumCategories[as]->title}</span>
-                                    <div class="btn-group actions" style="float:right;">
-                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-                            {/section}
-                        </ul>
-                     </div>
-                    {/if}
-                    {/is_module_activated}
-
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    {if count($videoCategories) > 0}
-                    <h3 href="#listadoVideo">{t}Video Categories{/t}</h3>
-                    <div id="listadoVideo">
-                        <ul id='videoCategories' class="elementsContainer">
-                            {section name=as loop=$videoCategories}
-                            <li id="video_{$videoCategories[as]->pk_content_category}"
-                                data-title="{$videoCategories[as]->title}"
-                                data-type="videoCategory"
-                                data-link="{$videoCategories[as]->name}"
-                                data-item-id="{$videoCategories[as]->pk_content_category}"
-                                class="drag-category"
-                                pk_menu="">
-                                <div>
-                                    <span class="type">{t}Video category{/t}:</span>
-                                    <span class="menu-title">{$videoCategories[as]->title}</span>
-                                    <div class="btn-group actions" style="float:right;">
-                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-                            {/section}
-                        </ul>
-                    </div>
-                    {/if}
-                    {/is_module_activated}
-
-                    {is_module_activated name="POLL_MANAGER"}
-                    {if count($pollCategories) > 0}
-                    <h3 href="#listadoPoll">{t}Poll Categories{/t}</h3>
-                    <div id="listadoPoll">
-                        <ul id='pollCategories' class="elementsContainer">
-                            {section name=as loop=$pollCategories}
-                            <li id="video_{$pollCategories[as]->pk_content_category}"
-                                data-title="{$pollCategories[as]->title}"
-                                data-type="pollCategory"
-                                data-link="{$pollCategories[as]->name}"
-                                data-item-id="{$pollCategories[as]->pk_content_category}"
-                                class="drag-category" pk_menu="">
-                                <div>
-                                    <span class="type">{t}Poll category{/t}:</span>
-                                    <span class="menu-title">{$pollCategories[as]->title}</span>
-                                    <div class="btn-group actions" style="float:right;">
-                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                        <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-                            {/section}
-                        </ul>
-                    </div>
-                    {/if}
-                    {/is_module_activated}
-
-                    {if count($pages) > 0}
-                    <h3 href="#frontpages">{t}Modules{/t}</h3>
-                    <div id="frontpages">
-                        <ul id='availablePages' class="elementsContainer">
-
-                            {foreach $pages as $key=>$value}
-                                <li id="page_{$value['link']}"
-                                    data-item-id="{$value['link']}"
-                                    data-title="{$value['title']}"
-                                    data-link="{$value['link']}"
-                                    class="drag-category"
-                                    data-type="internal"
-                                    pk_menu="">
-                                    <div>
-                                        <span class="type">{t}Module{/t}:</span>
-                                        <span class="menu-title">
-                                        {$value['title']}
-                                        </span>
-                                        <div class="btn-group actions" style="float:right;">
-                                        <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            {/foreach}
-                        </ul>
-                    </div>
-                    {/if}
-
-                    {if count($staticPages) > 0}
-                    <h3 href="#staticPages">{t}Static Pages{/t}</h3>
-                    <div id="staticPages">
-                          <ul id='availableStatics' class="elementsContainer">
-                             {section name=k loop=$staticPages}
-                                 <li id="static_{$staticPages[k]->id}"
-                                    data-title="{$staticPages[k]->title}"
-                                    data-item-id="{$staticPages[k]->id}"
-                                    data-type="static"
-                                    data-link="{$staticPages[k]->slug}"
-                                    pk_menu="{$staticPages[k]->id}"
-                                    class="drag-category">
-                                    <div>
-                                        <span class="type">{t}Static page{/t}:</span>
-                                        <span class="menu-title">{$staticPages[k]->title}</span>
-                                        <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                 </li>
-                             {/section}
-                         </ul>
-                    </div>
-                    {/if}
-
-                    {is_module_activated name="SYNC_MANAGER"}
-                    {if count($elements) > 0}
-                    <h3 href="#syncCategories">{t}Sync Categories{/t}</h3>
-                    <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
-                        {foreach $elements as $config name=colors}
-                            {foreach from=$config key=site item=syncCategories}
-                            <strong>{$site}                    </strong>
-                            <ul id='availableSync' class="elementsContainer">
-                                {foreach $syncCategories as $category}
-                                <li id="sync_category"
-                                    data-title="{$category|capitalize}"
-                                    data-type="syncCategory"
-                                    data-link="{$category}"
-                                    class="drag-category"
-                                    pk_menu=""
-                                    style="background-color: #{$colors[$site]}">
-                                    <div>
-                                        <span class="type">{t}Synched category{/t}:</span>
-                                        <span class="menu-title">{$category|capitalize}</span>
-                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                             alt="{t}Sync{/t}" >
-                                        <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                        </div>
-                                </li>
-                                {/foreach}
-                            </ul>
-                            {/foreach}
-                        {/foreach}
-                    </div>
-                    {/if}
-                    {/is_module_activated}
-
-                    {is_module_activated name="FRONTPAGES_LAYOUT"}
-                    {if count($categories) > 0}
-                    <h3 href="#listado">{t}Automatic Categories{/t}</h3>
-                    <div id="listado">
-                        <ul id='availableCategories' class="elementsContainer">
-                            {foreach $categories as $blog}
-                                <li id="cat_{$blog->pk_content_category}"
-                                    data-title="{$blog->title}"
-                                    data-type="blog-category"
-                                    data-link="{$blog->name}"
-                                    data-item-id="{$blog->pk_content_category}"
-                                    class="drag-category"
-                                    pk_menu="">
-                                    <div>
-                                        <span class="type">{t}Automatic Categories{/t}:</span>
-                                        <span class="menu-title">{$blog->title}</span>
-                                        <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            {/foreach}
-                        </ul>
-                    </div>
-                    {/if}
-                    {/is_module_activated}
-
-                    {is_module_activated name="FRONTPAGES_LAYOUT"}
-                    {is_module_activated name="SYNC_MANAGER"}
-                    {if count($elements) > 0}
-                    <h3 href="#syncBlogCategories">{t}Sync Automatic Categories{/t}</h3>
-                    <div id="syncBlogCategories"  class="elementsContainer">
-                        {foreach $elements as $config name=colors}
-                            {foreach from=$config key=site item=syncBlogCategories}
-                            <strong>{$site}     </strong>
-                            <ul id='availableSync' class="elementsContainer">
-                                {foreach $syncBlogCategories as $category}
-                                <li id="sync_category"
-                                    data-title="{$category|capitalize}"
-                                    data-type="syncBlogCategory"
-                                    data-link="{$category}"
-                                    class="drag-category"
-                                    pk_menu=""
-                                    style="background-color: #{$colors[$site]}">
-                                    <div>
-                                        <span class="type">{t}Sync Automatic category{/t}:</span>
-                                        <span class="menu-title">{$category|capitalize}</span>
-                                        <img src="{$params.IMAGE_DIR}sync-icon.png"
-                                             alt="{t}Synched blog category{/t}" >
-                                        <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                            <a href="#" class="edit-menu-item"><i class="fa fa-pencil"></i></a>
-                                            <a href="#" class="delete-menu-item"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                        </div>
-                                </li>
-                                {/foreach}
-                            </ul>
-                            {/foreach}
-                        {/foreach}
-                    </div>
-                    {/if}
-                    {/is_module_activated}
-                    {/is_module_activated}
-                </div>
+                <button class="btn btn-large" type="button" ng-click="open('modal-add-item')">
+                  Add
+                </button>
             </div>
         </div>
 
         <input type="hidden" name="items" id="items" value="" />
         <input type="hidden" name="items-hierarchy" id="items-hierarchy" value="" />
-    </div><!--fin wrapper-content-->
-</form>
-
-{include file="menues/modals/_modalAddItem.tpl"}
+    </div>
+    <script type="text/ng-template" id="menu-item">
+      <div class="menu-item" ui-tree-handle>
+        <span class="item-type" ng-if="item.type == 'external'">
+          {t}External link{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'internal'">
+          {t}Module{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'blog-category'">
+          {t}Category blog{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'category'">
+          {t}Frontpage{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'albumCategory'">
+          {t}Album category{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'pollCategory'">
+          {t}Poll category{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'videoCategory'">
+          {t}Video Category{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'static'">
+          {t}Static Page{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'syncCategory'">
+          {t}Synched category{/t}
+        </span>
+        <span class="item-type" ng-if="item.type == 'syncBlogCategory'">
+          {t}Synched blog category{/t}
+        </span>
+        <input ng-model="item.title" type="text">
+        <button class="btn btn-white pull-right" type="button">
+          <i class="fa fa-trash-o text-danger"></i>
+        </button>
+      </div>
+      <ol ui-tree-nodes="" ng-model="item.submenu">
+        <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-item'">
+        </li>
+      </ol>
+    </script>
+    <script type="text/ng-template" id="modal-add-item">
+      {include file="menues/modals/_modalAddItem.tpl"}
+    </script>
+ </form>
 {/block}
