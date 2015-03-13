@@ -54,7 +54,7 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
      * Closes the current modal
      */
      $scope.close = function() {
-      $modalInstance.close(false);
+      $modalInstance.dismiss();
     };
 
     /**
