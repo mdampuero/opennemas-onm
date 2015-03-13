@@ -8,7 +8,7 @@
         {t}Type{/t}
       </label>
       <select class="form-control" id="item-type" ng-model="type">
-        <option value="external-link">{t}External link{/t}</option>
+        <option value="external">{t}External link{/t}</option>
         {if count($categories) > 0}
           <option value="category">{t}Frontpages{/t}</option>
         {/if}
@@ -50,14 +50,14 @@
         {/is_module_activated}
       </select>
     </div>
-    <div ng-if="type == 'external-link'">
+    <div ng-if="type == 'external'">
       <p>{t}Fill the below form with the title and the external URL you want to add to the menu.{/t}</p>
       <div class="form-group">
         <label class="form-label" for="external-link-title">
           {t}Title{/t}
         </label>
         <div class="controls">
-          <input class="form-control" id="external-link-title" name="external-link-title" type="text">
+          <input class="form-control" id="external-link-title" name="external-link-title" ng-model="$parent.externalLinkTitle" type="text">
         </div>
       </div>
       <div class="form-group">
@@ -65,7 +65,7 @@
           {t}URL{/t}
         </label>
         <div class="controls">
-          <input class="form-control" id="external-link-url" name="external-link-url" type="text">
+          <input class="form-control" id="external-link-url" name="external-link-url" ng-model="$parent.externalLinkUrl" type="text">
         </div>
       </div>
     </div>

@@ -6,13 +6,13 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
 
     $scope.selected = [];
 
-    $scope.type = 'external-link'
+    $scope.type = 'external';
 
     /**
      * Confirms and executes the confirmed action.
      */
     $scope.addItem = function() {
-      if ($scope.type === 'external-link') {
+      if ($scope.type === 'external') {
         var item = {
           link:    $scope.externalLinkUrl,
           pk_item: $scope.externalLinkTitle,
