@@ -28,62 +28,62 @@
   </style>
   {block name="header-css"}
   {stylesheets src="
-  @Common/components/font-awesome/css/font-awesome.min.css,
-  @Common/components/bootstrap/dist/css/bootstrap.min.css,
-  @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
-  @Common/components/pace/themes/blue/pace-theme-minimal.css,
-  @Common/components/nanoscroller/bin/css/nanoscroller.css,
-  @Common/components/angular-loading-bar/build/loading-bar.min.css,
-  @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
-  @Common/components/ng-tags-input/ng-tags-input.min.css,
-  @Common/components/messenger/build/css/messenger.css,
-  @Common/components/messenger/build/css/messenger-theme-flat.css,
-  @Common/components/select2/select2.css,
+    @Common/components/font-awesome/css/font-awesome.min.css,
+    @Common/components/bootstrap/dist/css/bootstrap.min.css,
+    @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
+    @Common/components/pace/themes/blue/pace-theme-minimal.css,
+    @Common/components/nanoscroller/bin/css/nanoscroller.css,
+    @Common/components/angular-loading-bar/build/loading-bar.min.css,
+    @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
+    @Common/components/ng-tags-input/ng-tags-input.min.css,
+    @Common/components/messenger/build/css/messenger.css,
+    @Common/components/messenger/build/css/messenger-theme-flat.css,
+    @Common/components/select2/select2.css,
 
-  @Common/src/webarch/css/animate.min.css,
-  @Common/src/webarch/css/style.css,
-  @Common/src/webarch/css/responsive.css,
-  @Common/src/webarch/css/custom-icon-set.css,
-  @Common/src/webarch/css/magic_space.css,
+    @Common/src/webarch/css/animate.min.css,
+    @Common/src/webarch/css/style.css,
+    @Common/src/webarch/css/responsive.css,
+    @Common/src/webarch/css/custom-icon-set.css,
+    @Common/src/webarch/css/magic_space.css,
 
-  @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
+    @Common/components/jquery-ui/themes/base/minified/jquery-ui.min.css,
 
-  @Common/components/nanoscroller/bin/css/nanoscroller.css,
-  @Common/components/angular-loading-bar/build/loading-bar.min.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
-  @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
-  @Common/components/ng-tags-input/ng-tags-input.min.css,
-  @Common/components/messenger/build/css/messenger.css,
-  @Common/components/messenger/build/css/messenger-theme-flat.css,
+    @Common/components/nanoscroller/bin/css/nanoscroller.css,
+    @Common/components/angular-loading-bar/build/loading-bar.min.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
+    @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
+    @Common/components/ng-tags-input/ng-tags-input.min.css,
+    @Common/components/messenger/build/css/messenger.css,
+    @Common/components/messenger/build/css/messenger-theme-flat.css,
 
-  @Common/src/angular-dynamic-image/less/main.less,
-  @Common/src/angular-picker/less/main.less,
-  @Common/src/sidebar/less/main.less,
+    @Common/src/angular-dynamic-image/less/main.less,
+    @Common/src/angular-picker/less/main.less,
+    @Common/src/sidebar/less/main.less,
 
-  @Common/src/opennemas-webarch/css/base/*,
-  @Common/src/opennemas-webarch/css/components/*,
-  @Common/src/opennemas-webarch/css/layout/*,
-  @Common/src/opennemas-webarch/css/main.less,
+    @Common/src/opennemas-webarch/css/base/*,
+    @Common/src/opennemas-webarch/css/components/*,
+    @Common/src/opennemas-webarch/css/layout/*,
+    @Common/src/opennemas-webarch/css/main.less,
 
-  @AdminTheme/less/_album.less,
-  @AdminTheme/less/_article.less,
-  @AdminTheme/less/_comment.less,
-  @AdminTheme/less/_image.less"
-  filters="cssrewrite,less"}
-  <link rel="stylesheet" type="text/css" href="{$asset_url}">
+    @AdminTheme/less/_album.less,
+    @AdminTheme/less/_article.less,
+    @AdminTheme/less/_comment.less,
+    @AdminTheme/less/_image.less"
+    filters="cssrewrite,less"}
+      <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
   {/block}
 
   {block name="header-js"}
   {javascripts src="
-  @Common/components/jquery/jquery.min.js,
-  @Common/components/bootstrap/dist/js/bootstrap.min.js"
-  filters="uglifyjs"}
-  <script type="text/javascript" src="{$asset_url}"></script>
+    @Common/components/jquery/jquery.min.js,
+    @Common/components/bootstrap/dist/js/bootstrap.min.js"
+    filters="uglifyjs"}
+     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
   <script>
     var appVersion = '{$smarty.const.DEPLOYED_AT}';
@@ -231,7 +231,6 @@
       {/javascripts}
 
     {block name="footer-js"}
-
     {/block}
 
     {browser_update}

@@ -12,26 +12,6 @@
 
 {block name="footer-js" append}
 <script type="text/javascript">
-  var mediapicker = $('#media-uploader').mediaPicker({
-    upload_url: "{url name=admin_image_create category=0}",
-    browser_url : "{url name=admin_media_uploader_browser}",
-    months_url : "{url name=admin_media_uploader_months}",
-    maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-          'assign_content' : function( event, params ) {
-            var mediapicker   = $(this).data('mediapicker');
-            var image_element = mediapicker.buildHTMLElement(params);
-
-            var container = $('#related_media').find('.'+params['position']);
-
-            var image_data_el = container.find('.image-data');
-            image_data_el.find('.related-element-id').val(params.content.pk_photo);
-            image_data_el.find('.image').html(image_element);
-            container.addClass('assigned');
-          }
-        }
-      });
   var video_manager_url = {
     get_information: '{url name=admin_videos_get_info}',
     fill_tags: '{url name=admin_utils_calculate_tags}'
@@ -40,17 +20,6 @@
   $('#title').on('change', function(e, ui) {
     fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
   });
-
-  $('.article_images .unset').on('click', function (e, ui) {
-    e.preventDefault();
-
-    var parent = $(this).closest('.contentbox');
-
-    parent.find('.related-element-id').val('');
-    parent.find('.image').html('');
-
-    parent.removeClass('assigned');
-  });
 </script>
 {javascripts src="@AdminTheme/js/onm/video.js"}
 <script type="text/javascript" src="{$asset_url}"></script>
@@ -58,7 +27,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" enctype="multipart/form-data">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" class="video-form" enctype="multipart/form-data">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -182,6 +151,43 @@
             </div>
           </div>
         </div>
+
+        {if $type == "script" || $type == "external" || (isset($video) && ($video->author_name == 'script' || $video->author_name == 'external'))}
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Image assigned{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="row">
+              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+                <div class="form-group">
+                  <div class="thumbnail-placeholder ng-cloak">
+                    <div class="img-thumbnail" ng-if="!photo1">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                        <i class="fa fa-picture-o fa-2x"></i>
+                        <h5>{t}Pick an image{/t}</h5>
+                      </div>
+                    </div>
+                    <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                      <div class="thumbnail-actions">
+                        <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                    </dynamic-image>
+                    <input type="hidden" name="img1" ng-value="img1"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/if}
       </div>
     </div>
     <div class="form-vertical video-edit-form">

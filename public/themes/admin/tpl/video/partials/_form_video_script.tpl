@@ -26,7 +26,7 @@
         {/if}
     </div>
 </div>
-<div id="related_m  edia" class="form-controlgroup">
+<!-- <div id="related_media" class="form-controlgroup">
     <h3 class="title">{t}Video Cover{/t}</h3>
     <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
         <div class="image-data">
@@ -49,7 +49,7 @@
             <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
         </div>
     </div>
-</div>
+</div> -->
 
 <input type="hidden" value="{$video->video_url}" name="video_url" />
 <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
