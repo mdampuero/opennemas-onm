@@ -89,7 +89,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs">
-            <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+            <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}" class="select2">
               <option value="-1"> {t}-- All --{/t} </option>
               <option value="1"> {t}Published{/t} </option>
               <option value="0"> {t}No published{/t} </option>
