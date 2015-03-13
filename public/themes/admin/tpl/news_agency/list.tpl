@@ -102,7 +102,7 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
+            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
               <option value="10a">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
