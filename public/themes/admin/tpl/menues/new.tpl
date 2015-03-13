@@ -98,8 +98,7 @@
         </div>
       </div>
 
-      <input type="hidden" name="items" id="items" value="" />
-      <input type="hidden" name="items-hierarchy" id="items-hierarchy" value="" />
+      <input type="hidden" name="items" ng-value="menuItems"/>
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}
