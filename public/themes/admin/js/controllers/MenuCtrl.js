@@ -33,5 +33,12 @@ angular.module('BackendApp.controllers').controller('MenuCtrl', [
         $scope.menu.items = $scope.menu.items.concat(response.items);
       });
     };
+
+    /**
+     * Updates the menu items input value when menu items change.
+     */
+    $scope.$watch('menu.items', function() {
+      $scope.menuItems = angular.toJson($scope.menu.items);
+    }, true)
   }
 ]);
