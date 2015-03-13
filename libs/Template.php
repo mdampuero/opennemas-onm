@@ -162,6 +162,8 @@ class Template extends Smarty
 
         // Template variables
         $baseUrl = SITE_URL.'/themes/'.$theme.'/';
+        $baseUrl = str_replace('http:', '', $baseUrl);
+
         $this->locale_dir       = $baseUrl.'locale/';
         $this->css_dir          = $baseUrl.'css/';
         $this->image_dir        = $baseUrl.'images/';
