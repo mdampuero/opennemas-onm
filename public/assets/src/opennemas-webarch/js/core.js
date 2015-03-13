@@ -624,6 +624,7 @@ $('body.open-menu-left .page-content').on('touchstart', function (e) {
 
     // Opennemas inclusions
     $('.select2').select2({
+        dropdownAutoWidth : true,
         formatSelection: function(state) {
             var element = state.element;
             if ($(element).parents('.select2').data('label') != null) {
@@ -634,6 +635,7 @@ $('body.open-menu-left .page-content').on('touchstart', function (e) {
             return state.text
         }
     });
+    $('.select2-arrow').append('<i class="select2-arrow-down fa fa-angle-down"></i>');
 
 })(jQuery);
 

@@ -87,87 +87,48 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs">
-            <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                <strong>{t}Category{/t}:</strong>
-                <span ng-if="criteria.category_name == -1">{t}All{/t}</span>
-                <span ng-if="criteria.category_name != -1">[% criteria.category_name %]</span>
-              </span>
-              <span class="caret"></span>
-            </span>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.category_name = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
+            <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}" class="select2">
+              <option value="-1">{t}-- All --{/t}</option>
               {section name=as loop=$allcategorys}
               {assign var=ca value=$allcategorys[as]->pk_content_category}
-              <li ng-click="criteria.category_name = '{$allcategorys[as]->name}'">
-                <span class="a">
-                  {$allcategorys[as]->title}
-                  {if $allcategorys[as]->inmenu eq 0}
-                  {t}(inactive){/t}
-                  {/if}
-                </span>
-              </li>
+              <option value="{$allcategorys[as]->name}">
+                {$allcategorys[as]->title}
+                {if $allcategorys[as]->inmenu eq 0}
+                <span class="inactive">{t}(inactive){/t}</span>
+                {/if}
+              </option>
               {section name=su loop=$subcat[as]}
               {assign var=subca value=$subcat[as][su]->pk_content_category}
               {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
               {assign var=subca value=$subcat[as][su]->pk_content_category}
-              <li ng-click="criteria.category_name = '{$subcat[as][su]->name}'">
-                <span class="a">
-                  &rarr;
-                  {$subcat[as][su]->title}
-                  {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                  {t}(inactive){/t}
-                  {/if}
-                </span>
-              </li>
+              <option value="{$subcat[as][su]->name}">
+                &rarr;
+                {$subcat[as][su]->title}
+                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                <span class="inactive">{t}(inactive){/t}</span>
+                {/if}
+              </option>
               {/acl}
               {/section}
               {/section}
-            </ul>
+            </select>
           </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                {t}Status{/t}:
-                <span ng-if="criteria.content_status == null || criteria.content_status == -1">{t}All{/t}</span>
-                <span ng-if="criteria.content_status == 0">{t}No published{/t}</span>
-                <span ng-if="criteria.content_status == 1">{t}Published{/t}</span>
-              </span>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.content_status = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
-              <li ng-click="criteria.content_status = 1">
-                <span class="a">{t}Published{/t}</span>
-              </li>
-              <li ng-click="criteria.content_status = 0">
-                <span class="a">{t}No Published{/t}</span>
-              </li>
-            </ul>
+          <li class="quicklinks hidden-xs">
+            <select class="select2" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+              <option value="-1">{t}-- All --{/t}</option>
+              <option value="1">{t}Published{/t}</option>
+              <option value="0">{t}No published{/t}</option>
+            </select>
           </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                {t}Author{/t}: [% extra.authors[content.fk_author].name %]
-                <span ng-if="criteria.fk_author == -1">{t}All{/t}</span>
-                <span ng-if="criteria.fk_author != -1">[% criteria.category_name %]</span>
-              </span>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.fk_author = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
-              {foreach $authors as $author}
-              <li ng-click="criteria.fk_author = {$author->id}">
-                <span class="a">{$author->name}</span>
-              </li>
-              {/foreach}
-            </ul>
+          <li class="quicklinks hidden-xs hidden-sm">
+            <select class="select2" ng-model="criteria.author" data-label="{t}Author{/t}">
+              <option value="-1">{t}-- All authors --{/t}</option>
+              <option value="-2">{t}Director{/t}</option>
+              <option value="-3">{t}Editorial{/t}</option>
+              {section name=as loop=$autores}
+              <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
+              {/section}
+            </select>
           </li>
           <li class="quicklinks hidden-sm hidden-xs">
             <select name="status" ng-model="pagination.epp" data-label="{t}View:{/t}" class="select2">
