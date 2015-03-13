@@ -407,7 +407,7 @@ class Menu
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuElements($id, $items = array(), $parent = 0)
+    public function setMenuElements($id, $items = array(), $parent = 0, &$elementID = 1)
     {
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
@@ -423,34 +423,24 @@ class Menu
                 " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $values   = array();
-        $position = 1;
-        $saved    = true;
+        $values    = array();
+        $position  = 1;
+        $saved     = true;
         foreach ($items as $item) {
             $title = filter_var($item->title, FILTER_SANITIZE_STRING);
-            $link = filter_var($item->link, FILTER_SANITIZE_STRING);
-            $type = filter_var($item->type, FILTER_SANITIZE_STRING);
+            $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
+            $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
 
-            $values = array(null, $id, $title, $link, $type, $position,$parent);
+            $values = array($elementID, $id, $title, $link, $type, $position,$parent);
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
 
             if (!empty($item->submenu)) {
-                $sql = "SELECT pk_item FROM menu_items"
-                    . " WHERE `title`='" . $title . "'"
-                    . " AND `pk_menu`='" . $id . "'"
-                    . " AND `link_name`='" . $link . "'"
-                    . " AND `type`='" . $type . "'"
-                    . " AND `position`=" . $position
-                    . " AND `pk_father`=" . $parent;
-
-                $rs = $GLOBALS['application']->conn->Execute($sql);
-                $itemId = $rs->fields['pk_item'];
-
-                if (!$this->setMenuElements($id, $item->submenu, $itemId)) {
+                if (!$this->setMenuElements($id, $item->submenu, $elementID, $elementID)) {
                     return false;
                 }
             }
 
+            $elementID++;
             $position++;
         }
 
