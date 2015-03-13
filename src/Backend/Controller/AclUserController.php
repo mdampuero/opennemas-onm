@@ -87,8 +87,6 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -174,12 +172,10 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-
         if ($userId != $_SESSION['userid']) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
