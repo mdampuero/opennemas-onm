@@ -407,15 +407,17 @@ class Menu
      * @return boolean True if items were saved successfully. Otherwise, returns
      *                 false.
      */
-    public function setMenuElements($id, $items = array(), $parent = 0, &$elementID = 1)
+    public function setMenuElements($id, $items = array(), $parentID = 0, &$elementID = 1)
     {
+        $saved = true;
+
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
         }
 
         // Delete previous menu elements
-        if ($parent == 0) {
+        if ($parentID == 0) {
             $this->emptyMenu($id);
         }
 
@@ -423,25 +425,24 @@ class Menu
                 " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $values    = array();
         $position  = 1;
-        $saved     = true;
         foreach ($items as $item) {
             $title = filter_var($item->title, FILTER_SANITIZE_STRING);
             $link  = filter_var($item->link, FILTER_SANITIZE_STRING);
             $type  = filter_var($item->type, FILTER_SANITIZE_STRING);
 
-            $values = array($elementID, $id, $title, $link, $type, $position,$parent);
+            $values = array($elementID, $id, $title, $link, $type, $position, $parentID);
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
 
+            $parentId = $elementID;
+            $elementID++;
+            $position++;
+
             if (!empty($item->submenu)) {
-                if (!$this->setMenuElements($id, $item->submenu, $elementID, $elementID)) {
+                if (!$this->setMenuElements($id, $item->submenu, $parentId, $elementID)) {
                     return false;
                 }
             }
-
-            $elementID++;
-            $position++;
         }
 
         return $saved;
