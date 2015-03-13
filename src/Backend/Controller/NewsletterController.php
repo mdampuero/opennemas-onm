@@ -113,14 +113,20 @@ class NewsletterController extends Controller
         $menu->getMenu('frontpage');
         $i = 1;
         foreach ($menu->items as $item) {
-            if ($item->type == 'category' || $item->type == 'internal') {
-                $container               = new \stdClass();
-                $container->id           = $i;
-                $container->title        = $item->title;
-                $container->content_type =  'container';
-                $container->position     = $item->position;
-                $container->items        = array();
-                $newsletterContent[]     = $container;
+            if ($item->type == 'category' ||
+                $item->type == 'blog-category' ||
+                $item->type == 'internal'
+            ) {
+                $item->id           = $i;
+                $item->items        = array();
+                $item->content_type = 'container';
+                $newsletterContent[]     = $item;
+                if (!empty($item->submenu)) {
+                    foreach ($item->submenu as $subitem) {
+                        $subitem->id         = $i++;
+                        $newsletterContent[] = $subitem;
+                    }
+                }
                 $i++;
             }
         }
