@@ -162,6 +162,8 @@ class MenusController extends Controller
             }
         }
 
+        $menu->items = array_values($menu->items);
+
         return $this->render(
             'menues/new.tpl',
             array(
