@@ -398,65 +398,43 @@ class Menu
     }
 
     /**
-     * Sets the menu elements to one menu given its id and the list of items
+     * Sets the menu elements to one menu given its id and the list of items.
      *
-     * @param int $id the menu id to set the elements in
-     * @param array $items the list of elements to set
+     * @param int   $id     The menu id to set the elements in
+     * @param array $items  The list of elements to set.
+     * @param array $parent The id of the item parent.
      *
-     * @return bool if update went ok => true
+     * @return boolean True if items were saved successfully. Otherwise, returns
+     *                 false.
      */
-    public function setMenuElements($id, $items = array())
+    public function setMenuElements($id, $items = array(), $parent = 0)
     {
-        // Save new items temporarily to add children
-        $translations = array();
-
         // Check if id and $items are not empty
         if (empty($id) || count($items) < 1) {
             return false;
         }
 
         // Delete previous menu elements
-        $this->emptyMenu($id);
+        if ($parent == 0) {
+            $this->emptyMenu($id);
+        }
 
         $stmt = "INSERT INTO menu_items ".
                 " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $values = array();
-        $i      = 1;
-        $saved  = true;
-
+        $values   = array();
+        $position = 1;
+        $saved    = true;
         foreach ($items as $item) {
             $title = filter_var($item->title, FILTER_SANITIZE_STRING);
             $link = filter_var($item->link, FILTER_SANITIZE_STRING);
             $type = filter_var($item->type, FILTER_SANITIZE_STRING);
-            $parent = explode('_', $item->parent_id);
-            $parentId = $parent[0];
-            $parentType = null;
 
-            if (count($parent) > 1) {
-                $parentType = $parent[1];
-            }
-
-            if (array_key_exists($parentType, $translations) &&
-                array_key_exists($parentId, $translations[$parentType])
-            ) {
-                $parent = $translations[$parentType][$parentId];
-            } else {
-                $parent = filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0;
-            }
-
-            $position = $i;
             $values = array(null, $id, $title, $link, $type, $position,$parent);
-
-            $i++;
-
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if ($rs === false) {
-                $saved = $saved && false;
-            } else {
-                $saved = $saved && true;
 
+            if (!empty($item->submenu)) {
                 $sql = "SELECT pk_item FROM menu_items"
                     . " WHERE `title`='" . $title . "'"
                     . " AND `pk_menu`='" . $id . "'"
@@ -466,15 +444,14 @@ class Menu
                     . " AND `pk_father`=" . $parent;
 
                 $rs = $GLOBALS['application']->conn->Execute($sql);
-                $newId = $rs->fields['pk_item'];
+                $itemId = $rs->fields['pk_item'];
 
-                if (!array_key_exists($item->type, $translations)
-                    || (array_key_exists($item->type, $translations)
-                    && !array_key_exists($item->id, $translations[$item->type]))
-                ) {
-                    $translations[$item->type][$item->id] = $newId;
+                if (!$this->setMenuElements($id, $item->submenu, $itemId)) {
+                    return false;
                 }
             }
+
+            $position++;
         }
 
         return $saved;
