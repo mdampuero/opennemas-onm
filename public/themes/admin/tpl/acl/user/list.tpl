@@ -78,100 +78,22 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+            <input class="no-boarder" name="title" ng-model="criteria.name_like" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <span class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                <strong>{t}Category{/t}:</strong>
-                <span ng-if="criteria.category_name == -1">{t}All{/t}</span>
-                <span ng-if="criteria.category_name != -1">[% criteria.category_name %]</span>
-              </span>
-              <span class="caret"></span>
-            </span>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.category_name = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
-              {section name=as loop=$allcategorys}
-              {assign var=ca value=$allcategorys[as]->pk_content_category}
-              <li ng-click="criteria.category_name = '{$allcategorys[as]->name}'">
-                <span class="a">
-                  {$allcategorys[as]->title}
-                  {if $allcategorys[as]->inmenu eq 0}
-                  {t}(inactive){/t}
-                  {/if}
-                </span>
-              </li>
-              {section name=su loop=$subcat[as]}
-              {assign var=subca value=$subcat[as][su]->pk_content_category}
-              {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-              {assign var=subca value=$subcat[as][su]->pk_content_category}
-              <li ng-click="criteria.category_name = '{$subcat[as][su]->name}'">
-                <span class="a">
-                  &rarr;
-                  {$subcat[as][su]->title}
-                  {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                  {t}(inactive){/t}
-                  {/if}
-                </span>
-              </li>
-              {/acl}
-              {/section}
-              {/section}
-            </ul>
-          </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                {t}Status{/t}:
-                <span ng-if="criteria.content_status == -1">{t}All{/t}</span>
-                <span ng-if="criteria.content_status == 0">{t}Published{/t}</span>
-                <span ng-if="criteria.content_status == 1">{t}No published{/t}</span>
-              </span>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.content_status = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
-              <li ng-click="criteria.content_status = 1">
-                <span class="a">{t}Published{/t}</span>
-              </li>
-              <li ng-click="criteria.content_status = 0">
-                <span class="a">{t}No Published{/t}</span>
-              </li>
-            </ul>
-          </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <button class="btn btn-none dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              <span class="dropdown-current">
-                {t}Author{/t}: [% shvs.extra.authors[content.fk_author].name %]
-                <span ng-if="criteria.fk_author == -1">{t}All{/t}</span>
-                <span ng-if="criteria.fk_author != -1">[% criteria.category_name %]</span>
-              </span>
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li ng-click="criteria.fk_author = -1">
-                <span class="a">{t}All{/t}</span>
-              </li>
-              {foreach $authors as $author}
-              <li ng-click="criteria.fk_author = {$author->id}">
-                <span class="a">{$author->name}</span>
-              </li>
-              {/foreach}
-            </ul>
+          <li class="quicklinks hidden-xs">
+            <select id="usertype" name="type" class="select2" ng-model="criteria.type" data-label="{t}Type{/t}">
+              <option value="-1">{t}--All--{/t}</option>
+              <option value="0">{t}Backend{/t}</option>
+              <option value="1">{t}Frontend{/t}</option>
+            </select>
           </li>
           <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="criteria.elements_per_page" data-label="{t}View{/t}">
-              <option value="10a">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
+            <select id="usergroup" name="group" class="select2" ng-model="criteria.fk_user_group" data-label="{t}Group{/t}">
+              <option value="-1">{t}--All--{/t}</option>
+              {html_options options=$groupsOptions selected=$smarty.request.group|default:""}
             </select>
           </li>
         </ul>
