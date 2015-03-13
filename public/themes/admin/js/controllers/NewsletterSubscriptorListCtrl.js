@@ -7,7 +7,7 @@ angular.module('BackendApp.controllers').controller('NewsletterSubscriptorListCt
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('ContentListController', {$scope: $scope}));
+    $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));
 
     /**
      * Permanently removes a contents by using a confirmation dialog

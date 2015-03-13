@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <div ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('keywords', { title_like: '' }, 'created', 'desc', 'backend_ws_keywords_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('keywords', { title_like: '' }, 'created', 'desc', 'backend_ws_keywords_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

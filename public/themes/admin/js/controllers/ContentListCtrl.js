@@ -1,7 +1,7 @@
 /**
  * Controller to handle list actions.
  */
-angular.module('BackendApp.controllers').controller('ContentListController', [
+angular.module('BackendApp.controllers').controller('ContentListCtrl', [
   '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
   function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
     'use strict';

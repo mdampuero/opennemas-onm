@@ -10,7 +10,7 @@
 
 
 {block name="content"}
-<div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="ContentListController" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
