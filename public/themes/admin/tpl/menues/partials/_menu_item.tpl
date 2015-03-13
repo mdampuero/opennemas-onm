@@ -30,7 +30,7 @@
     {t}Synched blog category{/t}
   </span>
   <input ng-model="item.title" type="text">
-  <button class="btn btn-white pull-right" type="button">
+  <button class="btn btn-white pull-right" ng-click="removeItem($index)" type="button">
     <i class="fa fa-trash-o text-danger"></i>
   </button>
 </div>
