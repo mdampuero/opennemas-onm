@@ -83,7 +83,7 @@
             </select>
           </li>
           <li class="quicklinks hidden-sm hidden-xs">
-            <select name="status" ng-model="pagination.epp" data-label="{t}View:{/t}" class="select2">
+            <select name="status" ng-model="pagination.epp" data-label="{t}View{/t}" class="select2">
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
