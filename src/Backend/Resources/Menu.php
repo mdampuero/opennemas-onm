@@ -251,6 +251,8 @@ $menuXml = [
                 "title"       => _("Paywall"),
                 "icon"        => "fa fa-paypal",
                 "link"        => '#',
+                "module_name" => "PAYWALL",
+                "privilege"   => "PAYWALL",
                 "submenu" => [
                     [
                         "id"          => "paywall_stats",
