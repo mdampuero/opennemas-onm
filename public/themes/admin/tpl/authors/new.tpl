@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
-{script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
+<!-- {script_tag src="/onm/bootstrap-fileupload.min.js" common=1} -->
 <script>
 jQuery(document).ready(function($){
     // PAssword strength checker
@@ -11,10 +11,10 @@ jQuery(document).ready(function($){
     });
 
     // Avatar image uploader
-    $('.fileupload').fileupload({
-        name: 'avatar',
-        uploadtype:'image'
-    });
+    // $('.fileupload').fileupload({
+    //     name: 'avatar',
+    //     uploadtype:'image'
+    // });
 
     $('.delete').on('click', function(){
         $('.file-input').val('0');
@@ -24,7 +24,7 @@ jQuery(document).ready(function($){
 {/block}
 
 {block name="header-css" append}
-{css_tag href="/bootstrap/bootstrap-fileupload.min.css" common=1}
+<!-- {css_tag href="/bootstrap/bootstrap-fileupload.min.css" common=1} -->
 <style type="text/css">
 label {
     font-weight:normal;
@@ -96,7 +96,7 @@ label {
                             <span class="h-seperate"></span>
                         </li>
                         <li class="quicklinks">
-                            <button action="submit" class="btn btn-primary" name="action" value="validate">
+                            <button action="submit" class="btn btn-primary">
                                 <i class="fa fa-save"></i>
                                 {t}Save{/t}
                             </button>
