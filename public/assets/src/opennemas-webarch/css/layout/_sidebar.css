@@ -255,6 +255,7 @@
 }
 .sidebar .header-logo {
   display:none;
+  min-height: 50px;
 }
 @media (max-width: 767px) {
   /* When in phone mode hide some elements and put some colors in navbars */
