@@ -11,7 +11,7 @@
 {/block}
 
 {block name="content"}
-<div  ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -140,12 +140,12 @@
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
-      <div ng-if="!loading && contents.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
         <div class="center">
-          <h4>
-            <b>{t}There is no elements to import{/t}</b>
-          </h4>
-          <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
+          <h4>{t}There is no elements to import{/t}</h4>
+          {acl isAllowed="ONLY_MASTERS"}
+          <h6>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</h6>
+          {/acl}
         </div>
       </div>
       <table class="table table-hover table-condensed ng-cloak" ng-if="!loading && contents.length > 0">
@@ -165,7 +165,7 @@
         </thead>
 
         <tbody>
-          <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
+          <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
             <td class="checkbox-cell">
               <div class="checkbox check-default">
                 <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">

@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('photo', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -108,8 +108,14 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div class="table-wrapper ng-cloak">
-          <table class="table table-hover no-margin" ng-if="!loading">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any image that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Upload" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
             <thead>
               <tr>
                 <th class="checkbox-cell">
@@ -166,14 +172,14 @@
                   <div>
                     <div class="listing-inline-actions">
                       {acl isAllowed="PHOTO_UPDATE"}
-                        <a class="link" href="[% edit(content.id, 'admin_photo_show') %]">
-                          <i class="fa fa-pencil"></i> {t}Edit{/t}
-                        </a>
+                      <a class="link" href="[% edit(content.id, 'admin_photo_show') %]">
+                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      </a>
                       {/acl}
                       {acl isAllowed="PHOTO_DELETE"}
-                        <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
-                          <i class="fa fa-trash-o"></i> {t}Remove{/t}
-                        </button>
+                      <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                        <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                      </button>
                       {/acl}
                     </div>
                   </div>
@@ -186,56 +192,56 @@
           </table>
         </div>
       </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-        <div class="pagination-info pull-left" ng-if="contents.length > 0">
+      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="pagination-info pull-left">
           {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
         </div>
-        <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+        <div class="pull-right pagination-wrapper">
           <pagination class="no-margin" max-size="3" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
         </div>
       </div>
     </div>
-    <script type="text/ng-template" id="modal-delete">
-      {include file="common/modals/_modalDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-delete-selected">
-      {include file="common/modals/_modalBatchDelete.tpl"}
-    </script>
-    <script type="text/ng-template" id="modal-image">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
-        <h4 class="modal-title">{t}Image preview{/t}</h4>
-      </div>
-      <div class="modal-body">
-        <div class="resource">
-          <span ng-if="template.selected.type_img == 'swf'">
-            <object ng-data="'{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]'" ng-param="{ 'vmode': 'opaque' }"></object>
-          </span>
-          <span ng-if="template.selected.type_img !== 'swf'">
-            <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
-          </span>
-        </div>
-        <div class="details">
-          <h4 class="description">
-            <span ng-if="template.selected.description != ''">[% template.selected.description %]</span>
-            <span ng-if="template.selected.description == ''">{t}No available description{/t}</span>
-          </h4>
-          <div><strong>{t}Filename{/t}</strong> [% template.selected.title %]</div>
-          <div class="tags">
-            <img src="{$params.IMAGE_DIR}tag_red.png" />
-            <span ng-if="template.selected.metadata != ''">[% template.selected.metadata %]</span>
-            <span ng-if="template.selected.metadata == ''">{t}No tags{/t}</span>
-          </div>
-          <span class="author" ng-if="template.selected.author != ''">
-            <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
-          </span>
-          <div><strong>{t}Created on{/t}</strong> [% template.selected.created %]</div>
-
-          <div><strong>{t}Resolution:{/t}</strong> [% template.selected.width %] x [% template.selected.height %] (px)</div>
-          <div><strong>{t}Size:{/t}</strong> [% template.selected.size %] Kb</div>
-        </div>
-      </div>
-    </script>
   </div>
-</form>
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/modals/_modalDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-delete-selected">
+    {include file="common/modals/_modalBatchDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-image">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+      <h4 class="modal-title">{t}Image preview{/t}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="resource">
+        <span ng-if="template.selected.type_img == 'swf'">
+          <object ng-data="'{$MEDIA_IMG_URL}[% template.selected.path_file %][% template.selected.name %]'" ng-param="{ 'vmode': 'opaque' }"></object>
+        </span>
+        <span ng-if="template.selected.type_img !== 'swf'">
+          <img class="img-responsive" ng-src="{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
+        </span>
+      </div>
+      <div class="details">
+        <h4 class="description">
+          <span ng-if="template.selected.description != ''">[% template.selected.description %]</span>
+          <span ng-if="template.selected.description == ''">{t}No available description{/t}</span>
+        </h4>
+        <div><strong>{t}Filename{/t}</strong> [% template.selected.title %]</div>
+        <div class="tags">
+          <img src="{$params.IMAGE_DIR}tag_red.png" />
+          <span ng-if="template.selected.metadata != ''">[% template.selected.metadata %]</span>
+          <span ng-if="template.selected.metadata == ''">{t}No tags{/t}</span>
+        </div>
+        <span class="author" ng-if="template.selected.author != ''">
+          <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
+        </span>
+        <div><strong>{t}Created on{/t}</strong> [% template.selected.created %]</div>
+
+        <div><strong>{t}Resolution:{/t}</strong> [% template.selected.width %] x [% template.selected.height %] (px)</div>
+        <div><strong>{t}Size:{/t}</strong> [% template.selected.size %] Kb</div>
+      </div>
+    </div>
+  </script>
+</div>
 {/block}

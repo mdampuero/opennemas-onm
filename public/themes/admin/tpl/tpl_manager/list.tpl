@@ -32,7 +32,6 @@
     </div>
   </div>
 
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -123,6 +122,14 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
+
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t escape="no"}No cache files were generated for now.{/t}</h4>
+            <h6>{t escape="no" 1=$smarty.const.SITE_URL}Visit some pages in <a href="%1" title="Visit your site">your site</a>  and come back here{/t}</h6>
+          </div>
+        </div>
+
         <div class="table-wrapper ng-cloak" ng-if="!loading">
           <table class="table table-hover no-margin">
             <thead ng-if="contents.length != 0">
@@ -139,16 +146,6 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-if="contents.length == 0" class="center">
-                <td class="empty" colspan="4">
-                  <h4>
-                    {t escape="no"}No cache files were generated for now.{/t}
-                  </h4>
-                  <p>
-                    {t escape="no" 1=$smarty.const.SITE_URL}Visit some pages in <a href="%1" title="Visit your site">your site</a>  and come back here{/t}
-                  </p>
-                </td>
-              </tr>
               <tr class="cache-element" ng-repeat="content in contents">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default">
@@ -157,7 +154,6 @@
                   </div>
                 </td>
                 <td class="left">
-
                   {assign var="resource" value=$caches[c].resource}
 
                   <img ng-src="{$params.IMAGE_DIR}template_manager/elements/[% content.type %].png" ng-if="content.type != 'unknown'" alt="[% content.type_explanation %] cache file">

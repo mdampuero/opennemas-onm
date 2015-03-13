@@ -71,41 +71,30 @@
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
-            <div class="loading-spinner"></div>
-            <div class="spinner-text">{t}Loading{/t}...</div>
+          <div class="loading-spinner"></div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div class="table-wrapper ng-cloak">
-          <table class="table table-hover no-margin" ng-if="!loading">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any content that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
             <thead>
               <th class="title">{t}Title{/t}</th>
               <th class="left hidden-xs">{t}Created{/t}</th>
               <th class="right" style="width:10px;"></th>
             </thead>
             <tbody>
-              <tr ng-if="contents.length == 0">
-                <td class="empty" colspan="3">
-                  <div class="search-results">
-                    <p>
-                      <img src="{$params.IMAGE_DIR}/search/search-images.png">
-                    </p>
-                    {t escape="off"}Please fill the form for searching contents{/t}
-                  </div>
-                </td>
-              </tr>
-              <tr ng-repeat="content in contents" ng-if="contents.length > 0">
+              <tr ng-repeat="content in contents">
                 <td style="padding:10px;">
                   <strong>[% content.content_type_l10n_name %]</strong>  - [% content.title %]
                 </td>
                 <td class="left hidden-xs">
                   [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
-                <!-- <td class="center">
-                  <span class="btn btn-white">
-                    <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera" ng-if="content.in_litter == 1"/>
-                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1&& content.content_status == 1"/>
-                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1 && content.content_status == 0"/>
-                  </span>
-                </td> -->
                 <td class="right">
                   <div class="btn-group right">
                     <a class="btn btn-white" href="[% edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
@@ -119,11 +108,11 @@
         </div>
       </div>
 
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-          <div class="pagination-info pull-left" ng-if="contents.length > 0">
+      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="pagination-info pull-left">
               {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
           </div>
-          <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+          <div class="pull-right pagination-wrapper">
               <pagination class="no-margin" max-size="3" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
           </div>
       </div>

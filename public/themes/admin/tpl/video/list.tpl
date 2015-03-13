@@ -233,8 +233,14 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div class="table-wrapper ng-cloak">
-          <table class="table table-hover no-margin" ng-if="!loading">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any album that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
            <thead>
             <tr>
               <th class="checkbox-cell">
@@ -258,11 +264,7 @@
             </tr>
           </thead>
           <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
-            <tr ng-if="contents.length == 0">
-              <td class="empty" colspan="10">{t}No available videos.{/t}</td>
-            </tr>
-
-            <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+            <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
               <td class="checkbox-cell">
                 <div class="checkbox check-default">
                   <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
@@ -278,7 +280,7 @@
                 <div class="thumbnail visible-xs">
                   <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
                 </div>
-                <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong> [% content.title %]
+                <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong>  - [% content.title %]
                 <div class="small-text visible-sm">
                   {t}Created on{/t}: [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
@@ -331,11 +333,11 @@
         </table>
       </div>
     </div>
-    <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-      <div class="pagination-info pull-left" ng-if="contents.length > 0">
+    <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="pagination-info pull-left">
         {t}Showing{/t} [% ((pagination.page - 1) > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% pagination.page * pagination.epp %] {t}of{/t} [% pagination.total %]
       </div>
-      <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+      <div class="pull-right pagination-wrapper">
         <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
       </div>
     </div>
@@ -348,6 +350,5 @@
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
-</div>
 </div>
 {/block}

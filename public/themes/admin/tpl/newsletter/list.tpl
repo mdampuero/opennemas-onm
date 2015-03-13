@@ -7,10 +7,10 @@
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-              <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Newsletters{/t}
-              </h4>
+            <h4>
+              <i class="fa fa-home fa-lg"></i>
+              {t}Newsletters{/t}
+            </h4>
           </li>
         </ul>
         <div class="all-actions pull-right">
@@ -61,7 +61,7 @@
         <ul class="nav quick-section pull-right">
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
-            <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
+              <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
             </button>
           </li>
         </ul>
@@ -109,16 +109,18 @@
       <div class="grid-body no-padding">
         <div class="spinner-wrapper" ng-if="loading">
           <div class="loading-spinner"></div>
-          <div class="spinner-text">{t}Loading…{/t}</div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div ng-if="!loading && contents.length == 0" class="ng-cloak center">
-          <h4>{t}There is no newsletters yet{/t}</h4>
-          <h5>{t}or your search criteria doesn't match anything.{/t}</h5>
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any newsletter that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          </div>
         </div>
-        <div class="table-wrapper ng-cloak">
-          <table class="table table-hover no-margin" ng-if="!loading">
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
             <thead>
-              <tr ng-if="contents.length > 0">
+              <tr>
                 <th class="checkbox-cell">
                   <div class="checkbox checkbox-default">
                     <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
@@ -132,7 +134,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-if="contents.length >= 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
                 <td class="checkbox-cell">
                   <div class="checkbox check-default">
                     <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
@@ -174,11 +176,11 @@
             </tbody>
           </table>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-          <div class="pagination-info pull-left" ng-if="contents.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="pagination-info pull-left">
             {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
           </div>
-          <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+          <div class="pull-right pagination-wrapper">
             <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
           </div>
         </div>
@@ -191,22 +193,22 @@
   </script>
 
   <script type="text/ng-template" id="modal-batch-remove-permanently">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
-        <h4 class="modal-title">
-            <i class="fa fa-trash-o"></i>
-            {t}Remove permanently selected items{/t}
-        </h4>
-      </div>
-      <div class="modal-body">
-          <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
-          <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
-      </div>
-      <div class="modal-footer">
-          <span class="loading" ng-if="deleting == 1"></span>
-          <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
-          <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
-      </div>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+      <h4 class="modal-title">
+        <i class="fa fa-trash-o"></i>
+        {t}Remove permanently selected items{/t}
+      </h4>
+    </div>
+    <div class="modal-body">
+      <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+      <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
+    </div>
+    <div class="modal-footer">
+      <span class="loading" ng-if="deleting == 1"></span>
+      <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
+      <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+    </div>
   </script>
 </div>
 {/block}

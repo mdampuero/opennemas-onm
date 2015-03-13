@@ -75,7 +75,9 @@
 </table>
 <a href="{url name=admin_paywall_users}" class="btn btn-white">{t}Show all…{/t}</a>
 {else}
-<div class="center">
-  {t}No paywall users yet.{/t}
+<div class="listing-no-contents">
+  <div class="center">
+    <h4>{t}No paywall users yet.{/t}</h4>
+  </div>
 </div>
 {/if}

@@ -1,4 +1,3 @@
-<br>
 {if count($purchases) > 0}
 <table class="table table-condensed">
     <thead>
@@ -45,7 +44,9 @@
 </table>
 <a href="{url name=admin_paywall_purchases}" class="btn btn-white">{t}Show all…{/t}</a>
 {else}
-<div class="center">
-    {t}No purchases were made yet.{/t}
+<div class="listing-no-contents">
+  <div class="center">
+    <h4>{t}No purchases were made yet.{/t}</h4>
+  </div>
 </div>
 {/if}
