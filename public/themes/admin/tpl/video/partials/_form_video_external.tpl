@@ -23,8 +23,8 @@
     <label for="typ_medida" class="form-label">{t}Video type and file URLs{/t}</label>
     <div class="controls">
         <select name="type" id="type" ng-model="type">
-          <option value="html5" {if empty($video->id) || (empty($video->id) && $video->type == 'html5')} active{/if}>{t}HTML5 video{/t}</option>
-          <option value="flv" {if empty($video->id) && $video->type == 'flv'} active{/if}>{t}Flash video{/t}</option>
+          <option value="html5" {if empty($video->id) || (empty($video->id) && $video->type == 'html5')}selected="selected"{/if}>{t}HTML5 video{/t}</option>
+          <option value="flv" {if empty($video->id) && $video->type == 'flv'}selected="selected"{/if}>{t}Flash video{/t}</option>
         </select>
 
         <p></p>
@@ -48,14 +48,14 @@
         <div class="ng-cloak" ng-if="type == 'flv'">
           <div class="input-group">
             <span class="input-group-addon">{t}FLV format{/t}</span>
-            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="infor[source][webm]" value="{$video->video_url}" aria-describedby="basic-addon-flv">
+            <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="infor[source][flv]" value="{$video->video_url}" aria-describedby="basic-addon-flv">
           </div>
         </div>
 
         <input type="hidden" name="type" id="type" value="$video->type|default:'html5'">
     </div>
 </div>
-<div class="form-group">
+<div class="form-group" ng-if="id != ''">
     <label for="body" class="form-label">{t}Preview{/t}</label>
     {if isset($video)}
     <div id="video-information" style="text-align:center; margin:0 auto;" class="controls thumbnail video-container">
@@ -97,17 +97,15 @@
 {*script_tag src="/videojs/video.ads.js" common=1*}
 <script>
     videojs('video', {}, function() {
-      var player = this;
-     // player.ads(); // initialize the ad framework
-      // your custom ad integration code
+      // var player = this;
     });
-    jQuery(document).ready(function($){
-        $('#continue').on('click', function(e, ui) {
-            if ($('.related-element-id').val().length < 1) {
-                $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
-                e.preventDefault();
-            };
-        });
-    });
+    // jQuery(document).ready(function($){
+    //     $('#continue').on('click', function(e, ui) {
+    //         if ($('.related-element-id').val().length < 1) {
+    //             $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
+    //             e.preventDefault();
+    //         };
+    //     });
+    // });
 </script>
 

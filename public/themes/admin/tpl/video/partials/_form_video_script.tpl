@@ -1,32 +1,33 @@
 <div class="form-controlgroup">
-    <label for="title" class="form-label">{t}Title{/t}</label>
-    <div class="controls">
-        <input type="text" id="title" name="title" value="{$video->title|default:""}" required="required" class="form-control"/>
-    </div>
+  <label for="title" class="form-label">{t}Title{/t}</label>
+  <div class="controls">
+    <input type="text" id="title" name="title" value="{$video->title|default:""}" required="required" class="form-control"/>
+  </div>
 </div>
 
 <div class="form-controlgroup">
-    <label for="description" class="form-label">{t}Description{/t}</label>
-    <div class="controls">
-        <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="4" class="form-control onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
-    </div>
+  <label for="description" class="form-label">{t}Description{/t}</label>
+  <div class="controls">
+    <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="4" class="form-control onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
+  </div>
 </div>
 
 <div class="form-controlgroup">
-    <label for="video-information" class="form-label">{t}Write HTML code{/t}</label>
-    <div class="controls">
-        <textarea name="body" id="body" rows="8" class="form-control">{$video->body|clearslash|default:""}</textarea>
-        <br /><br />
+  <label for="video-information" class="form-label">{t}Write HTML code{/t}</label>
+  <div class="controls">
+    <textarea name="body" id="body" rows="8" class="form-control">{$video->body|clearslash|default:""}</textarea>
+    <br /><br />
 
-        {if isset($video)}
-        <label  class="form-label">{t}Preview{/t}</label>
-        <div id="video-information" class="video-container" style="width:530px; text-align:center; margin:0 auto;">
-             {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
-        </div>
-        {/if}
-    </div>
+    {if isset($video)}
+    <label  class="form-label">{t}Preview{/t}</label>
+    <div id="video-information" class="video-container" style="width:530px; text-align:center; margin:0 auto;">
+     {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
+   </div>
+   {/if}
+ </div>
 </div>
-<!-- <div id="related_media" class="form-controlgroup">
+<!--
+<div id="related_media" class="form-controlgroup">
     <h3 class="title">{t}Video Cover{/t}</h3>
     <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
         <div class="image-data">
@@ -49,7 +50,8 @@
             <a href="#" class="unset btn btn-small btn-danger"><i class="fa fa-trash"></i></a>
         </div>
     </div>
-</div> -->
+  </div>
+-->
 
 <input type="hidden" value="{$video->video_url}" name="video_url" />
 <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
@@ -57,12 +59,16 @@
 <input type="hidden" name="infor" value=""/>
 
 <script>
-    jQuery(document).ready(function($){
-        $('#continue').on('click', function(e, ui) {
-            if ($('.related-element-id').val().length < 1) {
-                $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
-                e.preventDefault();
-            };
-        });
+  jQuery(document).ready(function($){
+    'use strict';
+
+    $('.video-form').on('submit', function(e, ui) {
+      if ($('.related-element-id').val().length < 1) {
+        $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
+        e.preventDefault();
+
+        return false;
+      };
     });
+  });
 </script>

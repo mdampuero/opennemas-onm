@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" name="formulario" id="formulario" class="video-form" enctype="multipart/form-data">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -159,26 +159,26 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+              <div class="col-md-12" {if isset($video->thumb_image)}ng-init="video_thumbnail = {json_encode($video->thumb_image)|replace:'"':'\''}"{/if}>
                 <div class="form-group">
                   <div class="thumbnail-placeholder ng-cloak">
-                    <div class="img-thumbnail" ng-if="!photo1">
-                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                    <div class="img-thumbnail" ng-if="!video_thumbnail">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video_thumbnail">
                         <i class="fa fa-picture-o fa-2x"></i>
                         <h5>{t}Pick an image{/t}</h5>
                       </div>
                     </div>
-                    <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                    <div class="dynamic-image-placeholder ng-cloak" ng-if="video_thumbnail">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="video_thumbnail" transform="thumbnail,220,220">
                       <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
+                        <div class="thumbnail-action remove-action" ng-click="removeImage('video_thumbnail')">
                           <i class="fa fa-trash-o fa-2x"></i>
                         </div>
-                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video_thumbnail">
                           <i class="fa fa-camera fa-2x"></i>
                         </div>
                       </div>
-                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video_thumbnail" media-picker-type="photo"></div>
                     </dynamic-image>
                     <input type="hidden" name="img1" ng-value="img1"/>
                   </div>
