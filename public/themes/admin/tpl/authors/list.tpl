@@ -15,7 +15,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}">
+              <a class="btn btn-primary" href="{url name=admin_author_create}" title="{t}Create new author{/t}" accesskey="c">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
@@ -68,9 +68,11 @@
             <input class="no-boarder" name="title" ng-model="criteria.name_like" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right">
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
+        <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks hidden-xs">
+            <span class="info">
+              [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+            </span>
           </li>
           <li class="quicklinks form-inline pagination-links">
             <div class="btn-group">
