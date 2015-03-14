@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -192,7 +192,6 @@
     </div>
     <div class="form-vertical video-edit-form">
 
-      <input type="hidden" value="1" name="content_status">
       <input type="hidden" name="type" value="{$smarty.get.type}">
       <input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
     </div>

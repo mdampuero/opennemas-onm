@@ -151,14 +151,13 @@ class VideosController extends Controller
 
                 try {
                     $video = new \Video();
-                    $video->createFromLocalFile($videoFileData);
+                    $videoId = $video->createFromLocalFile($videoFileData);
                 } catch (\Exception $e) {
                     $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } elseif ($type == 'external' || $type == 'script') {
-
                 $information = $_POST['infor'];
 
                 $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
@@ -178,7 +177,7 @@ class VideosController extends Controller
                 );
 
                 try {
-                    $video->create($videoData);
+                    $videoId = $video->create($videoData);
 
                     $cacheManager = $this->get('template_cache_manager');
                     $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
@@ -191,13 +190,11 @@ class VideosController extends Controller
                 }
 
             } elseif ($type == 'web-source') {
-
                 if (!empty($_POST['information'])) {
-
                     $video = new \Video();
                     $_POST['information'] = json_decode($_POST['information'], true);
                     try {
-                        $video->create($_POST);
+                        $videoId = $video->create($_POST);
 
                         // Clean cache album home and frontpage for category
                         $cacheManager = $this->get('template_cache_manager');
@@ -230,10 +227,9 @@ class VideosController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_videos',
+                    'admin_video_show',
                     array(
-                        'category' => $category,
-                        'page' => $page
+                        'id' => $videoId
                     )
                 )
             );
@@ -291,7 +287,6 @@ class VideosController extends Controller
                     _("You can't modify this video because you don't have enought privileges.")
                 );
             } else {
-
                 if ($video->author_name == 'external' || $video->author_name == 'script') {
                     $information = $_POST['infor'];
                     $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
@@ -310,6 +305,7 @@ class VideosController extends Controller
                         'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
                         'starttime'      => $video->starttime,
                     );
+// var_dump($videoData);die();
 
                     $video->update($videoData);
                 } else {
@@ -326,26 +322,12 @@ class VideosController extends Controller
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
             $cacheManager->delete('home|1');
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_video_show',
-                        array('id' => $video->id)
-                    )
-                );
-            } else {
-                $page = $request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_videos',
-                        array(
-                            'category' => $video->category,
-                            'page'     => $page,
-                        )
-                    )
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_video_show',
+                    array('id' => $video->id)
+                )
+            );
         }
     }
 
@@ -422,13 +404,14 @@ class VideosController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos'));
         }
-
         if (($video->author_name == 'external' || $video->author_name == 'script')
             && is_array($video->information)) {
             $video->thumbnail = '';
+
             if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
-                $video->thumb_image = new \Photo($video->information['thumbnail']);
-                $video->thumbnail   = $video->thumb_image->path_file.$video->thumb_image->name;
+                $video->thumb_image = new \Photo();
+                // $video->thumb_image->
+                // $video->thumbnail   = $video->thumb_image->path_file.$video->thumb_image->name;
             }
         }
         $authorsComplete = \User::getAllUsersAuthors();

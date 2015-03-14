@@ -22,14 +22,14 @@
 <div class="form-group">
     <label for="typ_medida" class="form-label">{t}Video type and file URLs{/t}</label>
     <div class="controls">
-        <select name="type" id="type" ng-model="type">
-          <option value="html5" {if empty($video->id) || (empty($video->id) && $video->type == 'html5')}selected="selected"{/if}>{t}HTML5 video{/t}</option>
-          <option value="flv" {if empty($video->id) && $video->type == 'flv'}selected="selected"{/if}>{t}Flash video{/t}</option>
+        <select name="file_type" id="file_type" ng-model="file_type" required="required">
+          <option value="html5" {if !empty($video->id) && $video->type == 'html5'}selected="selected"{/if}>{t}HTML5 video{/t}</option>
+          <option value="flv" {if !empty($video->id) && $video->type == 'flv'}selected="selected"{/if}>{t}Flash video{/t}</option>
         </select>
 
         <p></p>
 
-        <div class="ng-cloak" ng-if="type == 'html5'">
+        <div class="ng-cloak" ng-if="file_type == 'html5'">
           <div class="input-group">
             <span class="input-group-addon">{t}MP4 format{/t}</span>
             <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor[source][mp4]" value="{$video->information['source']['mp4']|default:""}" aria-describedby="basic-addon-mp4">
@@ -45,7 +45,7 @@
             <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="infor[source][webm]" value="{$video->information['source']['webm']|default:""}" aria-describedby="basic-addon-webm">
           </div>
         </div>
-        <div class="ng-cloak" ng-if="type == 'flv'">
+        <div class="ng-cloak" ng-if="file_type == 'flv'">
           <div class="input-group">
             <span class="input-group-addon">{t}FLV format{/t}</span>
             <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="infor[source][flv]" value="{$video->video_url}" aria-describedby="basic-addon-flv">
