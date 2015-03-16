@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="VideoCtrl">
+<form action="{if isset($video)}{url name=admin_videos_update id=$video->id}{else}{url name=admin_videos_create}{/if}" method="POST" class="video-form" enctype="multipart/form-data" ng-controller="InnerCtrl">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
