@@ -122,10 +122,10 @@ class NewsletterController extends Controller
 
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
-            array(
+            [
                 'name'              => $configurations['name']." [".$time."]",
                 'newsletterContent' => $newsletterContent,
-                )
+            ]
         );
     }
 

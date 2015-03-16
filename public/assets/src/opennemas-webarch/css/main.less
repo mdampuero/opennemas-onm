@@ -168,6 +168,54 @@ body.collapsed .messages {
 /* Newsletter rules ============================================================ */
 
 .newsletter-manager {
+
+  ul {
+    margin-left:0
+  }
+  li {
+    list-style: none;
+  }
+  .newsletter-container  {
+    border:1px solid #ccc;
+    margin-bottom:10px;
+    max-width:800px;
+    margin:0 auto;
+    margin-bottom:20px
+  }
+  .newsletter-container .newsletter-container-title,
+  .newsletter-container .newsletter-container-contents {
+    padding:10px
+  }
+  .newsletter-container .newsletter-container-title {
+    border-bottom:1px solid #ccc
+  }
+  .newsletter-container .ui-sortable,
+  .newsletter-container-contents-sortable {
+    min-height:30px !important;
+  }
+  .newsletter-content {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 7px;
+    margin: 7px 0;
+    cursor:move;
+  }
+  .newsletter-content .content-type {
+    border-right: 1px solid #ccc;
+    display: inline-block;
+    font-weight: 900;
+    margin-top: 8px;
+    padding-right: 8px;
+    margin-right:8px
+  }
+  .newsletter-content-placeholder {
+    border:2px dashed #ccc;
+    background:#eee;
+    min-height:54px
+  }
+
+
+
   .ok, .failed {
     font-weight: bold;
   }
@@ -242,17 +290,6 @@ body.collapsed .messages {
     border:1px solid #ccc;
   }
 
-  .content-receiver {
-    border:1px solid #ccc;
-    border-top:0;
-  }
-  .container-label { position:relative; }
-  .container-buttons {
-    position:absolute;
-    top:-1px;
-    right:10px;
-    display:inline-block;
-  }
   .container-buttons i {
     margin-top:0;
     margin-left:3px;
@@ -265,13 +302,6 @@ body.collapsed .messages {
   }
   #newsletter-content-provider .toolbar{
     text-align:right
-  }
-  .contents ul {
-    margin:0 !important;
-    width:100%;
-  }
-  .contents ul li {
-    margin:4px 0;
   }
   .placeholder-element {
     min-height:24px !important;

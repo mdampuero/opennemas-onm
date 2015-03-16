@@ -218,7 +218,7 @@
             </div>
             <div class="grid-body">
               <div class="form-group">
-                <label for="category" class="form-label">{t}Category{/t}</label>
+                <label for="category" class="form-label">{t}Categories{/t}</label>
                 <div class="controls">
                   <select class="select2" name="category[]" id="category" required="required" multiple>
                     {if isset($advertisement->id)}
@@ -306,6 +306,10 @@
                   </select>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="form-label" for="position">
+                  {t}Position in selected page type{/t}
+                </label>
                 <div class="controls">
                   <div id="position-adv">
                     <div class="ng-cloak" ng-show="position == 'publi-frontpage'">
