@@ -68,7 +68,7 @@ class AuthorsController extends Controller
                 sprintf(_("Unable to find the author with the id '%d'"), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_opinion_authors'));
+            return $this->redirect($this->generateUrl('admin_authors'));
         }
 
         // Fetch user photo if exists
@@ -147,7 +147,7 @@ class AuthorsController extends Controller
 
                     return $this->redirect(
                         $this->generateUrl(
-                            'admin_opinion_author_show',
+                            'admin_author_show',
                             array('id' => $user->id)
                         )
                     );
@@ -187,7 +187,7 @@ class AuthorsController extends Controller
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
+                $this->generateUrl('admin_author_show', array('id' => $userId))
             );
         }
 
@@ -208,6 +208,7 @@ class AuthorsController extends Controller
             'sessionexpire'   => 60,
             'id_user_group'   => $user->id_user_group,
             'ids_category'    => $accessCategories,
+            'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
             'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
         );
@@ -256,7 +257,7 @@ class AuthorsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
+            $this->generateUrl('admin_author_show', array('id' => $userId))
         );
     }
 }
