@@ -1,12 +1,12 @@
 ul.messenger.messenger-fixed.messenger-on-top,
 ul.messenger.messenger-fixed.messenger-on-bottom {
   border-radius: 0;
-  bottom: 0;
+  top: 0;
   left: 0;
   margin: 0;
   padding-left: 210px;
   width: 100%;
-  z-index: 100;
+  z-index: 9999;
 
   -webkit-transition: all .25s;
   -o-transition: all .25s;
@@ -59,21 +59,25 @@ ul .messenger-message .messenger-close {
 
 .alert-info {
   background-color: #0090d9;
+  background-color:rgba(0, 114, 217, 0.95);
   color: #fff;
 }
 
 .alert-error {
   background-color: #f35958;
+  background-color:rgba(243, 89, 88, 0.95);
   color: #fff;
 }
 
 .alert-success {
   background-color: #0aa699;
+  background-color:rgba(10, 166, 153, 0.95);
   color: #fff;
 }
 
 .alert-warning {
   background-color: #fbb05e;
+  background-color:rgba(251, 176, 94, 0.95);
   color: #fff;
 }
 
