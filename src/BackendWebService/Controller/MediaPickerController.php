@@ -200,7 +200,7 @@ class MediaPickerController extends Controller
             'itemsSelected'    => _('items selected'),
             'menuItem'         => _('Browse'),
             'search'           => _('Search by name'),
-            'categories'       => $ccm->findAll(),
+            'categories'       => $ccm->find(),
             'contentTypes'     => $contentTypesFiltered,
             'dates'            => $this->getDates(),
         ];
