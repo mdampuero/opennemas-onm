@@ -82,7 +82,7 @@
         </div>
         <div class="grid-body">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-sm-8">
               <div class="form-group">
                 <label class="control-label" for="name">
                   {t}Display name{/t}
@@ -112,59 +112,8 @@
                   </div>
                 </div>
               </div>
-              {is_module_activated name="BLOG_MANAGER"}
-              <div class="control-group">
-                <label class="control-label">{t}View as Blog{/t}</label>
-                <div class="controls">
-                  <div class="checkbox">
-                    <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
-                    <label for="meta[is_blog]">
-                      {t}If this option is activated page author will be showed as blog{/t}
-                    </label>
-                  </div>
-                </div>
-              </div>
-              {/is_module_activated}
-              <div class="form-group">
-                <label class="form-label" for="url">
-                  {t}Other Blog Url{/t}
-                </label>
-                <div class="controls">
-                  <input class="form-control" id="url" name="url" placeholder="http://" value="{$user->url|default:""}" type="text">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="bio">
-                  {t}Short Biography{/t}
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="bio" name="bio" rows="3">{$user->bio|default:""}</textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="meta[bio_description]">
-                  {t}Biography{/t}
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="meta[bio_description]" name="meta[bio_description]" rows="3">{$user->meta['bio_description']|default:""}</textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="meta[inrss]">
-                  {t}Show in RSS{/t}
-                </label>
-                <div class="controls">
-                  <div class="checkbox">
-                    <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on' || $user->meta['inrss'] eq '1'} checked="checked"{/if}>
-                    <label for="meta[inrss]">
-                      {t}If this option is activated this author will be showed in rss{/t}
-                    </label>
-                  </div>
-                </div>
-                <input type="hidden" name="username" value="{$user->username|default:""}">
-              </div>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-sm-4 text-center">
               <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
                 <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                 </div>
@@ -191,6 +140,57 @@
                 </div>
               </div>
             </div>
+          </div>
+          {is_module_activated name="BLOG_MANAGER"}
+            <div class="form-group">
+              <label class="form-label">{t}View as Blog{/t}</label>
+              <div class="controls">
+                <div class="checkbox">
+                  <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
+                  <label for="meta[is_blog]">
+                    {t}If this option is activated page author will be showed as blog{/t}
+                  </label>
+                </div>
+              </div>
+            </div>
+          {/is_module_activated}
+          <div class="form-group">
+            <label class="form-label" for="url">
+              {t}Other Blog Url{/t}
+            </label>
+            <div class="controls">
+              <input class="form-control" id="url" name="url" placeholder="http://" value="{$user->url|default:""}" type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bio">
+              {t}Short Biography{/t}
+            </label>
+            <div class="controls">
+              <textarea class="form-control" id="bio" name="bio" rows="3">{$user->bio|default:""}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="meta[bio_description]">
+              {t}Biography{/t}
+            </label>
+            <div class="controls">
+              <textarea class="form-control" id="meta[bio_description]" name="meta[bio_description]" rows="3">{$user->meta['bio_description']|default:""}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="meta[inrss]">
+              {t}Show in RSS{/t}
+            </label>
+            <div class="controls">
+              <div class="checkbox">
+                <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on' || $user->meta['inrss'] eq '1'} checked="checked"{/if}>
+                <label for="meta[inrss]">
+                  {t}If this option is activated this author will be showed in rss{/t}
+                </label>
+              </div>
+            </div>
+            <input type="hidden" name="username" value="{$user->username|default:""}">
           </div>
         </div>
       </div>

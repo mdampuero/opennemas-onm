@@ -1,9 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-        <!-- @Common/js/onm/bootstrap-fileupload.min.js, -->
-    {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
-        @Common/js/jquery/jquery.multiselect.js,
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
         @Common/js/jquery/jquery.validate.min.js,
         @Common/js/jquery/localization/messages_es.js,
         @Common/js/onm/jquery.password-strength.js,
@@ -34,28 +32,7 @@
                     '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
                 );
             }
-
         }
-
-        $('#user-editing-form').tabs();
-
-        // Show/hide privilege tab depending on userType backend/frontend
-        if($('select#usertype').val() == '1') {
-            $('#id_user_group').removeAttr('required');
-            $('#privileges').hide();
-            $('.privileges-tab').hide();
-        }
-        $('select#usertype').change(function() {
-            if($(this).val() == '1'){
-                $('#id_user_group').removeAttr('required');
-                $('#privileges').hide();
-                $('.privileges-tab').hide();
-            } else {
-                $('#privileges').show();
-                $('.privileges-tab').show();
-                $('#id_user_group').attr('required', 'required');
-            }
-        });
 
         // Avatar image uploader
         $('.fileinput').fileinput({
@@ -63,23 +40,11 @@
           uploadtype:'image'
         });
 
-        $('.delete').on('click', function(){
-            $('.file-input').val('0');
-        })
-
-        // Use multiselect on user groups and categories
-        $('select#id_user_group').twosidedmultiselect();
-        $('select#ids_category').twosidedmultiselect();
-
         // Paywall datepicker only if available
         {acl isAllowed='USER_ADMIN'}
             {is_module_activated name='PAYWALL'}
-            jQuery('#paywall_time_limit').datetimepicker({
-                hourGrid: 4,
-                showAnim: 'fadeIn',
-                dateFormat: 'yy-mm-dd',
-                timeFormat: 'hh:mm:ss',
-                minuteGrid: 10
+            $('#paywall_time_limit').datetimepicker({
+              format: 'YYYY-MM-D HH:mm:ss'
             });
             {/is_module_activated}
         {/acl}
@@ -138,14 +103,14 @@
     <div class="content">
         {render_messages}
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-8">
                 <div class="grid simple">
                     <div class="grid-title">
                         <h4>{t}User info{/t}</h4>
                     </div>
                     <div class="grid-body">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="form-label" for="name">
                                         {t}Display name{/t}
@@ -162,8 +127,16 @@
                                         <input class="form-control" id="login" maxlength="20" name="login" required="required" type="text" value="{$user->username|default:""}"/>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">
+                                        {t}Email{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required"type="email" value="{$user->email|default:""}">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4 text-center">
                               <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                                 </div>
@@ -189,14 +162,6 @@
                                   </a>
                                 </div>
                               </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="email">
-                                {t}Email{/t}
-                            </label>
-                            <div class="controls">
-                                <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required"type="email" value="{$user->email|default:""}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -246,15 +211,15 @@
                                         <i class="fa fa-key"></i>
                                     </span>
                                     <input class="form-control validate-password-confirm" data-password-equals="password" id="passwordconfirm" maxlength="20" minlength=6 name="passwordconfirm" type="password" value=""/>
-                                    <span class="checker"></span>
                                 </div>
+                                  <span class="checker"></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
-                {if isset($user->id)}
+            <div class="col-md-4">
+                {if isset($user->id) && $user->id == $smarty.session.userid }
                     <div class="row">
                         <div class="col-md-12">
                             <div class="grid simple">
@@ -314,7 +279,7 @@
                                         <label for="id_user_group">
                                             {t}User group{/t}
                                         </label>
-                                        <select class="validate-selection" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
+                                        <select class="select2" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
                                             {if $smarty.session.isMaster}
                                                 <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
                                             {/if}
@@ -333,7 +298,7 @@
                                         <label for="id_user_group">
                                             {t}Categories{/t}
                                         </label>
-                                        <select class="validate-selection" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
+                                        <select class="select2" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
                                             <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
                                             {foreach item="c_it" from=$content_categories}
                                                 <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
