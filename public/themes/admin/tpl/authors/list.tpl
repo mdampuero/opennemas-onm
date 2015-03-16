@@ -108,7 +108,7 @@
         </div>
 
         <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
-          <table class="table table-hover table-condensed">
+          <table class="table table-hover no-margin">
             <thead>
               <tr>
                 <th class="checkbox-cell">
@@ -131,7 +131,7 @@
                   </div>
                 </td>
                 <td class="center">
-                  <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% shvs.extra.photos[content.avatar_img_id].path_file + '/' + shvs.extra.photos[content.avatar_img_id].name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
+                  <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[content.avatar_img_id].path_img" transform="thumbnail,120,120" ng-if="content.avatar_img_id != 0"></dynamic-image>
                   <gravatar email="[% content.email %]" image_dir="$params.IMAGE_DIR" image=true size="40" ng-if="content.avatar_img_id == 0"></gravatar>
                 </td>
 
