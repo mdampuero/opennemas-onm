@@ -656,7 +656,10 @@ $(window).resize(function() {
       $(this).find('#main-menu').removeClass('mini');
   };
 
-  // Opennemas inclusions
+})(jQuery);
+
+// Opennemas inclusions
+(function($) {
   $('.select2').select2({
     dropdownAutoWidth: true,
     formatSelection: function(state) {
@@ -669,5 +672,4 @@ $(window).resize(function() {
     }
   });
   $('.select2-arrow').append('<i class="select2-arrow-down fa fa-angle-down"></i>');
-
 })(jQuery);
