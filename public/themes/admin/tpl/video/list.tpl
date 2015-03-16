@@ -249,6 +249,7 @@
                   <label for="select-all"></label>
                 </div>
               </th>
+              <th class="hidden-xs hidden-sm"></th>
               <th>{t}Title{/t}</th>
               <th class="center hidden-xs">{t}Section{/t}</th>
               <th class="center nowrap hidden-xs hidden-sm">{t}Created on{/t}</th>
