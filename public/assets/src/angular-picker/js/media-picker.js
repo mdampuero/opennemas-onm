@@ -256,14 +256,7 @@ angular.module('onm.picker')
             target: attrs.mediaPickerTarget,
             types: {
               enabled:   [ 'photo' ],
-              available: [
-                'album',
-                'article',
-                'opinion',
-                'photo',
-                'poll',
-                'video'
-              ]
+              available: [ 'photo', 'video' ]
             },
 
             /**
