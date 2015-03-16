@@ -1,11 +1,6 @@
 //STEP 1 -Add Contents
 
 //STEPS
-$('#clean-button').on('click', function() {
-    $('div#newsletter-container').find('ul li').remove();
-    e.preventDefault();
-});
-
 $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
     log('submit');
     saveContents();
@@ -20,24 +15,6 @@ $("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) 
         $("#modal-newsletter-accept").modal('hide');
         $('#newsletter-pick-elements-form').submit();
     }
-});
-
-$("#modal-newsletter-accept").on('click', '.accept', function(e, ui) {
-    $("#modal-newsletter-accept").modal('hide');
-    log('yes clicked');
-    $('#newsletter-pick-elements-form').submit();
-});
-
-$('#modal-newsletter-accept a.btn.no').on('click', function(e) {
-    e.preventDefault();
-    $('#modal-newsletter-accept').modal('hide');
-});
-
-$("#modal-newsletter-accept").on('click', '.accept', function(e, ui) {
-    $("#modal-newsletter-accept").modal('hide');
-    log('yes clicked');
-
-    $('#newsletter-pick-elements-form').submit();
 });
 
 saveContents = function() {
@@ -68,159 +45,6 @@ saveContents = function() {
     $('#content_ids').val(encodedContents);
 };
 
-toggleProviderCheckbox = (function(item) {
-    var toggleElement = $('input#toggleallcheckbox');
-
-    var toggle = $(document).data('toggle');
-    if (toggle === undefined) {
-        toggle = true;
-    }
-
-    if (toggleElement) {
-        $('ul#contentList li input[type=checkbox]').each(function() {
-            $(this).prop('checked', toggle);
-        });
-    }
-    $(document).data('toggle', !toggle);
-});
-
-//OPERATIONS
-$('div.newsletter-contents').on('click', ' div.container-receiver .container-label', function(event) {
-    $(this).closest('div.container-receiver')
-        .addClass('active')
-        .siblings().removeClass('active');
-});
-
-$('div#newsletter-container').on('click', '.container-label .icon-chevron-down, .container-label .icon-chevron-up', function(i, item) {
-    var ul = $(this).closest('div.container-receiver').find('ul.content-receiver');
-    if ($(ul).css('display') == 'none') {
-      $(ul).show().sortable('enable');
-    } else {
-      $(ul).hide().sortable('disable');
-    }
-    $(this).toggleClass('icon-chevron-down icon-chevron-up');
-});
-
-$('div#newsletter-container').on('click', '.container-label .fa-trash', function(e) {
-    $(this).closest('div.container-receiver').remove();
-
-    e.preventDefault();
-});
-
-$('div#newsletter-container').on('click', '.fa-times', function() {
-    $(this).closest('.container-receiver').find('li').each(function (){
-        $(this).remove();
-    });
-});
-
-$('#button-add-container').on('click', function(event) {
-    $('#modal-add-label').modal('show');
-    return false;
-});
-
-
-$('modal-add-label').modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false
-});
-
-$('#modal-add-label a.btn.save').on('click', function(e) {
-//open modal
-    var label = $('#modal-add-label input#container_label').val();
-    var id = 1;
-    $('div.column-receiver div.container-receiver').each(function(index, item) {
-        if ($(item).data('id') > id) {
-            id = $(item).data('id');
-        }
-
-    });
-    id = id + 1;
-    $('div.column-receiver').find('.container-receiver').removeClass('active');
-    $('div.column-receiver').append('<div data-title="' + label + '" data-id="' + id +
-            '" class="container-receiver active"><div class="container-label"><span>' +
-            label + '</span> <div class="container-buttons btn-group">' +
-            ' <i class="icon-chevron-down"></i><i class="fa fa-pencil"></i>' +
-            ' <i class="fa fa-trash"></i> <i class="icon-clean"></i> </div> </div>' +
-            ' <ul class="content-receiver"> </ul> </div>');
-
-
-    $('div.column-receiver ul.content-receiver').sortable({
-        connectWith: 'div#content-provider ul#contentList, div.column-receiver ul.content-receiver',
-        dropOnEmpty: true,
-        placeholder: 'placeholder-element',
-        tolerance: 'pointer',
-        items: 'li:not(.container-label)'
-    }).disableSelection();
-
-    $('#modal-add-label input#container_label').val('');
-    $('#modal-add-label').modal('hide');
-
-    e.preventDefault();
-});
-
-jQuery('div.newsletter-contents').on('click', '#button-check-all', function(event) {
-    jQuery('#content-provider div.ui-tabs-panel:not(.ui-tabs-hide) ul#contentList li input[type=checkbox]').each(function() {
-        jQuery(this).prop('checked', !jQuery(this).prop('checked'));
-    });
-});
-
-jQuery('#add-selected').on('click', function(event) {
-    if ((jQuery('div#newsletter-container div.active').length === 0)) {
-        jQuery('#modal-container-active').modal('show');
-    } else {
-        jQuery('div.ui-tabs-panel:not(.ui-tabs-hide) ul#contentList li').find('input:checked').each(function() {
-            if (this.checked === true) {
-                jQuery(this).prop('checked', false);
-                item = jQuery(this).parent();
-                item.draggable('disable');
-                item.removeClass('ui-state-disabled');
-                jQuery('div#newsletter-container div.active ul.content-receiver').append(item);
-            }
-        });
-
-        jQuery('ul#contentList li').find('input:checked').prop('checked', false);
-        jQuery('input#toggleallcheckbox').prop('checked', false);
-    }
-});
-
-$('div#newsletter-container').sortable({
-    axis: 'y',
-    handle: 'span',
-    tolerance: 'pointer'
-}).disableSelection();
-
-$('modal-update-label').modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false
-});
-
-$('#modal-update-label a.btn.save').on('click', function(e) {
-    var label = $('#modal-update-label input#updated_label').val();
-
-    var id = $('#modal-update-label input#updated_id').val();
-
-    var container = $('div.container-receiver[data-id='+ id + ']');
-    container.attr('data-title', label);
-    $(container).find('div.container-label span').html(label);
-
-    $('#modal-update-label').modal('hide');
-
-    e.preventDefault();
-});
-
-/* Containers operations  */
-$('div#newsletter-container').on('click', '.container-label .fa-pencil', function(e) {
-    var container = $(this).closest('div.container-receiver');
-
-    $('#modal-update-label input#updated_label').val(container.attr('data-title'));
-    $('#modal-update-label input#updated_id').val(container.data('id'));
-
-    $('#modal-update-label').modal('show');
-    e.preventDefault();
-
-});
 
 /*****************************************************************************/
 

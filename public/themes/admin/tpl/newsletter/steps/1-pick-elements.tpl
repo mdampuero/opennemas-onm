@@ -90,10 +90,13 @@
             </div>
             <div class="newsletter-container-contents clearfix">
               <ul ui-sortable="sortableOptions" ng-model="container.items" class="newsletter-container-contents-sortable">
+                <li ng-if="container.items.length == 0">
+                  {t}Click in "Add contents" button above or drop contents from other containers{/t}
+                </li>
                 <li class="newsletter-content clearfix" ng-repeat="content in container.items">
-                  <span class="content-type">[% content.content_type %]</span> [% content.title %]
+                  <span class="content-type">[% content.content_type_name %]</span> [% content.title %]
 
-                  <button class="btn btn-white pull-right" ng-click="removeContent(content)" type="button">
+                  <button class="btn btn-white pull-right" ng-click="removeContent(container, content)" type="button">
                     <i class="fa fa-trash-o text-danger"></i>
                   </button>
 

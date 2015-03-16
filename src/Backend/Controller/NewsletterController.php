@@ -101,6 +101,10 @@ class NewsletterController extends Controller
                 $item->type == 'blog-category' ||
                 $item->type == 'internal'
             ) {
+                unset($item->pk_item);
+                unset($item->link);
+                unset($item->pk_father);
+                unset($item->type);
                 $item->id           = $i;
                 $item->items        = array();
                 $item->content_type = 'container';
@@ -111,6 +115,7 @@ class NewsletterController extends Controller
                         $newsletterContent[] = $subitem;
                     }
                 }
+                unset($item->submenu);
                 $i++;
             }
         }
@@ -171,7 +176,6 @@ class NewsletterController extends Controller
         $id = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('content_ids');
         $contents = json_decode($contentsRAW);
-
         $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
         $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));

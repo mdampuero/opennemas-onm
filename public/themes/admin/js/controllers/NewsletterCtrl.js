@@ -21,9 +21,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
     $scope.addContainer = function() {
       $scope.newsletterContents.push({
-        'pk_item': 0,
+        'id': 0,
         'title': '',
-        'link': '',
         'position': '',
         'items': []
       });
@@ -49,13 +48,16 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       $scope.newsletterContents.splice(position, 1);
     };
 
-    $scope.cleanContainers = function(container) {
+    $scope.cleanContainers = function() {
       for (var i = $scope.newsletterContents.length - 1; i >= 0; i--) {
         $scope.newsletterContents[i].items = [];
       }
     };
 
-    $scope.removeContent = function(container) {
+    $scope.removeContent = function(container, content) {
+      var position = container.items.indexOf(content);
+
+      container.items.splice(position, 1);
     };
 
     /**
@@ -64,16 +66,18 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      */
     $scope.$watch('newsletterContents', function() {
       for (var i = 0; i < $scope.newsletterContents.length; i++) {
-        var contents = [];
 
         for (var j = 0; j < $scope.newsletterContents[i].items.length; j++) {
+          console.log($scope.newsletterContents[i].items[j]);
           $scope.newsletterContents[i].items[j] = {
-            id:                $scope.newsletterContents[i].items.id,
-            content_type_name: $scope.newsletterContents[i].items[j].content_type_name,
-            title:             $scope.newsletterContents[i].items[i].title
+            id:           $scope.newsletterContents[i].items.pk_content,
+            content_type: $scope.newsletterContents[i].items[j].content_type,
+            title:        $scope.newsletterContents[i].items[j].title,
+            position:     j
           };
         }
       }
+      console.log($scope.newsletterContents);
 
       $scope.contents = angular.toJson($scope.newsletterContents);
     }, true);
