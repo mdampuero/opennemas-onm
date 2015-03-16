@@ -148,11 +148,11 @@
                     <label for="select-all"></label>
                   </div>
                 </th>
-                <th style='width:10px;' class="hidden-xs">{t}Image{/t}</th>
+                <th style="width: 100px;" class="text-center hidden-xs">{t}Image{/t}</th>
                 <th>{t}Author{/t} - {t}Title{/t}</th>
-                <th style='width:110px;' class="left hidden-xs">{t}Date{/t}</th>
+                <th style="width: 110px;" class="left hidden-xs">{t}Date{/t}</th>
                 {acl isAllowed="LETTER_AVAILABLE"}
-                <th class="center" style='width:10px;'>{t}Available{/t}</th>
+                <th class="center" style="width:10px;">{t}Available{/t}</th>
                 {/acl}
               </tr>
             </thead>
@@ -165,15 +165,13 @@
                   </div>
                 </td>
                 <td class="center hidden-xs">
-                  <span class="thumbnail">
-                    <i class="fa fa-picture-o fa-lg" ng-if="!content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
-                    <img ng-if="content.image" ng-src="content.image">
+                  <span ng-if="content.image">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path_img" transform="thumbnail,120,120"></dynamic-image>
                   </span>
                 </td>
                 <td>
-                  <span class="thumbnail center visible-xs">
-                    <i class="fa fa-picture-o fa-lg" ng-if="!content.image" title="{t}Media element (jpg, png, gif){/t}"></i>
-                    <img ng-if="content.image" ng-src="content.image">
+                  <span class="center visible-xs" ng-if="content.image">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path_img" transform="thumbnail,120,120"></dynamic-image>
                   </span>
                   <div>
                     <small>"[% content.author %]" ([% content.email %])</small>
