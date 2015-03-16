@@ -66,14 +66,7 @@ class NewsletterController extends Controller
             $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
         }
 
-        if (!empty($message)) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                $message
-            );
-        }
-
-        return $this->render('newsletter/list.tpl');
+        return $this->render('newsletter/list.tpl', ['message' => $message]);
     }
 
     /**

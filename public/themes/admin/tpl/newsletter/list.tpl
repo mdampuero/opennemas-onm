@@ -79,6 +79,10 @@
             </span>
             <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by subject{/t}" type="text"/>
           </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs">
+            <span class="info">{$message}</span>
+          </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
