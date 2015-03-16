@@ -55,7 +55,7 @@ angular.module('onm.picker')
                       <select name=\"category\" ng-model=\"$parent.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
                         <option value=\"[% category.name %]\" ng-repeat=\"category in picker.params.explore.categories\">\
-                          [% category.name %]\
+                          [% category.title %]\
                         </option>\
                       </select>\
                     </li>\
