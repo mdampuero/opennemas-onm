@@ -54,6 +54,7 @@
     "gritter": "~1.7.*",
     "Harry-Plotter": "https://github.com/nikopol/Harry-Plotter.git",
     "imageresize": "https://github.com/nmmf/imageresize.git",
+    "jasny-bootstrap": "~3.1.*",
     "jquery": "~1.9.*",
     "jquery-animateNumber": "https://github.com/aishek/jquery-animateNumber.git#0.0.10",
     "jquery-knob": "~1.2.*",
