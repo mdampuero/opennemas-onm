@@ -58,7 +58,7 @@
         <div class="grid-title clearfix">
           <div class="pull-left">{t}Add contents to groups by using the "Add contents" button{/t}</div>
           <div class="pull-right">
-            <button class="btn btn-mini" ng-click="addContainer()">
+            <button type="button" class="btn btn-mini" ng-click="addContainer()">
               <span class="fa fa-plus"></span> {t}Add Container{/t}
             </button>
             <button type="button" title="{t}Clean containers{/t}" class="btn btn-mini" ng-click="cleanContainers()">
