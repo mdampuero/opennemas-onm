@@ -245,7 +245,7 @@
         {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
       </div>
       <div class="pull-right pagination-wrapper">
-        <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_opinions_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pages"></pagination>
+        <pagination class="no-margin" max-size="5" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_opinions_list')" ng-model="pagination.page" total-items="pagination.total" num-pages="pagination.pages"></pagination>
       </div>
     </div>
   </div>
