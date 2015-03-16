@@ -1,13 +1,17 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
+  {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css,
+    @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css
+  " filters="cssrewrite"}
   <link rel="stylesheet" href="{$asset_url}">
   {/stylesheets}
 {/block}
 
 {block name="footer-js" append}
-  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js"}
+  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
+    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js
+  "}
   <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
@@ -40,6 +44,11 @@
         color.css('background-color', '#' + '{setting name="site_color"}');
         color.css('border-color', '#' + '{setting name="site_color"}');
         e.preventDefault();
+      });
+
+      $('.fileinput').fileinput({
+        name: 'logo_path',
+        uploadtype:'image'
       });
     });
   </script>
@@ -250,12 +259,27 @@
             <div class="form-group">
               <label for="logo_path" class="form-label">{t}Category logo{/t}</label>
               <div class="controls">
-                <input type="file" id="logo_path" name="logo_path"  />
-                <br>
-                {if !empty($category->logo_path)}
-                <label>{t}Image logo:{/t}</label>
-                <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" style="max-width:200px;" >
-                {/if}
+                <div class="fileinput {if $category->logo_path}fileinput-exists{else}fileinput-new{/if}" data-trigger="fileinput">
+                  <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
+                  </div>
+                  <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                    {if $category->logo_path}
+                      <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" style="max-width:200px;" >
+                    {/if}
+                  </div>
+                  <div>
+                    <span class="btn btn-file">
+                      <span class="fileinput-new">{t}Add new photo{/t}</span>
+                      <span class="fileinput-exists">{t}Change{/t}</span>
+                      <input type="file"/>
+                      <input type="hidden" name="logo_path" class="file-input" value="1">
+                    </span>
+                    <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                      <i class="fa fa-trash-o"></i>
+                      {t}Remove{/t}
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
             {/if}
