@@ -122,7 +122,7 @@
           </li>
           <li class="quicklinks hidden-xs hidden-sm">
             <select class="select2" ng-model="criteria.author" data-label="{t}Author{/t}">
-              <option value="-1">{t}-- All authors --{/t}</option>
+              <option value="-1">{t}-- All --{/t}</option>
               <option value="-2">{t}Director{/t}</option>
               <option value="-3">{t}Editorial{/t}</option>
               {section name=as loop=$autores}
