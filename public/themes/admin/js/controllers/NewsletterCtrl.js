@@ -68,13 +68,15 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       for (var i = 0; i < $scope.newsletterContents.length; i++) {
 
         for (var j = 0; j < $scope.newsletterContents[i].items.length; j++) {
-          console.log($scope.newsletterContents[i].items[j]);
-          $scope.newsletterContents[i].items[j] = {
-            id:           $scope.newsletterContents[i].items.pk_content,
-            content_type: $scope.newsletterContents[i].items[j].content_type,
-            title:        $scope.newsletterContents[i].items[j].title,
-            position:     j
+          var newElement = {
+            id:                     $scope.newsletterContents[i].items.id,
+            content_type:           $scope.newsletterContents[i].items[j].content_type,
+            content_type_l10n_name: $scope.newsletterContents[i].items[j].content_type_l10n_name,
+            title:                  $scope.newsletterContents[i].items[j].title,
+            position:               j
           };
+
+          $scope.newsletterContents[i].items[j] = newElement;
         }
       }
       console.log($scope.newsletterContents);

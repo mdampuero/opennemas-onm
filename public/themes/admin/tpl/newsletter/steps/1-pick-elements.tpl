@@ -69,8 +69,11 @@
         <div class="grid-body" id="newsletter-contents">
 
           <div class="newsletter-container ng-cloak" ng-repeat="container in newsletterContents| orderBy : id">
-            <div class="newsletter-container-title">
-              <input ng-model="container.title" type="text">
+            <div class="newsletter-container-title clearfix">
+              <div class="input-group title pull-left">
+                <input ng-model="container.title" type="text" class="form-control">
+                <span class="input-group-addon" id="basic-addon1"><span class="fa fa-pencil"></span></span>
+              </div>
 
               <div class="container-actions pull-right">
                 <button type="button" class="btn btn-white" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
@@ -89,12 +92,12 @@
               </div>
             </div>
             <div class="newsletter-container-contents clearfix">
+              <div ng-if="container.items.length == 0" class="hint-message">
+                {t}Click in "Add contents" button above or drop contents from other containers{/t}
+              </div>
               <ul ui-sortable="sortableOptions" ng-model="container.items" class="newsletter-container-contents-sortable">
-                <li ng-if="container.items.length == 0">
-                  {t}Click in "Add contents" button above or drop contents from other containers{/t}
-                </li>
                 <li class="newsletter-content clearfix" ng-repeat="content in container.items">
-                  <span class="content-type">[% content.content_type_name %]</span> [% content.title %]
+                  <span class="content-type">[% content.content_type_l10n_name %]</span> [% content.title %]
 
                   <button class="btn btn-white pull-right" ng-click="removeContent(container, content)" type="button">
                     <i class="fa fa-trash-o text-danger"></i>
@@ -116,17 +119,4 @@
   <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
 
 </form>
-{/block}
-
-{block name="footer-js" append}
-  {script_tag src="/onm/newsletter.js"}
-  <script type="text/javascript">
-    {if $with_html}
-    var has_contents = true;
-    {else}
-    var has_contents = false;
-    {/if}
-  </script>
-
-  {include file="newsletter/modals/_back_contents_accept.tpl"}
 {/block}
