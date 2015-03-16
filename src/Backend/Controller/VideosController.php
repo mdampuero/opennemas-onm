@@ -158,8 +158,7 @@ class VideosController extends Controller
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } elseif ($type == 'external' || $type == 'script') {
-                $information = $_POST['infor'];
-
+                $information = $requestPost->get('infor');
                 $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
 
                 $video = new \Video();
@@ -406,12 +405,9 @@ class VideosController extends Controller
         }
         if (($video->author_name == 'external' || $video->author_name == 'script')
             && is_array($video->information)) {
-            $video->thumbnail = '';
 
             if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
-                $video->thumb_image = new \Photo();
-                // $video->thumb_image->
-                // $video->thumbnail   = $video->thumb_image->path_file.$video->thumb_image->name;
+                $video->thumb = $video->getThumb();
             }
         }
         $authorsComplete = \User::getAllUsersAuthors();
