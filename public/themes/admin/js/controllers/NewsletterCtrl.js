@@ -24,7 +24,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
         'pk_item': 0,
         'title': '',
         'link': '',
-        'position': ''
+        'position': '',
+        'items': []
       });
     };
 
@@ -56,5 +57,25 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
     $scope.removeContent = function(container) {
     };
+
+    /**
+     * Removes unnecessary fields from items and updates the JSON string to send
+     * to server.
+     */
+    $scope.$watch('newsletterContents', function() {
+      for (var i = 0; i < $scope.newsletterContents.length; i++) {
+        var contents = [];
+
+        for (var j = 0; j < $scope.newsletterContents[i].items.length; j++) {
+          $scope.newsletterContents[i].items[j] = {
+            id:                $scope.newsletterContents[i].items.id,
+            content_type_name: $scope.newsletterContents[i].items[j].content_type_name,
+            title:             $scope.newsletterContents[i].items[i].title
+          };
+        }
+      }
+
+      $scope.contents = angular.toJson($scope.newsletterContents);
+    }, true);
   }
 ]);
