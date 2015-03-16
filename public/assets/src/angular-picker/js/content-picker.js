@@ -300,7 +300,6 @@ angular.module('onm.picker')
 
           // Bind click event to open picker
           elm.bind('click', function() {
-            console.log('click');
             $scope.reset();
 
             // Initialize the media picker available modes
