@@ -7,6 +7,7 @@
         @Common/js/jquery/jquery.validate.min.js,
         @Common/js/jquery/localization/messages_es.js,
         @Common/js/onm/jquery.password-strength.js,
+        @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
         @Common/js/admin.js "}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
@@ -57,9 +58,9 @@
         });
 
         // Avatar image uploader
-        $('.fileupload').fileupload({
-            name: 'avatar',
-            uploadtype:'image'
+        $('.fileinput').fileinput({
+          name: 'avatar',
+          uploadtype:'image'
         });
 
         $('.delete').on('click', function(){
@@ -87,9 +88,9 @@
 {/block}
 
 {block name="header-css" append}
-{*stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" css="cssrewrite"}
-    <!-- <link rel="stylesheet" href="{$asset_url}"> -->
-{/stylesheets*}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
 {/block}
 
 {block name="content"}
@@ -163,28 +164,31 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
-                                    {if $user->photo->name}
-                                    <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
-                                    </div>
-                                    {else}
-                                    <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                                        {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
-                                    </div>
-                                    {/if}
-                                    <div>
-                                        <span class="btn btn-file">
-                                            <span class="fileupload-new">{t}Add new photo{/t}</span>
-                                            <span class="fileupload-exists">{t}Change{/t}</span>
-                                            <input type="file"/>
-                                            <input type="hidden" name="avatar" class="file-input" value="1">
-                                        </span>
-                                        <a href="#" class="btn btn-danger fileupload-exists delete" data-dismiss="fileupload" title="{t}Remove image{/t}">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    </div>
+                              <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                                 </div>
+                                {if $user->photo->name}
+                                <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                                  <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                                </div>
+                                {else}
+                                <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
+                                  {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                </div>
+                                {/if}
+                                <div>
+                                  <span class="btn btn-file">
+                                    <span class="fileinput-new">{t}Add new photo{/t}</span>
+                                    <span class="fileinput-exists">{t}Change{/t}</span>
+                                    <input type="file"/>
+                                    <input type="hidden" name="avatar" class="file-input" value="1">
+                                  </span>
+                                  <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                    <i class="fa fa-trash-o"></i>
+                                    {t}Remove{/t}
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                         </div>
                         <div class="form-group">
