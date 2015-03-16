@@ -73,7 +73,7 @@
               <input ng-model="container.title" type="text">
 
               <div class="container-actions pull-right">
-                <button type="button" class="btn btn-white" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.id" media-picker-type="album,article,opinion,poll,video">
+                <button type="button" class="btn btn-white" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
                   <span class="fa fa-add"></span>
                   {t}Add contents{/t}
                 </button>
@@ -109,7 +109,7 @@
     </div>
   </div>
 
-  <input type="hidden" id="content_ids" name="content_ids">
+  <input type="hidden" name="content_ids" ng-value="contents">
   <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
 
 </form>
