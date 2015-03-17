@@ -47,7 +47,7 @@
         <ul class="nav quick-section pull-right">
           <li class="quicklinks">
             {acl isAllowed="GROUP_DELETE"}
-            <button class="btn btn-link" href="#" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
+            <button class="btn btn-link" href="#" ng-click="deleteSelected('backend_ws_usergroups_batch_delete')">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
             {/acl}
@@ -136,7 +136,7 @@
                     <a class="link" href="[% edit(content.id, 'admin_acl_usergroup_show') %]" title="{t}Edit user group{/t}">
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
-                    <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_usergroup_delete', $index)" title="{t}Delete this user group{/t}" type="button">
+                    <button class="link link-danger" ng-click="delete(content, 'backend_ws_usergroup_delete')" title="{t}Delete this user group{/t}" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>

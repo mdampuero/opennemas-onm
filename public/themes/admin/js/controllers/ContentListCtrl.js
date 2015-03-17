@@ -446,7 +446,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a list of keywords by using a confirmation dialog
      */
-    $scope.deleteSelectedUsers = function () {
+    $scope.deleteSelected = function (route) {
       // Enable spinner
       $scope.deleting = 1;
 
@@ -462,7 +462,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           },
           success: function() {
             return function() {
-              var url = routing.generate('backend_ws_users_batch_delete');
+              var url = routing.generate(route);
 
               return $http.post(url, {ids: $scope.selected.contents});
             };
@@ -487,7 +487,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     /**
      * Permanently removes a keyword by using a confirmation dialog
      */
-    $scope.deleteUser = function(content) {
+    $scope.delete = function(content, route) {
       var modal = $modal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
@@ -500,10 +500,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           },
           success: function() {
             return function() {
-              var url = routing.generate(
-                'backend_ws_user_delete',
-                { id: content.id }
-              );
+              var url = routing.generate(route, { id: content.id });
 
               return $http.post(url);
             };
