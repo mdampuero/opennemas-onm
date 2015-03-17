@@ -86,9 +86,11 @@ class NewsletterManager extends BaseManager
             $newsletterContent = array();
         }
 
+        $er = getService('entity_repository');
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
                 if (!empty($item->id) && $item->content_type !='label') {
+                    $content = $er->find($item->content_type, $item->id);
                     $content = new $item->content_type($item->id);
 
                     //if is a real content include it in the contents array
@@ -134,15 +136,16 @@ class NewsletterManager extends BaseManager
                 }
             }
         }
+var_dump($newsletterContent);die();
 
         $tpl->assign('newsletterContent', $newsletterContent);
 
-        //render menu
+        // render menu
         $menuManager = new \Menu();
         $menuFrontpage= $menuManager->getMenu('frontpage');
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
-        //render ads
+        // render ads
         $ads = \Advertisement::findForPositionIdsAndCategory(array(1001, 1009), 0);
         $tpl->assign('advertisements', $ads);
 
