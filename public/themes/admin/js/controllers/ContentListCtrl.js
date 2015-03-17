@@ -373,6 +373,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         resolve: {
           template: function() {
             return {
+              name:     name,
+              value:    value,
               selected: $scope.selected
             };
           },
