@@ -58,7 +58,7 @@
                             {t}Summary{/t}
                         </label>
                         <div class="controls">
-                            <textarea id="sumary_home" name="params[summaryHome]">{$article->params['summaryHome']|clearslash}</textarea>
+                            <textarea id="sumary_home" name="params[summaryHome]" class="form-control">{$article->params['summaryHome']|clearslash}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
