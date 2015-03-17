@@ -56,15 +56,18 @@ class WidgetsController extends Controller
         $category = $request->query->get('category', 'home');
 
         $widget = new \Widget($id);
-
+        $widgetParams = [];
         if (is_string($widget->params)) {
             $widget->params = unserialize($widget->params);
-            if (!is_array($widget->params)) {
-                $widget->params = array();
+
+            foreach ($widget->params as $key => $value) {
+                $widgetParams []= [
+                    'name' => $key,
+                    'value' => $value
+                ];
             }
-        } else {
-            $widget->params = [];
         }
+        $widget->params = $widgetParams;
         if (is_null($widget->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -119,6 +122,14 @@ class WidgetsController extends Controller
             );
             if ($widgetData['renderlet'] == 'intelligentwidget') {
                 $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
+            }
+
+            if (count($widgetData['params']) > 0) {
+                $newParams = [];
+                foreach ($widgetData['params'] as $param) {
+                    $newParams [$param->name]= $param->value;
+                }
+                $widgetData['params'] = $newParams;
             }
 
             try {
@@ -188,7 +199,7 @@ class WidgetsController extends Controller
         if (count($widgetData['params']) > 0) {
             $newParams = [];
             foreach ($widgetData['params'] as $param) {
-                $newParams []= ['name' => $param->name, 'value' => $param->value];
+                $newParams [$param->name]= $param->value;
             }
             $widgetData['params'] = $newParams;
         }
