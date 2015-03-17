@@ -19,7 +19,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if !empty($cover->id)}{url name=admin_cover_update id=$cover->id}{else}{url name=admin_cover_create}{/if}" method="POST"  enctype="multipart/form-data">
+  <form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST"  enctype="multipart/form-data">
     <div class="page-navbar actions-navbar">
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -38,7 +38,7 @@
                 <div class="all-actions pull-right">
                     <ul class="nav quick-section">
                         <li class="quicklinks">
-                            <a class="btn btn-link" href="{url name=admin_covers category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                            <a class="btn btn-link" href="{url name=admin_kioskos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
                                 <span class="fa fa-reply"></span>
                             </a>
                         </li>

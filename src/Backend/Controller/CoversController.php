@@ -124,7 +124,7 @@ class CoversController extends Controller
                 sprintf(_('Unable to find the cover with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_covers'));
+            return $this->redirect($this->generateUrl('admin_kioskos'));
         }
 
         return $this->render(
@@ -199,7 +199,7 @@ class CoversController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
+                $this->generateUrl('admin_kioskos', array('category' => $postInfo->getDigits('category')))
             );
 
         } catch (\Exception $e) {
@@ -207,7 +207,7 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $postInfo->getDigits('category'),
                     )
@@ -237,7 +237,7 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $cover->category,
                     )
@@ -264,7 +264,7 @@ class CoversController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_cover_show',
+                'admin_kiosko_show',
                 array('id' => $cover->id)
             )
         );
@@ -300,7 +300,7 @@ class CoversController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_covers',
+                'admin_kioskos',
                 array(
                     'category' => $cover->category,
                     'page'     => $page
@@ -386,6 +386,6 @@ class CoversController extends Controller
             _('Settings saved successfully.')
         );
 
-        return $this->redirect($this->generateUrl('admin_covers_config'));
+        return $this->redirect($this->generateUrl('admin_kioskos_config'));
     }
 }

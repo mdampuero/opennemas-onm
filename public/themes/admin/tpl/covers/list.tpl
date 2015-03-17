@@ -27,12 +27,12 @@
             </div>
             <ul class="dropdown-menu">
               <li>
-                <a href="{url name=admin_covers_widget}" {if $category=='widget'}class="active"{/if}>
+                <a href="{url name=admin_kioskos_widget}" {if $category=='widget'}class="active"{/if}>
                   {t}Widget Home{/t}
                 </a>
               </li>
               <li>
-                <a href="{url name=admin_covers}" {if $category != 'widget'}class="active"{/if}>
+                <a href="{url name=admin_kioskos}" {if $category != 'widget'}class="active"{/if}>
                   {t}Listing{/t}
                 </a>
               </li>
@@ -44,7 +44,7 @@
             <li class="quicklinks">
               {acl isAllowed="KIOSKO_ADMIN"}
               <li>
-                <a class="btn btn-link" href="{url name=admin_covers_config}" title="{t}Config covers module{/t}">
+                <a class="btn btn-link" href="{url name=admin_kioskos_config}" title="{t}Config covers module{/t}">
                   <span class="fa fa-cog fa-lg"></span>
                 </a>
               </li>
@@ -63,7 +63,7 @@
             <li class="quicklinks"><span class="h-seperate"></span></li>
             {acl isAllowed="KIOSKO_CREATE"}
             <li>
-              <a class="btn btn-primary" href="{url name=admin_cover_create}" title="{t}New cover{/t}">
+              <a class="btn btn-primary" href="{url name=admin_kiosko_create}" title="{t}New cover{/t}">
                 {t}Create{/t}
               </a>
             </li>
@@ -267,7 +267,7 @@
 
                   <div class="listing-inline-actions">
                     {acl isAllowed="VIDEO_UPDATE"}
-                    <a class="link" href="[% edit(content.id, 'admin_cover_show') %]">
+                    <a class="link" href="[% edit(content.id, 'admin_kiosko_show') %]">
                       <i class="fa fa-pencil"></i> {t}Edit{/t}
                     </a>
                     {/acl}

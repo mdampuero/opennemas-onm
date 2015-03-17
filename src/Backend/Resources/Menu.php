@@ -189,7 +189,7 @@ $menuXml = [
                 "id"          => "kiosko_manager",
                 "title"       => _("News Stand"),
                 "icon"        => "fa fa-newspaper-o",
-                "link"        => url('admin_covers'),
+                "link"        => url('admin_kioskos'),
                 "module_name" => "KIOSKO_MANAGER",
                 "privilege"   => "KIOSKO_ADMIN",
             ],

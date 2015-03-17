@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_covers_config}" method="POST">
+<form action="{url name=admin_kioskos_config}" method="POST">
 
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -21,7 +21,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" href="{url name=admin_covers}" title="{t}Go back to list{/t}">
+                        <a class="btn btn-link" href="{url name=admin_kioskos}" title="{t}Go back to list{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
