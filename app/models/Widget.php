@@ -337,7 +337,7 @@ class Widget extends Content
         }
         $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
 
-        $className = 'Widget' . $this->content;
+        $className = 'Widget' . trim($this->content);
         $filename = strtolower($className);
 
         foreach ($paths as $path) {
