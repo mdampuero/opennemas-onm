@@ -94,7 +94,7 @@ angular.module('onm.picker')
                   </div>\
                   <div class=\"picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)\">\
-                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
+                      <dynamic-image autoscale=\"true\" instance=\""
                         + instanceMedia
                         + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
@@ -103,7 +103,7 @@ angular.module('onm.picker')
                       <dynamic-image autoscale=\"true\" ng-model=\"selected.lastSelected\" property=\"thumb\"></dynamic-image>\
                     </div>\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"isFlash(selected.lastSelected)\">\
-                      <dynamic-image autoscale=\"true\" dimensions=\"true\" instance=\""
+                      <dynamic-image autoscale=\"true\" instance=\""
                           + instanceMedia
                           + "\" ng-model=\"selected.lastSelected\">\
                       </dynamic-image>\
@@ -119,6 +119,7 @@ angular.module('onm.picker')
                       </li>\
                       <li>[% selected.lastSelected.created | moment %]</li>\
                       <li>[% selected.lastSelected.size %] KB</li>\
+                      <li>[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>\
                       <li><span class=\"v-seperate\"></span></li>\
                       <li>\
                         <div class=\"form-group\">\
