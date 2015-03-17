@@ -158,10 +158,24 @@ class CacheManagerController extends Controller
      **/
     private function getFilters($request)
     {
-        $section      = $request->query->get('section', null);
-        $type         = $request->query->get('type', null);
-        $page         = $request->query->get('page', 1);
-        $itemsPerPage = $request->query->get('items_page', 15);
+        $section      = null;
+        $type         = null;
+        $page         = $request->request->get('page', 1);
+        $itemsPerPage = $request->request->get('epp', 15);
+
+        if ($request->get('search')) {
+            $search  = $request->get('search');
+
+            if (array_key_exists('type', $search)) {
+                $type = $search['type'][0]['value'];
+            }
+
+            if (array_key_exists('section', $search)) {
+                $type = $search['section'][0]['value'];
+            }
+        }
+
+
         if (empty($itemsPerPage)) {
             $itemsPerPage = 15;
         }
@@ -192,8 +206,8 @@ class CacheManagerController extends Controller
                 'poll-inner'         => 'poll.tpl\.php$',
                 'sitemap'            => 'sitemap.*\.php'
             );
-            $filter  .= $regexp[ $_REQUEST['type'] ];
-            $params[] = 'type='.$_REQUEST['type'];
+            $filter  .= $regexp[ $type ];
+            $params[] = 'type='.$type;
         }
 
         // If page is defined include it in params and page

@@ -66,7 +66,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <select name="type" ng-model="type" data-label="{t}Type{/t}" id="type">
+            <select name="type" ng-model="criteria.type" data-label="{t}Type{/t}" id="type">
               <option value="">{t}All types{/t}</option>
               <option value="frontpages">{t}Frontpages{/t}</option>
               <option value="articles">{t}Article: inner{/t}</option>
