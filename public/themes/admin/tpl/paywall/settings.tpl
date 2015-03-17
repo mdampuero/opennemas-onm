@@ -145,12 +145,12 @@
                      <div class="form-group">
                         <div class="controls">
                             <label class="form-label">{t}Use the testing environment Sandbox{/t}</label>
-                            <label for="developer_mode_yes">
-                                <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
-                                {t}Real mode (recommended){/t}
-                            </label>
                             <label for="developer_mode_no">
                                 <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
+                                {t}Real mode (recommended){/t}
+                            </label>
+                            <label for="developer_mode_yes">
+                                <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
                                 {t}Testing mode{/t}
                             </label>
                         </div>
@@ -234,7 +234,7 @@
             </div>
         </div>
 
-        <div class="grid simple">
+        {*<div class="grid simple">
             <div class="grid-title">
                 <h4><div class="step-number">4</div> {t}Recurring payments (optional){/t}</h4>
             </div>
@@ -276,11 +276,11 @@
                     </ol>
                 </div>
             </div>
-        </div>
+        </div>*}
 
         <div class="grid simple">
             <div class="grid-title">
-                <h4><div class="step-number">6</div> {t}Accept Opennemas payment agreements terms{/t}</h4>
+                <h4><div class="step-number">4  </div> {t}Accept Opennemas payment agreements terms{/t}</h4>
             </div>
 
             <div class="grid-body">
