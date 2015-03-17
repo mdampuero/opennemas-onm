@@ -58,7 +58,10 @@
             </button>
           </li>
           {/acl}
-          {acl isAllowed="ARTICLE_DELETE"}
+          {acl isAllowed="USER_DELETE"}
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
               <i class="fa fa-trash-o fa-lg"></i>

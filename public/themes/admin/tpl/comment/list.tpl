@@ -69,6 +69,9 @@
           {/acl}
           {acl isAllowed="COMMENT_DELETE"}
           <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
             <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
@@ -207,6 +210,9 @@
 </script>
 <script type="text/ng-template" id="modal-delete-selected">
   {include file="common/modals/_modalBatchDelete.tpl"}
+</script>
+<script type="text/ng-template" id="modal-update-selected">
+  {include file="common/modals/_modalBatchUpdate.tpl"}
 </script>
 </div>
 {/block}

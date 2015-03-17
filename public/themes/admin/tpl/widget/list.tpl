@@ -16,7 +16,7 @@
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            {acl isAllowed="ARTICLE_CREATE"}
+            {acl isAllowed="WIDGET_CREATE"}
             <li class="quicklinks">
               <a href="{url name=admin_widget_create category=$category}" class="btn btn-primary">
                 <i class="fa fa-plus fa-lg"></i>
@@ -49,9 +49,6 @@
           </li>
         </ul>
         <ul class="nav quick-section pull-right">
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
           {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
           <li class="quicklinks">
             <button class="btn btn-link"  ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -65,6 +62,9 @@
           </li>
           {/acl}
           {acl isAllowed="ADVERTISEMENT_DELETE"}
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
