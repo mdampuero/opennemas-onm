@@ -131,13 +131,13 @@
                 <td>
                   [% content.pclave %]
                   <p class="visible-xs">
-                    <span ng-if="extra.types[content.tipo] == 'URL'">
+                    <span ng-if="content.tipo == 'url'">
                       <span class="fa fa-external-link"></span> {t}External link to {/t}
                     </span>
-                    <span ng-if="extra.types[content.tipo] == 'Internal search'" >
+                    <span ng-if="content.tipo == 'intsearch'" >
                       <span class="fa fa-link"></span> {t}Internal search to keyword{/t}
                     </span>
-                    <span ng-if="extra.types[content.tipo] == 'Email'">
+                    <span ng-if="content.tipo == 'email'">
                       <span class="fa fa-envelope"></span> {t}Link to send email to{/t}
                     </span>
                     [% content.value %]
@@ -155,13 +155,13 @@
                   </div>
                 </td>
                 <td class="hidden-xs">
-                  <span ng-if="extra.types[content.tipo] == 'URL'">
+                  <span ng-if="content.tipo == 'url'">
                     <span class="fa fa-external-link"></span> {t}External link to {/t}
                   </span>
-                  <span ng-if="extra.types[content.tipo] == 'Internal search'" >
+                  <span ng-if="content.tipo == 'intsearch'" >
                     <span class="fa fa-link"></span> {t}Internal search to keyword{/t}
                   </span>
-                  <span ng-if="extra.types[content.tipo] == 'Email'">
+                  <span ng-if="content.tipo == 'email'">
                     <span class="fa fa-envelope"></span> {t}Link to send email to{/t}
                   </span>
                 </td>
