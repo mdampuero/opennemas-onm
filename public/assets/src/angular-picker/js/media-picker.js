@@ -66,17 +66,15 @@ angular.module('onm.picker')
                 <div class=\"picker-panel-wrapper\">\
                   <div class=\"picker-panel-content\" when-scrolled=\"scroll()\">\
                     <div class=\"items\" ng-if=\"!searchLoading\">\
-                      <div ng-if=\"uploader.queue.length > 0\">\
-                        <div ng-repeat=\"item in uploader.queue\">\
-                          <div class=\"img-thumbnail\">\
-                            <i class=\"fa fa-picture-o fa-5x\"></i>\
-                            <div class=\"progress\" style=\"margin-bottom: 0;\">\
-                              <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
-                            </div>\
+                      <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
+                        <div class=\"img-thumbnail\">\
+                          <i class=\"fa fa-picture-o fa-5x\"></i>\
+                          <div class=\"progress\" style=\"margin-bottom: 0;\">\
+                            <div class=\"progress-bar\" role=\"progressbar\" ng-style=\"{ 'width': item.progress + '%' }\"></div>\
                           </div>\
                         </div>\
                       </div>\
-                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by content.id\">\
+                      <div class=\"media-item [selectable]\"[selection] ng-repeat=\"content in contents track by $index\">\
                         <dynamic-image class=\"img-thumbnail\" instance=\""
                           + instanceMedia
                           + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
@@ -293,7 +291,7 @@ angular.module('onm.picker')
              *                 returns false.
              */
             isModeEnabled: function (mode) {
-              return this.modes.enabled.indexOf(mode);
+              return this.modes.enabled.indexOf(mode) !== -1;
             },
 
             /**
@@ -447,10 +445,8 @@ angular.module('onm.picker')
               $scope.loading = false;
               $scope.picker.params = response.data;
 
-              if ($scope.picker.isModeActive('explore')) {
+              if ($scope.picker.isModeEnabled('explore')) {
                 $scope.explore();
-              } else {
-                $scope.upload();
               }
             });
           });
@@ -567,8 +563,13 @@ angular.module('onm.picker')
       $scope.explore = function() {
         // Add a timeout to fix wrong epp calculation before full rendering
         $timeout(function() {
-          var h = $('.explore-panel .picker-panel-content').outerHeight();
-          var w = $('.explore-panel .picker-panel-content').outerWidth();
+          var h = $('.explore-panel .picker-panel-content').height();
+          var w = $('.explore-panel .picker-panel-content').width();
+
+          if (h === 100 && w === 100) {
+            var h = $('body').height() * 0.75;
+            var w = $('body').width() * 0.75;
+          }
 
           // (Content height - padding) / (Item height + Item right margin)
           var rows = Math.ceil((h - 20) / 135);
@@ -580,7 +581,7 @@ angular.module('onm.picker')
             $scope.epp = cols * rows;
           }
 
-          $scope.list();
+          $scope.list(true);
         }, 100);
       };
 
@@ -652,6 +653,7 @@ angular.module('onm.picker')
        */
       $scope.list = function (reset) {
         if (reset) {
+          $scope.page = 1;
           $scope.searchLoading = true;
         }
 
