@@ -363,34 +363,44 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param string loading Name of the property used to show work-in-progress.
      */
     $scope.updateSelectedItems = function(route, name, value, loading) {
-      // Load shared variable
-      var selected = $scope.selected.contents;
+      // Enable spinner
+      $scope.deleting = 1;
 
-      updateItemsStatus(loading, 1);
-
-      var url = routing.generate(
-        route, {
-          contentType: $scope.criteria.content_type_name
-        }
-      );
-
-      $http.post(url, {
-        ids: selected,
-        value: value
-      })
-        .success(function(response) {
-          updateItemsStatus(loading, 0, name, value);
-
-          for (var i = 0; i < response.messages.length; i++) {
-            var params = {
-              id: new Date().getTime() + '_' + response.messages[i].id,
-              message: response.messages[i].message,
-              type: response.messages[i].type
+      var modal = $modal.open({
+        templateUrl: 'modal-update-selected',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
             };
+          },
+          success: function() {
+            return function() {
+              // Load shared variable
+              var selected = $scope.selected.contents;
 
-            messenger.post(params);
+              updateItemsStatus(loading, 1);
+
+              var url = routing.generate(route,
+                { contentType: $scope.criteria.content_type_name });
+
+              return $http.post(url, { ids: selected, value: value });
+            };
           }
-        }).error(function(response) { });
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          $scope.renderMessages(response.data.messages);
+
+          if (response.status === 200) {
+            updateItemsStatus(loading, 0, name, value);
+          }
+        }
+      });
     };
 
     /**
