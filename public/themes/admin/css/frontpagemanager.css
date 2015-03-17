@@ -3,6 +3,8 @@ body {
 }
 #frontpagemanager {
     font-size:12px;
+    margin: 0 auto;
+    width: 972px;
 }
 #frontpagemanager .last {
     margin-right: 0 auto !important;
