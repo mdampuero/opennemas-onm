@@ -32,7 +32,7 @@
     <label for="preview" class="form-label">{t}Preview{/t}</label>
     <div class="controls">
         <div class="thumbnail center">
-            <div class="video_player" style="max-width:500px; overflow:hidden; margin:0 auto">{$information['embedHTML']}</div>
+            <div class="video_player" style="max-width:600px; overflow:hidden; margin:0 auto">{$information['embedHTML']}</div>
         </div>
 
         <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
