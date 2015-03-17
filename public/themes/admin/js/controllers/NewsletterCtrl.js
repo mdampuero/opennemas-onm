@@ -11,7 +11,11 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
     /*  ====================================================================== */
     $scope.stepOne = function(containers) {
-      $scope.newsletterContents = containers;
+      if (containers !== null) {
+        $scope.newsletterContents = containers;
+      } else {
+        $scope.newsletterContents = [];
+      }
 
       $scope.sortableOptions = {
           placeholder: 'newsletter-content-placeholder',
