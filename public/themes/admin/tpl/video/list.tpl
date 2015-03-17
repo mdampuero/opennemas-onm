@@ -81,7 +81,7 @@
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
-              <i class="fa fa-check fa-lg"></i>
+              <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
           <li class="quicklinks">
@@ -350,6 +350,10 @@
 
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
 </div>
 {/block}

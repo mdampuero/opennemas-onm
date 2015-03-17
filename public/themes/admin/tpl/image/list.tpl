@@ -208,6 +208,9 @@
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
   <script type="text/ng-template" id="modal-image">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>

@@ -100,6 +100,9 @@
 <script type="text/ng-template" id="modal-delete-selected">
   {include file="common/modals/_modalBatchDelete.tpl"}
 </script>
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
 </form>
 {include file="opinion/modals/_modalAccept.tpl"}
 {/block}
