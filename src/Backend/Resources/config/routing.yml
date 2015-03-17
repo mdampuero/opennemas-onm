@@ -558,6 +558,7 @@ admin_newsletter_show_contents:
 admin_newsletter_save_contents:
     path:     /newsletter/save-contents
     defaults: { _controller  : BackendBundle:Newsletter:saveContents }
+    methods:  [POST]
 
 admin_newsletter_preview:
     path:     /newsletter/{id}/preview
