@@ -6,7 +6,6 @@
   </h4>
 </div>
 <div class="modal-body">
-    <pre>[% template|json %]</pre>
     <p ng-if="template.name == 'content_status' && template.value == 0">{t escape=off}Are you sure you want to unpublish [% template.selected.contents.length %] item(s)?{/t}</p>
     <p ng-if="template.name == 'content_status' && template.value == 1">{t escape=off}Are you sure you want to publish [% template.selected.contents.length %] item(s)?{/t}</p>
     <p ng-if="template.name == 'activated' && template.value == 0">{t escape=off}Are you sure you want to disable [% template.selected.contents.length %] item(s)?{/t}</p>
