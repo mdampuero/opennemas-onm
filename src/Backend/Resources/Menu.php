@@ -111,7 +111,7 @@ $menuXml = [
                 "id"          => "static_pages_manager",
                 "title"       => _("Static Pages"),
                 "icon"        => "fa fa-file",
-                "link"        => url('admin_staticpages'),
+                "link"        => url('admin_static_pages'),
                 "module_name" => "STATIC_PAGES_MANAGER",
                 "privilege"   => "STATIC_PAGE_ADMIN",
             ],

@@ -100,7 +100,7 @@
                         {is_module_activated name="STATIC_PAGES_MANAGER"}
                         {acl isAllowed="STATIC_PAGE_CREATE"}
                         <li class="col-xs-6 col-sm-4 col-md-3">
-                            <a href="{url name=admin_staticpages_create}" title="{t}Media manager{/t}" class="thumbnail">
+                            <a href="{url name=admin_static_pages_create}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-file-text-o fa-3x"></i>{t}Static page{/t}
                             </a>
                         </li>

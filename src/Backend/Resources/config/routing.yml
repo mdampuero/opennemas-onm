@@ -60,25 +60,25 @@ admin_frontpage_last_version:
     defaults: { _controller  : BackendBundle:Frontpages:lastVersion }
 
 # Static Pages controller
-admin_staticpages:
+admin_static_pages:
     path:     /static-pages
     defaults: { _controller  : BackendBundle:StaticPages:list }
 
-admin_staticpage_show:
+admin_static_page_show:
     path:     /static-pages/{id}/show
     defaults: { _controller  : BackendBundle:StaticPages:show }
     options:
         expose: true
 
-admin_staticpages_create:
+admin_static_pages_create:
     path:     /static-pages/create
     defaults: { _controller  : BackendBundle:StaticPages:create }
 
-admin_staticpages_update:
+admin_static_pages_update:
     path:     /static-pages/{id}/update
     defaults: { _controller  : BackendBundle:StaticPages:update }
 
-admin_staticpages_build_slug:
+admin_static_pages_build_slug:
     path:     /static-pages/{id}/build-slug
     defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
 

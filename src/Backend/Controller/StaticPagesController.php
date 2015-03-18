@@ -76,7 +76,7 @@ class StaticPagesController extends Controller
                 sprintf(_('Unable to find a static page with the id "%d".'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_staticpages'));
+            return $this->redirect($this->generateUrl('admin_static_pages'));
         }
     }
 
@@ -115,7 +115,7 @@ class StaticPagesController extends Controller
             $this->get('session')->getFlashBag()->add('success', _('Static page created successfully.'));
 
             return $this->redirect(
-                $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
+                $this->generateUrl('admin_static_page_show', array('id' => $staticPage->id))
             );
 
         }
@@ -151,7 +151,7 @@ class StaticPagesController extends Controller
                 if (count($request->request) < 1) {
                     $this->get('session')->getFlashBag()->add('error', _("Static Page data sent not valid."));
 
-                    return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
+                    return $this->redirect($this->generateUrl('admin_static_page_show', array('id' => $id)));
                 }
 
                 $data = array(
@@ -173,7 +173,7 @@ class StaticPagesController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
+                $this->generateUrl('admin_static_page_show', array('id' => $staticPage->id))
             );
         }
     }

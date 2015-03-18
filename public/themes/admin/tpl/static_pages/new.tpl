@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{if isset($page->id)}{url name=admin_staticpages_update id=$page->id}{else}{url name=admin_staticpages_create}{/if}" method="POST" ng-controller="InnerCtrl">
+<form action="{if isset($page->id)}{url name=admin_static_pages_update id=$page->id}{else}{url name=admin_static_pages_create}{/if}" method="POST" ng-controller="InnerCtrl">
 
 <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -29,7 +29,7 @@
             <div class="all-actions pull-right">
                 <ul class="nav quick-section">
                     <li class="quicklinks">
-                        <a class="btn btn-link" href="{url name=admin_staticpages}" title="{t}Go back{/t}">
+                        <a class="btn btn-link" href="{url name=admin_static_pages}" title="{t}Go back{/t}">
                             <span class="fa fa-reply"></span>
                         </a>
                     </li>
@@ -143,7 +143,7 @@ jQuery(document).ready(function($){
         if ((slugy.length <= 0) && (previous!=slugy)) {
 
             jQuery.ajax({
-                url:  "{url name=admin_staticpages_build_slug id=$page->id|default:0}",
+                url:  "{url name=admin_static_pages_build_slug id=$page->id|default:0}",
                 type: "POST",
                 data: { action:"buildSlug", id:'{$page->id|default:0}', slug:slugy, title:jQuery('#title').attr('value') },
                 success: function(data){
