@@ -44,9 +44,10 @@
           </li>
           {/acl}
           <li>
-            <a class="btn btn-primary" href="{url name=admin_news_agency}" id="reload_listing" title="{t}Reload list{/t}">
-              <span class="fa fa-refresh"></span> <span class="hidden-xs">{t}Reload list{/t}</span>
-            </a>
+            <button class="btn btn-primary" ng-click="list('admin_news_agency_ws')" title="{t}Reload list{/t}" type="button">
+              <span class="fa fa-refresh"></span>
+              <span class="hidden-xs">{t}Reload list{/t}</span>
+            </button>
           </li>
         </ul>
       </div>
