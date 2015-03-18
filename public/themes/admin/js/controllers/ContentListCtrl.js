@@ -2,8 +2,8 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$http', '$modal', '$scope', '$timeout', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
-  function($http, $modal, $scope, $timeout, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
+  '$http', '$modal', '$scope', '$timeout', '$window', 'itemService', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'queryManager',
+  function($http, $modal, $scope, $timeout, $window, itemService, routing, messenger, webStorage, oqlEncoder, queryManager) {
     'use strict';
 
     /**
@@ -516,6 +516,29 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
             $scope.list($scope.route);
           }
         }
+      });
+    };
+
+    /**
+     * Permanently removes a menu by using a confirmation dialog
+     */
+    $scope.deleteConfig = function(url) {
+      var modal = $modal.open({
+        templateUrl: 'modal-remove-config',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          success: function() {
+            return null;
+          }
+        }
+      });
+
+      modal.result.then(function() {
+        $window.location.href = url;
       });
     };
 
