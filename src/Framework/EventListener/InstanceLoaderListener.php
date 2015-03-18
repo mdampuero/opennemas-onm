@@ -128,6 +128,8 @@ class InstanceLoaderListener implements EventSubscriberInterface
         \Application::load();
         \Application::initDatabase($databaseInstanceConnection);
 
+        $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
+
         // Check if the request is for backend and it is done to the proper
         // domain and protocol. If not redirect to the proper url
         if (strpos($request->getRequestUri(), '/admin') === 0) {
@@ -136,7 +138,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             $scheme = $forceSSL ? 'https://' : 'http://';
             $port   = in_array($request->getPort(), array(80, 443)) ?
                 '' : ':' . $request->getPort();
-            $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
 
             $domainRoot = getContainerParameter('opennemas.base_domain');
             $supposedDomain = $this->instance->internal_name . $domainRoot;
@@ -153,6 +154,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
             && strpos($request->getRequestUri(), '/admin') !== 0
             && strpos($request->getRequestUri(), '/manager') !== 0
             && strpos($request->getRequestUri(), '/ws') !== 0
+            && strpos($request->getRequestUri(), '/_wdt') !== 0
         ) {
             $port = in_array($request->getPort(), array(80, 443)) ?
                 '' : ':' . $request->getPort();
@@ -162,7 +164,9 @@ class InstanceLoaderListener implements EventSubscriberInterface
                 $domain = $this->instance->getMainDomain();
             }
 
-            if (($domain && $host !== $domain) || $request->getScheme() != 'http') {
+            // Redirect to proper URL if the source request is not from main domain
+            // or an HTTPS request
+            if (($domain && $host !== $domain) || $isSecuredRequest) {
                 $uri  = $request->getRequestUri();
                 $url = 'http://' . $domain . $port . $uri;
 
