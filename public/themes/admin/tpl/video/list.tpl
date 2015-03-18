@@ -187,7 +187,7 @@
           <input type="hidden" name="in_home" ng-model="criteria.in_home">
           <li class="quicklinks hidden-xs hidden-sm">
             <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
-              <option value="10a">10</option>
+              <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
               <option value="100">100</option>

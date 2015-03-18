@@ -69,6 +69,14 @@
             </span>
             <input class="no-boarder" type="text" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name{/t}" />
           </li>
+          <li class="quicklinks hidden-xs">
+            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
