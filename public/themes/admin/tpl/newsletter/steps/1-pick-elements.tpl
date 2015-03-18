@@ -76,7 +76,7 @@
               </div>
 
               <div class="container-actions pull-right">
-                <button type="button" class="btn btn-white" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
+                <button type="button" class="btn btn-white" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
                   <span class="fa fa-add"></span>
                   {t}Add contents{/t}
                 </button>
