@@ -186,14 +186,14 @@
                                     </label>
                                     <div class="controls">
                                         <select id="type_opinion" name="type_opinion" required="required">
-                                            <option value="-1">{t}-- Pick an author --{/t}</option>
+                                            <option value="-1">{t}-- Select opinion type --{/t}</option>
                                             <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
                                             <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
                                             <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="author">
                                     <label class="form-label" for="fk_author">
                                         {t}Author{/t}
                                     </label>
