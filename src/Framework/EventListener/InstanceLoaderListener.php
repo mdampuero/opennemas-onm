@@ -136,12 +136,13 @@ class InstanceLoaderListener implements EventSubscriberInterface
             $scheme = $forceSSL ? 'https://' : 'http://';
             $port   = in_array($request->getPort(), array(80, 443)) ?
                 '' : ':' . $request->getPort();
+            $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
 
             $domainRoot = getContainerParameter('opennemas.base_domain');
             $supposedDomain = $this->instance->internal_name . $domainRoot;
 
             if ($host !== strtolower($supposedDomain)
-                || ($forceSSL && !$request->isSecure())
+                || ($forceSSL && !$isSecuredRequest)
             ) {
                 $uri = $request->getRequestUri();
                 $url = $scheme . $supposedDomain . $port . $uri;
