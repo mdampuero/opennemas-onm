@@ -436,7 +436,7 @@ angular.module('onm.picker')
             $scope.loading = true;
 
             var url = routing.generate(
-              'backend_ws_media_picker_mode',
+              'backend_ws_picker_mode',
               { mode: $scope.picker.modes.enabled }
             );
 
@@ -673,7 +673,7 @@ angular.module('onm.picker')
           data.date = $scope.date;
         }
 
-        var url = routing.generate('backend_ws_media_picker_list', data);
+        var url = routing.generate('backend_ws_picker_list', data);
 
         $http.get(url).then(function(response) {
           if (reset) {
@@ -766,7 +766,7 @@ angular.module('onm.picker')
 
         var data = { description: $scope.selected.lastSelected.description };
         var url  = routing.generate(
-          'backend_ws_media_picker_save_description',
+          'backend_ws_picker_save_description',
           { id: $scope.selected.lastSelected.id }
         );
 

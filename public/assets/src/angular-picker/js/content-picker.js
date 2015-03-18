@@ -46,6 +46,7 @@ angular.module('onm.picker')
                     <li>\
                       <select name=\"content-type\" ng-model=\"$parent.contentType\">\
                         <option value=\"\">[% picker.params.explore.allContentTypes %]</option>\
+                        <option value=\"contents-in-frontpage\" ng-if=\"picker.section == 'newsletter'\">[% picker.params.explore.contentsInFrontpage %]</option>\
                         <option value=\"[% type %]\" ng-repeat=\"type in picker.types.enabled\">\
                           [% picker.params.explore.contentTypes[type] %]\
                         </option>\
@@ -182,6 +183,8 @@ angular.module('onm.picker')
               available: [ 'explore' ],
               enabled:   [ 'explore' ]
             },
+            section: attrs.contentPickerSection ?
+              attrs.contentPickerSection : 'default',
             selection: {
               enabled: attrs.contentPickerSelection === 'true' ? true : false,
               maxSize: attrs.contentPickerMaxSize ?
@@ -351,9 +354,13 @@ angular.module('onm.picker')
             $scope.loading = true;
 
             var url = routing.generate(
-              'backend_ws_media_picker_mode',
+              'backend_ws_picker_mode',
               { mode: $scope.picker.modes.enabled }
             );
+
+            if ($scope.picker.section === 'newsletter') {
+              $scope.contentType = 'contents-in-frontpage';
+            }
 
             // Get the parameters for the media picker
             $http.post(url).then(function(response) {
@@ -535,7 +542,7 @@ angular.module('onm.picker')
           data.date = $scope.date;
         }
 
-        var url = routing.generate('backend_ws_media_picker_list', data);
+        var url = routing.generate('backend_ws_picker_list', data);
 
         $http.get(url).then(function(response) {
           if (reset) {

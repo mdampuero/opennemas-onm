@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class MediaPickerController extends Controller
+class PickerController extends Controller
 {
     /**
      * Returns the list of media items.
@@ -21,7 +21,7 @@ class MediaPickerController extends Controller
         $date         = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
-        $contentTypes = $request->query->filter('content_type_name', 'photo', FILTER_SANITIZE_STRING);
+        $contentTypes = $request->query->filter('content_type_name', null, FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
 
@@ -189,20 +189,21 @@ class MediaPickerController extends Controller
         $ccm = \ContentCategoryManager::get_instance();
 
         return [
-            'allCategories'    => _('All categories'),
-            'allContentTypes'  => _('All content types'),
-            'allMonths'        => _('All months'),
-            'thumbnailDetails' => _('Thumbnail details'),
-            'itemDetails'      => _('Item details'),
-            'description'      => _('Description'),
-            'header'           => _('Pick the item to insert'),
-            'insert'           => _('Insert'),
-            'itemsSelected'    => _('items selected'),
-            'menuItem'         => _('Browse'),
-            'search'           => _('Search by name'),
-            'categories'       => $ccm->find(),
-            'contentTypes'     => $contentTypesFiltered,
-            'dates'            => $this->getDates(),
+            'allCategories'       => _('All categories'),
+            'allContentTypes'     => _('All content types'),
+            'contentsInFrontpage' => _('Contents in frontpage'),
+            'allMonths'           => _('All months'),
+            'thumbnailDetails'    => _('Thumbnail details'),
+            'itemDetails'         => _('Item details'),
+            'description'         => _('Description'),
+            'header'              => _('Pick the item to insert'),
+            'insert'              => _('Insert'),
+            'itemsSelected'       => _('items selected'),
+            'menuItem'            => _('Browse'),
+            'search'              => _('Search by name'),
+            'categories'          => $ccm->find(),
+            'contentTypes'        => $contentTypesFiltered,
+            'dates'               => $this->getDates(),
         ];
     }
 
