@@ -143,12 +143,25 @@ class NewsletterController extends Controller
         $id = $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
 
+        $containers = json_decode($newsletter->data);
+
+        foreach ($containers as $container) {
+            foreach ($container->items as &$item) {
+                if (!property_exists($item, 'content_type_l10n_name')) {
+                    $type = $item->content_type;
+                    $content = new $type();
+                    $item->content_type_l10n_name = $content->content_type_l10n_name;
+                    $item->content_type_name = \underscore($type);
+                }
+            }
+        }
+
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
                 'with_html'         => true,
                 'newsletter'        => $newsletter,
-                'newsletterContent' => json_decode($newsletter->data),
+                'newsletterContent' => $containers,
             )
         );
     }
@@ -168,7 +181,16 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('content_ids');
-        $contents = json_decode($contentsRAW);
+        $containers = json_decode($contentsRAW);
+
+        foreach ($containers as $container) {
+            foreach ($container->items as &$content) {
+                $content->content_type = \classify($content->content_type_name);
+                unset($content->content_type_name);
+                unset($content->content_type_l10n_name);
+            }
+        }
+
         $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
         $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
@@ -188,11 +210,11 @@ class NewsletterController extends Controller
             $newValues = array(
                 'title' => $title,
                 'data'  => $contentsRAW,
-                'html'  => $nm->render($contents),
+                'html'  => $nm->render($containers),
             );
 
             if (is_null($newsletter->html)) {
-                $newValues['html'] = $nm->render($contents);
+                $newValues['html'] = $nm->render($containers);
             }
 
             $newsletter->update($newValues);
@@ -201,8 +223,8 @@ class NewsletterController extends Controller
             $newsletter->create(
                 array(
                     'title'   => $title,
-                    'data'    => $contentsRAW,
-                    'html'    => $nm->render($contents),
+                    'data'    => json_encode($containers),
+                    'html'    => $nm->render($containers),
                 )
             );
         }
