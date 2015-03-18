@@ -136,7 +136,6 @@ class NewsletterManager extends BaseManager
                 }
             }
         }
-var_dump($newsletterContent);die();
 
         $tpl->assign('newsletterContent', $newsletterContent);
 
