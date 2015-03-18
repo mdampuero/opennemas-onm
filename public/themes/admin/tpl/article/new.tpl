@@ -1,17 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-                    @AdminTheme/js/jquery-onm/jquery.inputlength.js
-                    "}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
   <script>
 
     jQuery(document).ready(function($){
-      $('#title, #title_int, #subtitle').inputLengthControl();
-
       $('#title_input, #category').on('change', function() {
         var title = $('#title_input');
         var category = $('#category option:selected');
@@ -124,8 +120,12 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title">
-                    <input class="form-control" id="title_input" name="title" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
-                    <span class="input-group-addon add-on"></span>
+                    <input class="form-control" id="title_input" name="title" ng-model="title" ng-trim="false" required="required" type="text" value="{$article->title|clearslash|escape:"html"}"/>
+                    <span class="input-group-addon">
+                      <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 80, 'text-danger': title.length >= 80 }">
+                        [% title.length %]
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -135,8 +135,12 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="title_int">
-                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
-                    <span class="input-group-addon add-on"></span>
+                    <input class="form-control" id="title_int_input" maxlength="256" type="text" name="title_int" ng-model="title_int" ng-trim="false" value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
+                    <span class="input-group-addon">
+                      <span class="ng-cloak" ng-class="{ 'text-warning': title_int.length >= 50 && title_int.length < 100, 'text-danger': title_int.length >= 100 }">
+                        [% title_int.length %]
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -176,8 +180,12 @@
                 </label>
                 <div class="controls">
                   <div class="input-group" id="subtitle">
-                    <input class="form-control" name="subtitle" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
-                    <span class="input-group-addon add-on"></span>
+                    <input class="form-control" name="subtitle" ng-model="subtitle" ng-trim="false" type="text" value="{$article->subtitle|clearslash|escape:"html"}"/>
+                    <span class="input-group-addon">
+                      <span class="ng-cloak" ng-class="{ 'text-warning': subtitle.length >= 50 && subtitle.length < 100, 'text-danger': subtitle.length >= 100 }">
+                        [% subtitle.length %]
+                      </span>
+                    </span>
                   </div>
                 </div>
               </div>

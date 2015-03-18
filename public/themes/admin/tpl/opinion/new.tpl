@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-                      @AdminTheme/js/jquery-onm/jquery.inputlength.js"}
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
     <script>
@@ -19,8 +18,6 @@
             $("#endtime").on("dp.change",function (e) {
                 $('#starttime').data("DateTimePicker").maxDate(e.date);
             });
-
-            $('#title').inputLengthControl();
 
             $('#title').on('change', function(e, ui) {
               var metaTags = $('#metadata');
@@ -113,8 +110,12 @@
                             </label>
                             <div class="controls">
                                 <div class="input-group" id="title" >
-                                    <input class="form-control" name="title" required="required" type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
-                                    <span class="input-group-addon add-on"></span>
+                                    <input class="form-control" name="title" ng-model="title" ng-trim="false" required="required" type="text" value="{$opinion->title|clearslash|escape:"html"}"/>
+                                    <span class="input-group-addon">
+                                      <span class="ng-cloak" ng-class="{ 'text-warning': title.length >= 50 && title.length < 100, 'text-danger': title.length >= 100 }">
+                                        [% title.length %]
+                                      </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
