@@ -31,6 +31,10 @@ class PickerController extends Controller
         ];
 
         if (!empty($contentTypes)) {
+            if ($contentTypes[0] == 'contents-in-frontpage') {
+                return $this->listFrontpageContents();
+            }
+
             $types = [];
             foreach ($contentTypes as $type) {
                 $types[] = "content_type_name = '$type'";
@@ -205,6 +209,28 @@ class PickerController extends Controller
             'contentTypes'        => $contentTypesFiltered,
             'dates'               => $this->getDates(),
         ];
+    }
+
+    /**
+     * Returns the list of contents in frontpage.
+     *
+     * @return JsonResponse The response object.
+     */
+    private function listFrontpageContents()
+    {
+        $cm = new \ContentManager();
+
+        // Get contents for this home
+        $results = $cm->getContentsForHomepageOfCategory(0);
+
+        return new JsonResponse(
+            array(
+                'epp'     => count($results),
+                'page'    => 1,
+                'results' => $results,
+                'total'   => count($results)
+            )
+        );
     }
 
     /**
