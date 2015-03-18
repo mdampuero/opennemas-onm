@@ -70,7 +70,7 @@
                         {is_module_activated name="IMAGE_MANAGER"}
                         {acl isAllowed="PHOTO_CREATE"}
                         <li class="col-xs-6 col-sm-4 col-md-3">
-                            <a href="{url name=admin_image}" title="{t}Media manager{/t}" class="thumbnail">
+                            <a href="{url name=admin_images}" title="{t}Media manager{/t}" class="thumbnail">
                                 <i class="fa fa-image fa-3x"></i>{t}Upload images{/t}
                             </a>
                         </li>
