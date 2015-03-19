@@ -202,6 +202,7 @@
                 <a class="link link-success" href="[% content.import_url %]" title="{t}Import{/t}">
                   <span class="fa fa-cloud-download"></span> {t}Import{/t}
                 </a>
+                <span class="imported label label-success" ng-if="content.already_imported">{t}Already imported{/t}</span>
               </div>
             </td>
 
