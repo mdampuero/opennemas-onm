@@ -181,6 +181,9 @@
                         <i class="fa fa-trash-o"></i> {t}Remove{/t}
                       </button>
                       {/acl}
+                      <a class="link" href="{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]" target="_blank">
+                        <i class="fa fa-external-link"></i> {t}Link{/t}
+                      </a>
                     </div>
                   </div>
                 </td>
