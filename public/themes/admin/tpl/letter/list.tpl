@@ -86,7 +86,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs">
-            <select id="content_status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+            <select class="select2 input-medium" ng-model="criteria.content_status" data-label="{t}Status{/t}">
               <option value="-1">-- All --</option>
               <option value="1">{t}Published{/t}</option>
               <option value="0">{t}No published{/t}</option>
@@ -94,7 +94,7 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
+            <select class="select2 input-medium" ng-model="pagination.epp" data-label="{t}View{/t}">
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
@@ -152,7 +152,7 @@
                 <th>{t}Author{/t} - {t}Title{/t}</th>
                 <th style="width: 110px;" class="left hidden-xs">{t}Date{/t}</th>
                 {acl isAllowed="LETTER_AVAILABLE"}
-                <th class="center" style="width:10px;">{t}Available{/t}</th>
+                <th class="center" style="width:10px;">{t}Published{/t}</th>
                 {/acl}
               </tr>
             </thead>

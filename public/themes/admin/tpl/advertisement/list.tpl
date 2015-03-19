@@ -193,7 +193,7 @@
                 <th class="center hidden-xs" style="width:30px">{t}Permanence{/t}</th>
                 <th class="center hidden-xs" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
                 {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-                <th class="center" style="width:40px;">{t}Available{/t}</th>
+                <th class="center" style="width:40px;">{t}Published{/t}</th>
                 {/acl}
               </tr>
             </thead>

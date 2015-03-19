@@ -46,7 +46,7 @@
                   <th>{t}Internal name{/t}</th>
                   <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                   {acl isAllowed="CATEGORY_AVAILABLE"}
-                  <th style="width:15px;">{t}Available{/t}</th>
+                  <th style="width:15px;">{t}Published{/t}</th>
                   <th style="width:15px;" class="nowrap hidden-xs">{t}Show in rss{/t}</th>
                   {/acl}
                 </tr>
@@ -79,7 +79,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                     <th style="width:100px;"></th>
                   </tr>
@@ -113,7 +113,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -147,7 +147,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Advertisements{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -180,7 +180,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>
@@ -213,7 +213,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                     <th style="width:70px;"></th>
                   </tr>
@@ -247,7 +247,7 @@
                     <th>{t}Internal name{/t}</th>
                     <th style="width:15px;" class="hidden-xs">{t}Articles{/t}</th>
                     {acl isAllowed="CATEGORY_AVAILABLE"}
-                    <th style="width:15px;">{t}Available{/t}</th>
+                    <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
                   </tr>
                 </thead>

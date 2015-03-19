@@ -144,7 +144,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks dropdown hidden-xs">
-            <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
+            <select class="select2 input-medium" id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}">
               <option value="-1">{t}-- All --{/t}</option>
               {section name=as loop=$allcategorys}
               {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -171,14 +171,14 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs">
-            <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
+            <select class="select2 input-medium" ng-model="criteria.content_status" data-label="{t}Status{/t}">
               <option value="-1"> {t}-- All --{/t} </option>
               <option value="1"> {t}Published{/t} </option>
               <option value="0"> {t}No published{/t} </option>
             </select>
           </li>
           <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
+            <select class="select2 input-medium" ng-model="pagination.epp" data-label="{t}View{/t}">
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
