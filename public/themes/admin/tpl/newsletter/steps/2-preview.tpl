@@ -33,48 +33,46 @@ var  newsletter_urls = {
 
 {block name="content"}
 
-<form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form">
-<div class="page-navbar actions-navbar">
-    <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section">
-                <li class="quicklinks">
-                    <h4>
-                        <i class="fa fa-home fa-lg"></i>
-                        {t}Newsletters{/t}
-                    </h4>
-                </li>
-                <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
-                <li class="quicklinks hidden-xs">
-                    <h5>{t}Preview{/t}</h5>
-                </li>
-            </ul>
-            <div class="all-actions pull-right">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
-                            <span class="fa fa-reply"></span>
-                        </a>
-                    </li>
-                    <li class="quicklinks"><span class="h-seperate"></span></li>
-                    <li class="quicklinks btn-group">
-                        <a href="{url name=admin_newsletter_show_contents id=$newsletter->id}" class="btn btn-primary" title="{t}Previous{/t}" id="prev-button">
-                            <span class="fa fa-chevron-left"></span>
-                            <span class="hidden-xs">{t}Previous{/t}</span>
-                        </a>
-                        <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="btn btn-primary" title="{t}Next{/t}" id="next-button">
-                            <span class="hidden-xs">{t}Next{/t}</span>
-                            <span class="fa fa-chevron-right"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="content newsletter-manager">
-
+<form action="{url name=admin_newsletter_save_html id=$newsletter->id}" method="POST" id="newsletter-preview-form" ng-controller="NewsletterCtrl">
+  <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
+              <ul class="nav quick-section">
+                  <li class="quicklinks">
+                      <h4>
+                          <i class="fa fa-home fa-lg"></i>
+                          {t}Newsletters{/t}
+                      </h4>
+                  </li>
+                  <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                  <li class="quicklinks hidden-xs">
+                      <h5>{t}Preview{/t}</h5>
+                  </li>
+              </ul>
+              <div class="all-actions pull-right">
+                  <ul class="nav quick-section">
+                      <li class="quicklinks">
+                          <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
+                              <span class="fa fa-reply"></span>
+                          </a>
+                      </li>
+                      <li class="quicklinks"><span class="h-seperate"></span></li>
+                      <li class="quicklinks btn-group">
+                          <a href="{url name=admin_newsletter_show_contents id=$newsletter->id}" class="btn btn-primary" title="{t}Previous{/t}" id="prev-button">
+                              <span class="fa fa-chevron-left"></span>
+                              <span class="hidden-xs">{t}Previous{/t}</span>
+                          </a>
+                          <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" class="btn btn-primary" title="{t}Next{/t}" id="next-button">
+                              <span class="hidden-xs">{t}Next{/t}</span>
+                              <span class="fa fa-chevron-right"></span>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="content">
     <div class="grid simple">
         <div class="grid-body">
             <div class="form-group">
@@ -85,34 +83,33 @@ var  newsletter_urls = {
             </div>
         </div>
     </div>
-
     <div class="grid simple">
-        <div class="grid-title">
-            <h4>{t}Preview{/t}</h4>
-            <div id="buttons-preview" class="pull-right">
-                <ul class="nav quick-section">
-                    <li class="quicklinks">
-                        <a href="#" title="{t}Edit{/t}" id="edit-button" class="btn btn-mini btn-default">
-                            <span class="fa fa-pencil"></span>
-                            {t}Edit{/t}
-                        </a>
-                    </li>
-                    <li id="li-save-button" style="display:none;"  class="quicklinks">
-                        <a id="save-button" href="#" class="admin_add" title="{t}Save changes{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+      <button class="btn btn-default pull-right" ng-click="edit = !edit" style="margin: 7px 7px 0 0" title="{t}Edit{/t}" type="button">
+        <span ng-if="!edit">
+          <span class="fa fa-pencil"></span>
+          {t}Edit{/t}
+        </span>
+        <span class="ng-cloak" ng-click="saveHtml('{url name=admin_newsletter_save_html id=$newsletter->id}')" ng-if="edit">
+          <span class="fa fa-save"></span>
+          {t}Save{/t}
+        </span>
+      </button>
+      <div class="grid-title">
+        <h4>{t}Preview{/t}</h4>
+      </div>
+      <div class="grid-body">
+        <input name="html" type="hidden" ng-value="html">
+        <input name="hiddenHtml" type="hidden" value="{$newsletter->html|escape:'html'}">
+        <div class="form-group" ng-show="edit">
+          <textarea class="form-control" ng-model="html" cols="30" rows="10"></textarea>
         </div>
-        <div class="grid-body">
-            <div class="control-group">
-                <label for="htmlContent" class="control-label"></label>
-                <div class="controls">
-                    <div id="col-md-9">{$newsletter->html}</div>
-                </div>
-            </div>
+        <div class="form-group" ng-show="!edit">
+          <div class="controls">
+            <div ng-bind-html="trustedHtml"></div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </form>
 {/block}

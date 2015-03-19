@@ -2,8 +2,8 @@
  * Handle actions for poll inner form.
  */
 angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
-  '$controller', '$modal', '$rootScope', '$scope',
-  function($controller, $modal, $rootScope, $scope) {
+  '$controller', '$http', '$modal', '$rootScope', '$sce', '$scope',
+  function($controller, $http, $modal, $rootScope, $sce, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -73,7 +73,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
     };
 
     /**
-     * Parses and add more emails to newsletter receivers
+     * Parses and add more emails to newsletter receivers.
      */
     $scope.addMoreEmails = function() {
       $scope.moreEmailsError = false;
@@ -101,6 +101,20 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       }
     };
 
+    $scope.saveHtml = function(url) {
+      var data = {
+        title: $scope.subject,
+        html: $scope.html
+      };
+
+      $http.post(url, data).success(function(response) {
+        $scope.renderMessages(response.messages);
+      });
+    };
+
+    /**
+     * Opens a modal to confirm newsletter sending.
+     */
     $scope.send = function() {
       var modal = $modal.open({
         templateUrl: 'modal-confirm-send',
@@ -201,5 +215,14 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
       $scope.contents = angular.toJson($scope.newsletterContents);
     }, true);
+
+    /**
+     * Updates the trusted HTML to show in preview when HTML changes.
+     */
+    $scope.$watch('html', function() {
+      $scope.trustedHtml = $sce.trustAsHtml($scope.html);
+    });
+
+    $scope.html = $scope.hiddenHtml
   }
 ]);

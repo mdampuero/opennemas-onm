@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
@@ -288,7 +289,15 @@ class NewsletterController extends Controller
 
         $newsletter->update($values);
 
-        return new Response('ok', 200);
+        return new JsonResponse(array(
+            'messages' => array(
+                array(
+                    'id'      => '200',
+                    'type'    => 'success',
+                    'message' => sprintf(_('Content saved successfully'))
+                )
+            )
+        ));
     }
 
     /**
