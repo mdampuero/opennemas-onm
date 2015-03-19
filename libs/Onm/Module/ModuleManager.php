@@ -66,19 +66,12 @@ class ModuleManager
             ->activated_modules;
 
         if (is_null(self::$activatedModules)) {
-
             if (!isset($activatedModules) or (count($activatedModules) < 1)) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } elseif (self::checkAllModulesActivated()) {
-
                 self::$activatedModules = self::getAvailableModules();
-
             } else {
-
                 self::$activatedModules = $activatedModules;
-
             }
         }
 
@@ -133,7 +126,6 @@ class ModuleManager
                 'USER_MANAGER'              => _('Users'),
                 'USERVOICE_SUPPORT'         => _('UserVoice integration'),
                 'VIDEO_MANAGER'             => _('Videos'),
-                'VIDEO_LOCAL_MANAGER'       => _('Videos (local)'),
                 'WIDGET_MANAGER'            => _('Widgets'),
                 'PAYWALL'                   => _('Paywall'),
             );
@@ -345,11 +337,6 @@ class ModuleManager
                     'id'   => 'VIDEO_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Videos'),
-                ],
-                [
-                    'id'   => 'VIDEO_LOCAL_MANAGER',
-                    'plan' => 'Profesional',
-                    'name' => _('Videos (local)'),
                 ],
                 [
                     'id'   => 'WIDGET_MANAGER',

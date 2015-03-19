@@ -281,7 +281,7 @@
                 <div class="thumbnail visible-xs">
                   <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
                 </div>
-                <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong>  - [% content.title %]
+                <strong>[% content.author_name %]</strong>  - [% content.title %]
                 <div class="small-text visible-sm">
                   {t}Created on{/t}: [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
