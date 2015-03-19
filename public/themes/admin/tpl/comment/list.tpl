@@ -98,7 +98,7 @@
           <li class="quicklinks">
             <select class="select2" name="status" ng-model="criteria.status" data-label="{t}Status{/t}">
               <option value="-1">-- All --</option>
-              {html_options options=$statuses selected=$filter_status}
+              {html_options options=$statuses selected=pending}
             </select>
           </li>
           <li class="quicklinks hidden-xs">
