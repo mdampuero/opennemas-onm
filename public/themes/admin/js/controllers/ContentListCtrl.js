@@ -944,29 +944,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
     /**
      * Updates selected items current status.
-     *
-     * @param  mixed messages List of messages provided by the server.
-     */
-    $scope.renderMessages = function(messages) {
-      var errors = 0;
-
-      for (var i = 0; i < messages.length; i++) {
-        var params = {
-          id: new Date().getTime() + '_' + messages[i].id,
-          message: messages[i].message,
-          type: messages[i].type
-        };
-
-        messenger.post(params);
-
-        if (messages[i].type === 'error') {
-          errors++;
-        }
-      }
-    };
-
-    /**
-     * Updates selected items current status.
      * @param  string  loading Name of the work-in-progress property.
      * @param  integer status  Current work-in-progress status.
      * @param  string  name    Name of the property to update.

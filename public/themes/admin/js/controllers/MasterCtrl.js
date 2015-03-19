@@ -15,8 +15,8 @@
  * @param Object sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'routing', 'sidebar',
-  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, routing, sidebar) {
+  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'messenger', 'routing', 'sidebar',
+  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, messenger, routing, sidebar) {
     'use strict';
 
     /**
@@ -47,7 +47,8 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     /**
      * Scrolls the page to top.
      */
-    $scope.scrollTop = function() {
+
+     {
       $('body').animate({ scrollTop: 0 }, 250);
     };
 
@@ -87,6 +88,29 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
           }
         }
       });
+    };
+
+    /**
+     * Updates selected items current status.
+     *
+     * @param  mixed messages List of messages provided by the server.
+     */
+    $scope.renderMessages = function(messages) {
+      var errors = 0;
+
+      for (var i = 0; i < messages.length; i++) {
+        var params = {
+          id: new Date().getTime() + '_' + messages[i].id,
+          message: messages[i].message,
+          type: messages[i].type
+        };
+
+        messenger.post(params);
+
+        if (messages[i].type === 'error') {
+          errors++;
+        }
+      }
     };
 
     /**
