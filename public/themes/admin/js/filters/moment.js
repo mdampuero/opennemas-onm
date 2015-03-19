@@ -31,7 +31,7 @@ angular.module('BackendApp.filters').filter('moment', function() {
             tmz = timezone;
         }
 
-        moment.lang(lang);
+        moment.locale(lang);
 
         return moment(input).tz(tmz).format(fmt);
     };
