@@ -39,6 +39,7 @@
         });
 
         toogleSiteLogo = function(value) {
+          console.log(value);
             if(value == 0) {
                 $('#site_logo_block').hide();
             } else {
@@ -160,35 +161,37 @@
                         </select>
                       </div>
                     </div>
-                    <div class="form-group" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
-                      <label class="form-label" for="site_logo">
-                        {t}Site logo{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="site_logo" name="site_logo" type="file">
-                        {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                        <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
-                        {/if}
+                    <div class="form-group" id="site_logo_block"  {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
+                      <div class="form-group">
+                        <label class="form-label" for="site_logo">
+                          {t}Site logo{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="site_logo" name="site_logo" type="file">
+                          {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
+                          {/if}
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
-                      <label class="form-label" for="favico">
-                        {t}Favico{/t}
-                      </label>
-                      <div class="controls">
-                        <input id="favico" name="favico" type="file">
-                        {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
-                        <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
-                        {/if}
+                      <div class="form-group">
+                        <label class="form-label" for="favico">
+                          {t}Favico{/t}
+                        </label>
+                        <div class="controls">
+                          <input id="favico" name="favico" type="file">
+                          {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
+                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
+                          {/if}
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
-                      <label class="form-label" for="mobile_logo">{t}Site Mobile logo{/t}</label>
-                      <div class="controls">
-                        <input id="mobile_logo" name="mobile_logo" type="file">
-                        {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                        <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
-                        {/if}
+                      <div class="form-group">
+                        <label class="form-label" for="mobile_logo">{t}Site Mobile logo{/t}</label>
+                        <div class="controls">
+                          <input id="mobile_logo" name="mobile_logo" type="file">
+                          {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
+                          {/if}
+                        </div>
                       </div>
                     </div>
                   </div>
