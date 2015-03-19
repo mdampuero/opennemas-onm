@@ -14,7 +14,7 @@
             </button>
           </div>
         </div>
-        <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="10" media-picker-target="contentsLeft" media-picker-type="album,article,opinion,poll,video" media-picker-view="list-item">
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsLeft" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
           <button type="button" class="btn btn-primaty">{t}Click here to add contents{/t}</button>
         </div>
       </div>
@@ -28,7 +28,7 @@
             </button>
           </div>
         </div>
-        <div class="content-placeholder" media-picker media-picker-selection="true" media-picker-max-size="10" media-picker-target="contentsRight" media-picker-type="album,article,opinion,poll,video" media-picker-view="list-item">
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsRight" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
           <button type="button" class="btn btn-primaty">{t}Click here to add contents{/t}</button>
         </div>
       </div>
