@@ -99,6 +99,7 @@
                 </div>
               </div>
             </div>
+            {if !empty($letter->params)}
             <div class="form-inline-block">
               {foreach $letter->params as $key => $value}
               <div class="form-group">
@@ -109,6 +110,7 @@
               </div>
               {/foreach}
             </div>
+            {/if}
             <div class="form-group">
               <label for="created" class="form-label">{t}Created at{/t}</label>
               <div class="controls">
