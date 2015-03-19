@@ -123,7 +123,3 @@
   </div>
 </form>
 {/block}
-
-{block name="footer-js"}
-    {script_tag src="/onm/newsletter.js"}
-{/block}
