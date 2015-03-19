@@ -21,13 +21,14 @@
                     trigger: 'hover',
                     animation: true,
                     delay:0,
+                    html : true,
                     title: '{t}Allowed video sources:{/t}',
                     content: '{include file="video/partials/_sourceinfo.tpl"}'
                 });
             });
             </script>
             <style type="text/css">
-            .popover { width:300px;}
+                .popover { width:500px; }
             </style>
             {/if}
         </div>
