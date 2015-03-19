@@ -305,25 +305,31 @@ class NewsletterController extends Controller
      **/
     public function pickRecipientsAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
+        $id         = $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
-        $sbManager = new \Subscriptor();
-        $accounts = $sbManager->getUsers('status > 0 AND subscription = 1', '', 'pk_pc_user ASC');
 
-        $mailList   = array();
+        $subscriptionType = \Onm\Settings::get('newsletter_subscriptionType');
 
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations)
-            && array_key_exists('email', $configurations)
-            && !empty($configurations['email'])
-        ) {
-            $subscriptor = new \Subscriptor();
+        $accounts = array();
+        if ($subscriptionType === 'create_subscriptor') {
+            $sbManager = new \Subscriptor();
+            $accounts = $sbManager->getUsers(
+                'status > 0 AND subscription = 1', '', 'pk_pc_user ASC'
+            );
+        } else {
+            $configurations = \Onm\Settings::get('newsletter_maillist');
 
-            $subscriptor->email = $configurations['email'];
-            $subscriptor->name  = $configurations['name'];
+            if (!is_null($configurations)
+                && array_key_exists('email', $configurations)
+                && !empty($configurations['email'])
+            ) {
+                $subscriptor = new \Subscriptor();
 
-            $mailList[] = $subscriptor;
+                $subscriptor->email = $configurations['email'];
+                $subscriptor->name  = $configurations['name'];
+
+                $accounts[] = $subscriptor;
+            }
         }
 
         // Ajax request
@@ -345,11 +351,10 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/3-pick-recipients.tpl',
             array(
-                'id'         => $id,
-                'accounts'   => $accounts,
-                'mailList'   => $mailList,
-                'recipients' => $recipients,
-                'subscriptionType' => \Onm\Settings::get('newsletter_subscriptionType'),
+                'id'               => $id,
+                'accounts'         => $accounts,
+                'recipients'       => $recipients,
+                'subscriptionType' => $subscriptionType,
             )
         );
     }
