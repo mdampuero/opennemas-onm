@@ -31,7 +31,7 @@
     "blueimp-file-upload": "9.9.*",
     "bootstrap": "~3.3.*",
     "bootstrap-checkbox": "https://github.com/extremeFE/bootstrap-checkbox.git",
-    "bootstrap-tagsinput": "~0.4.*",
+    "bootstrap-tagsinput": "#8c55be627caa229ff79a0a3224b231886a81c8c6",
     "bootstrap-wysiwyg": "*",
     "bootstrap2": "bootstrap#2.3.2",
     "breakpoints": "https://github.com/xoxco/breakpoints.git",
