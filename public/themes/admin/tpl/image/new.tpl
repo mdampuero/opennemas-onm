@@ -112,10 +112,6 @@
         format: 'YYYY-MM-D HH:mm:ss'
       });
 
-      $('.iptc-exif .toggler').on('click', function(e, ui) {
-        $(this).parent().find('.info').toggle();
-      });
-
       $('.geocode_button').on('click', function(e,ui){
         e.preventDefault();
         geolocate_photo()
