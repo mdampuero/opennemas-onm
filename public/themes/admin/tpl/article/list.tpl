@@ -219,6 +219,12 @@
                       </span>
                     </small>
                   </div>
+                  <div class="visible-xs">
+                    <small>
+                      <strong>{t}Created on{/t}:</strong>
+                      [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                    </small>
+                  </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_article_show') %]">
