@@ -19,7 +19,7 @@
                       </div>
                     </div>
                     <div class="dynamic-image-placeholder" ng-if="photo1">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,500,500">
                         <div class="thumbnail-actions">
                           <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
                             <i class="fa fa-trash-o fa-2x"></i>
@@ -54,7 +54,7 @@
                       </div>
                     </div>
                     <div class="dynamic-image-placeholder" ng-if="photo2">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" transform="thumbnail,220,220" ng-if="photo2">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" transform="thumbnail,500,500" ng-if="photo2">
                         <div class="thumbnail-actions">
                           <div class="thumbnail-action remove-action" ng-click="removeImage('photo2')">
                             <i class="fa fa-trash-o fa-2x"></i>
@@ -91,7 +91,7 @@
                         </div>
                       </div>
                       <div class="dynamic-image-placeholder" ng-if="photo3">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" transform="thumbnail,220,220">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3" transform="thumbnail,500,500">
                           <div class="thumbnail-actions">
                             <div class="thumbnail-action remove-action" ng-click="removeImage('photo3')">
                               <i class="fa fa-trash-o fa-2x"></i>
