@@ -194,7 +194,7 @@
                   <input type="hidden" name="album_photos_id[]" ng-value="ids[$index]"/>
                   <input type="hidden" name="album_photos_footer[]" ng-value="footers[$index]"/>
                   <div class="dynamic-image-placeholder">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,220,220">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,220,220">
                       <div class="thumbnail-actions">
                         <div class="thumbnail-action remove-action" ng-click="removeItem('photos', $index)">
                           <i class="fa fa-trash-o fa-2x"></i>
@@ -232,7 +232,7 @@
                   </div>
                 </div>
                 <div class="dynamic-image-placeholder" ng-if="cover">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover" transform="thumbnail,220,220">
+                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover" transform="thumbnail,500,500">
                     <div class="thumbnail-actions">
                       <div class="thumbnail-action remove-action" ng-click="removeImage('cover')">
                         <i class="fa fa-trash-o fa-2x"></i>
