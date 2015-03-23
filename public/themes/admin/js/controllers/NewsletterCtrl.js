@@ -201,7 +201,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
         if ($scope.newsletterContents[i].items) {
           for (var j = 0; j < $scope.newsletterContents[i].items.length; j++) {
             var newElement = {
-              id:                     $scope.newsletterContents[i].items.id,
+              id:                     $scope.newsletterContents[i].items[j].id,
               content_type_name:      $scope.newsletterContents[i].items[j].content_type_name,
               content_type_l10n_name: $scope.newsletterContents[i].items[j].content_type_l10n_name,
               title:                  $scope.newsletterContents[i].items[j].title,
