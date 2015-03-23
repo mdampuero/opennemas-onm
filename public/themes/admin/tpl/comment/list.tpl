@@ -169,7 +169,7 @@
                   </div>
                 </td>
                 <td>
-                  <div class="submitted-on">{t}Authored by: {/t}<strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
+                  <div class="submitted-on">{t}Author: {/t}<strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
                   <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
                   <p>
                     [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
