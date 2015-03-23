@@ -193,7 +193,7 @@
               <th class="left hidden-xs">{t}Section{/t}</th>
               {/if}
               <th class="center hidden-xs" style="width:130px;">{t}Created{/t}</th>
-              <th class="center hidden-xs" style="width:10px;">{t}Published{/t}</th>
+              <th class="center" style="width:10px;">{t}Published{/t}</th>
             </thead>
             <tbody>
               <tr ng-if="contents.length == 0">
@@ -247,7 +247,7 @@
                 <td class="center nowrap hidden-xs">
                   [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
-                <td class="right hidden-xs">
+                <td class="right">
                   <span ng-if="content.category != 20">
                     {acl isAllowed="ARTICLE_AVAILABLE"}
                     <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
