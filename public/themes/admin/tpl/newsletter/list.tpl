@@ -149,7 +149,7 @@
                   <p ng-if="content.title != ''">[% content.title %]</p>
                   <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</p>
                   <p class="visible-xs">
-                    <small><strong>{t}Created on:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
+                    <small><strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
                   </p>
 
                   <div class="listing-inline-actions">

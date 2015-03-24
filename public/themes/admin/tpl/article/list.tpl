@@ -208,22 +208,17 @@
                 </td>
                 <td class="left">
                   <span tooltip="{t}Last editor{/t} [% extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
-                  <div>
-                    <small ng-if="content.fk_author != 0 || content.agency != ''">
-                      <strong>{t}Author{/t}:</strong>
-                      <span ng-if="content.fk_author != 0">
-                        [% extra.authors[content.fk_author].name %]
-                      </span>
-                      <span ng-if="content.fk_author == 0 && content.agency != ''">
-                        [% content.agency %]
-                      </span>
-                    </small>
+                  <div class="small-text" ng-if="content.fk_author != 0 || content.agency != ''">
+                    <strong>{t}Author{/t}:</strong>
+                    <span ng-if="content.fk_author != 0">
+                      [% extra.authors[content.fk_author].name %]
+                    </span>
+                    <span ng-if="content.fk_author == 0 && content.agency != ''">
+                      [% content.agency %]
+                    </span>
                   </div>
-                  <div class="visible-xs">
-                    <small>
-                      <strong>{t}Created on{/t}:</strong>
-                      [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                    </small>
+                  <div class="visible-sm visible-xs small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}

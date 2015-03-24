@@ -91,6 +91,9 @@
               <tr ng-repeat="content in contents">
                 <td style="padding:10px;">
                   <strong>[% content.content_type_l10n_name %]</strong>  - [% content.title %]
+                  <div class="visible-xs small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
                 </td>
                 <td class="left hidden-xs">
                   [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]

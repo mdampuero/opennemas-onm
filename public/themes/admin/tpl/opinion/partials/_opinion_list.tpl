@@ -183,7 +183,7 @@
                 -
                 [% content.title %]
                 <div class="visible-sm visible-xs small-text">
-                  {t}Created:{/t} [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="OPINION_UPDATE"}
