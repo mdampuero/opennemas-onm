@@ -31,25 +31,25 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('database:execute-script')
-            ->setDescription('Handles the current database schema.')
-            ->addArgument(
-                'script',
-                InputArgument::REQUIRED,
-                'The SQL script to execute.'
-            )
-            ->addOption(
-                'instance',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The instance name where execute the script'
-            )
-            ->addOption(
-                'database',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'The database name where execute the script'
-            );
+        ->setName('database:execute-script')
+        ->setDescription('Handles the current database schema.')
+        ->addArgument(
+            'script',
+            InputArgument::REQUIRED,
+            'The SQL script to execute.'
+        )
+        ->addOption(
+            'instance',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The instance name where execute the script'
+        )
+        ->addOption(
+            'database',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The database name where execute the script'
+        );
     }
 
     /**
@@ -120,6 +120,9 @@ class DatabaseExecuteScriptCommand extends ContainerAwareCommand
             . ' ' . $database . ' < ' . $script;
 
         $process = new Process($cmd);
+        $process->setTimeout(6000);
+        $process->setIdleTimeout(6000);
+
         $error = $process->run(
             function ($type, $buffer) use ($database, $output) {
                 if (Process::ERR === $type) {
