@@ -46,80 +46,95 @@ class AssetController extends Controller
             $imagine = new \Imagine\Imagick\Imagine();
 
             $image = $imagine->open($path);
-            $image->strip();
 
+            $imageFormat = strtolower($image->getImagick()->getImageFormat());
             $imageSize   = $image->getSize();
             $imageWidth  = $imageSize->getWidth();
             $imageHeight = $imageSize->getHeight();
 
-            if ($method == 'crop') {
-                $topX = $parameters[0];
-                $topY = $parameters[1];
-
-                $width  = $parameters[2];
-                $height = $parameters[3];
-
-                $image->crop(
-                    new \Imagine\Image\Point($topX, $topY),
-                    new \Imagine\Image\Box($width, $height)
+            if ($imageFormat == 'gif') {
+                return new Response(
+                    file_get_contents($path),
+                    200,
+                    array('Content-Type' => $imageFormat)
                 );
-            } elseif ($method == 'thumbnail') {
-                $width  = $parameters[0];
-                $height = $parameters[1];
-
-                if (isset($parameters[3]) && $parameters[3] == 'in') {
-                    $mode = ImageInterface::THUMBNAIL_INSET;
-                } else {
-                    $mode = ImageInterface::THUMBNAIL_OUTBOUND;
-                }
-
-                $image = $image->thumbnail(
-                    new \Imagine\Image\Box($width, $height, $mode)
-                );
-            } elseif ($method == 'zoomcrop') {
-                $width         = $parameters[0];
-                $height        = $parameters[1];
-                // $verticalPos   = $parameters[2];
-                // $horizontalPos = $parameters[3];
-                $mode = ImageInterface::THUMBNAIL_OUTBOUND;
-
-                if ($imageWidth >= $imageHeight) {
-                    $widthResize = $height*$imageWidth/$imageHeight;
-                    $heightResize = $height;
-                    $topX = $widthResize/2 - $width/2;
-                    $topY = 0;
-                } else {
-                    $widthResize = $width;
-                    $heightResize = $width*$imageHeight/$imageWidth;
-                    $topX = 0;
-                    $topY = $heightResize/2 - $height/2;
-                }
-                if ($topX < 0) {
-                    $topX = 0;
-                }
-                if ($topY < 0) {
-                    $topY = 0;
-                }
-
-                $image = $image->resize(
-                    new \Imagine\Image\Box($widthResize, $heightResize, $mode)
-                )->crop(
-                    new \Imagine\Image\Point($topX, $topY),
-                    new \Imagine\Image\Box($width, $height)
-                );
-            } elseif ($method == 'clean') {
-                // do nothing
-            } else {
-                $width  = $parameters[0];
-                $height = $parameters[1];
-
-                $image->resize(new \Imagine\Image\Box($width, $height));
             }
 
-            $originalFormat = strtolower($image->getImagick()->getImageFormat());
+            $image->strip();
+
+            switch ($method) {
+                case 'crop':
+                    $topX = $parameters[0];
+                    $topY = $parameters[1];
+
+                    $width  = $parameters[2];
+                    $height = $parameters[3];
+
+                    $image->crop(
+                        new \Imagine\Image\Point($topX, $topY),
+                        new \Imagine\Image\Box($width, $height)
+                    );
+                    break;
+                case 'thumbnail':
+                    $width  = $parameters[0];
+                    $height = $parameters[1];
+
+                    if (isset($parameters[3]) && $parameters[3] == 'in') {
+                        $mode = ImageInterface::THUMBNAIL_INSET;
+                    } else {
+                        $mode = ImageInterface::THUMBNAIL_OUTBOUND;
+                    }
+
+                    $image = $image->thumbnail(
+                        new \Imagine\Image\Box($width, $height, $mode)
+                    );
+                    break;
+                case 'zoomcrop':
+                    $width         = $parameters[0];
+                    $height        = $parameters[1];
+                    // $verticalPos   = $parameters[2];
+                    // $horizontalPos = $parameters[3];
+                    $mode = ImageInterface::THUMBNAIL_OUTBOUND;
+
+                    if ($imageWidth >= $imageHeight) {
+                        $widthResize = $height*$imageWidth/$imageHeight;
+                        $heightResize = $height;
+                        $topX = $widthResize/2 - $width/2;
+                        $topY = 0;
+                    } else {
+                        $widthResize = $width;
+                        $heightResize = $width*$imageHeight/$imageWidth;
+                        $topX = 0;
+                        $topY = $heightResize/2 - $height/2;
+                    }
+                    if ($topX < 0) {
+                        $topX = 0;
+                    }
+                    if ($topY < 0) {
+                        $topY = 0;
+                    }
+
+                    $image = $image->resize(
+                        new \Imagine\Image\Box($widthResize, $heightResize, $mode)
+                    )->crop(
+                        new \Imagine\Image\Point($topX, $topY),
+                        new \Imagine\Image\Box($width, $height)
+                    );
+                    break;
+                case 'clean':
+                    # do nothing
+                    break;
+
+                default:
+                    $width  = $parameters[0];
+                    $height = $parameters[1];
+
+                    $image->resize(new \Imagine\Image\Box($width, $height));
+                    break;
+            }
 
             $contents = $image->get(
-                $originalFormat,
+                $imageFormat,
                 array(
                     'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
                     'resolution-x'     => 72,
@@ -128,11 +143,10 @@ class AssetController extends Controller
                 )
             );
 
-            return new Response($contents, 200, array('Content-Type' => $originalFormat));
+            return new Response($contents, 200, array('Content-Type' => $imageFormat));
         } else {
             return new Response('', 404);
         }
-        // var_dump($finalParameters, $path);die();
     }
 
     /**
