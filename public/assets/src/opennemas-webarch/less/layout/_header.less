@@ -1,64 +1,72 @@
 .header {
-  height: 50px;
-  min-height: 50px;
-  width: auto;
+  height: @header-height;
+  min-height: @header-height;
+
+  .chat-toggler {
+    min-width: 0;
+    top: 4px;
+
+    i {
+      color: @header-color;
+      margin-top: 6px;
+    }
+  }
+
+  .header-seperation  {
+    background-color: @header-background;
+    display: block !important;
+    height: @header-height;
+    min-height: @header-height;
+    overflow: hidden;
+    transition: width .25s;
+    width: @header-width;
+
+    h1 {
+      color: #fff;
+      font-size: 18px;
+      height: @header-height;
+      line-height: @header-height;
+      margin: 0;
+      padding: 0px 14px;
+    }
+  }
+
+  .header-quick-nav {
+    background-color: @header-background;
+    height: @header-height;
+  }
+
+  .quick-section {
+    margin-top: 4px;
+    margin-left: 0;
+
+    li.quicklinks {
+      a {
+        color: @header-color;
+
+        i {
+          color: @header-color !important;
+          margin-right: 4px;
+        }
+
+        &:hover {
+          color: lighten(@header-color, 50%);
+
+          i {
+            color: lighten(@header-color, 50%) !important;
+          }
+        }
+      }
+
+
+      .h-seperate {
+        border-color: transparent;
+        top: 4px;
+      }
+    }
+  }
 }
 
-.header .header-seperation  {
-  background-color: #22252d;
-  display: block !important;
-  height: 50px;
-  min-height: 50px;
-  overflow: hidden;
-  width: 210px;
-
-  -webkit-transition:width .25s;
-  -moz-transition: width .25s;
-  transition: width .25s;
-}
-
-.collapsed .header .header-seperation,
-.unpinned-on-server .header .header-seperation  {
-  width: 50px;
-}
-
-.header-seperation .overlay {
-  height: 50px;
-}
-
-.header .header-seperation h1 {
-  color: #fff;
-  font-size: 24px;
-  margin: 0;
-  padding: 0px 14px;
-  height: 50px;
-}
-
-.header .header-seperation .first-char {
-  -webkit-transition:font-size .25s;
-  -moz-transition: font-size .25s;
-  transition: font-size .25s;
-}
-
-.collapsed .header .header-seperation .first-char,
-.unpinned-on-server .header .header-seperation .first-char {
-  font-size: 36px;
-}
-
-.header .header-seperation .title-token {
-  width: 162px;
-  overflow: hidden;
-  position: absolute;
-
-  -webkit-transition: width .25s;
-  -moz-transition: width .25s;
-  transition: width .25s;
-}
-
-.collapsed .header .header-seperation .title-token,
-.unpinned-on-server .header .header-seperation .title-token {
-  width: 0;
-}
 
 .header-static-logo {
   display: none;
@@ -79,7 +87,7 @@
 .layout-collapse-toggle:active,
 .notifications .button {
   background: #1b1e24;
-  color: #fff;
+  color: @header-color;
   border-radius: 0;
 }
 

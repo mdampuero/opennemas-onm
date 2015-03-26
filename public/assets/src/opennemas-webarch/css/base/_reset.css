@@ -12,6 +12,10 @@ a {
   transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
 }
 
+i {
+  transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
+}
+
 a:hover,
 a:focus {
   color:#376092;
