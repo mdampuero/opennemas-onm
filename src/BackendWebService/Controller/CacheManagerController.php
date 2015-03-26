@@ -273,7 +273,7 @@ class CacheManagerController extends Controller
         } elseif (in_array($cache['template'], ['album_frontpage'])) {
             $type  = 'album';
             $title = _('Album frontpage').': '.$cache['category'];
-            $url   = '/album/bla';
+            $url   = 'album/'.$cache['category'];
         } elseif (in_array($cache['template'], ['album'])) {
             $type  = 'album';
             $title = _('Album inner').': ';
@@ -285,7 +285,7 @@ class CacheManagerController extends Controller
         } elseif ($cache['template'] == 'opinion_author_index') {
             $type  = 'opinion';
             $title = _('Opinion frontpage').': '.sprintf(_("Page %s"), $cache['resource']);
-            $url   = 'opinion/?page='.$cache['resource'];
+            $url   = 'opinion/autor/'.$cache['category'].'/autor?page='.$cache['resource'];
         } elseif (in_array($cache['template'], ['opinion', 'blog_inner'])) {
             $type  = 'opinion';
             $title = _('Opinion inner').': ';
@@ -296,7 +296,7 @@ class CacheManagerController extends Controller
         } elseif (strtolower($cache['template']) == 'rss') {
             $type  = 'rss';
             $title = _('RSS').': '.$cache['category'];
-            $url   = '/rss/bla';
+            $url   = 'rss/'.$cache['category'];
             if ($cache['category'] == 'rssauthor') {
                 $title = _('RSS Author').': '.$cache['resource'];
                 $url = 'rss/author/'.$cache['resource'];
@@ -318,7 +318,7 @@ class CacheManagerController extends Controller
         } elseif ($cache['template'] == 'poll_frontpage') {
             $type  = 'poll';
             $title = _('Poll frontpage').': '.$cache['category'];
-            $url   = '/polls/';
+            $url   = 'poll/'.$cache['category'];
         } elseif ($cache['template'] == 'custom_css') {
             $type = 'custom_css';
             $title = _('Custom CSS');
