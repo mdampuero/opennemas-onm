@@ -104,7 +104,6 @@
   }
 }
 
-
 .header-static-logo {
   display: none;
   position: absolute;
@@ -113,7 +112,7 @@
   margin-left: -120px;
 }
 
-.layout-collapse{
+.layout-collapse {
   padding: 7px;
   display: none;
 }
@@ -125,6 +124,13 @@
   background: #1b1e24;
   color: @header-color;
   border-radius: 0;
+}
+
+.notifications {
+  .dropdown-menu {
+    margin-left: -200px;
+    width: 400px;
+  }
 }
 
 .notification-list {
@@ -167,6 +173,11 @@
 }
 
 .quick-items {
+  .dropdown-menu {
+    width: 300px;
+    margin-left: -125px;
+  }
+
   .quick-items-row {
     margin-bottom: 15px;
 
@@ -208,6 +219,7 @@
 
     .title {
       bottom: 10px;
+      font-weight: bold;
       left: 0;
       overflow: hidden;
       position: absolute;
@@ -216,11 +228,27 @@
       width: 80px;
     }
   }
+
+  &.help-items {
+    .dropdown-menu {
+      margin-left: -150px;
+    }
+  }
 }
 
-.header .header-seperation .notifcation-center {
-  margin-top:8px;
-  margin-right:8px !important;
+// Override colors for help dropdown
+.header .nav > li.quicklinks .quick-item i {
+  &.fa-question-circle {
+    color: @primary-color !important;
+  }
+
+  &.fa-support {
+    color: #f00 !important;
+  }
+
+  &.fa-youtube {
+    color: @youtube-color !important;
+  }
 }
 
 @media (max-width: 767px) {

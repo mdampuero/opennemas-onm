@@ -213,12 +213,32 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks dropdown help">
+            <li class="quicklinks quick-items help-items dropdown">
               <a href="#" data-toggle="dropdown">
                 <i class="fa fa-support"></i>
               </a>
               <div class="dropdown-menu">
                 <div class="dropdown-title">Help</div>
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
+                    <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
+                      <i class="fa fa-youtube"></i>
+                      <span class="title">{t}Youtube channel{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="http://help.opennemas.com" title="{t}F.A.Q.{/t}">
+                      <i class="fa fa-question-circle"></i>
+                      <span class="title">{t}F.A.Q.{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="javascript:UserVoice.showPopupWidget();">
+                      <i class="fa fa-support" title="{t}Contact us{/t}"></i>
+                      <span class="title">{t}Contact us{/t}</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </li>
             <li class="quicklinks">
