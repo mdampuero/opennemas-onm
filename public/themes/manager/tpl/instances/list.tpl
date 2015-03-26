@@ -178,6 +178,12 @@
                         {t}Created{/t}
                     </label>
                 </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-database" checklist-model="columns.selected" checklist-value="'database'" type="checkbox">
+                    <label for="checkbox-database">
+                        {t}Database{/t}
+                    </label>
+                </div>
             </div>
             <div class="col-sm-6 col-md-3 column">
                 <div class="checkbox check-default">
@@ -214,6 +220,12 @@
                     <input id="checkbox-photos" checklist-model="columns.selected" checklist-value="'photos'" type="checkbox">
                     <label for="checkbox-photos">
                         {t}Photo{/t}
+                    </label>
+                </div>
+                <div class="checkbox check-default">
+                    <input id="checkbox-support" checklist-model="columns.selected" checklist-value="'support'" type="checkbox">
+                    <label for="checkbox-support">
+                        {t}Support plan{/t}
                     </label>
                 </div>
             </div>
@@ -336,6 +348,9 @@
                                 {t}Created{/t}
                                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created') == 'asc', 'fa fa-caret-down': isOrderedBy('created') == 'desc'}"></i>
                             </th>
+                            <th class="text-center" ng-show="isEnabled('database')">
+                                {t}Database{/t}
+                            </th>
                             <th class="text-center pointer" ng-click="sort('contents')" ng-show="isEnabled('contents')">
                                 <i class="fa fa-folder-open-o" title="{t}Contents{/t}"></i>
                                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
@@ -359,6 +374,10 @@
                             <th class="text-center pointer" ng-click="sort('photos')" ng-show="isEnabled('photos')">
                                 {t}Photos{/t}
                                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('photos') == 'asc', 'fa fa-caret-down': isOrderedBy('photos') == 'desc'}"></i>
+                            </th>
+                            <th class="text-center pointer" ng-click="sort('support')" ng-show="isEnabled('support')">
+                                {t}Support plan{/t}
+                                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('support') == 'asc', 'fa fa-caret-down': isOrderedBy('support') == 'desc'}"></i>
                             </th>
                             <th class="text-center pointer" ng-click="sort('videos')" ng-show="isEnabled('videos')">
                                 {t}Videos{/t}
@@ -469,6 +488,9 @@
                             <td class="text-center" ng-show="isEnabled('created')">
                                 [% instance.created %]
                             </td>
+                            <td class="text-center" ng-show="isEnabled('database')">
+                                [% instance.settings.BD_DATABASE %]
+                            </td>
                             <td class="text-center" ng-show="isEnabled('contents')">
                                 <span tooltip-html-unsafe="[% '{t}Articles{/t}: ' + instance.articles + '<br>{t}Ads{/t}: ' + instance.advertisements + '<br>{t}Files{/t}: ' + instance.attachments + '<br>{t}Opinions{/t}: ' + instance.opinions + '<br>{t}Albums{/t}: ' + instance.albums + '<br>{t}Images{/t}: ' + instance.photos + '<br>{t}Videos{/t}: ' + instance.videos + '<br>{t}Polls{/t}: ' + instance.polls + '<br>{t}Widgets{/t}: ' + instance.widgets + '<br>{t}Static pages{/t}: ' + instance.static_pages + '<br>{t}Letters{/t}: ' + instance.letters %]">
                                     [% instance.contents %]
@@ -488,6 +510,9 @@
                             </td>
                             <td class="text-center" ng-show="isEnabled('photos')">
                                 [% instance.photos %]
+                            </td>
+                            <td class="text-center" ng-show="isEnabled('support')">
+                                [% instance.support_plan %]
                             </td>
                             <td class="text-center" ng-show="isEnabled('videos')">
                                 [% instance.videos %]

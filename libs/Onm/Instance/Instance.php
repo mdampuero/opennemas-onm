@@ -98,6 +98,13 @@ class Instance
     public $activated_modules = array();
 
     /**
+     * The requested changes in modules of the current instance.
+     *
+     * @var array
+     */
+    public $changes_in_modules = array();
+
+    /**
      * The array of settings.
      *
      * @var array
@@ -223,6 +230,13 @@ class Instance
      * @var integer
      */
     public $emails = 0;
+
+    /**
+     * Support plan type
+     *
+     * @var string
+     */
+    public $support_plan = '';
 
     /**
      * Initializes all the application values for the instance.

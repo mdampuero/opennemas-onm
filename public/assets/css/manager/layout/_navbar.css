@@ -240,7 +240,7 @@ div[ng-view].ng-leave-active .selected-navbar,
 }
 
 .column-filters {
-  height: 205px;
+  height: 225px;
   padding: 0 15px;
   margin: 0;
   overflow: hidden;

@@ -1081,6 +1081,7 @@ admin_media_uploader_months:
     path:     /media-uploader/months
     defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
+# Getting started routes
 admin_getting_started:
     path:     /getting-started
     defaults: { _controller  : BackendBundle:GettingStarted:gettingStarted }
@@ -1108,3 +1109,12 @@ admin_menu_sidebar_get:
     methods:  [ GET ]
     options:
         expose: true
+
+# Client info page routes
+admin_client_info_page:
+    path:     /client-info
+    defaults: { _controller  : BackendBundle:ClientInformation:default }
+
+admin_client_send_upgrade_mail:
+    path:     /client-info/upgrade-instance
+    defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
