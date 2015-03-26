@@ -177,6 +177,9 @@
                     <small>"[% content.author %]" ([% content.email %])</small>
                   </div>
                   <span tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
+                  <div class="visible-sm visible-xs small-text">
+                    <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="LETTER_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_letter_show') %]">

@@ -257,8 +257,8 @@
                 </td>
                 <td>
                   [% content.title %]
-                  <div class="visible-sm small-text">
-                    {t}Created at:{/t} [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <div class="visible-sm visible-xs small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="SPECIAL_UPDATE"}

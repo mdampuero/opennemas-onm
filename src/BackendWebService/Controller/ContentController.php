@@ -415,7 +415,7 @@ class ContentController extends Controller
                 $content->remove($id);
                 $success[] = array(
                     'id'      => $id,
-                    'message' => _('Item removed permanently successfully'),
+                    'message' => _('Item permanently removed successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
@@ -506,7 +506,10 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) removed successfully'), count($updated)),
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }
@@ -563,7 +566,8 @@ class ContentController extends Controller
             $status = $content->content_status;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _('Item ' . ($status ? 'published' : 'unpublished')
+                    . ' successfully'),
                 'type'    => 'success'
             );
         } else {
@@ -653,7 +657,10 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => sprintf(_('%d item(s) ' .
+                    ($available ? 'published' : 'unpublished') . ' successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }
@@ -709,7 +716,9 @@ class ContentController extends Controller
             $favorite = $content->favorite;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _(
+                    'Item ' . ($favorite ? 'added to favorites' : 'removed from favorites') . ' successfully'
+                ),
                 'type'    => 'success'
             );
         } else {
@@ -772,7 +781,9 @@ class ContentController extends Controller
             $inHome = $content->in_home;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _(
+                    'Item ' . ($inHome ? 'added to home' : 'removed from home') . ' successfully'
+                ),
                 'type'    => 'success'
             );
         } else {
@@ -862,7 +873,10 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => sprintf(
+                    _('%d item(s) '. ($inHome ? 'added to home' : 'removed from home') .' successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }

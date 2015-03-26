@@ -217,6 +217,9 @@
                 </td>
                 <td>
                   <strong>[% content.content_type_l10n_name %]</strong> - [% content.title %]
+                  <div class="visible-xs small-text">
+                    <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
                   <div class="listing-inline-actions">
                     <a ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
                       <i class="fa fa-pencil"></i>
