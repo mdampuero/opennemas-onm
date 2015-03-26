@@ -1,97 +1,108 @@
 .sidebar-footer-widget {
   background: lighten(@background, 3%);
+  height: @height;
   padding: 0;
   position: relative;
   right: 0;
-  width: @width;
-
-  -webkit-transition: all .25s;
-  -moz-transition: all .25s;
-  transition: all .25s;
-
-  a {
-    color: @color;
-
-    &:hover,
-    &:visited {
-      color: #fff;
-    }
-  }
 
   ul {
     margin: 0;
     padding: 0;
-    width: @width;
+    width: auto;
 
     li {
+      float: left;
+      height: @height;
       list-style: none;
-      padding: 9px;
-      height: 50px;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      transition: all .25s;
+
+      &.support {
+        width: @width - @collapsed-width;
+
+        .link {
+          cursor: pointer;
+          display: inline-block;
+          width: @width - @collapsed-width - 10px;
+
+          &:hover {
+            color: #fff;
+          }
+        }
+      }
+
+      &.pin {
+        cursor: pointer;
+        text-align: center;
+        width: @collapsed-width;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+
+      i {
+        padding: 18px 0;
+        text-align: center;
+        width: @collapsed-width;
+      }
+
+      .h-seperate {
+        width: 1px;
+        display: inline-block;
+        background: rgba(255,255,255,.25);
+        height: 26px;
+        float: right;
+        margin: 12px 5px 0 4px;
+        transition: all .25s;
+      }
+
+      .title {
+        display: inline-block;
+      }
     }
-  }
-
-  .logout {
-    background-color: #1b1e24;
-    border-radius: 100%;
-    cursor: pointer;
-    display: inline-block;
-    float: right;
-    height: 32px;
-    line-height: 32px;
-    text-align: center;
-    width: 32px;
-
-    .fa-power-off {
-      color: #f35958;
-    }
-
-    &:hover .fa-power-off {
-      color: #fff;
-    }
-  }
-
-  .profile-pic {
-    border-radius: 100%;
-    display: inline-block;
-    height: 32px;
-    float: left;
-    overflow: hidden;
-    width: 32px;
-  }
-
-  .username {
-    display: inline-block;
-    height: 20px;
-    float: left;
-    margin: 6px 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 108px;
-    white-space: nowrap;
   }
 }
 
-.collapsed.inverted .sidebar-footer-widget {
-  right: 160px;
-}
+.collapsed {
+  .sidebar-footer-widget {
+    ul {
+      li {
+        width: 0;
 
-.inverted .sidebar-footer-widget {
-  .logout {
-    left: 9px;
-  }
+        &.pin {
+          width: @collapsed-width;
+        }
 
-  .profile-pic {
-    float: right;
-  }
-
-  .username {
-    float: right;
-    margin-right: 10px;
-    text-align: right;
+        .h-seperate {
+          width: 0;
+        }
+      }
+    }
   }
 }
 
-.on-right .sidebar-footer-widget {
-  left: auto;
-  right: 0;
+.inverted {
+  .sidebar-footer-widget {
+    ul {
+      li {
+        float: right;
+
+        i {
+          float: right;
+        }
+
+        .h-seperate {
+          float: left;
+        }
+
+        .title {
+          padding: 12px 8px;
+          float: right;
+        }
+      }
+    }
+  }
 }
