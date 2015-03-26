@@ -36,9 +36,10 @@
   background-color: #e5e9ec;
 }
 
+/*Disable border-radius from nav-tabs*/
 .grid-body .nav-tabs > li > a,
 .grid-body .nav-tabs > li.active > a,
 .grid-body .nav-tabs > li.active > a:hover,
 .grid-body .nav-tabs > li.active > a:focus {
-  border-radius: 0;
+  /*border-radius: 0;*/
 }
