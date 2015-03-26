@@ -126,6 +126,15 @@
         <div class="pull-left">
           <ul class="nav quick-section">
             <li class="quicklinks">
+              <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                <i class="fa fa-dashboard"></i>
+                {t}My newspaper{/t}
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
               <a href="#">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
@@ -137,10 +146,27 @@
         <!-- BEGIN CHAT TOGGLER -->
         <div class="pull-right">
           <ul class="nav quick-section ">
-            <li class="quicklinks">
-              <a href="#">
+            <li class="quicklinks dropdown notifications">
+              <a href="#" data-toggle="dropdown">
                 <i class="fa fa-bell"></i>
               </a>
+              <div class="dropdown-menu">
+                <div class="dropdown-title">Notifications</div>
+                <ul class="notifications-list">
+                  <li class="notification-success">
+                    <div class="title">Success!</div>
+                    <p>{t}This is a notification for a success{/t}</p>
+                  </li>
+                  <li class="notification-error">
+                    <div class="title">Error!</div>
+                    <p>{t}This notification is an error{/t}</p>
+                  </li>
+                  <li class="notification-warning">
+                    <div class="title">Warning!</div>
+                    <p>{t}This notification is a warning{/t}</p>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="quicklinks">
               <span class="h-seperate"></span>
@@ -153,23 +179,31 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                <i class="fa fa-dashboard"></i>
-                {t}My newspaper{/t}
-              </a>
-            </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks user-info">
-              <a href="#">
+            <li class="quicklinks user-info dropdown">
+              <span class="link" data-toggle="dropdown">
                 <span class="title">
                   {$smarty.session.realname}
                 </span>
                 <div class="profile-pic">
-                  <img src="//www.gravatar.com/avatar/14bf30e52617d5af2aea507943f757dd?s=50&amp;d=mm&amp;r=g" alt="" width="25" height="25">
+                  {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
                 </div>
                 <i class="fa fa-angle-down"></i>
-              </a>
+              </span>
+              <ul class="dropdown-menu on-right" role="menu" aria-labelledby="dropdownMenu1">
+                <li>
+                  <a href="{url name="admin_acl_user_show" id="me"}">
+                    <i class="fa fa-user"></i>
+                    {t}Profile{/t}
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a role="menuitem" tabindex="-1" href="{url name="admin_logout"}">
+                    <i class="fa fa-power-off m-r-10"></i>
+                    {t}Log out{/t}
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
