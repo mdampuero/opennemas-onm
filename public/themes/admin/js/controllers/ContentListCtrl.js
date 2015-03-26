@@ -227,6 +227,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           contentType: $scope.criteria.content_type_name
         }
       );
+
       $http.post(url, {
         positions: ids
       }).success(function(response) {
@@ -1035,29 +1036,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       if (newValues !== oldValues) {
         $scope.pagination.page = 1;
-
-        searchTimeout = $timeout(function() {
-          $scope.list($scope.route);
-        }, 500);
-      }
-    }, true);
-
-    /**
-     * Load the value of elements per page variable in scope when it changes.
-     *
-     * @param  Event  event Event object.
-     * @param  Object vars  Shared variables object.
-     */
-    $scope.$watch('$scope.pagination.epp', function(newValues, oldValues) {
-      if (searchTimeout) {
-        $timeout.cancel(searchTimeout);
-      }
-
-      if (newValues !== oldValues) {
-        // $location.search('elements_per_page', newValues);
-
-        $scope.pagination.page = 1;
-        // $location.search('page', null);
 
         searchTimeout = $timeout(function() {
           $scope.list($scope.route);
