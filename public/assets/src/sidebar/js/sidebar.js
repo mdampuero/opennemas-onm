@@ -197,6 +197,16 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         };
 
         /**
+         * Returns the current sidebar pinned  status.
+         *
+         * @return boolean True if the sidebar is pinned. Otherwise, returns
+         *                 false
+         */
+        sidebar.isPinned = function() {
+          return this.pinned;
+        };
+
+        /**
          * Clears history for the given route and shows a spinner on route
          * change on item click.
          *
