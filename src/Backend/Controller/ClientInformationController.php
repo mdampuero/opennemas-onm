@@ -102,6 +102,8 @@ class ClientInformationController extends Controller
             $instance->support_plan = $modulesArray['SUPPORT_NONE'];
         }
 
+        $maxUsers = $this->get('setting_repository')->get('max_users');
+
         return $this->render(
             'stats/stats_info.tpl',
             array(
@@ -112,6 +114,7 @@ class ClientInformationController extends Controller
                 'plans'               => $plans,
                 'has_changes'         => $hasChanges,
                 'support_description' => $supportDescription,
+                'max_users'           => ($maxUsers == 'NaN' || empty($maxUsers)) ? _('Unlimited') : $maxUsers,
             )
         );
     }
