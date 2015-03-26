@@ -134,12 +134,6 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                <i class="fa fa-dashboard"></i>
-                {t}Stats{/t}
-              </a>
-            </li>
           </ul>
         </div>
         <!-- END TOP NAVIGATION MENU -->
@@ -154,6 +148,13 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
+            <li class="quicklinks">
+              <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                <i class="fa fa-dashboard"></i>
+                {t}My newspaper{/t}
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
           </ul>
           <div class="chat-toggler">
             <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom" data-content="" data-toggle="dropdown" data-original-title="Notifications">
