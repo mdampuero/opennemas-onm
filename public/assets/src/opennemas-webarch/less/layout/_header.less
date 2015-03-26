@@ -121,76 +121,99 @@
 .layout-collapse-toggle,
 .layout-collapse-toggle:hover,
 .layout-collapse-toggle:focus,
-.layout-collapse-toggle:active,
-.notifications .button {
+.layout-collapse-toggle:active {
   background: #1b1e24;
   color: @header-color;
   border-radius: 0;
 }
 
-.notifications {
-  .dropdown-menu {
-    padding: 15px;
-    width: 400px;
-    margin-left: -200px;
-    margin-top: 6px !important;
+.notification-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 
-    &:after {
-      left: 50%;
-      right: auto !important;
-      margin-left: 3px;
+  li {
+    border-radius: 3px;
+    display: block;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
 
-    &:before {
-      left: 50%;
-      right: auto !important;
-      margin-left: 2px;
-    }
-
-    .dropdown-title {
+    .title {
       font-weight: bold;
-      padding: 8px 0;
-      text-align: center;
-      text-transform: uppercase;
     }
 
-    .notifications-list {
-      list-style: none;
+    p {
+      font-size: 85%;
+      font-style: italic;
       margin: 0;
-      padding: 0;
+    }
+  }
 
-      li {
-        border-radius: 3px;
-        display: block;
-        padding: 8px 10px;
-        margin-bottom: 8px;
+  .notification-error {
+    background-color: fade(@error-color, 25%);
+  }
 
-        &:last-child {
-          margin-bottom: 0;
-        }
+  .notification-success {
+    background-color: fade(@success-color, 25%);
+  }
 
-        .title {
-          font-weight: bold;
-        }
+  .notification-warning {
+    background-color: fade(@warning-color, 25%);
+  }
+}
 
-        p {
-          font-size: 85%;
-          font-style: italic;
-          margin: 0;
-        }
+.quick-items {
+  .quick-items-row {
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .quick-item {
+    float: left;
+    height: 80px;
+    margin-right: 15px;
+    position: relative;
+    text-align: center;
+    width: 80px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    a {
+      border-radius: 4px;
+      color: @header-color;
+      display: block;
+      padding-top: 15px;
+      width: 100%;
+      height: 100%;
+
+      &:hover {
+        background-color: fade(@info-color, 10%);
       }
+    }
 
-      .notification-error {
-        background-color: fade(@error-color, 25%);
-      }
+    i {
+      color: @header-color;
+      display: block !important;
+      font-size: 24px !important;
+    }
 
-      .notification-success {
-        background-color: fade(@success-color, 25%);
-      }
-
-      .notification-warning {
-        background-color: fade(@warning-color, 25%);
-      }
+    .title {
+      bottom: 10px;
+      left: 0;
+      overflow: hidden;
+      position: absolute;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 80px;
     }
   }
 }

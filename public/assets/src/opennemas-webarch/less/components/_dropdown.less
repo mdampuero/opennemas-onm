@@ -19,6 +19,51 @@
   }
 }
 
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  background-color: fade(@info-color, 10%);
+}
+
+div.dropdown-menu {
+  padding: 15px;
+  margin-top: 6px !important;
+
+  &:after {
+    left: 50%;
+    right: auto !important;
+    margin-left: 3px;
+  }
+
+  &:before {
+    left: 50%;
+    right: auto !important;
+    margin-left: 2px;
+  }
+
+  .dropdown-title {
+    font-weight: bold;
+    padding-bottom: 8px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+.notifications {
+  .dropdown-menu {
+    margin-left: -200px;
+    width: 400px;
+  }
+}
+
+.quick-items {
+  .dropdown-menu {
+    width: 300px;
+    margin-left: -125px;
+  }
+}
+
 .open > .dropdown-menu {
   opacity: 1;
   visibility: visible;
