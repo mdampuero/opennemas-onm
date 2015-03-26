@@ -16,7 +16,7 @@ angular.module('onm.messenger', []).factory('messenger',  function () {
      */
     messenger.post = function(params) {
         Messenger.options = {
-            extraClasses: 'messenger-fixed messenger-on-top',
+            extraClasses: 'messenger-fixed messenger-on-bottom',
         };
 
         params.hideAfter = 5;
