@@ -103,7 +103,7 @@
           open<strong>nemas</strong>
           </h1>
         </a>
-        <div ng-mouseleave="sidebar.mouseLeave()" ng-mouseenter="sidebar.mouseEnter()">
+        <div>
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
             <h1>
               open<strong>nemas</strong>
