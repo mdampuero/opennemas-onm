@@ -103,7 +103,7 @@
         a {
           i {
             height: @height - 10px;
-            margin-left: 25px;
+            margin-left: @indentation;
             padding: 15px 0;
             width: @collapsed-width - 10px;
           }
@@ -111,8 +111,24 @@
           .title {
             height: 40px;
             padding: 12px 0;
-            max-width: @width - @collapsed-width - 15px;
+            max-width: @width - @collapsed-width - @indentation;
             transition: all .3s
+          }
+        }
+
+        .sub-menu {
+          background-color: darken(@background, 3%);
+
+          li {
+            a {
+              i {
+                margin-left: @indentation * 2;
+              }
+
+              .title {
+                max-width: @width - @collapsed-width - (@indentation * 2);
+              }
+            }
           }
         }
       }
@@ -204,7 +220,23 @@
         }
 
         .title {
-          transition: all .15s
+          max-width: 0;
+          transition: all .15s;
+        }
+      }
+
+      .sub-menu {
+        li {
+          a {
+            i {
+              margin-left: 0;
+            }
+
+            .title {
+              max-width: 0;
+              transition: all .15s
+            }
+          }
         }
       }
     }
@@ -270,7 +302,18 @@
       a {
         i {
           margin-left: 0;
-          margin-right: 25px;
+          margin-right: @indentation;
+        }
+      }
+
+      .sub-menu {
+        li {
+          a {
+            i {
+              margin-left: 0;
+              margin-right: @indentation;
+            }
+          }
         }
       }
     }
@@ -283,6 +326,16 @@
       a {
         i {
           margin-right: 0;
+        }
+      }
+    }
+
+    .sub-menu {
+      li {
+        a {
+          i {
+            margin-right: 0;
+          }
         }
       }
     }
