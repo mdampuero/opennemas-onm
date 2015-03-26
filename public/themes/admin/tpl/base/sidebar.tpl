@@ -9,15 +9,15 @@
     </a>
     <div class="user-info-wrapper clearfix">
       <div class="profile-wrapper">
-        {if $smarty.session.avatar_url}
-          <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
+        {if $smarty.session._sf2_attributes.instance.logo}
+          <img src="{$smarty.const.INSTANCE_MEDIA}/sections/{$smarty.session._sf2_attributes.instance.logo}" />
         {else}
-          {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="50"}
+          <img src="/assets/images/launcher-icons/IOS-60@2x.png" />
         {/if}
       </div>
       <div class="user-info">
         <div class="greeting">{t}Welcome{/t}</div>
-        <div class="username">{$smarty.session.realname}</div>
+        <div class="username" title="{$smarty.session._sf2_attributes.instance.name}">{$smarty.session._sf2_attributes.instance.name}</div>
       </div>
     </div>
     {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
