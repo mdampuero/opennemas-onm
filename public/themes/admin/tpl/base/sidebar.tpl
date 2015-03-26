@@ -26,11 +26,6 @@
   <div class="sidebar-footer-widget">
     <ul>
       <li class="support">
-        <span class="link">
-          <i class="fa fa-support fa-lg"></i>
-          <span class="title">{t}Help{/t}</span>
-        </span>
-        <span class="h-seperate"></span>
       </li>
       <li class="pin" ng-click="sidebar.pin()">
         <i class="fa fa-lg" ng-class="{ 'fa-angle-double-left': sidebar.isPinned(), 'fa-angle-double-right': !sidebar.isPinned()}"></i>
