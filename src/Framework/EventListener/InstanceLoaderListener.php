@@ -128,6 +128,14 @@ class InstanceLoaderListener implements EventSubscriberInterface
         \Application::load();
         \Application::initDatabase($databaseInstanceConnection);
 
+        $session = getService('session');
+        $sm      = getService('setting_repository');
+
+        $session->set(
+            'instance',
+            [ 'name' => $this->instance->name, 'logo' => $sm->get('site_logo') ]
+        );
+
         $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
 
         // Check if the request is for backend and it is done to the proper
