@@ -72,46 +72,46 @@
       </div>
     </div>
     <div class="iptc-exif">
-      <h5 class="toggler toggler_{$photo->id}">
+      <h5 class="toggler toggler_{$photo->id}" ng-click="info_{$photo->id} = !info_{$photo->id}">
         {t escape=off}View advanced data{/t}
         <span>
-          <i class="fa fa-plus-square-o"></i>
+          <i class="fa" ng-class="{ 'fa-plus-square-o': !info_{$photo->id}, 'fa-minus-square-o': info_{$photo->id} }"></i>
         </span>
       </h5>
-      <div class="info info_{$photo->id}">
+      <div class="info info_{$photo->id} ng-cloak" ng-if="info_{$photo->id}">
         {if is_null($photo->exif) neq true}
-        <h6>{t}EXIF Data{/t}</h6>
-        <div id="exif" class="photo-static-info">
-          {foreach $photo->exif as $name => $value}
-          {foreach $value as $d => $dato}
-          <p>
-            <strong>{$d}</strong> : {$dato}
-          </p>
-          {/foreach}
-          {/foreach}
-        </div>
+          <h6>{t}EXIF Data{/t}</h6>
+          <div id="exif" class="photo-static-info">
+            {foreach $photo->exif as $name => $value}
+              {foreach $value as $d => $dato}
+              <p>
+                <strong>{$d}</strong> : {$dato}
+              </p>
+              {/foreach}
+            {/foreach}
+          </div>
         {else}
-        <div id="exif" class="photo-static-info">
-          {t}No available EXIF data.{/t}
-        </div>
+          <div id="exif" class="photo-static-info">
+            {t}No available EXIF data.{/t}
+          </div>
         {/if}
 
         {if isset($photo->myiptc)}
-        <h6>{t}IPTC Data{/t}</h6>
-        <div id="iptc" class="photo-static-info">
-          {foreach $photo->myiptc as $name => $value}
-          {if $name}
-          <p>
-            <strong>{$name}</strong> : {$value}
-          </p>
-          {/if}
-          {/foreach}
-          <br />
-        </div>
+          <h6>{t}IPTC Data{/t}</h6>
+          <div id="iptc" class="photo-static-info">
+            {foreach $photo->myiptc as $name => $value}
+            {if $name}
+            <p>
+              <strong>{$name}</strong> : {$value}
+            </p>
+            {/if}
+            {/foreach}
+            <br />
+          </div>
         {else}
-        <div id="iptc" class="photo-static-info">
-          {t}No available IPTC data.{/t}
-        </div>
+          <div id="iptc" class="photo-static-info">
+            {t}No available IPTC data.{/t}
+          </div>
         {/if}
       </div><!-- /additional-info -->
     </div>
@@ -125,11 +125,6 @@
   $(document).ready(function() {
     $('#description-{$photo->id}').on('change', function(e, ui) {
       fill_tags(jQuery('#description-{$photo->id}').val(),'#metadata-{$photo->id}', '{url name=admin_utils_calculate_tags}');
-    });
-
-    $('.iptc-exif .toggler_{$photo->id}').on('click', function(e, ui) {
-      $(this).parent().find('.info_{$photo->id}').toggle();
-      $(this).find('i').toggleClass('fa-plus-square-o fa-minus-square-o');
     });
   });
 </script>
