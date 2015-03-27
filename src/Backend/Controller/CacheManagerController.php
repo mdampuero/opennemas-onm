@@ -83,24 +83,23 @@ class CacheManagerController extends Controller
         $this->cacheManager = $this->get('template_cache_manager');
         $this->cacheManager->setSmarty($frontpageTemplate);
 
-        $configDir     = $frontpageTemplate ->config_dir[0];
-        $configManager = $this->container->get('template_cache_config_manager')->setConfigDir(
-            $configDir
-        );
+        $configDir       = $frontpageTemplate ->config_dir[0];
+        $configContainer = $this->container->get('template_cache_config_manager');
+        $configManager   = $configContainer->setConfigDir($configDir);
 
         if ($this->request->getMethod() == 'POST') {
             $config = array();
-            $cacheGroups             = $request->request->get('groups');
-            $cacheGroupsCacheEnabled = $request->request->get('enabled');
-            $cacheGroupsLifeTime     = $request->request->get('cache_lifetime');
+            $cacheGroups         = $request->request->get('groups');
+            $cacheGroupsEnabled  = $request->request->get('enabled');
+            $cacheGroupsLifeTime = $request->request->get('lifetime');
 
             foreach ($cacheGroups as $section) {
-                $caching          = (isset($cacheGroupsCacheEnabled[$section]))? 1: 0;
-                $cache_lifetime   = intval($cacheGroupsLifeTime[$section]);
+                $caching  = (isset($cacheGroupsEnabled[$section]))? 1: 0;
+                $lifetime = intval($cacheGroupsLifeTime[$section]);
 
                 $config[$section] = array(
-                    'caching'        => $caching,
-                    'cache_lifetime' => $cache_lifetime,
+                    'caching'  => $caching,
+                    'cache_lifetime' => $lifetime,
                 );
             }
             $saved = $configManager->save($config);
@@ -125,7 +124,7 @@ class CacheManagerController extends Controller
                 'tpl_manager/config.tpl',
                 array(
                     'config'    => $config,
-                    'groupName' => array(
+                    'groupName' => [
                         'frontpages'        => _('Frontpage'),
                         'frontpage-mobile'  => _('Frontpage mobile version'),
                         'articles'          => _('Inner Article'),
@@ -137,24 +136,32 @@ class CacheManagerController extends Controller
                         'video-inner'       => _('Inner video'),
                         'gallery-frontpage' => _('Gallery frontpage'),
                         'gallery-inner'     => _('Gallery Inner'),
+                        'kiosko'            => _('Kiosko'),
+                        'letter-frontpage'  => _('Letter frontpage'),
+                        'letter-inner'      => _('Letter inner'),
+                        'newslibrary'       => _('Newslibrary'),
                         'poll-frontpage'    => _('Polls frontpage'),
                         'poll-inner'        => _('Poll inner'),
-                    ),
-                    'groupIcon' => array(
+                    ],
+                    'groupIcon' => [
                         'frontpages'        => 'frontpage.png',
                         'frontpage-mobile'  => 'mobile.png',
                         'articles'          => 'article.png',
                         'articles-mobile'   => 'mobile.png',
                         'opinion'           => 'opinion.png',
                         'rss'               => 'rss.png',
+                        'sitemap'           => 'sitemap.png',
                         'video'             => 'video.png',
                         'video-inner'       => 'video.png',
                         'gallery-frontpage' => 'album.png',
                         'gallery-inner'     => 'album.png',
-                        'poll-frontpage'    => 'polls.png',
-                        'poll-inner'        => 'polls.png',
-                        'sitemap'           => 'sitemap.png',
-                    ),
+                        'kiosko'            => 'kiosko.png',
+                        'letter-frontpage'  => 'letter.png',
+                        'letter-inner'      => 'letter.png',
+                        'newslibrary'       => 'newslibrary.png',
+                        'poll-frontpage'    => 'poll.png',
+                        'poll-inner'        => 'poll.png',
+                    ],
                 )
             );
         }

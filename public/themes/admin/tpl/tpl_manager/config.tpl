@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_tpl_manager_config}" method="POST">
-
+<form action="{url name=admin_tpl_manager_config}" method="POST" ng-controller="CacheConfigCtrl" ng-init='init({json_encode($config)}); groupName={json_encode($groupName)};groupIcon={json_encode($groupIcon)}'>
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -43,14 +42,13 @@
   </div>
   <div class="content">
     {render_messages}
-
     <div class="grid simple">
       <div class="grid-body no-padding">
         <div class="table-wrapper ng-cloak">
           <table class="table table-hover table-condensed">
             <thead>
               <tr>
-                <th class="center" style="width:10px">
+                <th class="checkbox-cell">
                   <div class="checkbox checkbox-default">
                     <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                     <label for="select-all"></label>
@@ -61,31 +59,24 @@
               </tr>
             </thead>
             <tbody>
-             {foreach from=$config key="k" item="v"}
-             <tr>
+            <tr ng-repeat="(group, item) in config">
               <td>
                 <div class="checkbox check-default">
-                    <input name="enabled[{$k|default:""}]" id="enabled[{$k|default:""}]" {if $v.caching}checked="checked"{/if} value="1" type="checkbox">
-                    <label for="enabled[{$k|default:""}]"></label>
+                  <input id="checkbox[%$index%]" name="enabled[[% group %]]" checklist-model="selected.contents" checklist-value="group" type="checkbox">
+                  <label for="checkbox[%$index%]"></label>
                 </div>
-                <input type="hidden" name="groups[]" value="{$k|default:""}">
+                <input type="hidden" name="groups[[% group %]]" ng-value="group">
               </td>
+              [% selected.groups %]
               <td>
-                <img src="{$params.IMAGE_DIR}template_manager/elements/{$groupIcon.$k}" title="Caché de opinión interior" />
-                {$groupName.$k|default:$k}
+                <img src="{$params.IMAGE_DIR}template_manager/elements/[% groupIcon[group] %]"/>
+                [% groupName[group] %]
               </td>
 
               <td class="right">
-                <input type="text" size="5" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" />
+                <input type="text" size="5" name="lifetime[[% group %]]" ng-model="item.cache_lifetime" ng-value="item.cache_lifetime"/>
               </td>
             </tr>
-            {foreachelse}
-            <tr>
-              <td class="empty" colspan=3>
-               {t}There is no cache configuration available{/t}
-             </td>
-           </tr>
-           {/foreach}
          </tbody>
        </table>
      </div>
