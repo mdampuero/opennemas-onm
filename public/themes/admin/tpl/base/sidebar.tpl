@@ -17,16 +17,16 @@
     </div>
     <div class="user-action-wrapper visible-xs">
       <div class="user-actions cleafix">
-        <div class="user-action ng-cloak" ng-click="mode = 'list'" ng-show="mode && mode != 'list'">
+        <div class="user-action ng-cloak" ng-click="mode = 'list'">
           <i class="fa fa-plus fa-bars"></i>
         </div>
-        <div class="user-action" ng-click="mode = 'create'" ng-show="!mode || mode != 'create'">
+        <div class="user-action" ng-click="mode = 'create'">
           <i class="fa fa-plus fa-lg"></i>
         </div>
-        <div class="user-action" ng-click="mode = 'notifications'" ng-show="!mode || mode != 'notifications'">
+        <div class="user-action" ng-click="mode = 'notifications'">
           <i class="fa fa-bell"></i>
         </div>
-        <div class="user-action no-padding" ng-click="mode = 'profile'" ng-show="!mode || mode != 'profile'">
+        <div class="user-action no-padding" ng-click="mode = 'profile'">
           <div class="profile-pic">
             {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="35"}
           </div>
@@ -80,12 +80,26 @@
         </a>
       </li>
     </ul>
+    <ul class="collapsed notification-list" ng-class="{ 'collapsed': mode != 'notifications'}">
+      <li class="list-title">
+        <span class="title">{t}Notifications{/t}</span>
+      </li>
+      <li class="notification notification-success">
+        <div class="notification-title">Success!</div>
+        <p>{t}This is a notification{/t}</p>
+      </li>
+      <li class="notification notification-error">
+        <div class="notification-title">Error!</div>
+        <p>{t}This is a notification{/t}</p>
+      </li>
+      <li class="notification notification-warning">
+        <div class="notification-title">Warning!</div>
+        <p>{t}This is a notification{/t}</p>
+      </li>
+    </ul>
     <ul class="collapsed" ng-class="{ 'collapsed': mode != 'profile'}">
       <li class="list-title">
         <span class="title">{$smarty.session.realname}</span>
-        <div class="profile-pic">
-          {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
-        </div>
       </li>
       <li>
         <a href="{url name=admin_acl_user_show id=me}">

@@ -1,6 +1,6 @@
 .sidebar-footer-widget {
-  background: @background;
-  height: @height;
+  background: @sidebar-background;
+  height: @sidebar-height;
   padding: 0;
   position: relative;
   right: 0;
@@ -12,7 +12,7 @@
 
     li {
       float: left;
-      height: @height;
+      height: @sidebar-height;
       list-style: none;
       margin: 0;
       overflow: hidden;
@@ -22,7 +22,7 @@
       &.pin {
         cursor: pointer;
         text-align: right;
-        width: @width;
+        width: @sidebar-width;
 
         &:hover {
           color: #fff;
@@ -32,7 +32,7 @@
       i {
         padding: 18px 0;
         text-align: center;
-        width: @collapsed-width;
+        width: @sidebar-width-collapsed;
       }
     }
   }
@@ -44,7 +44,7 @@
       width: 0;
 
       &.pin {
-        width: @collapsed-width;
+        width: @sidebar-width-collapsed;
       }
     }
   }

@@ -1,10 +1,11 @@
 .sidebar {
-  background-color: lighten(@background, 3%);
+  background-color: lighten(@sidebar-background, 3%);
   font-family: 'Open Sans';
   font-size: 14px;
   height: 100%;
-  margin-top: @margin;
-  padding-bottom: @height + @margin;
+  margin-top: @sidebar-margin;
+  opacity: 1;
+  padding-bottom: @sidebar-height + @sidebar-margin;
   position: fixed;
   transition: all .25s;
   z-index: 100;
@@ -15,7 +16,7 @@
     position: relative;
     right: 0;
     transition: all .25s;
-    width: @width;
+    width: @sidebar-width;
 
     ul {
       list-style: none;
@@ -26,7 +27,7 @@
       transition: margin .25s, opacity .35s;
 
       &.collapsed {
-        margin-left: -@width;
+        margin-left: -@sidebar-width;
         opacity: 0;
         transition: margin .25s, opacity .25s
       }
@@ -36,7 +37,7 @@
         overflow: hidden;
         padding: 0;
         position: relative;
-        width: @width;
+        width: @sidebar-width;
 
         &.active {
           font-weight: 400;
@@ -60,9 +61,12 @@
 
           .title {
             display: inline-block;
-            float: left;
-            margin-left: 18px;
+            font-weight: bold;
+            max-width: 150px;
+            overflow: hidden;
             padding-top: 2px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
 
@@ -73,7 +77,7 @@
         }
 
         a {
-          color: @color;
+          color: @sidebar-text-color;
           display: table;
           width: 100%;
 
@@ -83,12 +87,12 @@
 
           i {
             float: left;
-            height: @height;
+            height: @sidebar-height;
             margin: 0;
             padding: 18px 0;
             text-align: center;
             transition: all .25s;
-            width: @collapsed-width;
+            width: @sidebar-width-collapsed;
           }
 
           .arrow {
@@ -108,7 +112,7 @@
           .title {
             display: inline-block;
             float: left;
-            height: @height;
+            height: @sidebar-height;
             overflow: hidden;
             padding: 15px 0;
             transition: all .25s;
@@ -118,8 +122,35 @@
       }
     }
 
+    .list-title {
+      padding: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .notification {
+      border-radius: 3px;
+      color: #fff;
+      margin-bottom: 15px;
+      margin: 5px;
+      padding: 8px;
+      width: 200px;
+
+      &.notification-error {
+        background-color: fade(@error-color, 50%);
+      }
+
+      &.notification-success {
+        background-color: fade(@success-color, 50%);
+      }
+
+      &.notification-warning {
+        background-color: fade(@warning-color, 50%);
+      }
+    }
+
     .sub-menu {
-      background-color: @background;
+      background-color: @sidebar-background;
       clear: both;
       display: none;
       font-weight: 300;
@@ -131,10 +162,10 @@
 
         a {
           i {
-            height: @height - 10px;
-            margin-left: @indentation;
+            height: @sidebar-height - 10px;
+            margin-left: @sidebar-indentation;
             padding: 15px 0;
-            width: @collapsed-width - 10px;
+            width: @sidebar-width-collapsed - 10px;
           }
 
           .title {
@@ -145,16 +176,16 @@
         }
 
         .sub-menu {
-          background-color: darken(@background, 3%);
+          background-color: darken(@sidebar-background, 3%);
 
           li {
             a {
               i {
-                margin-left: @indentation * 2;
+                margin-left: @sidebar-indentation * 2;
               }
 
               .title {
-                max-width: @width - @collapsed-width - (@indentation * 2);
+                max-width: @sidebar-width - @sidebar-width-collapsed - (@sidebar-indentation * 2);
               }
             }
           }
@@ -169,21 +200,28 @@
       width: 210px;
 
       .user-action {
-        background: @background;
+        background: @sidebar-background;
         border-radius: 100%;
         cursor: pointer;
         float: left;
         height: 35px;
-        margin-left: 15px;
-        margin-right: 15px;
+        margin: 0 8px;
         overflow: hidden;
         padding-top: 7px;
         text-align: center;
         width: 35px;
+
+        &:first-child {
+          margin-left: 10px;
+        }
+
+        &:last-child {
+          margin-right: 10px;
+        }
       }
 
       .user-action-content {
-        background-color: @background;
+        background-color: @sidebar-background;
       }
     }
 
@@ -193,14 +231,14 @@
       transition: all .25s;
 
       .profile-wrapper {
-        height: @height;
+        height: @sidebar-height;
         margin: 0 10px 0 0;
         transition: all .25s;
-        width: @collapsed-width;
+        width: @sidebar-width-collapsed;
 
         img {
-          height: @height;
-          width: @collapsed-width;
+          height: @sidebar-height;
+          width: @sidebar-width-collapsed;
           transition: all .25s;
         }
       }
@@ -214,7 +252,7 @@
         .greeting {
           overflow: hidden;
           transition: all .5s;
-          width: @width - @avatar-size - 30px - 10px;
+          width: @sidebar-width - @sidebar-avatar-size - 30px - 10px;
         }
 
         .username {
@@ -222,7 +260,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           transition: all .5s;
-          width: @width - @avatar-size - 30px - 10px;
+          width: @sidebar-width - @sidebar-avatar-size - 30px - 10px;
           white-space: nowrap;
         }
       }
@@ -241,7 +279,7 @@
 }
 
 .sidebar-collapsed {
-  width: @collapsed-width;
+  width: @sidebar-width-collapsed;
 
   ul {
     li {
@@ -287,8 +325,8 @@
 
     .profile-wrapper,
     .profile-wrapper img {
-      height: @height / 2;
-      width: @collapsed-width / 2;
+      height: @sidebar-height / 2;
+      width: @sidebar-width-collapsed / 2;
     }
 
     .user-info {
@@ -341,7 +379,7 @@
       a {
         i {
           margin-left: 0;
-          margin-right: @indentation;
+          margin-right: @sidebar-indentation;
         }
       }
 
@@ -350,7 +388,7 @@
           a {
             i {
               margin-left: 0;
-              margin-right: @indentation;
+              margin-right: @sidebar-indentation;
             }
           }
         }
@@ -401,12 +439,23 @@
   .collapsed > .sidebar .sidebar-wrapper,
   .server-sidebar > .sidebar .sidebar-wrapper {
     width: 0;
+    opacity: 0;
+
+    .user-info-wrapper {
+      padding: 15px;
+
+      .profile-wrapper,
+      .profile-wrapper img {
+        height: @sidebar-height;
+        width: @sidebar-width-collapsed;
+      }
+    }
   }
 }
 
 @media (min-width: @phone-width) and (max-width: (@tablet-width - 1px)) {
   .sidebar {
-    padding-bottom: @margin;
+    padding-bottom: @sidebar-margin;
   }
 
   .server-sidebar > .sidebar .sidebar-wrapper {
