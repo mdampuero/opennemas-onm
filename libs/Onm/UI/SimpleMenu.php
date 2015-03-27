@@ -118,16 +118,21 @@ class SimpleMenu
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 
+            $classes = [];
             if ($isCurrent || $isSubmenuCurrent) {
-                $classes []= 'active';
+                $classes[] = 'active';
             }
             if ($isSubmenuCurrent) {
-                $classes []= 'open';
+                $classes[] = 'open';
+            }
+
+            if (array_key_exists('class', $element)) {
+                $classes[] = $element['class'];
             }
 
             $class = '';
-            if (array_key_exists('class', $element)) {
-                $class = 'class ="'.$element['class'].'"';
+            if (!empty($classes)) {
+                $class = 'class="' . implode(' ', $classes) . '"';
             }
 
             $output = "<li {$class}>"
