@@ -1,13 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-<script>
+<!-- <script>
   $('body').on('click', '.dismiss', function(e, ui) {
     e.preventDefault();
     $.ajax('{url name="admin_acl_user_set_meta"}?initial_tour_done=1');
-    $(this).closest('.well').slideUp('fast');
+    $(this).closest('.welcome-message').slideUp('fast');
   });
-</script>
+</script> -->
 {/block}
 
 {block name="content"}
@@ -28,19 +28,6 @@
 
 <div class="content welcome-page">
   {render_messages}
-
-  <div class="span12">
-    {if !$initial_tour_done}
-    <div class="well">
-      <h4>{t escape=off}<strong>Are you new in Opennemas?</strong> If you need some help getting started to create awesome content, check out our online user documentation.{/t}</h4>
-      <div class="pull-right buttons">
-        <a href="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas" target="_blank" class="btn">{t}Get started{/t}</a>
-        <a href="#dismiss" class="dismiss"> {t}or dismiss{/t}</a>
-      </div>
-    </div>
-    {/if}
-  </div>
-
   <div class="row">
     <div class="col-sm-6">
       <div class="grid simple add-contents">
@@ -48,11 +35,11 @@
           <h4>{t}Add contents to your site{/t}</h4>
         </div>
         <div class="grid-body">
-          <div class="row actions">
+          <div class="actions">
             {is_module_activated name="ARTICLE_MANAGER"}
             {acl isAllowed="ARTICLE_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_article_create}" title="{t}New article{/t}">
+            <div class="button">
+              <a href="{url name=admin_article_create}" title="{t}New article{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-file-o"></i>{t}New article{/t}
               </a>
             </div>
@@ -60,8 +47,8 @@
             {/is_module_activated}
             {is_module_activated name="OPINION_MANAGER"}
             {acl isAllowed="OPINION_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_opinion_create}" title="{t}New opinion{/t}">
+            <div class="button">
+              <a href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-comment-o"></i>{t}New opinion{/t}
               </a>
             </div>
@@ -69,8 +56,8 @@
             {/is_module_activated}
             {is_module_activated name="IMAGE_MANAGER"}
             {acl isAllowed="PHOTO_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_images}" title="{t}Media manager{/t}">
+            <div class="button">
+              <a href="{url name=admin_images}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-image"></i>{t}Upload images{/t}
               </a>
             </div>
@@ -79,8 +66,8 @@
 
             {is_module_activated name="ALBUM_MANAGER"}
             {acl isAllowed="ALBUM_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_album_create}" title="{t}Media manager{/t}">
+            <div class="button">
+              <a href="{url name=admin_album_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-stack-overflow"></i>{t}New Album{/t}
               </a>
             </div>
@@ -89,8 +76,8 @@
 
             {is_module_activated name="VIDEO_MANAGER"}
             {acl isAllowed="VIDEO_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}">
+            <div class="button">
+              <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-video-camera"></i>{t}Upload video{/t}
               </a>
             </div>
@@ -99,8 +86,8 @@
 
             {is_module_activated name="STATIC_PAGES_MANAGER"}
             {acl isAllowed="STATIC_PAGE_CREATE"}
-            <div class="col-xs-12">
-              <a href="{url name=admin_static_pages_create}" title="{t}Media manager{/t}">
+            <div class="button">
+              <a href="{url name=admin_static_pages_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-file-text-o"></i>{t}Static page{/t}
               </a>
             </div>
@@ -141,12 +128,20 @@
       </div>
     </div>
     <div class="col-sm-6">
-      <div class="grid simple help">
-        <div class="grid-title">
-          <h4><i class="fa fa-youtube-play"></i>{t}Need Help?{/t}</h4>
-        </div>
-        <div class="grid-body">
-          <p>{t}We have created a lot of videos that will teach you to perform easy tasks and advanced tasks.{/t}</p>
+      <div class="welcome-message tiles blue col-xs-12">
+        <div class="tiles-body">
+          <h4 class="text-white">{t escape=off}<strong>Are you new in Opennemas?</strong>{/t}</h4>
+
+          <h5 class="text-white">{t}If you need some help getting started to create awesome content, check out our online user documentation.{/t}</h5>
+
+
+          <ul>
+            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas" target="_blank">{t}Get started{/t}</a></li>
+            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase">{t}Online documentation{/t}</a></li>
+            <li><a class="text-white" href="javascript:UserVoice.showPopupWidget();">{t}Contact support{/t}</a></li>
+          </ul>
+          <br>
+          <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
           <div id="myCarousel" class="carousel slide clearfix" data-interval="">
             <!-- Carousel items -->
@@ -163,18 +158,6 @@
             <a class="carousel-control left btn" href="#myCarousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
             <a class="carousel-control right btn" href="#myCarousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
           </div>
-
-          <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}See more help videos in <a href="%1">our YouTube channel</a> or subscribe to it.{/t}</p>
-          <script src="https://apis.google.com/js/plusone.js"></script>
-          <div class="g-ytsubscribe" data-channel="OpennemasPublishing" data-layout="default"></div>
-
-          <hr>
-          <p>{t}If you prefer you can read our online documentation or if you have any doubt ask us.{/t}</p>
-
-          <ul>
-            <li><a href="http://help.opennemas.com/knowledgebase">{t}Online documentation{/t}</a></li>
-            <li><a href="javascript:UserVoice.showPopupWidget();">{t}Contact support{/t}</a></li>
-          </ul>
         </div>
       </div>
     </div>
