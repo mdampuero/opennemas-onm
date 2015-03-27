@@ -131,9 +131,15 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $session = getService('session');
         $sm      = getService('setting_repository');
 
+        $logo = $sm->get('favico');
+
+        if (!empty($logo)) {
+            $logo = $sm->get('site_logo');
+        }
+
         $session->set(
             'instance',
-            [ 'name' => $this->instance->name, 'logo' => $sm->get('site_logo') ]
+            [ 'name' => $this->instance->name, 'logo' => $logo ]
         );
 
         $isSecuredRequest = ($request->headers->get('x-forwarded-proto') == 'https');
