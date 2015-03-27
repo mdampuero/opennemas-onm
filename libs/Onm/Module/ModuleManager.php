@@ -148,7 +148,6 @@ class ModuleManager
                 'KIOSKO_MANAGER'            => _('Kiosko'),
                 'LETTER_MANAGER'            => _('Letters'),
                 'LIBRARY_MANAGER'           => _('Library'),
-                'LOG_SQL'                   => _('SQL Log'),
                 'MENU_MANAGER'              => _('Menus'),
                 'NEWS_AGENCY_IMPORTER'      => _('News Agency importer'),
                 'NEWSLETTER_MANAGER'        => _('Newsletter'),
@@ -315,12 +314,6 @@ class ModuleManager
                     'plan' => 'Other',
                     'name' => _('Library'),
                     'description' => _('With this module users can access all contents by date')
-                ],
-                [
-                    'id'   => 'LOG_SQL',
-                    'plan' => 'Other',
-                    'name' => _('SQL Log'),
-                    'description' => _('Internal module to check sql errors')
                 ],
                 [
                     'id'   => 'MENU_MANAGER',
