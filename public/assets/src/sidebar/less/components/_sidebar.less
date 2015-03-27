@@ -27,6 +27,7 @@
         overflow: hidden;
         padding: 0;
         position: relative;
+        width: @width;
 
         &.active {
           font-weight: 400;
@@ -44,7 +45,8 @@
 
         a {
           color: @color;
-          display: block;
+          display: table;
+          width: 100%;
 
           &:hover {
             color: #fff;
@@ -62,9 +64,7 @@
 
           .arrow {
             margin: 16px 20px 0 0;
-            position: absolute;
-            right: 0;
-            top: 0;
+            float: right;
 
             &:before {
               font-family: 'FontAwesome';
@@ -80,12 +80,10 @@
             display: inline-block;
             float: left;
             height: @height;
-            max-width: @width - @collapsed-width;
             overflow: hidden;
             padding: 15px 0;
             transition: all .25s;
             white-space: nowrap;
-            width: 100%;
           }
         }
       }
@@ -113,7 +111,6 @@
           .title {
             height: 40px;
             padding: 12px 0;
-            max-width: @width - @collapsed-width - @indentation;
             transition: all .3s
           }
         }
@@ -155,7 +152,7 @@
 
       .user-info {
         max-height: 100px;
-        left: 70px;
+        left: 75px;
         position: absolute;
         transition: all .3s;
 
@@ -201,17 +198,6 @@
           width: 50px;
           padding: 18px 0;
         }
-
-        .title {
-          max-width: 0;
-        }
-
-        .arrow {
-          display: inline-block;
-          height: 0;
-          overflow: hidden;
-          width: 0;
-        }
       }
     }
   }
@@ -221,11 +207,6 @@
       a {
         i {
           margin-left: 0;
-        }
-
-        .title {
-          max-width: 0;
-          transition: all .15s;
         }
       }
 
@@ -280,8 +261,7 @@
         }
 
         .arrow {
-          left: 0;
-          right: auto;
+          float: left;
           margin: 16px 0 0 20px;
 
           &:before {
@@ -357,9 +337,11 @@
 @media (max-width: (@phone-width - 1px)) {
   .sidebar {
     display: block;
-    z-index: 100;
+    margin-top: 0;
     opacity: 1;
+    padding-bottom: 0;
     visibility: visible;
+    z-index: 100;
   }
 
   .collapsed > .sidebar .sidebar-wrapper,
@@ -369,6 +351,10 @@
 }
 
 @media (min-width: @phone-width) and (max-width: (@tablet-width - 1px)) {
+  .sidebar {
+    padding-bottom: @margin;
+  }
+
   .server-sidebar > .sidebar .sidebar-wrapper {
     .sidebar-collapsed();
   }
