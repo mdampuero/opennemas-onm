@@ -94,22 +94,12 @@
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="navbar-inner">
       <div class="header-seperation">
-        <div class="layout-collapse pull-left">
-          <div class="btn layout-collapse-toggle" ng-click="sidebar.toggle()">
-            <i class="fa fa-bars fa-lg"></i>
-          </div>
-        </div>
-        <a class="header-static-logo" href="{url name=admin_welcome}">
+        <a class="header-logo pull-left" href="{url name=admin_welcome}">
           <h1>
-          open<strong>nemas</strong>
+            open<strong>nemas</strong>
           </h1>
         </a>
         <div>
-          <a class="header-logo pull-left" href="{url name=admin_welcome}">
-            <h1>
-              open<strong>nemas</strong>
-            </h1>
-          </a>
           {if {count_pending_comments} gt 0}
             <ul class="nav pull-right notifcation-center" ng-if="sidebar.isCollapsed()">
               <li class="dropdown" id="header_inbox_bar">
