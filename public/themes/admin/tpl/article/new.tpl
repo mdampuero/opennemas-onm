@@ -294,7 +294,8 @@
                       {t}Category{/t}
                     </label>
                     <div class="controls">
-                      <select id="category" name="category">
+                      <select id="category" name="category" required="required">
+                        <option value="" >{t}- Select a category -{/t}</option>
                         {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
@@ -309,11 +310,11 @@
                             {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
                             {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
                             &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                            {/if}
-                            {/acl}
-                            {/section}
-                            {/section}
-                            <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
+                          {/if}
+                          {/acl}
+                          {/section}
+                        {/section}
+                        <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
                       </select>
                     </div>
                   </div>
