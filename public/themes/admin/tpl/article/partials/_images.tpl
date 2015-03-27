@@ -138,7 +138,7 @@
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
                         <div class="img-thumbnail" ng-if="!video1">
-                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
                             <i class="fa fa-film fa-2x"></i>
                             <h5>Pick a video</h5>
                           </div>
@@ -149,11 +149,11 @@
                               <div class="thumbnail-action remove-action" ng-click="removeImage('video1')">
                                 <i class="fa fa-trash-o fa-2x"></i>
                               </div>
-                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
                                 <i class="fa fa-film fa-2x"></i>
                               </div>
                             </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
                           </dynamic-image>
                         </div>
                       </div>
@@ -177,7 +177,7 @@
                     <div class="form-group">
                       <div class="thumbnail-placeholder">
                         <div class="img-thumbnail" ng-if="!video2">
-                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
                             <i class="fa fa-film fa-2x"></i>
                             <h5>Pick a video</h5>
                           </div>
@@ -188,11 +188,11 @@
                               <div class="thumbnail-action remove-action" ng-click="removeImage('video2')">
                                 <i class="fa fa-trash-o fa-2x"></i>
                               </div>
-                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
                                 <i class="fa fa-film fa-2x"></i>
                               </div>
                             </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
                           </dynamic-image>
                         </div>
                       </div>
