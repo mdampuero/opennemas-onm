@@ -2,11 +2,6 @@
   <div class="overlay" ng-click="sidebar.open()" ng-mouseenter="sidebar.mouseEnter()"></div>
   <div class="sidebar-wrapper">
   <scrollable>
-    <a class="header-logo pull-left" href="{url name=admin_welcome}">
-      <h1>
-      <span class="first-char">o</span><span class="title-token">pen<strong>nemas</strong></span>
-      </h1>
-    </a>
     <div class="user-info-wrapper clearfix">
       <div class="profile-wrapper">
         {if $smarty.session._sf2_attributes.instance.logo}
