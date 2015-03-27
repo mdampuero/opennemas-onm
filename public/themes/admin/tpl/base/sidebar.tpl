@@ -27,7 +27,7 @@
     <ul>
       <li class="support">
       </li>
-      <li class="pin" ng-click="sidebar.pin()">
+      <li class="pin" ng-click="sidebar.pin()" tooltip="{t}Show/hide sidebar{/t}">
         <i class="fa fa-lg" ng-class="{ 'fa-angle-double-left': sidebar.isPinned(), 'fa-angle-double-right': !sidebar.isPinned()}"></i>
       </li>
     </ul>

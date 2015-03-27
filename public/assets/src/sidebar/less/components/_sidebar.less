@@ -15,6 +15,7 @@
     position: relative;
     right: 0;
     transition: all .25s;
+    min-width: @width;
 
     ul {
       list-style: none;
@@ -80,10 +81,11 @@
             float: left;
             height: @height;
             max-width: @width - @collapsed-width;
-            width: 100%;
             overflow: hidden;
             padding: 15px 0;
             transition: all .25s;
+            white-space: nowrap;
+            width: 100%;
           }
         }
       }
@@ -187,6 +189,8 @@
 }
 
 .sidebar-collapsed {
+  min-width: @collapsed-width;
+
   ul {
     li {
       a {
@@ -350,7 +354,7 @@
   .sidebar-collapsed();
 }
 
-@media (max-width: 767px) {
+@media (max-width: @phone-width - 1px) {
   .sidebar {
     display: block;
     width: @width;
@@ -365,7 +369,7 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: @phone-width) and (max-width: @tablet-width - 1px) {
   .server-sidebar > .sidebar {
     .sidebar-collapsed();
   }
