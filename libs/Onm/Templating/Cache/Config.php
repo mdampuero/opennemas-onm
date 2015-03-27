@@ -50,7 +50,82 @@ class Config
     {
         $filename = $this->configDir . 'cache.conf';
 
-        return parse_ini_file($filename, true);
+        $config = parse_ini_file($filename, true);
+
+        $groups = [
+            'frontpages' => [
+                'name'  => ('Frontpage'),
+                'icon' => 'frontpage.png',
+            ],
+            'frontpage-mobile' => [
+                'name'  => _('Frontpage mobile version'),
+                'icon' => 'mobile.png',
+            ],
+            'articles' => [
+                'name'  => _('Inner Article'),
+                'icon' => 'article.png',
+            ],
+            'articles-mobile' => [
+                'name'  => _('Inner Article mobile version'),
+                'icon' => 'mobile.png',
+            ],
+            'opinion' => [
+                'name'  => _('Inner Opinion'),
+                'icon' => 'opinion.png',
+            ],
+            'rss' => [
+                'name'  => _('RSS'),
+                'icon' => 'rss.png',
+            ],
+            'sitemap' => [
+                'name'  => ('Sitemap'),
+                'icon' => 'sitemap.png',
+            ],
+            'video' => [
+                'name'  => ('Frontpage videos'),
+                'icon' => 'video.png',
+            ],
+            'video-inner' => [
+                'name'  => ('Inner video'),
+                'icon' => 'video.png',
+            ],
+            'gallery-frontpage' => [
+                'name'  => ('Gallery frontpage'),
+                'icon' => 'album.png',
+            ],
+            'gallery-inner' => [
+                'name'  => ('Gallery Inner'),
+                'icon' => 'album.png',
+            ],
+            'kiosko' => [
+                'name'  => ('Kiosko'),
+                'icon' => 'kiosko.png',
+            ],
+            'letter-frontpage' => [
+                'name'  => ('Letter frontpage'),
+                'icon' => 'letter.png',
+            ],
+            'letter-inner' => [
+                'name'  => ('Letter inner'),
+                'icon' => 'letter.png',
+            ],
+            'newslibrary' => [
+                'name'  => ('Newslibrary'),
+                'icon' => 'newslibrary.png',
+            ],
+            'poll-frontpage' => [
+                'name'  => ('Polls frontpage'),
+                'icon' => 'poll.png',
+            ],
+            'poll-inner' => [
+                'name'  => ('Poll inner'),
+                'icon' => 'poll.png',
+            ],
+        ];
+
+        $completeGroups = array_merge_recursive($config, $groups);
+
+        return $completeGroups;
     }
 
     /**

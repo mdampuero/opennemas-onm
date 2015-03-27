@@ -32,6 +32,10 @@ angular.module('BackendApp.controllers').controller('CacheConfigCtrl', [
             this.push(key);
           }
         }, $scope.selected.contents);
+        // Check selectAll if all items are selected
+        if ($scope.selected.contents.length == Object.keys($scope.config).length) {
+          $scope.selected.all = true;
+        };
     }
 
     /**

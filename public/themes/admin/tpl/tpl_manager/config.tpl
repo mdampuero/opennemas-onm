@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_tpl_manager_config}" method="POST" ng-controller="CacheConfigCtrl" ng-init='init({json_encode($config)}); groupName={json_encode($groupName)};groupIcon={json_encode($groupIcon)}'>
+<form action="{url name=admin_tpl_manager_config}" method="POST" ng-controller="CacheConfigCtrl" ng-init='init({json_encode($config)})'>
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -69,8 +69,8 @@
               </td>
               [% selected.groups %]
               <td>
-                <img src="{$params.IMAGE_DIR}template_manager/elements/[% groupIcon[group] %]"/>
-                [% groupName[group] %]
+                <img src="{$params.IMAGE_DIR}template_manager/elements/[% item.icon %]"/>
+                [% item.name %]
               </td>
 
               <td class="right">

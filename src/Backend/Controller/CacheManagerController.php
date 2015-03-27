@@ -98,10 +98,12 @@ class CacheManagerController extends Controller
                 $lifetime = intval($cacheGroupsLifeTime[$section]);
 
                 $config[$section] = array(
-                    'caching'  => $caching,
+                    'caching'        => $caching,
                     'cache_lifetime' => $lifetime,
                 );
             }
+
+            // Save changes on file
             $saved = $configManager->save($config);
 
             if ($saved) {
@@ -116,53 +118,15 @@ class CacheManagerController extends Controller
                 );
             }
 
-            return $this->redirect($this->generateUrl('admin_tpl_manager_config'));
+            return $this->redirect(
+                $this->generateUrl('admin_tpl_manager_config')
+            );
         } else {
             $config = $configManager->load();
 
             return $this->render(
                 'tpl_manager/config.tpl',
-                array(
-                    'config'    => $config,
-                    'groupName' => [
-                        'frontpages'        => _('Frontpage'),
-                        'frontpage-mobile'  => _('Frontpage mobile version'),
-                        'articles'          => _('Inner Article'),
-                        'articles-mobile'   => _('Inner Article mobile version'),
-                        'opinion'           => _('Inner Opinion'),
-                        'rss'               => _('RSS'),
-                        'sitemap'           => _('Sitemap'),
-                        'video'             => _('Frontpage videos'),
-                        'video-inner'       => _('Inner video'),
-                        'gallery-frontpage' => _('Gallery frontpage'),
-                        'gallery-inner'     => _('Gallery Inner'),
-                        'kiosko'            => _('Kiosko'),
-                        'letter-frontpage'  => _('Letter frontpage'),
-                        'letter-inner'      => _('Letter inner'),
-                        'newslibrary'       => _('Newslibrary'),
-                        'poll-frontpage'    => _('Polls frontpage'),
-                        'poll-inner'        => _('Poll inner'),
-                    ],
-                    'groupIcon' => [
-                        'frontpages'        => 'frontpage.png',
-                        'frontpage-mobile'  => 'mobile.png',
-                        'articles'          => 'article.png',
-                        'articles-mobile'   => 'mobile.png',
-                        'opinion'           => 'opinion.png',
-                        'rss'               => 'rss.png',
-                        'sitemap'           => 'sitemap.png',
-                        'video'             => 'video.png',
-                        'video-inner'       => 'video.png',
-                        'gallery-frontpage' => 'album.png',
-                        'gallery-inner'     => 'album.png',
-                        'kiosko'            => 'kiosko.png',
-                        'letter-frontpage'  => 'letter.png',
-                        'letter-inner'      => 'letter.png',
-                        'newslibrary'       => 'newslibrary.png',
-                        'poll-frontpage'    => 'poll.png',
-                        'poll-inner'        => 'poll.png',
-                    ],
-                )
+                ['config' => $config]
             );
         }
     }
