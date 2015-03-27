@@ -37,14 +37,13 @@ tr:hover .listing-inline-actions {
 }
 
 .listing-inline-actions {
-  margin-top: 10px;
+  margin-top: 5px;
   opacity: 0.7;
   clear: both;
-  line-height: 2em;
 }
 
 .listing-inline-actions .link:first-child {
-  padding-left: 0;
+  margin-left:-5px;
 }
 
 .listing-inline-actions .link {
