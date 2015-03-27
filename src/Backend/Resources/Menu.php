@@ -6,6 +6,12 @@
  */
 $menuXml = [
     [
+        'id'      => 'browse',
+        'class'   => 'list-title visible-xs',
+        'title'   => _("Browse")
+    ],
+
+    [
         'id'      => 'welcome',
         'link'    => url('admin_welcome'),
         'title'   => _("Welcome"),
@@ -368,10 +374,17 @@ $menuXml = [
     ],
     [
         'id'      => 'faq_and_support',
+        'class'   => 'visible-xs',
         'link'    => '#',
         'title'   => _("Help & Support"),
         'icon'    => 'fa fa-support',
         'submenu' => [
+            [
+                "id"          => "youtube",
+                "title"       => _("Youtube channel"),
+                "icon"        => "fa fa-youtube",
+                "link"        => 'http://www.youtube.com/user/OpennemasPublishing',
+            ],
             [
                 "id"          => "faq",
                 "title"       => _("FAQ"),

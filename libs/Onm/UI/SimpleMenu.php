@@ -72,7 +72,7 @@ class SimpleMenu
             $output []= $content;
         }
 
-        $menu = "<ul>".implode("", $output)."</ul>";
+        $menu = "<ul ng-class=\"{ 'collapsed': mode && mode != 'list'}\">".implode("", $output)."</ul>";
 
         return $menu;
     }
@@ -118,12 +118,6 @@ class SimpleMenu
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 
-            $classes = [];
-
-            if (!empty($this->getClass($element['class']))) {
-                $classes []= $this->getClass($element['class']);
-            }
-
             if ($isCurrent || $isSubmenuCurrent) {
                 $classes []= 'active';
             }
@@ -132,8 +126,8 @@ class SimpleMenu
             }
 
             $class = '';
-            if (!empty($classes)) {
-                $class = 'class ="'.implode(' ', $classes).'"';
+            if (array_key_exists('class', $element)) {
+                $class = 'class ="'.$element['class'].'"';
             }
 
             $output = "<li {$class}>"
@@ -216,6 +210,12 @@ class SimpleMenu
         $icon = '<i class="fa" ></i>';
         if (array_key_exists('icon', $element)) {
             $icon = '<i class="'.$element['icon'].'" ></i>';
+        }
+
+        if (!array_key_exists('link', $element)) {
+            return "$icon
+                    <span class=\"title\">$title</span>
+                    $arrow";
         }
 
         return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>
