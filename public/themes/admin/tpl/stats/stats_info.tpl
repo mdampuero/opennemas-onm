@@ -1,7 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="content">
+<div class="content my-account-page" ng-app="BackendApp" ng-controller="MyAccountCtrl">
+  <div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-home fa-lg"></i>
+              {t}Account settings{/t}
+            </h4>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   {render_messages}
 
@@ -16,15 +30,13 @@
           <div class="tiles white">
             <div class="row">
               <div class="col-md-3 col-sm-3">
-                <div class="user-profile-pic">
-                  <img width="69" height="69" data-src-retina="assets/img/profiles/avatar2x.jpg" data-src="assets/img/profiles/avatar.jpg" src="assets/img/profiles/avatar.jpg" alt="">
-                </div>
                 <div class="user-mini-description">
-                  <h3 class="text-success semi-bold">
+                  <br>
+                  <h3 class="text-blue semi-bold">
                     2548
                   </h3>
                   <h5>Users</h5>
-                  <h3 class="text-success semi-bold">
+                  <h3 class="text-blue semi-bold">
                     457
                   </h3>
                   <h5>Mb of storage</h5>
@@ -36,10 +48,10 @@
                 <br>
                 <p><i class="fa fa-briefcase"></i>{$instance->created}</p>
                 <p>
-                <i class="fa fa-globe"></i>{implode(', ',$instance->domains)}
+                  <i class="fa fa-globe"></i>{implode(', ',$instance->domains)}
                 </p>
-                <p><i class="fa fa-file-o"></i>Download Resume</p>
-                <p><i class="fa fa-envelope"></i>{$instance->contact_mail}</p>
+                <!-- <p><i class="fa fa-file-o"></i>Download Resume</p> -->
+                <!-- <p><i class="fa fa-envelope"></i>{$instance->contact_mail}</p> -->
               </div>
             </div>
           </div>
@@ -50,7 +62,7 @@
 
         <div class="tiles blue m-b-10">
           <div class="tiles-body">
-            <div class="tiles-title text-black">{t}INSTANCE INFO{/t} </div>
+            <div class="tiles-title text-black">{t}Instance Stats{/t} </div>
 
             <div class="widget-stats">
               <div class="wrapper transparent">
@@ -70,21 +82,17 @@
                 <h5><span class="item-count animate-number semi-bold" data-value="1547" data-animation-duration="700">{$instance->support_plan}&nbsp; <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{$support_description}"></i></span></h5>
               </div>
             </div>
-            <div class="progress transparent progress-small no-radius m-t-20" style="width:100%">
-              <div class="progress-bar progress-bar-white animate-progress-bar" data-percentage="100%" style="width: 100%;"></div>
-            </div>
-            <div class="description"> <span class="text-white mini-description ">Owner email <span class="blend">{$instance->contact_mail}</span></span></div>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-6 col-vlg-3 col-sm-6">
 
         <div class="tiles gray m-b-10">
           <div class="tiles-body">
-            <div class="tiles-title text-black">{t}OWNER{/t} </div>
+            <div class="tiles-title text-black">{t}Account information{/t} </div>
 
-            <div class="description"> <span class="text-white mini-description ">Owner email <span class="blend">{$instance->contact_mail}</span></span></div>
+            <div class="widget-stats">
+              <p><span class="text-white mini-decription">Name <span class="blend">{$instance->name}</span></span></p>
+              <p><span class="text-white mini-description ">Billing CC Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
+            </div>
           </div>
         </div>
       </div>
@@ -139,20 +147,14 @@
                 {foreach $available_modules as $module}
                 {if $module['plan'] eq $plan}
                 <div class="span4 element">
-                  <label class="inline">
-                    <input type="checkbox" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}"
-                    {if in_array($module['id'], $instance->activated_modules)}
-                    checked> {$module['name']} <span class="pending"
-                    {if in_array($module['id'], $upgrade)}
-                    style="display:inline;">({t}pending activation{/t})</span>
-                    {/if}
-                    {else}
-                    > {$module['name']} <span class="pending"
-                    {if in_array($module['id'], $downgrade)}
-                    style="display:inline;">({t}pending deactivation{/t})</span>
-                    {/if}
-                    {/if}
-                  </label>
+                  <div class="checkbox">
+                    <input id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}" type="checkbox"/>
+                    <label id="{$module['name']}">
+                      {$module['name']}
+                      {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
+                      {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
+                    </label>
+                  </div>
                 </div>
                 {/if}
                 {/foreach}
@@ -163,19 +165,17 @@
         </div>
       </form>
       <div class="upgrade right">
-        <button class="btn btn-large btn-success" type="submit" form="upgrade-form"
-        {if $has_changes}
-        disabled>{t}Waiting for upgrade{/t}
-        <input type="hidden" name="waiting-upgrade" id="waiting-upgrade" value="1">
-        {else}
-        >{t}Upgrade instance{/t}
-        {/if}
-      </button>
+        <button class="btn btn-large btn-success" type="submit" form="upgrade-form" {if $has_changes}disabled{/if}>
+          {if $has_changes}
+          {t}Waiting for upgrade{/t}
+          <input type="hidden" name="waiting-upgrade" id="waiting-upgrade" value="1">
+          {else}
+          {t}Upgrade instance{/t}
+          {/if}
+        </button>
+      </div>
     </div>
-    <br>
-    <br>
   </div>
-</div>
 </div>
 {include file="stats/modals/_modal_upgrade_instance.tpl"}
 {/block}
