@@ -1,5 +1,5 @@
-<div class="sidebar" id="main-menu" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" ng-mouseenter="sidebar.mouseEnter()" ng-mouseleave="sidebar.mouseLeave()">
-  <div class="overlay" ng-click="sidebar.open()"></div>
+<div class="sidebar" id="main-menu" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" ng-mouseleave="sidebar.mouseLeave()">
+  <div class="overlay" ng-click="sidebar.open()" ng-mouseenter="sidebar.mouseEnter()"></div>
   <div class="sidebar-wrapper">
   <scrollable>
     <a class="header-logo pull-left" href="{url name=admin_welcome}">
@@ -27,7 +27,7 @@
     <ul>
       <li class="support">
       </li>
-      <li class="pin" ng-click="sidebar.pin()" tooltip="{t}Show/hide sidebar{/t}">
+      <li class="pin" ng-click="sidebar.pin()" tooltip="{t}Show/hide sidebar{/t}" tooltip-placement="right">
         <i class="fa fa-lg" ng-class="{ 'fa-angle-double-left': sidebar.isPinned(), 'fa-angle-double-right': !sidebar.isPinned()}"></i>
       </li>
     </ul>

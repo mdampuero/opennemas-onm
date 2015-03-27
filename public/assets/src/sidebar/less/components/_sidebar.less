@@ -15,7 +15,7 @@
     position: relative;
     right: 0;
     transition: all .25s;
-    min-width: @width;
+    max-width: @width;
 
     ul {
       list-style: none;
@@ -189,7 +189,7 @@
 }
 
 .sidebar-collapsed {
-  min-width: @collapsed-width;
+  max-width: @collapsed-width;
 
   ul {
     li {
@@ -357,7 +357,7 @@
 @media (max-width: @phone-width - 1px) {
   .sidebar {
     display: block;
-    width: @width;
+    width: 0;
     z-index: 100;
     opacity: 1;
     visibility: visible;
