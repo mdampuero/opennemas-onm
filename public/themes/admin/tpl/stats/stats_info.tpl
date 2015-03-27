@@ -21,46 +21,45 @@
 
   <div id="info-page" >
 
-    <div class="row">
-      <div class="col-md6 col-vlg-3 col-sm-6">
-        <div class=" tiles white no-padding">
-          <div class="tiles green cover-pic-wrapper">
-            <img src="http://revox.io/webarch/2.7/assets/img/cover_pic.png" alt="">
-          </div>
-          <div class="tiles white">
-            <div class="row">
-              <div class="col-md-3 col-sm-3">
-                <div class="user-mini-description">
-                  <br>
-                  <h3 class="text-blue semi-bold">
-                    2548
-                  </h3>
-                  <h5>Users</h5>
-                  <h3 class="text-blue semi-bold">
-                    457
-                  </h3>
-                  <h5>Mb of storage</h5>
-                </div>
-              </div>
-              <div class="col-md-8 user-description-box  col-sm-8">
-                <h4 class="semi-bold no-margin">{$instance->name}</h4>
-                <h6 class="no-margin"><a href="http://{$instance->getMainDomain()}">{$instance->getMainDomain()}</a></h6>
+    <div class="col-xs-12 col-sm-6">
+      <div class=" tiles white no-padding col-xs-12">
+        <div class="tiles green cover-pic-wrapper">
+          <img src="http://revox.io/webarch/2.7/assets/img/cover_pic.png" alt="">
+        </div>
+        <div class="tiles white">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <div class="user-mini-description">
                 <br>
-                <p><i class="fa fa-briefcase"></i>{$instance->created}</p>
-                <p>
-                  <i class="fa fa-globe"></i>{implode(', ',$instance->domains)}
-                </p>
-                <!-- <p><i class="fa fa-file-o"></i>Download Resume</p> -->
-                <!-- <p><i class="fa fa-envelope"></i>{$instance->contact_mail}</p> -->
+                <h3 class="text-blue semi-bold">
+                  2548
+                </h3>
+                <h5>Users</h5>
+                <h3 class="text-blue semi-bold">
+                  457
+                </h3>
+                <h5>Mb of storage</h5>
               </div>
+            </div>
+            <div class="col-md-8 user-description-box  col-sm-8">
+              <h4 class="semi-bold no-margin">{$instance->name}</h4>
+              <h6 class="no-margin"><a href="http://{$instance->getMainDomain()}">{$instance->getMainDomain()}</a></h6>
+              <br>
+              <p><i class="fa fa-briefcase"></i>{$instance->created}</p>
+              <p>
+                <i class="fa fa-globe"></i>{implode(', ',$instance->domains)}
+              </p>
+              <!-- <p><i class="fa fa-file-o"></i>Download Resume</p> -->
+              <!-- <p><i class="fa fa-envelope"></i>{$instance->contact_mail}</p> -->
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="col-md-6 col-vlg-3 col-sm-6">
-
-        <div class="tiles blue m-b-10">
+    <div class="col-xs-12 col-sm-6">
+      <div class="row">
+        <div class="tiles blue col-xs-12">
           <div class="tiles-body">
             <div class="tiles-title text-black">{t}Instance Stats{/t} </div>
 
@@ -85,21 +84,41 @@
           </div>
         </div>
 
-        <div class="tiles gray m-b-10">
+          <br>
+        <br>
+        <div class="tiles gray col-xs-12">
           <div class="tiles-body">
             <div class="tiles-title text-black">{t}Account information{/t} </div>
 
             <div class="widget-stats">
-              <p><span class="text-white mini-decription">Name <span class="blend">{$instance->name}</span></span></p>
+              <!-- <p><span class="text-white mini-decription">Name <span class="blend">{$instance->name}</span></span></p> -->
+              <p><span class="text-white mini-description">Name <span class="blend">Fabrizia</span></span></p>
+
+              <p><span class="text-white mini-description ">Contact Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
+            </div>
+          </div>
+        </div>
+
+          <br>
+        <br>
+        <div class="tiles gray col-xs-12">
+        <div class="tiles-body">
+            <div class="tiles-title text-black">{t}Billing information{/t} </div>
+
+            <div class="widget-stats">
+              <p><span class="text-white mini-decription">Name: <span class="blend">John Smith</span></span></p>
+              <p><span class="text-white mini-description">Address: <span class="blend">Kensington Streen, Alabama, US 0x0001</span></span></p>
+              <p><span class="text-white mini-description">Phone:  <span class="blend">+1 07520984</span></span></p>
               <p><span class="text-white mini-description ">Billing CC Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
             </div>
           </div>
         </div>
-      </div>
+        </div>
 
+      </div>
     </div>
 
-    <div>
+    <div class="col-xs-12">
       <h2>{t}Plans & Modules{/t}</h2>
       <p class="lead">{t}Here you can see a list of activated modules by plan{/t}</p>
 
