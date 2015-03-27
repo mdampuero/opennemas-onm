@@ -355,108 +355,18 @@ body.collapsed .messages {
 
   }
 }
-
+.tiles {
+  margin-bottom:10px
+}
 /* Welcome page rules ======================================================= */
 .welcome-page {
   margin-top:40px;
   background:White url(../../../themes/admin/images/welcome-background.png) top right repeat-x;
 
-  .well {
-    position: relative;
-    border: 1px solid #ccc !important;
-    border-radius: 3px;
-    background-color: #6aafcf !important;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.04);
-    padding: 15px 15px !important;
-    overflow: hidden;
-
-    position: relative;
-    border: 1px solid #2a8cba !important;
-    background-color: #6aafcf !important;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.04);
-  }
-  .well h4 {
-    font-weight:normal;
-    margin-top:0;
-    font-size: 18px;
-    font-weight: normal;
-    color: #fff;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-    line-height: 180%;
-    margin-right:200px;
-  }
-  .well div > *  {
-    vertical-align:middle;
-  }
-  .well .buttons {
-    position: absolute;
-    top: 25%;
-    right: 15px;
-    color:white;
-  }
-  .well .buttons .btn {
-    text-decoration:none;
-  }
-  .well .buttons .dismiss:hover {
-    text-decoration: underline;
-    color:White;
-  }
-  .well .buttons .dismiss {
-    margin-top:5px;
-    text-align: center;
-    font-size:1em;
-    font-weight: normal;
-    display:block;
-    float:none;
-    color:white;
-  }
-  .brand-link {
-    font-size:2em;
-    font-weight:bold;
-    padding-top:50px;
-    margin-bottom:40px;
-    text-shadow:1px 1px rgba(0, 0, 0, 0.15);
-  }
-
-  .add-contents .actions > div {
-    vertical-align: top;
-    display:inline-block;
-    list-style:none;
-    margin-bottom:10px;
-  }
-
-  .add-contents .actions a {
-    color:#333;
-    text-decoration: none;
-    margin:0;
-  }
-  .actions a .fa {
-    width:25px;
-    text-align:center
-  }
-  .actions a:hover > .fa {
-    text-decoration: none;
-  }
-
-  .help {
-    box-shadow: none;
-    border:1px solid rgba(204, 24, 30, 0.8);
-
-    .grid-title {
-      background:rgba(204, 24, 30, 0.8);
-      margin:0;
-      position:relative;
-      vertical-align: middle;
-    }
-    .grid-title h4 {
-      color:White;
-    }
-    .grid-title .fa {
-      font-size:1.4em;
-      display:inline-block;
-      margin-right:10px;
-      vertical-align: middle;
-      color:White
+  .welcome-message {
+    .tiles-body {
+      padding:10px;
+      margin-bottom:10px
     }
 
     .carousel {
@@ -472,10 +382,14 @@ body.collapsed .messages {
     }
 
     .carousel-control {
-      color:White;
-      background:rgba(0, 0, 0, 0.4);
-      border:2px solid Gray;
-      width: 10%;
+      color: White;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid Gray;
+      width: 30px;
+      height: 58px;
+      margin-top: 25%;
+      border-radius: 2px;
+      padding-left:7px
     }
     .carousel-control.left {
       left:0;
@@ -488,6 +402,37 @@ body.collapsed .messages {
       display:block;
       font-size:39px;
       text-align:center;
+    }
+  }
+  .brand-link {
+    font-size:2em;
+    font-weight:bold;
+    padding-top:50px;
+    margin-bottom:40px;
+    text-shadow:1px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .add-contents {
+
+    .actions > .button {
+      vertical-align: top;
+      list-style:none;
+      margin-bottom:10px;
+      display:inline-block;
+      width: 49%;
+    }
+
+    .add-contents .actions a {
+      color:#333;
+      text-decoration: none;
+      margin:0;
+    }
+    .actions a .fa {
+      width:25px;
+      text-align:center
+    }
+    .actions a:hover > .fa {
+      text-decoration: none;
     }
   }
 
