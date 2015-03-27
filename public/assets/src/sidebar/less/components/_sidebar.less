@@ -15,7 +15,7 @@
     position: relative;
     right: 0;
     transition: all .25s;
-    max-width: @width;
+    width: @width;
 
     ul {
       list-style: none;
@@ -189,7 +189,7 @@
 }
 
 .sidebar-collapsed {
-  max-width: @collapsed-width;
+  width: @collapsed-width;
 
   ul {
     li {
@@ -354,23 +354,22 @@
   .sidebar-collapsed();
 }
 
-@media (max-width: @phone-width - 1px) {
+@media (max-width: (@phone-width - 1px)) {
   .sidebar {
     display: block;
-    width: 0;
     z-index: 100;
     opacity: 1;
     visibility: visible;
   }
 
-  .collapsed > .sidebar,
-  .server-sidebar > .sidebar {
+  .collapsed > .sidebar .sidebar-wrapper,
+  .server-sidebar > .sidebar .sidebar-wrapper {
     width: 0;
   }
 }
 
-@media (min-width: @phone-width) and (max-width: @tablet-width - 1px) {
-  .server-sidebar > .sidebar {
+@media (min-width: @phone-width) and (max-width: (@tablet-width - 1px)) {
+  .server-sidebar > .sidebar .sidebar-wrapper {
     .sidebar-collapsed();
   }
 }
