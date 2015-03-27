@@ -361,7 +361,6 @@ $menuXml = [
                 "title"       => _("SQL error log"),
                 "icon"        => "fa fa-code",
                 "link"        => url('admin_databaseerrors'),
-                "module_name" => "LOG_SQL",
                 "privilege"   => "ONLY_MASTERS",
             ],
 
