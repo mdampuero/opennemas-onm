@@ -53,6 +53,7 @@
       @Common/components/ngQuickDate/dist/ng-quick-date.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
+      @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
