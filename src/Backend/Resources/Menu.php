@@ -364,6 +364,30 @@ $menuXml = [
                 "privilege"   => "ONLY_MASTERS",
             ],
 
+        ],
+    ],
+    [
+        'id'      => 'faq_and_support',
+        'link'    => '#',
+        'title'   => _("Help & Support"),
+        'icon'    => 'fa fa-support',
+        'submenu' => [
+            [
+                "id"          => "faq",
+                "title"       => _("FAQ"),
+                "link"        => 'http://help.opennemas.com',
+                "icon"        => "fa fa-question-circle",
+                "module_name" => "CACHE_MANAGER",
+                "privilege"   => "CACHE_ADMIN",
+            ],
+            [
+                "id"          => "support",
+                "title"       => _("Contact support"),
+                "icon"        => "fa fa-support",
+                "link"        => 'javascript:UserVoice.showPopupWidget();',
+                "module_name" => "LOG_SQL",
+                "privilege"   => "ONLY_MASTERS",
+            ],
         ]
     ]
 ];
