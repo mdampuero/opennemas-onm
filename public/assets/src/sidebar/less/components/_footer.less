@@ -19,24 +19,10 @@
       padding: 0;
       transition: all .25s;
 
-      &.support {
-        width: @width - @collapsed-width;
-
-        .link {
-          cursor: pointer;
-          display: inline-block;
-          width: @width - @collapsed-width - 10px;
-
-          &:hover {
-            color: #fff;
-          }
-        }
-      }
-
       &.pin {
         cursor: pointer;
-        text-align: center;
-        width: @collapsed-width;
+        text-align: right;
+        width: @width;
 
         &:hover {
           color: #fff;
@@ -47,20 +33,6 @@
         padding: 18px 0;
         text-align: center;
         width: @collapsed-width;
-      }
-
-      .h-seperate {
-        width: 1px;
-        display: inline-block;
-        background: rgba(255,255,255,.25);
-        height: 26px;
-        float: right;
-        margin: 12px 5px 0 4px;
-        transition: all .25s;
-      }
-
-      .title {
-        display: inline-block;
       }
     }
   }
@@ -75,10 +47,6 @@
         &.pin {
           width: @collapsed-width;
         }
-
-        .h-seperate {
-          width: 0;
-        }
       }
     }
   }
@@ -91,15 +59,6 @@
         float: right;
 
         i {
-          float: right;
-        }
-
-        .h-seperate {
-          float: left;
-        }
-
-        .title {
-          padding: 12px 8px;
           float: right;
         }
       }

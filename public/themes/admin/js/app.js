@@ -20,6 +20,7 @@ angular.module(
     'swfobject',
     'ui.bootstrap',
     'ui.sortable',
+    'ui.select',
     'ui.tree',
     'webStorageModule',
     'BackendApp.controllers',

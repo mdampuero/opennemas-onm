@@ -53,6 +53,7 @@
       @Common/components/ngQuickDate/dist/ng-quick-date.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-default-theme.css,
       @Common/components/ngQuickDate/dist/ng-quick-date-plus-default-theme.css,
+      @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
@@ -103,7 +104,7 @@
           open<strong>nemas</strong>
           </h1>
         </a>
-        <div ng-mouseleave="sidebar.mouseLeave()" ng-mouseenter="sidebar.mouseEnter()">
+        <div>
           <a class="header-logo pull-left" href="{url name=admin_welcome}">
             <h1>
               open<strong>nemas</strong>
@@ -134,25 +135,67 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <a href="#">
+            <li class="quicklinks quick-items dropdown">
+              <a href="#" data-toggle="dropdown">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>
+              <div class="dropdown-menu">
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
+                    <a href="{url name=admin_article_create}">
+                      <i class="fa fa-file-text"></i>
+                      <span class="title">{t}Article{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="{url name=admin_opinion_create}">
+                      <i class="fa fa-quote-right"></i>
+                      <span class="title">{t}Opinion{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="{url name=admin_album_create}">
+                      <i class="fa fa-stack-overflow"></i>
+                      <span class="title">{t}Album{/t}</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
+                    <a href="{url name=admin_letter_create}">
+                      <i class="fa fa-envelope"></i>
+                      <span class="title">{t}Letter{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="{url name=admin_special_create}">
+                      <i class="fa fa-star"></i>
+                      <span class="title">{t}Special{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="{url name=admin_static-page_create}">
+                      <i class="fa fa-file-o"></i>
+                      <span class="title">{t}Static page{/t}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </li>
           </ul>
         </div>
-        <!-- END TOP NAVIGATION MENU -->
-        <!-- BEGIN CHAT TOGGLER -->
         <div class="pull-right">
-          <ul class="nav quick-section ">
-            <li class="quicklinks dropdown notifications">
+          <ul class="nav quick-section">
+            <li class="quicklinks notifications dropdown">
               <a href="#" data-toggle="dropdown">
                 <i class="fa fa-bell"></i>
               </a>
               <div class="dropdown-menu">
-                <div class="dropdown-title">Notifications</div>
-                <ul class="notifications-list">
+                <div class="dropdown-title">
+                  {t}Notifications{/t}
+                </div>
+                <ul class="notification-list">
                   <li class="notification-success">
                     <div class="title">Success!</div>
                     <p>{t}This is a notification for a success{/t}</p>
@@ -171,10 +214,33 @@
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <a href="#">
+            <li class="quicklinks quick-items help-items dropdown">
+              <a href="#" data-toggle="dropdown">
                 <i class="fa fa-support"></i>
               </a>
+              <div class="dropdown-menu">
+                <div class="dropdown-title">Help</div>
+                <div class="clearfix quick-items-row">
+                  <div class="quick-item">
+                    <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
+                      <i class="fa fa-youtube"></i>
+                      <span class="title">{t}Youtube channel{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="http://help.opennemas.com" title="{t}F.A.Q.{/t}">
+                      <i class="fa fa-question-circle"></i>
+                      <span class="title">{t}F.A.Q.{/t}</span>
+                    </a>
+                  </div>
+                  <div class="quick-item">
+                    <a href="javascript:UserVoice.showPopupWidget();">
+                      <i class="fa fa-support" title="{t}Contact us{/t}"></i>
+                      <span class="title">{t}Contact us{/t}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </li>
             <li class="quicklinks">
               <span class="h-seperate"></span>
@@ -189,16 +255,23 @@
                 </div>
                 <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu on-right" role="menu" aria-labelledby="dropdownMenu1">
+              <ul class="dropdown-menu on-right" role="menu">
                 <li>
-                  <a href="{url name="admin_acl_user_show" id="me"}">
+                  <a href="{url name=admin_acl_user_show id=me}">
                     <i class="fa fa-user"></i>
                     {t}Profile{/t}
                   </a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                  <a role="menuitem" tabindex="-1" href="{url name="admin_logout"}">
+                  <a href="{url name=admin_getting_started}">
+                    <i class="fa fa-rocket"></i>
+                    {t}Getting started{/t}
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
                     <i class="fa fa-power-off m-r-10"></i>
                     {t}Log out{/t}
                   </a>
@@ -209,7 +282,7 @@
         </div>
       </div>
     </div>
-  </header> <!-- END TOP NAVIGATION BAR -->
+  </header>
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
     <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>

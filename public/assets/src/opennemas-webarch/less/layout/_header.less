@@ -104,7 +104,6 @@
   }
 }
 
-
 .header-static-logo {
   display: none;
   position: absolute;
@@ -113,7 +112,7 @@
   margin-left: -120px;
 }
 
-.layout-collapse{
+.layout-collapse {
   padding: 7px;
   display: none;
 }
@@ -121,8 +120,7 @@
 .layout-collapse-toggle,
 .layout-collapse-toggle:hover,
 .layout-collapse-toggle:focus,
-.layout-collapse-toggle:active,
-.notifications .button {
+.layout-collapse-toggle:active {
   background: #1b1e24;
   color: @header-color;
   border-radius: 0;
@@ -130,74 +128,127 @@
 
 .notifications {
   .dropdown-menu {
-    padding: 15px;
-    width: 400px;
     margin-left: -200px;
-    margin-top: 6px !important;
+    width: 400px;
+  }
+}
 
-    &:after {
-      left: 50%;
-      right: auto !important;
-      margin-left: 3px;
+.notification-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    border-radius: 3px;
+    display: block;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
 
-    &:before {
-      left: 50%;
-      right: auto !important;
-      margin-left: 2px;
-    }
-
-    .dropdown-title {
+    .title {
       font-weight: bold;
-      padding: 8px 0;
-      text-align: center;
-      text-transform: uppercase;
     }
 
-    .notifications-list {
-      list-style: none;
+    p {
+      font-size: 85%;
+      font-style: italic;
       margin: 0;
-      padding: 0;
+    }
+  }
 
-      li {
-        border-radius: 3px;
-        display: block;
-        padding: 8px 10px;
-        margin-bottom: 8px;
+  .notification-error {
+    background-color: fade(@error-color, 25%);
+  }
 
-        &:last-child {
-          margin-bottom: 0;
-        }
+  .notification-success {
+    background-color: fade(@success-color, 25%);
+  }
 
-        .title {
-          font-weight: bold;
-        }
+  .notification-warning {
+    background-color: fade(@warning-color, 25%);
+  }
+}
 
-        p {
-          font-size: 85%;
-          font-style: italic;
-          margin: 0;
-        }
+.quick-items {
+  .dropdown-menu {
+    width: 300px;
+    margin-left: -125px;
+  }
+
+  .quick-items-row {
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .quick-item {
+    float: left;
+    height: 80px;
+    margin-right: 15px;
+    position: relative;
+    text-align: center;
+    width: 80px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    a {
+      border-radius: 4px;
+      color: @header-color;
+      display: block;
+      padding-top: 15px;
+      width: 100%;
+      height: 100%;
+
+      &:hover {
+        background-color: fade(@info-color, 10%);
       }
+    }
 
-      .notification-error {
-        background-color: fade(@error-color, 25%);
-      }
+    i {
+      color: @header-color;
+      display: block !important;
+      font-size: 24px !important;
+    }
 
-      .notification-success {
-        background-color: fade(@success-color, 25%);
-      }
+    .title {
+      bottom: 10px;
+      font-weight: bold;
+      left: 0;
+      overflow: hidden;
+      position: absolute;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 80px;
+    }
+  }
 
-      .notification-warning {
-        background-color: fade(@warning-color, 25%);
-      }
+  &.help-items {
+    .dropdown-menu {
+      margin-left: -150px;
     }
   }
 }
 
-.header .header-seperation .notifcation-center {
-  margin-top:8px;
-  margin-right:8px !important;
+// Override colors for help dropdown
+.header .nav > li.quicklinks .quick-item i {
+  &.fa-question-circle {
+    color: @primary-color !important;
+  }
+
+  &.fa-support {
+    color: #f00 !important;
+  }
+
+  &.fa-youtube {
+    color: @youtube-color !important;
+  }
 }
 
 @media (max-width: 767px) {

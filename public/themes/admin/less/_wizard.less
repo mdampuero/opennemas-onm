@@ -1,3 +1,7 @@
+body {
+    background-color: #555 !important;
+}
+
 .wizard-title {
   display: inline-block;
   margin: 0 auto 50px;
@@ -25,11 +29,19 @@
 
 .wizard-container {
   background-size: cover;
-  display: none;
   height: 100%;
+  opacity: 0;
+  position: absolute;
+  transition: all .25s linear;
+  visibility: hidden;
+  width: 100%;
+  z-index: 0;
 
   &.active {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition: all .5s linear;
+    z-index: 10;
   }
 
   &.welcome,
@@ -188,6 +200,7 @@
   padding-top: 20px;
   position: absolute;
   width: 100%;
+  z-index: 20;
 
   .wizard-footer-wrapper {
     margin: 0 auto;

@@ -35,11 +35,12 @@ class CommentsController extends Controller
      **/
     public function init()
     {
-        $this->statuses = array(
-            \Comment::STATUS_ACCEPTED => _('Accepted'),
-            \Comment::STATUS_REJECTED => _('Rejected'),
-            \Comment::STATUS_PENDING  => _('Pending'),
-        );
+        $this->statuses = [
+            [ 'title' => _('All'), 'value' => -1 ],
+            [ 'title' => _('Accepted'), 'value' => \Comment::STATUS_ACCEPTED ],
+            [ 'title' => _('Rejected'), 'value' => \Comment::STATUS_REJECTED ],
+            [ 'title' => _('Pending'), 'value' => \Comment::STATUS_PENDING ],
+        ];
 
         $this->view->assign('statuses', $this->statuses);
     }
