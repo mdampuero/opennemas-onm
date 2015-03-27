@@ -254,7 +254,7 @@
 
 @media (max-width: 767px) {
   .header {
-    width: 100%;
+    display: none;
   }
 
   .header-logo {
@@ -270,31 +270,13 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
-  .server-sidebar .header .header-seperation  {
-    width: 50px;
-  }
-
-  .server-sidebar .header .header-seperation .first-char {
-    font-size: 36px;
-  }
-
-  .server-sidebar .header .header-seperation .title-token {
-    width: 0;
-  }
-}
-
 @media only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (orientation: portrait) {
   .header-seperation {
-    width: 210px !important;
-    text-align: left;
+    position: relative;
+    width: @header-width !important;
   }
 
-  .collapsed .header .header-seperation  {
-    width: 50px !important;
-  }
-
-  .header .header-quick-nav {
+  .header-quick-nav {
     display: block;
   }
 }
