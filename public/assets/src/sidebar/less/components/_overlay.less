@@ -1,14 +1,8 @@
-.overlay {
-  bottom: 0;
-  height: auto;
-  position: absolute;
-  top: 0;
-  width: 0;
-  z-index: 220;
-
-  -webkit-transition:width .25s;
-  -moz-transition: width .25s;
-  transition: width .25s;
+.sidebar {
+  .overlay {
+    background: none;
+    width: 0;
+  }
 }
 
 .collapsed > .sidebar > .overlay,
@@ -17,13 +11,17 @@
 }
 
 @media (max-width: 767px) {
-  .overlay {
-    display: none;
+  .sidebar {
+    .overlay {
+      display: none;
+    }
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .overlay {
-    width: 50px;
+  .sidebar {
+    .overlay {
+      width: 50px;
+    }
   }
 }

@@ -31,11 +31,15 @@
   margin: 0;
   overflow: hidden;
   padding: 0;
-  padding-left: 210px;
+  padding-left: 50px;
 
   -webkit-transition: all .25s;
   -moz-transition: all .25s;
   transition: all .25s;
+}
+
+.pinned .page-content {
+  padding-left: 210px;
 }
 
 .page-content .content {
@@ -60,11 +64,7 @@
 }
 
 .collapsed .page-container .page-content,
-.collapsed .page-container .page-content .actions-navbar,
-.collapsed .page-container .page-content .selected-navbar,
-.unpinned-on-server .page-container .page-content,
-.unpinned-on-server .page-container .page-content .actions-navbar,
-.unpinned-on-server .page-container .page-content .selected-navbar {
+.unpinned-on-server .page-container .page-content {
     padding-left: 50px;
 }
 
@@ -96,7 +96,14 @@
   .page-container .page-content,
   .page-container .page-content .actions-navbar,
   .page-container .page-content .selected-navbar {
-    left: 210px;
+    left: 50px;
+    padding-left: 0;
+  }
+
+  .pinned .page-container .page-content,
+  .pinned .page-container .page-content .actions-navbar,
+  .pinned .page-container .page-content .selected-navbar {
+    left: 50px;
     padding-left: 0;
   }
 
