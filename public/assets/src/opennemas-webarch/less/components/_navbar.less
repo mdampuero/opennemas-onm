@@ -119,6 +119,17 @@
   }
 }
 
+.filters-navbar {
+  background: @background-color;
+  box-shadow: none;
+  min-height: navbar-height;
+  padding: 7px 15px;
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 350;
+}
+
 .selected-navbar {
   background: #0090d9;
   color: #ffffff;
@@ -147,6 +158,11 @@
   }
 }
 
+.actions-navbar + .filters-navbar,
+.selected-navbar + .filters-navbar {
+  margin-top: @navbar-height;
+}
+
 div[ng-view].ng-leave-active .selected-navbar {
   opacity: 0;
   top: -@navbar-height;
@@ -172,14 +188,24 @@ div[ng-view].ng-leave-active .selected-navbar {
   }
 }
 
-.pinned .page-navbar {
+.pinned .actions-navbar,
+.pinned .selected-navbar {
   padding-left: @sidebar-width;
 }
 
-@media (min-width: @phone-width) and (max-width: @tablet-width - 1) {
-  .column-filters {
-    height: 375px;
-  }
+.collapsed .actions-navbar,
+.collapsed .selected-navbar{
+  padding-left: @sidebar-width-collapsed;
+}
+
+.server-sidebar .actions-navbar,
+.server-sidebar .selected-navbar {
+  padding-left: @sidebar-width;
+}
+
+.unpinned-on-server .actions-navbar,
+.unpinned-on-server .selected-navbar {
+  padding-left: @sidebar-width-collapsed;
 }
 
 @media (max-width: (@phone-width - 1)) {
@@ -192,12 +218,62 @@ div[ng-view].ng-leave-active .selected-navbar {
 
     &.selected-navbar.collapsed {
       opacity: 0;
-      top: 0px;
+      top: -50px;
     }
+  }
+
+  .actions-navbar {
+    background: lighten(@sidebar-background, 3%);
+    color: #fff;
+  }
+
+  .filters-navbar {
+    top: 0;
   }
 
   div[ng-view].ng-leave-active .selected-navbar {
     opacity: 0;
     top: 0px;
   }
+
+  .actions-navbar,
+  .selected-navbar,
+  .pinned .actions-navbar,
+  .pinned .selected-navbar {
+    left: @sidebar-width;
+    padding-left: 0;
+  }
+
+  .collapsed,
+  .server-sidebar {
+    .actions-navbar,
+    .selected-navbar {
+      left: 0;
+      padding-left: 0;
+    }
+  }
 }
+
+@media (min-width: @phone-width) and (max-width: (@tablet-width - 1)) {
+  .column-filters {
+    height: 375px;
+  }
+
+  .actions-navbar,
+  .selected-navbar,
+  .pinned .actions-navbar,
+  .pinned .selected-navbar {
+    left: @sidebar-width;
+    padding-left: 0;
+  }
+
+  .collapsed,
+  .server-sidebar {
+    .actions-navbar,
+    .selected-navbar {
+      left: 0;
+      padding-left: @sidebar-width-collapsed;
+    }
+  }
+}
+
