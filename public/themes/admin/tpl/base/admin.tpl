@@ -88,191 +88,191 @@
     </script>
   {/block}
 </head>
-<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')">
+<body ng-app="BackendApp" ng-controller="MasterCtrl" resizable ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" class="server-sidebar{if $smarty.session.sidebar_pinned === false} unpinned-on-server{/if}" ng-init="init('{$smarty.const.CURRENT_LANGUAGE|default:"en"}')">
   {block name="body"}
-  <header class="header navbar navbar-inverse">
-    <!-- BEGIN TOP NAVIGATION BAR -->
-    <div class="navbar-inner">
-      <div class="header-seperation">
-        <a class="header-logo pull-left" href="{url name=admin_welcome}">
-          <h1>
-            open<strong>nemas</strong>
-          </h1>
-        </a>
-        <div>
-          {if {count_pending_comments} gt 0}
-            <ul class="nav pull-right notifcation-center" ng-if="sidebar.isCollapsed()">
-              <li class="dropdown" id="header_inbox_bar">
-                <a href="{url name=admin_comments}" class="dropdown-toggle">
-                  <div class="iconset top-messages"></div>
-                  <span class="badge animated" id="msgs-badge">{count_pending_comments}</span>
-                </a>
-              </li>
-            </ul>
-          {/if}
-        </div>
-      </div>
-      <div class="header-quick-nav">
-        <!-- BEGIN TOP NAVIGATION MENU -->
-        <div class="pull-left">
-          <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                <i class="fa fa-dashboard"></i>
-                {t}My newspaper{/t}
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks quick-items dropdown">
-              <a href="#" data-toggle="dropdown">
-                <i class="fa fa-plus"></i>
-                {t}Create{/t}
-              </a>
-              <div class="dropdown-menu">
-                <div class="clearfix quick-items-row">
-                  <div class="quick-item">
-                    <a href="{url name=admin_article_create}">
-                      <i class="fa fa-file-text"></i>
-                      <span class="title">{t}Article{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="{url name=admin_opinion_create}">
-                      <i class="fa fa-quote-right"></i>
-                      <span class="title">{t}Opinion{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="{url name=admin_album_create}">
-                      <i class="fa fa-stack-overflow"></i>
-                      <span class="title">{t}Album{/t}</span>
-                    </a>
-                  </div>
-                </div>
-                <div class="clearfix quick-items-row">
-                  <div class="quick-item">
-                    <a href="{url name=admin_letter_create}">
-                      <i class="fa fa-envelope"></i>
-                      <span class="title">{t}Letter{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="{url name=admin_special_create}">
-                      <i class="fa fa-star"></i>
-                      <span class="title">{t}Special{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="{url name=admin_static-page_create}">
-                      <i class="fa fa-file-o"></i>
-                      <span class="title">{t}Static page{/t}</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="pull-right">
-          <ul class="nav quick-section">
-            <li class="quicklinks notifications dropdown">
-              <a href="#" data-toggle="dropdown">
-                <i class="fa fa-bell"></i>
-              </a>
-              <div class="dropdown-menu">
-                <div class="dropdown-title">
-                  {t}Notifications{/t}
-                </div>
-                <ul class="notification-list">
-                  <li class="notification-success">
-                    <div class="title">Success!</div>
-                    <p>{t}This is a notification for a success{/t}</p>
-                  </li>
-                  <li class="notification-error">
-                    <div class="title">Error!</div>
-                    <p>{t}This notification is an error{/t}</p>
-                  </li>
-                  <li class="notification-warning">
-                    <div class="title">Warning!</div>
-                    <p>{t}This notification is a warning{/t}</p>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks quick-items help-items dropdown">
-              <a href="#" data-toggle="dropdown">
-                <i class="fa fa-support"></i>
-              </a>
-              <div class="dropdown-menu">
-                <div class="dropdown-title">Help</div>
-                <div class="clearfix quick-items-row">
-                  <div class="quick-item">
-                    <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
-                      <i class="fa fa-youtube"></i>
-                      <span class="title">{t}Youtube channel{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="http://help.opennemas.com" title="{t}F.A.Q.{/t}">
-                      <i class="fa fa-question-circle"></i>
-                      <span class="title">{t}F.A.Q.{/t}</span>
-                    </a>
-                  </div>
-                  <div class="quick-item">
-                    <a href="javascript:UserVoice.showPopupWidget();">
-                      <i class="fa fa-support" title="{t}Contact us{/t}"></i>
-                      <span class="title">{t}Contact us{/t}</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks user-info dropdown">
-              <span class="link" data-toggle="dropdown">
-                <span class="title">
-                  {$smarty.session.realname}
-                </span>
-                <div class="profile-pic">
-                  {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
-                </div>
-                <i class="fa fa-angle-down"></i>
-              </span>
-              <ul class="dropdown-menu on-right" role="menu">
-                <li>
-                  <a href="{url name=admin_acl_user_show id=me}">
-                    <i class="fa fa-user"></i>
-                    {t}Profile{/t}
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a href="{url name=admin_getting_started}">
-                    <i class="fa fa-rocket"></i>
-                    {t}Getting started{/t}
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
-                    <i class="fa fa-power-off m-r-10"></i>
-                    {t}Log out{/t}
+    <div class="overlay"></div>
+    <header class="header navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="header-seperation">
+          <a class="header-logo pull-left" href="{url name=admin_welcome}">
+            <h1>
+              open<strong>nemas</strong>
+            </h1>
+          </a>
+          <div>
+            {if {count_pending_comments} gt 0}
+              <ul class="nav pull-right notifcation-center" ng-if="sidebar.isCollapsed()">
+                <li class="dropdown" id="header_inbox_bar">
+                  <a href="{url name=admin_comments}" class="dropdown-toggle">
+                    <div class="iconset top-messages"></div>
+                    <span class="badge animated" id="msgs-badge">{count_pending_comments}</span>
                   </a>
                 </li>
               </ul>
-            </li>
-          </ul>
+            {/if}
+          </div>
+        </div>
+        <div class="header-quick-nav">
+          <!-- BEGIN TOP NAVIGATION MENU -->
+          <div class="pull-left">
+            <ul class="nav quick-section">
+              <li class="quicklinks">
+                <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                  <i class="fa fa-dashboard"></i>
+                  {t}My newspaper{/t}
+                </a>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks quick-items dropdown">
+                <a href="#" data-toggle="dropdown">
+                  <i class="fa fa-plus"></i>
+                  {t}Create{/t}
+                </a>
+                <div class="dropdown-menu">
+                  <div class="clearfix quick-items-row">
+                    <div class="quick-item">
+                      <a href="{url name=admin_article_create}">
+                        <i class="fa fa-file-text"></i>
+                        <span class="title">{t}Article{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="{url name=admin_opinion_create}">
+                        <i class="fa fa-quote-right"></i>
+                        <span class="title">{t}Opinion{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="{url name=admin_album_create}">
+                        <i class="fa fa-stack-overflow"></i>
+                        <span class="title">{t}Album{/t}</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="clearfix quick-items-row">
+                    <div class="quick-item">
+                      <a href="{url name=admin_letter_create}">
+                        <i class="fa fa-envelope"></i>
+                        <span class="title">{t}Letter{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="{url name=admin_special_create}">
+                        <i class="fa fa-star"></i>
+                        <span class="title">{t}Special{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="{url name=admin_static-page_create}">
+                        <i class="fa fa-file-o"></i>
+                        <span class="title">{t}Static page{/t}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="pull-right">
+            <ul class="nav quick-section">
+              <li class="quicklinks notifications dropdown">
+                <a href="#" data-toggle="dropdown">
+                  <i class="fa fa-bell"></i>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-title">
+                    {t}Notifications{/t}
+                  </div>
+                  <ul class="notification-list">
+                    <li class="notification-success">
+                      <div class="title">Success!</div>
+                      <p>{t}This is a notification for a success{/t}</p>
+                    </li>
+                    <li class="notification-error">
+                      <div class="title">Error!</div>
+                      <p>{t}This notification is an error{/t}</p>
+                    </li>
+                    <li class="notification-warning">
+                      <div class="title">Warning!</div>
+                      <p>{t}This notification is a warning{/t}</p>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks quick-items help-items dropdown">
+                <a href="#" data-toggle="dropdown">
+                  <i class="fa fa-support"></i>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-title">Help</div>
+                  <div class="clearfix quick-items-row">
+                    <div class="quick-item">
+                      <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
+                        <i class="fa fa-youtube"></i>
+                        <span class="title">{t}Youtube channel{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="http://help.opennemas.com" title="{t}F.A.Q.{/t}">
+                        <i class="fa fa-question-circle"></i>
+                        <span class="title">{t}F.A.Q.{/t}</span>
+                      </a>
+                    </div>
+                    <div class="quick-item">
+                      <a href="javascript:UserVoice.showPopupWidget();">
+                        <i class="fa fa-support" title="{t}Contact us{/t}"></i>
+                        <span class="title">{t}Contact us{/t}</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="quicklinks">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks user-info dropdown">
+                <span class="link" data-toggle="dropdown">
+                  <span class="title">
+                    {$smarty.session.realname}
+                  </span>
+                  <div class="profile-pic">
+                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="25"}
+                  </div>
+                  <i class="fa fa-angle-down"></i>
+                </span>
+                <ul class="dropdown-menu on-right" role="menu">
+                  <li>
+                    <a href="{url name=admin_acl_user_show id=me}">
+                      <i class="fa fa-user"></i>
+                      {t}Profile{/t}
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="{url name=admin_getting_started}">
+                      <i class="fa fa-rocket"></i>
+                      {t}Getting started{/t}
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a role="menuitem" tabindex="-1" href="{url name=admin_logout}">
+                      <i class="fa fa-power-off m-r-10"></i>
+                      {t}Log out{/t}
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
     <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>
