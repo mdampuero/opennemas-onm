@@ -137,7 +137,7 @@
             </select>
           </li>
           <li class="quicklinks hidden-xs hidden-sm">
-            <select class="xmedium" ng-model="pagination.epp">
+            <select class="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
