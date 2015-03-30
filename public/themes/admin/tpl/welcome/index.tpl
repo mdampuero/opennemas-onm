@@ -136,9 +136,9 @@
 
 
           <ul>
-            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas" target="_blank">{t}Get started{/t}</a></li>
-            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase">{t}Online documentation{/t}</a></li>
-            <li><a class="text-white" href="javascript:UserVoice.showPopupWidget();">{t}Contact support{/t}</a></li>
+            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas" target="_blank">{t}First steps in opennemas{/t}</a></li>
+            <li><a class="text-white" href="http://help.opennemas.com/knowledgebase">{t}Detailed documentation{/t}</a></li>
+            <li><a class="text-white" href="javascript:UserVoice.showPopupWidget();">{t}Contact us for help{/t}</a></li>
           </ul>
           <br>
           <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
