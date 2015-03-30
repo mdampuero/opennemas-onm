@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div method="post" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div method="post" ng-app="BackendApp" ng-controller="TrashListCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -14,6 +14,18 @@
             </h4>
           </li>
         </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              {acl isAllowed="ARTICLE_CREATE"}
+              <button class="btn btn-danger" type="button" ng-click="removeAll()">
+                <i class="fa fa-trash-o"></i>
+                {t}Remove all{/t}
+              </button>
+              {/acl}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -270,6 +282,24 @@
 
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     {include file="common/modals/_modalBatchRemovePermanently.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-remove-all">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+    <h4 class="modal-title">
+        <i class="fa fa-trash-o"></i>
+        {t}Delete all trashed contents{/t}
+    </h4>
+  </div>
+  <div class="modal-body">
+      <p>{t escape=off}Are you sure you want to remove permanently all the contents inside the trash?{/t}</p>
+  </div>
+  <div class="modal-footer">
+      <span class="loading" ng-if="deleting == 1"></span>
+      <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove all{/t}</button>
+      <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+  </div>
   </script>
 </div>
 {/block}

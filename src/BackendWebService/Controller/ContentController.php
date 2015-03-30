@@ -522,6 +522,85 @@ class ContentController extends Controller
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function emptyTrashAction(Request $request)
+    {
+        // Check permissions
+        if (!in_array('TRASH_ADMIN', $this->getUser()->getRoles())) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), 'TRASH_ADMIN')
+                        )
+                    )
+                )
+            );
+        }
+
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        $contents = $this->get('entity_repository')->findBy([
+            'in_litter' => [
+                [
+                    'operator' => '=',
+                    'value'    => '1'
+                ]
+            ]
+        ]);
+
+        if (is_array($contents) && count($contents) > 0) {
+            foreach ($contents as $content) {
+                $id = $content->id;
+                if (!is_null($content->id)) {
+                    try {
+                        $content->remove($id);
+                        $updated[] = $id;
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
+                            'type'    => 'error'
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'messages'  => array_merge($success, $errors)
+            )
+        );
+    }
+
+    /**
      * Toggles content available property.
      *
      * @param  integer      $id          Content id.
