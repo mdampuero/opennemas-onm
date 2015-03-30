@@ -178,7 +178,7 @@
           <div class="pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks notifications dropdown">
-                <a href="#" data-toggle="dropdown">
+                <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
                   <i class="fa fa-bell"></i>
                 </a>
                 <div class="dropdown-menu">
@@ -205,7 +205,7 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks quick-items help-items dropdown">
-                <a href="#" data-toggle="dropdown">
+                <a href="#" data-toggle="dropdown" tooltip="{t}Help center{/t}" tooltip-placement="bottom">
                   <i class="fa fa-support"></i>
                 </a>
                 <div class="dropdown-menu">
