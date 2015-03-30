@@ -13,7 +13,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <a class="btn btn-primary yes" href="{url name=admin_frontpage_list category=$category}">{t}Reload frontpage{/t}</a>
+        <a class="btn btn-primary yes" href="#">{t}Reload frontpage{/t}</a>
         <a class="btn no" href="#">{t}Close{/t}</a>
       </div>
     </div>

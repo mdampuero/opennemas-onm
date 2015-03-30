@@ -167,6 +167,10 @@ jQuery(function($) {
         e.preventDefault();
         $('#modal-new-version').modal('hide');
     });
+    $('#modal-new-version').on('click', 'a.btn.yes', function(e,ui) {
+        e.preventDefault();
+        location.reload();
+    });
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
