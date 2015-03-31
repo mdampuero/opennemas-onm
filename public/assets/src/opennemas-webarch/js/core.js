@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 
   //**********************************BEGIN MAIN MENU********************************
-  jQuery('.page-sidebar li > a').on('click', function(e) {
+  $('.page-sidebar li > a').on('click', function(e) {
     var item = $(this).parent();
     var visible = item.hasClass('open');
     var submenu = $(this).next();
@@ -33,24 +33,29 @@ $(document).ready(function() {
 
   //***********************************BEGIN Lazyload images*****************************
   if ($.fn.lazyload) {
-    $("img.lazy").lazyload({
-      effect: "fadeIn"
+    $('img.lazy').lazyload({
+      effect: 'fadeIn'
     });
   }
 });
 
 // Opennemas inclusions
 (function($) {
+  'use strict';
+  $('.select2-multi').select2({
+    dropdownAutoWidth: true,
+    closeOnSelect:false
+  });
   $('.select2').select2({
     dropdownAutoWidth: true,
     formatSelection: function(state) {
       var element = state.element;
-      if ($(element).parents('.select2').data('label') != null) {
+      if ($(element).parents('.select2').data('label') !== null) {
         return $(element).parents('.select2').data('label') + ': ' + state.text;
       }
 
-      return state.text
+      return state.text;
     }
   });
   $('.select2-arrow').append('<i class="select2-arrow-down fa fa-angle-down"></i>');
-})(jQuery);
+})($);

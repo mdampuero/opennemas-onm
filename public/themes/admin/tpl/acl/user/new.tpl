@@ -279,7 +279,7 @@
                                         <label for="id_user_group">
                                             {t}User group{/t}
                                         </label>
-                                        <select class="select2" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
+                                        <select class="select2-multi" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
                                             {if $smarty.session.isMaster}
                                                 <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
                                             {/if}
@@ -298,14 +298,14 @@
                                         <label for="id_user_group">
                                             {t}Categories{/t}
                                         </label>
-                                        <select class="select2" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
+                                        <select class="select2-multi" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
                                             <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
                                             {foreach item="c_it" from=$content_categories}
                                                 <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
                                                 {if count($c_it->childNodes)>0}
                                                     {foreach item="sc_it" from=$c_it->childNodes}
                                                         <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                                                &nbsp; &rArr; {$sc_it->title}
+                                                                {$sc_it->title}
                                                         </option>
                                                     {/foreach}
                                                 {/if}
