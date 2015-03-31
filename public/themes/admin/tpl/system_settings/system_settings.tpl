@@ -1,230 +1,278 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-     {stylesheets src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css" filters="cssrewrite"}
-        <link rel="stylesheet" href="{$asset_url}">
-    {/stylesheets}
+{stylesheets
+  src="@AdminTheme/js/jquery/jquery_colorpicker/css/colorpicker.css,
+  @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+  <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
 
-    <style type="text/css">
-      .colorpicker {
-        z-index: 10;
-      }
-    </style>
-{/block}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
+  <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
+  <style type="text/css">
+    .colorpicker {
+      z-index: 10;
+    }
+  </style>
+  {/block}
 
-{block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
-        @Common/js/onm/md5.min.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
+  {block name="footer-js" append}
+  {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
+  @Common/js/onm/md5.min.js"}
+  <script type="text/javascript" src="{$asset_url}"></script>
+  {/javascripts}
 
-    <script type="text/javascript">
+  <script type="text/javascript">
 
     jQuery(document).ready(function($) {
         //Color Picker jQuery
         $('#site_color').ColorPicker({
-            onSubmit: function(hsb, hex, rgb, el) {
-                $(el).val(hex);
-                $(el).ColorPickerHide();
-            },
-            onChange: function (hsb, hex, rgb) {
-                $('#site_color').val(hex);
-                $('.colorpicker_viewer').css('background-color', '#' + hex);
-            },
-            onBeforeShow: function () {
-                $(this).ColorPickerSetColor(this.value);
-            }
-        }).bind('keyup', function(){
+          onSubmit: function(hsb, hex, rgb, el) {
+            $(el).val(hex);
+            $(el).ColorPickerHide();
+          },
+          onChange: function (hsb, hex, rgb) {
+            $('#site_color').val(hex);
+            $('.colorpicker_viewer').css('background-color', '#' + hex);
+          },
+          onBeforeShow: function () {
             $(this).ColorPickerSetColor(this.value);
+          }
+        }).bind('keyup', function(){
+          $(this).ColorPickerSetColor(this.value);
         });
 
         toogleSiteLogo = function(value) {
           console.log(value);
-            if(value == 0) {
-                $('#site_logo_block').hide();
-            } else {
-                $('#site_logo_block').show();
-            }
+          if(value == 0) {
+            $('#site_logo_block').hide();
+          } else {
+            $('#site_logo_block').show();
+          }
         }
 
         $('.check-pass').on('click', function(e, ui){
-            e.preventDefault();
-            var passInput = $('#onm_digest_pass');
-            var btn = $(this);
-            if (passInput.attr('type') == 'password') {
-                passInput.prop('type','text');
-            } else {
-                passInput.prop('type','password');
-            }
+          e.preventDefault();
+          var passInput = $('#onm_digest_pass');
+          var btn = $(this);
+          if (passInput.attr('type') == 'password') {
+            passInput.prop('type','text');
+          } else {
+            passInput.prop('type','password');
+          }
 
-            btn.find('i').toggleClass('fa-unlock-alt');
+          btn.find('i').toggleClass('fa-unlock-alt');
         });
-    });
-    </script>
-{/block}
 
-{block name="content"}
-  <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
-    <div class="page-navbar actions-navbar">
-      <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-          <ul class="nav quick-section">
-            <li class="quicklinks">
-              <h4>
-                <i class="fa fa-cogs fa-lg"></i>
-                {t}Settings{/t}
-              </h4>
-            </li>
-          </ul>
-          <div class="all-actions pull-right">
+        // Avatar image uploader
+        $('.fileinput').fileinput({
+          name: 'site_logo',
+          uploadtype:'image'
+        });
+      });
+    </script>
+    {/block}
+
+    {block name="content"}
+    <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
+      <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" value="1">
-                  <i class="fa fa-save"></i>
-                  {t}Save{/t}
-                </button>
+                <h4>
+                  <i class="fa fa-cogs fa-lg"></i>
+                  {t}Settings{/t}
+                </h4>
               </li>
             </ul>
+            <div class="all-actions pull-right">
+              <ul class="nav quick-section">
+                <li class="quicklinks">
+                  <button class="btn btn-primary" type="submit" value="1">
+                    <i class="fa fa-save"></i>
+                    {t}Save{/t}
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="content">
-      {render_messages}
+      <div class="content">
+        {render_messages}
 
-      <div class="grid simple">
-        <div class="grid-body no-padding">
-          <tabset>
-            <tab heading="{t}General{/t}">
-              <div class="tab-wrapper">
-                <div class="row">
-                  <div class="col-md-8">
-                    <div class="form-group">
-                      <label class="form-label" for="site_name">
-                        {t}Site name{/t}
-                      </label>
-                      <span class="help">
-                        {t}This will be displayed as your site name.{/t}
-                      </span>
-                      <div class="controls">
-                        <input class="form-control" id="site_name" name="site_name" required="required" type="text" value="{$configs['site_name']|default:""}" class="input-xlarge">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_agency">
-                        {t}Site agency{/t}
-                      </label>
-                      <span class="help">
-                        {t}This will be displayed as the default article signature.{/t}
-                      </span>
-                      <div class="controls">
-                        <input class="form-control"  id="site_agency" name="site_agency" type="text" value="{$configs['site_agency']|default:""}">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_color">
-                        {t}Site color{/t}
-                      </label>
-                      <span class="help">
-                        {t}Color used for links, menus and some widgets.{/t}
-                      </span>
-                      <div class="controls">
-                        <div class="input-group">
-                          <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                          </span>
-                          <input class="form-control colorpicker_input" id="site_color" name="site_color" readonly="readonly" type="text" value="{$configs['site_color']|default:""}">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_footer">
-                        {t}Footer text{/t}
-                      </label>
-                      <span class="help">
-                        {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
-                      </span>
-                      <div class="controls">
-                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label class="form-label" for="section_settings[allowLogo]" >
-                        {t}Use custom logo{/t}
-                      </label>
-                      <div class="controls">
-                        <select id="section_settings[allowLogo]" name="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);">
-                          <option value="0">{t}No{/t}</option>
-                          <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group" id="site_logo_block"  {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
+        <div class="grid simple">
+          <div class="grid-body no-padding">
+            <tabset>
+              <tab heading="{t}General{/t}">
+                <div class="tab-wrapper">
+                  <div class="row">
+                    <div class="col-md-8">
                       <div class="form-group">
-                        <label class="form-label" for="site_logo">
-                          {t}Site logo{/t}
+                        <label class="form-label" for="site_name">
+                          {t}Site name{/t}
                         </label>
+                        <span class="help">
+                          {t}This will be displayed as your site name.{/t}
+                        </span>
                         <div class="controls">
-                          <input class="form-control" id="site_logo" name="site_logo" type="file">
-                          {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
-                          {/if}
+                          <input class="form-control" id="site_name" name="site_name" required="required" type="text" value="{$configs['site_name']|default:""}" class="input-xlarge">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="form-label" for="favico">
-                          {t}Favico{/t}
+                        <label class="form-label" for="site_agency">
+                          {t}Site agency{/t}
                         </label>
+                        <span class="help">
+                          {t}This will be displayed as the default article signature.{/t}
+                        </span>
                         <div class="controls">
-                          <input id="favico" name="favico" type="file">
-                          {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
-                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
-                          {/if}
+                          <input class="form-control"  id="site_agency" name="site_agency" type="text" value="{$configs['site_agency']|default:""}">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="form-label" for="mobile_logo">{t}Site Mobile logo{/t}</label>
+                        <label class="form-label" for="site_footer">
+                          {t}Footer text{/t}
+                        </label>
+                        <span class="help">
+                          {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
+                        </span>
                         <div class="controls">
-                          <input id="mobile_logo" name="mobile_logo" type="file">
-                          {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                          <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
-                          {/if}
+                          <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </tab>
-            <tab heading="{t}SEO{/t}">
-              <div class="tab-wrapper">
-                <div class="row">
-                  <div class="col-md-6">
-                    <h4>{t}SEO options{/t}</h4>
-                    <div class="form-group">
-                      <label class="form-label" for="site_title">
-                        {t}Site title{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="site_title" name="site_title" type="text" value="{$configs['site_title']|default:""}">
+              </tab>
+              <tab heading="{t}Appearance{/t}">
+                <div class="tab-wrapper">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label class="form-label" for="site_color">
+                          {t}Site color{/t}
+                        </label>
+                        <span class="help">
+                          {t}Color used for links, menus and some widgets.{/t}
+                        </span>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
+                              &nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                            <input class="form-control colorpicker_input" id="site_color" name="site_color" readonly="readonly" type="text" value="{$configs['site_color']|default:""}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="controls">
+                          <div class="checkbox">
+                            <input type="checkbox" id="section_settings_allowLogo" name="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);" {if $configs['section_settings']['allowLogo'] eq "1"}checked="checked"{/if} />
+                            <label id="section_settings_allowLogo">
+                              {t}Use custom logo{/t}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group" id="site_logo_block">
+                        <label class="form-label" for="site_logo">
+                          {t}Site logo{/t}
+                        </label>
+                        <div class="controls">
+                          <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                            {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                              <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" alt="{t}Site logo{/t}" style="max-height:90px"/>
+                            </div>
+                            {else}
+                            No logo selected
+                            {/if}
+                            <div>
+                              <span class="btn btn-file">
+                                <span class="fileinput-new">{t}Pick image{/t}</span>
+                                <span class="fileinput-exists">{t}Change{/t}</span>
+                                <input type="file"/>
+                                <input type="hidden" name="site_logo" class="file-input" value="1">
+                              </span>
+                              <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                <i class="fa fa-trash-o"></i>
+                                {t}Remove{/t}
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
+                        <!-- <div class="form-group">
+                          <label class="form-label" for="site_logo">
+                            {t}Site logo{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="site_logo" name="site_logo" type="file">
+                            {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
+                            {/if}
+                          </div>
+                        </div> -->
+                        <div class="form-group">
+                          <label class="form-label" for="favico">
+                            {t}Favico{/t}
+                          </label>
+                          <div class="controls">
+                            <input id="favico" name="favico" type="file">
+                            {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
+                            {/if}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="mobile_logo">{t}Site Mobile logo{/t}</label>
+                          <div class="controls">
+                            <input id="mobile_logo" name="mobile_logo" type="file">
+                            {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
+                            {/if}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_description">
-                        {t}Site description{/t}
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="site_description" name="site_description">{$configs['site_description']|default:""}</textarea>
+                  </div>
+                </div>
+              </tab>
+              <tab heading="{t}SEO{/t}">
+                <div class="tab-wrapper">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h4>{t}SEO options{/t}</h4>
+                      <div class="form-group">
+                        <label class="form-label" for="site_title">
+                          {t}Site title{/t}
+                        </label>
+                        <div class="controls">
+                          <textarea class="form-control" id="site_title" name="site_title" rows="5">{$configs['site_title']|default:""}</textarea>
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="site_description">
-                       {t}Site keywords{/t}
-                     </label>
-                     <div class="controls">
-                        <textarea class="form-control" id="site_keywords" name="site_keywords">{$configs['site_keywords']|default:""}</textarea>
+                      <div class="form-group">
+                        <label class="form-label" for="site_description">
+                          {t}Site description{/t}
+                        </label>
+                        <div class="controls">
+                        <textarea class="form-control" id="site_description" name="site_description" rows="5">{$configs['site_description']|default:""}</textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="site_description">
+                         {t}Site keywords{/t}
+                       </label>
+                       <div class="controls">
+                        <textarea class="form-control" id="site_keywords" name="site_keywords" rows="5">{$configs['site_keywords']|default:""}</textarea>
                       </div>
                     </div>
                   </div>
@@ -324,26 +372,26 @@
                         </div>
                       </div>
                       {is_module_activated name="FRONTPAGES_LAYOUT"}
-                        <div class="col-md-6 form-group">
-                          <label class="form-label" for="items_in_blog">
-                            {t}Items per blog page{/t}
-                          </label>
-                          <div class="controls">
-                            <input class="form-control" id="items_in_blog" name="items_in_blog" type="number" value="{$configs['items_in_blog']|default:10}">
-                          </div>
+                      <div class="col-md-6 form-group">
+                        <label class="form-label" for="items_in_blog">
+                          {t}Items per blog page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="items_in_blog" name="items_in_blog" type="number" value="{$configs['items_in_blog']|default:10}">
                         </div>
+                      </div>
                       {/is_module_activated}
                     </div>
                     {is_module_activated name="FORM_MANAGER"}
-                      <h4>{t}Form Module{/t}</h4>
-                      <div class="form-group">
-                        <label class="form-label" for="contact_email">
-                          {t}Contact email{/t}
-                        </label>
-                        <div class="controls">
-                          <input class="form-control" id="contact_email" name="contact_email" type="text" value="{$configs['contact_email']}">
-                        </div>
+                    <h4>{t}Form Module{/t}</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="contact_email">
+                        {t}Contact email{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="contact_email" name="contact_email" type="text" value="{$configs['contact_email']}">
                       </div>
+                    </div>
                     {/is_module_activated}
                   </div>
                 </div>
@@ -500,45 +548,45 @@
                   </div>
                 </div>
                 {is_module_activated name="PAYWALL"}
-                  <h4>{t}Paypal Settings{/t}</h4>
-                  <div class="form-group">
-                    <label class="form-label" for="paypal_mail">
-                      {t}Account email:{/t}
-                    </label>
-                    <div class="controls">
-                      <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
-                      <div class="help">
-                        {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
-                      </div>
+                <h4>{t}Paypal Settings{/t}</h4>
+                <div class="form-group">
+                  <label class="form-label" for="paypal_mail">
+                    {t}Account email:{/t}
+                  </label>
+                  <div class="controls">
+                    <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
+                    <div class="help">
+                      {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
                     </div>
                   </div>
+                </div>
                 {/is_module_activated}
 
                 {is_module_activated name="NEWS_AGENCY_IMPORTER"}
-                  <h4>{t}Opennemas News Agency{/t}</h4>
-                  <div class="form-group">
-                    <label class="form-label" for="onm_digest_user">
-                      {t}User{/t}
-                    </label>
-                    <div class="controls">
-                      <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
-                    </div>
+                <h4>{t}Opennemas News Agency{/t}</h4>
+                <div class="form-group">
+                  <label class="form-label" for="onm_digest_user">
+                    {t}User{/t}
+                  </label>
+                  <div class="controls">
+                    <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
                   </div>
-                  <div class="form-group">
-                    <label class="form-label" for="onm_digest_pass">
-                      {t}Password{/t}
-                    </label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
-                        <div class="input-group-btn">
-                          <button class="btn check-pass" type="button">
-                            <i class="fa fa-lock"></i>
-                          </button>
-                        </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="onm_digest_pass">
+                    {t}Password{/t}
+                  </label>
+                  <div class="controls">
+                    <div class="input-group">
+                      <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
+                      <div class="input-group-btn">
+                        <button class="btn check-pass" type="button">
+                          <i class="fa fa-lock"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
+                </div>
                 {/is_module_activated}
                 <h4>{t}Recaptcha{/t}</h4>
                 <div class="form-group">
@@ -560,28 +608,28 @@
                     <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
                   </div>
                 </div>
-                  <h4>{t}OJD Statistics{/t}</h4>
-                  <div class="form-group">
-                    <label class="form-label" for="ojd_page_id">
-                      {t}OJD Page ID{/t}
-                    </label>
-                    <div class="controls">
-                      <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
-                      <div class="help">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
+                <h4>{t}OJD Statistics{/t}</h4>
+                <div class="form-group">
+                  <label class="form-label" for="ojd_page_id">
+                    {t}OJD Page ID{/t}
+                  </label>
+                  <div class="controls">
+                    <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
+                    <div class="help">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
+                  </div>
+                </div>
+                <h4>{t}ComScore Statistics{/t}</h4>
+                <div class="form-group">
+                  <label class="form-label" for="comscore_page_id">
+                    {t}comScore Page ID{/t}
+                  </label>
+                  <div class="controls">
+                    <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
+                    <div class="help">
+                      {t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}
                     </div>
                   </div>
-                  <h4>{t}ComScore Statistics{/t}</h4>
-                  <div class="form-group">
-                    <label class="form-label" for="comscore_page_id">
-                      {t}comScore Page ID{/t}
-                    </label>
-                    <div class="controls">
-                      <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
-                      <div class="help">
-                        {t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}
-                      </div>
-                    </div>
-                  </div>
+                </div>
               </div>
             </tab>
           </tabset>
@@ -589,4 +637,4 @@
       </div>
     </div>
   </form>
-{/block}
+  {/block}
