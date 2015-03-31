@@ -61,7 +61,6 @@
       @Common/src/angular-picker/less/main.less,
       @Common/src/sidebar/less/main.less,
       @Common/src/opennemas-webarch/css/base/*,
-      @Common/src/opennemas-webarch/css/components/*,
       @Common/src/opennemas-webarch/css/layout/*,
       @Common/src/opennemas-webarch/css/main.less,
       @Common/src/opennemas-webarch/less/main.less,

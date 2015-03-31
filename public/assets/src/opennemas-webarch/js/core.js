@@ -1,7 +1,6 @@
 $(document).ready(function() {
   'use strict';
 
-
   //**********************************BEGIN MAIN MENU********************************
   $('.page-sidebar li > a').on('click', function(e) {
     var item = $(this).parent();
