@@ -150,12 +150,12 @@
     {is_module_activated name="SYNC_MANAGER"}
       {if count($elements) > 0}
         <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($elements)|replace:'"':'\''}">
-          <div ng-repeat="(site, syncCategories) in elements">
+          <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
-            <div class="form-group" ng-repeat="category in syncCategories">
+            <div class="form-group" ng-repeat="category in params.categories" >
               <div class="checkbox">
-                <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-                <label for="checkbox-poll-[% $index %]">
+                <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
+                <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
                   [% category %]
                 </label>
               </div>
@@ -180,12 +180,12 @@
       {is_module_activated name="SYNC_MANAGER"}
        {if count($elements) > 0}
         <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|replace:'"':'\''}">
-          <div ng-repeat="(site, syncCategories) in elements">
+          <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
-            <div class="form-group" ng-repeat="category in syncCategories">
+            <div class="form-group" ng-repeat="category in params.categories">
               <div class="checkbox">
-                <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-                <label for="checkbox-poll-[% $index %]">
+                <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
+                <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
                   [% category %]
                 </label>
               </div>

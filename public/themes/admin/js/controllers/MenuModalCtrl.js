@@ -44,6 +44,14 @@ angular.module('BackendApp.controllers').controller('MenuModalCtrl', [
           item.link = $scope.selected[i].link;
         }
 
+        if (
+          $scope.type === 'syncCategory' ||
+          $scope.type === 'syncBlogCategory'
+        ) {
+          item.link  = $scope.selected[i];
+          item.title = $scope.selected[i];
+        }
+
         items.push(item);
       }
 
