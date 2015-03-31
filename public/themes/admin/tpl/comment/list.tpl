@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar filters-navbar">
+    <div class="page-navbar filters-navbar" ng-if="!loading">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -75,7 +75,7 @@
               <span class="add-on">
                 <span class="fa fa-search fa-lg"></span>
               </span>
-              <input autofocus class="no-boarder" ng-model="criteria.body_like" placeholder="{t}Search by body{/t}" type="text">
+              <input class="no-boarder" ng-model="criteria.body_like" placeholder="{t}Search by body{/t}" type="text">
             </li>
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
@@ -131,8 +131,11 @@
             <div class="loading-spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
-          <div ng-if="contents.length == 0">
-            <h5>{t}No comments matched your criteria.{/t}</h5>
+          <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+            <div class="center">
+              <h4>{t}Unable to find any comment that matches your search.{/t}</h4>
+              <h6>{t}Maybe changing any filter could help.{/t}</h6>
+            </div>
           </div>
           <div class="table-wrapper ng-cloak" ng-if="!loading">
             <table class="table table-hover no-margin" ng-if="contents.length > 0">
@@ -191,11 +194,11 @@
             </table>
           </div>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-          <div class="pagination-info pull-left" ng-if="contents.length > 0">
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="pagination-info pull-left">
             {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
           </div>
-          <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
+          <div class="pull-right pagination-wrapper">
           <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
         </div>
       </div>
