@@ -4,25 +4,18 @@
   <scrollable>
     <div class="user-info-wrapper clearfix">
       <div class="profile-wrapper">
-        {if $smarty.session._sf2_attributes.instance.logo}
-          <img src="{$smarty.const.INSTANCE_MEDIA}/sections/{$smarty.session._sf2_attributes.instance.logo}" />
-        {else}
           <img src="/assets/images/launcher-icons/IOS-60@2x.png" />
-        {/if}
       </div>
-      <div class="user-info">
+      <div class="user-info" ng-click="mode = 'list'">
         <div class="greeting">{t}Welcome{/t}</div>
         <div class="username" title="{$smarty.session._sf2_attributes.instance.name}">{$smarty.session._sf2_attributes.instance.name}</div>
       </div>
     </div>
     <div class="user-action-wrapper visible-xs">
       <div class="user-actions cleafix">
-        <div class="user-action ng-cloak" ng-click="mode = 'list'">
-          <i class="fa fa-plus fa-bars"></i>
-        </div>
-        <div class="user-action" ng-click="mode = 'create'">
-          <i class="fa fa-plus fa-lg"></i>
-        </div>
+        <a class="user-action" href="javascript:UserVoice.showPopupWidget();">
+          <i class="fa fa-question fa-lg"></i>
+        </a>
         <div class="user-action" ng-click="mode = 'notifications'">
           <i class="fa fa-bell"></i>
         </div>
@@ -33,58 +26,14 @@
         </div>
       </div>
     </div>
-    <ul class="collapsed" ng-class="{ 'collapsed': mode != 'create'}">
-      <li class="list-title">
-        <span class="title">{t}Create{/t}</span>
-      </li>
-      <li>
-        <a href="{url name=admin_article_create}">
-          <i class="fa fa-file-text"></i>
-          <span class="title">{t}New article{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_opinion_create}">
-          <i class="fa fa-quote-right"></i>
-          <span class="title">{t}New opinion{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_letter_create}">
-          <i class="fa fa-envelope"></i>
-          <span class="title">{t}New letter{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_album_create}">
-          <i class="fa fa-stack-overflow"></i>
-          <span class="title">{t}New album{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_poll_create}">
-          <i class="fa fa-pie-chart"></i>
-          <span class="title">{t}New poll{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_special_create}">
-          <i class="fa fa-star"></i>
-          <span class="title">{t}New special{/t}</span>
-        </a>
-      </li>
-      <li>
-        <a href="{url name=admin_static_page_create}">
-          <i class="fa fa-file"></i>
-          <span class="title">{t}New static page{/t}</span>
-        </a>
-      </li>
-    </ul>
     <ul class="collapsed notification-list" ng-class="{ 'collapsed': mode != 'notifications'}">
       <li class="list-title">
         <span class="title">{t}Notifications{/t}</span>
       </li>
-      <li class="notification notification-success">
+      <li class="notification">
+        <p>{t}No notifications for now{/t}</p>
+      </li>
+      <!-- <li class="notification notification-success">
         <div class="notification-title">Success!</div>
         <p>{t}This is a notification{/t}</p>
       </li>
@@ -95,7 +44,7 @@
       <li class="notification notification-warning">
         <div class="notification-title">Warning!</div>
         <p>{t}This is a notification{/t}</p>
-      </li>
+      </li> -->
     </ul>
     <ul class="collapsed" ng-class="{ 'collapsed': mode != 'profile'}">
       <li class="list-title">

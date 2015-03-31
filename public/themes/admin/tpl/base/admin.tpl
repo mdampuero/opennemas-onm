@@ -209,7 +209,7 @@
                   <i class="fa fa-support"></i>
                 </a>
                 <div class="dropdown-menu">
-                  <div class="dropdown-title">Help</div>
+                  <div class="dropdown-title">{t}Help center{/t}</div>
                   <div class="clearfix quick-items-row">
                     <div class="quick-item">
                       <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
