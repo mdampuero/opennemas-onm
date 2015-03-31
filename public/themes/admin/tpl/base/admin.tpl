@@ -118,7 +118,7 @@
             <ul class="nav quick-section">
               <li class="quicklinks">
                 <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                  <i class="fa fa-dashboard"></i>
+                  <i class="fa fa-bullseye"></i>
                   {t}My newspaper{/t}
                 </a>
               </li>
