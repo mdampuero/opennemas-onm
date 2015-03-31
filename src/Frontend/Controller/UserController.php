@@ -118,7 +118,6 @@ class UserController extends Controller
 
             // If checks are both false and pass is valid then send mail
             if (count($errors) <= 0) {
-
                 $url = $this->generateUrl('frontend_user_activate', array('token' => $data['token']), true);
 
                 $tplMail = new \Template(TEMPLATE_USER);
@@ -334,7 +333,10 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', _('There was an error while creating your user account.'));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _('There was an error while creating your user account.')
+            );
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }
@@ -700,11 +702,9 @@ class UserController extends Controller
         // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
-        foreach ($syncParams as $siteUrl => $categoriesToSync) {
-            foreach ($categoriesToSync as $value) {
-                if (preg_match('/'.$categoryName.'/i', $value)) {
-                    $wsUrl = $siteUrl;
-                }
+        foreach ($syncParams as $siteUrl => $values) {
+            if (in_array($categoryName, $values['categories'])) {
+                $wsUrl = $siteUrl;
             }
         }
 

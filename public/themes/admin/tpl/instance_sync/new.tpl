@@ -25,75 +25,55 @@
 
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-    $('#connect').on('click',function(e){
-      e.preventDefault();
-      var url = $('#site_url').serialize();
+  $('#connect').on('click',function(e){
+    e.preventDefault();
+    var data = $('#formulario').serialize();
 
-      $.ajax({
-        type: 'POST',
-        url: '{url name=admin_instance_sync_fetch_categories}',
-        data: url,
-        dataType: 'html',
-        beforeSend: function() {
-          $('#loading').show();
-        }
-      }).success(function(data) {
-        $('#categories').html(data).show();
-
-        $('#loading').hide();
-        $('#colorDiv').show();
-      });
+    $.ajax({
+      type: 'POST',
+      url: '{url name=admin_instance_sync_fetch_categories}',
+      data: data,
+      dataType: 'html',
+      beforeSend: function() {
+        $('#loading').show();
+        $('.output').hide();
+      }
+    }).success(function(data) {
+      $('#categories').html(data).show();
+      $('#loading').hide();
+    });
   });
 
+  $(document).ready(function($) {
+    var color = $('.colorpicker_viewer');
+    var inpt  = $('#color');
+    var btn   = $('.reset-button');
 
-
-  //   jQuery('#color-picker').ColorPicker({
-  //     onSubmit: function(hsb, hex, rgb, el) {
-  //       jQuery(el).val(hex);
-  //       jQuery(el).ColorPickerHide();
-  //     },
-  //     onChange: function (hsb, hex, rgb) {
-  //       jQuery('.colorpicker_viewer').css('background-color', '#' + hex);
-  //     },
-  //     onBeforeShow: function () {
-  //       jQuery(this).ColorPickerSetColor(this.value);
-  //     }
-  //   }).bind('keyup', function(){
-  //     jQuery(this).ColorPickerSetColor(this.value);
-  //   });
-
-  // });
-
-    $(document).ready(function($) {
-      var color = $('.colorpicker_viewer');
-      var inpt  = $('#color');
-      var btn   = $('.reset-button');
-
-      inpt.ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-          $(el).val(hex);
-          $(el).ColorPickerHide();
-        },
-        onChange: function (hsb, hex, rgb) {
-          inpt.val(hex);
-          color.css('background-color', '#' + hex);
-          color.css('border-color', '#' + hex);
-        },
-        onBeforeShow: function () {
-          $(this).ColorPickerSetColor(this.value);
-        }
-      })
-      .bind('keyup', function(){
+    inpt.ColorPicker({
+      onSubmit: function(hsb, hex, rgb, el) {
+        $(el).val(hex);
+        $(el).ColorPickerHide();
+      },
+      onChange: function (hsb, hex, rgb) {
+        inpt.val(hex);
+        color.css('background-color', '#' + hex);
+        color.css('border-color', '#' + hex);
+      },
+      onBeforeShow: function () {
         $(this).ColorPickerSetColor(this.value);
-      });
-
-      btn.on('click', function(e, ui){
-        inpt.val( '{setting name="site_color"}' );
-        color.css('background-color', '#' + '{setting name="site_color"}');
-        color.css('border-color', '#' + '{setting name="site_color"}');
-        e.preventDefault();
-      });
+      }
+    })
+    .bind('keyup', function(){
+      $(this).ColorPickerSetColor(this.value);
     });
+
+    btn.on('click', function(e, ui){
+      inpt.val( '{setting name="site_color"}' );
+      color.css('background-color', '#' + '{setting name="site_color"}');
+      color.css('border-color', '#' + '{setting name="site_color"}');
+      e.preventDefault();
+    });
+  });
 });
 </script>
 {/block}
@@ -147,23 +127,35 @@ jQuery(document).ready(function($) {
         <div class="form-group">
           <label for="site_url" class="form-label">{t}Site URL{/t}</label>
           <div class="controls">
+            <input type="text" required="required" name="site_url" id="site_url" value="{$site['site_url']}" placeholder="{t}http://example.com{/t}" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="username" class="form-label">{t}Username{/t}</label>
+          <div class="controls">
+            <input type="text" required="required" id="username" name="username" value="{$site['username']}" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">{t}Password{/t}</label>
+          <div class="controls">
             <div class="input-group">
-              <input type="text" required="required" name="site_url" id="site_url" value="{$site_url}" placeholder="{t}http://example.com{/t}" class="form-control">
-              <span class="input-group-addon primary" id="connect">
-                <span class="arrow"></span>
-                <i class="fa fa-plug"></i>
-                <button class="link" type="button">{t}Connect{/t}</button>
-              </span>
+              <input type="password" required="required" id="password" name="password" value="{$site['password']}" class="form-control"/>
+              <div class="input-group-btn">
+                <button class="btn check-pass" type="button">
+                  <i class="fa fa-lock"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
         <div class="form-group">
           <label for="site_color" class="form-label">{t}Site color{/t}</label>
           <div class="input-group">
-            <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$site_color|default:"#000"|trim}">
+            <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$site['site_color']|default:"#000"|trim}">
               &nbsp;&nbsp;&nbsp;&nbsp;
             </span>
-            <input class="form-control" size="6" type="text" id="color" name="site_color" value="{$site_color|default:"#000"|trim}">
+            <input class="form-control" size="6" type="text" id="color" name="site_color" value="{$site['site_color']|default:"#000"|trim}">
             <span class="input-group-btn">
               <button class="btn btn-default reset-button">
                 {t}Reset color{/t}
@@ -172,16 +164,18 @@ jQuery(document).ready(function($) {
           </div>
         </div>
 
+        <p class="col-md-12">
+          <a href="#" id="connect" class="btn btn-primary pull-right">{t}Connect{/t}</a>
+        </p>
+
         <div id="categories">
-          {include file="instance_sync/partials/_list_categories.tpl"}
+          {$output}
           <div class="spinner-wrapper" id="loading">
             <div class="loading-spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
           </div>
         </div>
-
       </div>
-
     </div>
   </div>
 </form>

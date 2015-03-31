@@ -2,9 +2,8 @@
 {block name="header-css" append}
 <style type="text/css">
   .colorpicker_viewer {
-    border-top-right-radius: 3px !important;
-    border-bottom-right-radius: 3px !important;
-    display:block;
+    width: 40px;
+    height: 40px;
   }
 </style>
 {/block}
@@ -43,9 +42,7 @@
 </div>
 
 <div class="content">
-
   {render_messages}
-
   <div class="grid simple">
     <div class="grid-body {if count($elements) >0}no-padding{/if}">
       {if count($elements) >0}
@@ -57,44 +54,38 @@
             <th style="width:10% !important;" class="hidden-xs">{t}Color{/t}</th>
           </tr>
         </thead>
-
         <tbody>
-          {foreach $elements as $num => $config}
-          {foreach $config as $site => $categories}
+          {foreach $elements as $siteUrl => $config}
           <tr>
             <td>
-              <strong>{$site}</strong>
-              <div class="visible-xs">{t}Categories to sync{/t}: {$categories|implode:", "}</div>
+              <strong>{$siteUrl}</strong>
+              <div class="visible-xs">{t}Categories to sync{/t}: {$config['categories']|implode:", "}</div>
               <div class="visible-xs">
-                <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
+                <div class="colorpicker_viewer" style="background-color:#{$config['site_color']};"></div>
               </div>
-
               <div class="listing-inline-actions">
-                <a class="link" href="{url name=admin_instance_sync_show site_url=$site}" title="{t}Edit{/t}" class="btn">
+                <a class="link" href="{url name=admin_instance_sync_show site_url=$siteUrl}" title="{t}Edit{/t}" class="btn">
                   <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
-                <a class="link link-danger" href="{url name=admin_instance_sync_delete site_url=$site}" title="{t}Delete{/t}"  class="btn btn-danger">
+                <a class="link link-danger" href="{url name=admin_instance_sync_delete site_url=$siteUrl}" title="{t}Delete{/t}" class="btn btn-danger">
                   <i class="fa fa-trash-o"></i> {t}Remove{/t}
                 </a>
               </div>
             </td>
             <td class="hidden-xs">
-              {$categories|implode:", "}
+              {$config['categories']|implode:", "}
             </td>
             <td class="hidden-xs">
-              <div class="colorpicker_viewer" style="background-color:#{$site_color[$site]};"></div>
+              <div class="colorpicker_viewer" style="background-color:#{$config['site_color']};"></div>
             </td>
           </tr>
-          {/foreach}
           {/foreach}
         </tbody>
       </table>
       {else}
-      <div class="listing-no-contents">
-        <div class="center">
-          <h4>{t}There are no synchronize settings available{/t}</h4>
-          <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
-        </div>
+      <div class="center">
+        <h4>{t}There are no synchronize settings available{/t}</h4>
+        <p>{t}Try adding one site to synchronize on the config button above.{/t}</p>
       </div>
       {/if}
     </div>
