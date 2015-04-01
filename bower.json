@@ -42,7 +42,7 @@
     "datatables": "~1.10.*",
     "datatables-responsive": "~1.0.*",
     "dropzone": "~3.*",
-    "eonasdan-bootstrap-datetimepicker": "4.0.*",
+    "eonasdan-bootstrap-datetimepicker": "4.7.*",
     "fancybox": "~2.1.*",
     "fastclick": "~1.0.*",
     "FitText.js": "~1.2.*",
