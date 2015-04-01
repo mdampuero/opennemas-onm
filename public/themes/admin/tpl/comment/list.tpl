@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar filters-navbar" ng-if="!loading">
+    <div class="page-navbar filters-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
@@ -83,7 +83,7 @@
             <li class="quicklinks">
               <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
                 <ui-select-match placeholder="Select a report">
-                    <strong>{t}Status{/t}:</strong>
+                    {t}Status{/t}:
                     [% $select.selected.title %]
                 </ui-select-match>
                 <ui-select-choices repeat="item.value as item in statuses" ng-init="statuses = {json_encode($statuses)|replace:'"':'\''}">
@@ -94,7 +94,7 @@
             <li class="quicklinks">
               <ui-select name="view" theme="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
                 <ui-select-match placeholder="Select a report">
-                    <strong>{t}View{/t}:</strong>
+                    {t}View{/t}:
                     [% $select.selected %]
                 </ui-select-match>
                 <ui-select-choices repeat="item in [10,25,50,100]">
@@ -106,7 +106,7 @@
           <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
             <li class="quicklinks hidden-xs">
               <span class="info">
-                [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
+                <div onm-paginator onm-paginator-string="%s-%s of %s"></div>
               </span>
             </li>
             <li class="quicklinks form-inline pagination-links">
