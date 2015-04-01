@@ -358,6 +358,7 @@ div#content-provider #toggler{
     margin:0;
     background:#222;
     color: #CFCFCF !important;
+    border-radius: 0;
 }
 #content-provider .pagination *:first-child {
     display: inline-block;
@@ -368,6 +369,7 @@ div#content-provider #toggler{
     background: none repeat scroll 0 0 #333333;
     border: 1px solid #444444;
     color: White !important;
+    padding: 0 5px;
 }
 
 #frontpagemanager:not(.home) .suggested {
