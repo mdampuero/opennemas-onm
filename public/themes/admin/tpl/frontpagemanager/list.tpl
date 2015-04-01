@@ -174,7 +174,7 @@
                   <span class="info">{t}Managing frontpage:{/t}</span>
                 </li>
                 <li>
-                    <select name="category" id="categoryItem" class="select2">
+                    <select name="category" id="categoryItem" class="select2" data-label="{t}Frontpage{/t}">
                     {acl hasCategoryAccess=0}
                         <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
                     {/acl}
@@ -209,7 +209,7 @@
                 </ul>
                 <ul class="nav quick-section pull-right">
                     <li class="quicklinks">
-                        <select name="category" id="categoryItem" class="select2">
+                        <select name="category" id="categoryItem" class="select2" data-label="{t}Frontpage{/t}">
                             {acl hasCategoryAccess=0}
                             <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
                             {/acl}
@@ -262,7 +262,6 @@
         </div><!-- /frontpagemanager -->
 
         <div id="content-provider" class="clearfix hidden-xs ng-cloak" title="{t}Available contents{/t}">
-            <div class="loading-spinner"></div>
             <div class="content-provider-block-wrapper clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}
@@ -272,7 +271,7 @@
                     </li>
                     {else}
                     <li>
-                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
+                        <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
@@ -297,7 +296,6 @@
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
                     <li>
-
                         <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
                     </li>
                     {/is_module_activated}
