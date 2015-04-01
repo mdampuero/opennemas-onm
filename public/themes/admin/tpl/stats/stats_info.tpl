@@ -28,17 +28,17 @@
         </div>
         <div class="tiles white">
           <div class="row">
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-3 col-sm-3">
               <div class="user-mini-description">
                 <br>
                 <h3 class="text-blue semi-bold">
-                  2548
+                  {$instance->users}
                 </h3>
-                <h5>Users</h5>
+                <h5>{t}Users{/t}</h5>
                 <h3 class="text-blue semi-bold">
-                  457
+                  {$instance->media_size|string_format:"%.2f"}
                 </h3>
-                <h5>Mb of storage</h5>
+                <h5>{t}Mb of storage{/t}</h5>
               </div>
             </div>
             <div class="col-md-8 user-description-box  col-sm-8">
