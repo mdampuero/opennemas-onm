@@ -912,17 +912,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
-     * Returns a list of numbers with
+     * Returns a number of pages for the total amount of contents
      */
-    $scope.getPagesArray = function() {
-      var numberOfPages = 1;
-
-      // Calculate
-      if ($scope.pagination.total > $scope.pagination.epp) {
-        numberOfPages = Math.ceil($scope.pagination.total / $scope.pagination.epp);
-      }
-
-      return new Array(numberOfPages);
+    $scope.getNumberOfPages = function() {
+      return Math.ceil($scope.pagination.total / $scope.pagination.epp);
     };
 
     /**

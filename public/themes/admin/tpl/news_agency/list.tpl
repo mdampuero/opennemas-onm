@@ -122,6 +122,7 @@
               <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
                 <i class="fa fa-chevron-left"></i>
               </button>
+              <input type="number" min="1" max="[% getNumberOfPages() %]" ng-model="pagination.page" class="btn page-selector">
               <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
                 <i class="fa fa-chevron-right"></i>
               </button>

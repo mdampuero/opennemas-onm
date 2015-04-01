@@ -155,9 +155,7 @@
               <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
                 <i class="fa fa-chevron-left"></i>
               </button>
-              <select class="btn btn-white page-selector" ng-model="pagination.page">
-                <option ng-repeat="i in getPagesArray() track by $index" value="[% $index + 1 %]">[% $index + 1 %]</option>
-              </select>
+              <input type="number" min="1" max="[% getNumberOfPages() %]" ng-model="pagination.page" class="btn page-selector">
               <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
                 <i class="fa fa-chevron-right"></i>
               </button>
