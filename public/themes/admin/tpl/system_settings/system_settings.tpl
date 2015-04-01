@@ -15,264 +15,277 @@
       z-index: 10;
     }
   </style>
-  {/block}
+{/block}
 
-  {block name="footer-js" append}
+{block name="footer-js" append}
   {javascripts src="@AdminTheme/js/jquery/jquery_colorpicker/js/colorpicker.js,
+  @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
   @Common/js/onm/md5.min.js"}
   <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
   <script type="text/javascript">
-
     jQuery(document).ready(function($) {
-        //Color Picker jQuery
-        $('#site_color').ColorPicker({
-          onSubmit: function(hsb, hex, rgb, el) {
-            $(el).val(hex);
-            $(el).ColorPickerHide();
-          },
-          onChange: function (hsb, hex, rgb) {
-            $('#site_color').val(hex);
-            $('.colorpicker_viewer').css('background-color', '#' + hex);
-          },
-          onBeforeShow: function () {
-            $(this).ColorPickerSetColor(this.value);
-          }
-        }).bind('keyup', function(){
+      //Color Picker jQuery
+      $('#site_color').ColorPicker({
+        onSubmit: function(hsb, hex, rgb, el) {
+          $(el).val(hex);
+          $(el).ColorPickerHide();
+        },
+        onChange: function (hsb, hex, rgb) {
+          $('#site_color').val(hex);
+          $('#colorpicker_viewer').css('background-color', '#' + hex);
+        },
+        onBeforeShow: function () {
           $(this).ColorPickerSetColor(this.value);
-        });
+        }
+      }).bind('keyup', function(){
+        $(this).ColorPickerSetColor(this.value);
+      });
 
-        toogleSiteLogo = function(value) {
-          console.log(value);
-          if(value == 0) {
-            $('#site_logo_block').hide();
-          } else {
-            $('#site_logo_block').show();
-          }
+      $('#allow_logo').on('click', function(){
+        if($(this).is(':checked')) {
+          $('#site_logo_block').show();
+        } else {
+          $('#site_logo_block').hide();
+        }
+      });
+
+      $('.check-pass').on('click', function(e){
+        e.preventDefault();
+        var passInput = $('#onm_digest_pass');
+        var btn = $(this);
+        if (passInput.attr('type') == 'password') {
+          passInput.prop('type','text');
+        } else {
+          passInput.prop('type','password');
         }
 
-        $('.check-pass').on('click', function(e, ui){
-          e.preventDefault();
-          var passInput = $('#onm_digest_pass');
-          var btn = $(this);
-          if (passInput.attr('type') == 'password') {
-            passInput.prop('type','text');
-          } else {
-            passInput.prop('type','password');
-          }
-
-          btn.find('i').toggleClass('fa-unlock-alt');
-        });
-
-        // Avatar image uploader
-        $('.fileinput').fileinput({
-          name: 'site_logo',
-          uploadtype:'image'
-        });
+        btn.find('i').toggleClass('fa-unlock-alt');
       });
-    </script>
-    {/block}
 
-    {block name="content"}
-    <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
-      <div class="page-navbar actions-navbar">
-        <div class="navbar navbar-inverse">
-          <div class="navbar-inner">
+      // Logo, mobile and favico image uploader
+      $('.fileinput.site-logo').fileinput({ name: 'site_logo', uploadtype:'image' });
+      $('.fileinput.favico').fileinput({ name: 'favico', uploadtype:'image' });
+      $('.fileinput.mobile-logo').fileinput({ name: 'mobile_logo', uploadtype:'image' });
+    });
+  </script>
+{/block}
+
+{block name="content"}
+  <form action="{url name="admin_system_settings_save"}" enctype="multipart/form-data" method="POST" id="formulario">
+    <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <h4>
+                <i class="fa fa-cogs fa-lg"></i>
+                {t}Settings{/t}
+              </h4>
+            </li>
+          </ul>
+          <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <h4>
-                  <i class="fa fa-cogs fa-lg"></i>
-                  {t}Settings{/t}
-                </h4>
+                <button class="btn btn-primary" type="submit" value="1">
+                  <i class="fa fa-save"></i>
+                  {t}Save{/t}
+                </button>
               </li>
             </ul>
-            <div class="all-actions pull-right">
-              <ul class="nav quick-section">
-                <li class="quicklinks">
-                  <button class="btn btn-primary" type="submit" value="1">
-                    <i class="fa fa-save"></i>
-                    {t}Save{/t}
-                  </button>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
-      <div class="content">
-        {render_messages}
+    </div>
+    <div class="content">
+      {render_messages}
 
-        <div class="grid simple">
-          <div class="grid-body no-padding">
-            <tabset>
-              <tab heading="{t}General{/t}">
-                <div class="tab-wrapper">
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group">
-                        <label class="form-label" for="site_name">
-                          {t}Site name{/t}
-                        </label>
-                        <span class="help">
-                          {t}This will be displayed as your site name.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control" id="site_name" name="site_name" required="required" type="text" value="{$configs['site_name']|default:""}" class="input-xlarge">
+      <div class="grid simple settings">
+        <div class="grid-body no-padding">
+          <tabset>
+            <tab heading="{t}General{/t}">
+              <div class="tab-wrapper">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label class="form-label" for="site_name">
+                        {t}Site name{/t}
+                      </label>
+                      <span class="help">
+                        {t}This will be displayed as your site name.{/t}
+                      </span>
+                      <div class="controls">
+                        <input class="form-control" id="site_name" name="site_name" required="required" type="text" value="{$configs['site_name']|default:""}" class="input-xlarge">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="site_agency">
+                        {t}Site agency{/t}
+                      </label>
+                      <span class="help">
+                        {t}This will be displayed as the default article signature.{/t}
+                      </span>
+                      <div class="controls">
+                        <input class="form-control"  id="site_agency" name="site_agency" type="text" value="{$configs['site_agency']|default:""}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="site_footer">
+                        {t}Footer text{/t}
+                      </label>
+                      <span class="help">
+                        {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
+                      </span>
+                      <div class="controls">
+                        <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tab>
+            <tab heading="{t}Appearance{/t}">
+              <div class="tab-wrapper">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label class="form-label" for="site_color">
+                        {t}Site color{/t}
+                      </label>
+                      <span class="help">
+                        {t}Color used for links, menus and some widgets.{/t}
+                      </span>
+                      <div class="controls">
+                        <div class="input-group">
+                          <span class="input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                          <input class="form-control" id="site_color" name="site_color" type="text" value="{$configs['site_color']|default:""}">
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label class="form-label" for="site_agency">
-                          {t}Site agency{/t}
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input class="form-control" id="allow_logo" name="section_settings[allowLogo]" type="checkbox" value="1" {if $configs['section_settings']['allowLogo'] eq "1"}checked{/if}/>
+                        <label class="form-label" for="allow_logo">
+                          {t}Use custom logo{/t}
                         </label>
-                        <span class="help">
-                          {t}This will be displayed as the default article signature.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control"  id="site_agency" name="site_agency" type="text" value="{$configs['site_agency']|default:""}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq 0}style="display:none"{/if}>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="form-label" for="site_logo">{t}Large logo{/t}</label>
+                          <div class="controls">
+                            <div class="fileinput site-logo {if !empty($configs['site_logo'])}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                              <div class="fileinput-exists fileinput-preview thumbnail" style="max-width: 200px; max-height: 150px;">
+                                {if !empty($configs['site_logo'])}
+                                  <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" alt="{t}Site logo{/t}"/>
+                                {/if}
+                              </div>
+                              <div>
+                                <span class="btn btn-file">
+                                  <span class="fileinput-new">{t}Pick image{/t}</span>
+                                  <span class="fileinput-exists">{t}Change{/t}</span>
+                                  <input type="file"/>
+                                  <input type="hidden" class="file-input">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                  <i class="fa fa-trash-o"></i>
+                                  {t}Remove{/t}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label class="form-label" for="site_footer">
-                          {t}Footer text{/t}
-                        </label>
-                        <span class="help">
-                          {t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}
-                        </span>
-                        <div class="controls">
-                          <textarea class="form-control" onm-editor onm-editor-preset="simple" id="site_footer" name="site_footer">{$configs['site_footer']|default:""}</textarea>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="form-label" for="mobile_logo">{t}Small logo{/t}</label>
+                          <div class="controls">
+                            <div class="fileinput mobile-logo {if !empty($configs['mobile_logo'])}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                              <div class="fileinput-exists fileinput-preview thumbnail" style="max-width: 100px; max-height: 60px;">
+                                {if !empty($configs['mobile_logo'])}
+                                  <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" alt="{t}Site logo{/t}"/>
+                                {/if}
+                              </div>
+                              <div>
+                                <span class="btn btn-file">
+                                  <span class="fileinput-new">{t}Pick image{/t}</span>
+                                  <span class="fileinput-exists">{t}Change{/t}</span>
+                                  <input type="file"/>
+                                  <input type="hidden" class="file-input">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                  <i class="fa fa-trash-o"></i>
+                                  {t}Remove{/t}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="form-label" for="favico">{t}Favico{/t}</label>
+                          <div class="controls">
+                            <div class="fileinput favico {if !empty($configs['favico'])}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                              <div class="fileinput-exists fileinput-preview thumbnail" style="max-width: 35px; max-height: 35px;">
+                                {if !empty($configs['favico'])}
+                                  <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" alt="{t}Site logo{/t}"/>
+                                {/if}
+                              </div>
+                              <div>
+                                <span class="btn btn-file">
+                                  <span class="fileinput-new">{t}Pick image{/t}</span>
+                                  <span class="fileinput-exists">{t}Change{/t}</span>
+                                  <input type="file"/>
+                                  <input type="hidden" class="file-input">
+                                </span>
+                                <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                  <i class="fa fa-trash-o"></i>
+                                  {t}Remove{/t}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </tab>
-              <tab heading="{t}Appearance{/t}">
-                <div class="tab-wrapper">
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group">
-                        <label class="form-label" for="site_color">
-                          {t}Site color{/t}
-                        </label>
-                        <span class="help">
-                          {t}Color used for links, menus and some widgets.{/t}
-                        </span>
-                        <div class="controls">
-                          <div class="input-group">
-                            <span class="colorpicker_viewer input-group-addon" id="colorpicker_viewer" style="background-color:#{$configs['site_color']}">
-                              &nbsp;&nbsp;&nbsp;&nbsp;
-                            </span>
-                            <input class="form-control colorpicker_input" id="site_color" name="site_color" readonly="readonly" type="text" value="{$configs['site_color']|default:""}">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="controls">
-                          <div class="checkbox">
-                            <input type="checkbox" id="section_settings_allowLogo" name="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);" {if $configs['section_settings']['allowLogo'] eq "1"}checked="checked"{/if} />
-                            <label id="section_settings_allowLogo">
-                              {t}Use custom logo{/t}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      <div class="form-group" id="site_logo_block">
-                        <label class="form-label" for="site_logo">
-                          {t}Site logo{/t}
-                        </label>
-                        <div class="controls">
-                          <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
-                            {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
-                              <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" alt="{t}Site logo{/t}" style="max-height:90px"/>
-                            </div>
-                            {else}
-                            No logo selected
-                            {/if}
-                            <div>
-                              <span class="btn btn-file">
-                                <span class="fileinput-new">{t}Pick image{/t}</span>
-                                <span class="fileinput-exists">{t}Change{/t}</span>
-                                <input type="file"/>
-                                <input type="hidden" name="site_logo" class="file-input" value="1">
-                              </span>
-                              <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
-                                <i class="fa fa-trash-o"></i>
-                                {t}Remove{/t}
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
-                      <div class="form-group" id="site_logo_block" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
-                        <!-- <div class="form-group">
-                          <label class="form-label" for="site_logo">
-                            {t}Site logo{/t}
-                          </label>
-                          <div class="controls">
-                            <input class="form-control" id="site_logo" name="site_logo" type="file">
-                            {if !empty($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:90px">
-                            {/if}
-                          </div>
-                        </div> -->
-                        <div class="form-group">
-                          <label class="form-label" for="favico">
-                            {t}Favico{/t}
-                          </label>
-                          <div class="controls">
-                            <input id="favico" name="favico" type="file">
-                            {if !empty($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
-                            {/if}
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label" for="mobile_logo">{t}Site Mobile logo{/t}</label>
-                          <div class="controls">
-                            <input id="mobile_logo" name="mobile_logo" type="file">
-                            {if !empty($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
-                            {/if}
-                          </div>
-                        </div>
+              </div>
+            </tab>
+            <tab heading="{t}SEO{/t}">
+              <div class="tab-wrapper">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h4>{t}SEO options{/t}</h4>
+                    <div class="form-group">
+                      <label class="form-label" for="site_title">
+                        {t}Site title{/t}
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="site_title" name="site_title" rows="5">{$configs['site_title']|default:""}</textarea>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </tab>
-              <tab heading="{t}SEO{/t}">
-                <div class="tab-wrapper">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h4>{t}SEO options{/t}</h4>
-                      <div class="form-group">
-                        <label class="form-label" for="site_title">
-                          {t}Site title{/t}
-                        </label>
-                        <div class="controls">
-                          <textarea class="form-control" id="site_title" name="site_title" rows="5">{$configs['site_title']|default:""}</textarea>
-                        </div>
+                    <div class="form-group">
+                      <label class="form-label" for="site_description">
+                        {t}Site description{/t}
+                      </label>
+                      <div class="controls">
+                      <textarea class="form-control" id="site_description" name="site_description" rows="5">{$configs['site_description']|default:""}</textarea>
                       </div>
-                      <div class="form-group">
-                        <label class="form-label" for="site_description">
-                          {t}Site description{/t}
-                        </label>
-                        <div class="controls">
-                        <textarea class="form-control" id="site_description" name="site_description" rows="5">{$configs['site_description']|default:""}</textarea>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="site_description">
-                         {t}Site keywords{/t}
-                       </label>
-                       <div class="controls">
-                        <textarea class="form-control" id="site_keywords" name="site_keywords" rows="5">{$configs['site_keywords']|default:""}</textarea>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="site_description">
+                       {t}Site keywords{/t}
+                     </label>
+                     <div class="controls">
+                      <textarea class="form-control" id="site_keywords" name="site_keywords" rows="5">{$configs['site_keywords']|default:""}</textarea>
                       </div>
                     </div>
                   </div>
@@ -399,236 +412,379 @@
             </tab>
             <tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
-                <h4>{t}Google Services{/t}</h4>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="google_page">
-                        {t}Google+ Page Url{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="google_page" name="google_page" type="text" value="{$configs['google_page']|default:""}">
-                        <span class="help">
-                          {t escape=off}If you have a <b>Google+ page</b>, please complete this input.{/t}
-                        </span>
+                <div class="col-md-6">
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#goggle">
+                            <i class="fa fa-google"></i>{t}Google Services{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="google_page">
+                              {t}Google+ Page Url{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_page" name="google_page" type="text" value="{$configs['google_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you have a <b>Google+ page</b>, please complete this input.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="google_custom_search_api_key">
+                              {t}Google Search API key:{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_custom_search_api_key" name="google_custom_search_api_key" type="text" value="{$configs['google_custom_search_api_key']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create" target="_blank">Google Search sign up website</a>.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="google_news_name">
+                              {t}Publication name in Google News{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_news_name" name="google_news_name" type="text" value="{$configs['google_news_name']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Publication name in <a href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="google_maps_api_key">
+                              {t}Google Maps API key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_maps_api_key" name="google_maps_api_key" type="text" value="{$configs['google_maps_api_key']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="youtube_page">
+                              {t}YouTube Page Url{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="youtube_page" name="youtube_page" type="text" value="{$configs['youtube_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you have a <b>Youtube page</b>, please complete the form with your youtube page url.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="google_analytics_api_key">
+                              {t}Google Analytics API key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="google_custom_search_api_key">
-                        {t}Google Search API key:{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="google_custom_search_api_key" name="google_custom_search_api_key" type="text" value="{$configs['google_custom_search_api_key']|default:""}">
-                        <span class="help">
-                          {t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create" target="_blank">Google Search sign up website</a>.{/t}
-                        </span>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#twitter">
+                            <i class="fa fa-twitter"></i>{t}Twitter{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="twitter" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="twitter_page">
+                              {t}Twitter Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <b>twitter page</b>, add your page url on the form. Default will be set with Opennemas.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#vimeo">
+                            <i class="fa fa-vimeo-square"></i>{t}Vimeo{/t}
+                          </a>
+                        </h4>
+                      </div>
+                    </div>
+                    <div id="vimeo" class="panel-collapse collapse" style="height: 0px;">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label class="form-label" for="vimeo_page">
+                            {t}Vimeo Page{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="vimeo_page" name="vimeo_page" type="text" value="{$configs['vimeo_page']|default:""}">
+                            <span class="help">
+                              {t escape=off}If you also have a <b>Vimeo page</b>, add your page url on the form.{/t}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#recaptcha">
+                            <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="recaptcha" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="piwik_token_auth">
+                                  {t}Public key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label" for="piwik_token_auth">
+                                  {t}Private key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
+                                </div>
+                              </div>
+                            </div>
+                            <span class="help">
+                              {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#comscore">
+                            <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="comscore" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="comscore_page_id">
+                              {t}comScore Page ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
+                              <div class="help">
+                                {t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="google_news_name">
-                        {t}Publication name in Google News{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="google_news_name" name="google_news_name" type="text" value="{$configs['google_news_name']|default:""}">
-                        <span class="help">
-                          {t escape=off}You can get your Publication name in <a href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}
-                        </span>
+                <div class="col-md-6">
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#facebook">
+                            <i class="fa fa-facebook"></i>{t}Facebook{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="facebook" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_page">
+                              {t}Facebook Page Url{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_page" name="facebook_page" type="text" value="{$configs['facebook_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_id">
+                              {t}Facebook Id{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_id" name="facebook_id" type="text" value="{$configs['facebook_id']|default:""}">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_api_key">
+                              {t}APP key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_api_key" name="facebook[api_key]" type="text" value="{$configs['facebook']['api_key']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_secret_key">
+                              {t}Secret key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="google_maps_api_key">
-                        {t}Google Maps API key{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="google_maps_api_key" name="google_maps_api_key" type="text" value="{$configs['google_maps_api_key']|default:""}">
-                        <span class="help">
-                          {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}
-                        </span>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#linkedin">
+                            <i class="fa fa-linkedin"></i>{t}LinkedIn{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="linkedin" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="linkedin_page">
+                              {t}LinkedIn Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="linkedin_page" name="linkedin_page" type="text" value="{$configs['linkedin_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <b>LinkedIn page</b>, add your page url on the form. Default will be set with Opennemas.{/t}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="youtube_page">
-                        {t}YouTube Page Url{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="youtube_page" name="youtube_page" type="text" value="{$configs['youtube_page']|default:""}">
-                        <span class="help">
-                          {t escape=off}If you have a <b>Youtube page</b>, please complete the form with your youtube page url.{/t}
-                        </span>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#news_agency">
+                            <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
+                          </a>
+                        </h4>
+                      </div>
+                    </div>
+                    <div id="news_agency" class="panel-collapse collapse" style="height: 0px;">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="form-label" for="onm_digest_user">
+                                {t}User{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label" for="onm_digest_pass">
+                                {t}Password{/t}
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
+                                  <div class="input-group-btn">
+                                    <button class="btn check-pass" type="button">
+                                      <i class="fa fa-lock"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="google_analytics_api_key">
-                        {t}Google Analytics API key{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                        <span class="help">
-                          {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                        </span>
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#ojd">
+                            <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="ojd" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="ojd_page_id">
+                              {t}OJD Page ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
+                              <div class="help">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <h4>{t}Facebook{/t}</h4>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="facebook_page">
-                        {t}Facebook Page Url{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="facebook_page" name="facebook_page" type="text" value="{$configs['facebook_page']|default:""}">
-                        <span class="help">
-                          {t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.{/t}
-                        </span>
+                  {is_module_activated name="PAYWALL"}
+                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#paypal">
+                            <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="paypal" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="paypal_mail">
+                              {t}Account email:{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
+                              <div class="help">
+                                {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="facebook_id">
-                        {t}Facebook Id{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="facebook_id" name="facebook_id" type="text" value="{$configs['facebook_id']|default:""}">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="facebook_api_key">
-                        {t}APP key{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="facebook_api_key" name="facebook[api_key]" type="text" value="{$configs['facebook']['api_key']|default:""}">
-                        <span class="help">
-                          {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="facebook_secret_key">
-                        {t}Secret key{/t}
-                      </label>
-                      <div class="controls">
-                        <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <h4>{t}Twitter{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="twitter_page">
-                    {t}Twitter Page{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
-                    <span class="help">
-                      {t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. Default will be set with Opennemas.{/t}
-                    </span>
-                  </div>
-                </div>
-                {is_module_activated name="PAYWALL"}
-                <h4>{t}Paypal Settings{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="paypal_mail">
-                    {t}Account email:{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
-                    <div class="help">
-                      {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
-                    </div>
-                  </div>
-                </div>
-                {/is_module_activated}
-
-                {is_module_activated name="NEWS_AGENCY_IMPORTER"}
-                <h4>{t}Opennemas News Agency{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="onm_digest_user">
-                    {t}User{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="onm_digest_pass">
-                    {t}Password{/t}
-                  </label>
-                  <div class="controls">
-                    <div class="input-group">
-                      <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
-                      <div class="input-group-btn">
-                        <button class="btn check-pass" type="button">
-                          <i class="fa fa-lock"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/is_module_activated}
-                <h4>{t}Recaptcha{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="recaptcha_public_key">
-                    {t}Public key{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
-                    <span class="help">
-                      {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="piwik_token_auth">
-                    {t}Private key{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
-                  </div>
-                </div>
-                <h4>{t}OJD Statistics{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="ojd_page_id">
-                    {t}OJD Page ID{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
-                    <div class="help">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
-                  </div>
-                </div>
-                <h4>{t}ComScore Statistics{/t}</h4>
-                <div class="form-group">
-                  <label class="form-label" for="comscore_page_id">
-                    {t}comScore Page ID{/t}
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
-                    <div class="help">
-                      {t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}
-                    </div>
-                  </div>
+                  {/is_module_activated}
                 </div>
               </div>
             </tab>
@@ -637,4 +793,4 @@
       </div>
     </div>
   </form>
-  {/block}
+{/block}
