@@ -912,6 +912,20 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * Returns a list of numbers with
+     */
+    $scope.getPagesArray = function() {
+      var numberOfPages = 1;
+
+      // Calculate
+      if ($scope.pagination.total > $scope.pagination.epp) {
+        numberOfPages = ($scope.pagination.total / $scope.pagination.epp);
+      }
+
+      return new Array(numberOfPages);
+    };
+
+    /**
      * Moves the list to the previous page
      */
     $scope.goToPrevPage = function() {

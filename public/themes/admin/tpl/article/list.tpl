@@ -134,12 +134,14 @@
             </select>
           </li>
           <li class="quicklinks hidden-sm hidden-xs">
-            <select name="status" ng-model="pagination.epp" data-label="{t}View{/t}" class="select2">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+            <ui-select name="view" theme="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
+              <ui-select-match placeholder="Number of elements">
+                  {t}View{/t}: [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in [10,25,50,100]">
+                [% item %]
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
@@ -153,6 +155,9 @@
               <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
                 <i class="fa fa-chevron-left"></i>
               </button>
+              <select class="btn btn-white page-selector" ng-model="pagination.page">
+                <option ng-repeat="i in getPagesArray() track by $index" value="[% $index + 1 %]">[% $index + 1 %]</option>
+              </select>
               <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
                 <i class="fa fa-chevron-right"></i>
               </button>
