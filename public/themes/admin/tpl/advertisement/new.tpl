@@ -185,11 +185,23 @@
                 <label for="starttime" class="form-label">{t}Date range{/t}</label>
                 <div class="controls">
                   <label for="starttime">{t}From{/t}</label>
-                  <input type="datetime" id="starttime"  name="starttime" title="Fecha inicio publicacion"
-                  value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                  <div class="controls">
+                    <div class="input-group">
+                      <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                      <span class="input-group-addon add-on">
+                        <span class="fa fa-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
                   <label for="endtime">{t}Until{/t}</label>
-                  <input type="datetime" id="endtime" name="endtime" title="Fecha fin publicacion"
-                  value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                  <div class="controls">
+                    <div class="input-group">
+                      <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                        <span class="input-group-addon add-on">
+                          <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                  </div>
                   <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
                 </div>
               </div>
