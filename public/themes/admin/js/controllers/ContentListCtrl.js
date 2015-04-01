@@ -919,7 +919,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       // Calculate
       if ($scope.pagination.total > $scope.pagination.epp) {
-        numberOfPages = ($scope.pagination.total / $scope.pagination.epp);
+        numberOfPages = Math.ceil($scope.pagination.total / $scope.pagination.epp);
       }
 
       return new Array(numberOfPages);
