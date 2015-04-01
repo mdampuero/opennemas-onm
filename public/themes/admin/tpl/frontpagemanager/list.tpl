@@ -173,77 +173,73 @@
                 <li class="quicklinks">
                   <span class="info">{t}Managing frontpage:{/t}</span>
                 </li>
-                    {*<!-- {acl hasCategoryAccess=0}
-                        <li class="quicklinks">
-                            <a class="btn btn-link" href="{url name=admin_frontpage_list category=home}" class="{if $category == 'home' || $category == 0}active{/if}">{t}Home{/t}</a>
-                        </li>
+                <li>
+                    <select name="category" id="categoryItem" class="select2">
+                    {acl hasCategoryAccess=0}
+                        <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
                     {/acl}
                     {foreach from=$menuItems item=menuItem}
-                        {if $menuItem->type == 'category'}
-                            {acl hasCategoryAccess=$menuItem->categoryID}
-                                <li class="quicklinks {if count($menuItem->submenu) > 0}dropdown{/if}{if $category eq $menuItem->categoryID} active{/if}">
-                                    <a class="btn btn-link{if $category eq $menuItem->categoryID || ($datos_cat[0]->fk_content_category neq '0' && $menuItem->categoryID eq $datos_cat[0]->fk_content_category)} active{/if}" {if count($menuItem->submenu) > 0}data-toggle="dropdown"{/if} href="{url name=admin_frontpage_list category=$menuItem->categoryID}" title="Sección: {$menuItem->title}">
-                                        {$menuItem->title}
-                                        {if count($menuItem->submenu) > 0}
-                                            <span class="caret"></span>
-                                        {/if}
-                                    </a>
-                                    {if count($menuItem->submenu) > 0}
-                                        {assign value=$menuItem->submenu var=submenu}
-                                        <ul class="dropdown-menu">
-                                            {section  name=s loop=$submenu}
-                                                {acl hasCategoryAccess=$submenu[s]->categoryID}
-                                                    <li class="{if $category eq $submenu[s]->categoryID}active{/if}">
-                                                        <a href="{url name=admin_frontpage_list category=$submenu[s]->categoryID}" title="{$submenu[s]->title|mb_lower}" class="cat {$menuItem->link}{if $category eq $menuItem->categoryID} active{/if}">
-                                                            {$submenu[s]->title}
-                                                        </a>
-                                                    </li>
-                                                {/acl}
-                                            {/section}
-                                        </ul>
-                                    {/if}
-                                </li>
-                            {/acl}
-                        {/if}
+                    {if $menuItem->type == 'category'}
+                        {acl hasCategoryAccess=$menuItem->categoryID}
+                            <li class="quicklinks {if count($menuItem->submenu) > 0}dropdown{/if}{if $category eq $menuItem->categoryID} active{/if}">
+                                <option value="{$menuItem->pk_content_category}"
+                                    {if $category eq $menuItem->pk_content_category} selected ="selected" {/if} >
+                                          {t 1=$menuItem->title}%1{/t}
+                                </option>
+                                </a>
+                                {if count($menuItem->submenu) > 0}
+                                    {assign value=$menuItem->submenu var=submenu}
+                                    <ul class="dropdown-menu">
+                                        {section  name=s loop=$submenu}
+                                            {acl hasCategoryAccess=$submenu[s]->categoryID}
+                                                <option value="{$submenu[s]->pk_content_category}"
+                                                    {if $category eq $submenu[s]->pk_content_category} selected ="selected" {/if} >
+                                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$submenu[s]->title}%1{/t}
+                                                </option>
+                                            {/acl}
+                                        {/section}
+                                    </ul>
+                                {/if}
+                            </li>
+                        {/acl}
+                    {/if}
                     {/foreach}
-                    -->*}
-
-                    <li class="quicklinks">
-                      <select name="category" id="categoryItem" class="select2">
-                          {acl hasCategoryAccess=0}
-                          <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
-                          {/acl}
-                          {section name=as loop=$allcategorys}
-                              {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                              <option value="{$allcategorys[as]->pk_content_category}"
-                                  {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                  {if $category eq $allcategorys[as]->pk_content_category} selected ="selected" {/if} >
-                                      {t 1=$allcategorys[as]->title}%1{/t}
-                              </option>
-                              {/acl}
-                              {section name=su loop=$subcat[as]}
-                                  {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                  <option value="{$subcat[as][su]->pk_content_category}"
-                                      {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                      {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
-                                      &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
-                                  </option>
-                                  {/acl}
-                              {/section}
-                          {/section}
-                        </select>
-                    </li>
+                    </select>
+                </li>
                 </ul>
                 <ul class="nav quick-section pull-right">
+                    <li class="quicklinks">
+                        <select name="category" id="categoryItem" class="select2">
+                            {acl hasCategoryAccess=0}
+                            <option value="0" {if $category eq 0}selected{/if}>{t}Home{/t}</option>
+                            {/acl}
+                            {section name=as loop=$allcategorys}
+                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                <option value="{$allcategorys[as]->pk_content_category}"
+                                    {if $category eq $allcategorys[as]->pk_content_category} selected ="selected" {/if} >
+                                          {t 1=$allcategorys[as]->title}%1{/t}
+                                </option>
+                            {/acl}
+                            {section name=su loop=$subcat[as]}
+                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                    <option value="{$subcat[as][su]->pk_content_category}"
+                                        {if $category eq $subcat[as][su]->pk_content_category} selected ="selected" {/if} >
+                                            &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
+                                    </option>
+                                {/acl}
+                            {/section}
+                        {/section}
+                        </select>
+                    </li>
                     {is_module_activated name="FRONTPAGES_LAYOUT"}
-                      <li class="quicklinks">
-                          <span class="h-seperate"></span>
-                      </li>
-                       <li class="quicklinks">
-                          <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <div class="btn btn-default" id="frontpage-settings" ng-click="open('modal-layout')">
                             <i class="fa fa-cog"></i>
-                          </div>
-                      </li>
+                        </div>
+                    </li>
                     {/is_module_activated}
                 </ul>
             </div>
