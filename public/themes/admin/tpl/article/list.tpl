@@ -91,7 +91,7 @@
           </li>
           <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
             <ui-select name="author" theme="select2" ng-model="criteria.category_name">
-              <ui-select-match placeholder="Number of elements">
+              <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
@@ -101,7 +101,7 @@
           </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
-              <ui-select-match placeholder="Number of elements">
+              <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
