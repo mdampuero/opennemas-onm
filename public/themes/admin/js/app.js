@@ -3,6 +3,7 @@ angular.module(
   [
     'angularFileUpload',
     'checklist-model',
+    'ngSanitize',
     'ngTouch',
     'onm.Editor',
     'onm.dynamicImage',
