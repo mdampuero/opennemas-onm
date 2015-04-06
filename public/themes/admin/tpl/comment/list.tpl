@@ -80,24 +80,22 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks ng-cloak">
+            <li class="quicklinks ng-cloak" ng-init="statuses = {json_encode($statuses)|replace:'"':'\''}">
               <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
                 <ui-select-match placeholder="Select a report">
-                    {t}Status{/t}:
-                    [% $select.selected.title %]
+                  <strong>{t}Status{/t}:</strong> [% $select.selected.title %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.value as item in statuses" ng-init="statuses = {json_encode($statuses)|replace:'"':'\''}">
+                <ui-select-choices repeat="item.value as item in statuses | filter: $select.search">
                   [% item.title %]
                 </ui-select-choices>
               </ui-select>
             </li>
             <li class="quicklinks ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
-                <ui-select-match placeholder="Select a report">
-                    {t}View{/t}:
-                    [% $select.selected %]
+              <ui-select name="view" theme="select2" ng-model="pagination.epp">
+                <ui-select-match>
+                  <strong>{t}View{/t}:</strong> [% $select.selected %]
                 </ui-select-match>
-                <ui-select-choices repeat="item in [10,25,50,100]">
+                <ui-select-choices repeat="item in views | filter: $select.search">
                   [% item %]
                 </ui-select-choices>
               </ui-select>
