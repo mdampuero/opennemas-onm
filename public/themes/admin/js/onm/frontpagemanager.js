@@ -131,7 +131,12 @@ function remove_element(element) {
 
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html(
+        "<div class='messages'><div class='alert alert-notice messenger-message'>" +
+            "<button class='close' data-dismiss='alert'>×</button>" +
+            frontpage_messages.remember_save_positions +
+        "</div></div>"
+    );
 }
 
 
@@ -207,17 +212,17 @@ jQuery(function($) {
             { 'ids': ids }
         ).done(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
+                "<div class='messages'><div class='alert alert-success messenger-message'>" +
                     "<button class='close' data-dismiss='alert'>×</button>" +
                     data +
-                '</div>'
+                '</div></div>'
             );
         }).fail(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
+                "<div class='messages'><div class='alert alert-error messenger-message'>" +
                     "<button class='close' data-dismiss='alert'>×</button>" +
                     data.responseText +
-                '</div>'
+                '</div></div>'
             );
         });
         $('#modal-batch-arquive').modal('hide');
@@ -281,16 +286,16 @@ jQuery(function($) {
                 { 'ids': [delId] }
             ).done(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
+                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data +
-                    '</div>');
+                    '</div></div>');
             }).fail(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
+                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data.responseText +
-                    '</div>'
+                    '</div></div>'
                 );
             });
 
@@ -616,25 +621,25 @@ jQuery(function($) {
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
                     $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
+                    "<div class='messages'><div class='alert alert-notice messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>"+
                         "Saving"+
-                    '</div>');
+                    '</div></div>');
                 }
             }).done(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
+                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data.message +
-                    '</div>');
+                    '</div></div>');
                 frontpage_info.last_saved = data.date;
             }).fail(function(data, ajaxOptions, thrownError) {
                 var response = $.parseJSON(data.responseText);
                 $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
+                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         response.message +
-                    '</div>'
+                    '</div></div>'
                 );
             });
         }

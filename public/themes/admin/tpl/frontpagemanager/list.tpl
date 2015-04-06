@@ -247,8 +247,7 @@
     </div>
 
     <div class="content">
-        <div id="warnings-validation"></div><!-- /warnings-validation -->
-
+        <div id="warnings-validation"></div>
         {render_messages}
 
         <div class="grid simple visible-xs">
