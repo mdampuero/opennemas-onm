@@ -89,40 +89,40 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks dropdown hidden-xs" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+          <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
             <ui-select name="author" theme="select2" ng-model="criteria.category_name">
               <ui-select-match placeholder="Number of elements">
-                  <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs" ng-init="status = [ { name: '{t}-- All --{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match placeholder="Number of elements">
-                  <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
                 [% item.name %]
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm" ng-init="authors = {json_encode($authors)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-init="authors = {json_encode($authors)|replace:'"':'\''}">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_author">
-              <ui-select-match placeholder="Number of elements">
-                  <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
+              <ui-select-match>
+                <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in authors | filter: { name: $select.search }">
                 [% item.name %]
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-sm hidden-xs">
+          <li class="quicklinks hidden-sm hidden-xs ng-cloak">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
-              <ui-select-match placeholder="Number of elements">
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
               <ui-select-choices repeat="item in views  | filter: $select.search">
                 [% item %]
