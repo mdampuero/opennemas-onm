@@ -69,7 +69,26 @@ class AlbumsController extends Controller
      */
     public function listAction()
     {
-        return $this->render('album/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'album/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**

@@ -42,9 +42,17 @@ class SearchController extends Controller
         $contentTypesAvailable = $this->getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);
 
+        $types = [
+            [ 'name' => _('All'), 'value' => -1 ]
+        ];
+
+        foreach ($contentTypesAvailable as $key => $value) {
+            $types[] = [ 'name' => _($value), 'value' => $key ];
+        }
+
         return $this->render(
             'search_advanced/list.tpl',
-            array('content_types' => $contentTypesAvailable)
+            array('types' => $types)
         );
     }
 

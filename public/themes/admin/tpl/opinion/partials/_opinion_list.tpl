@@ -83,7 +83,7 @@
               <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
             <ui-select-choices repeat="item.value as item in type | filter: { name: $select.search }">
-              [% item.name %]
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>
@@ -93,7 +93,7 @@
               <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
             <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
-              [% item.name %]
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>
@@ -103,7 +103,7 @@
               <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
             <ui-select-choices repeat="item.value as item in authors | filter: { name: $select.search }">
-              [% item.name %]
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>
@@ -112,8 +112,8 @@
             <ui-select-match>
               <strong>{t}View{/t}:</strong> [% $select.selected %]
             </ui-select-match>
-            <ui-select-choices repeat="item in views  | filter: $select.search">
-              [% item %]
+            <ui-select-choices repeat="item in views | filter: $select.search">
+              <div ng-bind-html="item | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
         </li>

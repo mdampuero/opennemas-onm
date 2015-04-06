@@ -31,18 +31,25 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select name="content_types[]" id="content_types" ng-model="criteria.content_type_name" class="select2" data-label="{t}Type{/t}"> <!-- multiple -->
-              {html_options options=$content_types selected=$content_types_selected}
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+            <ui-select name="type" theme="select2" ng-model="criteria.content_type_name">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in type  | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">

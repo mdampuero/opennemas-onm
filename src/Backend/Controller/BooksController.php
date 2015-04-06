@@ -42,13 +42,13 @@ class BooksController extends Controller
         $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category, $contentType);
 
-        $bookCategories = array();
-        foreach ($parentCategories as $bCat) {
+        $this->bookCategories = array();
+        foreach ($this->parentCategories as $bCat) {
             if ($bCat->internal_category == $contentType) {
-                $bookCategories[] = $bCat;
+                $this->bookCategories[] = $bCat;
             }
         }
 
@@ -58,9 +58,9 @@ class BooksController extends Controller
         $this->view->assign(
             array(
                 'category'     => $this->category,
-                'subcat'       => $subcat,
-                'allcategorys' => $bookCategories,
-                'datos_cat'    => $categoryData,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->bookCategories,
+                'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
@@ -87,7 +87,26 @@ class BooksController extends Controller
             );
         }
 
-        return $this->render('book/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'book/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**

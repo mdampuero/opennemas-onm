@@ -49,7 +49,7 @@ class AclUserController extends Controller
 
         $groupsOptions = array();
         foreach ($groups as $cat) {
-            $groupsOptions[$cat->id] = $cat->name;
+            $groupsOptions[] = [ 'name' => $cat->name, 'value' => $cat->id];
         }
 
         // Get max users from settings
@@ -63,16 +63,17 @@ class AclUserController extends Controller
         if (!$createEnabled) {
             $request->getSession()->getFlashBag()->add(
                 'notice',
-                _('You have reach the maximun users allowed. If you want to create more users, please contact us.')
+                _('You have reach the maximum users allowed. If you want to create more users, please contact us.')
             );
         }
+
+        array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'user_groups'     => $groups,
-                'groupsOptions'   => $groupsOptions,
-                'createEnabled'   => $createEnabled,
+                'groups'        => $groupsOptions,
+                'createEnabled' => $createEnabled,
             )
         );
     }

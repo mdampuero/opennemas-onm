@@ -86,63 +86,55 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="m-r-10 input-prepend inside search-form no-boarder">
-            <select class="select2" id="category" ng-model="criteria.fk_content_categories" data-label="{t}Category{/t}">
-              <option value="-1">{t}-- All --{/t}</option>
-              <optgroup label="{t}Special elements{/t}">
-                <option value="0">{t}HOMEPAGE{/t}</option>
-                <option value="4">{t}OPINION{/t}</option>
-                <option value="3">{t}ALBUM{/t}</option>
-                <option value="6">{t}VIDEO{/t}</option>
-              </optgroup>
-              <optgroup label="Categories">
-                {section name=as loop=$allcategorys}
-                {assign var=ca value=$allcategorys[as]->pk_content_category}
-                <option value="{$allcategorys[as]->pk_content_category}">
-                  {$allcategorys[as]->title}
-                  {if $allcategorys[as]->inmenu eq 0}
-                  <span class="inactive">{t}(inactive){/t}</span>
-                  {/if}
-                </option>
-                {section name=su loop=$subcat[as]}
-                {assign var=subca value=$subcat[as][su]->pk_content_category}
-                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                {assign var=subca value=$subcat[as][su]->pk_content_category}
-                <option value="{$subcat[as][su]->pk_content_category}">
-                  &rarr;
-                  {$subcat[as][su]->title}
-                  {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                  <span class="inactive">{t}(inactive){/t}</span>
-                  {/if}
-                </option>
-                {/acl}
-                {/section}
-                {/section}
-              </optgroup>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+            <ui-select name="author" theme="select2" ng-model="criteria.fk_content_categories">
+              <ui-select-match>
+                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices group-by="'group'" repeat="item.value as item in categories | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="hidden-xs">
-            <select class="select2" name="filter[type_advertisement]" ng-model="criteria.type_advertisement" data-label="{t}Banner type{/t}">
-              {html_options options=$filter_options.type_advertisement selected=$filterType}
-            </select>
+          <li class="hidden-xs ng-cloak" ng-init="typeAdvertisement = {json_encode($typeAdvertisement)|replace:'"':'\''}">
+            <ui-select name="type_advertisement" theme="select2" ng-model="criteria.type_advertisement">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in typeAdvertisement | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="hidden-xs">
-            <select class="input-medium select2" ng-model="criteria.content_status" data-label="{t}Status{/t}">
-              {html_options options=$filter_options.content_status selected=$filterAvailable}
-            </select>
+          <li class="hidden-xs hidden-sm ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+            <ui-select name="type" theme="select2" ng-model="criteria.with_script">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in type | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="hidden-xs hidden-sm">
-            <select class="input-medium select2" ng-model="criteria.with_script" data-label="{t}Type{/t}">
-              {html_options options=$filter_options.type}
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm">
-            <select class="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">

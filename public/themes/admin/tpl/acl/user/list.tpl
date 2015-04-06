@@ -86,26 +86,35 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select id="usertype" name="type" class="select2" ng-model="criteria.type" data-label="{t}Type{/t}">
-              <option value="-1">{t}--All--{/t}</option>
-              <option value="0">{t}Backend{/t}</option>
-              <option value="1">{t}Frontend{/t}</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1}, { name: '{t}Backend{/t}', value: 0}, { name: '{t}Frontend{/t}', value: 1 } ]">
+            <ui-select name="type" theme="select2" ng-model="criteria.type">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in type  | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select id="usergroup" name="group" class="select2" ng-model="criteria.fk_user_group" data-label="{t}Group{/t}">
-              <option value="-1">{t}--All--{/t}</option>
-              {html_options options=$groupsOptions selected=$smarty.request.group|default:""}
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="groups = {json_encode($groups)|replace:'"':'\''}">
+            <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
+              <ui-select-match>
+                <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in groups  | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">

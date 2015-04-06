@@ -118,47 +118,35 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks dropdown hidden-xs">
-            <select id="category" ng-model="criteria.category_name" data-label="{t}Category{/t}" class="select2">
-              <option value="-1">{t}-- All --{/t}</option>
-              {section name=as loop=$allcategorys}
-              {assign var=ca value=$allcategorys[as]->pk_content_category}
-              <option value="{$allcategorys[as]->name}">
-                {$allcategorys[as]->title}
-                {if $allcategorys[as]->inmenu eq 0}
-                <span class="inactive">{t}(inactive){/t}</span>
-                {/if}
-              </option>
-              {section name=su loop=$subcat[as]}
-              {assign var=subca value=$subcat[as][su]->pk_content_category}
-              {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-              {assign var=subca value=$subcat[as][su]->pk_content_category}
-              <option value="{$subcat[as][su]->name}">
-                &rarr;
-                {$subcat[as][su]->title}
-                {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                <span class="inactive">{t}(inactive){/t}</span>
-                {/if}
-              </option>
-              {/acl}
-              {/section}
-              {/section}
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+            <ui-select name="author" theme="select2" ng-model="criteria.category_name">
+              <ui-select-match>
+                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}" class="select2">
-              <option value="-1"> {t}-- All --{/t} </option>
-              <option value="1"> {t}Published{/t} </option>
-              <option value="0"> {t}No published{/t} </option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select class="select2 input-medium" name="status" ng-model="pagination.epp" data-label="{t}View{/t}">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">

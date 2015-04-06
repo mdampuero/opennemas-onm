@@ -41,7 +41,26 @@ class CacheManagerController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        return $this->render('tpl_manager/list.tpl');
+        $types = [
+            [ 'name' => _('All'), 'value' => '-1' ],
+            [ 'name' => _('Frontpages'), 'value' => 'frontpages' ],
+            [ 'name' => _('Article - inner'), 'value' => 'articles' ],
+            [ 'name' => _('Mobile - frontpages'), 'value' => 'mobilepages' ],
+            [ 'name' => _('RSS'), 'value' => 'rss' ],
+            [ 'name' => _('Opinion - Authors'), 'value' => 'frontpage-opinions' ],
+            [ 'name' => _('Opinion - inner'), 'value' => 'opinions' ],
+            [ 'name' => _('Video - frontpage'), 'value' => 'video-frontpage' ],
+            [ 'name' => _('Video - inner'), 'value' => 'video-inner' ],
+            [ 'name' => _('Album - frontpage'), 'value' => 'gallery-frontpage' ],
+            [ 'name' => _('Album - inner'), 'value' => 'gallery-inner' ],
+            [ 'name' => _('Poll - frontpage'), 'value' => 'poll-frontpage' ],
+            [ 'name' => _('Poll - inner'), 'value' => 'poll-inner' ]
+        ];
+
+        return $this->render(
+            'tpl_manager/list.tpl',
+            [ 'types' => $types ]
+        );
     }
 
     /**

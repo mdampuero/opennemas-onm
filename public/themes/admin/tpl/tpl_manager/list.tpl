@@ -65,30 +65,25 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="quicklinks">
-            <select name="type" ng-model="criteria.type" data-label="{t}Type{/t}" id="type">
-              <option value="-1">{t}All types{/t}</option>
-              <option value="frontpages">{t}Frontpages{/t}</option>
-              <option value="articles">{t}Article: inner{/t}</option>
-              <option value="mobilepages">{t}Mobile: frontpages{/t}</option>
-              <option value="rss">{t}RSS{/t}</option>
-              <option value="frontpage-opinions">{t}Opinion: Authors{/t}</option>
-              <option value="opinions">{t}Opinion: inner{/t}</option>
-              <option value="video-frontpage"}>{t}Video: frontpage{/t}</option>
-              <option value="video-inner">{t}Video: inner{/t}</option>
-              <option value="gallery-frontpage">{t}Album: frontpage{/t}</option>
-              <option value="gallery-inner">{t}Album: inner{/t}</option>
-              <option value="poll-frontpage">{t}Poll: frontpage{/t}</option>
-              <option value="poll-inner">{t}Poll: inner{/t}</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+            <ui-select name="type" theme="select2" ng-model="criteria.type">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in type  | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-sm hidden-xs">
-            <select name="status" ng-model="pagination.epp" data-label="{t}View{/t}" class="select2">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length != 0">

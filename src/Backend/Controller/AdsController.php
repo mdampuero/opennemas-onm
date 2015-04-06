@@ -74,28 +74,53 @@ class AdsController extends Controller
         $map      = $positionManager->getAllAdsPositions();
         $adsNames = $positionManager->getAllAdsNames();
 
-        // Filters
-        $filterOptions = array(
-            'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
-            'content_status' => array(
-                '-1' => _("-- All --"),
-                '0'  => _("No published"),
-                '1'  => _("Published")
-            ),
-            'type'  => array(
-                '-1' => _("-- All --"),
-                '0' => _("Multimedia"),
-                '1' => _("Javascript"),
-                '2' => _("OpenX"),
-                '3' => _("Google DFP")
-            ),
-        );
+        $typeAdvertisement = [
+            [ 'name' => _("All"), 'value' => -1 ],
+        ];
+
+        foreach ($adsNames as $key => $value) {
+            $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
+        }
+
+        $types = [
+            [ 'name' => _("All"), 'value' => -1 ],
+            [ 'name' => _("Multimedia"), 'value' => 0 ],
+            [ 'name' => _("Javascript"), 'value' => 1 ],
+            [ 'name' => _("OpenX"), 'value' => 2 ],
+            [ 'name' => _("Google DFP"), 'value' => 3 ]
+        ];
+
+        $categories = [
+            [ 'name' => _('All'), 'value' => -1 ],
+            [ 'name' => _('HOMEPAGE'), 'value' => 0, 'group' => _('Special elements') ],
+            [ 'name' => _('OPINION'), 'value' => 4, 'group' => _('Special elements') ],
+            [ 'name' => _('ALBUM'), 'value' => 3, 'group' => _('Special elements') ],
+            [ 'name' => _('VIDEO'), 'value' => 6, 'group' => _('Special elements') ]
+        ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name,
+                'group' => _('Categories')
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name,
+                    'group' => _('Categories')
+                ];
+            }
+        }
 
         return $this->render(
             'advertisement/list.tpl',
             array(
-                'filter_options' => $filterOptions,
-                'map'            => json_encode($map)
+                'categories'        => $categories,
+                'typeAdvertisement' => $typeAdvertisement,
+                'types'             => $types,
+                'map'               => json_encode($map)
             )
         );
     }

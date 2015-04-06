@@ -94,7 +94,7 @@
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
-                [% item.name %]
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </li>
@@ -104,7 +104,7 @@
                 <strong>{t}View{/t}:</strong> [% $select.selected %]
               </ui-select-match>
               <ui-select-choices repeat="item in views  | filter: $select.search">
-                [% item %]
+                <div ng-bind-html="item | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </li>

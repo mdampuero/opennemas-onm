@@ -89,28 +89,35 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select class="select2" name="type" ng-model="criteria.renderlet" data-label="{t}Type{/t}">
-              <option value="-1">{t}-- All --{/t}</option>
-              <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
-              <option value="html">{t}HTML{/t}</option>
-              <option value="smarty">{t}Smarty{/t}</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}IntelligentWidget{/t}', value: 'intelligentwidget' }, { name: '{t}HTML{/t}', value: 'html' }, { name: '{t}Smarty{/t}', value: 'smarty' } ]">
+            <ui-select name="status" theme="select2" ng-model="criteria.renderlet">
+              <ui-select-match>
+                <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in type | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select class="select2" name="status" ng-model="criteria.content_status" data-label="{t}Status{/t}">
-              <option value="-1"> {t}-- All --{/t} </option>
-              <option value="1"> {t}Published{/t} </option>
-              <option value="0"> {t}No published{/t} </option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm">
-            <select class="select2 xmedium" ng-model="pagination.epp">
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
