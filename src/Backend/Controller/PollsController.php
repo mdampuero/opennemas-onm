@@ -70,7 +70,26 @@ class PollsController extends Controller
      */
     public function listAction()
     {
-        return $this->render('poll/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->pk_content_category
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->pk_content_category
+                ];
+            }
+        }
+
+        return $this->render(
+            'poll/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**

@@ -110,7 +110,6 @@ class ArticlesController extends Controller
             }
         }
 
-
         $_SESSION['_from'] = $this->generateUrl('admin_articles');
 
         return $this->render(
