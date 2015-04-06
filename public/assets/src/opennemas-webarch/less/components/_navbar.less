@@ -8,7 +8,6 @@
   top: @header-height;
   transition: all .25s;
   width: 100%;
-  z-index: 10;
 
   h4 {
     line-height: 14px;
@@ -93,6 +92,8 @@
 }
 
 .actions-navbar {
+  z-index: 10;
+
   h4 {
     .fa {
       margin-right: 5px;
@@ -127,14 +128,13 @@
   position: relative;
   top: 0;
   width: 100%;
-  z-index: 350;
 }
 
 .selected-navbar {
   background: #0090d9;
-  color: #ffffff;
-  text-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 0px;
-  z-index: 450;
+  color: #fff;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
+  z-index: 20;
 
   &.collapsed {
     opacity: 0;
@@ -225,6 +225,13 @@ div[ng-view].ng-leave-active .selected-navbar {
   .actions-navbar {
     background: lighten(@sidebar-background, 3%);
     color: #fff;
+
+    h4 {
+      .fa {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
   }
 
   .filters-navbar {
