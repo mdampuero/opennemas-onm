@@ -66,10 +66,18 @@ class OpinionsController extends Controller
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
+        $authors = [
+            [ 'name' => _('All'), 'value' => -1 ],
+        ];
+
+        foreach ($allAuthors as $author) {
+            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
+        }
+
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores' => $allAuthors,
+                'authors' => $authors,
                 'blog'    => $blog,
                 'home'    => false,
             )
