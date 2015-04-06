@@ -84,12 +84,40 @@ class ArticlesController extends Controller
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
+        $authors = [
+            [ 'name' => _('All'), 'value' => -1 ],
+        ];
+
+        foreach ($allAuthors as $author) {
+            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
+        }
+
+        $categories = [
+            [ 'name' => _('All'), 'value' => -1 ],
+        ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->pk_content_category
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->pk_content_category
+                ];
+            }
+        }
+
+
         $_SESSION['_from'] = $this->generateUrl('admin_articles');
 
         return $this->render(
             'article/list.tpl',
             array(
-                'authors' => $allAuthors,
+                'authors'    => $authors,
+                'categories' => $categories,
             )
         );
     }

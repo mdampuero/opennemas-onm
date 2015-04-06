@@ -52,6 +52,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * The available elements per page
+     *
+     * @type {Array}
+     */
+    $scope.views = [ 10, 25, 50, 100 ];
+
+    /**
      * Default join operator for filters.
      *
      * @type string
