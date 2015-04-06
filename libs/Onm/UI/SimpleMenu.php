@@ -118,6 +118,10 @@ class SimpleMenu
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 
+            if ($element['link'] === '/admin') {
+                $isCurrent = preg_match("@^".preg_quote($element['link'])."$@", $_SERVER['REQUEST_URI']);
+            }
+
             $classes = [];
             if ($isCurrent || $isSubmenuCurrent) {
                 $classes[] = 'active';
