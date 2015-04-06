@@ -1,0 +1,21 @@
+.sidebar-toggler {
+  display: none;
+  position: fixed;
+  padding: 15px;
+  color: #fff;
+  left: @sidebar-width;
+  transition: all .25s;
+  z-index: 20;
+}
+
+.collapsed .sidebar-toggler,
+.server-sidebar .sidebar-toggler {
+  left: 0;
+}
+
+@media (max-width: (@phone-width - 1px)) {
+  .sidebar-toggler {
+    display: block;
+    z-index: 20;
+  }
+}
