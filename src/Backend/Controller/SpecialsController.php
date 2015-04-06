@@ -73,13 +73,13 @@ class SpecialsController extends Controller
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->pk_content_category
+                'value' => $category->name
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
+                    'value' => $subcategory->name
                 ];
             }
         }

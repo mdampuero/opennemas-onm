@@ -98,14 +98,14 @@ class ArticlesController extends Controller
 
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
-                'name' => $category->title,
-                'value' => $category->pk_content_category
+                'name'  => $category->title,
+                'value' => $category->name
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
-                    'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->pk_content_category
+                    'name'  => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
                 ];
             }
         }
