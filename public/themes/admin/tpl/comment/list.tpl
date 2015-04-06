@@ -80,7 +80,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks ng-cloak">
               <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
                 <ui-select-match placeholder="Select a report">
                     {t}Status{/t}:
@@ -91,7 +91,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks ng-cloak">
               <ui-select name="view" theme="select2" ng-model="pagination.epp" data-label="{t}View{/t}">
                 <ui-select-match placeholder="Select a report">
                     {t}View{/t}:
