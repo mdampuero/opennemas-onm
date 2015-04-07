@@ -2,11 +2,13 @@
     <div class="form-group">
         <label for="video_url" class="form-label">{t}Video URL{/t}</label>
         <div class="controls">
-            <div class="input-group" >
+            <div class="input-group">
                 <input type="text" id="video_url" name="video_url" value="{$video->video_url|default:""}" required="required" class="form-control" />
-                <span class="input-group-addon btn-primary" id="video_url_button">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" id="video_url_button" type="button">
                     <span class="fa fa-refresh"></span>
                     <span class="hidden-xs">{t}Get information{/t}</span>
+                  </button>
                 </span>
             </div>
             <div class="input-append">
