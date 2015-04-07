@@ -5,7 +5,7 @@ ul.messenger.messenger-fixed.messenger-on-bottom {
   margin: 0;
   padding-left: 210px;
   width: 100%;
-  z-index: 9999;
+  z-index: 750;
 
   -webkit-transition: all .25s;
   -o-transition: all .25s;
@@ -34,7 +34,6 @@ ul .messenger-message .messenger-message-inner:before {
   margin: -8px 10px 0 0;
   height: 13px;
   width: 13px;
-  z-index: 20;
 }
 
 ul .messenger-message .messenger-close {

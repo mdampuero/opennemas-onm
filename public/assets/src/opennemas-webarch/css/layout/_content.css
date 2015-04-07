@@ -9,15 +9,6 @@
   padding: 15px;
 }
 
-.login-container-wrapper {
-  background-color: #e5e9ec;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 .page-content .content .row > [class^=col-],
 .page-content .content .row > [class*= col-] {
   padding-left: 8px;
