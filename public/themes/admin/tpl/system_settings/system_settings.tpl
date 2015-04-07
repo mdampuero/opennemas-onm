@@ -413,11 +413,11 @@
             <tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
                 <div class="col-md-6">
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_1" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#goggle">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_1" href="#goggle">
                             <i class="fa fa-google"></i>{t}Google Services{/t}
                           </a>
                         </h4>
@@ -480,25 +480,37 @@
                             </div>
                           </div>
                           <div class="form-group">
-                            <label class="form-label" for="google_analytics_api_key">
-                              {t}Google Analytics API key{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                              <span class="help">
-                                {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                              </span>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="google_analytics_api_key">
+                                  {t}Google Analytics API key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                                  <span class="help">
+                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label" for="google_analytics_domain">
+                                  {t}Google Analytics Base domain{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_2" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#twitter">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_2" href="#twitter">
                             <i class="fa fa-twitter"></i>{t}Twitter{/t}
                           </a>
                         </h4>
@@ -520,37 +532,37 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_3" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#vimeo">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_3" href="#vimeo">
                             <i class="fa fa-vimeo-square"></i>{t}Vimeo{/t}
                           </a>
                         </h4>
                       </div>
-                    </div>
-                    <div id="vimeo" class="panel-collapse collapse" style="height: 0px;">
-                      <div class="panel-body">
-                        <div class="form-group">
-                          <label class="form-label" for="vimeo_page">
-                            {t}Vimeo Page{/t}
-                          </label>
-                          <div class="controls">
-                            <input class="form-control" id="vimeo_page" name="vimeo_page" type="text" value="{$configs['vimeo_page']|default:""}">
-                            <span class="help">
-                              {t escape=off}If you also have a <b>Vimeo page</b>, add your page url on the form.{/t}
-                            </span>
+                      <div id="vimeo" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="vimeo_page">
+                              {t}Vimeo Page{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="vimeo_page" name="vimeo_page" type="text" value="{$configs['vimeo_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you also have a <b>Vimeo page</b>, add your page url on the form.{/t}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_4" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#recaptcha">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_4" href="#recaptcha">
                             <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
                           </a>
                         </h4>
@@ -584,11 +596,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_5" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#comscore">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_5" href="#comscore">
                             <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
                           </a>
                         </h4>
@@ -612,11 +624,11 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_6" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#facebook">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_6" href="#facebook">
                             <i class="fa fa-facebook"></i>{t}Facebook{/t}
                           </a>
                         </h4>
@@ -665,11 +677,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_7" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#linkedin">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_7" href="#linkedin">
                             <i class="fa fa-linkedin"></i>{t}LinkedIn{/t}
                           </a>
                         </h4>
@@ -691,39 +703,39 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_8" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#news_agency">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_8" href="#news_agency">
                             <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
                           </a>
                         </h4>
                       </div>
-                    </div>
-                    <div id="news_agency" class="panel-collapse collapse" style="height: 0px;">
-                      <div class="panel-body">
-                        <div class="form-group">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <label class="form-label" for="onm_digest_user">
-                                {t}User{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
+                      <div id="news_agency" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="onm_digest_user">
+                                  {t}User{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-md-6">
-                              <label class="form-label" for="onm_digest_pass">
-                                {t}Password{/t}
-                              </label>
-                              <div class="controls">
-                                <div class="input-group">
-                                  <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
-                                  <div class="input-group-btn">
-                                    <button class="btn check-pass" type="button">
-                                      <i class="fa fa-lock"></i>
-                                    </button>
+                              <div class="col-md-6">
+                                <label class="form-label" for="onm_digest_pass">
+                                  {t}Password{/t}
+                                </label>
+                                <div class="controls">
+                                  <div class="input-group">
+                                    <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
+                                    <div class="input-group-btn">
+                                      <button class="btn check-pass" type="button">
+                                        <i class="fa fa-lock"></i>
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -733,11 +745,11 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_9" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#ojd">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_9" href="#ojd">
                             <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
                           </a>
                         </h4>
@@ -758,11 +770,11 @@
                     </div>
                   </div>
                   {is_module_activated name="PAYWALL"}
-                  <div class="panel-group" id="accordion" data-toggle="collapse">
+                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#paypal">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#paypal">
                             <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
                           </a>
                         </h4>
