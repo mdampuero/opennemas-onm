@@ -16,11 +16,8 @@
       </div>
     </div>
   </div>
-
   {render_messages}
-
   <div id="info-page" >
-
     <div class="col-xs-12 col-sm-6">
       <div class=" tiles white no-padding col-xs-12">
         <div class="tiles green cover-pic-wrapper">
@@ -56,13 +53,13 @@
         </div>
       </div>
     </div>
-
     <div class="col-xs-12 col-sm-6">
       <div class="row">
-        <div class="tiles blue col-xs-12">
+        <div class="tiles blue col-xs-12 m-b-15">
           <div class="tiles-body">
-            <div class="tiles-title text-black">{t}Instance Stats{/t} </div>
-
+            <div class="tiles-title text-uppercase text-black">
+              {t}Instance Stats{/t}
+            </div>
             <div class="widget-stats">
               <div class="wrapper transparent">
                 <h4 class="no-margin">{t}Activated users{/t}</h4>
@@ -83,28 +80,25 @@
             </div>
           </div>
         </div>
-
-          <br>
-        <br>
-        <div class="tiles gray col-xs-12">
+        <div class="tiles gray col-xs-12 m-b-15">
           <div class="tiles-body">
-            <div class="tiles-title text-black">{t}Account information{/t} </div>
-
+            <div class="tiles-title text-uppercase text-black">
+              {t}Account information{/t}
+            </div>
             <div class="widget-stats">
               <!-- <p><span class="text-white mini-decription">Name <span class="blend">{$instance->name}</span></span></p> -->
               <p><span class="text-white mini-description">Name <span class="blend">Fabrizia</span></span></p>
-
               <p><span class="text-white mini-description ">Contact Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
             </div>
           </div>
         </div>
-
-          <br>
+        <br>
         <br>
         <div class="tiles gray col-xs-12">
-        <div class="tiles-body">
-            <div class="tiles-title text-black">{t}Billing information{/t} </div>
-
+          <div class="tiles-body">
+            <div class="tiles-title text-uppercase text-black">
+              {t}Billing information{/t}
+            </div>
             <div class="widget-stats">
               <p><span class="text-white mini-decription">Name: <span class="blend">John Smith</span></span></p>
               <p><span class="text-white mini-description">Address: <span class="blend">Kensington Streen, Alabama, US 0x0001</span></span></p>
@@ -113,88 +107,87 @@
             </div>
           </div>
         </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-xs-12">
-      <h2>{t}Plans & Modules{/t}</h2>
-      <p class="lead">{t}Here you can see a list of activated modules by plan{/t}</p>
-
-      <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
-        <div class="tabbable tabs-left">
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab" data-toggle="tab">{t}Basic{/t}</a></li>
-            {foreach $plans as $plan => $total}
-            <li>
-              <a href="#tab{$total@index}" data-toggle="tab">{t}{$plan}{/t} ({$total})</a>
-            </li>
-            {/foreach}
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab">
-              <div class="basic modules">
-                <h4><i class="icon-check"></i> {t}Basic{/t}</h4>
-                {foreach $available_modules as $module}
-                {if $module['plan'] eq Base}
-                <div class="span4 element">
-                  <label class="inline">
-                    {if in_array($module['id'], $instance->activated_modules)}
-                    <i class="icon-check"></i>
-                    <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                    {else}
-                    <i class="icon-check-empty"></i>
-                    <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                    {/if}
-                    {$module['name']}
-                  </label>
-                </div>
-                {/if}
-                {/foreach}
-              </div>
-            </div>
-            {foreach $plans as $plan => $total}
-            <div class="tab-pane" id="tab{$total@index}">
-              <div class="modules">
-                <label class="inline">
-                  <h4>
-                    <input type="checkbox" id="select_{$total@index}">
-                    <span class="plan-title" id="{$plan}">{$plan}</span>
-                  </h4>
-                </label>
-                {foreach $available_modules as $module}
-                {if $module['plan'] eq $plan}
-                <div class="span4 element">
-                  <div class="checkbox">
-                    <input id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}" type="checkbox"/>
-                    <label id="{$module['name']}">
-                      {$module['name']}
-                      {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
-                      {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
-                    </label>
-                  </div>
-                </div>
-                {/if}
-                {/foreach}
-              </div>
-            </div>
-            {/foreach}
-          </div>
-        </div>
-      </form>
-      <div class="upgrade right">
-        <button class="btn btn-large btn-success" type="submit" form="upgrade-form" {if $has_changes}disabled{/if}>
-          {if $has_changes}
-          {t}Waiting for upgrade{/t}
-          <input type="hidden" name="waiting-upgrade" id="waiting-upgrade" value="1">
-          {else}
-          {t}Upgrade instance{/t}
-          {/if}
-        </button>
       </div>
     </div>
   </div>
+
+  <div class="col-xs-12">
+    <h2>{t}Plans & Modules{/t}</h2>
+    <p class="lead">{t}Here you can see a list of activated modules by plan{/t}</p>
+
+    <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab" data-toggle="tab">{t}Basic{/t}</a></li>
+          {foreach $plans as $plan => $total}
+          <li>
+            <a href="#tab{$total@index}" data-toggle="tab">{t}{$plan}{/t} ({$total})</a>
+          </li>
+          {/foreach}
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab">
+            <div class="basic modules">
+              <h4><i class="icon-check"></i> {t}Basic{/t}</h4>
+              {foreach $available_modules as $module}
+              {if $module['plan'] eq Base}
+              <div class="span4 element">
+                <label class="inline">
+                  {if in_array($module['id'], $instance->activated_modules)}
+                  <i class="icon-check"></i>
+                  <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
+                  {else}
+                  <i class="icon-check-empty"></i>
+                  <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
+                  {/if}
+                  {$module['name']}
+                </label>
+              </div>
+              {/if}
+              {/foreach}
+            </div>
+          </div>
+          {foreach $plans as $plan => $total}
+          <div class="tab-pane" id="tab{$total@index}">
+            <div class="modules">
+              <label class="inline">
+                <h4>
+                  <input type="checkbox" id="select_{$total@index}">
+                  <span class="plan-title" id="{$plan}">{$plan}</span>
+                </h4>
+              </label>
+              {foreach $available_modules as $module}
+              {if $module['plan'] eq $plan}
+              <div class="span4 element">
+                <div class="checkbox">
+                  <input id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}" type="checkbox"/>
+                  <label id="{$module['name']}">
+                    {$module['name']}
+                    {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
+                    {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
+                  </label>
+                </div>
+              </div>
+              {/if}
+              {/foreach}
+            </div>
+          </div>
+          {/foreach}
+        </div>
+      </div>
+    </form>
+    <div class="upgrade right">
+      <button class="btn btn-large btn-success" type="submit" form="upgrade-form" {if $has_changes}disabled{/if}>
+        {if $has_changes}
+        {t}Waiting for upgrade{/t}
+        <input type="hidden" name="waiting-upgrade" id="waiting-upgrade" value="1">
+        {else}
+        {t}Upgrade instance{/t}
+        {/if}
+      </button>
+    </div>
+  </div>
+</div>
 </div>
 {include file="stats/modals/_modal_upgrade_instance.tpl"}
 {/block}

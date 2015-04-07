@@ -143,21 +143,15 @@
           <br>
           <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <div id="myCarousel" class="carousel slide clearfix" data-interval="">
-            <!-- Carousel items -->
-            <div class="carousel-inner">
-              {foreach $youtube_videos  as $videoId}
-              <div class="{if $videoId@iteration == 1}active{/if} item">
+          <carousel interval="">
+            {foreach $youtube_videos  as $videoId}
+              <slide class="{if $videoId@iteration == 1}active{/if} item">
                 <div class="video-container">
                   <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" allowfullscreen></iframe>
                 </div>
-              </div>
-              {/foreach}
-            </div>
-            <!-- Carousel nav -->
-            <a class="carousel-control left btn" href="#myCarousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
-            <a class="carousel-control right btn" href="#myCarousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
-          </div>
+              </slide>
+            {/foreach}
+          </carousel>
         </div>
       </div>
     </div>
