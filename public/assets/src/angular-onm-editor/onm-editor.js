@@ -3,7 +3,7 @@
 *
 * Creates a media picker modal to upload/insert contents.
 */
-angular.module('onm.Editor', [])
+angular.module('onm.editor', [])
   .provider('onmEditor', [
     function() {
       /**

@@ -3,7 +3,7 @@
 *
 * Module to render HTML from objects.
 */
-angular.module('onm.Renderer', [])
+angular.module('onm.renderer', [])
   .service('renderer', [ function() {
     /**
      * Returns the HTML code to insert in a text for an image.
