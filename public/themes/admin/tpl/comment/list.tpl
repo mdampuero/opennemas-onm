@@ -104,7 +104,7 @@
           <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
             <li class="quicklinks hidden-xs">
               <span class="info">
-                <div onm-paginator onm-paginator-string="%s-%s of %s"></div>
+                <onm-paginator onm-paginator-string="%s-%s of %s"></onm-paginator>
               </span>
             </li>
             <li class="quicklinks form-inline pagination-links">

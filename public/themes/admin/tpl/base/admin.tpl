@@ -343,6 +343,7 @@
     @Common/src/angular-item-service/itemService.js,
     @Common/src/angular-renderer/renderer.js,
     @Common/src/angular-routing/routing.js,
+    @Common/src/angular-onm-paginator/onm-paginator.js,
     @Common/src/angular-picker/js/picker.js,
     @Common/src/angular-picker/js/content-picker.js,
     @Common/src/angular-picker/js/media-picker.js,
