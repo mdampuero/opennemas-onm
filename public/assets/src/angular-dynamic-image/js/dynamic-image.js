@@ -271,13 +271,12 @@
    *  - **ng-model**: ***Required***. The object or string to load dynamically.
    *  - **transform**: ***Optional***. The transformation to apply to the image.
    *
-   *
    * @example
-   * // Load an internal image from an object with autoscale
+   * <!-- Load an internal image from an object with autoscale -->
    * <dynamic-image autoscale="true" class="img-thumbnail" instance="c-default" ng-model="photo">
    * </dynamic-image>
    * @example
-   * // Load an image dynamically from an external source with an overlay for its dimensions
+   * <!-- Load an image dynamically from an external source with an overlay for its dimensions -->
    * <dynamic-image ng-model="http://www.example.com/sample-image.jpg" dimensions="true">
    * </dynamic-image>
    */
