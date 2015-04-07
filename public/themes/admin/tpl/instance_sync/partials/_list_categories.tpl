@@ -4,22 +4,18 @@
   <p>{t}Please, check if the credentials are correct and try again.{/t}</p>
 </div>
 {elseif !empty($all_categories)}
-<div class="output">
+<div class="output form-group">
   <label for="site_color" class="form-label">{t}Available categories for sync{/t}</label>
   <div class="controls">
-    <table class="table table-hover table-condensed">
-      <tbody>
-        {foreach $all_categories as $category}
-        <tr>
-          <td>
-            <input type="checkbox" name="categories[]" value="{$category->link}"
-            {if array_key_exists('categories', $site) && in_array($category->link, $site['categories'])}checked="checked"{/if} />
-            {$category->title}
-          </td>
-        </tr>
-        {/foreach}
-      </tbody>
-    </table>
+    {foreach $all_categories as $category}
+      <div class="col-sm-4">
+        <div class="checkbox check-default">
+          <input id="checkbox_{$category@index}" type="checkbox" name="categories[]" value="{$category->link}" {if array_key_exists('categories', $site) && in_array($category->link, $site['categories'])}checked="checked"{/if} />
+          <label for="checkbox_{$category@index}"></label>
+          {$category->title|ucfirst}
+        </div>
+      </div>
+    {/foreach}
   </div>
 </div>
 {else}
