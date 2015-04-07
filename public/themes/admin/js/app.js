@@ -14,7 +14,7 @@ angular.module(
     'onm.picker',
     'onm.renderer',
     'onm.scroll',
-    'onm.paginator',
+    'onm.pagination',
     'onm.resizable',
     'onm.sidebar',
     'pascalprecht.translate',
