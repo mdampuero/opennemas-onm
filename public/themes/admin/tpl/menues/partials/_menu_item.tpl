@@ -1,4 +1,4 @@
-<div class="menu-item" ui-tree-handle>
+<div class="menu-item clearfix" ui-tree-handle>
   <span class="item-type" ng-if="item.type == 'external'">
     {t}External link{/t}
   </span>
@@ -29,7 +29,10 @@
   <span class="item-type" ng-if="item.type == 'syncBlogCategory'">
     {t}Synched blog category{/t}
   </span>
-  <input ng-model="item.title" type="text">
+  <span class="h-seperate"></span>
+  <span class="no-padding">
+    <input ng-model="item.title" type="text">
+  </span>
   <button class="btn btn-white pull-right" ng-click="removeItem($index)" type="button">
     <i class="fa fa-trash-o text-danger"></i>
   </button>

@@ -1,5 +1,14 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="
+    @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
+    @AdminTheme/less/_opinion.less
+  " filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="header-js" append}
 {javascripts src="@AdminTheme/js/onm/jquery-functions.js"}
 <script text="text/javascript" src="{$asset_url}"></script>

@@ -1,4 +1,4 @@
-.menu-item {
+.angular-ui-tree-handle {
   background: #fff;
   border: 1px solid #ddd;
   padding: 7px;
@@ -17,12 +17,22 @@
     }
   }
 
-  .item-type {
-    border-right: 1px solid #ccc;
+  span {
     display: inline-block;
+    float: left;
     font-weight: 900;
-    margin-top: 8px;
-    padding-right: 16px;
+    overflow: hidden;
+    padding: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  span.h-seperate {
+    border-left: 1px solid #ccc;
+    display: inline-block;
+    height: 36px;
+    margin: 0 4px;
+    padding: 0;
   }
 }
 

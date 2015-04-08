@@ -52,6 +52,17 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * Tree options for opinion frontpage.
+     *
+     * @type {Object}
+     */
+    $scope.treeOptions = {
+      accept: function(sourceNodeScope, destNodesScope, destIndex) {
+        return destNodesScope.$modelValue.indexOf(sourceNodeScope.$modelValue) !== -1;
+      },
+    };
+
+    /**
      * The available elements per page
      *
      * @type {Array}
