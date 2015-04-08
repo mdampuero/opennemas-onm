@@ -227,7 +227,7 @@
               <th class="hidden-xs hidden-sm"></th>
               <th>{t}Title{/t}</th>
               <th class="center hidden-xs">{t}Section{/t}</th>
-              <th class="center nowrap hidden-xs hidden-sm">{t}Created on{/t}</th>
+              <th class="center nowrap hidden-xs hidden-sm">{t}Author{/t}</th>
               {acl isAllowed="VIDEO_AVAILABLE"}
               <th class="center" style="width:35px;">{t}Published{/t}</th>
               {/acl}
@@ -256,9 +256,9 @@
                 <div class="thumbnail visible-xs">
                   <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
                 </div>
-                <strong>[% content.author_name %]</strong>  - [% content.title %]
-                <div class="small-text visible-sm">
-                  {t}Created on{/t}: [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                [% content.title %]
+                <div class="small-text">
+                  <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
                 <div class="listing-inline-actions">
                   {acl isAllowed="VIDEO_UPDATE"}
@@ -280,7 +280,7 @@
               </td>
               {/if}
               <td class="center nowrap hidden-xs hidden-sm">
-                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                [% content.author_name %]
               </td>
               {acl isAllowed="VIDEO_AVAILABLE"}
               <td class="center">

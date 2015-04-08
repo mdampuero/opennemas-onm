@@ -206,7 +206,6 @@
                   </div>
                 </th>
                 <th class='left'>{t}Title{/t}</th>
-                <th class="left hidden-xs" style="width:110px;">{t}Date{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -219,8 +218,8 @@
                 </td>
                 <td>
                   <strong>[% content.content_type_l10n_name %]</strong> - [% content.title %]
-                  <div class="visible-xs small-text">
-                    <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
                     <a ng-href="[% edit(content.id, 'admin_'+content.content_type_name+'_show') %]" class="link">
@@ -237,9 +236,6 @@
                       {t}Remove permanently{/t}
                     </button>
                   </div>
-                </td>
-                <td class="center nowrap hidden-xs">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
               </tr>
             </tbody>

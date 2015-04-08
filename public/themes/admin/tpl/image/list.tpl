@@ -116,7 +116,6 @@
                 </th>
                 <th style="width:80px" class="hidden-xs"></th>
                 <th class="hidden-xs">{t}Information{/t}</th>
-                <th class="hidden-xs hidden-sm">{t}Created on{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -150,14 +149,12 @@
                       <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
                     </span>
                   </div>
-
                   <div class="description">
                     <span ng-if="content.description != ''">[% content.description %]</span>
                     <span ng-if="content.description == ''">{t}No available description{/t}</span>
                   </div>
-
-                  <div class="visible-xs visible-sm">
-                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div>
                     <div class="listing-inline-actions">
@@ -176,9 +173,6 @@
                       </a>
                     </div>
                   </div>
-                </td>
-                <td class="left nowrap hidden-xs hidden-sm">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
               </tr>
             </tbody>

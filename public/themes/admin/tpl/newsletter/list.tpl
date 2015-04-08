@@ -120,7 +120,6 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="left hidden-xs"  style="width:150px;">{t}Created{/t}</th>
                 <th class="left hidden-xs  hidden-sm"  style="width:150px;">{t}Updated{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
               </tr>
@@ -136,9 +135,9 @@
                 <td class="left">
                   <p ng-if="content.title != ''">[% content.title %]</p>
                   <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</p>
-                  <p class="visible-xs">
-                    <small><strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</small>
-                  </p>
+                  <div class="small-text">
+                    <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
 
                   <div class="listing-inline-actions">
                     <a class="link" href="[% edit(content.id, 'admin_newsletter_show_contents') %]" title="{t}Edit{/t}" >
@@ -154,9 +153,6 @@
                       {t}Delete{/t}
                     </button>
                   </div>
-                </td>
-                <td class="left hidden-xs">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
                 <td class="left hidden-xs hidden-sm">
                   [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]

@@ -79,19 +79,15 @@
           <table class="table table-hover no-margin">
             <thead>
               <th class="title">{t}Title{/t}</th>
-              <th class="left hidden-xs">{t}Created{/t}</th>
               <th class="right" style="width:10px;"></th>
             </thead>
             <tbody>
               <tr ng-repeat="content in contents">
                 <td style="padding:10px;">
                   <strong>[% content.content_type_l10n_name %]</strong>  - [% content.title %]
-                  <div class="visible-xs small-text">
+                  <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
-                </td>
-                <td class="left hidden-xs">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
                 <td class="right">
                   <div class="btn-group right">

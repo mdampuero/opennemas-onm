@@ -217,7 +217,6 @@
                 <th class="hidden-xs hidden-sm"></th>
                 <th class="title">{t}Information{/t}</th>
                 {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left hidden-xs">{t}Section{/t}</th>{/if}
-                <th class="left nowrap hidden-xs hidden-sm" style="width:100px;">Created</th>
                 <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
                 <th class="center" style="width:35px;">{t}Published{/t}</th>
                 {if $category!='widget'} <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}
@@ -245,8 +244,8 @@
                     <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;" class="thumbnail"/>
                   </span>
                   [% content.title %]
-                  <div class="visible-sm">
-                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ALBUM_UPDATE"}
@@ -265,11 +264,7 @@
                 <td class="left hidden-xs">
                  [% content.category_name %]
                </td>
-               {/if}
-
-               <td class="center nowrap hidden-xs hidden-sm">
-                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-              </td>
+              {/if}
               <td class="center hidden-xs">[% shvs.extra.views[content.id] %]</td>
 
               {acl isAllowed="ALBUM_AVAILABLE"}

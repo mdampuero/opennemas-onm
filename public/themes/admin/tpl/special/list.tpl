@@ -217,7 +217,6 @@
                 </th>
                 <th class="title">{t}Title{/t}</th>
                 <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
-                <th class="center hidden-xs hidden-sm" style="width:100px;">Created</th>
                 {acl isAllowed="SPECIAL_FAVORITE"}{if $category!='widget'}<th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}{/acl}
                 {acl isAllowed="SPECIAL_HOME"}<th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>{/acl}
                 {acl isAllowed="SPECIAL_AVAILABLE"}<th class="center" style="width:35px;">{t}Published{/t}</th>{/acl}
@@ -233,7 +232,7 @@
                 </td>
                 <td>
                   [% content.title %]
-                  <div class="visible-sm visible-xs small-text">
+                  <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
@@ -251,9 +250,6 @@
                 </td>
                 <td class="center hidden-xs">
                   [% content.category_name %]
-                </td>
-                <td class="center nowrap hidden-xs hidden-sm">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
                 {if $category!='widget'}
                 {acl isAllowed="SPECIAL_FAVORITE"}

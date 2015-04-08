@@ -199,7 +199,6 @@
                 </th>
                 <th>{t}Title{/t}</th>
                 <th style="width:20px" class="hidden-xs">{t}Category{/t}</th>
-                <th class="nowrap hidden-xs hidden-sm" style="width:20px">{t}Created on{/t}</th>
                 {if $category!='widget'} <th class="center hidden-xs" style="width:20px;">{t}Favorite{/t}</th>{/if}
                 <th class="center hidden-xs" style="width:20px;">{t}Home{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
@@ -216,11 +215,9 @@
                 </td>
                 <td>
                   [% content.title %]
-
-                  <div class="nowrap visible-sm">
-                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
-
                   <div class="listing-inline-actions">
                     {acl isAllowed="ATTACHMENT_UPDATE"}
                     <a class="link" href="[% edit(content.id, 'admin_file_show') %]">
@@ -244,9 +241,6 @@
                   <span ng-if="!content.category_name">
                     {t}Unassigned{/t}
                   </span>
-                </td>
-                <td class="nowrap hidden-xs hidden-sm">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
                 {if $category != 'widget'}
                 {acl isAllowed="ATTACHMENT_AVAILABLE"}

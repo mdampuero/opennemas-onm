@@ -163,10 +163,10 @@
                 </div>
               </th>
               <th class="left" >{t}Title{/t}</th>
+              <th class="left hidden-xs">{t}Author{/t}</th>
               {if $category eq 'all' || $category == 0}
-              <th class="left hidden-xs">{t}Section{/t}</th>
+                <th class="left hidden-xs">{t}Section{/t}</th>
               {/if}
-              <th class="center hidden-xs" style="width:130px;">{t}Created{/t}</th>
               <th class="center" style="width:10px;">{t}Published{/t}</th>
             </thead>
             <tbody>
@@ -182,23 +182,14 @@
                 </td>
                 <td class="left">
                   <span tooltip="{t}Last editor{/t} [% extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
-                  <div class="small-text" ng-if="content.fk_author != 0 || content.agency != ''">
-                    <strong>{t}Author{/t}:</strong>
-                    <span ng-if="content.fk_author != 0">
-                      [% extra.authors[content.fk_author].name %]
-                    </span>
-                    <span ng-if="content.fk_author == 0 && content.agency != ''">
-                      [% content.agency %]
-                    </span>
+                  <div class="small-text">
+                    <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="small-text">
                     <strong>{t}Available from{/t} </strong> [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     <span ng-if="content.endtime != '0000-00-00 00:00:00'">
                       <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </span>
-                  </div>
-                  <div class="visible-sm visible-xs small-text">
-                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
@@ -215,19 +206,24 @@
                     {/acl}
                   </div>
                 </td>
+                <td>
+                  <span ng-if="content.fk_author != 0">
+                    [% extra.authors[content.fk_author].name %]
+                  </span>
+                  <span ng-if="content.fk_author == 0 && content.agency != ''">
+                    [% content.agency %]
+                  </span>
+                </td>
                 {if $category eq 'all' || $category == 0}
-                <td class="left hidden-xs">
-                  <span ng-if="content.category_name == 'unknown'">
-                    {t}Unasigned{/t}
-                  </span>
-                  <span ng-if="content.category_name != 'unknown'">
-                    [% content.category_name %]
-                  </span>
-                </td>
+                  <td class="left hidden-xs">
+                    <span ng-if="content.category_name == 'unknown'">
+                      {t}Unasigned{/t}
+                    </span>
+                    <span ng-if="content.category_name != 'unknown'">
+                      [% content.category_name %]
+                    </span>
+                  </td>
                 {/if}
-                <td class="center nowrap hidden-xs">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                </td>
                 <td class="right">
                   <span ng-if="content.category != 20">
                     {acl isAllowed="ARTICLE_AVAILABLE"}

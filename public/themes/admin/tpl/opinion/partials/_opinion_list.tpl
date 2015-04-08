@@ -151,10 +151,10 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th>{t}Author name{/t} - {t}Title{/t}</th>
-              <th class="center hidden-xs hidden-sm">{t}Created on{/t}</th>
+              <th>{t}Title{/t}</th>
+              <th>{t}Author{/t}</th>
               <th class="center hidden-xs" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
-              <th class="center hidden-xs" style="width:70px;">{t}In home{/t}</th>
+              <th class="center hidden-xs" style="width:80px;">{t}In home{/t}</th>
               <th class="center" style="width:20px;">{t}Published{/t}</th>
               <th class="center hidden-xs" style="width:20px;">{t}Favorite{/t}</th>
             </tr>
@@ -168,17 +168,8 @@
                 </div>
               </td>
               <td>
-                <strong>
-                  <span ng-if="content.fk_author">
-                    [% extra.authors[content.fk_author].name %]
-                  </span>
-                  <span ng-if="!content.fk_author || content.fk_author == 0">
-                    [% content.author %]
-                  </span>
-                </strong>
-                -
                 [% content.title %]
-                <div class="visible-sm visible-xs small-text">
+                <div class="small-text">
                   <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
                 <div class="listing-inline-actions">
@@ -196,8 +187,13 @@
                   {/acl}
                 </div>
               </td>
-              <td class="center nowrap hidden-xs hidden-sm">
-                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+              <td class="nowrap">
+                <span ng-if="content.fk_author">
+                  [% extra.authors[content.fk_author].name %]
+                </span>
+                <span ng-if="!content.fk_author || content.fk_author == 0">
+                  [% content.author %]
+                </span>
               </td>
               <td class="center hidden-xs">
                 [% shvs.extra.views[content.id] %]

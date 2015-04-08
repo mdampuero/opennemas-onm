@@ -186,7 +186,6 @@
                 </th>
                 <th class="title">{t}Title{/t}</th>
                 <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
-                <th class="center hidden-xs" style="width:100px;">{t}Created on{/t}</th>
                 {acl isAllowed="BOOK_AVAILABLE"}
                 <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
                 {/acl}
@@ -205,6 +204,9 @@
                 </td>
                 <td>
                   [% content.title %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
                   <div class="listing-inline-actions">
                    {acl isAllowed="BOOK_UPDATE"}
                    <a class="link" href="[% edit(content.id, 'admin_book_show') %]">
@@ -227,9 +229,6 @@
                 <span ng-if="!content.category_name">
                   {t}Unassigned{/t}
                 </span>
-              </td>
-              <td class="center nowrap hidden-xs">
-                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
               </td>
               {acl isAllowed="BOOK_HOME"}
               <td class="center hidden-xs">

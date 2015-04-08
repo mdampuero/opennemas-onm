@@ -219,7 +219,6 @@
               </th>
               <th>{t}Title{/t}</th>
               <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
-              <th style="width:110px;" class="center hidden-xs hidden-sm">{t}Date{/t}</th>
               <th class="center hidden-xs hidden-sm" style="width:40px">{t}Votes{/t}</th>
               {acl isAllowed="POLL_AVAILABLE"}
               <th style="width:40px;" class="center">{t}Published{/t}</th>
@@ -242,7 +241,7 @@
               </td>
               <td>
                 [% content.title %]
-                <div class="visible-sm visible-xs small-text">
+                <div class="small-text">
                   <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </div>
                 <div class="listing-inline-actions">
@@ -262,9 +261,6 @@
               </td>
               <td class="center hidden-xs">
                 [% content.category_name %]
-              </td>
-              <td class="center nowrap hidden-xs hidden-sm">
-                [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
               </td>
               <td class="center hidden-xs hidden-sm">
                 [% content.total_votes %]

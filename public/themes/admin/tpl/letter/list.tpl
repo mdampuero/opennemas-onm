@@ -141,8 +141,8 @@
                   </div>
                 </th>
                 <th style="width: 100px;" class="text-center hidden-xs">{t}Image{/t}</th>
-                <th>{t}Author{/t} - {t}Title{/t}</th>
-                <th style="width: 110px;" class="left hidden-xs">{t}Date{/t}</th>
+                <th>{t}Title{/t}</th>
+                <th style="width: 110px;" class="left hidden-xs">{t}Author{/t}</th>
                 {acl isAllowed="LETTER_AVAILABLE"}
                 <th class="center" style="width:10px;">{t}Published{/t}</th>
                 {/acl}
@@ -165,11 +165,8 @@
                   <span class="center visible-xs" ng-if="content.image">
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path_img" transform="thumbnail,120,120"></dynamic-image>
                   </span>
-                  <div>
-                    <small>"[% content.author %]" ([% content.email %])</small>
-                  </div>
                   <span tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
-                  <div class="visible-sm visible-xs small-text">
+                  <div class="small-text">
                     <strong>{t}Date{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                   </div>
                   <div class="listing-inline-actions">
@@ -196,7 +193,7 @@
                   </div>
                 </td>
                 <td class="center nowrap hidden-xs">
-                  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  [% content.author %] ([% content.email %])
                 </td>
                 <td class="right">
                   {acl isAllowed="LETTER_AVAILABLE"}
