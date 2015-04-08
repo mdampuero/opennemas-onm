@@ -49,9 +49,7 @@
 
             @Common/src/sidebar/less/main.less,
 
-            @Common/src/opennemas-webarch/css/base/*,
-            @Common/src/opennemas-webarch/css/layout/*,
-            @Common/src/opennemas-webarch/css/main.less"
+            @Common/src/opennemas-webarch/less/main.less"
         filters="cssrewrite,less"}
           <link rel="stylesheet" type="text/css" href="{$asset_url}">
         {/stylesheets}

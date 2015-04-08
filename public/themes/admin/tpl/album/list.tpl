@@ -18,9 +18,9 @@
           <li class="quicklinks dropdown hidden-xs">
             <div data-toggle="dropdown">
               {if $category == 'widget'}
-              {t}Widget home{/t}
+                {t}Widget home{/t}
               {else}
-              {t}Listing{/t}
+                {t}Listing{/t}
               {/if}
               <span class="caret"></span>
             </div>
@@ -181,22 +181,9 @@
             </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
           <li class="quicklinks hidden-xs">
-            <span class="info">
-              [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
-            </span>
-          </li>
-          <li class="quicklinks form-inline pagination-links">
-            <div class="btn-group">
-              <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
-                <i class="fa fa-chevron-left"></i>
-              </button>
-              <input type="number" min="1" max="[% getNumberOfPages() %]" ng-model="pagination.page" class="btn page-selector">
-              <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
-                <i class="fa fa-chevron-right"></i>
-              </button>
-            </div>
+            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </li>
         </ul>
       </div>
@@ -314,11 +301,8 @@
       </div>
     </div>
     <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-      <div class="pagination-info pull-left">
-        {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
-      </div>
-      <div class="pull-right pagination-wrapper">
-        <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+      <div class="pull-right">
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
       </div>
     </div>
   </div>
