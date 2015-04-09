@@ -55,4 +55,6 @@ $(document).ready(function() {
 
       e.preventDefault();
     });
+
+    $('.nav-pills, .nav-tabs').tabdrop();
 });
