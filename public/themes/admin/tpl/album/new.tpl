@@ -224,24 +224,40 @@
               <h4>{t}Cover image{/t}</h4>
             </div>
             <div class="grid-body">
-              <div class="thumbnail-placeholder">
-                <div class="img-thumbnail" ng-if="!cover">
-                  <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
-                    <i class="fa fa-picture-o fa-2x"></i>
-                    <h5>Pick an image</h5>
+              <div class="thumbnail-wrapper">
+                <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
+                <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
+                  <p>Are you sure?</p>
+                  <div class="confirm-actions">
+                    <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
+                      <i class="fa fa-times fa-lg"></i>
+                      {t}No{/t}
+                    </button>
+                    <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
+                      <i class="fa fa-check fa-lg"></i>
+                      {t}Yes{/t}
+                    </button>
                   </div>
                 </div>
-                <div class="dynamic-image-placeholder" ng-if="cover">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
-                    <div class="thumbnail-actions">
-                      <div class="thumbnail-action remove-action" ng-click="removeImage('cover')">
-                        <i class="fa fa-trash-o fa-2x"></i>
-                      </div>
-                      <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
-                        <i class="fa fa-camera fa-2x"></i>
-                      </div>
+                <div class="thumbnail-placeholder">
+                  <div class="img-thumbnail" ng-if="!cover">
+                    <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
+                      <i class="fa fa-picture-o fa-2x"></i>
+                      <h5>Pick an image</h5>
                     </div>
-                  </dynamic-image>
+                  </div>
+                  <div class="dynamic-image-placeholder" ng-if="cover">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="cover">
+                      <div class="thumbnail-actions">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </div>
+                      </div>
+                    </dynamic-image>
+                  </div>
                 </div>
               </div>
             </div>

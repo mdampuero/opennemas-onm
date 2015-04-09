@@ -10,71 +10,103 @@
             <div class="row">
               <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
                 <h5>{t}Image to show in frontpages{/t}</h5>
-                <div class="form-group">
-                  <div class="thumbnail-placeholder">
-                    <div class="img-thumbnail" ng-if="!photo1">
-                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
-                        <i class="fa fa-picture-o fa-2x"></i>
-                        <h5>{t}Pick an image{/t}</h5>
-                      </div>
-                    </div>
-                    <div class="dynamic-image-placeholder" ng-if="photo1">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1">
-                        <div class="thumbnail-actions ng-cloak">
-                          <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
-                            <i class="fa fa-trash-o fa-2x"></i>
-                          </div>
-                          <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
-                            <i class="fa fa-camera fa-2x"></i>
-                          </div>
-                        </div>
-                        <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
-                      </dynamic-image>
+                <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">
+                    <p>{t}Are you sure?{/t}</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeImage('photo1');toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
                     </div>
                   </div>
-                </div>
-                <div class="form-group ng-cloak" ng-if="photo1">
-                  <label class="form-label" for="img1_footer">
-                    {t}Footer text{/t}
-                  </label>
-                  <div class="controls">
-                    <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
-                    <input type="hidden" name="img1" ng-value="[% img1 %]"/>
+                  <div class="form-group">
+                    <div class="thumbnail-placeholder">
+                      <div class="img-thumbnail" ng-if="!photo1">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                          <i class="fa fa-picture-o fa-2x"></i>
+                          <h5>{t}Pick an image{/t}</h5>
+                        </div>
+                      </div>
+                      <div class="dynamic-image-placeholder" ng-if="photo1">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1">
+                          <div class="thumbnail-actions ng-cloak">
+                            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
+                              <i class="fa fa-trash-o fa-2x"></i>
+                            </div>
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                              <i class="fa fa-camera fa-2x"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                        </dynamic-image>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ng-cloak" ng-if="photo1">
+                    <label class="form-label" for="img1_footer">
+                      {t}Footer text{/t}
+                    </label>
+                    <div class="controls">
+                      <textarea class="form-control" name="img1_footer" ng-model="img1_footer">{if isset($article->img1_footer)}{$article->img1_footer|clearslash|escape:'html'}{/if}</textarea>
+                      <input type="hidden" name="img1" ng-value="[% img1 %]"/>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo2 = {json_encode($photo2)|replace:'"':'\''}"{/if}>
                 <h5>{t}Image to show in inner{/t}</h5>
-                <div class="form-group">
-                  <div class="thumbnail-placeholder">
-                    <div class="img-thumbnail" ng-if="!photo2">
-                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
-                        <i class="fa fa-picture-o fa-2x"></i>
-                        <h5>{t}Pick an image{/t}</h5>
-                      </div>
-                    </div>
-                    <div class="dynamic-image-placeholder" ng-if="photo2">
-                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2">
-                        <div class="thumbnail-actions ng-cloak">
-                          <div class="thumbnail-action remove-action" ng-click="removeImage('photo2')">
-                            <i class="fa fa-trash-o fa-2x"></i>
-                          </div>
-                          <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
-                            <i class="fa fa-camera fa-2x"></i>
-                          </div>
-                        </div>
-                        <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo"></div>
-                      </dynamic-image>
+                <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo2 }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo2 }">
+                    <p>{t}Are you sure?{/t}</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo2')" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeImage('photo2');toggleOverlay('photo2')" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
                     </div>
                   </div>
-                </div>
-                <div class="form-group ng-cloak" ng-if="photo2">
-                  <label class="form-label" for="title">
-                    {t}Footer text{/t}
-                  </label>
-                  <div class="controls">
-                    <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{if isset($article->img2_footer)}{$article->img2_footer|clearslash|escape:'html'}{/if}</textarea>
-                    <input type="hidden" name="img2" ng-value="[% img2 %]"/>
+                  <div class="form-group">
+                    <div class="thumbnail-placeholder">
+                      <div class="img-thumbnail" ng-if="!photo2">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                          <i class="fa fa-picture-o fa-2x"></i>
+                          <h5>{t}Pick an image{/t}</h5>
+                        </div>
+                      </div>
+                      <div class="dynamic-image-placeholder" ng-if="photo2">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo2" ng-if="photo2">
+                          <div class="thumbnail-actions ng-cloak">
+                            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo2')">
+                              <i class="fa fa-trash-o fa-2x"></i>
+                            </div>
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2">
+                              <i class="fa fa-camera fa-2x"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo2" media-picker-type="photo"></div>
+                        </dynamic-image>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ng-cloak" ng-if="photo2">
+                    <label class="form-label" for="title">
+                      {t}Footer text{/t}
+                    </label>
+                    <div class="controls">
+                      <textarea class="form-control" name="img2_footer" ng-model="img2_footer">{if isset($article->img2_footer)}{$article->img2_footer|clearslash|escape:'html'}{/if}</textarea>
+                      <input type="hidden" name="img2" ng-value="[% img2 %]"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -82,6 +114,21 @@
                 {if $article->content_type_name == 'article'}
                 <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
                   <h5>{t}Home image{/t}</h5>
+                  <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo3 }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo3 }">
+                    <p>{t}Are you sure?{/t}</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo3')" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeImage('photo3');toggleOverlay('photo3')" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
+                    </div>
+                  </div>
                   <div class="form-group">
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!photo3">
@@ -93,7 +140,7 @@
                       <div class="dynamic-image-placeholder" ng-if="photo3">
                         <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3">
                           <div class="thumbnail-actions ng-cloak">
-                            <div class="thumbnail-action remove-action" ng-click="removeImage('photo3')">
+                            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
                              <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
@@ -135,30 +182,45 @@
                 <div class="row">
                   <div class="col-md-4" {if isset($video1) && $video1->title}ng-init="video1 = { id: '{$video1->id}', fk_video: '{$video1->id}', description: '{$video1->description}', thumb: '{$video1->thumb}', created: '{$video1->created}', metadata: '{$video1->metadata}' }"{/if}>
                     <h5>{t}Video for frontpage{/t}</h5>
-                    <div class="form-group">
-                      <div class="thumbnail-placeholder">
-                        <div class="img-thumbnail" ng-if="!video1">
-                          <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
-                            <i class="fa fa-film fa-2x"></i>
-                            <h5>Pick a video</h5>
-                          </div>
-                        </div>
-                        <div class="dynamic-image-placeholder" ng-if="video1">
-                          <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video1">
-                            <div class="thumbnail-actions">
-                              <div class="thumbnail-action remove-action" ng-click="removeImage('video1')">
-                                <i class="fa fa-trash-o fa-2x"></i>
-                              </div>
-                               <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
-                                <i class="fa fa-film fa-2x"></i>
-                              </div>
-                            </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
-                          </dynamic-image>
+                    <div class="thumbnail-wrapper">
+                      <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video1 }"></div>
+                      <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.video1 }">
+                        <p>{t}Are you sure?{/t}</p>
+                        <div class="confirm-actions">
+                          <button class="btn btn-link" ng-click="toggleOverlay('video1')" type="button">
+                            <i class="fa fa-times fa-lg"></i>
+                            {t}No{/t}
+                          </button>
+                          <button class="btn btn-link" ng-click="removeImage('video1');toggleOverlay('video1')" type="button">
+                            <i class="fa fa-check fa-lg"></i>
+                            {t}Yes{/t}
+                          </button>
                         </div>
                       </div>
-                    </div>
-                    <div class="form-group" ng-if="video1">
+                      <div class="form-group">
+                        <div class="thumbnail-placeholder">
+                          <div class="img-thumbnail" ng-if="!video1">
+                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                              <i class="fa fa-film fa-2x"></i>
+                              <h5>Pick a video</h5>
+                            </div>
+                          </div>
+                          <div class="dynamic-image-placeholder" ng-if="video1">
+                            <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video1">
+                              <div class="thumbnail-actions">
+                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
+                                  <i class="fa fa-trash-o fa-2x"></i>
+                                </div>
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                                  <i class="fa fa-film fa-2x"></i>
+                                </div>
+                              </div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
+                            </dynamic-image>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group" ng-if="video1">
                         <ul>
                           <li>{t}File name{/t}: [% video1.title %]</li>
                           <li>{t}Creation date{/t}: [% video1.created %]</li>
@@ -171,44 +233,61 @@
                         <textarea  class="form-control" name="footer_video" ng-model="footer_video" ng-value="footer_video">{$article->footer_video1|clearslash|escape:'html'}</textarea>
                         <input type="hidden" name="fk_video" ng-value="fk_video" class="related-element-id"/>
                       </div>
+                    </div>
                   </div>
                   <div class="col-md-4" {if isset($video2) && $video2->title}ng-init="video2 = { id: '{$video2->id}', fk_video: '{$video2->id}', description: '{$video2->description}', thumb: '{$video2->thumb}', created: '{$video2->created}', metadata: '{$video2->metadata}' }"{/if}>
                     <h5>{t}Video for inner article page{/t}</h5>
-                    <div class="form-group">
-                      <div class="thumbnail-placeholder">
-                        <div class="img-thumbnail" ng-if="!video2">
-                          <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
-                            <i class="fa fa-film fa-2x"></i>
-                            <h5>Pick a video</h5>
-                          </div>
-                        </div>
-                        <div class="dynamic-image-placeholder" ng-if="video2">
-                          <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video2">
-                            <div class="thumbnail-actions">
-                              <div class="thumbnail-action remove-action" ng-click="removeImage('video2')">
-                                <i class="fa fa-trash-o fa-2x"></i>
-                              </div>
-                               <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
-                                <i class="fa fa-film fa-2x"></i>
-                              </div>
-                            </div>
-                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
-                          </dynamic-image>
+                    <div class="thumbnail-wrapper">
+                      <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.video2 }"></div>
+                      <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.video2 }">
+                        <p>{t}Are you sure?{/t}</p>
+                        <div class="confirm-actions">
+                          <button class="btn btn-link" ng-click="toggleOverlay('video2')" type="button">
+                            <i class="fa fa-times fa-lg"></i>
+                            {t}No{/t}
+                          </button>
+                          <button class="btn btn-link" ng-click="removeImage('video2');toggleOverlay('video2')" type="button">
+                            <i class="fa fa-check fa-lg"></i>
+                            {t}Yes{/t}
+                          </button>
                         </div>
                       </div>
-                    </div>
-                    <div class="form-group" ng-if="video2">
-                      <ul>
-                        <li>{t}File name{/t}: [% video2.title %]</li>
-                        <li>{t}Creation date{/t}: [% video2.created %]</li>
-                        <li>{t}Description{/t}: [% video2.description %]</li>
-                        <li>{t}Tags{/t}: [% video2.metadata %]</li>
-                      </ul>
-                      <label class="form-label" for="title">
-                        {t}Footer text for inner video:{/t}
-                      </label>
-                      <textarea  class="form-control" name="footer_video2" ng-model="footer_video2" ng-value="footer_video2">{$article->footer_video2|clearslash|escape:'html'}</textarea>
-                      <input type="hidden" name="fk_video2" ng-value="fk_video2" class="related-element-id"/>
+                      <div class="form-group">
+                        <div class="thumbnail-placeholder">
+                          <div class="img-thumbnail" ng-if="!video2">
+                            <div class="thumbnail-empty" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                              <i class="fa fa-film fa-2x"></i>
+                              <h5>Pick a video</h5>
+                            </div>
+                          </div>
+                          <div class="dynamic-image-placeholder" ng-if="video2">
+                            <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video2">
+                              <div class="thumbnail-actions">
+                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
+                                  <i class="fa fa-trash-o fa-2x"></i>
+                                </div>
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                                  <i class="fa fa-film fa-2x"></i>
+                                </div>
+                              </div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
+                            </dynamic-image>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group" ng-if="video2">
+                        <ul>
+                          <li>{t}File name{/t}: [% video2.title %]</li>
+                          <li>{t}Creation date{/t}: [% video2.created %]</li>
+                          <li>{t}Description{/t}: [% video2.description %]</li>
+                          <li>{t}Tags{/t}: [% video2.metadata %]</li>
+                        </ul>
+                        <label class="form-label" for="title">
+                          {t}Footer text for inner video:{/t}
+                        </label>
+                        <textarea  class="form-control" name="footer_video2" ng-model="footer_video2" ng-value="footer_video2">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                        <input type="hidden" name="fk_video2" ng-value="fk_video2" class="related-element-id"/>
+                      </div>
                     </div>
                   </div>
                 </div>

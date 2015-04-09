@@ -161,7 +161,21 @@
           <div class="grid-body">
             <div class="row">
               <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
-                <div class="form-group">
+                <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">
+                    <p>Are you sure?</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeImage('photo1');toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
+                    </div>
+                  </div>
                   <div class="thumbnail-placeholder ng-cloak">
                     <div class="img-thumbnail" ng-if="!photo1">
                       <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
@@ -172,7 +186,7 @@
                     <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
                       <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
                       <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
                           <i class="fa fa-trash-o fa-2x"></i>
                         </div>
                         <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">

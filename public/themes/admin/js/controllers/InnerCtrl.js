@@ -63,6 +63,15 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
       $scope[from].splice(index, 1);
     };
 
+    $scope.toggleOverlay = function(overlay) {
+      if (!$scope.overlay) {
+        $scope.overlay = {};
+        $scope.overlay[overlay] = false;
+      }
+
+      $scope.overlay[overlay] = !$scope.overlay[overlay];
+    };
+
     /**
      * Insert the selected items in media picker in the target element.
      *
