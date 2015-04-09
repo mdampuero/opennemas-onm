@@ -37,8 +37,30 @@
     {render_messages}
     <div class="grid simple">
       <div class="grid-body no-padding">
-        <tabset>
-          <tab heading="{t}For articles{/t}" class="no-padding active">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{t}For articles{/t}</a></li>
+          {is_module_activated name="ALBUM_MANAGER"}
+            <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{t}For albums{/t}</a></li>
+          {/is_module_activated}
+          {is_module_activated name="VIDEO_MANAGER"}
+            <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{t}For videos{/t}</a></li>
+          {/is_module_activated}
+          {is_module_activated name="KIOSKO_MANAGER"}
+            <li role="presentation"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">{t}For ePapers{/t}</a></li>
+          {/is_module_activated}
+          {is_module_activated name="POLL_MANAGER"}
+            <li role="presentation"><a href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">{t}For polls{/t}</a></li>
+          {/is_module_activated}
+          {is_module_activated name="SPECIAL_MANAGER"}
+            <li role="presentation"><a href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">{t}For Specials{/t}</a></li>
+          {/is_module_activated}
+          {is_module_activated name="BOOK_MANAGER"}
+            <li role="presentation"><a href="#tab7" aria-controls="tab7" role="tab" data-toggle="tab">{t}For books{/t}</a></li>
+          {/is_module_activated}
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="tab1">
             <table class="table table-hover no-margin">
               <thead>
                 <tr>
@@ -53,7 +75,7 @@
               </thead>
               <tbody>
                 {section name=c loop=$categorys}
-                {if $categorys[c]->internal_category eq '1'}
+                {if $categorys[c]>internal_category eq '1'}
                 {include file="category/_partials/print_list_category.tpl"
                 category=$categorys[c]
                 subcategorys=$subcategorys[c]
@@ -69,9 +91,9 @@
                 {/section}
               </tbody>
             </table>
-          </tab>
+          </div>
           {is_module_activated name="ALBUM_MANAGER"}
-            <tab heading="{t}For albums{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab2">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -81,7 +103,6 @@
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
-                    <th style="width:100px;"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -102,10 +123,10 @@
                   {/section}
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
           {is_module_activated name="VIDEO_MANAGER"}
-            <tab heading="{t}For videos{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab3">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -136,10 +157,10 @@
 
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
           {is_module_activated name="KIOSKO_MANAGER"}
-            <tab heading="{t}For ePapers{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab4">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -169,10 +190,10 @@
                   {/section}
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
-            <tab heading="{t}For polls{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab5">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -202,10 +223,10 @@
                   {/section}
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
           {is_module_activated name="SPECIAL_MANAGER"}
-            <tab heading="{t}For Specials{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab6">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -215,7 +236,6 @@
                     {acl isAllowed="CATEGORY_AVAILABLE"}
                     <th style="width:15px;">{t}Published{/t}</th>
                     {/acl}
-                    <th style="width:70px;"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -236,10 +256,10 @@
                   {/section}
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
           {is_module_activated name="BOOK_MANAGER"}
-            <tab heading="{t}For books{/t}" class="no-padding">
+            <div role="tabpanel" class="tab-pane" id="tab7">
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
@@ -269,9 +289,9 @@
                   {/section}
                 </tbody>
               </table>
-            </tab>
+            </div>
           {/is_module_activated}
-        </tabset>
+        </div>
       </div>
     </div>
   </div>
