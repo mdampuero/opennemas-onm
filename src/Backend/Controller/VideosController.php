@@ -258,7 +258,7 @@ class VideosController extends Controller
                 return $this->render('video/selecttype.tpl');
             } else {
                 $authorsComplete = \User::getAllUsersAuthors();
-                $authors = array( '0' => _(' - Select one author - '));
+                $authors = array('0' => _(' - Select one author - '));
                 foreach ($authorsComplete as $author) {
                     $authors[$author->id] = $author->name;
                 }
@@ -430,7 +430,7 @@ class VideosController extends Controller
             }
         }
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array( '0' => _(' - Select one author - '));
+        $authors = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }

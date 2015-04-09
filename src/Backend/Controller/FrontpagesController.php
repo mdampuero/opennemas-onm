@@ -87,7 +87,7 @@ class FrontpagesController extends Controller
 
         $menu = new \Menu();
         $menu->getMenu($layoutSettings['menu']);
-        if (!empty($menu->items )) {
+        if (!empty($menu->items)) {
             foreach ($menu->items as &$item) {
                 $item->categoryID = $ccm->get_id($item->link);
                 if (!empty($item->submenu)) {

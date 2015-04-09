@@ -301,10 +301,15 @@ class NewsAgencyController extends Controller
         if ($article == 'redirect_list') {
             return $this->redirect($this->generateUrl('admin_news_agency'));
         } elseif ($article == 'redirect_category') {
-            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array(
-                'id'        => $id,
-                'source_id' => $sourceId
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_pickcategory',
+                    array(
+                        'id'        => $id,
+                        'source_id' => $sourceId
+                    )
+                )
+            );
         }
 
         // TODO: change this redirection when creating the ported article controller

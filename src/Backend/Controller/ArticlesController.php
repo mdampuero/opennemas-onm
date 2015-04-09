@@ -247,7 +247,7 @@ class ArticlesController extends Controller
 
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array( '0' => _(' - Select one author - '));
+            $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
@@ -394,7 +394,7 @@ class ArticlesController extends Controller
         }
 
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array( '0' => _(' - Select one author - '));
+        $authors = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
