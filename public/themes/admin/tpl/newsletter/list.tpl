@@ -120,7 +120,7 @@
                   </div>
                 </th>
                 <th>{t}Title{/t}</th>
-                <th class="left hidden-xs  hidden-sm"  style="width:150px;">{t}Updated{/t}</th>
+                <th class="center hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
               </tr>
             </thead>
@@ -154,7 +154,7 @@
                     </button>
                   </div>
                 </td>
-                <td class="left hidden-xs hidden-sm">
+                <td class="center hidden-xs hidden-sm">
                   [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                 </td>
                 <td class="right">

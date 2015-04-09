@@ -74,7 +74,6 @@ jQuery(document).ready(function($){
     {render_messages}
 
     <div class="grid simple">
-
         <div class="grid-body">
             <div class="col-md-7">
                 <div class="form-group">
@@ -107,6 +106,7 @@ jQuery(document).ready(function($){
                 <div class="form-group">
                     <label for="newsletter_subscriptionType" class="form-label">{t}Newsletter type{/t}</label>
                     <div class="help">
+                        {capture name=subscriptors}{url name=admin_newsletter_subscriptors}{/capture}
                         {t escape=off 1=$smarty.capture.subscriptors}Whether to manage new subscriptions by an external maillist or using the <a href="%1" target="_blank"> Opennemas-managed list of subscribers</a>.{/t}
                     </div>
                     <div class="controls">
@@ -114,8 +114,6 @@ jQuery(document).ready(function($){
                             <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
                             <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
                         </select>
-                        {capture name=subscriptors}{url name=admin_newsletter_subscriptors}{/capture}
-
                     </div>
                 </div>
 

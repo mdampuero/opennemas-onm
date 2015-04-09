@@ -105,8 +105,15 @@ class NewsletterController extends Controller
                 $newsletterContent[]     = $item;
                 if (!empty($item->submenu)) {
                     foreach ($item->submenu as $subitem) {
-                        $subitem->id         = $i++;
-                        $newsletterContent[] = $subitem;
+                        unset($subitem->pk_item);
+                        unset($subitem->link);
+                        unset($subitem->pk_father);
+                        unset($subitem->type);
+                        unset($subitem->submenu);
+                        $subitem->id           = $i++;
+                        $subitem->items        = array();
+                        $subitem->content_type = 'container';
+                        $newsletterContent[]   = $subitem;
                     }
                 }
                 unset($item->submenu);
@@ -323,7 +330,9 @@ class NewsletterController extends Controller
         if ($subscriptionType === 'create_subscriptor') {
             $sbManager = new \Subscriptor();
             $accounts = $sbManager->getUsers(
-                'status > 0 AND subscription = 1', '', 'pk_pc_user ASC'
+                'status > 0 AND subscription = 1',
+                '',
+                'pk_pc_user ASC'
             );
         } else {
             $configurations = \Onm\Settings::get('newsletter_maillist');
@@ -643,7 +652,9 @@ class NewsletterController extends Controller
         // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
             $lastInvoice->setDate(
-                $lastInvoice->format('Y'), $lastInvoice->format('m'), 28
+                $lastInvoice->format('Y'),
+                $lastInvoice->format('m'),
+                28
             );
         }
 

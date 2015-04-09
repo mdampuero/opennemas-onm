@@ -53,7 +53,7 @@
               <i class="fa fa-plus"></i>
               {t}Add to list{/t}
             </button>
-            <button class="btn btn-default btn-mini pull-right m-r-10" ng-click="toggle()" type="button">
+            <button class="btn btn-default btn-mini pull-right m-r-10" ng-click="toggleAllRecipients(source)" type="button">
               {t}Toggle all{/t}
             </button>
             <div class="form-group">
@@ -77,7 +77,7 @@
               <i class="fa fa-times fa-lg"></i>
               {t}Remove from list{/t}
             </button>
-            <button class="btn btn-default btn-mini pull-right m-r-10" ng-click="toggle()" type="button">
+            <button class="btn btn-default btn-mini pull-right m-r-10" ng-click="toggleAllRecipients(target)" type="button">
               {t}Toggle all{/t}
             </button>
             <div class="form-group">
@@ -114,7 +114,7 @@
             </div>
           </div>
         </div>
-        <input type="hidden" id="recipients_hidden" name="recipients" ng-value="target.items"/>
+        <input type="hidden" id="recipients_hidden" name="recipients" value="[% target.items %]"/>
       </div>
     </div>
     <script type="text/ng-template" id="modal-confirm-send">

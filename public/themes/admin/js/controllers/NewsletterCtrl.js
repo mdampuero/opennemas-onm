@@ -64,11 +64,12 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * @param {Array} source The list.
      */
     $scope.toggleAllRecipients = function(source) {
-      console.log('toggle');
-      source.selected = [];
-
-      if (source.all) {
+      if (source.all === false) {
         source.selected = angular.copy(source.items);
+        source.all = true;
+      } else {
+        source.selected = [];
+        source.all = false;
       }
     };
 
@@ -91,7 +92,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       for (var i = 0; i < emails.length; i++) {
         if (pattern.test(emails[i]) &&
             currentEmails.indexOf(emails[i]) === -1) {
-          $scope.target.items.push({ email: emails[i] });
+          $scope.target.items.push({ email: emails[i], name: emails[i] });
           $scope.moreEmails = $scope.moreEmails.replace(emails[i] + '\n', '');
         }
 
@@ -223,6 +224,6 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       $scope.trustedHtml = $sce.trustAsHtml($scope.html);
     });
 
-    $scope.html = $scope.hiddenHtml
+    $scope.html = $scope.hiddenHtml;
   }
 ]);

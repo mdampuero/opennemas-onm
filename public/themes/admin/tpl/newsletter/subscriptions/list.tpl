@@ -7,7 +7,7 @@
 {/block}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: 0 }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: -1   }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -100,30 +100,19 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs">
-            <select name="filters[subscription]" id="filters_subscription" class="select2" ng-model="criteria.subscription">
-              <option value="-1">{t}All{/t}</option>
-              <option value="1">{t}Subscribed{/t}</option>
-              <option value="0">{t}No subscribed{/t}</option>
-            </select>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Subscribed{/t}', value: 1 }, { name: '{t}No subscribed{/t}', value: 0 } ]">
+            <ui-select name="filters[subscription]" theme="select2" ng-model="criteria.subscription">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right simple-pagination ng-cloak" ng-if="contents.length > 0">
-          <li class="quicklinks hidden-xs">
-            <span class="info">
-              [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
-            </span>
-          </li>
-          <li class="quicklinks form-inline pagination-links">
-            <div class="btn-group">
-              <button class="btn btn-white" ng-click="goToPrevPage()" ng-disabled="isFirstPage()" type="button">
-                <i class="fa fa-chevron-left"></i>
-              </button>
-              <button class="btn btn-white" ng-click="goToNextPage()" ng-disabled="isLastPage()" type="button">
-                <i class="fa fa-chevron-right"></i>
-              </button>
-            </div>
-          </li>
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </ul>
       </div>
     </div>
@@ -203,12 +192,9 @@
             </tbody>
           </table>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading">
-          <div class="pagination-info pull-left" ng-if="contents.length > 0">
-            {t}Showing{/t} [% ((pagination.page - 1) * pagination.epp > 0) ? (pagination.page - 1) * pagination.epp : 1 %]-[% (pagination.page * pagination.epp) < pagination.total ? pagination.page * pagination.epp : pagination.total %] {t}of{/t} [% pagination.total %]
-          </div>
-          <div class="pull-right pagination-wrapper" ng-if="contents.length > 0">
-            <pagination class="no-margin" max-size="5" direction-links="true" ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total" num-pages="pagination.pages"></pagination>
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="pull-right">
+            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
           </div>
         </div>
       </div>
