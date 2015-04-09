@@ -152,7 +152,7 @@
                 </div>
               </th>
               <th>{t}Title{/t}</th>
-              <th>{t}Author{/t}</th>
+              <th class="hidden-xs">{t}Author{/t}</th>
               <th class="center hidden-xs" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
               <th class="center hidden-xs" style="width:80px;">{t}In home{/t}</th>
               <th class="center" style="width:20px;">{t}Published{/t}</th>
@@ -187,7 +187,7 @@
                   {/acl}
                 </div>
               </td>
-              <td class="nowrap">
+              <td class="hidden-xs nowrap">
                 <span ng-if="content.fk_author">
                   [% extra.authors[content.fk_author].name %]
                 </span>

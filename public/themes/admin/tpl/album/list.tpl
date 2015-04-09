@@ -232,17 +232,17 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  <span ng-if="content.cover != ''">
-                    <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;" class="thumbnail"/>
+                  <div ng-if="content.cover != ''" style="height: 120px; width: 100%;">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
                   </span>
-                  <span ng-if="content.cover == ''">
+                  <div ng-if="content.cover == ''">
                     <img ng-src="http://placehold.it/80x60" class="thumbnail" />
                   </span>
                 </td>
                 <td>
-                  <span ng-if="content.cover != ''" class="visible-xs visible-sm">
-                    <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;" class="thumbnail"/>
-                  </span>
+                  <div ng-if="content.cover != ''" class="visible-xs visible-sm" style="height: 120px; width: 100%; margin-bottom: 15px;">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
+                  </div>
                   [% content.title %]
                   <div class="small-text">
                     <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]

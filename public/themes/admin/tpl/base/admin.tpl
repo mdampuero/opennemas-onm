@@ -274,13 +274,13 @@
     <!-- BEGIN SIDEBAR -->
     {include file="base/sidebar.tpl"}
     <div class="sidebar-border" ng-click="sidebar.pin()" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" title="{t}Show/hide sidebar{/t}"></div>
-    <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
-      <span class="fa fa-bars fa-lg"></span>
-    </div>
     <!-- END SIDEBAR -->
     <div class="page-container row-fluid">
       <!-- BEGIN PAGE CONTAINER-->
       <div class="page-content">
+        <div class="sidebar-toggler ng-cloak" ng-click="sidebar.toggle()">
+          <span class="fa fa-bars fa-lg"></span>
+        </div>
         <div class="view" id="view" ng-view autoscroll="true">
           {block name="content"}{/block}
         </div>

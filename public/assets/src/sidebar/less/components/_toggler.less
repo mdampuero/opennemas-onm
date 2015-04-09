@@ -3,9 +3,11 @@
   position: fixed;
   padding: 15px;
   color: #fff;
+  height: @sidebar-width-collapsed;
   left: @sidebar-width;
   transition: all .25s;
-  z-index: 20;
+  width: @sidebar-width-collapsed;
+  z-index: 275;
 }
 
 .collapsed .sidebar-toggler,
@@ -16,6 +18,5 @@
 @media (max-width: (@phone-width - 1px)) {
   .sidebar-toggler {
     display: block;
-    z-index: 20;
   }
 }

@@ -248,13 +248,13 @@
                 </div>
               </td>
               <td style="width:15px;" class=" hidden-xs">
-                <div class="thumbnail">
-                  <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
+                <div style="height: 120px; width: 100%;">
+                  <dynamic-image autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
                 </div>
               </td>
               <td>
-                <div class="thumbnail visible-xs">
-                  <img ng-src="[% content.thumb %]" ng-if="content.thumb" alt="" style="max-width:60px">
+                <div class="visible-xs" style="height: 120px;  width: 100%; margin-bottom: 15px;">
+                  <dynamic-image autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
                 </div>
                 [% content.title %]
                 <div class="small-text">

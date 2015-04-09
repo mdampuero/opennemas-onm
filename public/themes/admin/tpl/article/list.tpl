@@ -206,7 +206,7 @@
                     {/acl}
                   </div>
                 </td>
-                <td>
+                <td class="hidden-xs">
                   <span ng-if="content.fk_author != 0">
                     [% extra.authors[content.fk_author].name %]
                   </span>
