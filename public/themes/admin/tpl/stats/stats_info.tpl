@@ -1,275 +1,185 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="@AdminTheme/less/_account.less" filters="cssrewrite,less"}
+    <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="content"}
-<div class="content my-account-page" ng-app="BackendApp" ng-controller="MyAccountCtrl">
-  <div class="page-navbar actions-navbar">
-    <div class="navbar navbar-inverse">
-      <div class="navbar-inner">
-        <ul class="nav quick-section">
-          <li class="quicklinks">
-            <h4>
-              <i class="fa fa-home fa-lg"></i>
-              {t}Account settings{/t}
-            </h4>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  {render_messages}
-  <div id="info-page" >
-    <div class="col-xs-12 col-sm-6">
-      <div class=" tiles white no-padding col-xs-12">
-        <div class="tiles green cover-pic-wrapper">
-          <img src="http://revox.io/webarch/2.7/assets/img/cover_pic.png" alt="">
-        </div>
-        <div class="tiles white">
-          <div class="row">
-            <div class="col-md-3 col-sm-3">
-              <div class="user-mini-description">
-                <br>
-                <h3 class="text-blue semi-bold">
-                  {$instance->users}
-                </h3>
-                <h5>{t}Users{/t}</h5>
-                <h3 class="text-blue semi-bold">
-                  {$instance->media_size|string_format:"%.2f"}
-                </h3>
-                <h5>{t}Mb of storage{/t}</h5>
-              </div>
-            </div>
-            <div class="col-md-8 user-description-box  col-sm-8">
-              <h4 class="semi-bold no-margin">{$instance->name}</h4>
-              <h6 class="no-margin"><a href="http://{$instance->getMainDomain()}">{$instance->getMainDomain()}</a></h6>
-              <br>
-              <p><i class="fa fa-briefcase"></i>{$instance->created}</p>
-              <p>
-                <i class="fa fa-globe"></i>{implode(', ',$instance->domains)}
-              </p>
-              <!-- <p><i class="fa fa-file-o"></i>Download Resume</p> -->
-              <!-- <p><i class="fa fa-envelope"></i>{$instance->contact_mail}</p> -->
-            </div>
-          </div>
+  <div class="content my-account-page" ng-app="BackendApp" ng-controller="MyAccountCtrl">
+    <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <h4>
+                <i class="fa fa-home fa-lg"></i>
+                {t}Account settings{/t}
+              </h4>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6">
-      <div class="row">
-        <div class="tiles blue col-xs-12 m-b-15">
-          <div class="tiles-body">
-            <div class="tiles-title text-uppercase text-black">
-              {t}Instance Stats{/t}
-            </div>
-            <div class="widget-stats">
-              <div class="wrapper transparent">
-                <h4 class="no-margin">{t}Activated users{/t}</h4>
-                <h5><span class="item-count semi-bold">{$instance->users} of {$max_users}</span></h5>
-              </div>
-            </div>
-            <div class="widget-stats">
-              <div class="wrapper transparent">
-                <h4>{t}Media size{/t}</h4>
-                <h5><span class="item-count animate-number semi-bold" data-value="{$instance->media_size}" data-animation-duration="700">{$instance->media_size|string_format:"%.2f"} MB</span></h5>
-              </div>
-            </div>
-            <div class="widget-stats ">
-              <div class="wrapper last">
-                <h4>Support plan</h4>
-                <h5><span class="item-count animate-number semi-bold" data-value="1547" data-animation-duration="700">{$instance->support_plan}&nbsp; <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="{$support_description}"></i></span></h5>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tiles gray col-xs-12 m-b-15">
-          <div class="tiles-body">
-            <div class="tiles-title text-uppercase text-black">
-              {t}Account information{/t}
-            </div>
-            <div class="widget-stats">
-              <!-- <p><span class="text-white mini-decription">Name <span class="blend">{$instance->name}</span></span></p> -->
-              <p><span class="text-white mini-description">Name <span class="blend">Fabrizia</span></span></p>
-              <p><span class="text-white mini-description ">Contact Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
-            </div>
-          </div>
-        </div>
-        <br>
-        <br>
-        <div class="tiles gray col-xs-12">
-          <div class="tiles-body">
-            <div class="tiles-title text-uppercase text-black">
-              {t}Billing information{/t}
-            </div>
-            <div class="widget-stats">
-              <p><span class="text-white mini-decription">Name: <span class="blend">John Smith</span></span></p>
-              <p><span class="text-white mini-description">Address: <span class="blend">Kensington Streen, Alabama, US 0x0001</span></span></p>
-              <p><span class="text-white mini-description">Phone:  <span class="blend">+1 07520984</span></span></p>
-              <p><span class="text-white mini-description ">Billing CC Email <a href="mailto:{$instance->contact_mail}" class="blend">{$instance->contact_mail}</a></span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xs-12">
-    <h2>{t}Plans & Modules{/t}</h2>
-    <p class="lead">{t}Here you can see a list of activated modules by plan{/t}</p>
-
-    <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
-      <div class="tabbable tabs-left">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#tab" data-toggle="tab">{t}Basic{/t}</a></li>
-          {foreach $plans as $plan => $total}
-          <li>
-            <a href="#tab{$total@index}" data-toggle="tab">{t}{$plan}{/t} ({$total})</a>
-          </li>
-          {/foreach}
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane active" id="tab">
-            <div class="basic modules">
-              <h4><i class="icon-check"></i> {t}Basic{/t}</h4>
-              {foreach $available_modules as $module}
-              {if $module['plan'] eq Base}
-              <div class="span4 element">
-                <label class="inline">
-                  {if in_array($module['id'], $instance->activated_modules)}
-                  <i class="icon-check"></i>
-                  <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                  {else}
-                  <i class="icon-check-empty"></i>
-                  <input type="hidden" id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}">
-                  {/if}
-                  {$module['name']}
-                </label>
-              </div>
-              {/if}
-              {/foreach}
-            </div>
-          </div>
-          {foreach $plans as $plan => $total}
-          <div class="tab-pane" id="tab{$total@index}">
-            <div class="modules">
-              <label class="inline">
-                <h4>
-                  <input type="checkbox" id="select_{$total@index}">
-                  <span class="plan-title" id="{$plan}">{$plan}</span>
-                </h4>
-              </label>
-              {foreach $available_modules as $module}
-              {if $module['plan'] eq $plan}
-              <div class="span4 element">
-                <div class="checkbox">
-                  <input id="{$module['name']}" name="modules[{$module['name']}]" value="{$module['id']}" type="checkbox"/>
-                  <label id="{$module['name']}">
-                    {$module['name']}
-                    {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
-                    {if in_array($module['id'], $downgrade)}<span class="pending">({t}pending deactivation{/t})</span>{/if}
-                  </label>
+    {render_messages}
+    <div class="row" id="info-page" >
+      <div class="col-xs-12 col-sm-8">
+        <div class="row">
+          <div class="col-xs-12 m-b-15">
+            <div class="tiles white">
+              <div class="tiles green">
+                <div class="tiles-body">
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <h3 class="text-white semi-bold">{$instance->name}</h3>
+                  <h5 class="text-white ">
+                    <i class="fa fa-globe"></i>
+                    {implode(', ',$instance->domains)}
+                  </h5>
+                </div>
+                <div class="tile-footer clearfix">
+                  <h6 class="no-margin pull-left">
+                    <a class="text-white" href="mailto://{$instance->contact_mail}">
+                      <i class="fa fa-envelope"></i>
+                      {$instance->contact_mail}
+                    </a>
+                  </h6>
+                  <span class="pull-right">
+                    <i class="fa fa-calendar"></i>
+                    {$instance->created}
+                  </span>
                 </div>
               </div>
-              {/if}
-              {/foreach}
             </div>
           </div>
-          {/foreach}
         </div>
       </div>
-    </form>
-    <div class="upgrade right">
-      <button class="btn btn-large btn-success" type="submit" form="upgrade-form" {if $has_changes}disabled{/if}>
-        {if $has_changes}
-        {t}Waiting for upgrade{/t}
-        <input type="hidden" name="waiting-upgrade" id="waiting-upgrade" value="1">
-        {else}
-        {t}Upgrade instance{/t}
-        {/if}
-      </button>
+      <div class="col-xs-12 col-sm-4">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="tiles purple m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Media size{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last transparent">
+                    <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="tiles red m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Support plan{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last transparent">
+                    <div class="item-count">
+                      {$instance->support_plan}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="tiles blue m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Users{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper transparent">
+                    <span class="item-title">{t}Activated{/t}</span>
+                    <span class="item-count">{$instance->users}</span>
+                  </div>
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper transparent">
+                    <span class="item-title">{t}Available{/t}</span>
+                    <span class="item-count">{$max_users - $instance->users}</span>
+                  </div>
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last transparent">
+                    <span class="item-title">{t}Max{/t}</span>
+                    <span class="item-count">{$max_users}</span>
+                  </div>
+                </div>
+                {if $max_users > 0}
+                <div class="progress transparent progress-small no-radius m-t-20" style="width:90%">
+                  <div class="progress-bar progress-bar-white animate-progress-bar" data-percentage="{($instance->users * 100) / $max_users}%" style="width: {($instance->users * 100) / $max_users}%;"></div>
+                </div>
+                <div class="description">
+                  <span class="text-white mini-description ">
+                    {($instance->users * 100) / $max_users}%
+                    <span class="blend">of total</span>
+                  </span>
+                </div>
+                {/if}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 m-b-15">
+        <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
+          <div class="tiles white">
+            <div class="clearfix b-grey b-b tiles-body">
+              <div class="pull-left">
+                <h4>{t}Plans & Modules{/t}</h4>
+                <p class="hidden-xs">{t}Here you can see a list of activated modules by plan{/t}</p>
+              </div>
+              <div class="upgrade pull-right">
+                <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
+                  <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
+                  <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
+                </button>
+              </div>
+            </div>
+            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+              <div class="plans-wrapper">
+                <div class="inline p-r-30" ng-repeat="plan in plans">
+                  <div class="checkbox">
+                    <input id="select_[% plan.id %]" ng-model="selected[plan.id]" ng-change="togglePlan(plan.id)" ng-disabled="plan.id == 'Base' || isBlocked(plan.id)" type="checkbox">
+                    <label for="select_[% plan.id %]">
+                      <h5 class="no-margin p-b-15">
+                        <span id="{$plan}">[% plan.title %] ([% plan.total %])</span>
+                      </h5>
+                    </label>
+                  </div>
+                  <div ng-repeat="item in modules | filter: { plan: plan.id }">
+                    <div class="checkbox">
+                      <input checklist-model="changes" checklist-value="item" id="module_[% item.id %]" ng-disabled="plan.id == 'Base' || isUpgraded(item.id) || isDowngraded(item.id)" type="checkbox"/>
+                      <label for="module_[% item.id %]">
+                        [% item.name %]
+                        <span class="text-danger" ng-if="isUpgraded(item.id)">({t}pending activation{/t})</span>
+                        <span class="text-danger" ng-if="isDowngraded(item.id)">({t}pending deactivation{/t})</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input name="hasChanges" ng-value="hasChanges" type="hidden">
+          <input name="modules" ng-value="activatedModules" type="hidden">
+        </form>
+      </div>
     </div>
   </div>
-</div>
-</div>
-{include file="stats/modals/_modal_upgrade_instance.tpl"}
 {/block}
 
-{block name="footer-js"}
-<script type="text/javascript">
-  $(document).ready(function (){
-    var checkedArray = [];
-    var isWaiting = $('#waiting-upgrade').val();
-
-    $('.modules').each(function(){
-      var item = $(this).find('.element');
-
-      if (item.length == item.find('input:checkbox:checked').length) {
-        $(this).find('[id^=select]').prop('checked', true);
-      };
-
-      $(this).each(function(){
-        checkedArray.push(
-          $(this).find('.element input:checkbox:checked').length
-          );
-      });
-    });
-
-    $('.modules .element input:checkbox').on('change', function(){
-      $(this).parent().find('span').toggle();
-      var plan = $(this).parents('.modules');
-      if (plan.find('.element').length ==
-        plan.find('.element input:checkbox:checked').length
-        ) {
-        plan.find('[id^=select]').prop('checked', true);
-    } else {
-      plan.find('[id^=select]').prop('checked', false);
-    }
-  });
-
-    $('.upgrade button').on('click', function(e){
-      e.preventDefault();
-      if (isWaiting != 1) {
-        var item = $('.modules');
-        var hasChanges = false;
-        item.each(function(){
-          var elem = $(this).find('.element');
-          elem.each(function(){
-            log($(this).find('.pending').css('display'));
-            if ($(this).find('.pending').css('display') == 'inline') {
-              hasChanges = true;
-            };
-          });
-        });
-
-        if (!hasChanges) {
-          $('.warnings-validation').html(
-            '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'+
-            '{t}You have to select at least one module to upgrade.{/t}'+
-            '</div>'
-            );
-        } else {
-          $("#modal-upgrade-instance").modal('show');
-        }
-      } else {
-        $('.warnings-validation').html(
-          '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'+
-          '{t}You have already requested an upgrade.{/t}'+
-          '</div>'
-          );
-      }
-    });
-
-$('[id^=select]').on('click', function(){
-  var root   = $(this).parents('.modules');
-  var status = this.checked;
-
-  root.find('input:checkbox').each(function(){
-    var element   = $(this).parent().find('span.pending');
-    var isChecked = $(this).is(':checked');
-    $(this).prop('checked', status);
-    if (isChecked != $(this).is(':checked')) {
-      element.toggle();
-    }
-  });
-});
-});
-</script>
-{/block}

@@ -72,18 +72,37 @@ class ClientInformationController extends Controller
 
         // Calculate total modules activated by plans
         $plans = [
-            'Profesional' => 0,
-            'Silver'      => 0,
-            'Gold'        => 0,
-            'Other'       => 0
+            'Basic' => [
+                'id'    => 'Base',
+                'title' => _('Base'),
+                'total' => 0
+            ],
+            'Profesional' => [
+                'id'    => 'Profesional',
+                'title' => _('Profesional'),
+                'total' => 0
+            ],
+            'Silver' => [
+                'id'    => 'Silver',
+                'title' => _('Silver'),
+                'total' => 0
+            ],
+            'Gold' => [
+                'id'    => 'Gold',
+                'title' => _('Gold'),
+                'total' => 0
+            ],
+            'Other' => [
+                'id'    => 'Other',
+                'title' => _('Other'),
+                'total' => 0
+            ]
         ];
 
-        foreach ($plans as $plan => &$total) {
+        foreach ($plans as &$plan) {
             foreach ($availableModules as $module) {
-                if ($module['plan'] == $plan &&
-                    in_array($module['id'], $instance->activated_modules)
-                ) {
-                    $total++;
+                if ($module['plan'] == $plan['id']) {
+                    $plan['total']++;
                 }
             }
         }
@@ -104,15 +123,17 @@ class ClientInformationController extends Controller
 
         $maxUsers = $this->get('setting_repository')->get('max_users');
 
+        $instance->activated_modules = array_values($instance->activated_modules);
+
         return $this->render(
             'stats/stats_info.tpl',
             array(
                 'instance'            => $instance,
                 'upgrade'             => $upgradeChanges,
                 'downgrade'           => $downgradeChanges,
-                'available_modules'   => $availableModules,
-                'plans'               => $plans,
-                'has_changes'         => $hasChanges,
+                'available_modules'   => str_replace('"', '\'', json_encode($availableModules)),
+                'plans'               => str_replace('"', '\'', json_encode(array_values($plans))),
+                'hasChanges'          => str_replace('"', '\'', json_encode($hasChanges)),
                 'support_description' => $supportDescription,
                 'max_users'           => ($maxUsers == 'NaN' || empty($maxUsers)) ? _('Unlimited') : $maxUsers,
             )
@@ -129,18 +150,18 @@ class ClientInformationController extends Controller
     public function upgradeInstanceAction(Request $request)
     {
         // Fetch requested modules
-        $modules = $request->request->get('modules');
-        $waitingUpdate = $request->request->filter(
-            'waiting-upgrade',
+        $modules = json_decode($request->request->get('modules'), true);
+        $hasChanges = $request->request->filter(
+            'hasChanges',
             null,
             FILTER_SANITIZE_STRING
         );
 
-        if ($waitingUpdate) {
+        if ($hasChanges) {
             $request->getSession()->getFlashBag()->add(
                 'error',
                 _(
-                    'You had already sent a upgrade request. '.
+                    'You had already sent an upgrade request. '.
                     'Your upgrade will be applied as soon as possible'
                 )
             );
