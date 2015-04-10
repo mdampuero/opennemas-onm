@@ -31,9 +31,6 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
       for (var i = 0; i < $scope.source.selected.length; i++) {
         var index = $scope.source.items.indexOf($scope.source.selected[i]);
-        console.log(index);
-        console.log($scope.source.selected[i]);
-        console.log($scope.source.items);
         $scope.source.items.splice(index, 1);
       }
 
@@ -57,6 +54,24 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       $scope.target.all = false;
       $scope.target.selected = [];
     };
+
+    /**
+     * Updates scope when target item changes.
+     *
+     * @param array nv The new values.
+     * @param array ov The old values.
+     */
+    $scope.$watch('target.items', function(nv, ov) {
+      var items = [];
+
+      if (nv instanceof Array) {
+        for (var i = 0; i < nv.length; i++) {
+          items.push({ email: nv[i].email, name: nv[i].name });
+        }
+      }
+
+      $scope.targetItems = angular.toJson(items);
+    }, true);
 
     /**
      * Selects/unselects all items of a list.

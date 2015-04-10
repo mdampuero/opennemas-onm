@@ -114,7 +114,7 @@
             </div>
           </div>
         </div>
-        <input type="hidden" id="recipients_hidden" name="recipients" value="[% target.items %]"/>
+        <input type="hidden" id="recipients_hidden" name="recipients" ng-value="targetItems"/>
       </div>
     </div>
     <script type="text/ng-template" id="modal-confirm-send">
