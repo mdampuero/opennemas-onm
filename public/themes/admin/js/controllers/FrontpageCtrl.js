@@ -28,6 +28,11 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       return els;
     }
 
+    $scope.changeCategory = function(category) {
+      window.location = routing.generate('admin_frontpage_list',
+        {category: category});
+    }
+
     $scope.preview = function(category) {
       $scope.loading = true;
 
