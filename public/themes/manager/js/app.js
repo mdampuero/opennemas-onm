@@ -9,6 +9,7 @@ angular.module(
     'ngAnimate',
     'ngQuickDate',
     'ngRoute',
+    'ngSanitize',
     'ngTagsInput',
     'ngTouch',
     'onm.auth',
