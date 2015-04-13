@@ -156,7 +156,8 @@
 
     a {
       border-radius: 4px;
-      color: @header-color;
+      // color: @header-color;
+      color: darken(@header-color, 5%);
       display: block;
       padding-top: 15px;
       width: 100%;
@@ -182,12 +183,52 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       width: 80px;
+
+      color: darken(@header-color, 25%);
     }
   }
 
   &.help-items {
     .dropdown-menu {
       margin-left: -150px;
+
+      .quick-item {
+        float:none;
+        width:100%;
+        height:initial;
+        display:block;
+
+        a {
+          padding:5px;
+        }
+
+        i.fa {
+          float:left;
+          margin-right:15px;
+          margin-left:5px;
+          text-align: center;
+        }
+        .title  {
+          bottom: initial;
+          left: initial;
+          overflow: auto;
+          position: relative;
+          text-overflow: initial;
+          white-space: initial;
+          width: auto;
+          color: #4d525e;
+          display: block;
+          text-align: left;
+          font-size: 103%;
+        }
+        .subtitle {
+          font-weight: normal;
+          font-size: 98%;
+          text-align:left;
+          display:block;
+          padding-left: 40px;
+        }
+      }
     }
   }
 }
