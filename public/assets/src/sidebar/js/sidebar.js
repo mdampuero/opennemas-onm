@@ -63,13 +63,13 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        */
       var sidebarTpl = '<div class="[class][position][inverted]"[id][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
           '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
-          '<scrollable>' +
-            '<div class="sidebar-wrapper">' +
+          '<div class="sidebar-wrapper">' +
+            '<scrollable>' +
               '<ul>' +
                 '[items]' +
               '</ul>' +
-            '</div>' +
-          '</scrollable>' +
+            '</scrollable>' +
+          '</div>' +
           '[footer]' +
         '</div>' +
         '[border]';
