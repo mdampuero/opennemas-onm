@@ -58,12 +58,15 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
+          <button class="btn btn-white" ng-click="criteria = {  name_like: [ { value: '', operator: 'like' } ]}; orderBy = [ { name: 'last_login', value: 'desc' } ]; pagination = { page: 1, epp: 25 }; refresh()">
             <i class="fa fa-trash-o fa-lg"></i>
           </button>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="refresh()">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <button class="btn btn-white" ng-click="refresh()">
             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
           </button>
         </li>

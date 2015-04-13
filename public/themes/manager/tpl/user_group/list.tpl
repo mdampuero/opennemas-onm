@@ -57,7 +57,10 @@
           </button>
         </li>
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="refresh()">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <button class="btn btn-white" ng-click="refresh()">
             <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': loading, 'fa-repeat': !loading }"></i>
           </button>
         </li>
