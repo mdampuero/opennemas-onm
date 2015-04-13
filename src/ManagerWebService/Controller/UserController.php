@@ -215,13 +215,14 @@ class UserController extends Controller
             $groups[$group->id] = $group;
         }
 
-        array_unshift($groups, [ 'id' => '', 'name' => _('All') ]);
+        $flatGroups = array_values($groups);
+        array_unshift($flatGroups, [ 'id' => null, 'name' => _('All') ]);
 
         return new JsonResponse(
             array(
                 'epp'      => $epp,
                 'template' => array(
-                    'flatGroups' => array_values($groups),
+                    'flatGroups' => $flatGroups,
                     'groups'     => $groups
                 ),
                 'page'     => $page,
@@ -424,6 +425,7 @@ class UserController extends Controller
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->get('id_user_group') ? : array(),
             'ids_category'    => $request->request->get('ids_category'),
+            'activated'       => $request->request->filter('activated', 0, FILTER_SANITIZE_STRING),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 

@@ -677,10 +677,23 @@ class ArticlesController extends Controller
         $countArticles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => 8,
-            'total_items'       => $countArticles,
-            'delta'             => 4,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => 8,
+            'total_items'           => $countArticles,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_articles_content_provider_suggested',
                 ['category' => $category]
             ),
@@ -727,9 +740,23 @@ class ArticlesController extends Controller
         $countArticles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => 8,
-            'total_items'       => $countArticles,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => 8,
+            'total_items'           => $countArticles,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_articles_content_provider_category',
                 ['category' => $categoryId]
             ),

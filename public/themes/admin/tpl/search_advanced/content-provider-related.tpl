@@ -1,39 +1,51 @@
-<span style="display:block; width:100%; text-align:center;">
-  <form action="{url name=admin_search_content_provider}" method="get" style="display:inline-block;" id="search-form-content-provider">
-    <input type="hidden" name="related" value="{$related}">
-    <div class="input-group">
-      <input class="form-control" name="search_string" placeholder="{t}Write here the text for search...{/t}" type="text" value="{$search_string}">
-      <span class="input-group-btn">
-        <button type="submit" class="btn" id="search-content-provider-button">
-          <i class="fa fa-search fa-lg"></i>
-        </button>
-      </span>
+<form action="{url name=admin_search_content_provider}" method="get" id="search-form-content-provider">
+  <div class="form-group">
+    <label class="form-label">{t}Write here the text for search...{/t}</label>
+    <div class="controls">
+      <div class="input-group">
+        <input type="text" name="search_string" class="form-control" value="{$search_string}">
+        <span class="input-group-addon button">
+          <i class="fa fa-search"></i>
+        </span>
+      </div>
     </div>
-  </form>
-</span>
-
-{include file="common/content_provider/_container-content-list.tpl" hidenoavailable=true}
+  </div>
+</form>
+{if count($results) > 0}
+  <div id="search_results_available" class="content-provider-block">
+    {foreach from=$results item=content name=video_loop}
+      {include file=$content->content_partial_path}
+    {/foreach}
+  </div>
+  <div class="pagination clearfix">
+    {$pager->links}
+  </div><!-- / -->
+{elseif (!empty($search_string))}
+  {t}No results{/t}
+{/if}
 <script>
 (function($){
     makeContentProviderAndPlaceholdersSortable();
-    $('#search-form-content-provider').on('submit', function(e, ui) {
+    $('span.button').on('click', function(){
+      $('#search-form-content-provider').submit();
+    });
+    $('#search-form-content-provider').on('submit', function(e) {
         e.preventDefault();
         var form = $(this);
         var formData = form.serialize();
         var tab = form.closest('.ui-tabs-panel');
         $.ajax({
             url: form.attr('action'),
-            type: "GET",
+            type: 'GET',
             data: formData,
             cache: false,
             success : function(data){
                 tab.html(data);
             },
-            failure: function(data){
+            failure: function(){
                 tab.html('{t}There was an error while performing the search please reload this tab by changing to another one.{/t}');
             }
         });
     });
 })(jQuery);
-
 </script>

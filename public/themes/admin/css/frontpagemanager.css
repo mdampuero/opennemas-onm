@@ -25,27 +25,30 @@ body {font-size:13px;}
 #content-provider .placeholder-element {min-height:20px;margin:5px;border:1px dashed #aaa !important;padding:5px;background:#eee;cursor:pointer;background-color:rgba(255,255,255,0.2) !important;}
 
 #content-provider {background: #fff;box-shadow: 0px 0px 5px 6px Black;padding-bottom:10px;overflow:visible;position:relative;}
-#content-provider .ui-tabs-nav {position:absolute;top:0px;left:0px;width:100%;}
+#content-provider .ui-tabs-nav {position:absolute;top:0px;left:0px;width:100%;padding:0;background:#e5e9ec !important;}
 #content-provider .ui-tabs-nav * {outline:none;border:none;}
+#content-provider .ui-tabs-nav a,
+#content-provider #toggler{font-weight:normal;font-size:11px;color: #8e9aa2;background-color: #e5e9ec;}
 #content-provider .ui-tabs .ui-tabs-panel {padding:3px !important;margin-top: 33px;border:0 none;border-top: 1px solid #ccc;padding-bottom:30px;}
 #content-provider .ui-tabs {background:none;padding:0;}
 #content-provider.ui-widget-content {background:none;}
 #content-provider .ui-tabs-panel {background:#fff;max-height:100%;}
-#content-provider .ui-tabs-nav {padding:0;background:#FFF !important;}
 #content-provider input[type="checkbox"],
 #content-provider div.content-action-buttons {display:none;}
 #content-provider span.type {display:none;}
 #content-provider {border:0 none;padding:0;box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;z-index: 100;overflow: hidden;}
 #content-provider .ui-tabs {border:0 none !important;padding:0;}
-#content-provider .ui-tabs-nav a,
-#content-provider #toggler{font-weight:normal;font-size:11px;color: #a2a2a2;background-color: #fff;}
 #content-provider .ui-tabs-selected a,
-#content-provider .ui-state-active a {color: #222;font-weight: bold;}
+#content-provider .ui-state-active a {color: #222;font-weight: bold;background-color: #fff;}
 #content-provider .spinner {position:absolute;top:9px;right:9px;z-index:10;display:none;}
 #content-provider .description .title {font-size: 13px;}
-#content-provider .pagination *:first-child {display: inline-block;margin-top: 7px;}
-#content-provider .pagination a {color: #fff;padding: 5px;font-size: 12px;}
-#content-provider .pagination {height: 35px;text-align:center;width:100%;position:absolute;bottom:0;left:0;margin:0;background:#22252d;color: #fff;border-radius: 0;}
+#content-provider .pagination a,
+#content-provider .pagination b, {color: #fff;padding: 5px 10px;font-size: 11px;border: 1px solid #fff;}
+#content-provider .pagination a:first-child,
+#content-provider .pagination b:first-child, { border-radius: 5px 0 0 5px;}
+#content-provider .pagination a:last-child,
+#content-provider .pagination b:last-child, { border-radius: 0 5px 5px 0;}
+#content-provider .pagination {height: 40px;text-align:center;width:100%;padding: 10px 0;position:absolute;bottom:0;left:0;margin:0;background:#22252d;color: #fff;border-radius: 0;}
 .content-provider-block {padding-bottom: 40px;overflow-x:hidden;height: 100%;}
 .content-provider-block .pagination {bottom: 0;position: absolute;right: 0;width: 100%;height: 24px;padding:2px;}
 .content-provider-block .pagination ul {margin:0;padding:0;list-style:none;}
@@ -58,6 +61,7 @@ body {font-size:13px;}
 .content .content-action-buttons{display:none;position:absolute;top:3px;right:3px;}
 
 #search_results_available span.type {display:inline-block !important;font-weight:bold;}
+#search-form-content-provider form {padding: 0 5px;}
 
 /* Jquery UI */
 .ui-dialog {
@@ -98,9 +102,10 @@ body {font-size:13px;}
 .ui-tabs-nav li:first-child{margin-left:10px;}
 .ui-widget {font-family: 'Open sans'}
 .ui-widget-header {background: #22252d;color: #fff;border:0;border-radius:0;}
-.ui-tabs-panel, .tabs > div {border:0 none !important;border-top:1px solid #ccc !important;}
+.ui-tabs-panel, .tabs > div {border:0 none !important;}
 .ui-dialog .ui-icon-closethick {background:url(../images/tb-close.png) top left no-repeat;}
 .ui-sortable-helper {z-index:9999 !important;}
+.ui-widget input {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;}
 
 #frontpagemanager:not(.home) .suggested {border:1px solid #BDB76B;}
 #frontpagemanager:not(.home) .suggested .content-icon-suggested {display: inline-block;}
@@ -118,7 +123,6 @@ body {font-size:13px;}
 .scheduled-state.intime { color: Green !important; font-weight:bold;}
 .scheduled-state.dued  { color: Red !important; font-weight:bold;}
 .scheduled-state.postponed { color: Blue !important; font-weight:bold;}
-
 
 span.in_frontpage {background:url(../images/frontpagemanager/home.png) top right no-repeat;height:20px;width:20px;display:inline-block;vertical-align:middle;}
 

@@ -39,7 +39,7 @@
           <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
-          <ui-select ng-model="criteria.fk_user_group" theme="select2" >
+          <ui-select ng-model="criteria.fk_user_group[0].value" theme="select2" >
             <ui-select-match>
               <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
             </ui-select-match>
