@@ -489,6 +489,11 @@ class InstanceManager extends BaseManager
                 $instance->{$key} = $value;
             }
         }
+
+        // Check for changes in modules
+        if (is_null($instance->changes_in_modules)) {
+            $instance->changes_in_modules = [];
+        }
     }
 
     /**

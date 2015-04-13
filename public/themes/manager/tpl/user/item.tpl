@@ -150,7 +150,14 @@
                         <div class="grid-body">
                             <div class="form-group">
                                 <label for="id-user-group">{t}User group{/t}</label>
-                                <select id="id-user-group" name="id_user_group" ui-select2 multiple ng-model="user.id_user_group" ng-options="key as value.name for (key, value) in template.groups track by value.id"></select>
+                                <ui-select multiple ng-model="user.id_user_group" theme="select2" >
+                                  <ui-select-match>
+                                    [% $item.name %]
+                                  </ui-select-match>
+                                  <ui-select-choices repeat="item.id as item in template.groups">
+                                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                  </ui-select-choices>
+                                </ui-select>
                             </div>
                         </div>
                     </div>

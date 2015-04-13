@@ -1,23 +1,25 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
 {block name="content"}
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Sidebars{/t}</h2>
-            </div>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-indent fa-flip-horizontal fa-lg"></i>
+                        {t}Sidebars{/t}
+                    </h4>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="wrapper-content">
-        {render_messages}
-        <div>
-            Nothing here for now
-        </div>
+</div>
+<div class="content">
+    {render_messages}
+    <div>
+        Nothing here for now
     </div>
-</form>
+</div>
+
 {/block}

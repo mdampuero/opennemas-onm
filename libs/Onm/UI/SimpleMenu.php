@@ -29,13 +29,6 @@ class SimpleMenu
     private $menu         = null;
 
     /**
-     * Errors while parsing the menu
-     *
-     * @var array
-     **/
-    private $errors       = null;
-
-    /**
      * The nesting level when traversing the menu
      *
      * @var int
@@ -45,34 +38,114 @@ class SimpleMenu
     /**
      * Initilizes the object from an XML file
      *
-     * @param string $menuXMLFile the path to the XML menu file
+     * @param string $menuArray the array with menu contents
      * @param string $baseUrl the base url for the links
      *
      * @return void
      */
-    public function __construct($menuXMLFile, $baseUrl = null)
+    public function __construct($menuArray, $baseUrl = null)
     {
-        $menu = simplexml_load_string($menuXMLFile);
-
         if (!isset($baseUrl)) {
             $baseUrl = SITE_URL_ADMIN;
         }
         $this->baseUrl = $baseUrl;
 
-        // If there were errors while loading the menu store them
-        // otherwise store the menu
-        if (!$menu) {
+        $this->menu = $menuArray;
+    }
 
-            $errors =  "Failed loading XML of Menu\n";
-            foreach (libxml_get_errors() as $error) {
-                $errors .= "\t".$error->message."\n";
-            }
-            $this->errors = $errors;
-
-        } else {
-            $this->menu = $menu;
+    /**
+     * Renders the menu given a set of params
+     *
+     * @param array $params the list of params used to render the menu
+     *
+     * @return string the final html content for the menu
+     **/
+    public function render($params = array())
+    {
+        if (isset($params['contents'])) {
+            $this->contents = $params['contents'];
         }
 
+        $output = '';
+        foreach ($this->menu as $element) {
+            list($content, $isCurrent) = $this->renderElement($element);
+            $output []= $content;
+        }
+
+        $menu = "<ul ng-class=\"{ 'collapsed': mode && mode != 'list'}\">".implode("", $output)."</ul>";
+
+        return $menu;
+    }
+
+    /**
+     * Renders an element
+     *
+     * @param string $element the element name
+     * @param SimpleXMLElement $element the element to render
+     * @param boolean $last whether this element is the last in the list
+     *
+     * @return string the generated HTML
+     */
+    private function renderElement($element)
+    {
+        if (in_array('separator', $element)) {
+            return $this->renderSeparator();
+        }
+
+        $output = '';
+        $submenuContent = '';
+        $isCurrent = $isSubmenuCurrent = false;
+
+        // Render submenu
+        $hasSubmenu = array_key_exists('submenu', $element);
+        if ($hasSubmenu) {
+            $submenu = $element['submenu'];
+
+            $submenuContent = [];
+            foreach ($submenu as $subMenuElement) {
+                list($content, $isSubmenuElementCurrent) = $this->renderElement($subMenuElement);
+                $isSubmenuCurrent = $isSubmenuCurrent || $isSubmenuElementCurrent;
+
+                $submenuContent []= $content;
+            }
+
+            $submenuContent = "<ul class='sub-menu'>".implode('', $submenuContent)."</ul>";
+        }
+
+        // Render node content
+        if (\Onm\Module\ModuleManager::isActivated($element['module_name'])
+            && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
+        ) {
+            $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
+
+            if ($element['link'] === '/admin') {
+                $isCurrent = preg_match("@^".preg_quote($element['link'])."$@", $_SERVER['REQUEST_URI']);
+            }
+
+            $classes = [];
+            if ($isCurrent || $isSubmenuCurrent) {
+                $classes[] = 'active';
+            }
+            if ($isSubmenuCurrent) {
+                $classes[] = 'open';
+            }
+
+            if (array_key_exists('class', $element)) {
+                $classes[] = $element['class'];
+            }
+
+            $class = '';
+            if (!empty($classes)) {
+                $class = 'class="' . implode(' ', $classes) . '"';
+            }
+
+            $output = "<li {$class}>"
+                    .$this->getHref($element, $hasSubmenu, $isCurrent || $isSubmenuCurrent)
+                    .$submenuContent
+                    ."</li>";
+        }
+
+        return [$output, ($isCurrent || $isSubmenuCurrent)];
     }
 
     /**
@@ -109,11 +182,17 @@ class SimpleMenu
      *
      * @return string the HTML generated
      **/
-    private function getHref($title, $id, $url, $external = false, $toggle = false)
+    private function getHref($element, $hasArrow, $isOpen)
     {
+        $id       = 'submenu_'.$element['id'];
+        $url      = $element['link'];
+        $title    = $element['title'];
+        $external = isset($element['target']);
+
         if (empty($title) && empty($url)) {
             return;
         }
+
         if (preg_match("@#@", $url)) {
             $url = $url;
         }
@@ -124,15 +203,35 @@ class SimpleMenu
             $target = "target=\"_blank\"";
         }
 
-        if ($toggle) {
-            $class = 'class="dropdown-toggle"';
-            $dataToggle = 'data-toggle="dropdown"';
+        $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
+        $attrId    = "id=\"".sprintf(_("%s"), $id)."\"";
+
+        $arrow = '';
+        if ($hasArrow) {
+            $active = '';
+
+            if ($isOpen) {
+                $active = ' open';
+            }
+            $arrow = "<span class='arrow $active'></span>";
         }
 
-        $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
-        $attrId = "id=\"".sprintf(_("%s"), $id)."\"";
+        $icon = '<i class="fa" ></i>';
+        if (array_key_exists('icon', $element)) {
+            $icon = '<i class="'.$element['icon'].'" ></i>';
+        }
 
-        return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>".$title."</a>";
+        if (!array_key_exists('link', $element)) {
+            return "$icon
+                    <span class=\"title\">$title</span>
+                    $arrow";
+        }
+
+        return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>
+                    $icon
+                    <span class=\"title\">$title</span>
+                    $arrow
+                </a>";
     }
 
     /**
@@ -158,137 +257,13 @@ class SimpleMenu
     }
 
     /**
-     * Renders an element
+     * undocumented function
      *
-     * @param string $element the element name
-     * @param SimpleXMLElement $value the element to render
-     * @param boolean $last whether this element is the last in the list
-     *
-     * @return string the generated HTML
-     */
-    private function renderElement($element, $value)
-    {
-        $output =  array();
-        switch ($element) {
-            case 'submenu':
-                $output []= $this->renderSubMenu($element, $value);
-
-                break;
-            case 'node':
-                $output []= $this->renderNode($value);
-
-                break;
-            default:
-                # code...
-                break;
-        }
-
-        return implode("\n", $output);
-    }
-
-    /**
-     * Recursive function to render a SubMenu and its contents
-     *
-     * @param string $element the element name
-     * @param SimpleXMLElement $value the element to render
-     *
-     * @return string the generated HTML
+     * @return void
+     * @author
      **/
-    private function renderSubMenu($element, $value)
+    public function renderSeparator()
     {
-        $this->nestingLevel++;
-        $hasSubmenu = false;
-        foreach ($value as $element => $submenuContent) {
-            $element = $this->renderElement($element, $submenuContent);
-            if (!empty($element)) {
-                $hasSubmenu = true;
-                $output []= $element;
-            }
-        }
-
-        if ($hasSubmenu) {
-            $class = $this->getClass($value['class'], $hasSubmenu);
-
-            if ($this->nestingLevel > 1) {
-                $dropdownClass = ' dropdown-submenu';
-                $dropdownClassUl = ' dropdown-menu';
-            } else {
-                $dropdownClass = ' dropdown-menu';
-                $dropdownClassUl = ' dropdown-menu';
-            }
-
-            $html  = "<li {$class}>"
-                    .$this->getHref(
-                        $value['title'],
-                        'menu_'.$value['id'],
-                        $value['link'],
-                        false,
-                        $hasSubmenu
-                    )
-                    . "<ul class='".$dropdownClassUl."'>".implode("", $output)."</ul>"
-                    . "</li>";
-        }
-        $this->nestingLevel--;
-
-        return $html;
-    }
-
-    /**
-     * Function for rendering one menu node
-     *
-     * @param SimpleXMLElement $value the node to render
-     *
-     * @return string the html content for a node
-     **/
-    private function renderNode($value)
-    {
-        $html = null;
-        if ((!isset($value['privilege']) || $this->checkAcl($value['privilege']))
-            && (\Onm\Module\ModuleManager::isActivated((string) $value['module_name']))
-        ) {
-            if (($value['privilege']!='ONLY_MASTERS')
-                || ($value['privilege']=='ONLY_MASTERS') && Acl::isMaster()
-            ) {
-                $external = isset($value['target']);
-                $class = $this->getClass($value['class']);
-                $html .= "<li {$class}>"
-                        .$this->getHref(
-                            $value['title'],
-                            'submenu_'.$value['id'],
-                            $value['link'],
-                            $external
-                        )
-                        ."</li>";
-            }
-        }
-
-        return $html;
-    }
-
-    /**
-     * Renders the menu given a set of params
-     *
-     * @param array $params the list of params used to render the menu
-     *
-     * @return string the final html content for the menu
-     **/
-    public function render($params = array())
-    {
-        if (isset($params['contents'])) {
-            $this->contents = $params['contents'];
-        }
-
-        $output = '';
-        foreach ($this->menu as $element => $value) {
-            $output []= $this->renderElement($element, $value);
-        }
-
-        $menu = "<ul id='menu' class='nav'>"
-              . implode("", $output)."</ul>";
-        // if ($params['doctype']) {
-        //     $menu = "<nav>".$menu."</nav>";
-        // }
-
-        return $menu;
+        return '<span class="separator"></span>';
     }
 }

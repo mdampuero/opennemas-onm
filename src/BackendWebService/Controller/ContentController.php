@@ -415,7 +415,7 @@ class ContentController extends Controller
                 $content->remove($id);
                 $success[] = array(
                     'id'      => $id,
-                    'message' => _('Item removed permanently successfully'),
+                    'message' => _('Item permanently removed successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
@@ -506,7 +506,89 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) removed successfully'), count($updated)),
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'messages'  => array_merge($success, $errors)
+            )
+        );
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function emptyTrashAction(Request $request)
+    {
+        // Check permissions
+        if (!in_array('TRASH_ADMIN', $this->getUser()->getRoles())) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), 'TRASH_ADMIN')
+                        )
+                    )
+                )
+            );
+        }
+
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        $contents = $this->get('entity_repository')->findBy([
+            'in_litter' => [
+                [
+                    'operator' => '=',
+                    'value'    => '1'
+                ]
+            ]
+        ]);
+
+        if (is_array($contents) && count($contents) > 0) {
+            foreach ($contents as $content) {
+                $id = $content->id;
+                if (!is_null($content->id)) {
+                    try {
+                        $content->remove($id);
+                        $updated[] = $id;
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
+                            'type'    => 'error'
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }
@@ -563,7 +645,8 @@ class ContentController extends Controller
             $status = $content->content_status;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _('Item ' . ($status ? 'published' : 'unpublished')
+                    . ' successfully'),
                 'type'    => 'success'
             );
         } else {
@@ -573,8 +656,6 @@ class ContentController extends Controller
                 'type'    => 'error'
             );
         }
-
-
 
         return new JsonResponse(
             array(
@@ -655,7 +736,10 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => sprintf(_('%d item(s) ' .
+                    ($available ? 'published' : 'unpublished') . ' successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }
@@ -711,7 +795,9 @@ class ContentController extends Controller
             $favorite = $content->favorite;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _(
+                    'Item ' . ($favorite ? 'added to favorites' : 'removed from favorites') . ' successfully'
+                ),
                 'type'    => 'success'
             );
         } else {
@@ -774,7 +860,9 @@ class ContentController extends Controller
             $inHome = $content->in_home;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => _(
+                    'Item ' . ($inHome ? 'added to home' : 'removed from home') . ' successfully'
+                ),
                 'type'    => 'success'
             );
         } else {
@@ -864,7 +952,10 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => sprintf(
+                    _('%d item(s) '. ($inHome ? 'added to home' : 'removed from home') .' successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }

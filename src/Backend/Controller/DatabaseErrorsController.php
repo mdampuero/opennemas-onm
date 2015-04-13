@@ -38,6 +38,8 @@ class DatabaseErrorsController extends Controller
     {
         $where        = "";
         $itemsPerPage = 10;
+        // $totalErrors  = (int) $rsTotalErrors;
+        $totalErrors = 0;
         $page         = $request->query->getDigits('page', 1);
         $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
@@ -53,11 +55,14 @@ class DatabaseErrorsController extends Controller
                ." ORDER BY created DESC"
                .' LIMIT '.($page-1)*$itemsPerPage.', '.($itemsPerPage);
 
-        $errors = $GLOBALS['application']->conn->Execute($sql, $values);
+        $errors = $GLOBALS['application']->conn->GetArray($sql, $values);
+        if ($errors === false) {
+            $errors = [];
+        }
 
         $pagination = $this->get('paginator')->create([
             'elements_per_page' => $itemsPerPage,
-            'total_items'       => (int) $rsTotalErrors,
+            'total_items'       => $totalErrors,
             'base_url'          => $this->generateUrl('admin_databaseerrors'),
         ]);
 

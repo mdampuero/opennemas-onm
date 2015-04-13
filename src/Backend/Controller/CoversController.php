@@ -45,7 +45,7 @@ class CoversController extends Controller
         $category = $this->get('request')->query->getDigits('category', 'all');
 
         $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
         $timezones = \DateTimeZone::listIdentifiers();
@@ -54,9 +54,9 @@ class CoversController extends Controller
         $this->view->assign(
             array(
                 'category'     => $category,
-                'subcat'       => $subcat,
-                'allcategorys' => $parentCategories,
-                'datos_cat'    => $categoryData,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
@@ -73,9 +73,28 @@ class CoversController extends Controller
      **/
     public function listAction()
     {
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
         return $this->render(
             'covers/list.tpl',
-            array('KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,)
+            [
+                'categories' => $categories,
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR
+            ]
         );
     }
 
@@ -124,11 +143,11 @@ class CoversController extends Controller
                 sprintf(_('Unable to find the cover with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_covers'));
+            return $this->redirect($this->generateUrl('admin_kioskos'));
         }
 
         return $this->render(
-            'covers/read.tpl',
+            'covers/new.tpl',
             array(
                 'cover'          => $cover,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
@@ -150,7 +169,7 @@ class CoversController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('covers/read.tpl');
+            return $this->render('covers/new.tpl');
         }
 
         $postInfo = $request->request;
@@ -199,7 +218,7 @@ class CoversController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
+                $this->generateUrl('admin_kioskos', array('category' => $postInfo->getDigits('category')))
             );
 
         } catch (\Exception $e) {
@@ -207,7 +226,7 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $postInfo->getDigits('category'),
                     )
@@ -237,7 +256,7 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $cover->category,
                     )
@@ -264,7 +283,7 @@ class CoversController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_cover_show',
+                'admin_kiosko_show',
                 array('id' => $cover->id)
             )
         );
@@ -300,7 +319,7 @@ class CoversController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_covers',
+                'admin_kioskos',
                 array(
                     'category' => $cover->category,
                     'page'     => $page
@@ -386,6 +405,6 @@ class CoversController extends Controller
             _('Settings saved successfully.')
         );
 
-        return $this->redirect($this->generateUrl('admin_covers_config'));
+        return $this->redirect($this->generateUrl('admin_kioskos_config'));
     }
 }

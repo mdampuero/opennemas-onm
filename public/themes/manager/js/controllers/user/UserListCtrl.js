@@ -30,7 +30,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.selected = {
             all: false,
-            users: []
+            items: []
         };
 
         /**
@@ -49,7 +49,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
             epp:   data.epp ? parseInt(data.epp) : 25,
             page:  data.page ? parseInt(data.page) : 1,
             total: data.total
-        }
+        };
 
         /**
          * List of template parameters
@@ -63,7 +63,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          *
          * @type Object
          */
-        $scope.users = data.results;
+        $scope.items = data.results;
 
         /**
          * Confirm delete action.
@@ -120,7 +120,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
                         return function() {
                             return itemService.deleteSelected(
                                 'manager_ws_users_delete',
-                                $scope.selected.users);
+                                $scope.selected.items);
                         };
                     }
                 }
@@ -132,7 +132,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
 
                     $scope.selected = {
                         all: false,
-                        users: []
+                        items: []
                     };
 
                     // Show success message
@@ -183,7 +183,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          * @param string id The group id.
          */
         $scope.isSelected = function(id) {
-            return $scope.selected.users.indexOf(id) != -1;
+            return $scope.selected.items.indexOf(id) != -1;
         };
 
         /**
@@ -213,11 +213,11 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          */
         $scope.selectAll = function() {
             if ($scope.selected.all) {
-                $scope.selected.users = $scope.users.map(function(user) {
+                $scope.selected.items = $scope.items.map(function(user) {
                     return user.id;
                 });
             } else {
-                $scope.selected.users = [];
+                $scope.selected.items = [];
             }
         };
 
@@ -250,27 +250,27 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
          * @param integer enabled The activated value.
          */
         $scope.setEnabledSelected = function(enabled) {
-            for (var i = 0; i < $scope.users.length; i++) {
-                var id = $scope.users[i].id;
-                if ($scope.selected.users.indexOf(id) != -1) {
-                    $scope.users[i].loading = 1;
+            for (var i = 0; i < $scope.items.length; i++) {
+                var id = $scope.items[i].id;
+                if ($scope.selected.items.indexOf(id) != -1) {
+                    $scope.items[i].loading = 1;
                 }
             }
 
             var data = {
-                selected: $scope.selected.users,
+                selected: $scope.selected.items,
                 activated: enabled
             }
 
             itemService.patchSelected('manager_ws_users_patch', data).then(function (response) {
                 if (response.status == 200 || response.status == 207) {
                     // Update users changed successfully
-                    for (var i = 0; i < $scope.users.length; i++) {
-                        var id = $scope.users[i].id;
+                    for (var i = 0; i < $scope.items.length; i++) {
+                        var id = $scope.items[i].id;
 
                         if (response.data.success.ids.indexOf(id) != -1) {
-                            $scope.users[i].activated = enabled;
-                            delete $scope.users[i].loading;
+                            $scope.items[i].activated = enabled;
+                            delete $scope.items[i].loading;
                         }
                     }
 
@@ -324,7 +324,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
         $scope.$on('$destroy', function() {
             $scope.criteria         = null;
             $scope.pagination.epp   = null;
-            $scope.users            = null;
+            $scope.items            = null;
             $scope.selected         = null;
             $scope.orderBy          = null;
             $scope.pagination.page  = null;
@@ -373,7 +373,7 @@ angular.module('ManagerApp.controllers').controller('UserListCtrl', [
 
             itemService.list('manager_ws_users_list', data).then(
                 function (response) {
-                    $scope.users   = response.data.results;
+                    $scope.items   = response.data.results;
                     $scope.pagination.total   = response.data.total;
                     $scope.loading = 0;
 

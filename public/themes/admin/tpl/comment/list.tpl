@@ -1,174 +1,198 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
-{block name="header-css" append}
-<style type="text/css">
-    .submitted-on {
-        color: #777;
-    }
-</style>
-{/block}
-
-
 {block name="content"}
-<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-    <div class="top-action-bar clearfix" class="clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>
-                    {t}Comments{/t}
-                </h2>
-            </div>
-            <ul class="old-button">
-                <li ng-if="shvs.selected.length > 0">
-                    <a href="#">
-                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                        <br/>{t}Batch actions{/t}
-                    </a>
-                    <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="COMMENT_AVAILABLE"}
-                        <li>
-                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')">
-                                <i class="icon-check"></i>
-                                {t}Accept{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')">
-                                <i class="icon-remove"></i>
-                                {t}Reject{/t}
-                            </a>
-                        </li>
-                        {/acl}
-                        {acl isAllowed="COMMENT_DELETE"}
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')">
-                                    <i class="icon-trash"></i>
-                                    {t}Delete{/t}
-                                </a>
-                            </li>
-                        {/acl}
-                    </ul>
-                </li>
-                <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                <li>
-                    <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/configure48x48.png" alt="{t}Settings{/t}"><br>
-                        {t}Settings{/t}
-                    </a>
-                </li>
+  <div action="{url name=admin_comments_list}" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+    <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <h4>
+              <i class="fa fa-comment"></i>
+              {t}Comments{/t}
+              </h4>
+            </li>
+          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              <li class="quicklinks">
+                <a class="btn btn-link" href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                  <i class="fa fa-gear fa-lg"></i>
+                </a>
+              </li>
             </ul>
+          </div>
         </div>
+      </div>
     </div>
-
-    <div class="wrapper-content">
-
-        {render_messages}
-
-        <div class="table-info clearfix">
-            <div class="pull-left form-inline">
-                <strong>{t}FILTER:{/t}</strong>
-                &nbsp;&nbsp;
-                <input type="text" autofocus placeholder="{t}Search by body{/t}" ng-model="shvs.search.body_like">
-                &nbsp;&nbsp;
-                <select class="select2" name="status" ng-model="shvs.search.status" data-label="{t}Status{/t}">
-                    <option value="-1">-- All --</option>
-                    {html_options options=$statuses selected=$filter_status}
-                </select>
-            </div>
+    <div class="page-navbar selected-navbar collapsed ng-cloak" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section pull-left">
+            <li class="quicklinks">
+              <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+              <i class="fa fa-arrow-left fa-lg"></i>
+              </button>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+              </h4>
+            </li>
+          </ul>
+          <ul class="nav quick-section pull-right">
+            {acl isAllowed="COMMENT_AVAILABLE"}
+            <li class="quicklinks">
+              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')" tooltip="{t}Reject{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-times fa-lg"></i>
+              </button>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')" tooltip="{t}Accept{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-check fa-lg"></i>
+              </button>
+            </li>
+            {/acl}
+            {acl isAllowed="COMMENT_DELETE"}
+            <li class="quicklinks">
+              <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i>
+              </button>
+            </li>
+            {/acl}
+          </ul>
         </div>
-        <div ng-include="'comments'"></div>
-
+      </div>
     </div>
-    <script type="text/ng-template" id="comments">
-        <div class="spinner-wrapper" ng-if="loading">
-            <div class="spinner"></div>
+    <div class="page-navbar filters-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section">
+            <li class="m-r-10 input-prepend inside search-input no-boarder hidden-xs">
+              <span class="add-on">
+                <span class="fa fa-search fa-lg"></span>
+              </span>
+              <input class="no-boarder" ng-model="criteria.body_like" placeholder="{t}Search by body{/t}" type="text">
+            </li>
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks ng-cloak" ng-init="statuses = {json_encode($statuses)|replace:'"':'\''}">
+              <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
+                <ui-select-match placeholder="Select a report">
+                  <strong>{t}Status{/t}:</strong> [% $select.selected.title %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in statuses | filter: $select.search">
+                  <div ng-bind-html="item.title | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+            <li class="quicklinks ng-cloak">
+              <ui-select name="view" theme="select2" ng-model="pagination.epp">
+                <ui-select-match>
+                  <strong>{t}View{/t}:</strong> [% $select.selected %]
+                </ui-select-match>
+                <ui-select-choices repeat="item in views | filter: $select.search">
+                  <div ng-bind-html="item | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </li>
+          </ul>
+          <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+            <li class="quicklinks hidden-xs">
+              <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      {render_messages}
+      <div class="grid simple">
+        <div class="grid-body no-padding">
+          <div class="spinner-wrapper" ng-if="loading">
+            <div class="loading-spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
+          </div>
+          <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+            <div class="center">
+              <h4>{t}Unable to find any comment that matches your search.{/t}</h4>
+              <h6>{t}Maybe changing any filter could help.{/t}</h6>
+            </div>
+          </div>
+          <div class="table-wrapper ng-cloak" ng-if="!loading">
+            <table class="table table-hover no-margin" ng-if="contents.length > 0">
+              <thead>
+                <tr>
+                  <th class="checkbox-cell">
+                    <div class="checkbox checkbox-default">
+                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                      <label for="select-all"></label>
+                    </div>
+                  </th>
+                  <th>{t}Comment{/t}</th>
+                  <th class="wrap hidden-xs">{t}In response to{/t}</th>
+                  <th style='width:10px;' class="center">{t}Published{/t}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-if="contents.length > 0" ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                  <td class="checkbox-cell">
+                    <div class="checkbox check-default">
+                      <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                      <label for="checkbox[%$index%]"></label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="submitted-on">{t}Author:{/t} <strong>[% content.author %]</strong> (<span ng-if="content.author_email">[% content.author_email %]</span>) - <span class="hidden-xs">[% content.author_ip %]</span></div>
+                    <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
+                    <p>
+                      [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
+                    </p>
+                    <div class="listing-inline-actions">
+                      {acl isAllowed="COMMENT_UPDATE"}
+                      <a class="link" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
+                        <i class="fa fa-pencil"></i> {t}Edit{/t}
+                      </a>
+                      {/acl}
+                      {acl isAllowed="COMMENT_DELETE"}
+                      <button class="link link-danger" ng-click="open('modal-remove-permanently', 'backend_ws_comment_delete', $index)" type="button">
+                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                      </button>
+                      {/acl}
+                    </div>
+                  </td>
+                  <td class="hidden-xs">
+                    [% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 250">...</span>
+                  </td>
+                  <td class="right">
+                    {acl isAllowed="COMMENT_AVAILABLE"}
+                    <button class="btn btn-white" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button">
+                    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.status == 'accepted', 'fa-times text-error': !content.loading && (content.status == 'pending' || content.status == 'rejected') }"></i>
+                    </button>
+                    {/acl}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <table class="table table-hover table-condensed" ng-if="!loading">
-            <thead>
-                <tr>
-                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th>{t}Author{/t}</th>
-                    <th>{t}Comment{/t}</th>
-                    <th class="wrap">{t}In response to{/t}</th>
-                    <th style='width:20px;' class="center">{t}Published{/t}</th>
-                    <th style='width:10px;'></th>
-               </tr>
-            </thead>
-            <tbody>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
-                    <td>
-                        <checkbox index="[% content.id %]">
-                    </td>
-                    <td>
-                        <strong>[% content.author %]</strong><br>
-                        <small ng-if="content.author_email">
-                            [% content.author_email %]
-                        </small>
-                        <br>
-                        <small>[% content.author_ip %]</small>
-                    </td>
-                    <td class="left">
-                        <div class="submitted-on">{t}Submitted on:{/t} [% content.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
-                        <p>
-                            [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
-                        </p>
-                    </td>
-                    <td >
-                        [% shvs.extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="shvs.extra.contents[content.content_id].title.length > 250">...</span>
-                    </td>
-                    <td class="center">
-                        {acl isAllowed="COMMENT_AVAILABLE"}
-                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button"></button>
-                        {/acl}
-                    </td>
-                    <td class="right">
-
-                        <div class="btn-group">
-                            {acl isAllowed="COMMENT_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
-                                    <i class="icon-pencil"></i>
-                                </a>
-                            {/acl}
-                            {acl isAllowed="COMMENT_DELETE"}
-                                <button class="btn btn-danger" ng-click="open('modal-remove-permanently', 'backend_ws_comment_delete', $index)" type="button">
-                                   <i class="icon-trash icon-white"></i>
-                                </button>
-                            {/acl}
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-if="shvs.contents.length == 0">
-                    <td class="empty" colspan="6">
-                        {t}No comments matched your criteria.{/t}
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="6" class="center">
-                        <div class="pull-left" ng-if="shvs.contents.length > 0">
-                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
-                        </div>
-                        <div class="pull-right" ng-if="shvs.contents.length > 0">
-                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
-                        </div>
-                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </script>
+        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+          <div class="pull-right">
+            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
     <script type="text/ng-template" id="modal-remove-permanently">
-        {include file="common/modals/_modalRemovePermanently.tpl"}
+      {include file="common/modals/_modalRemovePermanently.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
-        {include file="common/modals/_modalBatchDelete.tpl"}
+      {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
-</form>
+  </div>
 {/block}

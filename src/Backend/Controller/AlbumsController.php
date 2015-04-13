@@ -69,7 +69,26 @@ class AlbumsController extends Controller
      */
     public function listAction()
     {
-        return $this->render('album/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'album/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -134,14 +153,14 @@ class AlbumsController extends Controller
 
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array( '0' => _(' - Select one author - '));
+            $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
 
             return $this->render(
                 'album/new.tpl',
-                array ( 'authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
+                array ('authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
             );
         }
     }
@@ -222,7 +241,7 @@ class AlbumsController extends Controller
 
         $photos          = $album->_getAttachedPhotos($id);
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = array( '0' => _(' - Select one author - '));
+        $authors         = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -388,9 +407,26 @@ class AlbumsController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countAlbums,
-            'base_url'          => $this->generateUrl('admin_albums_content_provider', ['category' => $categoryId]),
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countAlbums,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
+                'admin_albums_content_provider',
+                ['category' => $categoryId]
+            ),
         ]);
 
         return $this->render(

@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Backend\Annotation\CheckModuleAccess;
@@ -42,8 +43,9 @@ class NewsletterController extends Controller
     public function listAction(Request $request)
     {
         $maxAllowed     = s::get('max_mailing');
-        $totalSendings  = $this->GetTotalNumberOfNewslettersSend();
+        $totalSendings  = $this->getTotalNumberOfNewslettersSend();
         $lastInvoice    = new \DateTime(s::get('last_invoice'));
+        $lastInvoiceText = $lastInvoice->format(_('Y-m-d'));
 
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
@@ -52,37 +54,20 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
-        $itemsPerPage = s::get('items_per_page');
-        $page         = $request->query->getDigits('page', 1);
+        if ($maxAllowed > 0) {
+            $message = sprintf(
+                _('%s newsletter sent from %d (%d allowed).'),
+                (int) $totalSendings,
+                $lastInvoiceText,
+                (int) $maxAllowed
+            );
+        } elseif ($totalSendings == 0) {
+            $message = sprintf(_('No newsletter sent from %s.'), $lastInvoiceText);
+        } else {
+            $message = sprintf(_('%d newsletter sent from %s.'), (int) $totalSendings, $lastInvoiceText);
+        }
 
-        $nm = $this->get('newsletter_manager');
-        list($count, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $itemsPerPage);
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $count,
-                'url'   => $this->generateUrl(
-                    'admin_newsletters',
-                    array(
-                        'page' => $page,
-                    )
-                )
-            )
-        );
-
-        return $this->render(
-            'newsletter/list.tpl',
-            array(
-                'newsletters'   => $newsletters,
-                'count'         => $count,
-                'pagination'    => $pagination,
-                'totalSendings' => $totalSendings,
-                'maxAllowed'    => $maxAllowed,
-                'lastInvoice'   => $lastInvoice->format(_('Y-m-d')),
-            )
-        );
+        return $this->render('newsletter/list.tpl', ['message' => $message]);
     }
 
     /**
@@ -110,16 +95,28 @@ class NewsletterController extends Controller
                 $item->type == 'blog-category' ||
                 $item->type == 'internal'
             ) {
+                unset($item->pk_item);
+                unset($item->link);
+                unset($item->pk_father);
+                unset($item->type);
                 $item->id           = $i;
                 $item->items        = array();
                 $item->content_type = 'container';
                 $newsletterContent[]     = $item;
                 if (!empty($item->submenu)) {
                     foreach ($item->submenu as $subitem) {
-                        $subitem->id         = $i++;
-                        $newsletterContent[] = $subitem;
+                        unset($subitem->pk_item);
+                        unset($subitem->link);
+                        unset($subitem->pk_father);
+                        unset($subitem->type);
+                        unset($subitem->submenu);
+                        $subitem->id           = $i++;
+                        $subitem->items        = array();
+                        $subitem->content_type = 'container';
+                        $newsletterContent[]   = $subitem;
                     }
                 }
+                unset($item->submenu);
                 $i++;
             }
         }
@@ -131,10 +128,10 @@ class NewsletterController extends Controller
 
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
-            array(
+            [
                 'name'              => $configurations['name']." [".$time."]",
                 'newsletterContent' => $newsletterContent,
-                )
+            ]
         );
     }
 
@@ -154,12 +151,25 @@ class NewsletterController extends Controller
         $id = $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
 
+        $containers = json_decode($newsletter->data);
+
+        foreach ($containers as $container) {
+            foreach ($container->items as &$item) {
+                if (!property_exists($item, 'content_type_l10n_name')) {
+                    $type = $item->content_type;
+                    $content = new $type();
+                    $item->content_type_l10n_name = $content->content_type_l10n_name;
+                    $item->content_type_name = \underscore($type);
+                }
+            }
+        }
+
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
                 'with_html'         => true,
                 'newsletter'        => $newsletter,
-                'newsletterContent' => json_decode($newsletter->data),
+                'newsletterContent' => $containers,
             )
         );
     }
@@ -179,7 +189,15 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('content_ids');
-        $contents = json_decode($contentsRAW);
+        $containers = json_decode($contentsRAW);
+
+        foreach ($containers as $container) {
+            foreach ($container->items as &$content) {
+                $content->content_type = \classify($content->content_type_name);
+                unset($content->content_type_name);
+                unset($content->content_type_l10n_name);
+            }
+        }
 
         $availableTimeZones = \DateTimeZone::listIdentifiers();
         $time = new \DateTime();
@@ -200,11 +218,11 @@ class NewsletterController extends Controller
             $newValues = array(
                 'title' => $title,
                 'data'  => $contentsRAW,
-                'html'  => $nm->render($contents),
+                'html'  => $nm->render($containers),
             );
 
             if (is_null($newsletter->html)) {
-                $newValues['html'] = $nm->render($contents);
+                $newValues['html'] = $nm->render($containers);
             }
 
             $newsletter->update($newValues);
@@ -213,8 +231,8 @@ class NewsletterController extends Controller
             $newsletter->create(
                 array(
                     'title'   => $title,
-                    'data'    => $contentsRAW,
-                    'html'    => $nm->render($contents),
+                    'data'    => json_encode($containers),
+                    'html'    => $nm->render($containers),
                 )
             );
         }
@@ -278,7 +296,15 @@ class NewsletterController extends Controller
 
         $newsletter->update($values);
 
-        return new Response('ok', 200);
+        return new JsonResponse(array(
+            'messages' => array(
+                array(
+                    'id'      => '200',
+                    'type'    => 'success',
+                    'message' => sprintf(_('Content saved successfully'))
+                )
+            )
+        ));
     }
 
     /**
@@ -295,25 +321,33 @@ class NewsletterController extends Controller
      **/
     public function pickRecipientsAction(Request $request)
     {
-        $id = $request->query->getDigits('id');
-
+        $id         = $request->query->getDigits('id');
         $newsletter = new \Newsletter($id);
-        $sbManager = new \Subscriptor();
-        $accounts = $sbManager->getUsers('status > 0 AND subscription = 1', '', 'pk_pc_user ASC');
 
-        $mailList   = array();
+        $subscriptionType = \Onm\Settings::get('newsletter_subscriptionType');
 
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations)
-            && array_key_exists('email', $configurations)
-            && !empty($configurations['email'])
-        ) {
-            $subscriptor = new \Subscriptor();
+        $accounts = array();
+        if ($subscriptionType === 'create_subscriptor') {
+            $sbManager = new \Subscriptor();
+            $accounts = $sbManager->getUsers(
+                'status > 0 AND subscription = 1',
+                '',
+                'pk_pc_user ASC'
+            );
+        } else {
+            $configurations = \Onm\Settings::get('newsletter_maillist');
 
-            $subscriptor->email = $configurations['email'];
-            $subscriptor->name  = $configurations['name'];
+            if (!is_null($configurations)
+                && array_key_exists('email', $configurations)
+                && !empty($configurations['email'])
+            ) {
+                $subscriptor = new \Subscriptor();
 
-            $mailList[] = $subscriptor;
+                $subscriptor->email = $configurations['email'];
+                $subscriptor->name  = $configurations['name'];
+
+                $accounts[] = $subscriptor;
+            }
         }
 
         // Ajax request
@@ -335,11 +369,10 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/3-pick-recipients.tpl',
             array(
-                'id'         => $id,
-                'accounts'   => $accounts,
-                'mailList'   => $mailList,
-                'recipients' => $recipients,
-                'subscriptionType' => \Onm\Settings::get('newsletter_subscriptionType'),
+                'id'               => $id,
+                'accounts'         => $accounts,
+                'recipients'       => $recipients,
+                'subscriptionType' => $subscriptionType,
             )
         );
     }
@@ -397,7 +430,7 @@ class NewsletterController extends Controller
         );
 
         $maxAllowed = s::get('max_mailing');
-        $remaining = $maxAllowed - $this->GetTotalNumberOfNewslettersSend();
+        $remaining = $maxAllowed - $this->getTotalNumberOfNewslettersSend();
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
@@ -454,43 +487,6 @@ class NewsletterController extends Controller
                 'newsletter'  => $newsletter,
             )
         );
-    }
-
-    /**
-     * Deletes an newsletter given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('NEWSLETTER_ADMIN')")
-     *
-     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (!empty($id)) {
-            $newsletter = new \Newsletter($id);
-            $newsletter->delete();
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _("Newsletter deleted successfully.")
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('You must give an id for delete a newsletter.')
-            );
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        } else {
-            return new Response('Ok', 200);
-        }
     }
 
     /**
@@ -593,7 +589,7 @@ class NewsletterController extends Controller
      *
      * @return int Total number of mail sent in current mount
      **/
-    private function GetTotalNumberOfNewslettersSend()
+    private function getTotalNumberOfNewslettersSend()
     {
         // Get maximum number of allowed sending mails
         $maxAllowed = s::get('max_mailing');
@@ -656,7 +652,9 @@ class NewsletterController extends Controller
         // Set day to 28 if it's more than that
         if ($lastInvoice->format('d') > 28) {
             $lastInvoice->setDate(
-                $lastInvoice->format('Y'), $lastInvoice->format('m'), 28
+                $lastInvoice->format('Y'),
+                $lastInvoice->format('m'),
+                28
             );
         }
 

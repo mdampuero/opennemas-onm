@@ -4,277 +4,405 @@
  *
  * @package  Backend
  */
-global $generator;
-$menuXml = '<?xml version="1.0"?>
-<menu>
-    <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
-        <node
-            module_name="FRONTPAGE_MANAGER"
-            privilege="ARTICLE_FRONTPAGE"
-            title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
-            id="frontpage_manager"
-            link="'.url('admin_frontpage_list').'"
-        />
-        <node
-            module_name="ADS_MANAGER"
-            privilege="ADVERTISEMENT_ADMIN"
-            title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'"
-            id="ads_manager"
-            link="'.url('admin_ads').'"
-        />
-        <node
-            module_name="WIDGET_MANAGER"
-            privilege="WIDGET_ADMIN"
-            title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
-            id="widget_manager"
-            link="'.url('admin_widgets').'"
-        />
-        <!-- <node
-            module_name="SIDEBAR_MANAGER"
-            privilege="SIDEBAR_ADMIN"
-            title="'.htmlspecialchars(_("Sidebars"), ENT_QUOTES).'"
-            id="sidebar_manager"
-            link="'.url('admin_sidebars').'"
-        />-->
-        <node
-            module_name="MENU_MANAGER"
-            privilege="MENU_ADMIN"
-            title="'.htmlspecialchars(_("Menus"), ENT_QUOTES).'"
-            id="menu_manager"
-            link="'.url('admin_menus').'"
-        />
-    </submenu>
+$menuXml = [
+    [
+        'id'      => 'browse',
+        'class'   => 'list-title visible-xs',
+        'title'   => _("Browse")
+    ],
 
-    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#"
-             privilege="ARTICLE_PENDINGS,OPINION_ADMIN,COMMENT_ADMIN,POLL_ADMIN,'
-                       .'ADVERTISEMENT_ADMIN,STATIC_PAGE_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,'
-                       .'CATEGORY_ADMIN,MENU_ADMIN">
-        <node
-            module_name="ARTICLE_MANAGER"
-            privilege="ARTICLE_PENDINGS"
-            title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'"
-            id="article_manager"
-            link="'.url('admin_articles').'"
-        />
-        <submenu module_name="OPINION_MANAGER"
-            privilege="OPINION_ADMIN"
-            title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'"
-            id="opinion_manager"
-            link="#">
-            <node
-                module_name="OPINION_MANAGER"
-                privilege="OPINION_ADMIN"
-                title="'.htmlspecialchars(_("Article opinions"), ENT_QUOTES).'"
-                id="opinion_manager"
-                link="'.url('admin_opinions').'"
-            />
-            <node
-                module_name="OPINION_MANAGER"
-                privilege="AUTHOR_ADMIN"
-                title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
-                id="authors"
-                link="'.url('admin_opinion_authors').'"
-            />
-        </submenu>
-        <node
-            module_name="COMMENT_MANAGER"
-            privilege="COMMENT_ADMIN"
-            title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'"
-            id="comment_manager"
-            link="'.url('admin_comments').'"
-        />
-        <node
-            module_name="POLL_MANAGER"
-            privilege="POLL_ADMIN"
-            title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"
-            id="poll_manager"
-            link="'.url('admin_polls').'"
-        />
-        <node
-            module_name="STATIC_PAGES_MANAGER"
-            privilege="STATIC_PAGE_ADMIN"
-            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            id="static_pages_manager"
-            link="'.url('admin_staticpages').'"
-        />
-        <node
-            module_name="SPECIAL_MANAGER"
-            privilege="SPECIAL_ADMIN"
-            title="'.htmlspecialchars(_("Specials"), ENT_QUOTES).'"
-            id="specials_manager"
-            link="'.url('admin_specials').'"
-        />
-        <node
-            module_name="LETTER_MANAGER"
-            privilege="LETTER_ADMIN"
-            title="'.htmlspecialchars(_("Letter to the editor"), ENT_QUOTES).'"
-            id="letter_manager"
-            link="'.url('admin_letters').'"
-        />
-        <node
-            module_name="CATEGORY_MANAGER"
-            privilege="CATEGORY_ADMIN"
-            title="'.htmlspecialchars(_("Category manager"), ENT_QUOTES).'"
-            id="category_manager"
-            link="'.url('admin_categories').'"
-        />
-     </submenu>
+    [
+        'id'      => 'welcome',
+        'link'    => url('admin_welcome'),
+        'title'   => _("Welcome"),
+        'icon'    => 'fa fa-home',
+    ],
 
-    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
-            privilege="PHOTO_ADMIN,ATTACHMENT_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
-        <node
-            module_name="IMAGE_MANAGER"
-            privilege="PHOTO_ADMIN"
-            title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
-            id="image_manager"
-            link="'.url('admin_images').'"
-        />
-        <node
-            module_name="FILE_MANAGER"
-            privilege="ATTACHMENT_ADMIN"
-            title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'"
-            id="file_manager"
-            link="'.url('admin_files').'"
-        />
-        <node
-            module_name="VIDEO_MANAGER"
-            privilege="VIDEO_ADMIN"
-            title="'.htmlspecialchars(_("Videos"), ENT_QUOTES).'"
-            id="video_manager"
-            link="'.url('admin_videos').'"
-        />
-        <node
-            module_name="ALBUM_MANAGER"
-            privilege="ALBUM_ADMIN"
-            title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'"
-            id="album_manager"
-            link="'.url('admin_albums').'"
-        />
-        <node
-            module_name="KIOSKO_MANAGER"
-            title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
-            id="kiosko_manager"
-            link="'.url('admin_covers').'"
-            privilege="KIOSKO_ADMIN" />
-        <node
-            module_name="BOOK_MANAGER"
-            privilege="BOOK_ADMIN"
-            title="'.htmlspecialchars(_("Books"), ENT_QUOTES).'"
-            id="book_manager"
-            link="'.url("admin_books").'"
-        />
-    </submenu>
+    // Frontpage menu
+    [
+        'id'      => 'frontpage',
+        'link'    => '#',
+        'title'   => _("Website"),
+        'icon'    => 'fa fa-globe',
+        'submenu' => [
+            [
+                "id"          => "frontpage_manager",
+                "title"       => _("Frontpage Manager"),
+                "icon"        => "fa fa-newspaper-o",
+                "link"        => url('admin_frontpage_list'),
+                "module_name" => "FRONTPAGE_MANAGER",
+                "privilege"   => "ARTICLE_FRONTPAGE",
+            ],
 
-    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
-        privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,'
-                  .'IMPORTER_ADMIN,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
-        <node
-            module_name="ADVANCED_SEARCH"
-            privilege="SEARCH_ADMIN"
-            title="'.htmlspecialchars(_("Global Search"), ENT_QUOTES).'"
-            id="advanced_search"
-            link="'.url('admin_search').'"
-        />
-        <node
-            module_name="TRASH_MANAGER"
-            title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
-            id="trash_manager"
-            link="'.url("admin_trash", array()).'"
-            privilege="TRASH_ADMIN" />
-        <node
-            module_name="NEWSLETTER_MANAGER"
-            title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'"
-            id="newsletter_manager"
-            link="'.url('admin_newsletters').'"
-            privilege="NEWSLETTER_ADMIN" />
-        <node
-            module_name="KEYWORD_MANAGER"
-            title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
-            id="keyword_manager"
-            link="'.url('admin_keywords', array()).'"
-            privilege="PCLAVE_ADMIN" />
-        <submenu title="'.htmlspecialchars(_("Paywall"), ENT_QUOTES).'" id="paywall" link="#"
-            privilege="PAYWALL">
-            <node
-            module_name="PAYWALL"
-            title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
-            id="keyword_manager"
-            link="'.url('admin_paywall', array()).'"
-            privilege="PAYWALL" />
-            <node
-            module_name="PAYWALL"
-            title="'.htmlspecialchars(_("Paywall users"), ENT_QUOTES).'"
-            id="keyword_manager"
-            link="'.url('admin_paywall_users', array()).'"
-            privilege="PAYWALL" />
-            <node
-            module_name="PAYWALL"
-            title="'.htmlspecialchars(_("Paywall purchases"), ENT_QUOTES).'"
-            id="keyword_manager"
-            link="'.url('admin_paywall_purchases', array()).'"
-            privilege="PAYWALL" />
-        </submenu>
-        <node
-            module_name="SYNC_MANAGER"
-            title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
-            privilege="SYNC_ADMIN"
-            id="sync_manager"
-            link="'.url('admin_instance_sync').'"
-        />
-        <node
-            module_name="NEWS_AGENCY_IMPORTER"
-            privilege="IMPORT_ADMIN"
-            title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
-            id="news_agency"
-            link="'.url('admin_news_agency').'"
-        />
-        <node
-            module_name="PAPER_IMPORT"
-            privilege="IMPORT_XML"
-            title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
-            id="xml_importer"
-            link="'.url('admin_importer_xmlfile').'"
-        />
+            [
+                "id"          => "ads_manager",
+                "title"       => _("Advertisements"),
+                "icon"        => "fa fa-bullhorn",
+                "link"        => url('admin_ads'),
+                "module_name" => "ADS_MANAGER",
+                "privilege"   => "ADVERTISEMENT_ADMIN",
+            ],
 
-    </submenu>
+            [
+                "id"          => "widget_manager",
+                "title"       => _("Widgets"),
+                "icon"        => "fa fa-puzzle-piece",
+                "link"        => url('admin_widgets'),
+                "module_name" => "WIDGET_MANAGER",
+                "privilege"   => "WIDGET_ADMIN",
+            ],
 
-    <submenu title="'.htmlspecialchars(_("Settings"), ENT_QUOTES).'" id="system" link="#"
-             privilege="ONM_SETTINGS,CACHE_ADMIN,USER_ADMIN,ONLY_MASTERS,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
-        <node
-            module_name="SETTINGS_MANAGER"
-            title="'.htmlspecialchars(_("General"), ENT_QUOTES).'"
-            id="settings_manager"
-            link="'.url("admin_system_settings", array()).'"
-            privilege="ONM_SETTINGS" />
+            [
+                "id"          => "sidebar_manager",
+                "title"       => _("Sidebars"),
+                "icon"        => "fa fa-indent fa-flip-horizontal",
+                "link"        => url('admin_sidebars'),
+                "module_name" => "SIDEBAR_MANAGER",
+                "privilege"   => "SIDEBAR_ADMIN",
+            ],
 
-            <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#"
-                     privilege="USER_ADMIN">
-                <node
-                    module_name="USER_MANAGER"
-                    privilege="USER_ADMIN"
-                    title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
-                    id="user_manager"
-                    link="'.url("admin_acl_user", array()).'"
-                />
-                <node
-                    module_name="USER_GROUP_MANAGER"
-                    privilege="USER_ADMIN"
-                    title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
-                    id="user_group_manager"
-                    link="'.url("admin_acl_usergroups", array()).'"
-                />
-            </submenu>
-        <node
-            module_name="CACHE_MANAGER"
-            title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
-            id="cache_manager"
-            link="'.url("admin_tpl_manager", array()).'"
-            privilege="CACHE_ADMIN" />
-        <node
-            module_name="LOG_SQL"
-            title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
-            id="log_sql"
-            link="'.url("admin_databaseerrors", array()).'"
-            privilege="ONLY_MASTERS" />
-    </submenu>
-</menu>';
+            [
+                "id"          => "menu_manager",
+                "title"       => _("Menus"),
+                "icon"        => "fa fa-list-alt",
+                "link"        => url('admin_menus'),
+                "module_name" => "MENU_MANAGER",
+                "privilege"   => "MENU_ADMIN",
+            ],
+        ],
+    ],
+
+    // Contents menu
+    [
+        'id'      => 'contents_manager',
+        'link'    => '#',
+        'title'   => _("Contents"),
+        'icon'    => 'fa fa-newspaper-o',
+        'submenu' => [
+            [
+                "id"          => "article_manager",
+                "title"       => _("Articles"),
+                "icon"        => "fa fa-file-text",
+                "link"        => url('admin_articles'),
+                "module_name" => "ARTICLE_MANAGER",
+                "privilege"   => "ARTICLE_PENDINGS",
+            ],
+            [
+                "id"          => "opinion_manager",
+                "title"       => _("Opinions"),
+                "icon"        => "fa fa-quote-right",
+                "link"        => url('admin_opinions'),
+                "module_name" => "OPINION_MANAGER",
+                "privilege"   => "OPINION_ADMIN",
+            ],
+            [
+                "id"          => "comment_manager",
+                "title"       => _("Comments"),
+                "icon"        => "fa fa-comment",
+                "link"        => url('admin_comments'),
+                "module_name" => "COMMENT_MANAGER",
+                "privilege"   => "COMMENT_ADMIN",
+            ],
+
+            [
+                "id"          => "poll_manager",
+                "title"       => _("Polls"),
+                "icon"        => "fa fa-pie-chart",
+                "link"        => url('admin_polls'),
+                "module_name" => "POLL_MANAGER",
+                "privilege"   => "POLL_ADMIN",
+            ],
+
+            [
+                "id"          => "static_pages_manager",
+                "title"       => _("Static Pages"),
+                "icon"        => "fa fa-file",
+                "link"        => url('admin_static_pages'),
+                "module_name" => "STATIC_PAGES_MANAGER",
+                "privilege"   => "STATIC_PAGE_ADMIN",
+            ],
+
+            [
+                "id"          => "specials_manager",
+                "title"       => _("Specials"),
+                "icon"        => "fa fa-star",
+                "link"        => url('admin_specials'),
+                "module_name" => "SPECIAL_MANAGER",
+                "privilege"   => "SPECIAL_ADMIN",
+            ],
+
+            [
+                "id"          => "letter_manager",
+                "title"       => _("Letter to the editor"),
+                "icon"        => "fa fa-envelope",
+                "link"        => url('admin_letters'),
+                "module_name" => "LETTER_MANAGER",
+                "privilege"   => "LETTER_ADMIN",
+            ],
+
+            [
+                "id"          => "category_manager",
+                "title"       => _("Category manager"),
+                "icon"        => "fa fa-bookmark",
+                "link"        => url('admin_categories'),
+                "module_name" => "CATEGORY_MANAGER",
+                "privilege"   => "CATEGORY_ADMIN",
+            ],
+
+        ],
+    ],
+
+    // Media menu
+    [
+        'id'      => 'media_manager',
+        'link'    => '#',
+        'title'   => _("Media"),
+        'icon'    => 'fa fa-image',
+        'submenu' => [
+            [
+                "id"          => "image_manager",
+                "title"       => _("Images"),
+                "icon"        => "fa fa-picture-o",
+                "link"        => url('admin_images'),
+                "module_name" => "IMAGE_MANAGER",
+                "privilege"   => "PHOTO_ADMIN",
+            ],
+            [
+                "id"          => "file_manager",
+                "title"       => _("Files"),
+                "icon"        => "fa fa-file",
+                "link"        => url('admin_files'),
+                "module_name" => "FILE_MANAGER",
+                "privilege"   => "ATTACHMENT_ADMIN",
+            ],
+            [
+                "id"          => "video_manager",
+                "title"       => _("Videos"),
+                "icon"        => "fa fa-film",
+                "link"        => url('admin_videos'),
+                "module_name" => "VIDEO_MANAGER",
+                "privilege"   => "VIDEO_ADMIN",
+            ],
+            [
+                "id"          => "album_manager",
+                "title"       => _("Albums"),
+                "icon"        => "fa fa-picture-o",
+                "link"        => url('admin_albums'),
+                "module_name" => "ALBUM_MANAGER",
+                "privilege"   => "ALBUM_ADMIN",
+            ],
+            [
+                "id"          => "kiosko_manager",
+                "title"       => _("News Stand"),
+                "icon"        => "fa fa-newspaper-o",
+                "link"        => url('admin_kioskos'),
+                "module_name" => "KIOSKO_MANAGER",
+                "privilege"   => "KIOSKO_ADMIN",
+            ],
+            [
+                "id"          => "book_manager",
+                "title"       => _("Books"),
+                "icon"        => "fa fa-book",
+                "link"        => url('admin_books'),
+                "module_name" => "BOOK_MANAGER",
+                "privilege"   => "BOOK_ADMIN",
+            ],
+
+
+
+        ],
+    ],
+
+    // Utils menu
+    [
+        'id'      => 'util',
+        'link'    => '#',
+        'title'   => _("Utilities"),
+        'icon'    => 'fa fa-wrench',
+        'submenu' => [
+            [
+                "id"          => "advanced_search",
+                "title"       => _("Global Search"),
+                "icon"        => "fa fa-search",
+                "link"        => url('admin_search'),
+                "module_name" => "ADVANCED_SEARCH",
+                "privilege"   => "SEARCH_ADMIN",
+            ],
+            [
+                "id"          => "trash_manager",
+                "title"       => _("Trash"),
+                "icon"        => "fa fa-trash-o",
+                "link"        => url('admin_trash'),
+                "module_name" => "TRASH_MANAGER",
+                "privilege"   => "TRASH_ADMIN",
+            ],
+            [
+                "id"          => "newsletter_manager",
+                "title"       => _("Newsletters"),
+                "icon"        => "fa fa-envelope",
+                "link"        => url('admin_newsletters'),
+                "module_name" => "NEWSLETTER_MANAGER",
+                "privilege"   => "NEWSLETTER_ADMIN",
+            ],
+            [
+                "id"          => "keyword_manager",
+                "title"       => _("Keywords"),
+                "icon"        => "fa fa-tags",
+                "link"        => url('admin_keywords'),
+                "module_name" => "KEYWORD_MANAGER",
+                "privilege"   => "PCLAVE_ADMIN",
+            ],
+            [
+                "id"          => "paywall",
+                "title"       => _("Paywall"),
+                "icon"        => "fa fa-paypal",
+                "link"        => '#',
+                "module_name" => "PAYWALL",
+                "privilege"   => "PAYWALL",
+                "submenu" => [
+                    [
+                        "id"          => "paywall_stats",
+                        "title"       => _("Statistics"),
+                        "icon"        => "fa fa-bar-chart",
+                        "link"        => url('admin_paywall'),
+                        "module_name" => "PAYWALL",
+                        "privilege"   => "PAYWALL",
+                    ],
+                    [
+                        "id"          => "paywall_users",
+                        "title"       => _("Paywall users"),
+                        "icon"        => "fa fa-users",
+                        "link"        => url('admin_paywall_users'),
+                        "module_name" => "PAYWALL",
+                        "privilege"   => "PAYWALL",
+                    ],
+                    [
+                        "id"          => "paywall_purchases",
+                        "title"       => _("Paywall purchases"),
+                        "icon"        => "fa fa-shopping-cart",
+                        "link"        => url('admin_paywall_purchases'),
+                        "module_name" => "PAYWALL",
+                        "privilege"   => "PAYWALL",
+                    ],
+                ]
+            ],
+            [
+                "id"          => "sync_manager",
+                "title"       => _("Sync Instances"),
+                "icon"        => "fa fa-exchange",
+                "link"        => url('admin_instance_sync'),
+                "module_name" => "SYNC_MANAGER",
+                "privilege"   => "SYNC_ADMIN",
+            ],
+            [
+                "id"          => "news_agency",
+                "title"       => _("News Agency"),
+                "icon"        => "fa fa-microphone",
+                "link"        => url('admin_news_agency'),
+                "module_name" => "NEWS_AGENCY_IMPORTER",
+                "privilege"   => "IMPORT_ADMIN",
+            ],
+        ],
+    ],
+
+    // Settings menu
+    [
+        'id'      => 'system',
+        'link'    => '#',
+        'title'   => _("Configuration"),
+        'icon'    => 'fa fa-cogs',
+        'submenu' => [
+            [
+                "id"          => "settings_manager",
+                "title"       => _("Settings"),
+                "icon"        => "fa fa-wrench",
+                "link"        => url('admin_system_settings'),
+                "module_name" => "SETTINGS_MANAGER",
+                "privilege"   => "ONM_SETTINGS",
+            ],
+            [
+                "id"          => "acl_manager",
+                "title"       => _("Users & Groups"),
+                "link"        => '#',
+                "icon"        => "fa fa-users",
+                "module_name" => "SETTINGS_MANAGER",
+                "privilege"   => "ONM_SETTINGS",
+                "submenu"     => [
+                    [
+                        "id"          => "user_manager",
+                        "title"       => _("Users"),
+                        "icon"        => "fa fa-user",
+                        "link"        => url('admin_acl_user'),
+                        "module_name" => "USER_MANAGER",
+                        "privilege"   => "USER_ADMIN",
+                    ],
+                    [
+                        "id"          => "user_group_manager",
+                        "title"       => _("User Groups"),
+                        "icon"        => "fa fa-users",
+                        "link"        => url('admin_acl_usergroups'),
+                        "module_name" => "USER_GROUP_MANAGER",
+                        "privilege"   => "USER_ADMIN",
+                    ],
+                ],
+            ],
+            [
+                "id"          => "authors",
+                "title"       => _("Authors"),
+                "link"        => url('admin_opinion_authors'),
+                'icon'        => 'fa fa-user',
+                "module_name" => "OPINION_MANAGER",
+                "privilege"   => "AUTHOR_ADMIN",
+            ],
+            [
+                "id"          => "cache_manager",
+                "title"       => _("Cache manager"),
+                "icon"        => "fa fa-database",
+                "link"        => url('admin_tpl_manager'),
+                "module_name" => "CACHE_MANAGER",
+                "privilege"   => "ONLY_MASTERS",
+            ],
+            [
+                "id"          => "log_sql",
+                "title"       => _("SQL error log"),
+                "icon"        => "fa fa-code",
+                "link"        => url('admin_databaseerrors'),
+                "privilege"   => "ONLY_MASTERS",
+            ],
+
+        ],
+    ],
+    [
+        'id'      => 'faq_and_support',
+        'class'   => 'visible-xs',
+        'link'    => '#',
+        'title'   => _("Help & Support"),
+        'icon'    => 'fa fa-support',
+        'submenu' => [
+            [
+                "id"          => "youtube",
+                "title"       => _("Youtube channel"),
+                "icon"        => "fa fa-youtube",
+                "link"        => 'http://www.youtube.com/user/OpennemasPublishing',
+            ],
+            [
+                "id"          => "faq",
+                "title"       => _("FAQ"),
+                "link"        => 'http://help.opennemas.com',
+                "icon"        => "fa fa-question-circle",
+                "module_name" => "CACHE_MANAGER",
+                "privilege"   => "CACHE_ADMIN",
+            ],
+            [
+                "id"          => "support",
+                "title"       => _("Contact support"),
+                "icon"        => "fa fa-support",
+                "link"        => 'javascript:UserVoice.showPopupWidget();',
+                "module_name" => "LOG_SQL",
+                "privilege"   => "ONLY_MASTERS",
+            ],
+        ]
+    ]
+];
+
+return $menuXml;

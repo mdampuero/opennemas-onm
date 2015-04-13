@@ -42,7 +42,24 @@ function check_available_new_version() {
     });
 }
 
+    function get_contents_in_frontpage() {
+      var els = [];
 
+      $('div.placeholder').each(function() {
+        var placeholder = $(this).data('placeholder');
+        $(this).find('div.content-provider-element').each(function(index) {
+          els.push({
+            'id' : $(this).data('content-id'),
+            'content_type': $(this).data('class'),
+            'placeholder': placeholder,
+            'position': index,
+            'params': {}
+          });
+        });
+      });
+
+      return els;
+    }
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -111,27 +128,15 @@ function remove_element(element) {
     });
 }
 
-function get_contents_in_frontpage() {
-    var els = [];
 
-    jQuery('div.placeholder').each(function() {
-        var placeholder = jQuery(this).data('placeholder');
-        jQuery(this).find('div.content-provider-element').each(function(index) {
-            els.push({
-                'id' : jQuery(this).data('content-id'),
-                'content_type': jQuery(this).data('class'),
-                'placeholder': placeholder,
-                'position': index,
-                'params': {}
-            });
-        });
-
-    });
-    return els;
-}
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html(
+        "<div class='messages'><div class='alert alert-notice messenger-message'>" +
+            "<button class='close' data-dismiss='alert'>×</button>" +
+            frontpage_messages.remember_save_positions +
+        "</div></div>"
+    );
 }
 
 
@@ -166,6 +171,10 @@ jQuery(function($) {
     $('#modal-new-version').on('click', 'a.btn.no', function(e,ui) {
         e.preventDefault();
         $('#modal-new-version').modal('hide');
+    });
+    $('#modal-new-version').on('click', 'a.btn.yes', function(e,ui) {
+        e.preventDefault();
+        location.reload();
     });
     /***************************************************************************
     * Batch Actions
@@ -203,17 +212,17 @@ jQuery(function($) {
             { 'ids': ids }
         ).done(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
+                "<div class='messages'><div class='alert alert-success messenger-message'>" +
                     "<button class='close' data-dismiss='alert'>×</button>" +
                     data +
-                '</div>'
+                '</div></div>'
             );
         }).fail(function(data) {
             $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
+                "<div class='messages'><div class='alert alert-error messenger-message'>" +
                     "<button class='close' data-dismiss='alert'>×</button>" +
                     data.responseText +
-                '</div>'
+                '</div></div>'
             );
         });
         $('#modal-batch-arquive').modal('hide');
@@ -277,16 +286,16 @@ jQuery(function($) {
                 { 'ids': [delId] }
             ).done(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
+                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data +
-                    '</div>');
+                    '</div></div>');
             }).fail(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
+                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data.responseText +
-                    '</div>'
+                    '</div></div>'
                 );
             });
 
@@ -546,7 +555,7 @@ jQuery(function($) {
     * Content provider code
     ***************************************************************************/
 
-    $('#content-provider').dialog({ minWidth: 720, autoOpen: false, maxHeight: 500 });
+    $('#content-provider').dialog({ minWidth: 800, autoOpen: false, maxHeight: 500 });
 
     $('#content-provider .content-provider-block-wrapper').tabs({
         ajaxOptions: {
@@ -612,56 +621,28 @@ jQuery(function($) {
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
                     $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
+                    "<div class='messages'><div class='alert alert-notice messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>"+
                         "Saving"+
-                    '</div>');
+                    '</div></div>');
                 }
             }).done(function(data) {
                 $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
+                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         data.message +
-                    '</div>');
+                    '</div></div>');
                 frontpage_info.last_saved = data.date;
             }).fail(function(data, ajaxOptions, thrownError) {
                 var response = $.parseJSON(data.responseText);
                 $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
+                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         response.message +
-                    '</div>'
+                    '</div></div>'
                 );
             });
         }
-    });
-
-    $('#button_previewfrontpage').on('click', function(e, ui) {
-        e.preventDefault();
-        var contents = get_contents_in_frontpage();
-        var category = $(this).data('category-name');
-        var encodedContents = JSON.stringify(get_contents_in_frontpage());
-
-        $.ajax({
-            type: 'POST',
-            url: frontpage_urls.preview_frontpage,
-            data: {
-                'contents': encodedContents,
-                'category_name': category
-            },
-            beforeSend: function(xhr) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        "Generating frontpage. Please wait..." +
-                    "</div>"
-                );
-            },
-            success: function() {
-                $.colorbox({href: frontpage_urls.get_preview_frontpage, iframe : true, width: '95%', height: '95%'});
-                $('#warnings-validation').html('');
-            }
-        });
     });
 
     $('#button_multiple_delete').on('click', function(e,ui) {
@@ -697,10 +678,6 @@ jQuery(function($) {
             }).fail(function(data) {
             });
         }
-    });
-
-    $('#pick-layout, .settings-panel .close').click('click', function(e, ui) {
-        $('.settings-panel').slideToggle();
     });
 
 });

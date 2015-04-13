@@ -1,4 +1,5 @@
-<table class="table table-hover table-condensed">
+{if count($users) > 0}
+<table class="table table-condensed">
     {if count($users) > 0}
     <thead>
         <tr>
@@ -10,15 +11,6 @@
             <th class="center">{t}Status{/t}</th>
             <th style="width:10px">{t}Edit{/t}</th>
             {/if}
-
-        </tr>
-    </thead>
-    {else}
-    <thead>
-        <tr>
-            <th colspan="11">
-                &nbsp;
-            </th>
 
         </tr>
     </thead>
@@ -38,14 +30,14 @@
             {if isset($user->meta['last_login'])}
                 {datetime date=$user->meta['last_login']}
             {else}
-                <span class="icon-remove"></span>
+                <span class="fa fa-times"></span>
             {/if}
         </td>
         <td class="center">
             {if isset($user->meta['paywall_time_limit'])}
                 {datetime date=$user->meta['paywall_time_limit']}
             {else}
-                <span class="icon-remove"></span>
+                <span class="fa fa-times"></span>
             {/if}
         </td>
         {if $show_edit_button}
@@ -61,18 +53,15 @@
                 <span style="color:#0000A0">{t}Registered{/t}</span>
             {/if}
         </td>
-        <td class="center">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn" title="{t}Edit{/t}"><i class="icon-pencil"></i></a>
+        <td class="right">
+            <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn btn-white" title="{t}Edit{/t}"><i class="fa fa-pencil"></i></a>
         </td>
         {/if}
 
     </tr>
-    {foreachelse}
-    <tr>
-        <td class="empty" colspan="11">{t}No users with paywall{/t}</td>
-    </tr>
     {/foreach}
     </tbody>
+    {if count($users) > 0}
     <tfoot>
         <tr>
             <td colspan="11" class="center">
@@ -82,4 +71,13 @@
             </td>
         </tr>
     </tfoot>
+    {/if}
 </table>
+<a href="{url name=admin_paywall_users}" class="btn btn-white">{t}Show all…{/t}</a>
+{else}
+<div class="listing-no-contents">
+  <div class="center">
+    <h4>{t}No paywall users yet.{/t}</h4>
+  </div>
+</div>
+{/if}

@@ -49,7 +49,7 @@ class AclUserController extends Controller
 
         $groupsOptions = array();
         foreach ($groups as $cat) {
-            $groupsOptions[$cat->id] = $cat->name;
+            $groupsOptions[] = [ 'name' => $cat->name, 'value' => $cat->id];
         }
 
         // Get max users from settings
@@ -63,16 +63,17 @@ class AclUserController extends Controller
         if (!$createEnabled) {
             $request->getSession()->getFlashBag()->add(
                 'notice',
-                _('You have reach the maximun users allowed. If you want to create more users, please contact us.')
+                _('You have reach the maximum users allowed. If you want to create more users, please contact us.')
             );
         }
+
+        array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'user_groups'     => $groups,
-                'groupsOptions'   => $groupsOptions,
-                'createEnabled'   => $createEnabled,
+                'groups'        => $groupsOptions,
+                'createEnabled' => $createEnabled,
             )
         );
     }
@@ -87,8 +88,6 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -174,12 +173,10 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-
         if ($userId != $_SESSION['userid']) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
@@ -559,7 +556,7 @@ class AclUserController extends Controller
             return $this->render('login/recover_pass.tpl');
         } else {
             $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
+            $token = '';
             // Get user by email
             $user = new \User();
             $user->findByEmail($email);
@@ -695,6 +692,8 @@ class AclUserController extends Controller
      */
     public function socialAction(Request $request, $id, $resource)
     {
+        $template = 'acl/user/social.tpl';
+
         $user = $this->get('user_repository')->find($id);
 
         $session = $request->getSession();
@@ -720,10 +719,14 @@ class AclUserController extends Controller
             $resourceName = 'Twitter';
         }
 
+        if ($request->get('style') && $request->get('style') == 'orb') {
+            $template = 'acl/user/social_alt.tpl';
+        }
+
         $this->dispatchEvent('social.disconnect', array('user' => $user));
 
         return $this->render(
-            'acl/user/social.tpl',
+            $template,
             array(
                 'current_user_id' => $this->getUser()->id,
                 'connected'       => $connected,
@@ -742,7 +745,7 @@ class AclUserController extends Controller
      * @param  integer  $id      The user's id.
      * @return Response          The response object.
      */
-    public function disconnectAction($id, $resource)
+    public function disconnectAction(Request $request, $id, $resource)
     {
         $user = $this->get('user_repository')->find($id);
 
@@ -760,7 +763,11 @@ class AclUserController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'admin_acl_user_social',
-                array('id' => $id, 'resource' => $resource)
+                [
+                    'id'       => $id,
+                    'resource' => $resource,
+                    'style'    => $request->get('style')
+                ]
             )
         );
     }

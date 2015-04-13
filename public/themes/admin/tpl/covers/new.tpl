@@ -1,154 +1,157 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js,
-        @AdminTheme/js/jquery/jquery-ui-sliderAccess.js,
-        @AdminTheme/js/onm/jquery.datepicker.js "}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
+{block name="footer-js" append}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+    <script type="text/javascript" src="{$asset_url}"></script>
+  {/javascripts}
+
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $('#date').datetimepicker({
+        format: 'YYYY-MM-D'
+      });
+
+      $('#title').on('change', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+      });
+    });
+  </script>
 {/block}
 
 {block name="content"}
-<form id="formulario" enctype="multipart/form-data"  name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title">
-            <h2>{if !isset($kiosko->id)}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2>
+  <form action="{if !empty($cover->id)}{url name=admin_kiosko_update id=$cover->id}{else}{url name=admin_kiosko_create}{/if}" method="POST"  enctype="multipart/form-data">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-newspaper-o"></i>
+                            {t}Covers{/t}
+                        </h4>
+                    </li>
+                    <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+                    <li class="quicklinks hidden-xs">
+                        <h5>{if !isset($cover->id)}{t}Creating ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h5>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_kioskos category=$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                                <span class="fa fa-reply"></span>
+                            </a>
+                        </li>
+                        <li class="quicklinks"><span class="h-seperate"></span></li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-save"></span>
+                                {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <ul class="old-button">
-            <li>
-                <button action="submit">
-                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
-                </button>
-            </li>
-            <li class="separator"></li>
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?action=list" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
-                </a>
-            </li>
-        </ul>
     </div>
-</div>
+    <div class="content">
+      {render_messages}
+      <div class="row">
+        <div class="col-md-8">
+          <div class="grid simple">
+            <div class="grid-body">
+              <div class="form-group">
+                <label for="title" class="form-label">{t}Title{/t}</label>
+                <div class="controls">
+                  <input type="text" id="title" name="title" value="{$cover->title|default:""}" required="required" class="form-control"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="date" class="form-label">{t}Date{/t}</label>
+                <div class="controls">
+                  <div class="input-group">
+                    <input class="form-control" type="text" id="date" name="date" value="{$cover->created}" required="required" placeholder="{t}Click here to pick a date{/t}" aria-describedby="basic-addon2">
+                    <span class="input-group-addon" id="basic-addon2"><span class="fa fa-calendar"></span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="price" class="form-label">{t}Price{/t}</label>
+                <span class="help">{t}Split decimals with a dot{/t}.</span>
+                <div class="controls">
+                  <input type="number" step="any" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="type" class="form-label">{t}Type{/t}</label>
+                <div class="controls">
+                  <select name="type" id="type" required="required">
+                    <option value="0" {if empty($cover) || $cover->type==0}selected{/if}>{t}Item{/t}</option>
+                    <option value="1" {if $cover->type==1}selected{/if}>{t}Subscription{/t}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="date" class="form-label">{t}File{/t}</label>
+                <div class="controls">
+                  {if is_object($cover)}
+                    <div class="thumbnail" style="display:inline-block;">
+                      <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->name|regex_replace:"/.pdf$/":".jpg"}" title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}"/>
+                    </div>
+                  {else}
+                    <input type="file" id="file" name="file" required="required" />
+                  {/if}
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="id" name="id" value="{$cover->id}" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="grid simple">
+            <div class="grid-body">
 
-{render_messages}
+              <div class="form-group">
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="content_status" name="content_status" {if $cover->content_status eq 1}checked="checked"{/if}>
+                  <label for="content_status">{t}Published{/t}</label>
+                </div>
+              </div>
 
-<div class="wrapper-content">
-
-    <div id="content-wrapper">
-        <table class="adminheading">
-            <th>
-                <td></td>
-            </th>
-        </table>
-        <table class="adminform">
-            <tbody>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Title{/t}:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="title" name="title" title="Portada" size="80" value="{$kiosko->title|clearslash|default:""}" class="required" onBlur="javascript:get_metadata(this.value);" />
-                    </td>
-                    <td rowspan="3">
-                        <table style='background-color:#F5F5F5; padding:18px; width:99%;'>
-                            <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                    <label for="title">{t}Category{/t}</label>
-                                </td>
-                                <td nowrap="nowrap">
-                                    {include file="common/selector_categories.tpl" name="category" item=$kiosko}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                    <label for="content_status">{t}Available{/t}:</label>
-                                </td>
-                                <td valign="top" nowrap="nowrap">
-                                    <select name="content_status" id="content_status" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                        <option value="0" {if $kiosko->available==0}selected{/if}>{t}No{/t}</option>
-                                        <option value="1" {if empty($kiosko) || $kiosko->content_status==1}selected{/if}>{t}Yes{/t}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                    <label for="title">{t}Favorite{/t}:</label>
-                                </td>
-                                <td valign="top" nowrap="nowrap">
-                                    <select name="favorite" id="favorite" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                        <option value="0" {if $kiosko->favorite==0}selected{/if}>{t}No{/t}</option>
-                                        <option value="1" {if empty($kiosko) || $kiosko->favorite==1}selected{/if}>{t}Yes{/t}</option>
-                                    </select>
-                                    <img class="favorite" src="{$params.IMAGE_DIR}selected.png" border="0" alt="En home" align="top" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="metadata">{t}Keywords{/t}: </label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$kiosko->metadata|clearslash|default:""}" /><br>
-                        <label align='right'><sub>{t}Separated by commas{/t}</sub></label><br>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top"  align="right" style="padding:4px;">
-                        <label for="title">{t}Price{/t}:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="number" step="any" id="price" name="price" size="80" value="{$kiosko->price|string_format:"%.2f"|default:""}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Date{/t}:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                         <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" />
-                    </td>
-                </tr>
-                {if $smarty.request.action eq 'new'}
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Upload PDF{/t}:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                         <input type="file" id="file" name="file" title="PDF de portada" class="required" /></div>
-                    </td>
-                </tr>
-                <!-- Hidden form vars -->
-                <input type="hidden" id="action" name="action" value="create" />
-                {else}
-                <tr>
-                    <td valign="top" colspan="3">
-                        <p style="text-align: center;">
-                            <img src="{$KIOSKO_IMG_URL}{$kiosko->path}{$kiosko->name|regex_replace:"/.pdf$/":".jpg"}" title="{$kiosko->title|clearslash}" alt="{$kiosko->title|clearslash}" />
-                        </p>
-                    </td>
-                </tr>
-                <!-- Hidden form vars -->
-                <input type="hidden" id="action" name="action" value="update" />
-                <input type="hidden" id="id" name="id" value="{$kiosko->id}" />
-                {/if}
-            </tbody>
-        </table>
-
-    </div><!--fin content-wrapper-->
-
-</form>
-{capture assign="language"}{setting name=site_language}{/capture}
-{assign var="lang" value=$language|truncate:2:""}
-{if !empty($lang)}
-    {assign var="js" value="/jquery/jquery_i18n/jquery.ui.datepicker-"|cat:$lang|cat:".js"}
-    {script_tag language="javascript" src=$js}
-    <script>
-    jQuery(document).ready(function() {
-        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "{$lang}" ] );
-    });
-    </script>
-{/if}
+              <div class="form-group">
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="favorite" name="favorite" {if $cover->favorite eq 1}checked="checked"{/if}>
+                  <label for="favorite">{t}Favorite{/t}</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="category" class="form-label">{t}Category{/t}</label>
+                <div class="controls">
+                  <select name="category" id="category" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                    {section name=as loop=$allcategorys}
+                      {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                      {/acl}
+                      {section name=su loop=$subcat[as]}
+                        {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                          <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category || $cover->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;L&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                        {/acl}
+                      {/section}
+                    {/section}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="metadata" class="form-label">{t}Keywords{/t}</label>
+                <span class="help">{t}List of words separated by commas{/t}.</span>
+                <div class="controls">
+                  <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$cover->metadata|default:""}"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 {/block}

@@ -1,6 +1,6 @@
 
-<div class="control-group">
-    <label for="title" class="control-label">{t}Title{/t}</label>
+<div class="form-group">
+    <label for="title" class="form-label">{t}Title{/t}</label>
     <div class="controls">
         <input  type="text" id="title" name="title"
             {if (!empty($video->title))}
@@ -8,51 +8,38 @@
             {else}
                 value="{$information['title']}"
             {/if}
-             required="required" class="input-xlarge"/>
+             required="required" class="form-control"/>
     </div>
 </div>
 
-<div class="control-group">
-    <label for="metadata" class="control-label">{t}Keywords{/t}</label>
+<div class="form-group">
+    <label for="description" class="form-label">{t}Description{/t}</label>
     <div class="controls">
-        <input type="text" id="metadata" name="metadata" value="{$video->metadata|default:""}" required="required" class="input-xlarge"/>
-        <div class="help-block">{t}List of words separated by commas.{/t}</div>
-    </div>
-</div>
-<div class="control-group">
-    <label for="description" class="control-label">{t}Description{/t}</label>
-    <div class="controls">
-        <textarea name="description" id="description" required="required" rows="6" class="input-xxlarge">{$video->description|clearslash|default:""}</textarea>
-    </div>
-</div>
-<div class="control-group">
-    <label for="author_name" class="control-label">{t}Service:{/t}</label>
-    <div class="controls">
-        <input type="text" id="author_name" name="author_name" title="author_name" required="required"
-                {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"|default:""}"
-                {else} value="{$information['service']|clearslash|escape:"html"|default:""}" {/if} />
+        <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:""}</textarea>
     </div>
 </div>
 
 {if (!empty($video->uri))}
-<div class="control-group">
-    <label for="link" class="control-label">{t}Link{/t}</label>
+<div class="form-group">
+    <label for="link" class="form-label">{t}Link{/t}</label>
     <div class="controls">
         <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">{$smarty.const.SITE_URL}{$video->uri}</a>
     </div>
 </div>
 {/if}
 
-<div class="control-group">
-    <label for="preview" class="control-label">{t}Preview{/t}</label>
+<div class="form-group">
+    <label for="preview" class="form-label">{t}Preview{/t}</label>
     <div class="controls">
-        <div class="video_player" style="max-width:500px; overflow:hidden;">{$information['embedHTML']}</div>
+        <div class="thumbnail center">
+            <div class="video_player" style="max-width:600px; overflow:hidden; margin:0 auto">{$information['embedHTML']}</div>
+        </div>
 
         <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
     </div>
 </div>
-<div class="control-group">
-    <label for="other_info" class="control-label">{t}Other information{/t}</label>
+<div class="form-group">
+    <label for="other_info" class="form-label">{t}Other information{/t}</label>
     <div class="controls">
         <table style="width:80%; margin:20xp;">
             <tr>
@@ -86,3 +73,6 @@
         </table>
     </div>
 </div>
+<input type="hidden" id="author_name" name="author_name" title="author_name" required="required"
+    {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"|default:""}"
+    {else} value="{$information['service']|clearslash|escape:"html"|default:""}" {/if} />

@@ -3,8 +3,9 @@
         <meta charset="UTF-8">
         <title>Document</title>
         {block name="header-css"}
-            {stylesheets src="@Common/css/bootstrap/bootstrap.css,
-                @Common/css/fontawesome/font-awesome.min.css,
+            {stylesheets src="
+                @Common/components/font-awesome/css/font-awesome.min.css,
+                @Common/components/bootstrap/dist/css/bootstrap.min.css,
                 @Common/css/style.css" filters="cssrewrite"}
                 <link rel="stylesheet" href="{$asset_url}">
             {/stylesheets}

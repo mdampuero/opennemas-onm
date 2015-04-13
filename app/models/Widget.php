@@ -62,7 +62,6 @@ class Widget extends Content
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -70,7 +69,6 @@ class Widget extends Content
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -161,7 +159,6 @@ class Widget extends Content
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
             return false;
         }
 
@@ -337,7 +334,7 @@ class Widget extends Content
         }
         $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
 
-        $className = 'Widget' . $this->content;
+        $className = 'Widget' . trim($this->content);
         $filename = strtolower($className);
 
         foreach ($paths as $path) {
@@ -361,7 +358,6 @@ class Widget extends Content
 
         try {
             if (class_exists($className)) {
-
                 $er = getService('entity_repository');
                 $widget = $er->find('Widget', $this->id);
 

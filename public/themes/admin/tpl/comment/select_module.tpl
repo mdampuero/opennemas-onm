@@ -6,29 +6,24 @@
 </script>
 {/block}
 
-{block name="header-css" append}
-<style type="text/css">
-    .submitted-on {
-        color: #777;
-    }
-</style>
-{/block}
-
 {block name="content"}
-    <div class="top-action-bar clearfix" class="clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>
-                    {t}Comments{/t}
-                </h2>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-comment"></i>
+                            {t}Comments{/t}
+                        </h4>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <div class="wrapper-content">
-
+    <div class="content">
         {render_messages}
-
 
         {include file="comment/modals/_modalChange.tpl"}
         <script>

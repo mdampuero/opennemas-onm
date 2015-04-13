@@ -1,0 +1,15 @@
+{
+  "name": "opennemas",
+  "version": "0.1.0",
+  "dependencies": {
+    "bower": "~1.4.1",
+    "less": "~2.2.0",
+    "uglify-js": "~2.4.16",
+    "uglifycss": "~0.0.11"
+  },
+  "devDependencies": {
+    "angular-jsdoc": "~0.3.*",
+    "jsdoc": "~3.3.*",
+    "jshint": "~2.5.*"
+  }
+}

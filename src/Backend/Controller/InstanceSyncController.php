@@ -38,26 +38,13 @@ class InstanceSyncController extends Controller
      **/
     public function listAction()
     {
-        $allSites = $colors = array();
-
-        if ($syncParams = s::get('sync_params')) {
-            $syncColors = s::get('sync_colors');
-
-            // Fetch all elements
-            foreach ($syncParams as $siteUrl => $categories) {
-                $allSites[] = array ($siteUrl => $categories);
-                if (array_key_exists($siteUrl, $syncColors)) {
-                    $colors[$siteUrl] = $syncColors[$siteUrl];
-                }
-            }
-        }
+        $allSites = s::get('sync_params');
 
         return $this->render(
             'instance_sync/list.tpl',
-            array(
-                'site_color' => $colors,
-                'elements'   => $allSites
-            )
+            [
+                'elements' => $allSites
+            ]
         );
     }
 
@@ -79,29 +66,23 @@ class InstanceSyncController extends Controller
         }
 
         // Filter params
-        $syncParams = filter_input_array(INPUT_POST);
-        $siteUrl    = $request->request->filter('site_url', '', FILTER_SANITIZE_URL);
-        $siteColor  = $request->request->filter('site_color', '', FILTER_SANITIZE_STRING);
+        $data = [
+            'site_url'   => $request->request->filter('site_url', '', FILTER_VALIDATE_URL),
+            'username'   => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'   => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'site_color' => $request->request->filter('site_color', '', FILTER_SANITIZE_STRING),
+            'categories' => $request->request->get('categories'),
+        ];
 
-        $categoriesToSync = $syncParams['categories'];
-
-        // Get saved settings if exists
-        if ($syncSettings = s::get('sync_params')) {
-            $syncParams = array_merge($syncSettings, array($siteUrl => $categoriesToSync));
+        // Get saved settings if exists (update action)
+        $siteData = [];
+        if ($syncParams = s::get('sync_params')) {
+            $siteData = array_merge($syncParams, [$data['site_url'] => $data]);
         } else {
-            $syncParams = array($siteUrl => $categoriesToSync);
+            $siteData = [$data['site_url'] => $data];
         }
 
-        // Get site colors
-        if ($syncColorSettings = s::get('sync_colors')) {
-            $syncColors = array_merge($syncColorSettings, array($siteUrl => $siteColor));
-        } else {
-            $syncColors = array($siteUrl => $siteColor);
-        }
-
-        if (s::set('sync_params', $syncParams)
-            && s::set('sync_colors', $syncColors)
-        ) {
+        if (s::set('sync_params', $siteData)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Configuration saved successfully')
@@ -113,7 +94,12 @@ class InstanceSyncController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_instance_sync'));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_instance_sync_show',
+                ['site_url' => $data['site_url']]
+            )
+        );
     }
 
     /**
@@ -129,35 +115,29 @@ class InstanceSyncController extends Controller
      **/
     public function fetchCategoriesAction(Request $request)
     {
-        $siteUrl = $request->request->filter('site_url', '', FILTER_VALIDATE_URL);
+        $siteUrl  = $request->request->filter('site_url', '', FILTER_VALIDATE_URL);
+        $username = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
+        $password = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
 
-        $categoriesChecked = $availableCategories = array();
-        if (isset($siteUrl) && !empty($siteUrl)) {
-            $connectionUrl = $siteUrl.'/ws/categories/lists.xml';
-            $xmlString = @file_get_contents($connectionUrl);
-            if ($xmlString) {
-                $categories = simplexml_load_string($xmlString);
-
-                $availableCategories = array();
-                foreach ($categories as $category) {
-
-                    if (!empty($category->submenu)) {
-                        foreach ($category->submenu as $subcategory) {
-
-                            $category->items[] = $subcategory;
-                        }
-                    }
-                    $availableCategories[] = $category;
-                }
+        $element = $categories = [];
+        $authError = false;
+        if (!empty($siteUrl)) {
+            $url = $siteUrl.'/ws/categories/lists.xml';
+            // Fetch content using digest authentication
+            $xmlString = $this->getContentFromUrlWithDigestAuth($url, $username, $password);
+            // Load xml object
+            $categories = simplexml_load_string($xmlString);
+            // Check for bad authentication
+            if (isset($categories->error)) {
+                $authError = true;
             }
-
-            // Fetch sync categories in config
-            $syncParams = s::get('sync_params', array());
-            $categoriesChecked = array();
+            // Fetch params from db
+            $syncParams = s::get('sync_params');
+            // Get site values if exists
             if ($syncParams) {
-                foreach ($syncParams as $siteUrl => $categories) {
-                    if (preg_match('@'.$siteUrl.'@', $siteUrl)) {
-                        $categoriesChecked = $categories;
+                foreach ($syncParams as $site => $values) {
+                    if (preg_match('@'.$site.'@', $siteUrl)) {
+                        $element = $values;
                     }
                 }
             }
@@ -165,10 +145,11 @@ class InstanceSyncController extends Controller
 
         return $this->render(
             'instance_sync/partials/_list_categories.tpl',
-            array(
-                'categories_checked' => $categoriesChecked,
-                'categories'         => $availableCategories
-            )
+            [
+                'site'           => $element,
+                'all_categories' => $categories,
+                'has_auth_error' => $authError,
+            ]
         );
     }
 
@@ -187,50 +168,39 @@ class InstanceSyncController extends Controller
     {
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
 
-        // Fetch all categories from site url
-        $connectionUrl = $siteUrl.'/ws/categories/lists.xml';
-        $xmlString = file_get_contents($connectionUrl);
+        // Fetch params from db
+        $syncParams = s::get('sync_params');
+
+        // Get site values
+        $element = $syncParams[$siteUrl];
+
+        // Set url to fetch categories
+        $url = $siteUrl.'/ws/categories/lists.xml';
+        // Fetch content using digest authentication
+        $xmlString = $this->getContentFromUrlWithDigestAuth(
+            $url,
+            $element['username'],
+            $element['password']
+        );
+        // Load xml object
         $categories = simplexml_load_string($xmlString);
 
-        $availableCategories = array();
-        foreach ($categories as $category) {
-            $availableCategories[] = $category;
-        }
-
-        // Fetch sync categories in config
-        $syncParams = s::get('sync_params');
-        $syncColors = s::get('sync_colors');
-        $categoriesChecked = array();
-        foreach ($syncParams as $site => $categories) {
-            if (preg_match('@'.$site.'@', $siteUrl)) {
-                $categoriesChecked = $categories;
-            }
-        }
-
-        if (array_key_exists($siteUrl, $syncColors)) {
-            $color = $syncColors[$siteUrl];
-        }
-
+        // Fetch categories output
         $output = $this->renderView(
             'instance_sync/partials/_list_categories.tpl',
-            array(
-                'site_url'           => $siteUrl,
-                'site_color'         => $color,
-                'categories'         => $availableCategories,
-                'categories_checked' => $categoriesChecked,
-            )
+            [
+                'site'           => $element,
+                'all_categories' => $categories
+            ]
         );
 
-        // Show list
+        // Render view
         return $this->render(
             'instance_sync/new.tpl',
-            array(
-                'site_url'           => $siteUrl,
-                'site_color'         => $color,
-                'categories'         => $availableCategories,
-                'categories_checked' => $categoriesChecked,
-                'output'             => $output,
-            )
+            [
+                'site'   => $element,
+                'output' => $output,
+            ]
         );
     }
 
@@ -249,21 +219,14 @@ class InstanceSyncController extends Controller
     {
         $siteUrl = $request->query->filter('site_url', '', FILTER_VALIDATE_URL);
 
-        // Fetch sync categories in config
+        // Fetch params from db
         $syncParams = s::get('sync_params');
-        $syncColors = s::get('sync_colors');
 
         if (array_key_exists($siteUrl, $syncParams)) {
             unset($syncParams[$siteUrl]);
         }
 
-        if (array_key_exists($siteUrl, $syncColors)) {
-            unset($syncColors[$siteUrl]);
-        }
-
-        if (s::set('sync_params', $syncParams)
-            && s::set('sync_colors', $syncColors)
-        ) {
+        if (s::set('sync_params', $syncParams)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Site configuration deleted successfully')
@@ -276,5 +239,52 @@ class InstanceSyncController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_instance_sync'));
+    }
+
+    /**
+     * Get content from a given url using http digest auth and curl
+     *
+     * @param $url the http server url
+     *
+     * @return $content the content from this url
+     *
+     **/
+    private function getContentFromUrlWithDigestAuth($url, $username, $password)
+    {
+        $ch = curl_init();
+
+        $httpCode = '';
+        $maxRedirects = 0;
+        $redirectsAllowed = 3;
+
+        do {
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            curl_setopt($ch, CURLOPT_USERPWD, "{$username}:{$password}");
+            curl_setopt($ch, CURLOPT_HEADER, 1);
+            $content = curl_exec($ch);
+
+            $response = explode("\r\n\r\n", $content);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            $content = $response[count($response) -1];
+
+            if ($httpCode == 301 || $httpCode == 302) {
+                $matches = array();
+                preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
+                $url = trim(array_pop($matches));
+            }
+
+            $maxRedirects++;
+
+        } while ($httpCode == 302 ||
+                 $httpCode == 301 ||
+                 $maxRedirects > $redirectsAllowed
+        );
+
+        curl_close($ch);
+
+        return $content;
     }
 }

@@ -351,7 +351,7 @@ class Comment
             return false;
         }
 
-        dispatchEventWithParams('comment.delete', array('comment' => $this));
+        // dispatchEventWithParams('comment.delete', array('comment' => $this));
 
         return true;
     }

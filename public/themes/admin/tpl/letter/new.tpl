@@ -1,216 +1,210 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="footer-js" append}
-    {javascripts src="@AdminTheme/js/jquery/jquery-ui-timepicker-addon.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-{include file="media_uploader/media_uploader.tpl"}
+{javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+<script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 <script>
-jQuery(document).ready(function($) {
-    $('#formulario').onmValidate({
-        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-    });
-
-    $('#letter-edit').tabs();
-
+  jQuery(document).ready(function($) {
     $('#created').datetimepicker({
-        hourGrid: 4,
-        showAnim: "fadeIn",
-        dateFormat: 'yy-mm-dd',
-        timeFormat: 'hh:mm:ss',
-        minuteGrid: 10,
-        onClose: function(dateText, inst) {
-            var endDateTextBox = jQuery('#created');
-            if (endDateTextBox.val() != '') {
-                var testStartDate = new Date(dateText);
-                var testEndDate = new Date(endDateTextBox.val());
-                if (testStartDate > testEndDate)
-                    endDateTextBox.val(dateText);
-            }
-            else {
-                endDateTextBox.val(dateText);
-            }
-        },
-        onSelect: function (selectedDateTime){
-            var start = jQuery(this).datetimepicker('getDate');
-            jQuery('#created').datetimepicker('option', 'minDate', new Date(start.getTime()));
-        }
+      format: 'YYYY-MM-D HH:mm:ss'
     });
 
     $('#title').on('change', function(e, ui) {
-        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+      fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
-
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-                if (params['position'] == 'body' || params['position'] == 'summary') {
-                    var image_element = mediapicker.buildHTMLElement(params);
-                    CKEDITOR.instances[params['position']].insertHtml(image_element, true);
-                } else {
-                    var container = $('#related_media').find('.'+params['position']);
-                    var image_element = mediapicker.buildHTMLElement(params, true);
-
-                    var image_data_el = container.find('.image-data');
-                    image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                    image_data_el.find('.related-element-footer').val(params.content.description);
-                    image_data_el.find('.image').html(image_element);
-                    container.addClass('assigned');
-                };
-            }
-        }
-    });
-});
+  });
 </script>
 {/block}
 
 {block name="content"}
-<form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" name="formulario" id="formulario">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{if isset($letter->id)}{t}Editing letter{/t}{else}{t}Creating letter{/t}{/if}</h2></div>
-            <ul class="old-button">
-                <li>
-                    <button value="1" name="continue" type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir" ><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_letters}" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" >
-                        <br />
-                        {t}Go back{/t}
-                    </a>
-                </li>
-            </ul>
+<form action="{if isset($letter->id)}{url name=admin_letter_update id=$letter->id}{else}{url name=admin_letter_create}{/if}" method="POST" ng-controller="LetterCtrl">
+  <div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-envelope"></i>
+              <span class="hidden-xs">{t}Letters to the Editor{/t}</span>
+              <span class="visible-xs-inline">{t}Letters{/t}</span>
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <h5>
+              {if isset($letter->id)}
+              {t}Editing letter{/t}
+              {else}
+              {t}Creating letter{/t}
+              {/if}
+            </h5>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_letters}" title="{t}Go back{/t}">
+                <span class="fa fa-reply"></span>
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <button type="submit" class="btn btn-primary">
+                <span class="fa fa-save"></span>
+                {t}Save{/t}
+              </button>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="wrapper-content">
-
-        {render_messages}
-
-        <div class="form-horizontal panel">
-            <div class="control-group">
-                <label for="title" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="input-xxlarge" />
-                </div>
+  <div class="content">
+    {render_messages}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="grid simple">
+          <div class="grid-body">
+            <div class="form-group">
+              <label for="title" class="form-label">{t}Title{/t}</label>
+              <div class="controls">
+                <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="form-control" />
+              </div>
             </div>
 
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
-                            value="{$letter->metadata|clearslash|escape:"html"}"/>
-                    <div class="help-block">{t}List of words separated by words.{/t}</div>
-                </div>
+            <div class="form-group">
+              <label for="body" class="form-label">{t}Body{/t}</label>
+              <div class="controls">
+                <textarea name="body" id="body" class="onm-editor form-control" onm-editor onm-editor-preset="standard" rows="10">{$letter->body|clearslash}</textarea>
+              </div>
             </div>
-
+            <h4>{t}Author information{/t}</h4>
+            <div class="row">
+              <div class="form-inline-block">
+                <div class="form-group col-md-6">
+                  <label for="author" class="form-label">{t}Nickname{/t}</label>
+                  <div class="controls">
+                    <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="email" class="form-label">{t}Email{/t}</label>
+                  <div class="controls">
+                    <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {if !empty($letter->params)}
+            <div class="form-inline-block">
+              {foreach $letter->params as $key => $value}
+              <div class="form-group">
+                <label for="{$key}" class="form-label">{t}{$key|capitalize}{/t}</label>
+                <div class="controls">
+                  <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly class="form-control" />
+                </div>
+              </div>
+              {/foreach}
+            </div>
+            {/if}
+            <div class="form-group">
+              <label for="created" class="form-label">{t}Created at{/t}</label>
+              <div class="controls">
+                <div class="input-group">
+                  <input class="form-control" type="text" id="created" name="created" value="{$letter->created}"/>
+                  <span class="input-group-addon add-on">
+                    <span class="fa fa-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="grid simple">
+          <div class="grid-body">
             {acl isAllowed="LETTER_AVAILABLE"}
-            <div class="control-group">
-                <label for="content_status" class="control-label">{t}Published{/t}</label>
-                <div class="controls">
-                    <select name="content_status" id="content_status" required="required">
-                        <option value="1" {if $letter->content_status eq 1} selected {/if}>Si</option>
-                        <option value="0" {if $letter->content_status eq 0} selected {/if}>No</option>
-                    </select>
-                </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="content_status" name="content_status" {if $letter->content_status eq 1} checked {/if}  value="1" type="checkbox"/>
+                <label for="content_status">
+                  {t}Published{/t}
+                </label>
+              </div>
             </div>
             {/acl}
-
-            <div class="control-group">
-                <label class="control-label">{t}Author information{/t}</label>
-                <div class="controls">
-                    <div class="form-inline-block">
-                        <div class="control-group">
-                            <label for="author" class="control-label">{t}Nickname{/t}</label>
-                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="input-xlarge" />
-                        </div>
-                        <div class="control-group">
-                            <label for="email" class="control-label">{t}Email{/t}</label>
-                            <div class="controls">
-                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="input-xlarge" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-inline-block">
-                        {foreach $letter->params as $key => $value}
-                        <div class="control-group">
-                            <label for="{$key}" class="control-label">{t}{$key|capitalize}{/t}</label>
-                            <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly/>
-                        </div>
-                        {/foreach}
-                    </div>
-                </div>
+            <div class="form-group">
+              <label for="metadata" class="form-label">{t}Tags{/t}</label>
+              <span class="help">{t}List of words separated by words.{/t}</span>
+              <div class="controls">
+                <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="hidden" value="{$letter->metadata|clearslash|escape:"html"}"/>
+              </div>
             </div>
-
-            <div class="control-group">
-                <label for="created" class="control-label">{t}Created at{/t}</label>
-                <div class="controls">
-                    <input type="text" id="created" name="created" value="{$letter->created}"class="input-xxlarge" />
-                </div>
+            <div class="form-group">
+              <label for="url" class="form-label">{t}Related url{/t}</label>
+              <div class="controls">
+                <input type="text" id="url" name="url" value="{$letter->url}" class="form-control"/>
+              </div>
             </div>
-
-            <div class="control-group">
-                <label for="body" class="control-label">{t}Body{/t}</label>
-                <div class="controls">
-                    <textarea name="body" id="body"   class="onm-editor">{$letter->body|clearslash}</textarea>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="url" class="control-label">{t}Related url{/t}</label>
-                <div class="controls">
-                    <input type="text" id="url" name="url" value="{$letter->url}" class="input-xxlarge"/>
-                </div>
-            </div>
-
-            {acl isAllowed='PHOTO_ADMIN'}
-            {is_module_activated name="IMAGE_MANAGER"}
-            <div id="related_media" class="control-group">
-                <label for="special-image" class="control-label">{t}Image for Special{/t}</label>
-                <div class="controls">
-                    <ul class="related-images thumbnails">
-                        <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
-                            <h3 class="title">{t}Frontpage image{/t}</h3>
-                            <div class="content">
-                                <div class="image-data">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
-                                    </a>
-                                    <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
-                                </div>
-
-                                <div class="not-set">
-                                    {t}Image not set{/t}
-                                </div>
-
-                                <div class="btn-group">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
-                                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            {/is_module_activated}
-            {/acl}
-
-
+          </div>
         </div>
+
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Image assigned{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="row">
+              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+                <div class="thumbnail-wrapper">
+                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
+                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">
+                    <p>Are you sure?</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeImage('photo1');toggleOverlay('photo1')" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="thumbnail-placeholder ng-cloak">
+                    <div class="img-thumbnail" ng-if="!photo1">
+                      <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                        <i class="fa fa-picture-o fa-2x"></i>
+                        <h5>{t}Pick an image{/t}</h5>
+                      </div>
+                    </div>
+                    <div class="dynamic-image-placeholder ng-cloak" ng-if="photo1">
+                      <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
+                      <div class="thumbnail-actions">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo1')">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </div>
+                      </div>
+                      <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
+                    </dynamic-image>
+                    <input type="hidden" name="img1" ng-value="img1"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-
-    <input type="hidden" name="id" id="id" value="{$letter->id|default:""}" />
+  </div>
+  <input type="hidden" name="id" id="id" value="{$letter->id|default:""}" />
 </form>
 {/block}

@@ -1,257 +1,318 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {include file="common/angular_includes.tpl"}
-{/block}
-
-
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Albums{/t} :: </h2>
-                <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
-                    <div class="options">
-                        <h4>{t}Other{/t}</h4>
-                        <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-                        <a href="{url name=admin_albums}" {if $category !== 'widget'}class="active"{/if}>{t}Listing{/t}</a>
-                    </div>
-                </div>
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('album', { content_status: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-stack-overflow"></i>
+              {t}Albums{/t}
+            </h4>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks dropdown hidden-xs">
+            <div data-toggle="dropdown">
+              {if $category == 'widget'}
+                {t}Widget home{/t}
+              {else}
+                {t}Listing{/t}
+              {/if}
+              <span class="caret"></span>
             </div>
-            <ul class="old-button">
-                {acl isAllowed="ALBUM_SETTINGS"}
-                <li>
-                    <a href="{url name=admin_albums_config}" title="{t}Config album module{/t}">
-                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                {/acl}
-                <li ng-if="shvs.selected.length > 0">
-                    <a href="#">
-                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
-                        <br/>{t}Batch actions{/t}
-                    </a>
-                    <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="ALBUM_AVAILABLE"}
-                        <li>
-                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
-                                <i class="icon-eye-open"></i>
-                                {t}Publish{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
-                                <i class="icon-eye-close"></i>
-                                {t}Unpublish{/t}
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')">
-                                <i class="go-home"></i>
-                                {t escape="off"}In home{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')">
-                                <i class="no-home"></i>
-                                {t escape="off"}Drop from home{/t}
-                            </a>
-                        </li>
-                        {/acl}
-                        {acl isAllowed="ALBUM_DELETE"}
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
-                                    <i class="icon-trash"></i>
-                                    {t}Delete{/t}
-                                </a>
-                            </li>
-                        {/acl}
-                    </ul>
-                </li>
-                <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {acl isAllowed="ALBUM_WIDGET"}
-                     {if $category eq 'widget'}
-                        <li>
-                            <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
-                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
-                            </a>
-                        </li>
-                    {/if}
-                {/acl}
-                {acl isAllowed="ALBUM_CREATE"}
-                <li>
-                    <a href="{url name=admin_album_create category=$category}" title="{t}New album{/t}" >
-                        <img src="{$params.IMAGE_DIR}/album.png" alt="{t}New album{/t}"><br />{t}New album{/t}
-                    </a>
-                </li>
-                {/acl}
+            <ul class="dropdown-menu">
+              <li>
+                <a href="{url name=admin_albums_widget}">
+                  {t}Widget home{/t}
+                </a>
+              </li>
+              <li>
+                <a href="{url name=admin_albums}">
+                  {t}Listing{/t}
+                </a>
+              </li>
             </ul>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            {acl isAllowed="ALBUM_SETTINGS"}
+            <li class="quicklinks">
+              <a class="btn btn-link" href="{url name=admin_albums_config}" title="{t}Config album module{/t}">
+                <span class="fa fa-cog fa-lg"></span>
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/acl}
+            {acl isAllowed="ALBUM_WIDGET"}
+            {if $category eq 'widget'}
+            <li class="quicklinks">
+              <a class="btn btn-white" href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+                <i class="fa fa-save"></i>
+                {t}Save positions{/t}
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/if}
+            {/acl}
+            {acl isAllowed="ALBUM_CREATE"}
+            <li class="quicklinks">
+              <a class="btn btn-primary" href="{url name=admin_album_create category=$category}" title="{t}New album{/t}" >
+                <span class="fa fa-plus"></span>
+                {t}Create{/t}
+              </a>
+            </li>
+            {/acl}
+          </ul>
         </div>
+      </div>
     </div>
-    <div class="wrapper-content">
+  </div>
 
-        {render_messages}
+  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section pull-left">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+              <i class="fa fa-arrow-left fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+            </h4>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          {acl isAllowed="ALBUM_AVAILABLE"}
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')" tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-times fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')" tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-check fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')" tooltip="{t escape="off"}In home{/t}" tooltip="{t escape="off"}In home{/t}" tooltip-placement="bottom">
+              <i class="fa fa-home"></i>
+            </a>
+          </li>
+          <li class="quicklinks hidden-xs">
+            <a class="btn btn-link" href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')" tooltip="{t escape="off"}Drop from home{/t}" tooltip="{t escape="off"}Drop from home{/t}" tooltip-placement="bottom">
+              <i class="fa fa-home"></i>
+              <i class="fa fa-times fa-sub text-danger"></i>
+            </a>
+          </li>
+          {acl isAllowed="ALBUM_DELETE"}
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          {/acl}
+          {/acl}
+          {acl isAllowed="ALBUM_DELETE"}
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="sendToTrashSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i>
+            </button>
+          </li>
+          {/acl}
+        </ul>
+      </div>
+    </div>
+  </div>
 
-        <div class="table-info clearfix">
-            <div class="pull-left">
-                <div class="form-inline">
-                    <strong>{t}FILTER:{/t}</strong>
-                    &nbsp;&nbsp;
-                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    &nbsp;&nbsp;
-                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
-                        <option value="-1">{t}-- All --{/t}</option>
-                            {section name=as loop=$allcategorys}
-                                {assign var=ca value=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->name}">
-                                    {$allcategorys[as]->title}
-                                    {if $allcategorys[as]->inmenu eq 0}
-                                        <span class="inactive">{t}(inactive){/t}</span>
-                                    {/if}
-                                </option>
-                                {section name=su loop=$subcat[as]}
-                                {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
-                                    <option value="{$subcat[as][su]->name}">
-                                        &rarr;
-                                        {$subcat[as][su]->title}
-                                        {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
-                                            <span class="inactive">{t}(inactive){/t}</span>
-                                        {/if}
-                                    </option>
-                                {/acl}
-                                {/section}
-                            {/section}
-                    </select>
-                    &nbsp;&nbsp;
-                    <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
-                        <option value="-1"> {t}-- All --{/t} </option>
-                        <option value="1"> {t}Published{/t} </option>
-                        <option value="0"> {t}No published{/t} </option>
-                    </select>
-                    &nbsp;&nbsp;
-                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
-                </div>
-            </div>
+  <div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="m-r-10 input-prepend inside search-input no-boarder">
+            <span class="add-on">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="no-boarder" name="title" ng-model="criteria.title_like" placeholder="{t}Search by title{/t}" type="text"/>
+          </li>
+          <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+            <ui-select name="author" theme="select2" ng-model="criteria.category_name">
+              <ui-select-match>
+                <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in categories | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
+            <ui-select name="status" theme="select2" ng-model="criteria.content_status">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+          <li class="quicklinks hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks hidden-xs">
+            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    {render_messages}
+    <div class="grid simple">
+      <div class="grid-body no-padding">
+        <div class="spinner-wrapper" ng-if="loading">
+          <div class="loading-spinner"></div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div ng-include="'albums'"></div>
-
-        <script type="text/ng-template" id="albums">
-            <div class="spinner-wrapper" ng-if="loading">
-                <div class="spinner"></div>
-                <div class="spinner-text">{t}Loading{/t}...</div>
-            </div>
-
-            <table class="table table-hover table-condensed" ng-if="!loading">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any album that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
             <thead>
-                <tr>
-                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                    <th></th>
-                    <th class="title">{t}Title{/t}</th>
-                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
-                    <th class="left nowrap" style="width:100px;">Created</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                    <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="right" style="width:10px;"></th>
-                </tr>
+              <tr>
+                <th class="checkbox-cell">
+                  <div class="checkbox checkbox-default">
+                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                    <label for="select-all"></label>
+                  </div>
+                </th>
+                <th class="hidden-xs hidden-sm"></th>
+                <th class="title">{t}Information{/t}</th>
+                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left hidden-xs">{t}Section{/t}</th>{/if}
+                <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
+                <th class="center" style="width:35px;">{t}Published{/t}</th>
+                {if $category!='widget'} <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
+              </tr>
             </thead>
-            <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
-            <tr ng-if="shvs.contents.length == 0">
-                <td class="empty" colspan="10">{t}No available albums.{/t}</td>
-            </tr>
-
-            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
-                <td>
-                    <checkbox index="[% content.id %]">
+            <tbody {if $category == 'widget'}ui-sortable ng-model="contents"{/if}>
+              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+                <td class="checkbox-cell">
+                  <div class="checkbox check-default">
+                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                    <label for="checkbox[%$index%]"></label>
+                  </div>
+                </td>
+                <td class="hidden-xs hidden-sm">
+                  <div ng-if="content.cover != ''" style="height: 120px; width: 100%;">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
+                  </span>
+                  <div ng-if="content.cover == ''">
+                    <img ng-src="http://placehold.it/80x60" class="thumbnail" />
+                  </span>
                 </td>
                 <td>
-                    <span ng-if="content.cover != ''">
-                        <img ng-src="{$smarty.const.MEDIA_IMG_PATH_WEB}[% content.cover %]" style="max-height:60px; max-width:80px;"/>
-                    </span>
-                    <span ng-if="content.cover == ''">
-                        <img ng-src="http://placehold.it/80x60" />
-                    </span>
-                </td>
-                <td>
-                    [% content.title %]
+                  <div ng-if="content.cover != ''" class="visible-xs visible-sm" style="height: 120px; width: 100%; margin-bottom: 15px;">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
+                  </div>
+                  [% content.title %]
+                  <div class="small-text">
+                    <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
+                  <div class="listing-inline-actions">
+                    {acl isAllowed="ALBUM_UPDATE"}
+                    <a class="link" href="[% edit(content.id, 'admin_album_show') %]">
+                      <i class="fa fa-pencil"></i> {t}Edit{/t}
+                    </a>
+                    {/acl}
+                    {acl isAllowed="ALBUM_DELETE"}
+                    <button class="del link link-danger" ng-click="sendToTrash(content)" type="button">
+                      <i class="fa fa-trash-o"></i> {t}Remove{/t}
+                    </button>
+                    {/acl}
+                  </div>
                 </td>
                 {if $category=='widget' || $category=='all'}
-                <td class="left">
-                     [% content.category_name %]
-                </td>
-                {/if}
+                <td class="left hidden-xs">
+                 [% content.category_name %]
+               </td>
+              {/if}
+              <td class="center hidden-xs">[% shvs.extra.views[content.id] %]</td>
 
-                <td class="center nowrap">
-                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
-                </td>
-                <td class="center">[% shvs.extra.views[content.id] %]</td>
-
-                {acl isAllowed="ALBUM_AVAILABLE"}
-                <td class="center">
-                    <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
-                </td>
-                {/acl}
-                {acl isAllowed="ALBUM_FAVORITE"}
-                <td class="center">
-                    <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button"></button>
-                </td>
-                {/acl}
-                {acl isAllowed="ALBUM_HOME"}
-                <td class="center">
-                    <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
-                </td>
-                {/acl}
-
-                <td class="right">
-                    <div class="btn-group">
-                        {acl isAllowed="ALBUM_UPDATE"}
-                        <a class="btn" href="[% edit(content.id, 'admin_album_show') %]">
-                            <i class="icon-pencil"></i>
-                        </a>
-                        {/acl}
-                        {acl isAllowed="ALBUM_DELETE"}
-                        <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
-                            <i class="icon-trash icon-white"></i>
-                        </button>
-                        {/acl}
-                    </div>
-                </td>
+              {acl isAllowed="ALBUM_AVAILABLE"}
+              <td class="center">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading == 1, 'fa-check text-success': !content.loading == 1 && content.content_status == 1, 'fa-times text-danger': !content.loading == 1 && content.content_status == 0 }"></i>
+                </button>
+              </td>
+              {/acl}
+              {acl isAllowed="ALBUM_FAVORITE"}
+              <td class="center hidden-xs">
+                <button class="btn btn-white"  ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.favorite_loading == 1, 'fa-star text-warning': !content.favorite_loading == 1 && content.favorite == 1, 'fa-star-o': !content.favorite_loading == 1 && content.favorite != 1 }"></i>
+                </button>
+              </td>
+              {/acl}
+              {acl isAllowed="ALBUM_HOME"}
+              <td class="right hidden-xs">
+                <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button">
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.home_loading == 1, 'fa-home text-info': !content.home_loading == 1 && content.in_home == 1, 'fa-home': !content.home_loading == 1 && content.in_home == 0 }"></i>
+                  <i class="fa fa-times fa-sub text-danger" ng-if="!content.home_loading == 1 && content.in_home == 0"></i>
+                </button>
+              </td>
+              {/acl}
 
             </tr>
-            </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="10" class="center">
-                            <div class="pull-left" ng-if="shvs.contents.length > 0">
-                                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
-                            </div>
-                            <div class="pull-right" ng-if="shvs.contents.length > 0">
-                                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
-                            </div>
-                            <span ng-if="shvs.contents.length == 0">&nbsp;</span>
-                        </td>
-                    </tr>
-                </tfoot>
+          </tbody>
         </table>
-        </script>
-
-
-        <script type="text/ng-template" id="modal-delete">
-            {include file="common/modals/_modalDelete.tpl"}
-        </script>
-
-        <script type="text/ng-template" id="modal-delete-selected">
-            {include file="common/modals/_modalBatchDelete.tpl"}
-        </script>
+      </div>
     </div>
+    <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+      <div class="pull-right">
+        <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/modals/_modalDelete.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-delete-selected">
+    {include file="common/modals/_modalBatchDelete.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
+</div>
 </form>
 {/block}

@@ -64,6 +64,9 @@ class SidebarController extends Controller
                         ]
                     ]
                 ]
+            ],
+            'translations' => [
+                'Show/hide sidebar' => _('Show/hide sidebar')
             ]
         ]);
     }

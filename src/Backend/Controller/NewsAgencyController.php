@@ -98,19 +98,10 @@ class NewsAgencyController extends Controller
         );
 
         $message = '';
-        if ($minutesFromLastSync > 100) {
-            $message = _('A long time ago from synchronization.');
-        } elseif ($minutesFromLastSync > 10) {
-            $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
-        }
-        if ($message) {
+        if ($minutesFromLastSync > 10) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                $message
-                . _(
-                    'Try syncing the news list from server by clicking '
-                    .'in "Sync with server" button above'
-                )
+                sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync)
             );
         }
 
@@ -268,12 +259,17 @@ class NewsAgencyController extends Controller
                 $this->generateUrl('admin_news_agency', array('page' => $page))
             );
         }
+        if ($alreadyImported) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('This content was imported before. You may cause a content duplication while importing it.')
+            );
+        }
 
         return $this->render(
             'news_agency/show.tpl',
             array(
                 'element'  => $element,
-                'imported' => $alreadyImported,
             )
         );
     }
@@ -305,10 +301,15 @@ class NewsAgencyController extends Controller
         if ($article == 'redirect_list') {
             return $this->redirect($this->generateUrl('admin_news_agency'));
         } elseif ($article == 'redirect_category') {
-            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array(
-                'id'        => $id,
-                'source_id' => $sourceId
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_pickcategory',
+                    array(
+                        'id'        => $id,
+                        'source_id' => $sourceId
+                    )
+                )
+            );
         }
 
         // TODO: change this redirection when creating the ported article controller
@@ -496,9 +497,7 @@ class NewsAgencyController extends Controller
         $content = null;
         if ($element->hasPhotos()) {
             foreach ($element->getPhotos() as $photo) {
-
                 if ($photo->getId() == $attachmentId) {
-
                     $filePath = null;
                     if (strpos($photo->getFilePath(), 'http://') !== false) {
                         $filePath = $photo->getFilePath();
@@ -759,43 +758,47 @@ class NewsAgencyController extends Controller
             );
 
             return $this->render('news_agency/config/new.tpl');
-        } else {
-            $servers = s::get('news_agency_config');
-
-            if (!is_array($servers)) {
-                $servers = array();
-            }
-
-            $latestServerId = max(array_keys($servers));
-
-            $server = array(
-                'id'            => $latestServerId + 1,
-                'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-                'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-                'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-                'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-                'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-                'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-                'activated'     => $request->request->getDigits('activated', 0),
-            );
-
-            $servers[$server['id']] = $server;
-
-            s::set('news_agency_config', $servers);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('News agency server added.')
-            );
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_server_show',
-                    array('id' => $server['id'])
-                )
-            );
         }
+
+        $servers = s::get('news_agency_config');
+
+        if (!is_array($servers)) {
+            $servers = [];
+        }
+
+        if (count($servers) <= 0) {
+            $latestServerId = 0;
+        } else {
+            $latestServerId = max(array_keys($servers));
+        }
+
+        $server = array(
+            'id'            => $latestServerId + 1,
+            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'     => $request->request->getDigits('activated', 0),
+        );
+
+        $servers[$server['id']] = $server;
+
+        s::set('news_agency_config', $servers);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('News agency server added.')
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_news_agency_server_show',
+                array('id' => $server['id'])
+            )
+        );
     }
 
     /**

@@ -33,7 +33,10 @@ function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
         url: url + '?data=' + raw_info
     }).done(function(data) {
-        jQuery(target_element).val(data);
+        var tags = data.split(',');
+        for (var i = 0; i < tags.length; i++) {
+          jQuery(target_element).tagsinput('add', tags[i]);
+        }
     });
 }
 

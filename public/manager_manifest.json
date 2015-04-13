@@ -41,6 +41,5 @@
   ],
   "start_url": "/manager/",
   "scope": "/manager/",
-  "display": "standalone",
-  "orientation": "landscape"
+  "display": "fullscreen"
 }

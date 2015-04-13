@@ -167,7 +167,9 @@ class OpinionsController extends Controller
                 // Must drop the blogs
                 $filters = array_merge(
                     $filters,
-                    array('opinions`.`fk_author'  => array(array('value' => array_keys($authorsBlog), 'operator' => 'NOT IN')))
+                    array('opinions`.`fk_author'  => array(
+                        array('value' => array_keys($authorsBlog), 'operator' => 'NOT IN'))
+                    )
                 );
             }
 
@@ -280,15 +282,12 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion_frontpage.tpl', $cacheID)
         ) {
-
-            // Getting Synchronize setting params
+            // Get sync params
             $wsUrl = '';
             $syncParams = s::get('sync_params');
-            foreach ($syncParams as $siteUrl => $categoriesToSync) {
-                foreach ($categoriesToSync as $value) {
-                    if (preg_match('/'.$this->category_name.'/i', $value)) {
-                        $wsUrl = $siteUrl;
-                    }
+            foreach ($syncParams as $siteUrl => $values) {
+                if (in_array($categoryName, $values['categories'])) {
+                    $wsUrl = $siteUrl;
                 }
             }
 
@@ -555,15 +554,12 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion_author_index.tpl', $cacheID)
         ) {
-
-            // Getting Synchronize setting params
+            // Get sync params
             $wsUrl = '';
             $syncParams = s::get('sync_params');
-            foreach ($syncParams as $siteUrl => $categoriesToSync) {
-                foreach ($categoriesToSync as $value) {
-                    if (preg_match('/'.$this->category_name.'/i', $value)) {
-                        $wsUrl = $siteUrl;
-                    }
+            foreach ($syncParams as $siteUrl => $values) {
+                if (in_array($categoryName, $values['categories'])) {
+                    $wsUrl = $siteUrl;
                 }
             }
 
@@ -831,14 +827,12 @@ class OpinionsController extends Controller
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
 
-        // Getting Synchronize setting params
+        // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
-        foreach ($syncParams as $siteUrl => $categoriesToSync) {
-            foreach ($categoriesToSync as $value) {
-                if (preg_match('/'.$this->category_name.'/i', $value)) {
-                    $wsUrl = $siteUrl;
-                }
+        foreach ($syncParams as $siteUrl => $values) {
+            if (in_array($categoryName, $values['categories'])) {
+                $wsUrl = $siteUrl;
             }
         }
 
@@ -860,7 +854,6 @@ class OpinionsController extends Controller
             $this->view->assign('advertisements', $ads);
 
             if (($opinion->content_status==1) && ($opinion->in_litter == 0)) {
-
                 if (isset($opinion->img2) && ($opinion->img2 > 0)) {
                     $photo = new \Photo($opinion->img2);
                     $this->view->assign('photo', $photo);

@@ -29,7 +29,11 @@ class LayoutManager
      */
     public function __construct($xmlFile)
     {
-        $this->layoutDoc = simplexml_load_file($xmlFile);
+        if (file_exists($xmlFile)) {
+            $this->layoutDoc = simplexml_load_file($xmlFile);
+        } else {
+            $this->layoutDoc = [];
+        }
     }
 
     /**
@@ -43,7 +47,7 @@ class LayoutManager
      */
     public function renderElement($element, $value, $last)
     {
-        $output =  array();
+        $output =  [];
         switch ($element) {
             case 'wrapper':
                 $output []= $this->renderWrapper($element, $value, $last);
@@ -73,7 +77,7 @@ class LayoutManager
      */
     public function renderWrapper($elementType, $innerValues, $isLast)
     {
-        $output = array();
+        $output = [];
         $last = ($isLast)?" last":"";
         $output []= '<div class="wrapper clearfix span-'.$innerValues['width'].$last.'">';
 
@@ -254,7 +258,7 @@ class LayoutManager
 
         $this->params = $params;
 
-        $output = '';
+        $output = [];
         foreach ($this->layoutDoc as $element => $value) {
             $output []= $this->renderElement($element, $value, false);
         }

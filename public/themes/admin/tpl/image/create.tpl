@@ -9,37 +9,89 @@ var image_uploader ={
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t}Upload images{/t}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=admin_images category=$category}">
-                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
-                </a>
-            </li>
-            <li class="separator"></li>
-            <li style="display:none" class="edit-uploaded" id="edit-uploaded-button">
-                <a href="#">
-                    <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Edit uploaded{/t}"><br />{t}Edit uploaded{/t}
-                </a>
-            </li>
-        </ul>
+<div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <ul class="nav quick-section">
+                <li class="quicklinks">
+                    <h4>
+                        <i class="fa fa-home fa-lg"></i>
+                        {t}Images{/t} :: {t}Upload images{/t}
+                    </h4>
+                </li>
+            </ul>
+            <div class="all-actions pull-right">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
-<div class="wrapper-content">
+<div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-home fa-lg"></i>
+                            {t}Images{/t} :: {t}Upload{/t}
+                        </h4>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_images}" title="{t}Go back to list{/t}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li style="display:none" class="edit-uploaded" id="edit-uploaded-button">
+                            <a href="#">
+                                <span class="fa fa-pencil"></span> {t}Edit uploaded{/t}
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="content">
 
     {render_messages}
-    <div class="notice edit-uploaded" style="display:none">
+    <div class="alert alert-info edit-uploaded" style="display:none">
         {t}Please click in the "Edit uploaded" button from above to edit latest upload photo's data{/t}
     </div><!-- / -->
 
     <form id="fileupload" action="{url name=admin_image_create category=$category}" method="POST" enctype="multipart/form-data">
-
-        <div class="clearfix">
+    <div class="grid simple">
+        <div class="grid-title">
             <div class="fileupload-buttonbar pull-left">
                 <div class="btn-group">
-                    <div class="btn fileinput-button input-hidden">
+                    <div class="fileinput-button input-hidden">
                         <i class="icon-plus-sign"></i>
                         {t}Add files...{/t}
                         <input type="file" name="files[]" multiple>
@@ -52,10 +104,22 @@ var image_uploader ={
                 </div>
             </div>
         </div>
-        <div id="dropzone" class="fade well">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
-        <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
+        <div class="grid-body no-padding">
 
-        <div class="well">
+                <div class="clearfix">
+
+                </div>
+                <div id="dropzone" class="fade well">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
+                <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
+
+                <input type="hidden" name="category" value="{$category}" />
+
+                <div id="upload-helper" data-filecount=0></div>
+            </div>
+    </div>
+    <div class="grid simple">
+        <div class="grid-body">
+
             <h3>{t}User notes{/t}</h3>
             <ul>
                 <li>
@@ -69,13 +133,22 @@ var image_uploader ={
                 <li>{t escape=off}Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.{/t}</li>
             </ul>
         </div>
-        <input type="hidden" name="category" value="{$category}" />
+    </div>
     </form>
-    <div id="upload-helper" data-filecount=0></div>
 </div>
 {/block}
 
+{block name="header-css" append}
+    {stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" filters="cssrewrite"}
+        <link rel="stylesheet" href="{$asset_url}" media="screen">
+    {/stylesheets}
+{/block}
+
 {block name="footer-js" append}
+    {javascripts src="@Common/components/blueimp-file-upload/js/jquery.fileupload.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+
     <script>
     var fileUploadErrors = {
         maxFileSize: '{t}File is too big{/t}',

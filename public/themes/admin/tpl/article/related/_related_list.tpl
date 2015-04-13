@@ -1,92 +1,123 @@
-<table style="margin-bottom:0; width:100%;">
-    <tbody>
-        <tr>
-            <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                {include file="article/related/_related_provider.tpl"}
-            </td>
-            <td style="width:50%; vertical-align:top; padding:4px 0;" >
-                <div id="frontpage_related" class="column-receiver">
-                    <h5>{t}Related in frontpage{/t}</h5>
-                    <ul class="content-receiver" >
-                        {foreach from=$orderFront item=content}
-                            <li data-id="{$content->pk_content}" data-type="Opinion" data-title="{$content->title|clearslash}">
-                                <span class="type">{ucfirst($content->content_type_name)} -</span>
-                                <span class="date">{$content->created|date_format:"%d-%m-%Y"} -</span>
-                                {$content->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
-                            </li>
-                        {/foreach}
-                    </ul>
-                </div>
-
-                <div id="inner_related" class="column-receiver">
-                        <h5>{t}Related in inner{/t}</h5>
-                        <ul class="content-receiver" >
-                        {foreach from=$orderInner item=content}
-                            <li data-id="{$content->pk_content}" data-type="Opinion" data-title="{$content->title|clearslash}">
-                                <span class="type">{ucfirst($content->content_type_name)} -</span>
-                                <span class="date">{$content->created|date_format:"%d-%m-%Y"} -</span>
-                                {$content->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
-                            </li>
-                        {/foreach}
-                        </ul>
-                </div>
-
-
-                {is_module_activated name="CRONICAS_MODULES"}
-                    <div id="home_related" class="column-receiver">
-                        <h5>{t}Related in home{/t}</h5>
-                        <ul class="content-receiver" >
-                        {foreach from=$orderHome item=content}
-                            <li data-id="{$content->pk_content}" data-type="Opinion" data-title="{$content->title|clearslash}">
-                                <span class="type">{ucfirst($content->content_type_name)} -</span>
-                                <span class="date">{$content->created|date_format:"%d-%m-%Y"} -</span>
-                                {$content->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
-                            </li>
-                        {/foreach}
-                        </ul>
-                    </div>
-                {/is_module_activated}
-                {is_module_activated name="CRONICAS_MODULES"}
-                    <div id="gallery-Frontpage" class="column-receiver gallery">
-                        <h5>{t}Gallery for frontpage{/t}(*{t}Only one album{/t})</h5>
-                        <ul class="content-receiver" >
-                            {if !empty($article->params['withGallery']) && !empty($galleries['front']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$galleries['front']->pk_album}">
-                                    {$galleries['front']->created|date_format:"%d-%m-%Y"} : {$galleries['front']->title|clearslash}
-                                    <span class="icon"><i class="icon-trash"></i></span>
-                                </li>
-                            {/if}
-                        </ul>
-                    </div>
-                    <div id="gallery-Inner" class="column-receiver gallery">
-                        <h5>{t}Gallery for inner{/t}(*{t}Only one album{/t})</h5>
-                        <ul class="content-receiver" >
-                            {if !empty($article->params['withGalleryInt']) && !empty($galleries['inner']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$galleries['inner']->pk_album}">
-                                    {$galleries['inner']->created|date_format:"%d-%m-%Y"} : {$galleries['inner']->title|clearslash}
-                                    <span class="icon"><i class="icon-trash"></i></span>
-                                </li>
-                            {/if}
-                        </ul>
-                    </div>
-                    <div id="gallery-Home" class="column-receiver gallery">
-                        <h5>{t}Gallery for Home{/t} (*{t}Only one album{/t})</h5>
-                        <ul class="content-receiver" >
-                            {if !empty($article->params['withGalleryHome']) && !empty($galleries['home']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$galleries['home']->pk_album}">
-                                    {$galleries['home']->created|date_format:"%d-%m-%Y"} : {$galleries['home']->title|clearslash}
-                                    <span class="icon"><i class="icon-trash"></i></span>
-                                </li>
-                            {/if}
-                        </ul>
-
-                    </div>
-                {/is_module_activated}
-
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="grid simple">
+  <div class="grid-title">
+    <h4>{t}Related contents{/t}</h4>
+  </div>
+  <div class="grid-body">
+    <div class="m-b-40" {if isset($orderFront)}ng-init="relatedInFrontpage = {json_encode($orderFront)|replace:'"':'\''}"{/if}>
+      <div class="clearfix">
+        <h5 class="pull-left">{t}Related in frontpage{/t}</h5>
+        <div class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInFrontpage">
+          <i class="fa fa-plus"></i>
+          {t}Add contents{/t}
+        </div>
+      </div>
+      <div ui-sortable ng-model="relatedInFrontpage">
+        <div class="related-item" ng-repeat="content in relatedInFrontpage">
+          <div class="related-item-info">
+            <span class="sort-icon"></span>
+            [% content.content_type_name %] - [% content.title %]
+          </div>
+          <button class="btn btn-white" ng-click="removeItem('relatedInFrontpage', $index)">
+            <i class="fa fa-trash-o text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="m-b-40" {if isset($orderInner)}ng-init="relatedInInner = {json_encode($orderInner)|replace:'"':'\''}"{/if}>
+      <div class="clearfix">
+        <h5 class="pull-left">{t}Related in inner{/t}</h5>
+        <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInInner">
+          <i class="fa fa-plus"></i>
+          {t}Add contents{/t}
+        </div>
+      </div>
+      <div ui-sortable ng-model="relatedInInner">
+        <div class="related-item" ng-repeat="content in relatedInInner">
+          <div class="related-item-info">
+            <span class="sort-icon"></span>
+            [% content.content_type_name %] - [% content.title %]
+          </div>
+          <button class="btn btn-white" ng-click="removeItem('relatedInInner', $index)">
+            <i class="fa fa-trash-o text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    {is_module_activated name="CRONICAS_MODULES"}
+      <div class="m-b-40" {if isset($orderHome)}ng-init="relatedInHome = {json_encode($orderHome)|replace:'"':'\''}"{/if}>
+        <div class="clearfix">
+          <h5 class="pull-left">{t}Related in home{/t}</h5>
+          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInHome" type="button">
+            <i class="fa fa-plus"></i>
+            {t}Add contents{/t}
+          </button>
+        </div>
+        <div ui-sortable ng-model="relatedInHome">
+          <div class="related-item" ng-repeat="content in relatedInHome">
+            <div class="related-item-info">
+              <span class="sort-icon"></span>
+              [% content.content_type_name %] - [% content.title %]
+            </div>
+            <button class="btn btn-white" ng-click="removeItem('relatedInHome', $index)">
+              <i class="fa fa-trash-o text-danger"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="m-b-40" {if isset($galleries['front']) && $galleries['front']->title}ng-init="galleryForFrontpage = { id: '{$galleries['front']->id}', content_type_name: '{$galleries['front']->content_type_name}', title: '{$galleries['front']->title}' }"{/if}>
+        <div class="clearfix">
+          <h5 class="pull-left">{t}Gallery for frontpage{/t} <small>*{t}Only one album{/t}</small></h5>
+          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForFrontpage" content-picker-type="album" type="button">
+            <i class="fa fa-plus"></i>
+            {t}Add gallery{/t}
+          </button>
+        </div>
+        <div class="related-item" ng-if="galleryForFrontpage">
+          <div class="related-item-info">
+            <span class="sort-icon"></span>
+            [% galleryForFrontpage.content_type_name %] - [% galleryForFrontpage.title %]
+          </div>
+          <button class="btn btn-white" ng-click="removeAlbum('galleryForFrontpage')" type="album">
+            <i class="fa fa-trash-o text-danger"></i>
+          </button>
+        </div>
+      </div>
+      <div class="m-b-40" {if isset($galleries['inner']) && $galleries['inner']->title}ng-init="galleryForInner = { id: '{$galleries['inner']->id}', content_type_name: '{$galleries['inner']->content_type_name}', title: '{$galleries['inner']->title}' }"{/if}>
+        <div class="clearfix">
+          <h5 class="pull-left">{t}Gallery for inner{/t} <small>*{t}Only one album{/t}</small></h5>
+           <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForInner" content-picker-type="album">
+            <i class="fa fa-plus"></i>
+            {t}Add gallery{/t}
+          </button>
+        </div>
+          <div class="related-item" ng-if="galleryForInner">
+          <div class="related-item-info">
+            <span class="sort-icon"></span>
+            [% galleryForInner.content_type_name %] - [% galleryForInner.title %]
+          </div>
+          <button class="btn btn-white" ng-click="removeAlbum('galleryForInner')" type="album">
+            <i class="fa fa-trash-o text-danger"></i>
+          </button>
+        </div>
+      </div>
+      <div {if isset($galleries['home']) && $galleries['home']->title}ng-init="galleryForHome = { id: '{$galleries['home']->id}', content_type_name: '{$galleries['home']->content_type_name}', title: '{$galleries['home']->title}' }"{/if}>
+        <div class="clearfix">
+          <h5 class="pull-left">{t}Gallery for Home{/t} <small>*{t}Only one album{/t}</small></h5>
+          <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForHome" content-picker-type="album">
+            <i class="fa fa-plus"></i>
+            {t}Add gallery{/t}
+          </div>
+        </div>
+        <div class="related-item" ng-if="galleryForHome">
+          <div class="related-item-info">
+            <span class="sort-icon"></span>
+            [% galleryForHome.content_type_name %] - [% galleryForHome.title %]
+          </div>
+          <button class="btn btn-white" ng-click="removeAlbum('galleryForHome')" type="album">
+            <i class="fa fa-trash-o text-danger"></i>
+          </button>
+        </div>
+      </div>
+    {/is_module_activated}
+  </div>
+</div>

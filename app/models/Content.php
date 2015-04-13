@@ -528,6 +528,8 @@ class Content
 
         $values = array(
             'body'           => (!array_key_exists('body', $data))? '': $data['body'],
+            'created'        =>
+                (!isset($data['created'])) ? $this->created: $data['created'],
             'changed'        => date("Y-m-d H:i:s"),
             'starttime'      =>
                 (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
@@ -596,7 +598,7 @@ class Content
         }
 
         $sql = "UPDATE contents
-                SET `title`=?, `description`=?, `body`=?,
+                SET `title`=?, `description`=?, `body`=?, `created`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
                     `changed`=?, `in_home`=?, `frontpage`=?,
                     `available`=?, `content_status`=?, `with_comment`=?,
@@ -605,7 +607,7 @@ class Content
                 WHERE pk_content= ?";
 
         $values = array(
-            $data['title'], $data['description'], $data['body'],
+            $data['title'], $data['description'], $data['body'], $data['created'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'], $data['with_comment'],

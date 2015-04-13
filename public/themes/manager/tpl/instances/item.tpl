@@ -218,6 +218,34 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-6">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>
+                            {t}Support{/t}
+                            <i>
+                                <a href="http://help.opennemas.com/knowledgebase/articles/463594-precios-opennemas-servicio-de-desarrollo" target="_blank">
+                                    &nbsp;&nbsp;+ info
+                                </a>
+                            </i>
+                        </h4>
+                    </div>
+                    <div class="grid-body support-list">
+                        <div class="form-group">
+                            <label class="form-label">{t}Development plan{/t}</label>
+                            <div class="controls" ng-init="initializeSupportPlan()">
+                                <div class="radio col-sm-6" ng-repeat="support in template.available_modules|filter:{ plan : 'Support'}" >
+                                    <input id="[% support.id %]" ng-model="instance.support_plan" type="radio" value="[% support.id %]">
+                                    <label for="[% support.id %]">
+                                        [% support.name %]
+                                    </label>
+                                    <span class="help muted" ng-if="support.description">( [% support.description %] )</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -228,25 +256,35 @@
                     <div class="grid-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="checkbox check-default  check-title">
+                                <div class="checkbox check-default check-title">
                                     <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="row" ng-repeat="planName in template.plans">
                             <div class="col-sm-12 instance-plan-block">
+                              <div class="col-sm-12 m-b-10 m-t-10">
                                 <div class="checkbox check-default check-title col-sm-12">
                                     <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
                                     <label for="checkbox-[% planName %]">
                                         <h5>Plan [% planName %]</h5>
                                     </label>
                                 </div>
-                                <div class="checkbox check-default col-sm-4" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
-                                    <input id="checkbox-[% module.id %]" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
+                              </div>
+                              <div class="col-sm-4 m-b-5" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                                <div class="checkbox check-default">
+                                    <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
                                     <label for="checkbox-[% module.id %]">
                                         [% module.name %]
+                                        <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) == -1 ">
+                                            ({t}pending activation{/t})
+                                        </span>
+                                        <span class="text-error" ng-if="instance.changes_in_modules.indexOf(module.id) != -1 && instance.activated_modules.indexOf(module.id) != -1 ">
+                                            ({t}pending deactivation{/t})
+                                        </span>
                                     </label>
                                 </div>
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -312,7 +350,6 @@
                         <h4>External services</h4>
                     </div>
                     <div class="grid-body">
-
                         <div class="form-group">
                             <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
                             <div class="controls">

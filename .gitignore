@@ -2,6 +2,7 @@
 *.sublime-*
 *~
 *.pot
+*.todo
 .development
 .deploy.php
 .maintenance
@@ -34,18 +35,20 @@ build/*
 
 # misc
 backups/*
+doc/*
 cache.properties
 tmp/*
 vendor/*
 
+# node
+node_modules/*
+
 #public
+public/assets/components/*
 public/assets/js/routes.js
-public/assets/components
 public/build
 public/bundles
-public/components
 public/media/
 public/themes/*
 !public/themes/admin
 !public/themes/manager
-

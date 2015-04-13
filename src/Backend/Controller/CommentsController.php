@@ -35,11 +35,12 @@ class CommentsController extends Controller
      **/
     public function init()
     {
-        $this->statuses = array(
-            \Comment::STATUS_ACCEPTED => _('Accepted'),
-            \Comment::STATUS_REJECTED => _('Rejected'),
-            \Comment::STATUS_PENDING  => _('Pending'),
-        );
+        $this->statuses = [
+            [ 'title' => _('All'), 'value' => -1 ],
+            [ 'title' => _('Accepted'), 'value' => \Comment::STATUS_ACCEPTED ],
+            [ 'title' => _('Rejected'), 'value' => \Comment::STATUS_REJECTED ],
+            [ 'title' => _('Pending'), 'value' => \Comment::STATUS_PENDING ],
+        ];
 
         $this->view->assign('statuses', $this->statuses);
     }
@@ -101,7 +102,7 @@ class CommentsController extends Controller
                     'success',
                     _("Now you are using the Opennemas comment system.")
                 );
-                return $this->redirect($this->generateUrl('admin_comments_list'));
+                return $this->redirect($this->generateUrl('admin_comments_config'));
                 break;
 
             case 'disqus':
@@ -315,7 +316,7 @@ class CommentsController extends Controller
             $comment->content = new \Content($comment->content_id);
 
             return $this->render(
-                'comment/read.tpl',
+                'comment/new.tpl',
                 array('comment' => $comment)
             );
         }

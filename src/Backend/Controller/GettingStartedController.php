@@ -15,6 +15,7 @@
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -67,18 +68,19 @@ class GettingStartedController extends Controller
      */
     public function acceptTermsAction(Request $request)
     {
-        if ($request->get('accept')) {
+        if ($request->get('accept') && $request->get('accept') === 'true') {
             $date = new \DateTime(null, new \DateTimeZone('UTC'));
             $user = $this->getUser();
             $newMeta = array('terms_accepted' => $date->format('Y-m-d H:i:s'));
             $user->setMeta($newMeta);
 
             $user->meta = array_merge($user->meta, $newMeta);
-
-            return new Response('OK');
+        } else {
+            $user = $this->getUser();
+            $user->deleteMetaKey($user->id, 'terms_accepted');
         }
 
-        return new Response('Not accepted', 412);
+        return new JsonResponse();
     }
 
     /**

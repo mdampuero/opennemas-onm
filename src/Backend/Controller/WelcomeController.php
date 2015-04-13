@@ -7,7 +7,7 @@
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c)  OpenHost S.L.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -56,12 +56,12 @@ class WelcomeController extends Controller
 
         return $this->render(
             'welcome/index.tpl',
-            array(
+            [
                 'terms_accepted'    => $terms,
                 'modules'           => $availableModules,
                 'youtube_videos'    => $youtubeVideoIds,
                 'initial_tour_done' => $tourDone,
-            )
+            ]
         );
     }
 
@@ -81,14 +81,18 @@ class WelcomeController extends Controller
         $xml = simplexml_load_string($youtubeRss);
 
         $videosYoutubeIds = array();
-        foreach ($xml->channel->item as $item) {
-            preg_match('@v=(.*)&@', $item->link, $matches);
 
-            $videosYoutubeIds []= $matches[1];
+        // Parse youtube videos only if the request was done
+        if (is_object($xml)) {
+            foreach ($xml->channel->item as $item) {
+                preg_match('@v=(.*)&@', $item->link, $matches);
 
+                $videosYoutubeIds []= $matches[1];
+
+            }
+            shuffle($videosYoutubeIds);
+            $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
         }
-        shuffle($videosYoutubeIds);
-        $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
 
         return $videosYoutubeIds;
     }

@@ -11,34 +11,52 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title">
-            <h2>{t}Comments{/t}</h2>
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-comment"></i>
+                            {t}Comments{/t}
+                        </h4>
+                    </li>
+                    <li class="quicklinks">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks">
+                        <h5>{t}Disqus{/t}</h5>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
+                                <i class="fa fa-gear"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <ul class="old-button">
-            <li>
-                <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png"><br />{t}Config{/t}
-                </a>
-            </li>
-        </ul>
     </div>
-</div>
-<div class="disqus">
-    {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
-    <a href="http://{$disqus_shortname}.disqus.com/admin/moderate/" target="_blank">
-        <div class="disqus-link">
-            <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" />
-            {t}To moderate your Disqus comments, click here{/t}
+
+    <div class="content">
+        <div class="disqus">
+            {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
+            <a href="http://{$disqus_shortname}.disqus.com/admin/moderate/" target="_blank">
+                <div class="disqus-link">
+                    <img src="{$params.IMAGE_DIR}/disqus-icon.png" alt="Disqus" />
+                    {t}To moderate your Disqus comments, click here{/t}
+                </div>
+            </a>
+            {else}
+                <div class="wrapper-content center">
+                    <h3>{t}Disqus not configured{/t}</h3>
+                </div>
+            {/if}
         </div>
-    </a>
-    {else}
-        <div class="wrapper-content center">
-            <h3>{t}Disqus not configured{/t}</h3>
-        </div>
-    {/if}
-</div>
+    </div>
 {/block}
 
 {block name="copyright"}
