@@ -215,11 +215,14 @@ class UserController extends Controller
             $groups[$group->id] = $group;
         }
 
+        array_unshift($groups, [ 'id' => '', 'name' => _('All') ]);
+
         return new JsonResponse(
             array(
                 'epp'      => $epp,
                 'template' => array(
-                    'groups' => $groups
+                    'flatGroups' => array_values($groups),
+                    'groups'     => $groups
                 ),
                 'page'     => $page,
                 'results'  => $users,

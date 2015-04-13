@@ -41,7 +41,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
      *
      * @type Object
      */
-    $scope.instances = data.results;
+    $scope.items = data.results;
 
     /**
      * The list of selected elements.
@@ -50,7 +50,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
      */
     $scope.selected = {
       all: false,
-      instances: []
+      items: []
     };
 
     /**
@@ -122,7 +122,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
      * @param string id The group id.
      */
     $scope.isSelected = function(id) {
-      return $scope.selected.instances.indexOf(id) != -1;
+      return $scope.selected.items.indexOf(id) != -1;
     };
 
     /**
@@ -177,10 +177,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
           template: function() {
             var selected = [];
 
-            for (var i = 0; i < $scope.instances.length; i++) {
-              if ($scope.selected.instances.indexOf(
-                $scope.instances[i].id) != -1) {
-                selected.push($scope.instances[i]);
+            for (var i = 0; i < $scope.items.length; i++) {
+              if ($scope.selected.items.indexOf(
+                $scope.items[i].id) != -1) {
+                selected.push($scope.items[i]);
               }
             }
 
@@ -193,7 +193,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
             return function() {
               return itemService.deleteSelected(
                 'manager_ws_instances_delete',
-                $scope.selected.instances);
+                $scope.selected.items);
             };
           }
         }
@@ -205,7 +205,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
           $scope.selected = {
             all: false,
-            instances: []
+            items: []
           };
 
           // Show success message
@@ -256,11 +256,11 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
      */
     $scope.selectAll = function() {
       if ($scope.selected.all) {
-        $scope.selected.instances = $scope.instances.map(function(instance) {
+        $scope.selected.items = $scope.items.map(function(instance) {
           return instance.id;
         });
       } else {
-        $scope.selected.instances = [];
+        $scope.selected.items = [];
       }
     };
 
@@ -295,27 +295,27 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
      * @param integer enabled The activated value.
      */
     $scope.setEnabledSelected = function(enabled) {
-      for (var i = 0; i < $scope.instances.length; i++) {
-        var id = $scope.instances[i].id;
-        if ($scope.selected.instances.indexOf(id) != -1) {
-          $scope.instances[i].loading = 1;
+      for (var i = 0; i < $scope.items.length; i++) {
+        var id = $scope.items[i].id;
+        if ($scope.selected.items.indexOf(id) != -1) {
+          $scope.items[i].loading = 1;
         }
       }
 
       var data = {
-        selected: $scope.selected.instances,
+        selected: $scope.selected.items,
         activated: enabled
       }
 
       itemService.patchSelected('manager_ws_instances_patch', data).then(function(response) {
         if (response.status == 200 || response.status == 207) {
           // Update instances changed successfully
-          for (var i = 0; i < $scope.instances.length; i++) {
-            var id = $scope.instances[i].id;
+          for (var i = 0; i < $scope.items.length; i++) {
+            var id = $scope.items[i].id;
 
             if (response.data.success.ids.indexOf(id) != -1) {
-              $scope.instances[i].activated = enabled;
-              delete $scope.instances[i].loading;
+              $scope.items[i].activated = enabled;
+              delete $scope.items[i].loading;
             }
           }
 
@@ -384,7 +384,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
       $scope.criteria = null;
       $scope.columns = null;
       $scope.pagination.epp = null;
-      $scope.instances = null;
+      $scope.items = null;
       $scope.selected = null;
       $scope.orderBy = null;
       $scope.pagination.page = null;
@@ -449,7 +449,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
       itemService.list('manager_ws_instances_list', data).then(
         function(response) {
-          $scope.instances = response.data.results;
+          $scope.items = response.data.results;
           $scope.pagination.total = response.data.total;
 
           $scope.loading = 0;

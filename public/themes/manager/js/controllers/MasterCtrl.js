@@ -34,6 +34,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         };
 
         /**
+         * The available elements per page
+         *
+         * @type {Array}
+         */
+        $scope.views = [ 10, 25, 50, 100 ];
+
+        /**
          * Removes a class from body and checks if user is authenticated.
          */
         $scope.init = function(language) {
@@ -234,16 +241,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
         });
 
         /**
-         * Restart the loading status for sidebar and check the top margin.
-         *
-         * @param Object event The event object.
-         * @param array  args  The list of arguments.
-         */
-        $rootScope.$on('$routeChangeSuccess', function (event, next, current) {
-            $scope.checkFiltersBar();
-        });
-
-        /**
          * Shows a modal to force page reload.
          *
          * @param Object event The event object.
@@ -269,21 +266,6 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
                 message: args.data.text
             });
         });
-
-        /**
-         * Updates the content margin-top basing on the filters-navbar height.
-         */
-        $scope.checkFiltersBar = function checkFiltersBar() {
-            $timeout(function() {
-                if ($('.view:not(.ng-leave-active) .filters-navbar').length != 1) {
-                    return false;
-                }
-
-                var margin = 50 + $('.filters-navbar').height() - 15;
-
-                $('.content').css('margin-top', margin + 'px');
-            }, 1000);
-        };
 
         webStorage.prefix('ONM-');
         if (webStorage.local.get('token') && webStorage.local.get('user')) {
