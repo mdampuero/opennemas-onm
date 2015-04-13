@@ -14,6 +14,7 @@ namespace Framework\Assetic;
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
 use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\LessFilter;
 use Framework\Assetic\Filter\LessNonCachedFilter;
 use Assetic\Filter\UglifyCssFilter;
 
@@ -53,13 +54,19 @@ class StylesheetManager extends AssetManager
                     );
                     break;
                 case 'less':
-                    $this->fm->set(
-                        'less',
-                        new LessNonCachedFilter(
+                    $filter = new LessFilter(
+                        $this->config['filters']['less']['node'],
+                        $this->config['filters']['less']['node_paths']
+                    );
+
+                    if ($this->env == 'dev') {
+                        $filter = new LessNonCachedFilter(
                             $this->config['filters']['less']['node'],
                             $this->config['filters']['less']['node_paths']
-                        )
-                    );
+                        );
+                    }
+
+                    $this->fm->set('less', $filter);
                     break;
                 default:
                     throw new FilterException();
