@@ -25,26 +25,22 @@
     {render_messages}
     <div class="row" id="info-page" >
       <div class="col-xs-12 col-sm-8">
-        <div class="row">
+        <div class="row instance-info">
           <div class="col-xs-12 m-b-15">
             <div class="tiles white">
-              <div class="tiles green">
+              <div class="tiles green body-wrapper">
                 <div class="tiles-body">
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <br>
-                  <h3 class="text-white semi-bold">{$instance->name}</h3>
-                  <h5 class="text-white ">
-                    <i class="fa fa-globe"></i>
-                    {implode(', ',$instance->domains)}
-                  </h5>
+                  <div class="instance-name-wrapper">
+                    <h3 class="text-white semi-bold">{$instance->name}</h3>
+                    <h5 class="text-white ">
+                      <i class="fa fa-globe"></i>
+                      {implode(', ',$instance->domains)}
+                    </h5>
+                  </div>
                 </div>
                 <div class="tile-footer clearfix">
                   <h6 class="no-margin pull-left">
-                    <a class="text-white" href="mailto://{$instance->contact_mail}">
+                    <a class="text-white" href="mailto://{$instance->contact_mail}" title="">
                       <i class="fa fa-envelope"></i>
                       {$instance->contact_mail}
                     </a>
@@ -141,16 +137,36 @@
             <div class="clearfix b-grey b-b tiles-body">
               <div class="pull-left">
                 <h4>{t}Plans & Modules{/t}</h4>
-                <p class="hidden-xs">{t}Here you can see a list of activated modules by plan{/t}</p>
+                {*<p class="hidden-xs hidden">{t}Here you can see a list of activated modules by plan{/t}</p>*}
               </div>
-              <div class="upgrade pull-right">
+              <div class="upgrade pull-right hidden">
                 <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
                   <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
                   <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
                 </button>
               </div>
             </div>
-            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+            <div class="tiles-body clearfix">
+              <div>
+                <div>
+                  <p class="col-xs-8">{t}Opennemas offers many more modules and solutions{/t}</p>
+                  <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" target="_blank" class="btn btn-primary btn-large col-xs-4">
+                    {t}Check out our modules{/t}
+                  </a>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div>
+                  <p class="col-xs-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
+                  <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-4">
+                    {t}Contact Us{/t}
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+            {*
               <div class="plans-wrapper">
                 <div class="inline p-r-30" ng-repeat="plan in plans">
                   <div class="checkbox">
@@ -173,6 +189,7 @@
                   </div>
                 </div>
               </div>
+            *}
             </div>
           </div>
           <input name="hasChanges" ng-value="hasChanges" type="hidden">

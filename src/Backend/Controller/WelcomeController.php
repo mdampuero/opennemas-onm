@@ -76,7 +76,7 @@ class WelcomeController extends Controller
         $youtubeRss = $cm->getUrlContent(
             'http://gdata.youtube.com/feeds/base/users/OpennemasPublishing/'
             .'uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile'
-            );
+        );
 
         $xml = simplexml_load_string($youtubeRss);
 
