@@ -292,6 +292,7 @@
     @Common/components/nanoscroller/bin/javascripts/jquery.nanoscroller.min.js,
     @Common/components/messenger/build/js/messenger.min.js,
     @Common/components/messenger/build/js/messenger-theme-flat.js,
+    @Common/components/select2/select2.min.js,
 
     @Common/js/onm/md5.min.js,
     @Common/js/onm/scripts.js,
