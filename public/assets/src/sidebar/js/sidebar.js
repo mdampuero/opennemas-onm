@@ -290,7 +290,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
 
           // Item with route
           if (item.route) {
-            li = li.replace('#', routing.ngGenerate(item.route));
+            li = li.replace('#', routing.ngGenerate(item.route) + '/');
           }
 
           // Custom icon class
