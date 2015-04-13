@@ -57,7 +57,13 @@ class RssController extends Controller
             );
         }
 
-        return $this->render('rss/index.tpl', array('cache_id' => $cacheID));
+        return $this->render(
+            'rss/index.tpl',
+            array(
+                'cache_id' => $cacheID,
+                'x-tags'   => 'rss'
+            )
+        );
     }
 
     /**
@@ -185,19 +191,17 @@ class RssController extends Controller
             );
         }
 
-        $response = new Response(
-            '',
-            200,
-            array(
-                'Content-Type' => 'text/xml; charset=UTF-8',
-                'x-tags'       => 'rss',
-            )
-        );
-
         return $this->render(
             'rss/rss.tpl',
-            array('cache_id' => $cacheID),
-            $response
+            array(
+                'cache_id' => $cacheID,
+                'x-tags'   => 'rss',
+            ),
+            new Response(
+                '',
+                200,
+                array('Content-Type' => 'text/xml; charset=UTF-8')
+            )
         );
     }
 
@@ -272,14 +276,14 @@ class RssController extends Controller
 
         return $this->render(
             'rss/rss.tpl',
-            array('cache_id' => $cacheID),
+            array(
+                'cache_id' => $cacheID,
+                'x-tags'   => 'rss'
+            ),
             new Response(
                 '',
                 200,
-                array(
-                    'Content-Type' => 'text/xml; charset=UTF-8',
-                    'x-tags'       => 'rss',
-                )
+                array('Content-Type' => 'text/xml; charset=UTF-8')
             )
         );
 

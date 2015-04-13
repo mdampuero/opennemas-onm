@@ -443,26 +443,26 @@ class NewsAgencyController extends Controller
      **/
     public function getSimilarCategoryIdForElement($element)
     {
-        if (!array_key_exists('category', $element->getMetaData())) {
-            $originalCategory = '';
-        } else {
-            $originalCategory = utf8_decode($element->getMetaData()['category']);
+        $finalCategory = 0;
+        if (is_array($element->getMetaData()) &&
+            array_key_exists('category', $element->getMetaData())
+        ) {
+            $originalCategory     = utf8_decode($element->getMetaData()['category']);
+            $originalCategoryTemp = strtolower($originalCategory);
 
-        }
-        $originalCategoryTemp = strtolower($originalCategory);
+            $ccm        = \ContentCategoryManager::get_instance();
+            $categories = $ccm->findAll();
 
-        $ccm        = \ContentCategoryManager::get_instance();
-        $categories = $ccm->findAll();
+            $prevPoint = 1000;
+            $finalCategory = null;
+            foreach ($categories as $category) {
+                $categoryName = strtolower(utf8_decode($category->title));
+                $lev          = levenshtein($originalCategoryTemp, $categoryName);
 
-        $prevPoint = 1000;
-        $finalCategory = null;
-        foreach ($categories as $category) {
-            $categoryName = strtolower(utf8_decode($category->title));
-            $lev          = levenshtein($originalCategoryTemp, $categoryName);
-
-            if ($lev < 2  && $lev < $prevPoint) {
-                $prevPoint     = $lev;
-                $finalCategory = $category->id;
+                if ($lev < 2  && $lev < $prevPoint) {
+                    $prevPoint     = $lev;
+                    $finalCategory = $category->id;
+                }
             }
         }
 
@@ -499,19 +499,18 @@ class NewsAgencyController extends Controller
             foreach ($element->getPhotos() as $photo) {
                 if ($photo->getId() == $attachmentId) {
                     $filePath = null;
-
-                    // Try to get image from local
-                    if (is_file($repository->syncPath.DS.$sourceId.DS.$photo->getName())) {
-                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
-                    }
-
-                    if (!$filePath && strpos($photo->getFilePath(), 'http://') !== false) {
+                    if (strpos($photo->getFilePath(), 'http://') !== false) {
                         $filePath = $photo->getFilePath();
                     }
 
                     // Get image from FTP
                     if (!$filePath) {
                         $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
+                    }
+
+                    // If no image from FTP check HTTP
+                    if (!$filePath) {
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
 
                     $content = @file_get_contents($filePath);
@@ -762,13 +761,11 @@ class NewsAgencyController extends Controller
         } else {
             $servers = s::get('news_agency_config');
 
-
             if (!is_array($servers)) {
                 $servers = array();
-                $latestServerId = 0;
-            } else {
-                $latestServerId = max(array_keys($servers));
             }
+
+            $latestServerId = max(array_keys($servers));
 
             $server = array(
                 'id'            => $latestServerId + 1,
