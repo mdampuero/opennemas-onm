@@ -369,7 +369,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
           }
 
           if (this.pinnable) {
-            border = '<div class="sidebar-border ng-cloak"></div>';
+            border = '<div class="sidebar-border ng-cloak" ng-click="ngModel.pin()"></div>';
           }
 
           for (var i = 0; i < this.data.items.length; i++) {
