@@ -281,5 +281,18 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             },
             true
         );
+
+        // Initializes the selected flags
+        for (var i = 0; i < $scope.template.plans.length; i++) {
+            var plan = $scope.template.plans[i];
+            var modulesInPlan = $filter('filter')($scope.template.available_modules, { plan: plan });
+            $scope.selected.plan[plan] = true;
+
+            for (var j = 0; j < modulesInPlan.length; j++) {
+              if ($scope.instance.activated_modules.indexOf(modulesInPlan[j].id) === -1) {
+                $scope.selected.plan[plan] = false;
+              }
+            }
+        }
     }
 ]);
