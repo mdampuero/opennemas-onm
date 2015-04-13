@@ -256,20 +256,23 @@
                     <div class="grid-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="checkbox check-default  check-title">
+                                <div class="checkbox check-default check-title">
                                     <button class="btn" ng-click="selectAll()">{t}Select all{/t}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="row" ng-repeat="planName in template.plans">
                             <div class="col-sm-12 instance-plan-block">
+                              <div class="col-sm-12 m-b-10 m-t-10">
                                 <div class="checkbox check-default check-title col-sm-12">
                                     <input id="checkbox-[% planName %]" ng-model="selected.plan[planName]" ng-change="togglePlan(planName)" ng-checked="isPlanSelected(planName)" type="checkbox">
                                     <label for="checkbox-[% planName %]">
                                         <h5>Plan [% planName %]</h5>
                                     </label>
                                 </div>
-                                <div class="checkbox check-default col-sm-4" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                              </div>
+                              <div class="col-sm-4 m-b-5" ng-repeat="module in template.available_modules|filter:{ plan : planName}">
+                                <div class="checkbox check-default">
                                     <input id="checkbox-[% module.id %]" ng-click="toggleChanges(module)" checklist-model="instance.activated_modules" checklist-value="module.id" type="checkbox">
                                     <label for="checkbox-[% module.id %]">
                                         [% module.name %]
@@ -281,6 +284,7 @@
                                         </span>
                                     </label>
                                 </div>
+                              </div>
                             </div>
                         </div>
                     </div>
