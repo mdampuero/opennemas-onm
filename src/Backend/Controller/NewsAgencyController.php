@@ -442,21 +442,26 @@ class NewsAgencyController extends Controller
      **/
     public function getSimilarCategoryIdForElement($element)
     {
-        $originalCategory     = utf8_decode($element->getMetaData()['category']);
-        $originalCategoryTemp = strtolower($originalCategory);
+        $finalCategory = 0;
+        if (is_array($element->getMetaData()) &&
+            array_key_exists('category', $element->getMetaData())
+        ) {
+            $originalCategory     = utf8_decode($element->getMetaData()['category']);
+            $originalCategoryTemp = strtolower($originalCategory);
 
-        $ccm        = \ContentCategoryManager::get_instance();
-        $categories = $ccm->findAll();
+            $ccm        = \ContentCategoryManager::get_instance();
+            $categories = $ccm->findAll();
 
-        $prevPoint = 1000;
-        $finalCategory = null;
-        foreach ($categories as $category) {
-            $categoryName = strtolower(utf8_decode($category->title));
-            $lev          = levenshtein($originalCategoryTemp, $categoryName);
+            $prevPoint = 1000;
+            $finalCategory = null;
+            foreach ($categories as $category) {
+                $categoryName = strtolower(utf8_decode($category->title));
+                $lev          = levenshtein($originalCategoryTemp, $categoryName);
 
-            if ($lev < 2  && $lev < $prevPoint) {
-                $prevPoint     = $lev;
-                $finalCategory = $category->id;
+                if ($lev < 2  && $lev < $prevPoint) {
+                    $prevPoint     = $lev;
+                    $finalCategory = $category->id;
+                }
             }
         }
 
