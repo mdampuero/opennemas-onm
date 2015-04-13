@@ -14,7 +14,7 @@ class LessNonCachedFilter extends LessFilter
 
         $filename = realpath($root . '/' . $path);
 
-        if (preg_match('/\.less$/', $filename) && file_exists($filename)) {
+        if (preg_match('/main\.less$/', $filename) && file_exists($filename)) {
             touch($filename);
         }
 
