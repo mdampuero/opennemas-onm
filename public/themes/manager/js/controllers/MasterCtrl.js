@@ -292,5 +292,10 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
             $scope.user = webStorage.local.get('user');
             $scope.loaded = true;
         }
+
+        // Prevent default for links where href="#"
+        $('a[href=#]').on('click', function(e) {
+            e.preventDefault();
+        });
     }
 ]);
