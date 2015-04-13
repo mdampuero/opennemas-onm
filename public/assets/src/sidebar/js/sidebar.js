@@ -21,7 +21,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        * @type string
        */
       var defaultSidebarTpl = '<div class="sidebar">' +
-        '<div class="spinner-wrapper">' +
+        '<div class="sidebar-wrapper">' +
           '<div class="spinner">' +
             '<i class="fa fa-circle-o-notch fa-3x fa-spin"></i>' +
           '</div>' +
@@ -35,18 +35,9 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        */
       var footerTpl = '<div class="sidebar-footer-widget">' +
         '<ul>' +
-          '<li class="profile-info">' +
-            '<a ng-href="' + routing.ngGenerate('manager_user_show', { id: 'me' }) + '">' +
-              '<div class="profile-pic">' +
-                '<img class="gravatar" email="[% $parent.user.email %]" image="1" size="32" width=32 height=32 >' +
-              '</div>' +
-              '<div class="username">' +
-                '[% $parent.user.name %]' +
-              '</div>' +
-            '</a>' +
-            '<div class="logout" ng-click="$parent.logout();">' +
-              '<i class="fa fa-power-off"></i>' +
-            '</div>' +
+          '<li class="support"><li>' +
+          '<li class="pin" ng-click="ngModel.pin()" tooltip="[% ngModel.data.translations[\'Show/hide sidebar\']%]" tooltip-placement="right">' +
+            '<i class="fa fa-lg" ng-class="{ \'fa-angle-double-left\': ngModel.isPinned(), \'fa-angle-double-right\': !ngModel.isPinned()}"></i>' +
           '</li>' +
         '</ul>' +
       '</div>';
@@ -70,9 +61,8 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        *
        * @type string
        */
-      var sidebarTpl = '<div class="[position][inverted]" ng-class="{ \'collapsed\': ngModel.isCollapsed() }">' +
-        '<div class="[class]"[id][swipeable]>' +
-          '<div class="overlay"></div>' +
+      var sidebarTpl = '<div class="[class][position][inverted]"[id][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
+          '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
           '<scrollable>' +
             '<div class="sidebar-wrapper">' +
               '<ul>' +
@@ -82,8 +72,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
           '</scrollable>' +
           '[footer]' +
         '</div>' +
-        '[border]' +
-      '</div>';
+        '[border]';
 
       /**
        * Default values for sidebar.
@@ -128,7 +117,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
          */
         sidebar.check = function() {
           this.forced    = false;
-          this.collapsed = this.pinned;
+          this.collapsed = !this.pinned;
 
           if ($window.innerWidth < this.threshold) {
             this.forced    = true;
@@ -221,7 +210,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
             this.changing[route] = true;
           }
 
-          this.collapsed = this.pinned;
+          this.collapsed = !this.pinned;
 
           // Collapse this for small screens
           if (this.forced) {
