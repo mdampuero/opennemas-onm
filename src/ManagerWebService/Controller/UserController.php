@@ -216,7 +216,7 @@ class UserController extends Controller
         }
 
         $flatGroups = array_values($groups);
-        array_unshift($flatGroups, [ 'id' => '', 'name' => _('All') ]);
+        array_unshift($flatGroups, [ 'id' => null, 'name' => _('All') ]);
 
         return new JsonResponse(
             array(
