@@ -407,9 +407,26 @@ class AlbumsController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countAlbums,
-            'base_url'          => $this->generateUrl('admin_albums_content_provider', ['category' => $categoryId]),
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countAlbums,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
+                'admin_albums_content_provider',
+                ['category' => $categoryId]
+            ),
         ]);
 
         return $this->render(
