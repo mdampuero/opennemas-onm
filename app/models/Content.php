@@ -393,6 +393,7 @@ class Content
                                     ? 0: intval($data['frontpage']);
         $data['position']         = (empty($data['position']))? '2': $data['position'];
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
+        $data['favorite']          = (empty($data['favorite']))? 0: $data['favorite'];
         $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
         $data['params'] =
@@ -433,9 +434,9 @@ class Content
             `metadata`, `starttime`, `endtime`,
             `created`, `changed`, `content_status`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `home_pos`,`available`, `with_comment`,
+            `in_home`, `favorite`, `home_pos`,`available`, `with_comment`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?,?)";
 
         $values = array(
             $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
@@ -443,7 +444,7 @@ class Content
             $data['created'], $data['changed'], $data['content_status'],
             $data['position'],$data['frontpage'],
             $data['fk_author'], $data['fk_publisher'],
-            $data['fk_user_last_editor'], $data['in_home'],
+            $data['fk_user_last_editor'], $data['in_home'], $data['favorite'],
             $data['home_pos'], $data['available'], $data['with_comment'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
@@ -543,6 +544,8 @@ class Content
                 (!isset($data['frontpage'])) ? $this->frontpage: $data['frontpage'],
             'in_home'        =>
                 (!isset($data['in_home'])) ? $this->in_home: $data['in_home'],
+            'favorite'        =>
+                (!isset($data['favorite'])) ? $this->favorite: $data['favorite'],
             'with_comment'        =>
                 (!isset($data['with_comment'])) ? $this->with_comment: $data['with_comment'],
             'params'         =>
@@ -600,7 +603,7 @@ class Content
         $sql = "UPDATE contents
                 SET `title`=?, `description`=?, `body`=?, `created`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
-                    `changed`=?, `in_home`=?, `frontpage`=?,
+                    `changed`=?, `in_home`=?, `favorite`=?, `frontpage`=?,
                     `available`=?, `content_status`=?, `with_comment`=?,
                     `fk_author`=?, `fk_user_last_editor`=?,
                     `slug`=?, `category_name`=?, `params`=?
@@ -609,7 +612,7 @@ class Content
         $values = array(
             $data['title'], $data['description'], $data['body'], $data['created'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['changed'], $data['in_home'], $data['frontpage'],
+            $data['changed'], $data['in_home'], $data['favorite'], $data['frontpage'],
             $data['available'], $data['content_status'], $data['with_comment'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $catName, $data['params'], $data['id']
