@@ -32,10 +32,12 @@
                 <div class="tiles-body">
                   <div class="instance-name-wrapper">
                     <h3 class="text-white semi-bold">{$instance->name}</h3>
+                    {foreach $instance->domains as $domain}
                     <h5 class="text-white ">
                       <i class="fa fa-globe"></i>
-                      {implode(', ',$instance->domains)}
+                      <a href="http://{$domain}" target="_" class="text-white">{$domain}</a>
                     </h5>
+                    {/foreach}
                   </div>
                 </div>
                 <div class="tile-footer clearfix">
