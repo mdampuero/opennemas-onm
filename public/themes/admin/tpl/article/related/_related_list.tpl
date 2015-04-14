@@ -85,7 +85,7 @@
       <div class="m-b-40" {if isset($galleries['inner']) && $galleries['inner']->title}ng-init="galleryForInner = { id: '{$galleries['inner']->id}', content_type_name: '{$galleries['inner']->content_type_name}', title: '{$galleries['inner']->title}' }"{/if}>
         <div class="clearfix">
           <h5 class="pull-left">{t}Gallery for inner{/t} <small>*{t}Only one album{/t}</small></h5>
-           <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForInner" content-picker-type="album">
+           <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForInner" content-picker-type="album" type="button">
             <i class="fa fa-plus"></i>
             {t}Add gallery{/t}
           </button>
@@ -103,7 +103,7 @@
       <div {if isset($galleries['home']) && $galleries['home']->title}ng-init="galleryForHome = { id: '{$galleries['home']->id}', content_type_name: '{$galleries['home']->content_type_name}', title: '{$galleries['home']->title}' }"{/if}>
         <div class="clearfix">
           <h5 class="pull-left">{t}Gallery for Home{/t} <small>*{t}Only one album{/t}</small></h5>
-          <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForHome" content-picker-type="album">
+          <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="galleryForHome" content-picker-type="album" type="button">
             <i class="fa fa-plus"></i>
             {t}Add gallery{/t}
           </div>
