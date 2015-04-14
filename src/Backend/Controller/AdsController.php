@@ -330,7 +330,6 @@ class AdsController extends Controller
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
-            'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
             'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
             'num_clic'           => $request->request->filter('num_clic', '', FILTER_SANITIZE_STRING),

@@ -142,7 +142,7 @@
                       {t}Width{/t}
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="params_width" name="params_width" type="number" value="{$advertisement->params['width']}" {if isset($advertisement) && $advertisement->with_script != 2}required="required"{/if} min="0">
+                      <input class="form-control" id="params_width" name="params_width" type="number" value="{$advertisement->params['width']}" ng-required="with_script != 2" min="0">
                     </div>
                   </div>
                 </div>
@@ -150,7 +150,7 @@
                   <div class="form-group">
                     <label for="params_height" class="form-label">{t}Height{/t}</label>
                     <div class="controls">
-                      <input class="form-control" id="params_height" name="params_height" type="number" value="{$advertisement->params['height']}" {if isset($advertisement) && $advertisement->with_script != 2}required="required"{/if} min="0">
+                      <input class="form-control" id="params_height" name="params_height" type="number" value="{$advertisement->params['height']}" ng-required="with_script != 2" min="0">
                     </div>
                   </div>
                 </div>
@@ -205,17 +205,17 @@
                   <div class="help-block">{t}Show this ad within a range of dates.{/t}.</div>
                 </div>
               </div>
-              <div class="form-group" style="{if !isset($advertisement) || (($advertisement->type_advertisement + 50) % 100) != 0}display:none{/if};">
+              <div class="form-group" ng-show="((type_advertisement + 50) % 100) != 0">
                 <label for="timeout" class="form-label">{t}Display banner while{/t}</label>
                 <div class="controls">
                   <input type="number" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" min="0" max="100"/>
                   <div class="help-block">{t}Amount of seconds that this banner will block all the page.{/t}</div>
                 </div>
               </div>
-              <div class="form-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
+              <div class="form-group" id="div_url1" ng-show="with_script == 0">
                 <label for="url" class="form-label">{t}Url{/t}</label>
                 <div class="controls">
-                  <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" {if !empty($advertisement)  && ($advertisement->with_script == 0)} required="required"{/if} />
+                  <input type="url" id="url" name="url" class="form-control" value="{$advertisement->url}" placeholder="http://" ng-required="with_script == 0" />
                 </div>
               </div>
             </div>
