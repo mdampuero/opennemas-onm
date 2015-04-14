@@ -107,7 +107,7 @@ class WidgetsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $post   = $request->request;
+            $post = $request->request;
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),

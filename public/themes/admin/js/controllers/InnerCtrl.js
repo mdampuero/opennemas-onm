@@ -103,7 +103,7 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
     });
 
     // Initialize the scope with the input/select values.
-    $('input, select').each(function() {
+    $('input, select, textarea').each(function() {
       var name = $(this).attr('name');
       $scope[name] = $(this).val();
     });
