@@ -57,7 +57,7 @@ class WidgetsController extends Controller
 
         $widget = new \Widget($id);
         $widgetParams = [];
-        if (is_string($widget->params)) {
+        if (is_string($widget->params) && !empty($widget->params)) {
             $widget->params = unserialize($widget->params);
 
             foreach ($widget->params as $key => $value) {
