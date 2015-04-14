@@ -58,7 +58,7 @@
             {/acl}
             {acl isAllowed="COMMENT_DELETE"}
             <li class="quicklinks">
-              <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+              <button class="btn btn-link" ng-click="deleteSelected('backend_ws_comments_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
               </button>
             </li>
@@ -159,7 +159,7 @@
                       </a>
                       {/acl}
                       {acl isAllowed="COMMENT_DELETE"}
-                      <button class="link link-danger" ng-click="open('modal-remove-permanently', 'backend_ws_comment_delete', $index)" type="button">
+                      <button class="link link-danger" ng-click="delete(content, 'backend_ws_comment_delete')" type="button">
                       <i class="fa fa-trash-o"></i> {t}Remove{/t}
                       </button>
                       {/acl}
@@ -188,8 +188,8 @@
       </div>
     </div>
   </div>
-    <script type="text/ng-template" id="modal-remove-permanently">
-      {include file="common/modals/_modalRemovePermanently.tpl"}
+    <script type="text/ng-template" id="modal-delete">
+      {include file="common/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
       {include file="common/modals/_modalBatchDelete.tpl"}
