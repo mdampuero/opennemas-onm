@@ -89,6 +89,16 @@ tr:hover .listing-inline-actions {
   }
 }
 @media (max-width: 767px) {
+  .table > thead > tr > th,
+  .table > tbody > tr > td {
+    padding-left: 0 !important;
+  }
+
+  .table > thead > tr > th:first-child,
+  .table > tbody > tr > td:first-child {
+    padding-left: 15px !important;
+  }
+
   .grid-footer .pagination-info {
     margin: 0 auto;
     text-align: center;
