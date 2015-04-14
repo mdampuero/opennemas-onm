@@ -118,3 +118,5 @@ parameters:
     recaptcha_private_key: 6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs
 
     sales_email: sales@openhost.es
+
+    analytics.enabled: false
