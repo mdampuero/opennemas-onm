@@ -3,7 +3,7 @@
 
   button {
     float: left;
-    height: @height;
+    height: @pagination-height;
 
     &:first-child {
       border-radius: @radius 0 0 @radius;
@@ -16,28 +16,28 @@
     }
 
     .fa {
-      color: @text-color;
+      color: @default-color;
     }
   }
 
   input {
     border-radius: 0;
     float: left;
-    height: @height;
-    min-height: @height;
+    height: @pagination-height;
+    min-height: @pagination-height;
     padding: 0 !important;
     text-align: right;
     transition: all .25s;
-    width: @width;
+    width: @pagination-width;
 
     &:focus {
-      width: @width + 10px;
+      width: @pagination-width + 10px;
     }
   }
 }
 
 .pagination-status {
-  color: @text-color;
+  color: @default-color;
   float: left;
   margin-right: 8px;
   padding: 9px 0 8px;
