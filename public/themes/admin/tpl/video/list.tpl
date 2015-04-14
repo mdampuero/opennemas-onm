@@ -247,14 +247,16 @@
                   <label for="checkbox[%$index%]"></label>
                 </div>
               </td>
-              <td style="width:15px;" class=" hidden-xs">
-                <div style="height: 120px; width: 100%;">
-                  <dynamic-image autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
+              <td class="hidden-sm hidden-xs">
+                <div style="height: 120px; width: 120px;">
+                  <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
+                  <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
                 </div>
               </td>
               <td>
-                <div class="visible-xs" style="height: 120px;  width: 100%; margin-bottom: 15px;">
-                  <dynamic-image autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
+                <div class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
+                  <dynamic-image ng-if="content.thumb_image" autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.thumb_image"></dynamic-image>
+                  <dynamic-image ng-if="!content.thumb_image" autoscale="true" class="img-thumbnail" ng-model="content.thumb"></dynamic-image>
                 </div>
                 [% content.title %]
                 <div class="small-text">
