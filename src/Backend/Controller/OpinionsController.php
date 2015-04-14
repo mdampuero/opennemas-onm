@@ -314,16 +314,9 @@ class OpinionsController extends Controller
                 );
             }
 
-            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-            if (isset($continue) && $continue==1) {
-                return $this->redirect(
-                    $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl('admin_opinions', array('type_opinion' => $data['category']))
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl('admin_opinion_show', array('id' => $opinion->id))
+            );
         } else {
             // Fetch all authors
             $allAuthors = \User::getAllUsersAuthors();
