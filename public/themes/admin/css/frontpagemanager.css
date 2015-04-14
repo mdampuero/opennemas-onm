@@ -24,7 +24,7 @@ body {font-size:13px;}
 #frontpagemanager .placeholder-element ,
 #content-provider .placeholder-element {min-height:20px;margin:5px;border:1px dashed #aaa !important;padding:5px;background:#eee;cursor:pointer;background-color:rgba(255,255,255,0.2) !important;}
 
-#content-provider {background: #fff;box-shadow: 0px 0px 5px 6px Black;padding-bottom:10px;overflow:visible;position:relative;}
+#content-provider {padding:0;box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;overflow:visible;position:relative;z-index: 200;}
 #content-provider .ui-tabs-nav {position:absolute;top:0px;left:0px;width:100%;padding:0;background:#e5e9ec !important;}
 #content-provider .ui-tabs-nav * {outline:none;border:none;}
 #content-provider .ui-tabs-nav a,
@@ -36,7 +36,6 @@ body {font-size:13px;}
 #content-provider input[type="checkbox"],
 #content-provider div.content-action-buttons {display:none;}
 #content-provider span.type {display:none;}
-#content-provider {border:0 none;padding:0;box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;z-index: 100;overflow: hidden;}
 #content-provider .ui-tabs {border:0 none !important;padding:0;}
 #content-provider .ui-tabs-selected a,
 #content-provider .ui-state-active a {color: #222;font-weight: bold;background-color: #fff;}
@@ -81,7 +80,7 @@ body {font-size:13px;}
     padding:0;
     overflow: visible;
 }
-.ui-sortable-helper {max-width:400px;z-index: 99999;overflow: hidden;text-overflow: ellipsis;}
+.ui-sortable-helper {max-width:400px;z-index: 9999999;overflow: hidden;text-overflow: ellipsis;}
 .ui-sortable-helper .selectButton,
 .ui-sortable-helper .content-action-buttons {display:none !important;}
 
