@@ -8,6 +8,13 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
 
+    kernel.listener.analytics.comscore:
+        class: Framework\EventListener\ComScoreAnalyticsListener
+        arguments: [ @service_container ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+
+
     kernel.listener.analytics.ojd:
         class: Framework\EventListener\OJDAnalyticsListener
         arguments: [ @service_container ]
