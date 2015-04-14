@@ -23,8 +23,16 @@
   input {
     border-radius: 0;
     float: left;
-    min-height: @height;
     height: @height;
+    min-height: @height;
+    padding: 0 !important;
+    text-align: right;
+    transition: all .25s;
+    width: @width;
+
+    &:focus {
+      width: @width + 10px;
+    }
   }
 }
 
