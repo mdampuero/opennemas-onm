@@ -431,7 +431,7 @@
                             <div class="controls">
                               <input class="form-control" id="google_page" name="google_page" type="text" value="{$configs['google_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you have a <b>Google+ page</b>, please complete this input.{/t}
+                                {t escape=off}If you have a <strong>Google+ page</strong>, please complete this input.{/t}
                               </span>
                             </div>
                           </div>
@@ -475,7 +475,7 @@
                             <div class="controls">
                               <input class="form-control" id="youtube_page" name="youtube_page" type="text" value="{$configs['youtube_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you have a <b>Youtube page</b>, please complete the form with your youtube page url.{/t}
+                                {t escape=off}If you have a <strong>Youtube page</strong>, please complete the form with your youtube page url.{/t}
                               </span>
                             </div>
                           </div>
@@ -524,7 +524,7 @@
                             <div class="controls">
                               <input class="form-control" id="twitter_page" name="twitter_page" type="text" value="{$configs['twitter_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you also have a <b>twitter page</b>, add your page url on the form. Default will be set with Opennemas.{/t}
+                                {t escape=off}If you also have a <stron>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
                               </span>
                             </div>
                           </div>
@@ -550,7 +550,7 @@
                             <div class="controls">
                               <input class="form-control" id="vimeo_page" name="vimeo_page" type="text" value="{$configs['vimeo_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you also have a <b>Vimeo page</b>, add your page url on the form.{/t}
+                                {t escape=off}If you also have a <strong>Vimeo page</strong>, add your page url on the form.{/t}
                               </span>
                             </div>
                           </div>
@@ -614,7 +614,7 @@
                             <div class="controls">
                               <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
                               <div class="help">
-                                {t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}
+                                {t escape=off}If you also have a <strong>comScore statistics service</strong>, add your page id{/t}
                               </div>
                             </div>
                           </div>
@@ -642,7 +642,7 @@
                             <div class="controls">
                               <input class="form-control" id="facebook_page" name="facebook_page" type="text" value="{$configs['facebook_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.{/t}
+                                {t escape=off}If you have a <strong>facebook page</strong>, please complete the form with your facebook page url and Id.{/t}
                               </span>
                             </div>
                           </div>
@@ -695,7 +695,7 @@
                             <div class="controls">
                               <input class="form-control" id="linkedin_page" name="linkedin_page" type="text" value="{$configs['linkedin_page']|default:""}">
                               <span class="help">
-                                {t escape=off}If you also have a <b>LinkedIn page</b>, add your page url on the form. Default will be set with Opennemas.{/t}
+                                {t escape=off}If you also have a <strong>LinkedIn page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
                               </span>
                             </div>
                           </div>
@@ -762,7 +762,7 @@
                             </label>
                             <div class="controls">
                               <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
-                              <div class="help">{t escape=off}If you also have a <b>OJD statistics service</b>, add your page id{/t}</div>
+                              <div class="help">{t escape=off}If you also have a <strong>OJD statistics service</strong>, add your page id{/t}</div>
                             </div>
                           </div>
                         </div>

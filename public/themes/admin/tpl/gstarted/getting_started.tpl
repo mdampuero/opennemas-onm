@@ -74,7 +74,7 @@
             <div class="orb">
               <i class="fa fa-question fa-3x"></i>
             </div>
-            {t escape=off}If you need further information you can always contact us by using the  <span class="icon-large icon-question-sign"></span> Help  button in the upper right corner.{/t}
+            {t escape=off}If you need further information you can always contact us by using the  <span class="fa fa-support fa-2x"></span> Help  button in the upper right corner.{/t}
           </div>
         </div>
         <div class="wizard-button">
