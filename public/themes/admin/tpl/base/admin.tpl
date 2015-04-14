@@ -166,7 +166,7 @@
                     <div class="quick-item">
                       <a href="{url name=admin_static-page_create}">
                         <i class="fa fa-file-o"></i>
-                        <span class="title">{t}Static page{/t}</span>
+                        <span class="title">{t}Page{/t}</span>
                       </a>
                     </div>
                   </div>
