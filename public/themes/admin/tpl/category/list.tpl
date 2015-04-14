@@ -75,7 +75,7 @@
               </thead>
               <tbody>
                 {section name=c loop=$categorys}
-                {if $categorys[c]>internal_category eq '1'}
+                {if $categorys[c]->internal_category eq '1'}
                 {include file="category/_partials/print_list_category.tpl"
                 category=$categorys[c]
                 subcategorys=$subcategorys[c]
