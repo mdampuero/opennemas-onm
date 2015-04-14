@@ -8,6 +8,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
 
+    kernel.listener.analytics.piwik:
+        class: Framework\EventListener\PiwikAnalyticsListener
+        arguments: [ @service_container ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+
     kernel.listener.maintenance_mode:
         class: Framework\EventListener\MaintenanceModeListener
         tags:
