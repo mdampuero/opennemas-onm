@@ -119,4 +119,4 @@ parameters:
 
     sales_email: sales@openhost.es
 
-    analytics.enabled: false
+    backend_analytics.enabled: false

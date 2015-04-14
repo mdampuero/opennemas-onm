@@ -17,14 +17,12 @@ class ComScoreAnalyticsListener
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (!$this->container->getParameter('analytics.enabled')) {
-            return;
-        }
-
         $uri     = $event->getRequest()->getUri();
         $referer = $event->getRequest()->headers->get('referer');
 
-        if (preg_match('/\/admin/', $uri)) {
+        if ($this->container->getParameter('backend_analytics.enabled')
+            && preg_match('/\/admin/', $uri)
+        ) {
             return;
         }
 
