@@ -413,28 +413,215 @@
             <tab heading="{t}External services{/t}">
               <div class="tab-wrapper">
                 <div class="col-md-6">
+                  <h5>{t}Analytic system integration{/t}</h5>
                   <div class="panel-group" id="accordion_1" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
                         <h4 class="panel-title">
                           <a class="collapsed" data-toggle="collapse" data-parent="#accordion_1" href="#goggle">
-                            <i class="fa fa-google"></i>{t}Google Services{/t}
+                            <i class="fa fa-google"></i>{t}Google Analytics{/t}
                           </a>
                         </h4>
                       </div>
                       <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
                           <div class="form-group">
-                            <label class="form-label" for="google_page">
-                              {t}Google+ Page Url{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="google_page" name="google_page" type="text" value="{$configs['google_page']|default:""}">
-                              <span class="help">
-                                {t escape=off}If you have a <strong>Google+ page</strong>, please complete this input.{/t}
-                              </span>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="google_analytics_api_key">
+                                  {t}Google Analytics API key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                                  <span class="help">
+                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label" for="google_analytics_domain">
+                                  {t}Google Analytics Base domain{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
+                                </div>
+                              </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_5" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_5" href="#comscore">
+                            <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="comscore" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="comscore_page_id">
+                              {t}comScore Page ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
+                              <div class="help">
+                                {t escape=off}If you also have a <strong>comScore statistics service</strong>, add your page id{/t}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_9" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_9" href="#ojd">
+                            <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="ojd" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="ojd_page_id">
+                              {t}OJD Page ID{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
+                              <div class="help">{t escape=off}If you also have a <strong>OJD statistics service</strong>, add your page id{/t}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h5>{t}Internal settings{/t}</h5>
+                  <div class="panel-group" id="accordion_4" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_4" href="#recaptcha">
+                            <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="recaptcha" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="piwik_token_auth">
+                                  {t}Public key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label" for="piwik_token_auth">
+                                  {t}Private key{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
+                                </div>
+                              </div>
+                            </div>
+                            <span class="help">
+                              {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_8" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_8" href="#news_agency">
+                            <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="news_agency" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label" for="onm_digest_user">
+                                  {t}User{/t}
+                                </label>
+                                <div class="controls">
+                                  <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label" for="onm_digest_pass">
+                                  {t}Password{/t}
+                                </label>
+                                <div class="controls">
+                                  <div class="input-group">
+                                    <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
+                                    <div class="input-group-btn">
+                                      <button class="btn check-pass" type="button">
+                                        <i class="fa fa-lock"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {is_module_activated name="PAYWALL"}
+                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#paypal">
+                            <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="paypal" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="paypal_mail">
+                              {t}Account email:{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
+                              <div class="help">
+                                {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/is_module_activated}
+                  <div class="panel-group" id="accordion_11" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_11" href="#goggle-services">
+                            <i class="fa fa-google"></i>{t}Google Services{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="goggle-services" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
                           <div class="form-group">
                             <label class="form-label" for="google_custom_search_api_key">
                               {t}Google Search API key:{/t}
@@ -468,6 +655,35 @@
                               </span>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h5>{t}Social network integration{/t}</h5>
+                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#goggle-plus">
+                            <i class="fa fa-youtube"></i>{t}Google+ and YouTube{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="goggle-plus" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
+                          <div class="form-group">
+                            <label class="form-label" for="google_page">
+                              {t}Google+ Page Url{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google_page" name="google_page" type="text" value="{$configs['google_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you have a <strong>Google+ page</strong>, please complete this input.{/t}
+                              </span>
+                            </div>
+                          </div>
                           <div class="form-group">
                             <label class="form-label" for="youtube_page">
                               {t}YouTube Page Url{/t}
@@ -479,27 +695,57 @@
                               </span>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-group" id="accordion_6" data-toggle="collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-heading collapsed">
+                        <h4 class="panel-title">
+                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_6" href="#facebook">
+                            <i class="fa fa-facebook"></i>{t}Facebook{/t}
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="facebook" class="panel-collapse collapse" style="height: 0px;">
+                        <div class="panel-body">
                           <div class="form-group">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <label class="form-label" for="google_analytics_api_key">
-                                  {t}Google Analytics API key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                                  <span class="help">
-                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                                  </span>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label" for="google_analytics_domain">
-                                  {t}Google Analytics Base domain{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
-                                </div>
-                              </div>
+                            <label class="form-label" for="facebook_page">
+                              {t}Facebook Page Url{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_page" name="facebook_page" type="text" value="{$configs['facebook_page']|default:""}">
+                              <span class="help">
+                                {t escape=off}If you have a <strong>facebook page</strong>, please complete the form with your facebook page url and Id.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_id">
+                              {t}Facebook Id{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_id" name="facebook_id" type="text" value="{$configs['facebook_id']|default:""}">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_api_key">
+                              {t}APP key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_api_key" name="facebook[api_key]" type="text" value="{$configs['facebook']['api_key']|default:""}">
+                              <span class="help">
+                                {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="form-label" for="facebook_secret_key">
+                              {t}Secret key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
                             </div>
                           </div>
                         </div>
@@ -558,125 +804,6 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_4" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_4" href="#recaptcha">
-                            <i class="fa fa-keyboard-o"></i>{t}Recaptcha{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="recaptcha" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <label class="form-label" for="piwik_token_auth">
-                                  {t}Public key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label" for="piwik_token_auth">
-                                  {t}Private key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
-                                </div>
-                              </div>
-                            </div>
-                            <span class="help">
-                              {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="panel-group" id="accordion_5" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_5" href="#comscore">
-                            <i class="fa fa-area-chart"></i>{t}ComScore Statistics{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="comscore" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <label class="form-label" for="comscore_page_id">
-                              {t}comScore Page ID{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="comscore_page_id" name="comscore[page_id]" type="text" value="{$configs['comscore']['page_id']|default:""}">
-                              <div class="help">
-                                {t escape=off}If you also have a <strong>comScore statistics service</strong>, add your page id{/t}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="panel-group" id="accordion_6" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_6" href="#facebook">
-                            <i class="fa fa-facebook"></i>{t}Facebook{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="facebook" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <label class="form-label" for="facebook_page">
-                              {t}Facebook Page Url{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="facebook_page" name="facebook_page" type="text" value="{$configs['facebook_page']|default:""}">
-                              <span class="help">
-                                {t escape=off}If you have a <strong>facebook page</strong>, please complete the form with your facebook page url and Id.{/t}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="facebook_id">
-                              {t}Facebook Id{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="facebook_id" name="facebook_id" type="text" value="{$configs['facebook_id']|default:""}">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="facebook_api_key">
-                              {t}APP key{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="facebook_api_key" name="facebook[api_key]" type="text" value="{$configs['facebook']['api_key']|default:""}">
-                              <span class="help">
-                                {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="facebook_secret_key">
-                              {t}Secret key{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="facebook_secret_key" name="facebook[secret_key]" type="text" value="{$configs['facebook']['secret_key']|default:""}">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                   <div class="panel-group" id="accordion_7" data-toggle="collapse">
                     <div class="panel panel-default">
                       <div class="panel-heading collapsed">
@@ -703,100 +830,6 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-group" id="accordion_8" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_8" href="#news_agency">
-                            <i class="fa fa-microphone"></i>{t}Opennemas News Agency{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="news_agency" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <label class="form-label" for="onm_digest_user">
-                                  {t}User{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="onm_digest_user" name="onm_digest_user" type="text" value="{$configs['onm_digest_user']|default:""}">
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label" for="onm_digest_pass">
-                                  {t}Password{/t}
-                                </label>
-                                <div class="controls">
-                                  <div class="input-group">
-                                    <input class="form-control" id="onm_digest_pass" name="onm_digest_pass" type="password" value="{$configs['onm_digest_pass']|default:""}">
-                                    <div class="input-group-btn">
-                                      <button class="btn check-pass" type="button">
-                                        <i class="fa fa-lock"></i>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="panel-group" id="accordion_9" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_9" href="#ojd">
-                            <i class="fa fa-line-chart"></i>{t}OJD Statistics{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="ojd" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <label class="form-label" for="ojd_page_id">
-                              {t}OJD Page ID{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="ojd_page_id" name="ojd[page_id]" type="text" value="{$configs['ojd']['page_id']|default:""}">
-                              <div class="help">{t escape=off}If you also have a <strong>OJD statistics service</strong>, add your page id{/t}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {is_module_activated name="PAYWALL"}
-                  <div class="panel-group" id="accordion_10" data-toggle="collapse">
-                    <div class="panel panel-default">
-                      <div class="panel-heading collapsed">
-                        <h4 class="panel-title">
-                          <a class="collapsed" data-toggle="collapse" data-parent="#accordion_10" href="#paypal">
-                            <i class="fa fa-paypal"></i>{t}Paypal Settings{/t}
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="paypal" class="panel-collapse collapse" style="height: 0px;">
-                        <div class="panel-body">
-                          <div class="form-group">
-                            <label class="form-label" for="paypal_mail">
-                              {t}Account email:{/t}
-                            </label>
-                            <div class="controls">
-                              <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
-                              <div class="help">
-                                {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/is_module_activated}
                 </div>
               </div>
             </tab>
