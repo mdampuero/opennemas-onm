@@ -232,7 +232,7 @@
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm">
-                  <div ng-if="content.cover != ''" style="height: 120px; width: 100%;">
+                  <div ng-if="content.cover != ''" style="height: 120px; width: 120px;">
                     <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
                   </span>
                   <div ng-if="content.cover == ''">
@@ -240,8 +240,8 @@
                   </span>
                 </td>
                 <td>
-                  <div ng-if="content.cover != ''" class="visible-xs visible-sm" style="height: 120px; width: 100%; margin-bottom: 15px;">
-                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover" transform="thumbnail,220,220"></dynamic-image>
+                  <div ng-if="content.cover != ''" class="visible-xs visible-sm" style="height: 150px; width: 150px; margin: 0 auto 15px;">
+                    <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.cover"></dynamic-image>
                   </div>
                   [% content.title %]
                   <div class="small-text">

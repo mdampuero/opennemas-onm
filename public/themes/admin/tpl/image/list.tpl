@@ -135,12 +135,12 @@
                   </div>
                 </td>
                 <td class="hidden-xs">
-                  <div ng-click="open('modal-image', content)" style="width: 100%; height: 120px; margin: 0 auto;">
+                  <div ng-click="open('modal-image', content)" style="height: 120px; width: 120px; margin-bottom: 15px;">
                     <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
                   </div>
                 </td>
                 <td>
-                  <div ng-click="open('modal-image', content)" class="visible-xs center" style="width: 100%; height: 120px; margin-bottom: 15px;">
+                  <div ng-click="open('modal-image', content)" class="visible-xs center" style="height: 200px; width: 200px; margin: 0 auto 15px;">
                     <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" transform="thumbnail,220,220"></dynamic-image>
                   </div>
                   <div class="description">
