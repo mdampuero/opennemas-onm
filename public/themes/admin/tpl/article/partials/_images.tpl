@@ -115,50 +115,51 @@
                 <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
                   <h5>{t}Home image{/t}</h5>
                   <div class="thumbnail-wrapper">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo3 }"></div>
-                  <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo3 }">
-                    <p>{t}Are you sure?{/t}</p>
-                    <div class="confirm-actions">
-                      <button class="btn btn-link" ng-click="toggleOverlay('photo3')" type="button">
-                        <i class="fa fa-times fa-lg"></i>
-                        {t}No{/t}
-                      </button>
-                      <button class="btn btn-link" ng-click="removeImage('photo3');toggleOverlay('photo3')" type="button">
-                        <i class="fa fa-check fa-lg"></i>
-                        {t}Yes{/t}
-                      </button>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo3 }"></div>
+                    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo3 }">
+                      <p>{t}Are you sure?{/t}</p>
+                      <div class="confirm-actions">
+                        <button class="btn btn-link" ng-click="toggleOverlay('photo3')" type="button">
+                          <i class="fa fa-times fa-lg"></i>
+                          {t}No{/t}
+                        </button>
+                        <button class="btn btn-link" ng-click="removeImage('photo3');toggleOverlay('photo3')" type="button">
+                          <i class="fa fa-check fa-lg"></i>
+                          {t}Yes{/t}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="thumbnail-placeholder">
-                      <div class="img-thumbnail" ng-if="!photo3">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
-                          <i class="fa fa-picture-o fa-2x"></i>
-                          <h5>{t}Pick an image{/t}</h5>
+                    <div class="form-group">
+                      <div class="thumbnail-placeholder">
+                        <div class="img-thumbnail" ng-if="!photo3">
+                          <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                            <i class="fa fa-picture-o fa-2x"></i>
+                            <h5>{t}Pick an image{/t}</h5>
+                          </div>
+                        </div>
+                        <div class="dynamic-image-placeholder" ng-if="photo3">
+                          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3">
+                            <div class="thumbnail-actions ng-cloak">
+                              <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
+                                <i class="fa fa-trash-o fa-2x"></i>
+                              </div>
+                               <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
+                                <i class="fa fa-camera fa-2x"></i>
+                              </div>
+                            </div>
+                            <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-type="photo"></div>
+                          </dynamic-image>
                         </div>
                       </div>
-                      <div class="dynamic-image-placeholder" ng-if="photo3">
-                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo3">
-                          <div class="thumbnail-actions ng-cloak">
-                            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo3')">
-                              <i class="fa fa-trash-o fa-2x"></i>
-                            </div>
-                             <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3">
-                              <i class="fa fa-camera fa-2x"></i>
-                            </div>
-                          </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo3" media-picker-type="photo"></div>
-                        </dynamic-image>
-                      </div>
                     </div>
-                  </div>
-                  <div class="form-group ng-cloak" ng-if="photo3">
-                    <label class="form-label" for="params[imageHomeFooter]">
-                      {t}Footer text{/t}
-                    </label>
-                    <div class="controls">
-                      <textarea class="form-control" name="params[imageHomeFooter]" ng-model="imageHomeFooter">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
-                      <input type="hidden" name="params[imageHome]" ng-value="imageHome" class="related-element-id"/>
+                    <div class="form-group ng-cloak" ng-if="photo3">
+                      <label class="form-label" for="params[imageHomeFooter]">
+                        {t}Footer text{/t}
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" name="params[imageHomeFooter]" ng-model="imageHomeFooter">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
+                        <input type="hidden" name="params[imageHome]" ng-value="imageHome" class="related-element-id"/>
+                      </div>
                     </div>
                   </div>
                 </div>
