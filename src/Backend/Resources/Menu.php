@@ -325,8 +325,8 @@ $menuXml = [
                 "title"       => _("Users & Groups"),
                 "link"        => '#',
                 "icon"        => "fa fa-users",
-                "module_name" => "SETTINGS_MANAGER",
-                "privilege"   => "ONM_SETTINGS",
+                "module_name" => "USER_MANAGER || USER_GROUP_MANAGER",
+                "privilege"   => "USER_ADMIN",
                 "submenu"     => [
                     [
                         "id"          => "user_manager",

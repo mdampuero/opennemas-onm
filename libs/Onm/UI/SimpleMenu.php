@@ -112,8 +112,18 @@ class SimpleMenu
             $submenuContent = "<ul class='sub-menu'>".implode('', $submenuContent)."</ul>";
         }
 
+        $moduleAllowed = true;
+        if (array_key_exists('module_name', $element)) {
+            $modules       = explode(' || ', $element['module_name']);
+            $moduleAllowed = false;
+
+            foreach ($modules as $module) {
+                $moduleAllowed = $moduleAllowed || \Onm\Module\ModuleManager::isActivated($module);
+            }
+        }
+
         // Render node content
-        if (\Onm\Module\ModuleManager::isActivated($element['module_name'])
+        if ($moduleAllowed
             && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
