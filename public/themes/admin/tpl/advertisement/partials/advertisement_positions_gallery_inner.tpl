@@ -81,6 +81,6 @@
 <div class="col-md-3">
   <div id="advertisement-mosaic-gallery-inner" style="">
     <div id="advertisement-mosaic-frame-gallery-inner"></div>
-    <img src="{$params.IMAGE_DIR}advertisement/right1Ads.png" width="240" usemap="#mapGallery" />
+    <img src="{$params.IMAGE_DIR}advertisement/right1Ads.png" style="width:100%" usemap="#mapGallery" />
   </div>
 </div>

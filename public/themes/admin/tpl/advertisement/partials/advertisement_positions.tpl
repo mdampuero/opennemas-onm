@@ -266,6 +266,6 @@
 <div class="col-md-3">
   <div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+    <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:100%" usemap="#mapPortada" />
   </div>
 </div>
