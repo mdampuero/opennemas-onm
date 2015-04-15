@@ -133,6 +133,27 @@ angular.module('BackendApp.controllers')
         }
       };
 
+      $scope.getActivatedModulesForPlan = function(plan_id) {
+        var modules = $filter('filter')($scope.modules, { plan: plan_id });
+        console.log(modules);
+
+        var modules_activated = [];
+        for (var i = modules.length - 1; i >= 0; i--) {
+
+          if (($scope.instance.activated_modules.indexOf(modules[i].id) !== -1)) {
+            modules_activated.push(modules[i]);
+          };
+        };
+
+        console.log(modules_activated)
+        return modules_activated;
+      };
+      $scope.countActivatedModulesForPlan = function(plan_id) {
+        var modules = $scope.getActivatedModulesForPlan(plan_id);
+
+        return modules.length;
+      };
+
       // Updates the variable for changes
       $scope.$watch('instance.activated_modules', function(nv) {
         $scope.changes = [];

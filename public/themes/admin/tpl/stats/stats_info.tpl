@@ -42,15 +42,15 @@
                 </div>
                 <div class="tile-footer clearfix">
                   <h6 class="no-margin pull-left">
-                    <a class="text-white" href="mailto:{$instance->contact_mail}" title="">
+                    <a class="text-white" href="mailto:{$instance->contact_mail}" tooltip="{t}This is the email used to create your newspaper{/t}" tooltip-placement="bottom">
                       <i class="fa fa-envelope"></i>
                       {$instance->contact_mail}
                     </a>
                   </h6>
-                  <span class="pull-right">
+                  <a href="#" class="pull-right text-white">
                     <i class="fa fa-calendar"></i>
-                    <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}">{$instance->created}</span>
-                  </span>
+                    <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -67,8 +67,9 @@
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
-                    <div class="item-count">
-                      {t}Base{/t}
+                    <div class="item-count ng-cloak">
+                      <span ng-if="countActivatedModulesForPlan('Profesional') == 0 || countActivatedModulesForPlan('Gold') == 0 || countActivatedModulesForPlan('Other') == 0">{t}Base{/t}</span>
+                      <span ng-if="countActivatedModulesForPlan('Profesional') > 0 || countActivatedModulesForPlan('Gold') > 0 || countActivatedModulesForPlan('Other') > 0">{t}Base + Modules{/t}</span>
                     </div>
                   </div>
                 </div>
@@ -84,7 +85,7 @@
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
                     <div class="item-count">
-                      {$instance->support_plan} <i class="fa fa-info-circle" tooltip="{t}Support by tickets{/t}"></i>
+                      {$instance->support_plan} <i class="fa fa-info-circle" tooltip="{t}Support by tickets{/t}" tooltip-placement="bottom"></i>
                     </div>
                   </div>
                 </div>
@@ -157,15 +158,28 @@
             <div class="clearfix b-grey b-b tiles-body">
               <div class="pull-left">
                 <h4>{t}Plans & Modules{/t}</h4>
-                {*<p class="hidden-xs hidden">{t}Here you can see a list of activated modules by plan{/t}</p>*}
+                <p class="hidden-xs">{t}Here you can see a list of your activated modules{/t}</p>
               </div>
-              <div class="upgrade pull-right hidden">
+              {*<div class="upgrade pull-right hidden">
                 <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
                   <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
                   <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
                 </button>
+              </div>*}
+            </div>
+            <div class="tiles-body ng-cloak" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+              <div class="plans-wrapper">
+                <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
+                  <h5 class="plan-title">
+                    [% plan.title %]
+                  </h5>
+                  <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
+                    [% item.name %]
+                  </div>
+                </div>
               </div>
             </div>
+            <hr class="ng-cloak">
             <div class="tiles-body clearfix">
               <div>
                 <div>
@@ -185,8 +199,8 @@
                 </div>
               </div>
             </div>
-            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
             {*
+            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
               <div class="plans-wrapper">
                 <div class="inline p-r-30" ng-repeat="plan in plans">
                   <div class="checkbox">
@@ -209,8 +223,8 @@
                   </div>
                 </div>
               </div>
-            *}
             </div>
+            *}
           </div>
           <input name="hasChanges" ng-value="hasChanges" type="hidden">
           <input name="modules" ng-value="activatedModules" type="hidden">
