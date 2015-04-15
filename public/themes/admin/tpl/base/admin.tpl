@@ -130,46 +130,116 @@
                   {t}Create{/t}
                 </a>
                 <div class="dropdown-menu">
-                  <div class="clearfix quick-items-row">
-                    <div class="quick-item">
-                      <a href="{url name=admin_article_create}">
-                        <i class="fa fa-file-text"></i>
-                        <span class="title">{t}Article{/t}</span>
-                      </a>
-                    </div>
-                    <div class="quick-item">
-                      <a href="{url name=admin_opinion_create}">
-                        <i class="fa fa-quote-right"></i>
-                        <span class="title">{t}Opinion{/t}</span>
-                      </a>
-                    </div>
-                    <div class="quick-item">
-                      <a href="{url name=admin_album_create}">
-                        <i class="fa fa-stack-overflow"></i>
-                        <span class="title">{t}Album{/t}</span>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="clearfix quick-items-row">
-                    <div class="quick-item">
-                      <a href="{url name=admin_letter_create}">
-                        <i class="fa fa-envelope"></i>
-                        <span class="title">{t}Letter{/t}</span>
-                      </a>
-                    </div>
-                    <div class="quick-item">
-                      <a href="{url name=admin_special_create}">
-                        <i class="fa fa-star"></i>
-                        <span class="title">{t}Special{/t}</span>
-                      </a>
-                    </div>
-                    <div class="quick-item">
-                      <a href="{url name=admin_static-page_create}">
-                        <i class="fa fa-file-o"></i>
-                        <span class="title">{t}Page{/t}</span>
-                      </a>
-                    </div>
-                  </div>
+                  {is_module_activated name="ARTICLE_MANAGER"}
+                    {acl isAllowed="ARTICLE_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_article_create}">
+                          <i class="fa fa-file-text"></i>
+                          <span class="title">{t}Article{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="OPINION_MANAGER"}
+                    {acl isAllowed="OPINION_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_opinion_create}">
+                          <i class="fa fa-quote-right"></i>
+                          <span class="title">{t}Opinion{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="POLL_MANAGER"}
+                    {acl isAllowed="POLL_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_poll_create}">
+                          <i class="fa fa-pie-chart"></i>
+                          <span class="title">{t}Poll{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="STATIC_PAGES_MANAGER"}
+                    {acl isAllowed="STATIC_PAGE_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_static_pages_create}">
+                          <i class="fa fa-file-o"></i>
+                          <span class="title">{t}Page{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="SPECIAL_MANAGER"}
+                    {acl isAllowed="SPECIAL_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_special_create}">
+                          <i class="fa fa-star"></i>
+                          <span class="title">{t}Special{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="LETTER_MANAGER"}
+                    {acl isAllowed="LETTER_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_letter_create}">
+                          <i class="fa fa-envelope"></i>
+                          <span class="title">{t}Letter{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="CATEGORY_MANAGER"}
+                    {acl isAllowed="CATEGORY_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_category_create}">
+                          <i class="fa fa-bookmark"></i>
+                          <span class="title">{t}Category{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="ALBUM_MANAGER"}
+                    {acl isAllowed="ALBUM_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_album_create}">
+                          <i class="fa fa-stack-overflow"></i>
+                          <span class="title">{t}Album{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="KIOSKO_MANAGER"}
+                    {acl isAllowed="KIOSKO_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_kiosko_create}">
+                          <i class="fa fa-newspaper-o"></i>
+                          <span class="title">{t}News Stand{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="BOOK_MANAGER"}
+                    {acl isAllowed="BOOK_CREATE"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_books_create}">
+                          <i class="fa fa-book"></i>
+                          <span class="title">{t}Book{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
+                  {is_module_activated name="OPINION_MANAGER"}
+                    {acl isAllowed="AUTHOR_ADMIN"}
+                      <div class="quick-item">
+                        <a href="{url name=admin_author_create}">
+                          <i class="fa fa-user"></i>
+                          <span class="title">{t}Author{/t}</span>
+                        </a>
+                      </div>
+                    {/acl}
+                  {/is_module_activated}
                 </div>
               </li>
             </ul>
