@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 13:38+0200\n"
-"PO-Revision-Date: 2015-04-15 13:40+0200\n"
+"POT-Creation-Date: 2015-04-15 17:02+0200\n"
+"PO-Revision-Date: 2015-04-15 17:03+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -349,13 +349,6 @@ msgid ""
 msgstr ""
 "No se pudo cambiar el acceso de administración del usuario. Has alcanzado el "
 "número máximo de usuarios."
-
-msgid ""
-"You have reach the maximun users allowed. If you want to create more users, "
-"please contact us."
-msgstr ""
-"Has alcanzado el máximo de usuario permitidos. Si quieres crear más usuarios "
-"contacta con nosotros."
 
 msgid "User created successfully."
 msgstr "Usuario creado correctamente."
@@ -2227,10 +2220,10 @@ msgstr "Hemeroteca de estáticos"
 msgid "Static pages"
 msgstr "Páginas estáticas"
 
-msgid "No Support"
-msgstr "Sin soporte"
+msgid "Basic support"
+msgstr "Soporte básico"
 
-msgid "Profesional Support"
+msgid "Profesional support"
 msgstr "Soporte profesional"
 
 msgid "Support 2"
@@ -2329,6 +2322,9 @@ msgstr "Añadir descripción…"
 
 msgid "No support"
 msgstr "Sin soporte"
+
+msgid "Profesional Support"
+msgstr "Soporte profesional"
 
 msgid "10 hours/month"
 msgstr "10 horas/mes"
@@ -3110,6 +3106,9 @@ msgstr "Mi periódico"
 msgid "Page"
 msgstr "Página"
 
+msgid "Author"
+msgstr "Autor"
+
 msgid "Notifications"
 msgstr "Notificaciones"
 
@@ -3217,9 +3216,6 @@ msgstr "Personalizar contenido"
 
 msgid "Unable to find any letter that matches your search."
 msgstr "No se pudieron encontrar cartas que coincidan con tu búsqueda."
-
-msgid "Author"
-msgstr "Autor"
 
 msgid "Reject"
 msgstr "Rechazar"
@@ -5025,11 +5021,17 @@ msgstr ""
 msgid "Account settings"
 msgstr "Preferencias de la cuenta"
 
+msgid "This is the email used to create your newspaper"
+msgstr "Este es el correo-e usado para crear el periódico"
+
 msgid "Your newspaper was created on %1"
 msgstr "Tu periódico fué creado el %1"
 
 msgid "Plan"
 msgstr "Plan"
+
+msgid "Base + Modules"
+msgstr "Base + Módulos"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
@@ -5049,8 +5051,8 @@ msgstr "Máximo"
 msgid "Plans & Modules"
 msgstr "Planes y módulos"
 
-msgid "Here you can see a list of activated modules by plan"
-msgstr "Aquí puedes ver una lista de los módulos activados por plan"
+msgid "Here you can see a list of your activated modules"
+msgstr "Aquí puedes ver una lista de los módulos que tiene activados"
 
 msgid "Upgrade"
 msgstr "Actualizar"
@@ -7051,6 +7053,16 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid ""
+#~ "You have reach the maximun users allowed. If you want to create more "
+#~ "users, please contact us."
+#~ msgstr ""
+#~ "Has alcanzado el máximo de usuario permitidos. Si quieres crear más "
+#~ "usuarios contacta con nosotros."
+
+#~ msgid "No Support"
+#~ msgstr "Sin soporte"
 
 #~ msgid "Unable to update the user with the submitted information."
 #~ msgstr "No se pudo actualizar el usuario con la información proporcionada."
