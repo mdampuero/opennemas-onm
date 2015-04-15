@@ -131,24 +131,24 @@
 <script type="text/javascript">
 /* <![CDATA[ */
 
-jQuery(document).ready(function($){
+$(document).ready(function($){
     var previous = null;
 
-    $('#title').on('change', function(e, ui) {
+    $('#title').on('change', function() {
         if (!$('#metadata').val()) {
             fill_tags($('#title').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
         }
 
-        var slugy = jQuery.trim(jQuery('#slug').attr('value'));
-        if ((slugy.length <= 0) && (previous!=slugy)) {
+        var slugy = $.trim($('#slug').val());
+        if ((slugy.length <= 0) && (previous !== slugy)) {
 
-            jQuery.ajax({
-                url:  "{url name=admin_static_pages_build_slug id=$page->id|default:0}",
-                type: "POST",
-                data: { action:"buildSlug", id:'{$page->id|default:0}', slug:slugy, title:jQuery('#title').attr('value') },
+            $.ajax({
+                url:  '{url name=admin_static_pages_build_slug id=$page->id|default:0}',
+                type: 'POST',
+                data: { id: '{$page->id|default:0}', slug: slugy, title: $('#title').val() },
                 success: function(data){
-                    jQuery('#slug').attr('value', data);
-                    previous = jQuery('#slug').value;
+                    $('#slug').val(data);
+                    previous = $('#slug').val();
                 }
             });
         }
