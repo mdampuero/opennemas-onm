@@ -37,7 +37,7 @@ class NewsletterSubscriptorsController extends Controller
      * @Security("has_role('NEWSLETTER_ADMIN')")
      *
      * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     */
     public function listAction(Request $request)
     {
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
@@ -72,7 +72,7 @@ class NewsletterSubscriptorsController extends Controller
      * @Security("has_role('NEWSLETTER_ADMIN')")
      *
      * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     */
     public function deleteAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -119,7 +119,7 @@ class NewsletterSubscriptorsController extends Controller
      * @Security("has_role('NEWSLETTER_ADMIN')")
      *
      * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     */
     public function toggleSubscriptionAction(Request $request)
     {
         $id   = $request->query->getDigits('id', null);
@@ -161,7 +161,7 @@ class NewsletterSubscriptorsController extends Controller
      * @Security("has_role('NEWSLETTER_ADMIN')")
      *
      * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     */
     public function toggleActivatedAction(Request $request)
     {
         $id   = $request->query->getDigits('id', null);
@@ -187,8 +187,8 @@ class NewsletterSubscriptorsController extends Controller
 
         return new JsonResponse(
             array(
-                'status' => $status,
-                'messages'       => $messages
+                'status'   => $status,
+                'messages' => $messages
             )
         );
     }
@@ -246,36 +246,92 @@ class NewsletterSubscriptorsController extends Controller
      * @Security("has_role('NEWSLETTER_ADMIN')")
      *
      * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
-     **/
+     */
     public function batchSubscribeAction(Request $request)
     {
-        $ids = $request->query->get('cid');
-        $state = $request->query->getDigits('subscribe', 1);
+        $ids = $request->request->get('ids');
+        $state = $request->request->getDigits('value', 1);
 
-        if (is_array($ids) && count($ids) > 0) {
-            $user = new \Subscriptor();
+        if (!is_array($ids) || count($ids) == 0) {
+            return new JsonResponse([
+                'messages' => [
+                    'id'      => 500,
+                    'message' => _('Please specify a subscriptor id for change its subscribed state it.'),
+                    'type'    => 'error'
+                ]
+            ]);
+        }
 
-            foreach ($ids as $id) {
-                $data[] = array(
-                    'id'    => $id,
-                    'value' => $state
-                );
-            }
+        $user = new \Subscriptor();
 
-            $user->mUpdateProperty($data, 'subscription');
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids))
-            );
-        } else {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _('Please specify a subscriptor id for change its subscribed state it.')
+        foreach ($ids as $id) {
+            $data[] = array(
+                'id'    => $id,
+                'value' => $state
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        $user->mUpdateProperty($data, 'subscription');
+
+        return new JsonResponse([
+            'subscribed' => $state,
+            'messages' => [
+                [
+                    'id'      => count($ids),
+                    'message' => sprintf(_('Successfully changed subscribed state for %d subscriptors.'), count($ids)),
+                    'type'    => 'success'
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Deletes multiple subscriptors at once given its ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWSLETTER_MANAGER")
+     */
+    public function batchActivatedAction(Request $request)
+    {
+        $ids = $request->request->get('ids');
+        $state = $request->request->getDigits('value', 1);
+
+        if (!is_array($ids) || count($ids) == 0) {
+            return new JsonResponse([
+                'messages' => [
+                    'id'      => 500,
+                    'message' => _('Please specify a subscriptor id for change its activated state it.'),
+                    'type'    => 'error'
+                ]
+            ]);
+        }
+
+        $user = new \Subscriptor();
+
+        foreach ($ids as $id) {
+            $data[] = array(
+                'id'    => $id,
+                'value' => $state
+            );
+        }
+
+        $user->mUpdateProperty($data, 'status');
+
+        return new JsonResponse([
+            'status' => $state,
+            'messages' => [
+                [
+                    'id'      => count($ids),
+                    'message' => sprintf(_('Successfully changed activated state for %d subscriptors.'), count($ids)),
+                    'type'    => 'success'
+                ]
+            ]
+        ]);
     }
 
     /**

@@ -27,6 +27,12 @@ backend_ws_newsletter_subscriptor_batch_delete:
     options:
         expose: true
 
+backend_ws_newsletter_subscriptors_batch_activated:
+    path:     /newsletters/subscriptors/batch-activate
+    defaults: { _controller  : BackendWebServiceBundle:NewsletterSubscriptors:batchActivated }
+    options:
+        expose: true
+
 backend_ws_newsletter_subscriptors_batch_subscribe:
     path:     /newsletters/subscriptors/batch-subscribe
     defaults: { _controller  : BackendWebServiceBundle:NewsletterSubscriptors:batchSubscribe }

@@ -1,10 +1,4 @@
 {extends file="base/admin.tpl"}
-{block name="footer-js"}
-{include file="newsletter/subscriptions/modals/_modalDelete.tpl"}
-{include file="newsletter/subscriptions/modals/_modalBatchDelete.tpl"}
-{include file="newsletter/subscriptions/modals/_modalBatchSubscribe.tpl"}
-{include file="newsletter/subscriptions/modals/_modalAccept.tpl"}
-{/block}
 
 {block name="content"}
 <div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: -1   }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
@@ -46,46 +40,61 @@
   </div>
 
 
-<!-- <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+  <div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <ul class="nav quick-section pull-left">
-                <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
-                    <i class="fa fa-check fa-lg"></i>
-                  </button>
-                </li>
-                 <li class="quicklinks">
-                    <span class="h-seperate"></span>
-                </li>
-                <li class="quicklinks">
-                    <h4>
-                        [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
-                    </h4>
-                </li>
-            </ul>
-            <ul class="nav quick-section pull-right">
-                <li class="quicklinks">
-                    <button class="btn btn-link batchDeleteButton" accesskey="d">
-                        <span class="fa fa-trash-o"></span>
-                        {t}Delete{/t}
-                    </button>
-                </li>
-                <li class="quicklinks">
-                    <button data-subscribe="0" class="btn btn-link batchSubscribeButton">
-                        {t}Unsubscribe{/t}
-                    </button>
-                </li>
-
-                <li class="quicklinks">
-                    <button data-subscribe="1" class="btn btn-link batchSubscribeButton">
-                        {t}Subscribe{/t}
-                    </button>
-                </li>
-            </ul>
-        </div>
+      <div class="navbar-inner">
+        <ul class="nav quick-section pull-left">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+              <i class="fa fa-check fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+            </h4>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          <li class="quicklinks">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 2, 'loading')" tooltip="{t}Activate{/t}" tooltip-placement="bottom">
+              <i class="fa fa-check fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_activated', 'status', 3, 'loading')" tooltip="{t}Deactivate{/t}" tooltip-placement="bottom">
+              <i class="fa fa-times fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link batchSubscribeButton" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 1, 'loading_sub')" tooltip="{t}Subscribe{/t}" tooltip-placement="bottom">
+              <i class="fa fa-envelope fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="updateSelectedItems('backend_ws_newsletter_subscriptors_batch_subscribe', 'subscription', 0, 'loading_sub')" tooltip="{t}Unsubscribe{/t}" tooltip-placement="bottom">
+              <i class="fa fa-envelope fa-lg"></i>
+              <i class="fa fa-times fa-sub text-danger"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deleteSelected()" tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+              <span class="fa fa-trash-o fa-lg"></span>
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div> -->
+  </div>
 
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
@@ -164,7 +173,7 @@
                       <a class="link" href="[% edit(content.id, 'admin_newsletter_subscriptor_show') %]" title="{t}Edit user{/t}">
                         <i class="fa fa-pencil"></i> {t}Edit{/t}
                       </a>
-                      <button type="button" class="link link-danger" title="{t}Delete user{/t}" ng-click="removePermanently(content)">
+                      <button type="button" class="link link-danger" title="{t}Delete user{/t}" ng-click="delete(content)">
                         <i class="icon-white fa fa-trash"></i> {t}Remove{/t}
                       </button>
                   </div>
@@ -192,20 +201,22 @@
             </tbody>
           </table>
         </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-          <div class="pull-right">
-            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
-          </div>
+      </div>
+      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="pull-right">
+          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
         </div>
       </div>
     </div>
   </div>
-
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
+    {include file="newsletter/subscriptions/modals/_modalDelete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-delete-selected">
-    {include file="common/modals/_modalBatchDelete.tpl"}
+    {include file="newsletter/subscriptions/modals/_modalBatchDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
 </div>
 {/block}
