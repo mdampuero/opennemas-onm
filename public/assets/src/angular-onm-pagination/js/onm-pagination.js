@@ -152,11 +152,9 @@ angular.module('onm.pagination', [])
       $scope.page = $scope.ngModel;
     });
 
-    /**
-     * Updates the current page when proxy variable changes.
-     */
+    // Updates the current page when proxy variable changes
     $scope.$watch('page', function(nv) {
-      if (nv > 1 && nv < $scope.totalPages) {
+      if (nv > 0 && nv < $scope.totalPages) {
         $scope.ngModel = nv;
       }
     });
