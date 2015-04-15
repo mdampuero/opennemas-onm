@@ -42,7 +42,7 @@
                 </div>
                 <div class="tile-footer clearfix">
                   <h6 class="no-margin pull-left">
-                    <a class="text-white" href="mailto://{$instance->contact_mail}" title="">
+                    <a class="text-white" href="mailto:{$instance->contact_mail}" title="">
                       <i class="fa fa-envelope"></i>
                       {$instance->contact_mail}
                     </a>
