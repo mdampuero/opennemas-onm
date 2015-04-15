@@ -361,28 +361,13 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         }
       );
 
-      $http.post(url, {
-        value: value
-      }).success(function(response) {
-        if (response[name] !== null) {
-          contents[index][name] = response[name];
-        }
-
-        for (var i = 0; i < response.messages.length; i++) {
-          var params = {
-            id: new Date().getTime() + '_' + response.messages[i].id,
-            message: response.messages[i].message,
-            type: response.messages[i].type
-          };
-
-          messenger.post(params);
-        }
-
-        // Disable spinner
+      $http.post(url, { value: value }).success(function(response) {
         contents[index][loading] = 0;
+        contents[index][name] = response[name];
+        $scope.renderMessages(response.messages);
       }).error(function(response) {
-        // Disable spinner
         contents[index][loading] = 0;
+        $scope.renderMessages(response.messages);
       });
 
       // Updated shared variable

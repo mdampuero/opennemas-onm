@@ -336,57 +336,64 @@ class UsersController extends ContentController
             );
         }
 
+        if (is_null($id)) {
+            return new JsonResponse(
+                [
+                    'messages' => array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    )
+                ],
+                404
+            );
+        }
+
         $enabled  = $request->request->getDigits('value');
         $messages = array();
 
+        $user = new \User($id);
         // Get max users from settings
         $maxUsers = s::get('max_users');
+
         // Check total activated users before creating new one
-        if ($maxUsers > 0 && $enabled) {
-            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
-            if (!$createEnabled) {
+        if (!$user->isMaster() && $maxUsers > 0 && $enabled) {
+            if (!\User::getTotalActivatedUsersRemaining($maxUsers)) {
                 return new JsonResponse(
-                    array(
-                        'messages'  => array(
-                            array(
+                    [
+                        'messages'  => [
+                            [
                                 'id'      => '500',
                                 'type'    => 'error',
                                 'message' => _(
                                     'Unable to change user backend access. You have reach the maximum allowed'
                                 ),
-                            )
-                        )
-                    )
+                            ]
+                        ]
+                    ],
+                    403
                 );
             }
         }
 
-        if (!is_null($id)) {
-            $user = new \User();
-            if ($enabled) {
-                $user->activateUser($id);
-            } else {
-                $user->deactivateUser($id);
-            }
-
-            $messages[] = array(
-                'id'      => $id,
-                'message' => _('Item updated successfully'),
-                'type'    => 'success'
-            );
+        $user = new \User($id);
+        if ($enabled) {
+            $user->activateUser($id);
         } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                'type'    => 'error'
-            );
+            $user->deactivateUser($id);
         }
 
         return new JsonResponse(
-            array(
+            [
                 'activated' => $enabled,
-                'messages'  => $messages
-            )
+                'messages'  => [
+                    [
+                        'id'      => $id,
+                        'message' => _('Item updated successfully'),
+                        'type'    => 'success'
+                    ]
+                ]
+            ]
         );
     }
 
