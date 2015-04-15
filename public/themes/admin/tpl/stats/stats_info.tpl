@@ -24,7 +24,7 @@
     </div>
     {render_messages}
     <div class="row" id="info-page" >
-      <div class="col-xs-12 col-sm-8">
+      <div class="col-xs-12 col-sm-7">
         <div class="row instance-info">
           <div class="col-xs-12 m-b-15">
             <div class="tiles white">
@@ -49,7 +49,7 @@
                   </h6>
                   <span class="pull-right">
                     <i class="fa fa-calendar"></i>
-                    {$instance->created}
+                    <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}">{$instance->created}</span>
                   </span>
                 </div>
               </div>
@@ -57,17 +57,35 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4">
+      <div class="col-xs-12 col-sm-5">
         <div class="row">
-          <div class="col-md-12">
-            <div class="tiles purple m-b-15">
+          <div class="col-md-6">
+            <div class="tiles red m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Media size{/t}
+                  {t}Plan{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
-                    <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
+                    <div class="item-count">
+                      {t}Base{/t}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="tiles green m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}Support plan{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last transparent">
+                    <div class="item-count">
+                      {$instance->support_plan} <i class="fa fa-info-circle" tooltip="{t}Support by tickets{/t}"></i>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -76,16 +94,14 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="tiles red m-b-15">
+            <div class="tiles purple m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Support plan{/t}
+                  {t}Storage size{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
-                    <div class="item-count">
-                      {$instance->support_plan}
-                    </div>
+                    <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
                   </div>
                 </div>
               </div>
@@ -105,12 +121,12 @@
                     <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
-                <div class="widget-stats">
+                <!-- <div class="widget-stats">
                   <div class="wrapper transparent">
                     <span class="item-title">{t}Available{/t}</span>
                     <span class="item-count">{$max_users - $instance->users}</span>
                   </div>
-                </div>
+                </div> -->
                 <div class="widget-stats">
                   <div class="wrapper last transparent">
                     <span class="item-title">{t}Max{/t}</span>
