@@ -135,7 +135,6 @@ angular.module('BackendApp.controllers')
 
       $scope.getActivatedModulesForPlan = function(plan_id) {
         var modules = $filter('filter')($scope.modules, { plan: plan_id });
-        console.log(modules);
 
         var modules_activated = [];
         for (var i = modules.length - 1; i >= 0; i--) {
@@ -145,7 +144,6 @@ angular.module('BackendApp.controllers')
           };
         };
 
-        console.log(modules_activated)
         return modules_activated;
       };
       $scope.countActivatedModulesForPlan = function(plan_id) {

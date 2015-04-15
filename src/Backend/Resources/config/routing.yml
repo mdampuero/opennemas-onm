@@ -1114,9 +1114,9 @@ admin_menu_sidebar_get:
 
 # Client info page routes
 admin_client_info_page:
-    path:     /client-info
+    path:     /my-account
     defaults: { _controller  : BackendBundle:ClientInformation:default }
 
 admin_client_send_upgrade_mail:
-    path:     /client-info/upgrade-instance
+    path:     /my-account/upgrade-instance
     defaults: { _controller  : BackendBundle:ClientInformation:upgradeInstance }
