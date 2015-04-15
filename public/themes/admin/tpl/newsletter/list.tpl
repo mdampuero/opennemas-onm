@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+  {*<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
@@ -67,7 +67,7 @@
         </ul>
       </div>
     </div>
-  </div>
+  </div>*}
 
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
@@ -113,12 +113,12 @@
           <table class="table table-hover no-margin">
             <thead>
               <tr>
-                <th class="checkbox-cell">
+                {*<th class="checkbox-cell">
                   <div class="checkbox checkbox-default">
                     <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
                     <label for="select-all"></label>
                   </div>
-                </th>
+                </th>*}
                 <th>{t}Title{/t}</th>
                 <th class="center hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
                 <th class="right">{t}Sendings{/t}</th>
@@ -126,12 +126,12 @@
             </thead>
             <tbody>
               <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
-                <td class="checkbox-cell">
+                {*<td class="checkbox-cell">
                   <div class="checkbox check-default">
                     <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
                     <label for="checkbox[%$index%]"></label>
                   </div>
-                </td>
+                </td>*}
                 <td class="left">
                   <p ng-if="content.title != ''">[% content.title %]</p>
                   <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</p>
