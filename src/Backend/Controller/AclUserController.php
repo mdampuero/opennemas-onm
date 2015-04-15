@@ -57,7 +57,7 @@ class AclUserController extends Controller
         // Check total allowed users before creating new one
         $createEnabled = true;
         if ($maxUsers > 0) {
-            $createEnabled = \User::getTotalUsersRemaining($maxUsers);
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
         }
 
         if (!$createEnabled) {
@@ -301,15 +301,10 @@ class AclUserController extends Controller
         // Check total allowed users before creating new one
         $createEnabled = true;
         if ($maxUsers > 0) {
-            $createEnabled = \User::getTotalUsersRemaining($maxUsers);
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
         }
 
         if (!$createEnabled) {
-            $request->getSession()->getFlashBag()->add(
-                'notice',
-                _('You have reach the maximun users allowed. If you want to create more users, please contact us.')
-            );
-
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 

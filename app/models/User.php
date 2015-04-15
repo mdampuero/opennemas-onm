@@ -1399,38 +1399,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
     }
 
     /**
-     * Returns the total allowed users to create
-     *
-     * @param  int  $maxUsers
-     *
-     * @return int  total users
-     **/
-    public static function getTotalUsersRemaining($maxUsers = false)
-    {
-        // The value isn't set on DB or is set to 0 (no limit)
-        if (!$maxUsers) {
-            return -1;
-        }
-
-        // Get total created backend users - not masters nor only authors
-        $sql = 'SELECT count(id) as total FROM `users`
-                WHERE type=0 AND fk_user_group NOT REGEXP "^4$|^4,|,4,|,4$" AND
-                fk_user_group NOT REGEXP "^3$"';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs === false) {
-            return false;
-        }
-
-        if ($rs->fields['total'] > $maxUsers) {
-            return false;
-        }
-
-        return $maxUsers - $rs->fields['total'];
-    }
-
-    /**
      * Returns the total users that can be activated
      *
      * @param  int  $maxUsers
