@@ -59,7 +59,7 @@
       </div>
       <div class="col-xs-12 col-sm-4">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="tiles purple m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
@@ -73,7 +73,9 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+        </div>
+        <div class="row">
+          <div class="col-md-12">
             <div class="tiles red m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
