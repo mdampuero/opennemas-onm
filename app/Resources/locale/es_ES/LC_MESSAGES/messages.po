@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-14 17:03+0200\n"
-"PO-Revision-Date: 2015-04-14 17:25+0200\n"
+"POT-Creation-Date: 2015-04-15 13:38+0200\n"
+"PO-Revision-Date: 2015-04-15 13:40+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1179,9 +1179,6 @@ msgstr ""
 "Estado de «En Portada» cambiado correctamente para el artículo de opinión "
 "«%s»"
 
-msgid "Unable to save the positions."
-msgstr "No se pudieron guardar las posiciones."
-
 msgid "Day"
 msgstr "Día"
 
@@ -1715,6 +1712,9 @@ msgid "Please specify a subscriptor id for change its subscribed state it."
 msgstr ""
 "Especifique el identificador de un subscriptor para cambiar el estado de su "
 "suscripción."
+
+msgid "Unable to save the positions."
+msgstr "No se pudieron guardar las posiciones."
 
 msgid "All categories"
 msgstr "Todas las categorías"
@@ -3107,6 +3107,9 @@ msgstr "Información de la instancia"
 msgid "My newspaper"
 msgstr "Mi periódico"
 
+msgid "Page"
+msgstr "Página"
+
 msgid "Notifications"
 msgstr "Notificaciones"
 
@@ -3659,8 +3662,8 @@ msgid ""
 "Are you sure you want to reject [% template.selected.contents.length %] "
 "item(s)?"
 msgstr ""
-"¿Estás seguro de que quieres rechazar [% template.selected.contents.length %]"
-" elemento(s)?"
+"¿Estás seguro de que quieres rechazar [% template.selected.contents.length "
+"%] elemento(s)?"
 
 msgid ""
 "Are you sure you want to accept [% template.selected.contents.length %] "
@@ -3673,15 +3676,15 @@ msgid ""
 "Are you sure you want to drop from home [% template.selected.contents.length "
 "%] item(s)?"
 msgstr ""
-"¿Estás seguro de que quieres sacar de la portada [% "
-"template.selected.contents.length %] elemento(s)?"
+"¿Estás seguro de que quieres sacar de la portada [% template.selected."
+"contents.length %] elemento(s)?"
 
 msgid ""
 "Are you sure you want to add to home [% template.selected.contents.length %] "
 "item(s)?"
 msgstr ""
-"¿Estás seguro de que quieres añadir a la portada [% "
-"template.selected.contents.length %] elemento(s)?"
+"¿Estás seguro de que quieres añadir a la portada [% template.selected."
+"contents.length %] elemento(s)?"
 
 msgid "Yes, update all"
 msgstr "Si, actualizar todos"
@@ -3693,8 +3696,8 @@ msgid ""
 "Are you sure you want to delete [% template.selected.contents.length %] "
 "item(s)?"
 msgstr ""
-"¿Estás seguro de que quieres eliminar [% template.selected.contents.length %]"
-" elemento(s)?"
+"¿Estás seguro de que quieres eliminar [% template.selected.contents.length "
+"%] elemento(s)?"
 
 msgid "Restore item"
 msgstr "Restaurar elemento"
@@ -3703,8 +3706,8 @@ msgid ""
 "Are you sure that do you want restore from trash \"[% template.content.title "
 "%]\"?"
 msgstr ""
-"¿Estás seguro de que quieres restaurar de la papelera \"[% "
-"template.content.title %]\"?"
+"¿Estás seguro de que quieres restaurar de la papelera \"[% template.content."
+"title %]\"?"
 
 msgid "Yes, restore"
 msgstr "Si, restaurar"
@@ -4250,15 +4253,99 @@ msgstr "Email de contacto"
 msgid "External services"
 msgstr "Servicios externos"
 
-msgid "Google Services"
-msgstr "Servicios de Google"
+msgid "Analytic system integration"
+msgstr "Integración con sistemas de analíticas"
 
-msgid "Google+ Page Url"
-msgstr "Url de la página de Google+"
+msgid "Google Analytics"
+msgstr "Google Analytics"
+
+msgid "Google Analytics API key"
+msgstr "Llave de la API de Google Analytics"
 
 msgid ""
-"If you have a <strong>Google+ page</strong>, please complete this input."
-msgstr "Si tiene una <strong>página en Google+</strong>, completa este campo."
+"You can get your Google Analytics Site ID from <a href=\"https://www.google."
+"com/analytics/\" target=\"_blank\">GAnalytics site</a> under the General "
+"Overview list (should be something like UA-546457-3)."
+msgstr ""
+"Puedes obtener tu ID de sitio web de Google Analytics desde <a href="
+"\"https://www.google.com/analytics/\" target=\"_blank\">el sitio web de "
+"GAnalytics</a> bajo la lista de la Vista previa (debería ser algo semejante "
+"a UA-546457-3)."
+
+msgid "Google Analytics Base domain"
+msgstr "Dominio base para Google Analytics"
+
+msgid "ComScore Statistics"
+msgstr "Estadísticas de comScore"
+
+msgid "comScore Page ID"
+msgstr "Identificador de página comScore"
+
+msgid ""
+"If you also have a <strong>comScore statistics service</strong>, add your "
+"page id"
+msgstr ""
+"Si ya tienes el <strong>servicio de estadísticas de comScore</strong>, añade "
+"tu identificador de página"
+
+msgid "OJD Statistics"
+msgstr "Estadísticas de OJD"
+
+msgid "OJD Page ID"
+msgstr "Identificador del sitio en OJD"
+
+msgid ""
+"If you also have a <strong>OJD statistics service</strong>, add your page id"
+msgstr ""
+"Si ya tienes el <strong>servicio de estadísticas de OJD</strong>, añade tu "
+"identificador de página"
+
+msgid "Internal settings"
+msgstr "Preferencias internas"
+
+msgid "Recaptcha"
+msgstr "Recaptcha"
+
+msgid "Public key"
+msgstr "Llave pública"
+
+msgid "Private key"
+msgstr "Llave privada"
+
+msgid ""
+"Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/"
+"admin#whyrecaptcha\" target=\"_blank\">this page</a>."
+msgstr ""
+"Puedess obtener tus llaves de reCAPTCHA desde <a href=\"https://www.google."
+"com/recaptcha/admin#whyrecaptcha\" target=\"_blank\">esta página</a>."
+
+msgid "Used when we want to test if the user is an human and not a robot."
+msgstr ""
+"Usado cuando quieress comprobar si un usuario es un humano y no un robot."
+
+msgid "Opennemas News Agency"
+msgstr "Agencia de noticias Opennemas"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Paypal Settings"
+msgstr "Opciones de Paypal"
+
+msgid "Account email:"
+msgstr "Correo del usuario de la cuenta"
+
+msgid ""
+"You can get your PayPal account email from <a href=\"https://www.paypal.com/"
+"us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
+"This must be a business account for receiving payments"
+msgstr ""
+"Puedes recibir correos electrónicos de <a href=\"https://www.paypal.com/us/"
+"cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal</a>. Esta "
+"debe ser tu cuenta de empresa para recibir las notificaciones de pagos."
+
+msgid "Google Services"
+msgstr "Servicios de Google"
 
 msgid "Google Search API key:"
 msgstr "Llave de la API de Google Search:"
@@ -4287,6 +4374,19 @@ msgstr ""
 "\"http://code.google.com/apis/maps/signup.html\" target=\"_blank\">el sitio "
 "web Google Maps sign up</a>."
 
+msgid "Social network integration"
+msgstr "Integración con redes sociales"
+
+msgid "Google+ and YouTube"
+msgstr "Google+ y YouTube"
+
+msgid "Google+ Page Url"
+msgstr "Url de la página de Google+"
+
+msgid ""
+"If you have a <strong>Google+ page</strong>, please complete this input."
+msgstr "Si tiene una <strong>página en Google+</strong>, completa este campo."
+
 msgid "YouTube Page Url"
 msgstr "Url de la página de Youtube"
 
@@ -4296,78 +4396,6 @@ msgid ""
 msgstr ""
 "Si tienes un a <strong>página en Youtube</strong>, completa el formulario "
 "con la URL de la página de Youtube."
-
-msgid "Google Analytics API key"
-msgstr "Llave de la API de Google Analytics"
-
-msgid ""
-"You can get your Google Analytics Site ID from <a href=\"https://www.google."
-"com/analytics/\" target=\"_blank\">GAnalytics site</a> under the General "
-"Overview list (should be something like UA-546457-3)."
-msgstr ""
-"Puedes obtener tu ID de sitio web de Google Analytics desde <a href="
-"\"https://www.google.com/analytics/\" target=\"_blank\">el sitio web de "
-"GAnalytics</a> bajo la lista de la Vista previa (debería ser algo semejante "
-"a UA-546457-3)."
-
-msgid "Google Analytics Base domain"
-msgstr "Dominio base para Google Analytics"
-
-msgid "Twitter Page"
-msgstr "Página en Twitter"
-
-msgid ""
-"If you also have a <stron>Twitter page</strong>, add your page url on the "
-"form. Default will be set with Opennemas."
-msgstr ""
-"Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
-"en el formulario. Por omisión se usará el de OpenNemas"
-
-msgid "Vimeo"
-msgstr "Vimeo"
-
-msgid "Vimeo Page"
-msgstr "Página de Vimeo"
-
-msgid ""
-"If you also have a <strong>Vimeo page</strong>, add your page url on the "
-"form."
-msgstr ""
-"Si ya tienes una <b>página de Vimeo</b>, añade tu URL de la página en el "
-"formulario."
-
-msgid "Recaptcha"
-msgstr "Recaptcha"
-
-msgid "Public key"
-msgstr "Llave pública"
-
-msgid "Private key"
-msgstr "Llave privada"
-
-msgid ""
-"Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/"
-"admin#whyrecaptcha\" target=\"_blank\">this page</a>."
-msgstr ""
-"Puedess obtener tus llaves de reCAPTCHA desde <a href=\"https://www.google."
-"com/recaptcha/admin#whyrecaptcha\" target=\"_blank\">esta página</a>."
-
-msgid "Used when we want to test if the user is an human and not a robot."
-msgstr ""
-"Usado cuando quieress comprobar si un usuario es un humano y no un robot."
-
-msgid "ComScore Statistics"
-msgstr "Estadísticas de comScore"
-
-msgid "comScore Page ID"
-msgstr "Identificador de página comScore"
-
-msgid ""
-"If you also have a <strong>comScore statistics service</strong>, add your "
-"page id"
-msgstr ""
-"Si ya tienes el <strong>servicio de estadísticas de comScore</strong>, añade "
-"tu identificador de página"
 
 msgid "Facebook Page Url"
 msgstr "Url de la página de Facebook"
@@ -4396,6 +4424,29 @@ msgstr ""
 msgid "Secret key"
 msgstr "Llave secreta"
 
+msgid "Twitter Page"
+msgstr "Página en Twitter"
+
+msgid ""
+"If you also have a <stron>Twitter page</strong>, add your page url on the "
+"form. Default will be set with Opennemas."
+msgstr ""
+"Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
+"en el formulario. Por omisión se usará el de OpenNemas"
+
+msgid "Vimeo"
+msgstr "Vimeo"
+
+msgid "Vimeo Page"
+msgstr "Página de Vimeo"
+
+msgid ""
+"If you also have a <strong>Vimeo page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Vimeo</b>, añade tu URL de la página en el "
+"formulario."
+
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
@@ -4408,39 +4459,6 @@ msgid ""
 msgstr ""
 "Si tienes una <strong>página en LinkedIn</strong>, añade el nombre de perfíl "
 "en el formulario. Por omisión se usará el de OpenNemas"
-
-msgid "Opennemas News Agency"
-msgstr "Agencia de noticias Opennemas"
-
-msgid "User"
-msgstr "Usuario"
-
-msgid "OJD Statistics"
-msgstr "Estadísticas de OJD"
-
-msgid "OJD Page ID"
-msgstr "Identificador del sitio en OJD"
-
-msgid ""
-"If you also have a <strong>OJD statistics service</strong>, add your page id"
-msgstr ""
-"Si ya tienes el <strong>servicio de estadísticas de OJD</strong>, añade tu "
-"identificador de página"
-
-msgid "Paypal Settings"
-msgstr "Opciones de Paypal"
-
-msgid "Account email:"
-msgstr "Correo del usuario de la cuenta"
-
-msgid ""
-"You can get your PayPal account email from <a href=\"https://www.paypal.com/"
-"us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
-"This must be a business account for receiving payments"
-msgstr ""
-"Puedes recibir correos electrónicos de <a href=\"https://www.paypal.com/us/"
-"cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal</a>. Esta "
-"debe ser tu cuenta de empresa para recibir las notificaciones de pagos."
 
 msgid "Editing author"
 msgstr "Editando autor"
@@ -4743,8 +4761,8 @@ msgid ""
 "Get more help from our videotutorials in <a href=\"%1\" class=\"text-white "
 "bold\">our YouTube channel</a> and subscribe to it."
 msgstr ""
-"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white bold\">"
-"nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
+"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white bold"
+"\">nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
 
 msgid "Ads"
 msgstr "Publicidades"
@@ -4856,6 +4874,9 @@ msgstr "Posición en el tipo de página seleccionado"
 
 msgid "Advertisment"
 msgstr "Publicidad"
+
+msgid "Are you sure?"
+msgstr "¿Estas seguro?"
 
 msgid "Flash based"
 msgstr "Basado en Flash"
@@ -5004,11 +5025,20 @@ msgstr ""
 msgid "Account settings"
 msgstr "Preferencias de la cuenta"
 
-msgid "Media size"
-msgstr "Tamaño del media"
+msgid "Your newspaper was created on %1"
+msgstr "Tu periódico fué creado el %1"
+
+msgid "Plan"
+msgstr "Plan"
 
 msgid "Support plan"
 msgstr "Plan de soporte"
+
+msgid "Support by tickets"
+msgstr "Soporte por tiquets"
+
+msgid "Storage size"
+msgstr "Amacenamiento ocupado"
 
 msgid "Available"
 msgstr "Disponible"
@@ -5369,9 +5399,6 @@ msgstr "Imágenes asignadas"
 msgid "Image to show in frontpages"
 msgstr "Imagen a mostrar en las papeleras"
 
-msgid "Are you sure?"
-msgstr "¿Estas seguro?"
-
 msgid "Image to show in inner"
 msgstr "Imagen a mostrar en interior"
 
@@ -5638,10 +5665,9 @@ msgid ""
 "plugins/comments/\">Facebook comment system</a> and use their online tools "
 "to manage your website comments."
 msgstr ""
-"Integra Opennemas con el <a href=\""
-"https://developers.facebook.com/docs/plugins/comments/\">sistema de "
-"comentarios de Facebook</a> y use su potente sistema para gestionar los "
-"comentarios de su sitio web."
+"Integra Opennemas con el <a href=\"https://developers.facebook.com/docs/"
+"plugins/comments/\">sistema de comentarios de Facebook</a> y use su potente "
+"sistema para gestionar los comentarios de su sitio web."
 
 msgid "Delete comment"
 msgstr "Eliminar comentario"
@@ -5798,11 +5824,11 @@ msgstr "Artículos de editorial"
 msgid "Other Articles"
 msgstr "Otros artículos"
 
-msgid "Director"
-msgstr "Director"
-
 msgid "Editorial"
 msgstr "Editorial"
+
+msgid "Director"
+msgstr "Director"
 
 msgid "Unable to find any opinion that matches your search."
 msgstr "No se pudieron encontrar opiniones que coincidan con tu búsqueda."
@@ -5919,7 +5945,8 @@ msgid "Edit this content"
 msgstr "Editar este contenido"
 
 msgid "Are you sure that do you want remove \"[% template.content.title %]\"?"
-msgstr "¿Estás seguro de que quieres eliminar \"[% template.content.title %]\"?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar \"[% template.content.title %]\"?"
 
 msgid "Delete albums"
 msgstr "Eliminar álbumes"
@@ -6197,8 +6224,8 @@ msgid ""
 "The frontpage manager is currently <strong>unavaible for your screen size</"
 "strong>"
 msgstr ""
-"El gestor de portadas no está <strong>disponible para tu tamaño de "
-"pantalla</strong> actualmente"
+"El gestor de portadas no está <strong>disponible para tu tamaño de pantalla</"
+"strong> actualmente"
 
 msgid "Available contents"
 msgstr "Contenidos disponibles"
@@ -6830,6 +6857,9 @@ msgstr "Correo del propietario"
 msgid "Created from"
 msgstr "Creado el"
 
+msgid "Media size"
+msgstr "Tamaño del media"
+
 msgid "Language"
 msgstr "Idioma:"
 
@@ -6874,9 +6904,6 @@ msgstr "Plan de desarrollo"
 
 msgid "Select all"
 msgstr "Seleccionar todo"
-
-msgid "Internal settings"
-msgstr "Preferencias internas"
 
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sin espacios"
@@ -7003,9 +7030,6 @@ msgstr "Puedes acceder al periódico con la información de abajo"
 
 msgid "Newspaper URL"
 msgstr "URL del periódico"
-
-msgid "Plan"
-msgstr "Plan"
 
 msgid "We seem to have lost you in the clouds."
 msgstr "Parece que te perdimos en las nubes."
@@ -7648,9 +7672,6 @@ msgstr ""
 
 #~ msgid "Terms of use"
 #~ msgstr "Términos de uso"
-
-#~ msgid "Social network"
-#~ msgstr "Redes sociales"
 
 #~ msgid "Skip tour"
 #~ msgstr "Saltar guía inicial"
