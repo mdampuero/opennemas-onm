@@ -10,6 +10,7 @@
 
 namespace BackendWebService\Controller;
 
+use Backend\Annotation\CheckModuleAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +20,10 @@ class OpinionsController extends ContentController
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
+     * @param Request $request     The request object.
+     * @param string  $contentType Content type name.
+     *
+     * @return JsonResponse The response object.
      */
     public function listAction(Request $request, $contentType = null)
     {
@@ -59,5 +61,59 @@ class OpinionsController extends ContentController
                 'total'             => $total
             )
         );
+    }
+
+    /**
+     * Saves the widget opinions content positions.
+     *
+     * @param Request  $request The request object.
+     *
+     * @return Response The response object.
+     *
+     * @Security("has_role('OPINION_ADMIN')")
+     *
+     * @CheckModuleAccess(module="OPINION_MANAGER")
+     */
+    public function saveFrontpageAction(Request $request)
+    {
+        $containers = $request->get('positions');
+        $errors     = [];
+        $result     = true;
+
+        if (is_array($containers) && count($containers) > 0) {
+            foreach ($containers as $ids) {
+                $position = 0;
+
+                foreach ($ids as $id) {
+                    $opinion = new \Opinion($id);
+                    $result = $result &&  $opinion->setPosition($position);
+                    $position++;
+                }
+            }
+        }
+
+        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
+
+        if (!$result) {
+            return new JsonResponse([
+                'messages' => [
+                    [
+                        'id'      => $id,
+                        'message' => _('Unable to save the positions.'),
+                        'type'    => 'error'
+                    ]
+                ]
+            ]);
+        }
+
+        return new JsonResponse([
+            'messages' => [
+                    [
+                        'id'      => $id,
+                        'message' => _('Positions saved successfully.'),
+                        'type'    => 'success'
+                    ]
+                ]
+        ]);
     }
 }

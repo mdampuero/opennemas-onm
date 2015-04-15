@@ -74,7 +74,7 @@
           {acl isAllowed="OPINION_FRONTPAGE"}
           {if $home}
           <li>
-            <button class="btn btn-white" id="save_positions" title="{t}Save positions{/t}">
+            <button class="btn btn-white" id="save_positions" ng-click="saveOpinionsFrontpage()" title="{t}Save positions{/t}" type="button">
               <i class="fa fa-save"></i> <span class="hidden-xs">{t}Save positions{/t}</span>
             </button>
           </li>
@@ -114,50 +114,4 @@
   </script>
 </form>
 {include file="opinion/modals/_modalAccept.tpl"}
-{/block}
-
-{block name="footer-js" append}
-{if $home}
-<script>
-  jQuery(document).ready(function($) {
-    $( "#list-opinion tbody" ).sortable({
-      items: "tr:not(.table-header)",
-      containment: 'parent'
-    });
-    $( "#sortable" ).disableSelection();
-
-    $('#save_positions').on('click', function(e, ui) {
-      e.preventDefault();
-      var content_positions = [
-      'director-opinion',
-      'editorial-opinion',
-      'normal-opinion'
-      ];
-      var elements = [];
-      $.each(content_positions, function(key, position_name) {
-
-        var name = '.'+position_name
-        var items = jQuery(name);
-
-        var elements_in_position = [];
-        items.each(function(key, item) {
-          elements_in_position.push($(item).data('id'));
-        });
-
-        if (elements_in_position.length > 0) {
-          elements.push(elements_in_position);
-        };
-      });
-      $.ajax({
-        url : '{url name=admin_opinions_savepositions}',
-        method: 'POST',
-        data: { positions: JSON.stringify(elements)},
-        success: function(data) {
-          $('#warnings-validation').html(data);
-        }
-      });
-    });
-  });
-</script>
-{/if}
 {/block}

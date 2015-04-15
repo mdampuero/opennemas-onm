@@ -265,6 +265,22 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }).error(function(response) {});
     };
 
+    $scope.saveOpinionsFrontpage = function(route) {
+      var ids = { director: [], editorial: [], opinions: [] };
+
+      for (var name in ids) {
+        for (var i = 0; i < $scope[name].length; i++) {
+          ids[name].push($scope[name][i].id);
+        };
+      }
+
+      var url = routing.generate('backend_ws_opinions_save_frontpage');
+
+      $http.post(url, { positions: ids }).success(function(response) {
+        $scope.renderMessages(response.messages);
+      }).error(function() {});
+    };
+
     /**
      * Selects/unselects all instances.
      */

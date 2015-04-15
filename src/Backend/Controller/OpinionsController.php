@@ -477,56 +477,6 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Saves the widget opinions content positions.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("has_role('OPINION_ADMIN')")
-     *
-     * @CheckModuleAccess(module="OPINION_MANAGER")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $containers = json_decode($request->get('positions'));
-
-        $result = true;
-
-        if (isset($containers)
-            && is_array($containers)
-            && count($containers) > 0
-        ) {
-            foreach ($containers as $elements) {
-                $pos = 1;
-                foreach ($elements as $id) {
-                    $opinion = new \Opinion($id);
-                    $result = $result &&  $opinion->setPosition($pos);
-
-                    $pos++;
-                }
-            }
-        }
-
-        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
-
-        if ($result === true) {
-            $message = _('Positions saved successfully.');
-            $output = sprintf(
-                '<div class="alert alert-success">%s<button data-dismiss="alert" class="close">×</button></div>',
-                $message
-            );
-        } else {
-            $message = _('Unable to save the positions.');
-            $output = sprintf(
-                '<div class="alert alert-error">%s<button data-dismiss="alert" class="close">×</button></div>',
-                $message
-            );
-        }
-
-        return new Response($output);
-    }
-
-    /**
      * Lists the available opinions for the frontpage manager.
      *
      * @param  Request $request The request object.

@@ -38,8 +38,8 @@
   </div>
   <script type="text/ng-template" id="opinion-item">
     <div class="menu-item clearfix" ui-tree-handle>
-      <span class="opinion-author" ng-if="item.type_opinion == 1">{t}Director{/t}</span>
-      <span class="opinion-author" ng-if="item.type_opinion == 2">{t}Editorial{/t}</span>
+      <span class="opinion-author" ng-if="item.type_opinion == 1">{t}Editorial{/t}</span>
+      <span class="opinion-author" ng-if="item.type_opinion == 2">{t}Director{/t}</span>
       <span class="opinion-author" ng-if="item.type_opinion == 0">
         <a data-nodrag ng-href="[% edit(item.author.id, 'admin_acl_user_show') %]">
           [% item.author.name %]
@@ -47,7 +47,7 @@
       </span>
       <span class="h-seperate"></span>
       <span class="opinion-title">
-        <a data-nodrag ng-href="[% edit(item.author.id, 'admin_opinion_show') %]">
+        <a data-nodrag ng-href="[% edit(item.id, 'admin_opinion_show') %]">
           [% item.title %]
         </a>
       </span>

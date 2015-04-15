@@ -3,3 +3,9 @@ backend_ws_opinions_list:
     defaults: { _controller: BackendWebServiceBundle:Opinions:list }
     options:
         expose: true
+
+backend_ws_opinions_save_frontpage:
+    path:     /opinions/save-frontpage
+    defaults: { _controller: BackendWebServiceBundle:Opinions:saveFrontpage }
+    options:
+        expose: true
