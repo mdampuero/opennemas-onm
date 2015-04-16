@@ -195,19 +195,22 @@ class PickerController extends Controller
         return [
             'allCategories'       => _('All categories'),
             'allContentTypes'     => _('All content types'),
-            'contentsInFrontpage' => _('Contents in frontpage'),
             'allMonths'           => _('All months'),
-            'thumbnailDetails'    => _('Thumbnail details'),
-            'itemDetails'         => _('Item details'),
+            'category'            => _('Category'),
+            'categories'          => $ccm->find(),
+            'contentsInFrontpage' => _('Contents in frontpage'),
+            'contentTypes'        => $contentTypesFiltered,
+            'created'             => _('Created'),
+            'dates'               => $this->getDates(),
             'description'         => _('Description'),
             'header'              => _('Pick the item to insert'),
             'insert'              => _('Insert'),
+            'itemDetails'         => _('Item details'),
             'itemsSelected'       => _('items selected'),
             'menuItem'            => _('Browse'),
             'search'              => _('Search by name'),
-            'categories'          => $ccm->find(),
-            'contentTypes'        => $contentTypesFiltered,
-            'dates'               => $this->getDates(),
+            'title'               => _('Title'),
+            'thumbnailDetails'    => _('Thumbnail details'),
         ];
     }
 

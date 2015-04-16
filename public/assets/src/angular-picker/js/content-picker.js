@@ -78,32 +78,20 @@ angular.module('onm.picker')
                 </div>\
                 <div class=\"picker-panel-sidebar\">\
                   <div class=\"picker-panel-sidebar-header\">\
-                    <h4 ng-if=\"picker.views.enabled == 'thumbnail'\">[% picker.params.explore.thumbnailDetails %]</h4>\
-                    <h4 ng-if=\"picker.views.enabled == 'list-item'\">[% picker.params.explore.itemDetails %]</h4>\
+                    <h4>[% picker.params.explore.itemDetails %]</h4>\
                   </div>\
                   <div class=\"picker-panel-sidebar-body\" ng-if=\"selected.lastSelected\">\
                     <ul class=\"media-information\">\
                       <li>\
-                        <a ng-href=\"[% routing.generate('admin_photo_show', { id: selected.lastSelected.id}) %]\" target=\"_blank\">\
-                          <strong>\
-                            [% selected.lastSelected.name %]\
-                            <i class=\"fa fa-edit\"></i>\
-                          </strong>\
-                        </a>\
+                        <strong>\
+                          [% selected.lastSelected.title %]\
+                        </strong>\
                       </li>\
-                      <li>[% selected.lastSelected.created | moment %]</li>\
-                      <li>[% selected.lastSelected.size %] KB</li>\
-                      <li><span class=\"v-seperate\"></span></li>\
-                      <li>\
-                        <div class=\"form-group\">\
-                          <label for=\"description\">\
-                            [% picker.params.explore.description %]\
-                            <div class=\"pull-right\">\
-                              <i class=\"fa\" ng-class=\"{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }\"></i>\
-                            </div>\
-                          </label>\
-                          <textarea id=\"description\" ng-blur=\"saveDescription(selected.lastSelected.id)\" ng-model=\"selected.lastSelected.description\" cols=\"30\" rows=\"2\"></textarea>\
-                        </div>\
+                      <li ng-show=\"selected.lastSelected.category_name\"><strong>[% picker.params.explore.category %]:</strong> [% selected.lastSelected.category_name %]</li>\
+                      <li ng-show=\"selected.lastSelected.created\"><strong>[% picker.params.explore.created %]:</strong> [% selected.lastSelected.created | moment %]</li>\
+                      <li ng-show=\"selected.lastSelected.description\">\
+                        <div><strong>[% picker.params.explore.description %]</strong></div>\
+                        [% selected.lastSelected.description %]\
                       </li>\
                     </ul>\
                   </div>\
@@ -146,31 +134,12 @@ angular.module('onm.picker')
                 <div class=\"picker-loading\" ng-if=\"loading\">\
                   <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
                 </div>\
-                <div class=\"picker-sidebar\" ng-if=\"!loading\">\
-                  <ul>\
-                    [sidebar]\
-                  </ul>\
-                </div>\
                 <div class=\"picker-content\" ng-if=\"!loading\">\
                   [content]\
                 </div>\
               </div>\
             </div>\
           </div>";
-
-          /**
-           * Template for the media picker sidebar items.
-           *
-           * @type string
-           */
-          var sidebarTpl = {
-            explore: "<li ng-class=\"{ 'active': picker.isModeActive('explore') }\" ng-click=\"picker.enable('explore'); explore()\">\
-              <h5>\
-                <i class=\"fa fa-folder\"></i>\
-                [% picker.params.explore.menuItem %]\
-              </h5>\
-            </li>"
-          };
 
           /**
            * Default media picker configuration.
@@ -250,16 +219,10 @@ angular.module('onm.picker')
              * Renders the media picker.
              */
             render: function () {
-              var content = '';
+              var content = contentTpl['explore'];;
               var picker  = pickerTpl;
               var selectable = '';
               var selection = '';
-              var sidebar = '';
-
-              for (var i = 0; i < this.modes.enabled.length; i++) {
-                sidebar += sidebarTpl[this.modes.enabled[i]];
-                content += contentTpl[this.modes.enabled[i]];
-              }
 
               // Add selection actions
               if (this.selection.enabled) {
@@ -269,8 +232,6 @@ angular.module('onm.picker')
 
               content = content.replace(/\[selectable\]/g, selectable);
               content = content.replace(/\[selection\]/g, selection);
-
-              picker = picker.replace(/\[sidebar\]/g, sidebar);
               picker = picker.replace(/\[content\]/g, content);
 
               return picker;
