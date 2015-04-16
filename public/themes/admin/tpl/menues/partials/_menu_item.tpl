@@ -1,4 +1,5 @@
 <div class="menu-item clearfix" ui-tree-handle>
+  [% index %]
   <span class="item-type" ng-if="item.type == 'external'">
     {t}External link{/t}
   </span>
@@ -33,11 +34,11 @@
   <span class="no-padding">
     <input ng-model="item.title" type="text">
   </span>
-  <button class="btn btn-white pull-right" ng-click="removeItem($index)" type="button">
+  <button data-nodrag class="btn btn-white pull-right" ng-click="removeItem($index{if $subitem}, parentIndex{/if})" type="button">
     <i class="fa fa-trash-o text-danger"></i>
   </button>
 </div>
 <ol ui-tree-nodes="" ng-model="item.submenu">
-  <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-item'">
+  <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-sub-item'">
   </li>
 </ol>

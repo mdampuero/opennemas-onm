@@ -12,11 +12,15 @@ angular.module('BackendApp.controllers').controller('MenuCtrl', [
     /**
      * Deletes an item from the menu.
      *
-     * @param {integer} index The index of the item to remove.
+     * @param {Integer} index The index of the item to remove.
      */
-    $scope.removeItem = function(index) {
-      console.log(index);
-      $scope.menu.items.splice(index, 1);
+    $scope.removeItem = function(index, parentIndex) {
+      if (angular.isUndefined(parentIndex)) {
+        $scope.menu.items.splice(index, 1);
+        return;
+      }
+
+      $scope.menu.items[parentIndex].submenu.splice(index, 1);
     };
 
     /**

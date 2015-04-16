@@ -85,7 +85,7 @@
         <div class="grid-body" ng-init="menu = {json_encode($menu)|replace:'"':'\''}">
           <div class="ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
-              <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'"></li>
+              <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
             </ol>
           </div>
           <button class="btn btn-white btn-large" type="button" ng-click="open('modal-add-item')">
@@ -99,6 +99,9 @@
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}
+    </script>
+    <script type="text/ng-template" id="menu-sub-item">
+      {include file="menues/partials/_menu_item.tpl" subitem="true"}
     </script>
     <script type="text/ng-template" id="modal-add-item">
       {include file="menues/modals/_modalAddItem.tpl"}
