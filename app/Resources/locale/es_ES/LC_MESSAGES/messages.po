@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 11:12+0200\n"
-"PO-Revision-Date: 2015-04-16 11:13+0200\n"
+"POT-Creation-Date: 2015-04-16 15:13+0200\n"
+"PO-Revision-Date: 2015-04-16 16:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -59,7 +59,7 @@ msgid "Database error."
 msgstr "Error de base de datos."
 
 msgid "Opinion"
-msgstr "Artículo de opinión"
+msgstr "Opinión"
 
 msgid "Event"
 msgstr "Evento"
@@ -2964,6 +2964,12 @@ msgstr "Elemento"
 msgid "Subscription"
 msgstr "Suscripción"
 
+msgid "Add new photo"
+msgstr "Añadir nueva foto"
+
+msgid "Change"
+msgstr "Cambiar"
+
 msgid "Published"
 msgstr "Publicado"
 
@@ -3899,12 +3905,6 @@ msgstr ""
 "Si quieres usar un avatar personalizado regístrate en <a href='http://www."
 "gravatar.com'>gravatar.com</a> y asegúrate de usar el mismo correo "
 "electrónico que tienes aquí en OpenNemas"
-
-msgid "Add new photo"
-msgstr "Añadir nueva foto"
-
-msgid "Change"
-msgstr "Cambiar"
 
 msgid "Blog Url"
 msgstr "Url del blog"
@@ -5022,9 +5022,6 @@ msgstr "No hay ninguna configuración de sincronización disponible"
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
 "Intenta añadir un site para sincronizar utilizando el botón de configuración"
-
-msgid "Account settings"
-msgstr "Preferencias de la cuenta"
 
 msgid "This is the email used to create your newspaper"
 msgstr "Este es el correo-e usado para crear el periódico"
@@ -6519,6 +6516,12 @@ msgstr "Volver al inicio de sesión"
 msgid "Submit"
 msgstr "Enviar"
 
+msgid "Sign into open<strong>nemas</strong>"
+msgstr "Entrar en open<strong>nemas</strong>"
+
+msgid "Use Facebook, Twitter or your email to sign in."
+msgstr "Usa Facebook, Twitter o tu correo-e para entrar."
+
 msgid "Username or email"
 msgstr "Nombre de usuario o correo-e"
 
@@ -7058,6 +7061,9 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "Account settings"
+#~ msgstr "Preferencias de la cuenta"
 
 #~ msgid "Delete subscriptions"
 #~ msgstr "Eliminar suscripciones"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 11:12+0200\n"
-"PO-Revision-Date: 2015-04-16 11:12+0200\n"
+"POT-Creation-Date: 2015-04-16 15:13+0200\n"
+"PO-Revision-Date: 2015-04-16 16:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1388,7 +1388,7 @@ msgid "Articles"
 msgstr "Artigos"
 
 msgid "Opinions"
-msgstr "Artigos de opinión"
+msgstr "Opinións"
 
 msgid "Comments"
 msgstr "Comentarios"
@@ -2936,6 +2936,12 @@ msgstr "Elemento"
 msgid "Subscription"
 msgstr "Suscrición"
 
+msgid "Add new photo"
+msgstr "Engadir nova foto"
+
+msgid "Change"
+msgstr "Cambiar"
+
 msgid "Published"
 msgstr "Publicado"
 
@@ -3862,12 +3868,6 @@ msgstr ""
 "Se queres usar un avatar personalizado rexistrate en <a href='http://www."
 "gravatar.com'>gravatar.com</a> e asegúrate de usar o mesmo correo "
 "electrónico que tes aquí en OpenNemas"
-
-msgid "Add new photo"
-msgstr "Engadir nova foto"
-
-msgid "Change"
-msgstr "Cambiar"
 
 msgid "Blog Url"
 msgstr "Url do blogue"
@@ -4984,9 +4984,6 @@ msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
 "Engade un sitio para sincronizar empregando o botón de configuración de "
 "arriba."
-
-msgid "Account settings"
-msgstr "Preferencias da conta"
 
 msgid "This is the email used to create your newspaper"
 msgstr "Este foi o correo-e usado para creare o seu periódico"
@@ -6464,6 +6461,12 @@ msgstr "Volver ao inicio de sesión"
 msgid "Submit"
 msgstr "Enviar"
 
+msgid "Sign into open<strong>nemas</strong>"
+msgstr "Entrar en openn<strong>nemas</strong>"
+
+msgid "Use Facebook, Twitter or your email to sign in."
+msgstr "Usa Facebook, Twitter ou o teu correo-e para entrar."
+
 msgid "Username or email"
 msgstr "Nome de usuario ou correo-e"
 
@@ -6999,6 +7002,9 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Account settings"
+#~ msgstr "Preferencias da conta"
 
 #~ msgid "Delete subscriptions"
 #~ msgstr "Eliminar subscricións"
