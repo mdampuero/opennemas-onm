@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1, activated: -1 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -106,6 +106,16 @@
               </ui-select-choices>
             </ui-select>
           </li>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: -1}, { name: '{t}Activated{/t}', value: 1}, { name: '{t}Deactivated{/t}', value: 0 } ]">
+            <ui-select name="activated" theme="select2" ng-model="criteria.activated">
+              <ui-select-match>
+                <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in activated  | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
           <li class="quicklinks hidden-xs ng-cloak">
             <ui-select name="view" theme="select2" ng-model="pagination.epp">
               <ui-select-match>
@@ -201,7 +211,7 @@
                     [% extra.groups[group].name %][% $last ? '' : ', ' %]
                   </span>
                 </td>
-                <td class="right">
+                <td class="center">
                   <button class="btn btn-white" ng-click="updateItem($index, content.id, 'backend_ws_user_set_enabled', 'activated', content.activated != 1 ? 1 : 0, 'loading')" type="button">
                     <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': content.loading, 'fa-check text-success' : !content.loading && content.activated == '1', 'fa-times text-error': !content.loading && content.activated == '0' }"></i>
                   </button>
