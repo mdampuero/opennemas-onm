@@ -155,31 +155,6 @@
       <div class="col-xs-12 m-b-15">
         <form id="upgrade-form" method="POST" action="{url name=admin_client_send_upgrade_mail}">
           <div class="tiles white">
-            <div class="clearfix b-grey b-b tiles-body">
-              <div class="pull-left">
-                <h4>{t}Plans & Modules{/t}</h4>
-                <p class="hidden-xs">{t}Here you can see a list of your activated modules{/t}</p>
-              </div>
-              {*<div class="upgrade pull-right hidden">
-                <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
-                  <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
-                  <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
-                </button>
-              </div>*}
-            </div>
-            <div class="tiles-body ng-cloak" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
-              <div class="plans-wrapper">
-                <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
-                  <h5 class="plan-title">
-                    [% plan.title %]
-                  </h5>
-                  <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
-                    [% item.name %]
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr class="ng-cloak">
             <div class="tiles-body clearfix">
               <div>
                 <div>
@@ -229,6 +204,34 @@
           <input name="hasChanges" ng-value="hasChanges" type="hidden">
           <input name="modules" ng-value="activatedModules" type="hidden">
         </form>
+      </div>
+      <div class="col-xs-12 m-b-15 ng-cloak">
+        <div class="tiles white">
+            <div class="clearfix b-grey b-b tiles-body">
+              <div class="pull-left">
+                <p class="hidden-xs">{t}Here you can see a list of your activated modules{/t}</p>
+                <h4>{t}Activated plans & modules{/t}</h4>
+              </div>
+              {*<div class="upgrade pull-right hidden">
+                <button class="btn btn-large btn-success" ng-disabled="hasChanges || !changed()" type="submit">
+                  <span ng-if="!hasChanges">{t}Upgrade{/t}</span>
+                  <span class="ng-cloak" ng-if="hasChanges">{t}Waiting for upgrade{/t}</span>
+                </button>
+              </div>*}
+            </div>
+            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+              <div class="plans-wrapper">
+                <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
+                  <h5 class="plan-title">
+                    [% plan.title %]
+                  </h5>
+                  <div ng-repeat="item in getActivatedModulesForPlan(plan.id)" style="display:inline-block; margin-right:5px" class="module-activated">
+                    [% item.name %]
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
       </div>
     </div>
   </div>
