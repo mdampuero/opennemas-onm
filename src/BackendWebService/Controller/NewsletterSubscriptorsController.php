@@ -305,7 +305,7 @@ class NewsletterSubscriptorsController extends Controller
             return new JsonResponse([
                 'messages' => [
                     'id'      => 500,
-                    'message' => _('Please specify a subscriptor id for change its activated state it.'),
+                    'message' => _('Please specify a subscriptor id to change the activated state.'),
                     'type'    => 'error'
                 ]
             ]);
