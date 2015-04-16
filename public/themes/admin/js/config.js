@@ -60,15 +60,15 @@ angular.module('BackendApp')
     });
 
     $translateProvider.preferredLanguage('en');
-  }).config(function (onmEditorProvider) {
+  }).config(function (EditorProvider) {
     // Add external plugins
-    onmEditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
-    onmEditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
+    EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
+    EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
 
     // Add custom plugins
-    onmEditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
-    onmEditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
+    EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
+    EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
 
     // Enable CKEditor for all environments (browsers)
-    onmEditorProvider.setCompatible(true);
+    EditorProvider.setCompatible(true);
   });
