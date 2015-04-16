@@ -156,7 +156,8 @@
                   <span ng-if="content.is_blog == 1">
                     <strong>Blog </strong>:
                   </span>
-                  [% content.bio %]
+                  <span ng-if="content.bio != ''">[% content.bio %]</span>
+                  <span ng-if="content.bio == ''">{t}No biography set{/t}</span>
                 </td>
               </tr>
             </tbody>
