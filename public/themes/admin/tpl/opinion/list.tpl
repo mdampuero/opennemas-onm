@@ -1,10 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="
-    @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-    @AdminTheme/less/_opinion.less
-  " filters="cssrewrite,less"}
+  {stylesheets src="@AdminTheme/less/_opinion.less" filters="cssrewrite,less"}
     <link rel="stylesheet" type="text/css" href="{$asset_url}">
   {/stylesheets}
 {/block}
