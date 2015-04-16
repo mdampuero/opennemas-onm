@@ -15,7 +15,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-home fa-lg"></i>
-                {t}Account settings{/t}
+                {t}My account{/t}
               </h4>
             </li>
           </ul>
@@ -33,7 +33,7 @@
                   <div class="instance-name-wrapper">
                     <h3 class="text-white semi-bold">{$instance->name}</h3>
                     {foreach $instance->domains as $domain}
-                    <h5 class="text-white ">
+                    <h5 class="text-white">
                       <i class="fa fa-globe"></i>
                       <a href="http://{$domain}" target="_" class="text-white">{$domain}</a>
                     </h5>
@@ -41,16 +41,16 @@
                   </div>
                 </div>
                 <div class="tile-footer clearfix">
-                  <h6 class="no-margin pull-left">
-                    <a class="text-white" href="mailto:{$instance->contact_mail}" tooltip="{t}This is the email used to create your newspaper{/t}" tooltip-placement="bottom">
+                  <div class="row">
+                    <a class="text-white contact-email col-xs-12 col-md-6" href="mailto:{$instance->contact_mail}" tooltip="{t}This is the email used to create your newspaper{/t}" tooltip-placement="bottom">
                       <i class="fa fa-envelope"></i>
                       {$instance->contact_mail}
                     </a>
-                  </h6>
-                  <a href="#" class="pull-right text-white">
-                    <i class="fa fa-calendar"></i>
-                    <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
-                  </a>
+                    <a href="#" class="text-white created-at col-xs-12 col-md-6">
+                      <i class="fa fa-calendar"></i>
+                      <span tooltip="{t 1=$instance->created}Your newspaper was created on %1{/t}" tooltip-placement="bottom">{$instance->created}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,18 +157,15 @@
           <div class="tiles white">
             <div class="tiles-body clearfix">
               <div>
-                <div>
-                  <p class="col-xs-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                  <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" target="_blank" class="btn btn-primary btn-large col-xs-4">
+                <div class="more-plans clearfix">
+                  <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
+                  <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
                     {t}Check out our modules{/t}
                   </a>
                 </div>
-                <br>
-                <br>
-                <br>
-                <div>
-                  <p class="col-xs-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
-                  <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-4">
+                <div class="get-help clearfix">
+                  <p class="col-xs-12 col-md-8">{t}If you need a custom plan or you want to purchase a plan or module please click in the next link:{/t}</p>
+                  <a href="mailto:sales@openhost.es" class="btn btn-white btn-large col-xs-12 col-md-4">
                     {t}Contact Us{/t}
                   </a>
                 </div>

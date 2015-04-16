@@ -1,6 +1,4 @@
 .plans-wrapper {
-  // white-space: nowrap;
-
   .checkbox {
     margin-bottom: 5px;
   }
@@ -15,6 +13,7 @@
     background: url(/assets/images/moleskine.jpg) no-repeat;
     background-size: 100%;
     background-position: center;
+    background-color: #ccc;
 
     .tiles-body {
       min-height:260px;
@@ -23,12 +22,27 @@
     }
     .instance-name-wrapper {
       margin:10px;
+      margin-top:0;
       text-align: right;
+    }
+
+    .created-at {
+      text-align:right
+    }
+
+    .contact-email {
+      text-align:left;
     }
   }
 
 }
 .my-account-page {
+  .more-plans {
+    margin-bottom:10px;
+  }
+  .contact-us {
+
+  }
   .plan-wrapper {
     margin-bottom:15px;
   }
@@ -45,4 +59,27 @@
     border-radius: 3px;
     margin-bottom:3px
   }
+}
+
+
+
+@media (max-width: 768px) {
+  .instance-info {
+    .body-wrapper {
+      background-color:#c3b7c1;
+
+      .tiles-body {
+        min-height: 150px;
+      }
+
+      .created-at,
+      .contact-email {
+        text-align:center !important;
+      }
+      .contact-email {
+        margin-bottom:5px;
+      }
+    }
+  }
+
 }
