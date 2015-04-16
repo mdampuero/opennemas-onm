@@ -197,7 +197,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-mode="explore,upload" media-picker-target="editor.summary">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.summary">
                     {t}Insert image{/t}
                   </div>
                 </div>
@@ -212,7 +212,7 @@
                 </label>
                 {acl isAllowed='PHOTO_ADMIN'}
                 <div class="pull-right">
-                  <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-mode="explore,upload" media-picker-target="editor.body">
+                  <div class="btn btn-default btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
                     {t}Insert image{/t}
                   </div>
                 </div>

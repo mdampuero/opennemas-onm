@@ -86,7 +86,7 @@
                   </label>
                   <div class="pull-right">
                       {acl isAllowed='PHOTO_ADMIN'}
-                      <div class="btn btn-default btn-mini ng-cloak form-control" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.content" ng-show="renderlet == 'html'">{t}Insert image{/t}</div>
+                      <div class="btn btn-default btn-mini ng-cloak form-control" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.content" ng-show="renderlet == 'html'">{t}Insert image{/t}</div>
                       {/acl}
                   </div>
                   <div class="controls">
