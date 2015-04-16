@@ -186,6 +186,7 @@
                 </th>
                 <th class="title">{t}Title{/t}</th>
                 <th style="width:65px;" class="center hidden-xs">{t}Section{/t}</th>
+                <th style="width:20px;" class="center hidden-xs">{t}Position{/t}</th>
                 {acl isAllowed="BOOK_AVAILABLE"}
                 <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
                 {/acl}
@@ -229,6 +230,9 @@
                 <span ng-if="!content.category_name">
                   {t}Unassigned{/t}
                 </span>
+              </td>
+              <td class="center hidden-xs">
+                [% content.position %]
               </td>
               {acl isAllowed="BOOK_HOME"}
               <td class="center hidden-xs">
