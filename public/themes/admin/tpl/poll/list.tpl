@@ -186,7 +186,7 @@
   <div class="content">
     {render_messages}
 
-    {if $category == 'widget'}
+    {if $category == 'widget' && $total_elements_widget > 0}
     <div class="messages" ng-if="{$total_elements_widget} > 0 && pagination.total != {$total_elements_widget}">
       <div class="alert alert-info">
         <button class="close" data-dismiss="alert">×</button>

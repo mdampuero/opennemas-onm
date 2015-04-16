@@ -146,20 +146,20 @@ class OpinionsController extends Controller
         if (($numOpinions > 0) && (count($opinions) > $numOpinions)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
+                sprintf(_("You must put %d opinions %s in the frontpage "), $numOpinions, 'opinions')
             );
         }
 
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
+                sprintf(_("You must put %d opinions %s in the frontpage "), $numEditorial, 'editorial')
             );
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                sprintf(count($opinions) . _("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
+                sprintf(_("You must put %d opinions %s in the frontpage "), $numDirector, 'opinion del director')
             );
         }
 
