@@ -102,7 +102,7 @@
       {render_messages}
 
       <div class="grid simple settings">
-        <div class="grid-body no-padding">
+        <div class="grid-body no-padding ng-cloak">
           <tabset>
             <tab heading="{t}General{/t}">
               <div class="tab-wrapper">
