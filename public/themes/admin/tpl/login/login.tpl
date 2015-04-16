@@ -14,9 +14,11 @@
         <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
         <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
         {block name="header-css"}
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
+
         {stylesheets src="
         @Common/components/bootstrap/dist/css/bootstrap.min.css,
-        @Common/components/font-awesome/css/font-awesome.min.css,
         @Common/src/webarch/css/animate.min.css,
         @Common/src/webarch/css/style.css,
         @Common/src/webarch/css/responsive.css,
@@ -47,8 +49,8 @@
                         <div class="row login-container animated fadeInUp">
                             <div class="col-md-6 col-md-offset-3 tiles white no-padding">
                                 <div class="p-t-30 p-l-20 p-b-10 xs-p-t-10 xs-p-l-10 xs-p-b-10">
-                                    <h2 class="normal center">Sign into open<strong>nemas</strong></h2>
-                                    <p>Use Facebook, Twitter or your email to sign in.<br></p>
+                                    <h2 class="normal center">{t escape=off}Sign into open<strong>nemas</strong>{/t}</h2>
+                                    <p>{t}Use Facebook, Twitter or your email to sign in.{/t}<br></p>
                                 </div>
                                 <div class="row m-l-5 m-r-5 p-b-20">
                                     <div class="col-sm-6">
@@ -112,8 +114,8 @@
             </main>
             <footer>
                 <div class="muted credit">
-                    <ul>
-                        <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
+                    <p class="center">&copy; {strftime("%Y")} OpenHost S.L.</p>
+                    <ul class="center">
                         <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
                         <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
                         <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad" target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
@@ -141,7 +143,7 @@
     {/javascripts}
     <script type="text/javascript">
     jQuery(document).ready(function($) {
-    BackendAuthentication.init()
+      BackendAuthentication.init()
     });
     </script>
         {uservoice_widget}

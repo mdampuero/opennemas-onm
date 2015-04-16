@@ -23,9 +23,9 @@
   {/block}
 
   <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
-    <style>
-      @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-    </style>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
+
   {block name="header-css"}
     {stylesheets src="
       @Common/components/font-awesome/css/font-awesome.min.css,
