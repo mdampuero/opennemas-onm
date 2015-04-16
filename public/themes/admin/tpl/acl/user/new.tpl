@@ -325,24 +325,36 @@
                             </div>
                             <div class="grid-body">
                                 <div class="form-group">
-                                    <label class="form-label" for="user_language">
-                                        {t}User type{/t}
-                                    </label>
-                                    <div class="controls">
-                                        <select id="usertype" name="type">
-                                            <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                                            <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-                                        </select>
-                                    </div>
+                                  <label class="form-label" for="usertype">
+                                    {t}User type{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select id="usertype" name="type">
+                                      <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                                      <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+                                    </select>
+                                  </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="metaclass="form-label" [user_language]">
-                                        {t}User language{/t}
-                                    </label>
-                                    <div class="controls">
-                                        {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                                        <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
-                                    </div>
+                                  <label class="form-label" for="meta">
+                                    {t}User language{/t}
+                                  </label>
+                                  <div class="controls">
+                                    {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
+                                    <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="activated">
+                                    {t}Status{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select id="activated" name="activated">
+                                      <option value="0" {if ($user->activated eq "0")}selected{/if}>{t}Deactivated{/t}</option>
+                                      <option value="1" {if ($user->activated eq "1")}selected{/if}>{t}Activated{/t}</option>
+                                    </select>
+                                    <div class="help-block">{t}Used to enable or disable user access to control panel.{/t}</div>
+                                  </div>
                                 </div>
                             </div>
                         </div>
