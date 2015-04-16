@@ -219,7 +219,7 @@
                 {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left hidden-xs">{t}Section{/t}</th>{/if}
                 <th class="center hidden-xs" style="width:40px">{t}Views{/t}</th>
                 <th class="center" style="width:35px;">{t}Published{/t}</th>
-                {if $category!='widget'} <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                <th class="center hidden-xs" style="width:35px;">{t}Favorite{/t}</th>
                 <th class="center hidden-xs" style="width:35px;">{t}Home{/t}</th>
               </tr>
             </thead>
@@ -263,9 +263,9 @@
                 {if $category=='widget' || $category=='all'}
                 <td class="left hidden-xs">
                  [% content.category_name %]
-               </td>
-              {/if}
-              <td class="center hidden-xs">[% shvs.extra.views[content.id] %]</td>
+                </td>
+                {/if}
+              <td class="center hidden-xs">[% extra.views[content.id] %]</td>
 
               {acl isAllowed="ALBUM_AVAILABLE"}
               <td class="center">
