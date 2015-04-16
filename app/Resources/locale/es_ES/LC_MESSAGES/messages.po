@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-15 17:02+0200\n"
-"PO-Revision-Date: 2015-04-15 21:22+0200\n"
+"POT-Creation-Date: 2015-04-16 11:12+0200\n"
+"PO-Revision-Date: 2015-04-16 11:13+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1697,14 +1697,23 @@ msgstr "Se han eliminado %d suscripciones con éxito."
 msgid "Please specify a subscriptor id for delete it."
 msgstr "Especifique el identificador de un suscriptor para eliminarlo."
 
-#, php-format
-msgid "Successfully changed subscribed state for %d subscriptors."
-msgstr "Estado de suscripción cambiado correctamente para %d suscriptores."
-
 msgid "Please specify a subscriptor id for change its subscribed state it."
 msgstr ""
 "Especifique el identificador de un subscriptor para cambiar el estado de su "
 "suscripción."
+
+#, php-format
+msgid "Successfully changed subscribed state for %d subscriptors."
+msgstr "Estado de suscripción cambiado correctamente para %d suscriptores."
+
+msgid "Please specify a subscriptor id to change the activated state."
+msgstr ""
+"Especifique el identificador de un subscriptor para cambiar su estado de "
+"activado."
+
+#, php-format
+msgid "Successfully changed activated state for %d subscriptors."
+msgstr "Estado de activación cambiado correctamente para %d suscriptores."
 
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
@@ -2531,37 +2540,34 @@ msgstr ""
 "Estamos realizando labores de mantenimiento en la plataforma Opennemas, por "
 "favor espere unos minutos."
 
-msgid "Delete subscriptions"
-msgstr "Eliminar suscripciones"
-
-msgid "You must select some elements."
-msgstr "Debes seleccionar algún elemento."
-
-msgid "Accept"
-msgstr "Aceptar"
-
-msgid "Delete subscriptor"
-msgstr "Eliminar suscriptor"
+msgid "Send to trash"
+msgstr "Enviar a la papelera"
 
 msgid ""
-"Are you sure that do you want delete the subscritor with the mail \"<span>"
-"%title%</span>\"?"
+"Are you sure that do you want delete the subscriptor with the mail \"[% "
+"template.content.email %]\"?"
 msgstr ""
-"¿Está seguro de que quiere eliminar el suscriptor con el correo-e \"<span>"
-"%title%</span>\"?"
+"¿Está seguro de que quiere eliminar el suscriptor con el correo-e \"[% "
+"template.content.email %]\"?"
 
 msgid "Yes, delete"
 msgstr "Si, eliminar"
 
-msgid "Delete videos"
-msgstr "Eliminar vídeos"
+msgid "Delete selected items"
+msgstr "Eliminar elementos seleccionados"
 
-msgid "Are you sure you want to delete those <span>%num%</span> subscriptors?"
+msgid ""
+"Are you sure you want to delete [% template.selected.contents.length %] "
+"item(s)?"
 msgstr ""
-"¿Estás seguro de que quieres eliminar estes <span>%num%</span> suscriptores?"
+"¿Estás seguro de que quieres eliminar [% template.selected.contents.length "
+"%] elemento(s)?"
 
 msgid "Yes, delete all"
 msgstr "Si, eliminarlos todos"
+
+msgid "Delete videos"
+msgstr "Eliminar vídeos"
 
 msgid ""
 "Are you sure you want to toggle subscription status for those <span>%num%</"
@@ -2569,6 +2575,9 @@ msgid ""
 msgstr ""
 "¿Estás seguro de que quieres cambiar el estado de suscripción para <span>%num"
 "%</span> suscriptores?"
+
+msgid "You must select some elements."
+msgstr "Debes seleccionar algún elemento."
 
 msgid "Creating subscriptor"
 msgstr "Creando suscriptor"
@@ -2612,11 +2621,17 @@ msgstr "Suscripciones"
 msgid "Go back to newsletter manager"
 msgstr "Volver al gestor de boletínes"
 
-msgid "Unsubscribe"
-msgstr "Desuscribir"
+msgid "Activate"
+msgstr "Activar"
+
+msgid "Deactivate"
+msgstr "Desactivar"
 
 msgid "Subscribe"
 msgstr "Suscribir"
+
+msgid "Unsubscribe"
+msgstr "Desuscribir"
 
 msgid "Search by name or email"
 msgstr "Buscar por nombre o correo"
@@ -2662,6 +2677,9 @@ msgstr "No hay ningún contenedor activado"
 
 msgid "You must select a container"
 msgstr "Debes seleccionar algún contenedor."
+
+msgid "Accept"
+msgstr "Aceptar"
 
 msgid "Are you sure to send the newsletter."
 msgstr "¿Estás seguro que quieres enviar el boletín de noticias?"
@@ -3072,9 +3090,6 @@ msgstr "Quitar de todas las portadas"
 
 msgid "Arquive"
 msgstr "Archivar"
-
-msgid "Send to trash"
-msgstr "Enviar a la papelera"
 
 msgid "Disable"
 msgstr "Desactivar"
@@ -3684,16 +3699,6 @@ msgstr ""
 
 msgid "Yes, update all"
 msgstr "Si, actualizar todos"
-
-msgid "Delete selected items"
-msgstr "Eliminar elementos seleccionados"
-
-msgid ""
-"Are you sure you want to delete [% template.selected.contents.length %] "
-"item(s)?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar [% template.selected.contents.length "
-"%] elemento(s)?"
 
 msgid "Restore item"
 msgstr "Restaurar elemento"
@@ -5048,18 +5053,6 @@ msgstr "Disponible"
 msgid "Max"
 msgstr "Máximo"
 
-msgid "Plans & Modules"
-msgstr "Planes y módulos"
-
-msgid "Here you can see a list of your activated modules"
-msgstr "Aquí puedes ver una lista de los módulos que tiene activados"
-
-msgid "Upgrade"
-msgstr "Actualizar"
-
-msgid "Waiting for upgrade"
-msgstr "Esperando actualización"
-
 msgid "Opennemas offers many more modules and solutions"
 msgstr "Opennemas ofrece muchos más módulos y soluciones"
 
@@ -5081,6 +5074,18 @@ msgstr "activación pendiente"
 
 msgid "pending deactivation"
 msgstr "desactivación pendiente"
+
+msgid "Here you can see a list of your activated modules"
+msgstr "Aquí puedes ver una lista de los módulos que tiene activados"
+
+msgid "Activated plans & modules"
+msgstr "Planes y módulos activados"
+
+msgid "Upgrade"
+msgstr "Actualizar"
+
+msgid "Waiting for upgrade"
+msgstr "Esperando actualización"
 
 msgid "Upgrade instance"
 msgstr "Actualizar instancia"
@@ -7053,6 +7058,18 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "Delete subscriptions"
+#~ msgstr "Eliminar suscripciones"
+
+#~ msgid "Delete subscriptor"
+#~ msgstr "Eliminar suscriptor"
+
+#~ msgid ""
+#~ "Are you sure you want to delete those <span>%num%</span> subscriptors?"
+#~ msgstr ""
+#~ "¿Estás seguro de que quieres eliminar estes <span>%num%</span> "
+#~ "suscriptores?"
 
 #~ msgid ""
 #~ "You have reach the maximun users allowed. If you want to create more "
