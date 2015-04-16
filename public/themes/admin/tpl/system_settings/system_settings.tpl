@@ -427,7 +427,7 @@
                         <div class="panel-body">
                           <div class="form-group">
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-xs-12">
                                 <label class="form-label" for="google_analytics_api_key">
                                   {t}Google Analytics API key{/t}
                                 </label>
@@ -438,7 +438,7 @@
                                   </span>
                                 </div>
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-xs-12">
                                 <label class="form-label" for="google_analytics_domain">
                                   {t}Google Analytics Base domain{/t}
                                 </label>
@@ -516,7 +516,7 @@
                         <div class="panel-body">
                           <div class="form-group">
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-xs-12">
                                 <label class="form-label" for="piwik_token_auth">
                                   {t}Public key{/t}
                                 </label>
@@ -524,7 +524,7 @@
                                   <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
                                 </div>
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-xs-12">
                                 <label class="form-label" for="piwik_token_auth">
                                   {t}Private key{/t}
                                 </label>
