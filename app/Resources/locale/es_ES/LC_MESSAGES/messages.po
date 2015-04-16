@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 15:13+0200\n"
-"PO-Revision-Date: 2015-04-16 16:52+0200\n"
+"POT-Creation-Date: 2015-04-16 17:41+0200\n"
+"PO-Revision-Date: 2015-04-16 17:44+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1067,7 +1067,7 @@ msgstr "%s boletines enviados desde %d (%d permitidos)."
 
 #, php-format
 msgid "No newsletter sent from %s."
-msgstr "%d boletines enviados desde %s."
+msgstr "No se enviaron boletines desde %s."
 
 #, php-format
 msgid "%d newsletter sent from %s."
@@ -3957,6 +3957,12 @@ msgstr "Idioma del usuario"
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para los mensajes, interfaz y medidas en su página web."
 
+msgid "Deactivated"
+msgstr "Desactivado"
+
+msgid "Used to enable or disable user access to control panel."
+msgstr "Úsalo para activar o desactivar el acceso al panel de control."
+
 msgid "Group"
 msgstr "Grupo"
 
@@ -4494,6 +4500,9 @@ msgstr "No se pudieron encontrar autores que coincidan con tu búsqueda."
 
 msgid "Avatar"
 msgstr "Avatar"
+
+msgid "No biography set"
+msgstr "No tiene biografía establecida"
 
 msgid "Delete video"
 msgstr "Eliminar vídeo"
