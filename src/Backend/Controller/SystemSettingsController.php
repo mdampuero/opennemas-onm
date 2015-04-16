@@ -89,14 +89,19 @@ class SystemSettingsController extends Controller
         $mobileLogo = $request->files->get('mobile_logo');
 
         // Get settings from section (array)
-        $sectionSettings = $request->request->filter('section_settings');
+        $sectionSettings = $request->request->filter('section_settings', array());
 
         // Generate upload path
         $uploadDirectory = MEDIA_PATH.'/sections/';
 
         // Check if upload directory is already created
-        if ($sectionSettings['allowLogo'] == 1 && !is_dir($uploadDirectory)) {
+        if (array_key_exists('allowLogo', $sectionSettings) &&
+            $sectionSettings['allowLogo'] == 1 &&
+            !is_dir($uploadDirectory)
+        ) {
             \Onm\FilesManager::createDirectory($uploadDirectory);
+        } else {
+            s::set('section_settings', array('allowLogo' => 0));
         }
 
         if (!is_null($siteLogo)) {
