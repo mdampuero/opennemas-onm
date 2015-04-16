@@ -263,7 +263,6 @@ class CoversController extends Controller
                 )
             );
         }
-        $_POST['fk_user_last_editor'] = $_SESSION['userid'];
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
@@ -273,19 +272,73 @@ class CoversController extends Controller
                 'error',
                 _("You can't modify this cover because you don't have enough privileges.")
             );
-        } else {
+
+            return $this->redirect(
+                $this->generateUrl('admin_kiosko_show', [ 'id' => $cover->id ])
+            );
+        }
+
+        try {
+            $_POST['fk_user_last_editor'] = $_SESSION['userid'];
+            $_POST['name'] = $cover->name;
+            $_POST['thumb_url'] = $cover->thumb_url;
+
+            if (!$request->request->get('cover') && !empty($cover->name)) {
+                $coverFile = $cover->kiosko_path . $cover->path . $cover->name;
+                $coverThumb = $cover->kiosko_path . $cover->path . $cover->thumb_url;
+
+                // Remove old files if fileinput changed
+                if (file_exists($coverFile)) {
+                    unlink($coverFile);
+                }
+
+                if (file_exists($coverThumb)) {
+                    unlink($coverThumb);
+                }
+
+                $_POST['name'] = '';
+                $_POST['thumb_url'] = '';
+            }
+
+            // Handle new file
+            if ($request->files->get('cover')) {
+                $_POST['name'] = date('His').'-'.$_POST['category'].'.pdf';
+                $_POST['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
+                $path = $cover->kiosko_path . $cover->path;
+
+                // Create folder if it doesn't exist
+                if (!file_exists($path)) {
+                    \Onm\FilesManager::createDirectory($path);
+                }
+                $uploadStatus = false;
+
+                $file = $request->files->get('cover');
+                $uploadStatus = $file->isValid() && $file->move(realpath($path), $_POST['name']);
+
+                if (!$uploadStatus) {
+                    throw new \Exception(
+                        sprintf(
+                            _('Unable to upload the file. Try to upload a file smaller than %d MB'),
+                            (int) ini_get('upload_max_filesize')
+                        )
+                    );
+                }
+
+                $cover->createThumb($_POST['name'], $cover->path);
+            }
+
             $cover->update($_POST);
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Cover updated successfully.")
             );
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_kiosko_show',
-                array('id' => $cover->id)
-            )
+            $this->generateUrl('admin_kiosko_show', [ 'id' => $cover->id ])
         );
     }
 

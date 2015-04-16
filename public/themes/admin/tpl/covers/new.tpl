@@ -1,7 +1,15 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" filters="cssrewrite"}
+    <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="footer-js" append}
-  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"}
+  {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
+    @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js
+  "}
     <script type="text/javascript" src="{$asset_url}"></script>
   {/javascripts}
 
@@ -13,6 +21,11 @@
 
       $('#title').on('change', function(e, ui) {
         fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+      });
+
+      $('.fileinput').fileinput({
+        name: 'cover',
+        uploadtype:'image'
       });
     });
   </script>
@@ -65,6 +78,8 @@
                 <div class="controls">
                   <input type="text" id="title" name="title" value="{$cover->title|default:""}" required="required" class="form-control"/>
                 </div>
+                {$cover->name}
+                {$cover->thumb_url}
               </div>
               <div class="form-group">
                 <label for="date" class="form-label">{t}Date{/t}</label>
@@ -94,13 +109,27 @@
               <div class="form-group">
                 <label for="date" class="form-label">{t}File{/t}</label>
                 <div class="controls">
-                  {if is_object($cover)}
-                    <div class="thumbnail" style="display:inline-block;">
-                      <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->name|regex_replace:"/.pdf$/":".jpg"}" title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}"/>
+                  <div class="fileinput {if $cover->name}fileinput-exists{else}fileinput-new{/if}" data-trigger="fileinput">
+                    <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
                     </div>
-                  {else}
-                    <input type="file" id="file" name="file" required="required" />
-                  {/if}
+                    <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                      {if $cover->path}
+                        <img src="{$KIOSKO_IMG_URL}{$cover->path}{$cover->thumb_url|regex_replace:"/.pdf$/":".jpg"}" style="max-width:200px;" >
+                      {/if}
+                    </div>
+                    <div>
+                      <span class="btn btn-file">
+                        <span class="fileinput-new">{t}Add new photo{/t}</span>
+                        <span class="fileinput-exists">{t}Change{/t}</span>
+                        <input type="file"/>
+                        <input type="hidden" name="cover" class="file-input" value="1">
+                      </span>
+                      <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                        <i class="fa fa-trash-o"></i>
+                        {t}Remove{/t}
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
