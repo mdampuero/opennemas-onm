@@ -69,7 +69,7 @@
           <input name="html" type="hidden" ng-value="html">
           <input name="hiddenHtml" type="hidden" value="{$newsletter->html|escape:'html'}">
           <div class="form-group" ng-show="edit">
-            <textarea class="form-control" ng-model="html" cols="30" rows="10"></textarea>
+            <textarea onm-editor class="form-control" ng-model="html" cols="30" rows="10"></textarea>
           </div>
           <div class="form-group" ng-show="!edit">
             <div class="controls">
