@@ -20,7 +20,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        *
        * @type string
        */
-      var defaultSidebarTpl = '<div class="sidebar">' +
+      var defaultSidebarTpl = '<div class="sidebar"[ngAttrs]>' +
         '<div class="sidebar-wrapper">' +
           '<div class="spinner">' +
             '<i class="fa fa-circle-o-notch fa-3x fa-spin"></i>' +
@@ -61,7 +61,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
        *
        * @type string
        */
-      var sidebarTpl = '<div class="[class][position][inverted]"[id][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
+      var sidebarTpl = '<div class="[class][position][inverted]"[id][ngAttrs][swipeable] ng-mouseleave="ngModel.mouseLeave()">' +
           '<div class="overlay" ng-click="ngModel.open()" ng-mouseenter="ngModel.mouseEnter()"></div>' +
           '<div class="sidebar-wrapper">' +
             '<scrollable>' +
@@ -135,9 +135,20 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         /**
          * Returns the default HTML for sidebar.
          *
+         * @param {Object} attrs Object with angular attributes.
+         *
          * @return string The default HTML code for the sidebar.
          */
-        sidebar.default = function() {
+        sidebar.default = function(attrs) {
+          var ngAttrs = '';
+
+          for (var key in attrs) {
+            var newKey = key.replace(/([A-Z]{1})/, '-$1'.toLowerCase());
+            ngAttrs += ' ' + newKey + '="' + attrs[key] + '"';
+          }
+
+          defaultSidebarTpl = defaultSidebarTpl.replace('[ngAttrs]', ngAttrs);
+
           return defaultSidebarTpl;
         };
 
@@ -332,9 +343,11 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         /**
          * Returns the HTML for a sidebar.
          *
+         * @param {Object} attrs Object with angular attributes.
+         *
          * @return string The HTML code for the given sidebar
          */
-        sidebar.renderSidebar = function() {
+        sidebar.renderSidebar = function(attrs) {
           var border    = '';
           var div       = sidebarTpl;
           var id        = '';
@@ -343,6 +356,14 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
           var items     = '';
           var position  = '';
           var swipeable = '';
+          var ngAttrs = '';
+
+          var ngAttrs = '';
+
+          for (var key in attrs) {
+            var newKey = key.replace(/([A-Z]{1})/, '-$1'.toLowerCase());
+            ngAttrs += ' ' + newKey + '="' + attrs[key] + '"';
+          }
 
           if (this.id) {
             id = ' id="' + this.id + '"';
@@ -377,12 +398,12 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
           }
 
           div = div.replace('[class]', this.class);
-
           div = div.replace('[id]', id);
           div = div.replace('[footer]', footer);
           div = div.replace('[border]', border);
           div = div.replace('[items]', items);
           div = div.replace('[inverted]', inverted);
+          div = div.replace('[ngAttrs]', ngAttrs);
           div = div.replace('[position]', position);
           div = div.replace('[swipeable]', swipeable);
 
@@ -392,10 +413,12 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         /**
          * Returns the HTML for the current model.
          *
+         * @param {Object} attrs Object with angular attributes.
+         *
          * @return string The HTML code for the current model.
          */
-        sidebar.render = function() {
-          return this.renderSidebar(this.model);
+        sidebar.render = function(attrs) {
+          return this.renderSidebar(attrs);
         };
 
         /**
@@ -449,9 +472,9 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
    * @param Object routing    The routing service.
    * @param Object sidebar    The sidebar factory.
    */
-  .directive('sidebar', ['$compile', '$http', '$rootScope', '$window',
+  .directive('sidebar', ['$compile', '$filter', '$http', '$rootScope', '$window',
     'routing', 'sidebar',
-    function($compile, $http, $rootScope, $window, routing,
+    function($compile, $filter, $http, $rootScope, $window, routing,
         sidebar) {
       return {
         restrict: 'E',
@@ -461,6 +484,14 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
         link: function($scope, elm, attrs) {
           if (!attrs.src) {
             return;
+          }
+
+          // Get angular attributes (ng-class, ng-show, ...)
+          var angularAttrs = {};
+          for (var key in attrs) {
+            if (key !== 'ngModel' && /ng([A-Z][a-x]*)+/.test(key)) {
+              angularAttrs[key] = attrs[key];
+            }
           }
 
           $scope.ngModel = sidebar.init({
@@ -473,7 +504,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
             swipeable: attrs.swipeable === 'true' ? attrs.swipeable : true
           });
 
-          var dft = $compile($scope.ngModel.default())($scope);
+          var dft = $compile($scope.ngModel.default(angularAttrs))($scope);
           elm.replaceWith(dft);
 
           var url = routing.generate(attrs.src);
@@ -502,7 +533,7 @@ angular.module('onm.sidebar', ['onm.history', 'onm.routing'])
               $scope.ngModel.check();
             });
 
-            var html = $scope.ngModel.render();
+            var html = $scope.ngModel.render(angularAttrs);
             var e    = $compile(html)($scope);
 
             e.find('.sidebar').bind('mouseenter', function() {

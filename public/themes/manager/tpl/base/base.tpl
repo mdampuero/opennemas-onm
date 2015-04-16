@@ -82,7 +82,7 @@
       <p>To use Opennemas, please enable JavaScript.</p>
     </noscript>
   </div>
-  <header class="header navbar navbar-inverse">
+  <header class="header navbar navbar-inverse" ng-class="{ 'hidden': !auth.status }">
     <div class="navbar-inner">
       <div class="header-seperation">
         <a class="header-logo pull-left" href="{url name=manager_welcome}">
@@ -185,7 +185,7 @@
       </div>
     </div>
   </header>
-  <sidebar class="sidebar" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
+  <sidebar class="sidebar" ng-class="{ 'hidden': !$parent.auth.status }" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
   <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
     <!-- BEGIN PAGE CONTAINER-->
     <div class="page-content">
