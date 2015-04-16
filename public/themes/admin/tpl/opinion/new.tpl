@@ -133,7 +133,7 @@
                             </label>
                             {acl isAllowed='PHOTO_ADMIN'}
                                 <div class="pull-right">
-                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.body">
+                                    <div class="btn btn-default btn-mini" media-picker media-picker-selection="true" media-picker-max-size="5" media-picker-mode="explore,upload" media-picker-target="editor.body">
                                       {t}Insert image{/t}
                                     </div>
                                 </div>
