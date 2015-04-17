@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 17:41+0200\n"
-"PO-Revision-Date: 2015-04-16 16:52+0200\n"
+"POT-Creation-Date: 2015-04-17 11:58+0200\n"
+"PO-Revision-Date: 2015-04-17 12:04+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1634,16 +1634,43 @@ msgstr "Non se puido atopar o elemento co identificador «%s»"
 msgid "%d item(s) permanently removed successfully"
 msgstr "%d elemento(s) eliminado(s) permanentemente correctamente"
 
-msgid "Item "
-msgstr "Elemento"
+msgid "Item published successfully"
+msgstr "Elemento publicado correctamente"
+
+msgid "Item unpublished successfully"
+msgstr "Elemento despublicado correctamente"
 
 #, php-format
 msgid "Unable to update the item with id \"%d\""
 msgstr "Non se puido actualizar o elemento co identificador «%d»"
 
 #, php-format
-msgid "%d item(s) "
-msgstr "%d elemento(s)"
+msgid "%d item(s) published successfully"
+msgstr "%d elemento(s) publicado(s) correctamente"
+
+#, php-format
+msgid "%d item(s) unpublished successfully"
+msgstr "%d elemento(s) despublicado(s) correctamente"
+
+msgid "Item added to favorites successfully"
+msgstr "Elemento engadido a favoritos correctamente"
+
+msgid "Item removed from favorites successfully"
+msgstr "Elemento retirado de favoritos correctamente"
+
+msgid "Item added to home successfully"
+msgstr "Elemento engadido á portada correctamente"
+
+msgid "Item removed from home successfully"
+msgstr "Elemento retirado da portada correctamente"
+
+#, php-format
+msgid "%d item(s) added to home successfully"
+msgstr "%d elemento(s) engadido(s) á portada correctamente"
+
+#, php-format
+msgid "%d item(s) removed from home successfully"
+msgstr "%d elemento(s) retirado(s) da portada correctamente"
 
 #, php-format
 msgid "Unable to save the position for the item with id \"%d\""
@@ -1708,17 +1735,17 @@ msgstr "Tódalas categorías"
 msgid "All content types"
 msgstr "Todos os tipos de contido"
 
-msgid "Contents in frontpage"
-msgstr "Contidos na portada"
-
 msgid "All months"
 msgstr "Todos os meses"
 
-msgid "Thumbnail details"
-msgstr "Detalles da miniatura"
+msgid "Category"
+msgstr "Categoria"
 
-msgid "Item details"
-msgstr "Detalles do elemento"
+msgid "Contents in frontpage"
+msgstr "Contidos na portada"
+
+msgid "Created"
+msgstr "Creado"
 
 msgid "Description"
 msgstr "Descrición"
@@ -1729,11 +1756,20 @@ msgstr "Seleccione o elemento a insertar"
 msgid "Insert"
 msgstr "Inserir"
 
+msgid "Item details"
+msgstr "Detalles do elemento"
+
 msgid "items selected"
 msgstr "elementos seleccionados"
 
 msgid "Search by name"
 msgstr "Filtrar por nome"
+
+msgid "Title"
+msgstr "Titulo"
+
+msgid "Thumbnail details"
+msgstr "Detalles da miniatura"
 
 msgid "Upload new media"
 msgstr "Subir novo multimedia"
@@ -2166,9 +2202,6 @@ msgstr "Xestor avanzado de portadas"
 
 msgid "Blog"
 msgstr "Blog"
-
-msgid "Category"
-msgstr "Categoria"
 
 msgid "Cronicas customizations"
 msgstr "Personalizacións para Crónicas"
@@ -2860,9 +2893,6 @@ msgstr ""
 "Pode que ao cambiar un filtro axude ou pode engadir usando o botón «Crear» "
 "de enriba."
 
-msgid "Title"
-msgstr "Titulo"
-
 msgid "Updated"
 msgstr "Actualizado"
 
@@ -3491,9 +3521,6 @@ msgstr "Novo ficheiro"
 msgid "Unable to find any file that matches your search."
 msgstr "Non se puideron atopar ficheiros que coincidan coa súa busca."
 
-msgid "Created"
-msgstr "Creado"
-
 msgid "Unassigned"
 msgstr "Sen asignar"
 
@@ -3920,13 +3947,11 @@ msgstr "Idioma do usuario"
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
-#, fuzzy
 msgid "Deactivated"
-msgstr "Desactivar"
+msgstr "Desactivado"
 
-#, fuzzy
 msgid "Used to enable or disable user access to control panel."
-msgstr "Este usuario non ten acceso ao panel de control."
+msgstr "Úseo para activar ou desactivar o acceso ao panel de control."
 
 msgid "Group"
 msgstr "Grupo"
@@ -4464,9 +4489,8 @@ msgstr "Non se puideron atopar autores que coincidan coa súa busca."
 msgid "Avatar"
 msgstr "Avatar"
 
-#, fuzzy
 msgid "No biography set"
-msgstr "Biografia curta"
+msgstr "No ten biografía estabelecida"
 
 msgid "Delete video"
 msgstr "Eliminar vídeo"
@@ -7014,6 +7038,12 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Item "
+#~ msgstr "Elemento"
+
+#~ msgid "%d item(s) "
+#~ msgstr "%d elemento(s)"
 
 #~ msgid "Account settings"
 #~ msgstr "Preferencias da conta"
