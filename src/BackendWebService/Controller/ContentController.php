@@ -61,7 +61,7 @@ class ContentController extends Controller
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = $this->convertToUtf8($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
         foreach ($results as &$result) {
@@ -1130,28 +1130,5 @@ class ContentController extends Controller
         }
 
         return $extra;
-    }
-
-    /**
-     * Converts all contents to utf-8.
-     *
-     * @param  array $contents Contents to convert.
-     * @return array           Contents with properties in utf-8.
-     */
-    protected function convertToUtf8($contents)
-    {
-        foreach ($contents as &$content) {
-            foreach (get_object_vars($content) as $key => $value) {
-                if (is_string($value)) {
-                    $content->{$key} = iconv(
-                        mb_detect_encoding($value),
-                        'utf-8',
-                        $value
-                    );
-                }
-            }
-        }
-
-        return $contents;
     }
 }

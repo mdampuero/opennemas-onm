@@ -60,6 +60,7 @@ class PickerController extends Controller
         $filter = implode(' AND ', $filter);
 
         $results = $em->findBy($filter, $order, $epp, $page);
+        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($filter);
 
         return new JsonResponse(

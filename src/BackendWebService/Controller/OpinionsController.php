@@ -41,7 +41,7 @@ class OpinionsController extends ContentController
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = $this->convertToUtf8($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
         foreach ($results as &$result) {
