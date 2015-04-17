@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 17:41+0200\n"
-"PO-Revision-Date: 2015-04-16 17:44+0200\n"
+"POT-Creation-Date: 2015-04-17 11:58+0200\n"
+"PO-Revision-Date: 2015-04-17 12:02+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1650,16 +1650,43 @@ msgstr "No se pudo encontrar el elemento con el identificador «%s»"
 msgid "%d item(s) permanently removed successfully"
 msgstr "%d elemento(s) eliminado(s) de forma permanente con éxito"
 
-msgid "Item "
-msgstr "Elemento"
+msgid "Item published successfully"
+msgstr "Elemento publicado correctamente"
+
+msgid "Item unpublished successfully"
+msgstr "Elemento despublicado correctamente"
 
 #, php-format
 msgid "Unable to update the item with id \"%d\""
 msgstr "No se pudo actualizar el elemento con el identificador «%d»"
 
 #, php-format
-msgid "%d item(s) "
-msgstr "%s elemento(s)"
+msgid "%d item(s) published successfully"
+msgstr "%d elemento(s) publicado(s) correctamente"
+
+#, php-format
+msgid "%d item(s) unpublished successfully"
+msgstr "%d elemento(s) despublicado(s) correctamente"
+
+msgid "Item added to favorites successfully"
+msgstr "Elemento añadido a favoritos correctamente"
+
+msgid "Item removed from favorites successfully"
+msgstr "Elemento retirado de favoritos correctamente"
+
+msgid "Item added to home successfully"
+msgstr "Elemento añadido a la portada correctamente"
+
+msgid "Item removed from home successfully"
+msgstr "Elemento retirado a la portada correctamente"
+
+#, php-format
+msgid "%d item(s) added to home successfully"
+msgstr "%d elemento(s) añadidos(s) a la portada correctamente"
+
+#, php-format
+msgid "%d item(s) removed from home successfully"
+msgstr "%d elemento(s) retirados(s) de la portada correctamente"
 
 #, php-format
 msgid "Unable to save the position for the item with id \"%d\""
@@ -1724,17 +1751,17 @@ msgstr "Todas las categorías"
 msgid "All content types"
 msgstr "Todos los tipos de contenido"
 
-msgid "Contents in frontpage"
-msgstr "Contenidos en portada"
-
 msgid "All months"
 msgstr "Todos los meses"
 
-msgid "Thumbnail details"
-msgstr "Detalles de la miniatura"
+msgid "Category"
+msgstr "Categoría"
 
-msgid "Item details"
-msgstr "Detalles del elemento"
+msgid "Contents in frontpage"
+msgstr "Contenidos en portada"
+
+msgid "Created"
+msgstr "Creado"
 
 msgid "Description"
 msgstr "Descripción"
@@ -1745,11 +1772,20 @@ msgstr "Selecciona el elemento a insertar"
 msgid "Insert"
 msgstr "Insertar"
 
+msgid "Item details"
+msgstr "Detalles del elemento"
+
 msgid "items selected"
 msgstr "elementos seleccionados"
 
 msgid "Search by name"
 msgstr "Filtrar por nombre"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Thumbnail details"
+msgstr "Detalles de la miniatura"
 
 msgid "Upload new media"
 msgstr "Subir nuevo fichero multimedia"
@@ -2189,9 +2225,6 @@ msgstr "Gestor de portadas avanzado"
 
 msgid "Blog"
 msgstr "Blog"
-
-msgid "Category"
-msgstr "Categoría"
 
 msgid "Cronicas customizations"
 msgstr "Personalizaciones para Cronicas"
@@ -2888,9 +2921,6 @@ msgstr ""
 "Puede que cambiando los filtros ayude o tambien puede usar el botón «Crear» "
 "de arriba."
 
-msgid "Title"
-msgstr "Título"
-
 msgid "Updated"
 msgstr "Actualizado"
 
@@ -3521,9 +3551,6 @@ msgstr "Nuevo fichero"
 
 msgid "Unable to find any file that matches your search."
 msgstr "No se pudieron encontrar archivos que coincidan con tu búsqueda."
-
-msgid "Created"
-msgstr "Creado"
 
 msgid "Unassigned"
 msgstr "Sin asignar"
@@ -7070,6 +7097,12 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "Item "
+#~ msgstr "Elemento"
+
+#~ msgid "%d item(s) "
+#~ msgstr "%s elemento(s)"
 
 #~ msgid "Account settings"
 #~ msgstr "Preferencias de la cuenta"
