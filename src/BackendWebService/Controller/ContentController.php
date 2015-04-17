@@ -930,7 +930,7 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->toggleInHome();
 
-            if ($in_home) {
+            if ($content->in_home) {
                 $message = _('Item added to home successfully');
             } else {
                 $message = _('Item removed from home successfully');
