@@ -71,7 +71,20 @@ class OpinionsController extends Controller
         ];
 
         foreach ($allAuthors as $author) {
-            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
+            $blog = 0;
+            if (isset($author->params) &&
+                is_array($author->params) &&
+                array_key_exists('is_blog', $author->params) &&
+                $author->params['is_blog'] == 1
+            ) {
+                $blog = 1;
+                $author->name = $author->name.' (Blog)';
+            }
+
+            $authors[] = [
+                'name'   => $author->name,
+                'value'  => $author->id,
+            ];
         }
 
         return $this->render(
