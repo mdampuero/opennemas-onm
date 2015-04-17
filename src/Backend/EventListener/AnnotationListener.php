@@ -44,9 +44,8 @@ class AnnotationListener
 
         foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
             // Validate module access to user
-            if(isset($annotation->module)) {
+            if (isset($annotation->module)) {
                 if (!\Onm\Module\ModuleManager::isActivated($annotation->module)) {
-
                     $redirectUrl = $this->router->generate('admin_login');
 
                     throw new ModuleNotActivatedException();

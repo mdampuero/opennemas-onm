@@ -350,7 +350,7 @@ class CacheManagerController extends Controller
 
 
         if ($isContent) {
-            $content = array_filter($contents, function($contentItem) use ($cache) {
+            $content = array_filter($contents, function ($contentItem) use ($cache) {
                 if ($contentItem->id == $cache['resource']) {
                     return $contentItem;
                 }
