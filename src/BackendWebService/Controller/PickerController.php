@@ -227,7 +227,7 @@ class PickerController extends Controller
         // Get contents for this home
         $results = $cm->getContentsForHomepageOfCategory(0);
 
-        $results = array_filter($results, function($value) {
+        $results = array_filter($results, function ($value) {
             return $value->content_type_name != 'widget';
         });
 

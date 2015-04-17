@@ -172,7 +172,8 @@ class NewsletterManager extends BaseManager
         $tpl->assign('current_date', $currentDate);
 
         $publicUrl = preg_replace(
-            '@^http[s]?://(.*?)/$@i', 'http://$1',
+            '@^http[s]?://(.*?)/$@i',
+            'http://$1',
             getService('instance_manager')->current_instance->getMainDomain()
         );
 
