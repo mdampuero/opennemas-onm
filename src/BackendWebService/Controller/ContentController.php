@@ -642,11 +642,15 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->setAvailable($status, $this->getUser()->id);
 
+            if ($status) {
+                $message = _('Item published successfully');
+            } else {
+                $message = _('Item unpublished successfully');
+            }
             $status = $content->content_status;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item ' . ($status ? 'published' : 'unpublished')
-                    . ' successfully'),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -734,12 +738,15 @@ class ContentController extends Controller
         }
 
         if ($updated > 0) {
+            if ($available) {
+                $message = sprintf(_('%d item(s) published successfully'), count($updated));
+            } else {
+                $message = sprintf(_('%d item(s) unpublished successfully'), count($updated));
+            }
+
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) ' .
-                    ($available ? 'published' : 'unpublished') . ' successfully'),
-                    count($updated)
-                ),
+                'message' => $message,
                 'type'    => 'success'
             );
         }
@@ -793,11 +800,16 @@ class ContentController extends Controller
             $content->toggleFavorite();
 
             $favorite = $content->favorite;
+
+            if ($favorite) {
+                $message = _('Item added to favorites successfully');
+            } else {
+                $message = _('Item removed from favorites successfully');
+            }
+
             $success[] = array(
                 'id'      => $id,
-                'message' => _(
-                    'Item ' . ($favorite ? 'added to favorites' : 'removed from favorites') . ' successfully'
-                ),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -857,12 +869,16 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->toggleInHome();
 
+            if ($in_home) {
+                $message = _('Item added to home successfully');
+            } else {
+                $message = _('Item removed from home successfully');
+            }
+
             $inHome = $content->in_home;
             $success[] = array(
                 'id'      => $id,
-                'message' => _(
-                    'Item ' . ($inHome ? 'added to home' : 'removed from home') . ' successfully'
-                ),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -950,12 +966,15 @@ class ContentController extends Controller
         }
 
         if ($updated > 0) {
+            if ($inHome) {
+                $message = sprintf(_('%d item(s) added to home successfully'), count($updated));
+            } else {
+                $message = sprintf(_('%d item(s) removed from home successfully'), count($updated));
+            }
+
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(
-                    _('%d item(s) '. ($inHome ? 'added to home' : 'removed from home') .' successfully'),
-                    count($updated)
-                ),
+                'message' => $message,
                 'type'    => 'success'
             );
         }
