@@ -495,7 +495,7 @@ class NewsAgencyController extends Controller
         }
 
         $content = null;
-        if ($element->hasPhotos()) {
+        if (is_object($element) && $element->hasPhotos()) {
             foreach ($element->getPhotos() as $photo) {
                 if ($photo->getId() == $attachmentId) {
                     $filePath = null;
@@ -1009,7 +1009,6 @@ class NewsAgencyController extends Controller
         if ($element->getServicePartyName() == 'Opennemas') {
             // Check if allow to import authors
             if (isset($server['author']) && $server['author'] == '1') {
-
                 // Get author object,decode it and create new author
                 $authorObj = $element->getRightsOwner();
 
