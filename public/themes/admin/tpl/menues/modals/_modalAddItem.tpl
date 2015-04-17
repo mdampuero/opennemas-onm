@@ -72,7 +72,7 @@
     {if count($categories) > 0}
       <div ng-if="type == 'category'" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
         <div class="form-group" ng-repeat="category in categories">
-          <div class="checkbox">
+          <div class="checkbox col-md-6">
             <input id="checkbox-frontpage-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
             <label for="checkbox-frontpage-[% $index %]">
               [% category.title %]
@@ -85,7 +85,7 @@
       {if count($albumCategories) > 0}
         <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($albumCategories)|replace:'"':'\''}">
           <div class="form-group" ng-repeat="category in albumCategories">
-            <div class="checkbox">
+            <div class="checkbox col-md-6">
               <input id="checkbox-album-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
               <label for="checkbox-album-[% $index %]">
                 [% category.title %]
@@ -99,7 +99,7 @@
       {if count($videoCategories) > 0}
         <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($videoCategories)|replace:'"':'\''}">
           <div class="form-group" ng-repeat="category in videoCategories">
-            <div class="checkbox">
+            <div class="checkbox col-md-6">
               <input id="checkbox-video-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
               <label for="checkbox-video-[% $index %]">
                 [% category.title %]
@@ -113,7 +113,7 @@
       {if count($pollCategories) > 0}
         <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($pollCategories)|replace:'"':'\''}">
           <div class="form-group" ng-repeat="category in pollCategories">
-            <div class="checkbox">
+            <div class="checkbox col-md-6">
               <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
               <label for="checkbox-poll-[% $index %]">
                 [% category.title %]
@@ -126,7 +126,7 @@
     {if count($pages) > 0}
       <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|replace:'"':'\''}">
         <div class="form-group" ng-repeat="page in pages">
-          <div class="checkbox">
+          <div class="checkbox col-md-6">
             <input id="checkbox-module-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
             <label for="checkbox-module-[% $index %]">
               [% page.title %]
@@ -138,7 +138,7 @@
     {if count($staticPages) > 0}
       <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($staticPages)|replace:'"':'\''}">
         <div class="form-group" ng-repeat="page in staticPages">
-          <div class="checkbox">
+          <div class="checkbox col-md-6">
             <input id="checkbox-static-pages-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
             <label for="checkbox-static-pages-[% $index %]">
               [% page.title %]
@@ -153,7 +153,7 @@
           <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
             <div class="form-group" ng-repeat="category in params.categories" >
-              <div class="checkbox">
+              <div class="checkbox col-md-6">
                 <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
                 <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
                   [% category %]
@@ -168,7 +168,7 @@
       {if count($categories) > 0}
         <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|replace:'"':'\''}">
           <div class="form-group" ng-repeat="category in automaticCategories">
-            <div class="checkbox">
+            <div class="checkbox col-md-6">
               <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
               <label for="checkbox-poll-[% $index %]">
                 [% category.title %]
@@ -183,7 +183,7 @@
           <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
             <div class="form-group" ng-repeat="category in params.categories">
-              <div class="checkbox">
+              <div class="checkbox col-md-6">
                 <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
                 <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
                   [% category %]
