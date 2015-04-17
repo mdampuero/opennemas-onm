@@ -82,7 +82,7 @@
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
             </ol>
           </div>
-          <button class="btn btn-white btn-large" type="button" ng-click="open('modal-add-item')">
+          <button class="btn btn-white btn-large m-t-15" type="button" ng-click="open('modal-add-item')">
             <i class="fa fa-plus"></i>
             {t}Add items{/t}
           </button>
