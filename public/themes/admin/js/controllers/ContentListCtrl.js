@@ -349,7 +349,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param mixed  value   New value.
      * @param string loading Name of the property used to show work-in-progress.
      */
-    $scope.updateItem = function(index, id, route, name, value, loading) {
+    $scope.updateItem = function(index, id, route, name, value, loading, reload) {
       // Load shared variable
       var contents = $scope.contents;
 
@@ -367,6 +367,10 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         contents[index][loading] = 0;
         contents[index][name] = response[name];
         $scope.renderMessages(response.messages);
+
+        if (reload) {
+          $scope.list($scope.route);
+        }
       }).error(function(response) {
         contents[index][loading] = 0;
         $scope.renderMessages(response.messages);
