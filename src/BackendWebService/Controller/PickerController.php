@@ -231,6 +231,8 @@ class PickerController extends Controller
             return $value->content_type_name != 'widget';
         });
 
+        $results = \Onm\StringUtils::convertToUtf8($results);
+
         return new JsonResponse(
             array(
                 'epp'     => count($results),
