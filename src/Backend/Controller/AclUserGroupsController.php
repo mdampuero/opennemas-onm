@@ -57,6 +57,7 @@ class AclUserGroupsController extends Controller
     {
         $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
+        // Check if user group exists
         $userGroup = new \UserGroup($id);
         if (is_null($userGroup->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -66,13 +67,26 @@ class AclUserGroupsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_acl_usergroups'));
         }
+
+        // Get all privileges groupd by module
         $privilege = new \Privilege();
+        $allPrivilegesByModules = $privilege->getPrivilegesByModules();
+        $totalPrivilegesByModule = [];
+        foreach ($allPrivilegesByModules as $module => $elements) {
+            $totalPrivilegesByModule[$module] = 0;
+            foreach ($elements as $element) {
+                if (in_array($element->id, $userGroup->privileges)) {
+                    $totalPrivilegesByModule[$module]++;
+                }
+            }
+        }
 
         return $this->render(
             'acl/user_group/new.tpl',
             array(
-                'user_group' => $userGroup,
-                'modules'    => $privilege->getPrivilegesByModules(),
+                'user_group'      => $userGroup,
+                'modules'         => $allPrivilegesByModules,
+                'total_activated' => $totalPrivilegesByModule,
             )
         );
     }
