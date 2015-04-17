@@ -75,7 +75,7 @@
               <div id="module{$privileges@index}" class="panel-collapse collapse in">
                 <div class="panel-body">
                   {foreach $privileges as $privilege}
-                  <div class="col-sm-4">
+                  <div class="col-xs-12 col-md-6 col-lg-4">
                     <div class="checkbox check-default">
                       <input id="checkbox_{$privileges@index}{$privilege@index}" type="checkbox" name="privileges[]" value="{$privilege->id}" {if $user_group->containsPrivilege($privilege->id)}checked="checked"{/if}>
                       <label for="checkbox_{$privileges@index}{$privilege@index}">
