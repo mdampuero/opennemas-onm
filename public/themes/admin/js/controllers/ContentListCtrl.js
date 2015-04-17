@@ -105,9 +105,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       // Filters used in GUI
       $scope.criteria = filters;
 
-      if (epp) {
+      console.log(epp, angular.isUndefined(epp));
+      if (!angular.isUndefined(epp)) {
         $scope.pagination.epp = epp;
       }
+      console.log($scope.pagination.epp);
 
       // Add content_type_name if it isn't a list of all content types
       if (contentName !== null && contentName !== 'content'

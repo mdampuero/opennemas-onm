@@ -38,23 +38,23 @@
   </div>
   <script type="text/ng-template" id="opinion-item">
     <div class="menu-item clearfix" ui-tree-handle>
-      <span class="opinion-author" ng-if="item.type_opinion == 1">{t}Editorial{/t}</span>
-      <span class="opinion-author" ng-if="item.type_opinion == 2">{t}Director{/t}</span>
-      <span class="opinion-author" ng-if="item.type_opinion == 0">
+      <span class="item-author" ng-if="item.type_opinion == 1">{t}Editorial{/t}</span>
+      <span class="item-author" ng-if="item.type_opinion == 2">{t}Director{/t}</span>
+      <span class="item-author" ng-if="item.type_opinion == 0">
         <a data-nodrag ng-href="[% edit(item.author.id, 'admin_acl_user_show') %]">
           [% item.author.name %]
         </a>
       </span>
       <span class="h-seperate"></span>
-      <span class="opinion-title">
+      <span class="item-title">
         <a data-nodrag ng-href="[% edit(item.id, 'admin_opinion_show') %]">
           [% item.title %]
         </a>
       </span>
       <span class="h-seperate hidden-xs hidden-sm"></span>
-      <span class="hidden-xs hidden-sm opinion-created">[% item.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</span>
+      <span class="hidden-xs hidden-sm item-created">[% item.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</span>
       <span class="h-seperate hidden-xs"></span>
-      <span class="hidden-xs opinion-views">{t}Views{/t}: [% item.views ? item.views : 0 %]</span>
+      <span class="hidden-xs item-views">{t}Views{/t}: [% item.views ? item.views : 0 %]</span>
       </div>
     </div>
   </script>

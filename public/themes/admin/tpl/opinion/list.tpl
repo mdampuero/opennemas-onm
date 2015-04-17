@@ -1,11 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-  {stylesheets src="@AdminTheme/less/_opinion.less" filters="cssrewrite,less"}
-    <link rel="stylesheet" type="text/css" href="{$asset_url}">
-  {/stylesheets}
-{/block}
-
 {block name="header-js" append}
 {javascripts src="@AdminTheme/js/onm/jquery-functions.js"}
 <script text="text/javascript" src="{$asset_url}"></script>
@@ -22,9 +16,9 @@
             <h4>
               <i class="fa fa-quote-right"></i>
               {if $contentType eq 'blog'}
-              Posts
+                Posts
               {else}
-              {t}Opinions{/t}
+                {t}Opinions{/t}
               {/if}
             </h4>
           </li>
@@ -34,9 +28,9 @@
           <li class="quicklinks dropdown hidden-xs">
             <div data-toggle="dropdown">
               {if $home}
-              {t}Opinion frontpage{/t}
+                {t}Opinion frontpage{/t}
               {else}
-              {t}Listing{/t}
+                {t}Listing{/t}
               {/if}
               <span class="caret"></span>
             </div>

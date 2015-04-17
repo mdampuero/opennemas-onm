@@ -84,6 +84,67 @@ class ContentController extends Controller
     }
 
     /**
+     * Returns a list of contents in home in JSON format.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function listHomeAction(Request $request, $contentType)
+    {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
+                        )
+                    )
+                )
+            );
+        }
+
+        $em = $this->get('entity_repository');
+
+        $order = '`position` asc';
+        $search = [
+            'content_type_name' => [ [ 'value' => $contentType ] ],
+            'in_home' => [ [ 'value' => 1 ] ],
+        ];
+
+        $results = $em->findBy($search, $order);
+        $results = \Onm\StringUtils::convertToUtf8($results);
+        $total   = $em->countBy($search);
+
+        foreach ($results as &$result) {
+            $createdTime = new \DateTime($result->created);
+            $result->created = $createdTime->format(\DateTime::ISO8601);
+
+            $updatedTime = new \DateTime($result->changed);
+            $result->changed = $updatedTime->format(\DateTime::ISO8601);
+        }
+
+        return new JsonResponse(
+            array(
+                'extra'             => $this->loadExtraData($results),
+                'results'           => $results,
+                'total'             => $total,
+            )
+        );
+    }
+
+
+    /**
      * Deletes a content.
      *
      * @param  integer      $id          Content id.
@@ -1027,7 +1088,8 @@ class ContentController extends Controller
         ) {
             $pos = 1;
             foreach ($positions as $id) {
-                $file= new \Attachment($id);
+                $contentType = \classify($contentType);
+                $file= new $contentType($id);
 
                 if ($file->setPosition($pos)) {
                     $updated[] = $id;
