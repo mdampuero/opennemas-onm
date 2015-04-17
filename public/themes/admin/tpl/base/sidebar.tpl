@@ -1,5 +1,5 @@
 <div class="sidebar" id="main-menu" ng-swipe-right="sidebar.swipeOpen()" ng-swipe-left="sidebar.swipeClose()" ng-mouseleave="sidebar.mouseLeave()">
-  <div class="overlay" ng-click="sidebar.open()" ng-mouseenter="sidebar.mouseEnter()"></div>
+  <div class="overlay" ng-click="sidebar.open()"></div>
   <div class="sidebar-wrapper">
   <scrollable>
     <div class="user-info-wrapper clearfix">
