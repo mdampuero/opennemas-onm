@@ -217,6 +217,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="col-md-4">
                 {if isset($user->id) && $user->id == $smarty.session.userid }
@@ -244,79 +245,6 @@
                         </div>
                     </div>
                 {/if}
-                {acl isAllowed="USER_ADMIN"}
-                    {is_module_activated name="PAYWALL"}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="grid simple">
-                                    <div class="grid-title">
-                                        <h4>{t}Paywall{/t}</h4>
-                                    </div>
-                                    <div class="grid-body">
-                                        <div class="form-group">
-                                            <label class="form-label" for="paywall_time_limit">
-                                                {t}Paywall time limit:{/t}
-                                            </label>
-                                            <div class="controls">
-                                                <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->meta['paywall_time_limit']}"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {/is_module_activated}
-                {/acl}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="grid simple">
-                            <div class="grid-title">
-                                <h4>{t}Privileges{/t}</h4>
-                            </div>
-                            <div class="grid-body">
-                                {acl isAllowed="GROUP_CHANGE"}
-                                    <div class="form-group">
-                                        <label for="id_user_group">
-                                            {t}User group{/t}
-                                        </label>
-                                        <select class="select2-multi" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
-                                            {if $smarty.session.isMaster}
-                                                <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
-                                            {/if}
-                                            {foreach $user_groups as $group}
-                                                {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
-                                                    <option  value="{$group->id}" selected="selected">{$group->name}</option>
-                                                {else}
-                                                    <option  value="{$group->id}">{$group->name}</option>
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </div>
-                                {/acl}
-                                {acl isAllowed="USER_CATEGORY"}
-                                    <div class="form-group">
-                                        <label for="id_user_group">
-                                            {t}Categories{/t}
-                                        </label>
-                                        <select class="select2-multi" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
-                                            <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                                            {foreach item="c_it" from=$content_categories}
-                                                <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                                                {if count($c_it->childNodes)>0}
-                                                    {foreach item="sc_it" from=$c_it->childNodes}
-                                                        <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                                                {$sc_it->title}
-                                                        </option>
-                                                    {/foreach}
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </div>
-                                {/acl}
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="grid simple">
@@ -358,6 +286,77 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                {acl isAllowed="USER_ADMIN"}
+                    {is_module_activated name="PAYWALL"}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="grid simple">
+                                    <div class="grid-title">
+                                        <h4>{t}Paywall{/t}</h4>
+                                    </div>
+                                    <div class="grid-body">
+                                        <div class="form-group">
+                                            <label class="form-label" for="paywall_time_limit">
+                                                {t}Paywall time limit:{/t}
+                                            </label>
+                                            <div class="controls">
+                                                <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->meta['paywall_time_limit']}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {/is_module_activated}
+                {/acl}
+            </div>
+            <div class="col-xs-12">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Privileges{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        {acl isAllowed="GROUP_CHANGE"}
+                            <div class="form-group">
+                                <label for="id_user_group">
+                                    {t}User group{/t}
+                                </label>
+                                <select class="select2-multi" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
+                                    {if $smarty.session.isMaster}
+                                        <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
+                                    {/if}
+                                    {foreach $user_groups as $group}
+                                        {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
+                                            <option  value="{$group->id}" selected="selected">{$group->name}</option>
+                                        {else}
+                                            <option  value="{$group->id}">{$group->name}</option>
+                                        {/if}
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/acl}
+                        {acl isAllowed="USER_CATEGORY"}
+                            <div class="form-group">
+                                <label for="id_user_group">
+                                    {t}Categories{/t}
+                                </label>
+                                <select class="select2-multi" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
+                                    <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
+                                    {foreach item="c_it" from=$content_categories}
+                                        <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
+                                        {if count($c_it->childNodes)>0}
+                                            {foreach item="sc_it" from=$c_it->childNodes}
+                                                <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+                                                        {$sc_it->title}
+                                                </option>
+                                            {/foreach}
+                                        {/if}
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/acl}
                     </div>
                 </div>
             </div>
