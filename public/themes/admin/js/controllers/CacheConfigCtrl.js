@@ -42,7 +42,6 @@ angular.module('BackendApp.controllers').controller('CacheConfigCtrl', [
      * Selects/unselects all instances.
      */
     $scope.selectAll = function() {
-      console.log($scope.config);
       if ($scope.selected.all) {
         $scope.selected.contents = Object.keys($scope.config);
       } else {
