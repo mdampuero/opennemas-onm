@@ -230,9 +230,10 @@
             </div>
             <div class="grid-body">
               <div class="form-group">
-                <label for="category" class="form-label">{t}Categories{/t}</label>
+                <label for="category" class="form-label">{t}In categories{/t}</label>
                 <div class="controls">
-                  <select class="select2-multi" name="category[]" id="category" required="required" multiple="multiple">
+                  {*<select class="select2-multi" name="category[]" id="category" required="required" multiple="multiple">*}
+                  <select name="category[]" id="category" required="required" multiple="multiple" size=7>
                     {if isset($advertisement->id)}
                     <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                     <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
@@ -289,7 +290,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="position">
-                  {t}Page type{/t}
+                  {t}and pages of type{/t}
                 </label>
                 <div class="controls">
                   <select name="position" id="position" ng-model="position">
@@ -320,7 +321,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="position">
-                  {t}Position in selected page type{/t}
+                  {t}and inside the position{/t}
                 </label>
                 <div class="controls">
                   <div id="position-adv">
