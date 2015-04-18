@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-  {stylesheets src="@AdminTheme/css/bp/screen.css,
-    @AdminTheme/less/_frontpage.less,
+  {stylesheets src="@AdminTheme/less/_frontpage.less,
     @AdminTheme/css/frontpagemanager.css,
     @AdminTheme/css/jquery/colorbox.css" filters="cssrewrite,less"}
     <link rel="stylesheet" href="{$asset_url}">
@@ -12,14 +11,6 @@
     @media (max-width: 767px) {
       .page-content .filters-navbar ~ .content {
         margin-top: 60px;
-      }
-      #frontpagemanager {
-        zoom:0.7 !important;
-      }
-    }
-    @media (max-width:900px) {
-      #frontpagemanager {
-        zoom:0.7 !important;
       }
     }
   </style>
@@ -195,7 +186,7 @@
     </div>
   </div>
 
-  <div id="frontpagemanager" data-category="{$category_id}" class="{$category_id} clearfix hidden-xs">
+  <div id="frontpagemanager" data-category="{$category_id}" class="{$category_id} clearfix span-24 hidden-xs">
     {$layout}
   </div><!-- /frontpagemanager -->
 
