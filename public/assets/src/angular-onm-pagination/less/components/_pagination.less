@@ -20,6 +20,15 @@
     }
   }
 
+  input[type='number'] {
+      -moz-appearance:textfield;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+  }
+
   input {
     border-radius: 0;
     float: left;
@@ -29,12 +38,14 @@
     text-align: right;
     transition: all .25s;
     width: @pagination-width;
+    padding-right:10px !important;
 
     &:focus {
       width: @pagination-width + 10px;
     }
   }
 }
+
 
 .pagination-status {
   color: @default-color;
