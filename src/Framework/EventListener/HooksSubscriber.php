@@ -114,7 +114,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             'menu.update' => [
-                ['mockHookAction', 0],
+                ['cleanAllSmartyCache', 5],
+                ['sendVarnishRequestCleaner', 5],
             ],
             'menu.delete' => [
                 ['mockHookAction', 0],
@@ -347,6 +348,16 @@ class HooksSubscriber implements EventSubscriberInterface
 
             $this->cleanOpcode();
         }
+    }
+
+    /**
+     * Cleans all the smarty cache elements.
+     */
+    public function cleanAllSmartyCache()
+    {
+        // Initialization of the frontend template object
+        $frontpageTemplate = new \Template(TEMPLATE_USER);
+        $frontpageTemplate->clearAllCache();
     }
 
     /**
