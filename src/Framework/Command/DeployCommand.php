@@ -59,7 +59,7 @@ EOF
 
         $this->compileTranslations();
 
-        $this->installNpmAndGruntDeps();
+        $this->installNpmAndBowerDeps();
 
         $this->generateRoutes();
 
@@ -240,11 +240,11 @@ EOF
      *
      * @return void
      **/
-    public function installNpmAndGruntDeps()
+    public function installNpmAndBowerDeps()
     {
         $this->execProcess('npm install');
 
-        $this->execProcess('node_modules/.bin/grunt install');
+        $this->execProcess('node_modules/.bin/bower install');
     }
 
     /**

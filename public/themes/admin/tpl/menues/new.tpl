@@ -1,5 +1,6 @@
 {extends file="base/admin.tpl"}
 
+
 {block name="content"}
   <form action="{if isset($menu->pk_menu)}{url name=admin_menu_update id=$menu->pk_menu}{else}{url name=admin_menu_create}{/if}" method="post" name="formulario" id="formulario" ng-controller="MenuCtrl">
     <div class="page-navbar actions-navbar">
@@ -73,19 +74,26 @@
         </div>
       </div>
       <div class="grid simple">
-        <div class="grid-title">
-          <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
+        <div class="grid-title clearfix">
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+              <h4><span class="semi-bold">{t}Menu contents{/t}</span></h4>
+              <h6>{t}Use drag and drop to sort and nest elements{/t}</h6>
+            </div>
+            <div class="col-xs-12 col-md-6 right">
+              <button class="btn btn-white" type="button" ng-click="open('modal-add-item')">
+                <i class="fa fa-plus"></i>
+                {t}Add items{/t}
+              </button>
+            </div>
+          </div>
         </div>
         <div class="grid-body" ng-init="menu = {json_encode($menu)|replace:'"':'\''}">
-          <div class="ng-cloak" ui-tree data-max-depth="2">
+          <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
             </ol>
           </div>
-          <button class="btn btn-white btn-large m-t-15" type="button" ng-click="open('modal-add-item')">
-            <i class="fa fa-plus"></i>
-            {t}Add items{/t}
-          </button>
         </div>
       </div>
 

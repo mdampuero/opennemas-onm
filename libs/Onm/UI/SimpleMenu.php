@@ -98,6 +98,8 @@ class SimpleMenu
 
         // Render submenu
         $hasSubmenu = array_key_exists('submenu', $element);
+        $submenuContent = '';
+
         if ($hasSubmenu) {
             $submenu = $element['submenu'];
 
@@ -106,10 +108,14 @@ class SimpleMenu
                 list($content, $isSubmenuElementCurrent) = $this->renderElement($subMenuElement);
                 $isSubmenuCurrent = $isSubmenuCurrent || $isSubmenuElementCurrent;
 
-                $submenuContent []= $content;
+                if (!empty($content)) {
+                    $submenuContent []= $content;
+                }
             }
 
-            $submenuContent = "<ul class='sub-menu'>".implode('', $submenuContent)."</ul>";
+            if (count($submenuContent) > 0) {
+                $submenuContent = "<ul class='sub-menu'>".implode('', $submenuContent)."</ul>";
+            }
         }
 
         $moduleAllowed = true;
@@ -125,6 +131,7 @@ class SimpleMenu
         // Render node content
         if ($moduleAllowed
             && (!isset($element['privilege']) || $this->checkAcl($element['privilege']))
+            && (($hasSubmenu && !empty($submenuContent)) || !$hasSubmenu)
         ) {
             $isCurrent = preg_match("@^".preg_quote($element['link'])."@", $_SERVER['REQUEST_URI']);
 

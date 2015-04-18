@@ -7,8 +7,8 @@
 {/block}
 
 {block name="body"}
-  <div class="wizard-wrapper" ng-controller="GettingStartedCtrl">
-    <div class="wizard-container welcome" ng-class="{ 'active': !step || step == 1 }">
+  <div class="wizard-wrapper clearfix" ng-controller="GettingStartedCtrl">
+    <div class="wizard-container welcome active" ng-class="{ 'active': !step || step == 1 }">
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}Welcome to Opennemas{/t}</h1>
@@ -34,7 +34,7 @@
         <div class="terms-wrapper">
           <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
           <div class="checkbox">
-            <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" type="checkbox">
+            <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" ng-value="termsAccepted" type="checkbox">
             <label for="accept-terms">
               {t}Accept the terms of use{/t}
             </label>

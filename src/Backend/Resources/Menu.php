@@ -309,12 +309,12 @@ $menuXml = [
     [
         'id'      => 'system',
         'link'    => '#',
-        'title'   => _("Configuration"),
+        'title'   => _("System"),
         'icon'    => 'fa fa-cogs',
         'submenu' => [
             [
                 "id"          => "settings_manager",
-                "title"       => _("Settings"),
+                "title"       => _("Configuration"),
                 "icon"        => "fa fa-wrench",
                 "link"        => url('admin_system_settings'),
                 "module_name" => "SETTINGS_MANAGER",

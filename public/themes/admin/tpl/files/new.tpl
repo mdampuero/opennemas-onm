@@ -61,7 +61,7 @@
             {acl isAllowed="BOOK_CREATE"}
             <li class="quicklinks">
               <button class="btn btn-primary" type="submit">
-                <span class="fa fa-plus"></span>
+                <span class="fa fa-save"></span>
                 {t}Save{/t}
               </button>
             </li>

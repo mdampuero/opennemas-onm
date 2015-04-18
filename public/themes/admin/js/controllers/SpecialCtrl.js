@@ -47,7 +47,6 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('contentsLeft', function(nv, ov) {
-      console.log(nv);
       var items          = [];
       $scope.relatedLeft = [];
 
@@ -67,7 +66,6 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('contentsRight', function(nv, ov) {
-      console.log(nv);
       var items           = [];
       $scope.relatedRight = [];
 
