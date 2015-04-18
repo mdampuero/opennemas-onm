@@ -426,26 +426,28 @@
                       <div id="goggle" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
                           <div class="form-group">
-                            <div class="row">
-                              <div class="col-xs-12">
-                                <label class="form-label" for="google_analytics_api_key">
-                                  {t}Google Analytics API key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
-                                  <span class="help">
-                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
-                                  </span>
-                                </div>
+                            <div class="form-group">
+                              <label class="form-label" for="google_analytics_api_key">
+                                {t}Google Analytics API key{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
+                                <span class="help">
+                                  {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
+                                </span>
                               </div>
-                              <div class="col-xs-12">
-                                <label class="form-label" for="google_analytics_domain">
-                                  {t}Google Analytics Base domain{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
-                                </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="google_analytics_domain">
+                                {t}Google Analytics Base domain{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="google_analytics_domain" name="google_analytics[base_domain]" type="text" value="{$configs['google_analytics']['base_domain']|default:""}">
                               </div>
+                            </div>
+
+                            <div class="form-group">
+                              <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
                             </div>
                           </div>
                         </div>
@@ -474,6 +476,9 @@
                               </div>
                             </div>
                           </div>
+                          <div class="form-group">
+                            <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -498,6 +503,9 @@
                               <div class="help">{t escape=off}If you also have a <strong>OJD statistics service</strong>, add your page id{/t}</div>
                             </div>
                           </div>
+                          <div class="form-group">
+                            <i class="fa fa-info-circle"></i> {t}We are not responsible of the stats or of any third party services{/t}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -515,28 +523,24 @@
                       <div id="recaptcha" class="panel-collapse collapse" style="height: 0px;">
                         <div class="panel-body">
                           <div class="form-group">
-                            <div class="row">
-                              <div class="col-xs-12">
-                                <label class="form-label" for="piwik_token_auth">
-                                  {t}Public key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
-                                </div>
-                              </div>
-                              <div class="col-xs-12">
-                                <label class="form-label" for="piwik_token_auth">
-                                  {t}Private key{/t}
-                                </label>
-                                <div class="controls">
-                                  <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
-                                </div>
-                              </div>
+                            <label class="form-label" for="piwik_token_auth">
+                              {t}Public key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="recaptcha_public_key" name="recaptcha[public_key]" type="text" value="{$configs['recaptcha']['public_key']|default:""}">
                             </div>
-                            <span class="help">
-                              {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
-                            </span>
                           </div>
+                          <div class="form-group">
+                            <label class="form-label" for="piwik_token_auth">
+                              {t}Private key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="recaptcha_private_key" name="recaptcha[private_key]" type="text" value="{$configs['recaptcha']['private_key']|default:""}">
+                            </div>
+                          </div>
+                          <span class="help">
+                            {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
+                          </span>
                         </div>
                       </div>
                     </div>
