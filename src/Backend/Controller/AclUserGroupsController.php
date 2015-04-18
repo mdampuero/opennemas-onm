@@ -75,7 +75,7 @@ class AclUserGroupsController extends Controller
         foreach ($allPrivilegesByModules as $module => $elements) {
             $totalPrivilegesByModule[$module] = 0;
             foreach ($elements as $element) {
-                if (in_array($element->id, $userGroup->privileges)) {
+                if (is_array($userGroup) && in_array($element->id, $userGroup->privileges)) {
                     $totalPrivilegesByModule[$module]++;
                 }
             }
