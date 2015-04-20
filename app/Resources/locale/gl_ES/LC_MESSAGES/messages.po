@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-17 11:58+0200\n"
-"PO-Revision-Date: 2015-04-17 12:04+0200\n"
+"POT-Creation-Date: 2015-04-20 16:49+0200\n"
+"PO-Revision-Date: 2015-04-20 16:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1459,11 +1459,11 @@ msgstr "Sincronización de instancias"
 msgid "News Agency"
 msgstr "Axencias de novas"
 
+msgid "System"
+msgstr "Sistema"
+
 msgid "Configuration"
 msgstr "Configuración"
-
-msgid "Settings"
-msgstr "Preferencias"
 
 msgid "Users & Groups"
 msgstr "Usuarios e grupos"
@@ -2068,6 +2068,9 @@ msgstr "Ordes"
 
 msgid "OpCache Status"
 msgstr "Estado de Opcache"
+
+msgid "Settings"
+msgstr "Preferencias"
 
 msgid "User groups"
 msgstr "Grupos de usuarios"
@@ -2984,6 +2987,42 @@ msgstr "%1"
 msgid "List of words separated by commas"
 msgstr "Lista de palabras separadas por comas"
 
+msgid "Publish"
+msgstr "Publicar"
+
+msgid "Unpublish"
+msgstr "Despublicar"
+
+msgid "In home"
+msgstr "En portada"
+
+msgid "Drop from home"
+msgstr "Sacar de portada"
+
+msgid "Search by title"
+msgstr "Buscar por titulo"
+
+msgid "No published"
+msgstr "Non publicado"
+
+msgid "Unable to find any cover that matches your search."
+msgstr "Non se puideron atopar portadas que coincidan coa súa busca."
+
+msgid "Section"
+msgstr "Sección"
+
+msgid "Home"
+msgstr "Portada"
+
+msgid "Last editor"
+msgstr "Último editor"
+
+msgid "Sort elements"
+msgstr "Ordenar elementos"
+
+msgid "You must put %1 covers in the HOME"
+msgstr "Debes ter %d portadas na portada principal"
+
 msgid "Order newsstand frontpage by"
 msgstr "Ordenar portada de Kiosko segundo"
 
@@ -3017,36 +3056,6 @@ msgstr "Gardar posicións"
 
 msgid "New cover"
 msgstr "Nova portada"
-
-msgid "Publish"
-msgstr "Publicar"
-
-msgid "Unpublish"
-msgstr "Despublicar"
-
-msgid "In home"
-msgstr "En portada"
-
-msgid "Drop from home"
-msgstr "Sacar de portada"
-
-msgid "Search by title"
-msgstr "Buscar por titulo"
-
-msgid "No published"
-msgstr "Non publicado"
-
-msgid "Unable to find any cover that matches your search."
-msgstr "Non se puideron atopar portadas que coincidan coa súa busca."
-
-msgid "Section"
-msgstr "Sección"
-
-msgid "Home"
-msgstr "Portada"
-
-msgid "Last editor"
-msgstr "Último editor"
 
 msgid "Creating widget"
 msgstr "Creando widget"
@@ -3515,14 +3524,17 @@ msgstr "Tamaño (MB)"
 msgid "TOTAL"
 msgstr "TOTAL"
 
-msgid "New file"
-msgstr "Novo ficheiro"
-
 msgid "Unable to find any file that matches your search."
 msgstr "Non se puideron atopar ficheiros que coincidan coa súa busca."
 
+msgid "You must put %1 polls in the HOME"
+msgstr "Debes ter %d enquisas na portada"
+
 msgid "Unassigned"
 msgstr "Sen asignar"
+
+msgid "New file"
+msgstr "Novo ficheiro"
 
 msgid "Delete polls"
 msgstr "Eliminar enquisas"
@@ -3575,6 +3587,9 @@ msgstr "Permitir comentarios"
 msgid "Publication closed date"
 msgstr "Data de final de publicación"
 
+msgid "Unable to find any poll that matches your search."
+msgstr "Non se puideron atopar enquisas que coincidan coa súa busca."
+
 msgid "Poll section preferences"
 msgstr "Preferencias das enquisas"
 
@@ -3610,12 +3625,6 @@ msgstr "Configuración do módulo «Álbum»"
 
 msgid "New poll"
 msgstr "Nova enquisa"
-
-msgid "You must put %1 polls in the HOME"
-msgstr "Debes ter %d enquisas na portada"
-
-msgid "Unable to find any poll that matches your search."
-msgstr "Non se puideron atopar enquisas que coincidan coa súa busca."
 
 msgid "Delete advertisements"
 msgstr "Publicidade publicidades"
@@ -3848,9 +3857,6 @@ msgstr "Editando grupo"
 msgid "Creating user group"
 msgstr "Creando grupo de usuario"
 
-msgid "Basic information"
-msgstr "Información básica"
-
 msgid "Group name"
 msgstr "Nome do grupo"
 
@@ -3917,21 +3923,6 @@ msgstr "Facebook"
 msgid "Twitter"
 msgstr "Twitter"
 
-msgid "Paywall time limit:"
-msgstr "Limite de tiempo del paywall:"
-
-msgid "User group"
-msgstr "Grupo de usuarios"
-
-msgid "User group:"
-msgstr "Grupos de usuarios:"
-
-msgid "Master"
-msgstr "Mestre"
-
-msgid "HOME"
-msgstr "Portada"
-
 msgid "User type"
 msgstr "Tipo de usuario"
 
@@ -3952,6 +3943,21 @@ msgstr "Desactivado"
 
 msgid "Used to enable or disable user access to control panel."
 msgstr "Úseo para activar ou desactivar o acceso ao panel de control."
+
+msgid "Paywall time limit:"
+msgstr "Limite de tiempo del paywall:"
+
+msgid "User group"
+msgstr "Grupo de usuarios"
+
+msgid "User group:"
+msgstr "Grupos de usuarios:"
+
+msgid "Master"
+msgstr "Mestre"
+
+msgid "HOME"
+msgstr "Portada"
 
 msgid "Group"
 msgstr "Grupo"
@@ -4045,6 +4051,9 @@ msgstr "Editando menú"
 msgid "Creating menu"
 msgstr "Creando menú"
 
+msgid "Basic information"
+msgstr "Información básica"
+
 msgid "Position"
 msgstr "Posición"
 
@@ -4057,6 +4066,9 @@ msgstr ""
 
 msgid "Menu contents"
 msgstr "Contidos do menú"
+
+msgid "Use drag and drop to sort and nest elements"
+msgstr "Use arrastrar e soltar para ordenar e aniñar elementos"
 
 msgid "Add items"
 msgstr "Engadir elementos"
@@ -4270,6 +4282,9 @@ msgstr ""
 
 msgid "Google Analytics Base domain"
 msgstr "Dominio base para Google Analytics"
+
+msgid "We are not responsible of the stats or of any third party services"
+msgstr "Non somos responsabeis das estatísticas de servizos de terceiros"
 
 msgid "ComScore Statistics"
 msgstr "Estatisticas de comScore"
@@ -4555,6 +4570,15 @@ msgstr "URL da miniatura"
 msgid "Embed Url"
 msgstr "URL de ficheiro embebido"
 
+msgid "Unable to find any video that matches your search."
+msgstr "Non se puideron atopar vídeos que coincidan coa súa busca."
+
+msgid "You must put %1 videos in the HOME"
+msgstr "Debes ter %d vídeos na portada"
+
+msgid "Unable to find any album that matches your search."
+msgstr "Non se puideron atopar álbums que coincidan coa súa busca."
+
 msgid "Write HTML code"
 msgstr "Escribe o código HTML"
 
@@ -4654,12 +4678,6 @@ msgstr "Widget de portada"
 
 msgid "Config video module"
 msgstr "Configuración do módulo «Video»"
-
-msgid "You must put %1 videos in the HOME"
-msgstr "Debes ter %d vídeos na portada"
-
-msgid "Unable to find any album that matches your search."
-msgstr "Non se puideron atopar álbums que coincidan coa súa busca."
 
 msgid "Terms of Service Agreement"
 msgstr "Aceptación dos termos do servizo"
@@ -4842,8 +4860,11 @@ msgstr ""
 msgid "Where to show this ad"
 msgstr "Onde mostrar esta publicidade"
 
-msgid "Page type"
-msgstr "Tipo de páxina"
+msgid "In categories"
+msgstr "Nas categorías"
+
+msgid "and pages of type"
+msgstr "e tipos de páxina"
 
 msgid "Inner article"
 msgstr "Artigo interior"
@@ -4866,8 +4887,8 @@ msgstr "Enquisa interior"
 msgid "Others"
 msgstr "Outros"
 
-msgid "Position in selected page type"
-msgstr "Posición no tipo de páxina seleccionado"
+msgid "and inside the position"
+msgstr "e na posición"
 
 msgid "Advertisment"
 msgstr "Publicidade"
@@ -5477,6 +5498,12 @@ msgstr "Prema aquí para engadir contidos"
 msgid "Articles in right column"
 msgstr "Artigos na columna dereita"
 
+msgid "You must put %1 specials in the HOME"
+msgstr "Debe ter %d especiais na portada"
+
+msgid "Unable to find any special that matches your search."
+msgstr "Non se puideron atopar especiais que coincidan coa súa busca."
+
 msgid "Image for Special:"
 msgstr "Imaxe para o especial:"
 
@@ -5523,12 +5550,6 @@ msgstr ""
 
 msgid "Config special module"
 msgstr "Configuración do módulo «Especiais»"
-
-msgid "You must put %1 specials in the HOME"
-msgstr "Debe ter %d especiais na portada"
-
-msgid "Unable to find any special that matches your search."
-msgstr "Non se puideron atopar especiais que coincidan coa súa busca."
 
 msgid "Delete category"
 msgstr "Eliminar categoría"
@@ -5876,32 +5897,11 @@ msgstr "Autor de blog"
 msgid "Config opinion module"
 msgstr "Configuración do módulo de opinión"
 
-msgid "%1 not found - Opennemas"
-msgstr "%1 non atopado - Opennemas"
-
-msgid "The CMS for journalism"
-msgstr "O CMS para o xornalismo"
-
 msgid "%1 doesn’t exist."
 msgstr "%1 non existe."
 
 msgid "Do you want to register %1?"
 msgstr "Desexa rexistrar %1?"
-
-msgid "About"
-msgstr "Sobre"
-
-msgid "Help"
-msgstr "Axuda"
-
-msgid "Privacy Policy"
-msgstr "Politica de privacidade"
-
-msgid "Legal"
-msgstr "Información legal"
-
-msgid "We already have being informed of this error: %1"
-msgstr "Xa fomos informados deste erro: %1"
 
 msgid "'%1' not activated - Opennemas"
 msgstr "«%1» non activada - Opennemas"
@@ -5977,6 +5977,9 @@ msgstr "Engadir imaxes"
 
 msgid "Cover image"
 msgstr "Imaxe principal"
+
+msgid "You must put %1 albums in the HOME"
+msgstr "Debes ter %d álbums na portada"
 
 msgid ""
 "Use  total in widget album for define how many albums can see in widgets in "
@@ -6515,8 +6518,23 @@ msgstr "Esqueceches o contrasinal?"
 msgid "Log in"
 msgstr "Iniciar sesión"
 
+msgid "About"
+msgstr "Sobre"
+
+msgid "Help"
+msgstr "Axuda"
+
+msgid "Privacy Policy"
+msgstr "Politica de privacidade"
+
+msgid "Legal"
+msgstr "Información legal"
+
 msgid "Go to admin main page"
 msgstr "Ir á páxina principal do administrador"
+
+msgid "The CMS for journalism"
+msgstr "O CMS para o xornalismo"
 
 msgid "Recover password"
 msgstr "Recuperar contrasinal"
@@ -6642,11 +6660,14 @@ msgstr "Editando libro"
 msgid "Separated by comas"
 msgstr "Separadas por comas"
 
-msgid "New book"
-msgstr "Novo libro"
-
 msgid "Unable to find any book that matches your search."
 msgstr "Non se puideron atopar libros que coincidan coa súa busca."
+
+msgid "You must put %1 books in the HOME"
+msgstr "Debes ter %d libros na portada"
+
+msgid "New book"
+msgstr "Novo libro"
 
 msgid "New user group"
 msgstr "Nuevo grupo de usuario"
@@ -7038,6 +7059,15 @@ msgid ""
 msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
+
+#~ msgid "Position in selected page type"
+#~ msgstr "Posición no tipo de páxina seleccionado"
+
+#~ msgid "%1 not found - Opennemas"
+#~ msgstr "%1 non atopado - Opennemas"
+
+#~ msgid "We already have being informed of this error: %1"
+#~ msgstr "Xa fomos informados deste erro: %1"
 
 #~ msgid "Item "
 #~ msgstr "Elemento"
@@ -8895,9 +8925,6 @@ msgstr ""
 
 #~ msgid "Sender"
 #~ msgstr "Remitente"
-
-#~ msgid "System log"
-#~ msgstr "Rexistro do sistema"
 
 #~ msgid "Enable Log:"
 #~ msgstr "Activar rexistro:"
