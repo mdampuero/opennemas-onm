@@ -61,11 +61,13 @@ class ErrorController extends Controller
                 if ($this->request->isXmlHttpRequest()) {
                     $content = $errorMessage;
                 } else {
+                    $ads = \Frontend\Controller\ArticlesController::getAds();
                     $content = $this->renderView(
                         'static_pages/404.tpl',
                         array(
                             'category_real_name' => $page->title,
                             'page'               => $page,
+                            'advertisements'     => $ads
                         )
                     );
                 }
