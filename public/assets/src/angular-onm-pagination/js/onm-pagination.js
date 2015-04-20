@@ -45,7 +45,7 @@ angular.module('onm.pagination', [])
               <button class="btn btn-white" ng-click="previous()" ng-disabled="isFirstPage()" type="button">\
                 <i class="fa fa-chevron-left"></i>\
               </button>\
-              <input min="1" max="[% totalPages %]" ng-model="page" type="number">\
+              <input min="1" max="[% totalPages %]" ng-keypress="updatePage($event)" ng-model="page" type="number">\
               <button class="btn btn-white" ng-click="next()" ng-disabled="isLastPage()" type="button">\
                 <i class="fa fa-chevron-right"></i>\
               </button>\
@@ -134,6 +134,22 @@ angular.module('onm.pagination', [])
     };
 
     /**
+     * @function updatePage
+     * @memberOf PaginationCtrl
+     *
+     * @description
+     *   Update the current page on enter press.
+     *
+     * @param {Object} e The event object.
+     */
+    $scope.updatePage = function(e) {
+      if (e.keyCode === 13 && $scope.page > 0
+          && $scope.page <= $scope.totalPages) {
+        $scope.ngModel = $scope.page;
+      }
+    }
+
+    /**
      * Updates pagination values when the current page changes.
      */
     $scope.$watch('[ngModel,itemsPerPage]', function() {
@@ -150,12 +166,5 @@ angular.module('onm.pagination', [])
       }
 
       $scope.page = $scope.ngModel;
-    });
-
-    // Updates the current page when proxy variable changes
-    $scope.$watch('page', function(nv) {
-      if (nv > 0 && nv <= $scope.totalPages) {
-        $scope.ngModel = nv;
-      }
     });
   }]);

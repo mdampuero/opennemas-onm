@@ -21,13 +21,9 @@
   }
 
   input[type='number'] {
-      -moz-appearance:textfield;
+
   }
 
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-  }
 
   input {
     border-radius: 0;
@@ -35,13 +31,15 @@
     height: @pagination-height;
     min-height: @pagination-height;
     padding: 0 !important;
-    text-align: right;
+    text-align: center;
     transition: all .25s;
     width: @pagination-width;
-    padding-right:10px !important;
+    -moz-appearance: textfield;
+    -werbkit-appearance: none;
 
-    &:focus {
-      width: @pagination-width + 10px;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
     }
   }
 }
