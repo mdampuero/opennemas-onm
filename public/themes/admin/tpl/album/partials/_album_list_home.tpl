@@ -27,7 +27,7 @@
   <div class="widget-home-item clearfix" ui-tree-handle>
     <span></span>
     <span class="item-title">
-      <a data-nodrag ng-href="[% edit(item.id, 'admin_opinion_show') %]">
+      <a data-nodrag ng-href="[% edit(item.id, 'admin_album_show') %]">
         [% item.title %]
       </a>
       <p class="no-margin">
