@@ -158,6 +158,7 @@ class ArticlesController extends Controller
             'article'         => $article,
             'content'         => $article,
             'actual_category' => $categoryName,
+            'time'            => '12345',
         ];
 
         if ($cacheable) {
