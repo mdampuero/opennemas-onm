@@ -9,6 +9,7 @@
 {block name="body"}
   <div class="wizard-wrapper clearfix" ng-controller="GettingStartedCtrl">
     <div class="wizard-container welcome active" ng-class="{ 'active': !step || step == 1 }">
+      <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}Welcome to Opennemas{/t}</h1>
@@ -20,13 +21,14 @@
           {t}Before starting to work on it you have to perform some tasks, sush as setup your social networks and get some information about how to use Opennemas{/t}
         </p>
         <div class="wizard-button">
-          <button class="btn btn-block btn-success" ng-click="step = 2">
+          <button class="btn btn-block btn-success" ng-click="goToStep(2)">
             <h4>{t}Next{/t}</h4>
           </button>
         </div>
       </div>
     </div>
     <div class="wizard-container terms-and-conditions" ng-class="{ 'active': step == 2 }">
+      <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <p>
           {t}In order to use Opennemas you must accept the terms of use{/t}
@@ -42,13 +44,14 @@
           </div>
         </div>
         <div class="wizard-button">
-          <button class="btn btn-block btn-success" ng-click="step = 3" ng-disabled="!termsAccepted">
+          <button class="btn btn-block btn-success" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
             <h4>{t}Next{/t}</h4>
           </button>
         </div>
       </div>
     </div>
     <div class="wizard-container help" ng-class="{ 'active': step == 3 }">
+      <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}Do you need some help?{/t}</h1>
@@ -62,29 +65,36 @@
             <div class="orb">
               <i class="fa fa-support fa-3x"></i>
             </div>
-            {t escape=off}Our <a href="http://help.opennemas.com/" target="_blank">knownledge base</a> has manuals and howtos about how to create contents and improve your newspaper.{/t}
+            <div class="item-text">
+              {t escape=off}Our <a href="http://help.opennemas.com/" target="_blank">knownledge base</a> has manuals and howtos about how to create contents and improve your newspaper.{/t}
+            </div>
           </div>
           <div class="help-item">
             <div class="orb">
               <i class="fa fa-youtube fa-3x"></i>
             </div>
-            {t escape=off}See our <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank">video tutorials</a> for getting step-by-step guidance.{/t}
+            <div class="item-text">
+              {t escape=off}See our <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank">video tutorials</a> for getting step-by-step guidance.{/t}
+            </div>
           </div>
           <div class="help-item">
             <div class="orb">
               <i class="fa fa-question fa-3x"></i>
             </div>
-            {t escape=off}If you need further information you can always contact us by using the  <span class="fa fa-support fa-2x"></span> Help  button in the upper right corner.{/t}
+            <div class="item-text">
+              {t escape=off}If you need further information you can always contact us by using the <span class="fa fa-support"></span> Help button in the upper right corner.{/t}
+            </div>
           </div>
         </div>
         <div class="wizard-button">
-          <button class="btn btn-block btn-success" ng-click="step = 4">
+          <button class="btn btn-block btn-success" ng-click="goToStep(4)">
             <h4>{t}Next{/t}</h4>
           </button>
         </div>
       </div>
     </div>
     <div class="wizard-container social-networks" ng-class="{ 'active': step == 4 }">
+      <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}Do you have a Facebook or a Twitter account?{/t}</h1>
@@ -99,13 +109,14 @@
           </div>
         </div>
         <div class="wizard-button">
-          <button class="btn btn-block btn-success" ng-click="step = 5">
+          <button class="btn btn-block btn-success" ng-click="goToStep(5)">
             <h4>{t}Next{/t}</h4>
           </button>
         </div>
       </div>
     </div>
     <div class="wizard-container ready" ng-class="{ 'active': step == 5 }">
+      <div class="wizard-overlay"></div>
       <div class="wizard-content">
         <div class="wizard-title">
           <h1>{t}That's it!{/t}</h1>
@@ -123,31 +134,31 @@
     </div>
     <div class="wizard-footer">
       <div class="wizard-footer-wrapper">
-        <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="step = 1">
+        <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
           <div class="wizard-orb">
             <h4>1</h4>
           </div>
           <h5>{t}Welcome!{/t}</h5>
         </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="step = 2">
+        <button class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="goToStep(2)">
           <div class="wizard-orb">
             <h4>2</h4>
           </div>
           <h5>{t}Terms & conditions{/t}</h5>
         </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="step = 3" ng-disabled="!termsAccepted">
+        <button class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>3</h4>
           </div>
           <h5>{t}Getting help{/t}</h5>
         </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="step = 4" ng-disabled="!termsAccepted">
+        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>4</h4>
           </div>
           <h5>{t}Social Network{/t}</h5>
         </button>
-        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="step = 5" ng-disabled="!termsAccepted">
+        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="goToStep(5)" ng-disabled="!termsAccepted">
           <div class="wizard-orb">
             <h4>5</h4>
           </div>

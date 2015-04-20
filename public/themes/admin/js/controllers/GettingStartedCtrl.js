@@ -2,8 +2,8 @@ angular.module('BackendApp.controllers')
   /**
    * Handle actions for article inner.
   */
-  .controller('GettingStartedCtrl', ['$http', '$scope', 'routing',
-  function($http, $scope, routing) {
+  .controller('GettingStartedCtrl', ['$http', '$scope', '$timeout', 'routing',
+  function($http, $scope, $timeout, routing) {
     'use strict';
 
     $scope.step = 1;
@@ -19,6 +19,13 @@ angular.module('BackendApp.controllers')
       $http.post(url, { accept : $scope.termsAccepted }).error(function() {
         $scope.termsAccepted = false;
       });
+    };
+
+    $scope.goToStep = function(step) {
+      $scope.step = step;
+      $timeout(function() {
+        $('body').scrollTop(0);
+      }, 250);
     };
   }
 ]);
