@@ -5,6 +5,7 @@ angular.module(
     'checklist-model',
     'ngSanitize',
     'ngTouch',
+    'onm.gravatar',
     'onm.editor',
     'onm.dynamicImage',
     'onm.item',

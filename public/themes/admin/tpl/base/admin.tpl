@@ -422,6 +422,7 @@
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/src/opennemas-webarch/js/core.js,
       @Common/src/angular-dynamic-image/js/dynamic-image.js,
+      @Common/src/angular-gravatar/gravatar.js,
       @Common/src/angular-onm-editor/onm-editor.js,
       @Common/src/angular-onm-pagination/js/onm-pagination.js,
       @Common/src/angular-oql-encoder/oql-encoder.js,
