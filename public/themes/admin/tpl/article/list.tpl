@@ -220,7 +220,7 @@
                       {t}Unasigned{/t}
                     </span>
                     <span ng-if="content.category_name != 'unknown'">
-                      [% content.category_name %]
+                      [% extra.categories[content.category_name] %]
                     </span>
                   </td>
                 {/if}

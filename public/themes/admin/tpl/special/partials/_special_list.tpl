@@ -117,7 +117,7 @@
                 </div>
               </td>
               <td class="center hidden-xs">
-                [% content.category_name %]
+                [% extra.categories[content.category_name] %]
               </td>
               {if $category!='widget'}
               {acl isAllowed="SPECIAL_FAVORITE"}

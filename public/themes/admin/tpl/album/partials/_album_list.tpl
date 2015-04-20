@@ -183,7 +183,7 @@
               </td>
               {if $category=='widget' || $category=='all'}
               <td class="left hidden-xs">
-               [% content.category_name %]
+               [% extra.categories[content.category_name] %]
               </td>
               {/if}
             <td class="center hidden-xs">[% extra.views[content.id] %]</td>

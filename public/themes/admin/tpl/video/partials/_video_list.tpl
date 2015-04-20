@@ -201,7 +201,7 @@
             </td>
             {if $category=='widget' || $category=='all'}
             <td class="center hidden-xs hidden-sm">
-              [% content.category_name %]
+              [% extra.categories[content.category_name] %]
             </td>
             {/if}
             <td class="center nowrap hidden-xs hidden-sm">

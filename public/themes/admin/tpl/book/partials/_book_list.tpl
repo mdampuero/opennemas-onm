@@ -162,7 +162,7 @@
             </td>
             <td class="center hidden-xs">
               <span ng-if="content.category_name">
-                [% content.category_name %]
+                [% extra.categories[content.category_name] %]
               </span>
               <span ng-if="!content.category_name">
                 {t}Unassigned{/t}

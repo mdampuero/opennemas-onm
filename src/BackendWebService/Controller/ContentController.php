@@ -1210,6 +1210,14 @@ class ContentController extends Controller
             $extra['authors'][$user->id] = $user->eraseCredentials();
         }
 
+        $ccm = \ContentCategoryManager::get_instance();
+        $categories = $ccm->findAll();
+        $extra['categories'] = [];
+
+        foreach ($categories as $category) {
+            $extra['categories'][$category->name] = $category->title;
+        }
+
         return $extra;
     }
 }
