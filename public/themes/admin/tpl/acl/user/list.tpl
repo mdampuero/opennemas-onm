@@ -161,7 +161,7 @@
                     <label for="select-all"></label>
                   </div>
                 </th>
-                <th class=" hidden-xs"></th>
+                <th class=" hidden-xs" style="width:20px;">{t}Avatar{/t}</th>
                 <th class="left">{t}Full name{/t}</th>
                 <th class="center nowrap hidden-xs" style="width:110px">{t}Username{/t}</th>
                 <th class="center hidden-xs hidden-sm" >{t}E-mail{/t}</th>
@@ -177,7 +177,7 @@
                     <label for="checkbox[%$index%]"></label>
                   </div>
                 </td>
-                <td class="hidden-xs">
+                <td class="center hidden-xs">
                   <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[content.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="content.avatar_img_id != 0"></dynamic-image>
                   <gravatar class="gravatar" ng-model="content.email" size="40" ng-if="!content.avatar_img_id || content.avatar_img_id == 0"></gravatar>
                 </td>
