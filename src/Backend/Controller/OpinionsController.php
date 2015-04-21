@@ -191,9 +191,9 @@ class OpinionsController extends Controller
             'opinion/list.tpl',
             array(
                 'autores'    => $allAuthors,
-                'opinions'   => $opinions,
-                'director'   => $director,
-                'editorial'  => $editorial,
+                'opinions'   => \Onm\StringUtils::convertToUtf8($opinions),
+                'director'   => \Onm\StringUtils::convertToUtf8($director),
+                'editorial'  => \Onm\StringUtils::convertToUtf8($editorial),
                 'type'       => 'frontpage',
                 'page'       => $page,
                 'home'       => true,
