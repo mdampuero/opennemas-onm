@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|replace:'"':'\''})">
+<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|replace:'"':'\''})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="grid-body" id="newsletter-contents">
-            <div class="newsletter-container ng-cloak" ng-repeat="container in newsletterContents| orderBy : id">
+            <div class="newsletter-container ng-cloak animate" ng-repeat="container in newsletterContents">
               <div class="newsletter-container-title clearfix">
                 <div class="input-group title pull-left">
                   <input ng-model="container.title" type="text" class="form-control">
@@ -76,7 +76,7 @@
                   <button type="button" ng-click="moveContainerUp(container)" class="btn btn-white" ng-if="$index !== 0">
                     <i class="fa fa-chevron-up"></i>
                   </button>
-                  <button type="button" ng-click="moveContainerDown(container)" class="btn btn-white" ng-if="$index < newsletterContents.length">
+                  <button type="button" ng-click="moveContainerDown(container)" class="btn btn-white" ng-if="$index+1 < newsletterContents.length">
                     <i class="fa fa-chevron-down"></i>
                   </button>
                   <button class="btn btn-white" ng-click="removeContainer(container)" type="button">
