@@ -44,7 +44,7 @@ angular.module('onm.picker')
                       </div>\
                     </li>\
                     <li>\
-                      <select name=\"content-type\" ng-model=\"$parent.contentType\">\
+                      <select name=\"content-type\" ng-model=\"criteria.contentType\">\
                         <option value=\"\">[% picker.params.explore.allContentTypes %]</option>\
                         <option value=\"contents-in-frontpage\" ng-if=\"picker.section == 'newsletter'\">[% picker.params.explore.contentsInFrontpage %]</option>\
                         <option value=\"[% type %]\" ng-repeat=\"type in picker.types.enabled\">\
@@ -52,8 +52,8 @@ angular.module('onm.picker')
                         </option>\
                       </select>\
                     </li>\
-                    <li ng-if=\"contentType != 'contents-in-frontpage'\">\
-                      <select name=\"category\" ng-model=\"$parent.category\">\
+                    <li ng-if=\"criteria.contentType != 'contents-in-frontpage'\">\
+                      <select name=\"category\" ng-model=\"criteria.category\">\
                         <option value=\"\">[% picker.params.explore.allCategories %]</option>\
                         <option value=\"[% category.name %]\" ng-repeat=\"category in picker.params.explore.categories\">\
                           [% category.title %]\
@@ -320,7 +320,7 @@ angular.module('onm.picker')
             );
 
             if ($scope.picker.section === 'newsletter') {
-              $scope.contentType = 'contents-in-frontpage';
+              $scope.criteria.contentType = 'contents-in-frontpage';
             }
 
             // Get the parameters for the media picker
@@ -379,6 +379,8 @@ angular.module('onm.picker')
        * @type {Object}
        */
       $scope.routing = routing;
+
+      $scope.criteria = {};
 
       /**
        * The list of selected contents.
@@ -486,9 +488,9 @@ angular.module('onm.picker')
         }
 
         var data = {
-          category: $scope.category ? $scope.category: null,
-          content_type_name: $scope.contentType ?
-            [ $scope.contentType ] : $scope.picker.types.enabled,
+          category: $scope.criteria.category ? $scope.criteria.category: null,
+          content_type_name: $scope.criteria.contentType ?
+            [ $scope.criteria.contentType ] : $scope.picker.types.enabled,
           epp:        $scope.epp,
           page:       $scope.page,
           sort_by:    'created',
@@ -660,7 +662,8 @@ angular.module('onm.picker')
        * @param array ov The old values.
        */
       var search;
-      $scope.$watch('[date,title,contentType,category]', function(nv, ov) {
+      $scope.$watch('[date,title,criteria]', function(nv, ov) {
+        console.log('watcher');
         if (nv === ov) {
           return false;
         }
