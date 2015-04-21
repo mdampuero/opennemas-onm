@@ -4,7 +4,7 @@
     <div class="grid-title">
       <h4>{t}Director Articles{/t}</h4>
     </div>
-    <div class="grid-body" ng-init="director = {json_encode($director)|replace:'"':'\''}">
+    <div class="grid-body" ng-init="director = {json_encode($director)|replace:'&#39;':'\\\''|replace:'"':'\''}">
       <div class="ng-cloak" ui-tree="treeOptions" data-max-depth="1">
         <ol ui-tree-nodes="" ng-model="director">
           <li ng-repeat="item in director" ui-tree-node ng-include="'opinion-item'"></li>
@@ -16,7 +16,7 @@
     <div class="grid-title">
       <h4>{t}Editorial Articles{/t}</h4>
     </div>
-    <div class="grid-body" ng-init="editorial = {json_encode($editorial)|replace:'"':'\''}">
+    <div class="grid-body" ng-init="editorial = {json_encode($editorial)|replace:'&#39;':'\\\''|replace:'"':'\''}">
       <div class="ng-cloak" ui-tree="treeOptions" data-max-depth="2">
         <ol ui-tree-nodes="" ng-model="editorial">
           <li ng-repeat="item in editorial" ui-tree-node ng-include="'opinion-item'"></li>
@@ -28,7 +28,7 @@
     <div class="grid-title">
       <h4>{t}Other Articles{/t}</h4>
     </div>
-    <div class="grid-body" ng-init="opinions = {json_encode($opinions)|replace:'"':'\''}">
+    <div class="grid-body" ng-init="opinions = {json_encode($opinions)|replace:'&#39;':'\\\''|replace:'"':'\''}">
       <div class="ng-cloak" ui-tree="treeOptions" data-max-depth="2">
         <ol ui-tree-nodes="" ng-model="opinions">
           <li ng-repeat="item in opinions" ui-tree-node ng-include="'opinion-item'"></li>
