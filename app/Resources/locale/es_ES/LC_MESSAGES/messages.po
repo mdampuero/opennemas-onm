@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-21 17:34+0200\n"
+"POT-Creation-Date: 2015-04-21 20:15+0200\n"
 "PO-Revision-Date: 2015-04-21 17:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -4096,9 +4096,6 @@ msgstr "Editando menú"
 msgid "Creating menu"
 msgstr "Creando menú"
 
-msgid "Basic information"
-msgstr "Información básica"
-
 msgid "Position"
 msgstr "Posición"
 
@@ -7123,6 +7120,9 @@ msgid ""
 msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
+
+#~ msgid "Basic information"
+#~ msgstr "Información básica"
 
 #~ msgid "Position in selected page type"
 #~ msgstr "Posición en el tipo de página seleccionado"
