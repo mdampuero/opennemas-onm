@@ -105,10 +105,9 @@ class Synchronizer
     {
         $params   = $this->getSyncParams();
 
-        $toTime   = strtotime(date('c'));
         $fromTime = strtotime($params['lastimport']);
 
-        return round((abs($toTime - $fromTime) / 60), 0);
+        return $fromTime;
     }
 
     /**

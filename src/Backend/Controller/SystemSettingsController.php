@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -27,41 +28,35 @@ use Onm\Settings as s;
  **/
 class SystemSettingsController extends Controller
 {
-
-    /**
-     * Common actions for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        // Check ACL
-        $this->configurationsKeys = array(
-            'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
-            'site_footer', 'mobile_logo', 'favico', 'youtube_page', 'contact_email',
-            'site_color', 'site_name', 'time_zone','site_language','site_footer',
-            'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
-            'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
-            'google_analytics','piwik', 'ojd', 'comscore', 'section_settings', 'paypal_mail',
-            'items_per_page','refresh_interval','items_in_blog', 'google_news_name',
-            'google_page', 'webmastertools_google', 'webmastertools_bing',
-            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
-            'cookies_hint_enabled', 'cookies_hint_url',
-        );
-    }
-
     /**
      * Gets all the settings and displays the form
      *
      * @return void
      *
      * @Security("has_role('ONM_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="SETTINGS_MANAGER")
      **/
     public function defaultAction()
     {
         $configurations = array();
 
-        foreach ($this->configurationsKeys as $value) {
+        $configurationsKeys = [
+            'site_title', 'site_logo', 'site_description','site_keywords',
+            'site_agency', 'site_footer', 'mobile_logo', 'favico',
+            'youtube_page', 'contact_email', 'site_color', 'site_name',
+            'time_zone','site_language','site_footer', 'recaptcha',
+            'google_maps_api_key','google_custom_search_api_key', 'vimeo_page',
+            'facebook','facebook_page','facebook_id','twitter_page',
+            'googleplus_page', 'google_analytics','piwik', 'ojd', 'comscore',
+            'section_settings', 'paypal_mail', 'items_per_page',
+            'refresh_interval','items_in_blog', 'google_news_name',
+            'google_page', 'webmastertools_google', 'webmastertools_bing',
+            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
+            'cookies_hint_enabled', 'cookies_hint_url', 'linkedin_page'
+        ];
+
+        foreach ($configurationsKeys as $value) {
             $configurations[$value] = s::get($value);
         }
 
@@ -83,6 +78,8 @@ class SystemSettingsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ONM_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="SETTINGS_MANAGER")
      **/
     public function saveAction(Request $request)
     {
@@ -92,14 +89,19 @@ class SystemSettingsController extends Controller
         $mobileLogo = $request->files->get('mobile_logo');
 
         // Get settings from section (array)
-        $sectionSettings = $request->request->filter('section_settings');
+        $sectionSettings = $request->request->filter('section_settings', array());
 
         // Generate upload path
         $uploadDirectory = MEDIA_PATH.'/sections/';
 
         // Check if upload directory is already created
-        if ($sectionSettings['allowLogo'] == 1 && !is_dir($uploadDirectory)) {
+        if (array_key_exists('allowLogo', $sectionSettings) &&
+            $sectionSettings['allowLogo'] == 1 &&
+            !is_dir($uploadDirectory)
+        ) {
             \Onm\FilesManager::createDirectory($uploadDirectory);
+        } else {
+            s::set('section_settings', array('allowLogo' => 0));
         }
 
         if (!is_null($siteLogo)) {

@@ -73,8 +73,6 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 
 .table {color:#424E51; font-size:12px;}
 .table-condensed th, .table-condensed td{ padding:8px 5px;vertical-align: middle}
-.pagination { vertical-align:middle; }
-.table .pagination { margin-top:0;margin-bottom:0;display:inline-block;}
 .table a {font-weight:bold;}
 .table a.btn {font-weight:normal}
 .table input[type="checkbox"] {margin-top:0;}
@@ -82,9 +80,6 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
 .table th, .table tfoot td { background: #343434; color: #FFFFFF; font-size: 12px; font-weight: normal; padding: 9px; text-align: left; }
 
 
-.table .pagination { color:#aaa !important; }
-.table .pagination a { background: #3f3f3f !important; border: 1px solid #666; color:White !important; text-shadow:none; }
-.table .pagination a:hover { background:#3c3c3c; }
 .form-horizontal .help-block {margin-top:3px;}
 
 .form-inline-block > *{ vertical-align: top; }
@@ -185,21 +180,11 @@ table.adminform {
 
 table.adminform tfoot tr { text-align: center;  color: #333; }
 
-.pagination a { border:1px solid #ddd; padding:4px 6px; background:#fafafa;}
-.pagination a:hover { background:#fff;}
-
 table.adminform tfoot tr td{
   background:#F1F1F1;
   border-top:1px solid #D2D2D2;
   padding:10px;
   text-align: center; white-space: nowrap;
-}
-
-.pagination div.limit {
-  float: left;
-  height: 22px;
-  line-height: 22px;
-  margin: 0 10px;
 }
 
 .gallery_list {
@@ -1561,9 +1546,6 @@ div.upload {
 
 .related-content-provider {
   width: 440px;
-}
-.related-content-provider .pagination {
-  margin:5px 0;
 }
 
 div#newsletter-container.column-receiver,

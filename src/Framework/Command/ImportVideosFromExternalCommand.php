@@ -163,7 +163,7 @@ class ImportVideosFromExternalCommand extends ContainerAwareCommand
 
         $failedVideosUrl = [];
         $importedVideos = $notImportedVideos = $alreadyImported = 0;
-        for($i = 1; $i <= $totalqueries; $i++) {
+        for ($i = 1; $i <= $totalqueries; $i++) {
             // Fetch $maxVideosPerQuery video from channel
             $videos = simplexml_load_file(
                 'http://gdata.youtube.com/feeds/base/users/'.$this->channel.

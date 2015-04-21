@@ -1,0 +1,137 @@
+/* Others =================================================================== */
+.application-loading {
+  background: #e5e9ec;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.error-container .error-main {
+  margin: 0;
+  padding: 10% 0;
+  position: relative;
+}
+
+.loading-message {
+  height: 150px;
+  left: 50%;
+  margin: 0 auto;
+  margin-top: -75px;
+  margin-left: -250px;
+  position: absolute;
+  text-align: center;
+  top: 30%;
+  width: 500px;
+}
+
+.step-number {
+  background: @background-color;
+  border-radius: 20px;
+  padding: 5px 9px;
+  color: @default-color;
+  font-weight: bold;
+  font-family: Arial, Verdana;
+  font-size: .9em;
+  display: inline-block;
+  line-height: 1em;
+}
+
+@media (max-width: 767px) {
+  .visible-xs-inline {
+    display: inline-block !important;
+  }
+}
+.small-text {
+  font-size: 0.95em;
+}
+.label-info, .badge-info {
+  background-color: #376092 !important;
+}
+.tagsinput .label-info, .tagsinput .badge-info {
+  font-size: 13px;
+}
+
+
+:disabled {
+  cursor: not-allowed;
+}
+
+div#match-color {
+  cursor: pointer;
+}
+.match_viewer {
+  height: 28px;
+  border: 1px solid #B5B8C8;
+  border-right: 0 !important;
+  width: 30px !important;
+  display: inline-block;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  float: left;
+  margin-left: -2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+.listing-no-contents {
+  padding: 15px;
+}
+
+/* Messages displayed from server =========================================== */
+.content .messages {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: -1px;
+  padding-left: 210px;
+  z-index: 750;
+
+  & > * {
+    margin-bottom: 0;
+    padding: 15px;
+  }
+
+  .alert {
+    border: 0 !important;
+    border-radius: 0px;
+
+    .close {
+      -webkit-appearance: none;
+      background: none;
+      background: transparent;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      font-size: 20px;
+      font-weight: bold;
+      height: auto;
+      line-height: 20px;
+      margin: -12px 0 0 0;
+      opacity: 1;
+      padding: 0;
+      padding: 8px 10px 7px 7px;
+      width: auto;
+    }
+  }
+
+  .alert-notice {
+    color: #505458;
+    background-color: #FDE46F;
+
+    .close {
+      color: #ce8f22;
+    }
+  }
+}
+
+body.collapsed .messages {
+  padding-left: 50px;
+}
+
+@media (max-width: 767px) {
+  body.collapsed .messages {
+    padding-left: 0 !important;
+  }
+}

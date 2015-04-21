@@ -33,6 +33,7 @@ class SettingManager extends BaseManager
      * @var array
      */
     protected $toAutoload = [
+        'favico',
         'site_color',
         'site_description',
         'site_footer',

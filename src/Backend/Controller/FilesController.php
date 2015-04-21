@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -32,9 +33,6 @@ class FilesController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('FILE_MANAGER');
-
         $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
         $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
@@ -69,10 +67,31 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function listAction()
     {
-        return $this->render('files/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'files/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -81,6 +100,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function widgetAction()
     {
@@ -98,6 +119,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function statisticsAction()
     {
@@ -199,6 +222,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_CREATE')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -276,6 +301,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -312,6 +339,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -350,6 +379,8 @@ class FilesController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ATTACHMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -390,6 +421,8 @@ class FilesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="FILE_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {

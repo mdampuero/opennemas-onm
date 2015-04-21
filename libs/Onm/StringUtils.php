@@ -726,4 +726,27 @@ EOF;
 
         return utf8_encode(strtr($string, $transTbl));
     }
+
+    /**
+     * Converts all object properties to utf-8.
+     *
+     * @param  array $objects List of objects to convert
+     * @return array           List of objects with properties in utf-8.
+     */
+    public static function convertToUtf8($objects)
+    {
+        foreach ($objects as &$object) {
+            foreach (get_object_vars($object) as $key => $value) {
+                if (is_string($value)) {
+                    $object->{$key} = iconv(
+                        mb_detect_encoding($value),
+                        'utf-8',
+                        $value
+                    );
+                }
+            }
+        }
+
+        return $objects;
+    }
 }

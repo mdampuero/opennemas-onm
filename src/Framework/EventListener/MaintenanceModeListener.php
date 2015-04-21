@@ -58,7 +58,8 @@ class MaintenanceModeListener implements EventSubscriberInterface
                 try {
                     $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
                 } catch (\Exception $e) {
-                    // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
+                    // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)',
+                    //       get_class($e), $e->getMessage()), false);
 
                     // set handling to false otherwise it wont be able to handle further more
                     // $handling = false;

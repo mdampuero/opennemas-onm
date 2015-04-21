@@ -10,6 +10,8 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
         $scope.instance = {
             domains: [],
             activated_modules: [],
+            changes_in_modules: [],
+            support_plan: 'SUPPORT_NONE',
             settings: {
                 TEMPLATE_USER: 'base'
             },
@@ -17,6 +19,7 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
                 site_language: 'es_ES',
                 pass_level:    -1,
                 max_mailing:   0,
+                max_users:   0,
                 time_zone:     '335'
             }
         };
@@ -27,6 +30,18 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
          * @type Object
          */
         $scope.template = data.template;
+
+        /**
+         * Copy of changed_in_modules array.
+         *
+         * @type Array
+         */
+        if (data.instance) {
+            $scope.changed_modules = angular.copy(data.instance.changes_in_modules);
+        } else {
+            $scope.changed_modules = '';
+        }
+
 
         /**
          * The instance object.
@@ -80,6 +95,34 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
             }
 
             return true;
+        }
+
+        /**
+         * Add/remove modules from changed_in_modules array.
+         *
+         * @param string  moduleId The id of the module.
+         *
+         */
+        $scope.toggleChanges = function(module) {
+            if ($scope.instance.changes_in_modules.indexOf(module.id) != -1) {
+                $scope.instance.changes_in_modules.splice(
+                    $scope.instance.changes_in_modules.indexOf(module.id),
+                    1
+                );
+            } else if ($scope.changed_modules.indexOf(module.id) != -1 &&
+                $scope.instance.changes_in_modules.indexOf(module.id) == -1
+            ) {
+                $scope.instance.changes_in_modules.push(module.id);
+            }
+        }
+
+        /**
+         * Initialize support plan
+         */
+        $scope.initializeSupportPlan = function() {
+            if ($scope.instance.support_plan.indexOf('SUPPORT') == -1) {
+                $scope.instance.support_plan = 'SUPPORT_NONE';
+            }
         }
 
         /**
@@ -219,8 +262,37 @@ angular.module('ManagerApp.controllers').controller('InstanceCtrl', [
 
         $scope.$on('$destroy', function() {
             $scope.instance = null;
+            $scope.changed_modules = null;
             $scope.template = null;
             $scope.selected = null;
         })
+
+        /**
+         * Forces the values to be integer.
+         *
+         * @param Object newValues New values.
+         * @param Object oldValues Old values.
+         */
+        $scope.$watch(
+            '[instance.external.max_users, instance.external.max_mailing]',
+            function(newValues, oldValues) {
+                $scope.instance.external.max_users = parseInt($scope.instance.external.max_users);
+                $scope.instance.external.max_mailing = parseInt($scope.instance.external.max_mailing);
+            },
+            true
+        );
+
+        // Initializes the selected flags
+        for (var i = 0; i < $scope.template.plans.length; i++) {
+            var plan = $scope.template.plans[i];
+            var modulesInPlan = $filter('filter')($scope.template.available_modules, { plan: plan });
+            $scope.selected.plan[plan] = true;
+
+            for (var j = 0; j < modulesInPlan.length; j++) {
+              if ($scope.instance.activated_modules.indexOf(modulesInPlan[j].id) === -1) {
+                $scope.selected.plan[plan] = false;
+              }
+            }
+        }
     }
 ]);

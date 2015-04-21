@@ -3,6 +3,8 @@
 <project name="OpenNemas" default="build">
 
     <property name="toolsdir" value="bin/" />
+    <property name="node_modules_bin_dir" value="node_modules/.bin" />
+    <property name="node_modules_dir" value="node_modules" />
     <path id="project.paths.php">
         <pathelement path="${basedir}/src/Backend" />
         <pathelement path="${basedir}/src/BackendWebService" />
@@ -17,13 +19,25 @@
         <pathelement path="${basedir}/libs/core" />
         <!-- Take a look at lint target should be updated -->
     </path>
+
     <pathconvert pathsep=" " property="project.paths.php.space-separated" refid="project.paths.php"/>
     <pathconvert pathsep="," property="project.paths.php.comma-separated" refid="project.paths.php"/>
 
-    <target name="build" depends="prepare,lint,phpunit-ci,tools-parallel"/>
+    <path id="project.paths.js">
+        <pathelement path="${basedir}/public/assets/src" />
+        <pathelement path="${basedir}/public/js" />
+        <pathelement path="${basedir}/public/themes/admin" />
+        <pathelement path="${basedir}/public/themes/manager" />
+        <!-- Take a look at lint target should be updated -->
+    </path>
+
+    <pathconvert pathsep=" " property="project.paths.js.space-separated" refid="project.paths.js"/>
+    <pathconvert pathsep="," property="project.paths.js.comma-separated" refid="project.paths.js"/>
+
+    <target name="build" depends="prepare,phplint,jshint,jsdoc,phpunit-ci,tools-parallel"/>
 
     <target name="build-sequential"
-            depends="prepare,lint,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
+            depends="prepare,phplint,jshint,jsdoc,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox-ci" />
 
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel threadCount="4">
@@ -42,6 +56,7 @@
         <delete dir="${basedir}/build/api"/>
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/jsdoc" />
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
         <delete dir="${basedir}/build/phpdox"/>
@@ -52,10 +67,13 @@
         <mkdir dir="${basedir}/build/api"/>
         <mkdir dir="${basedir}/build/code-browser"/>
         <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/jsdoc" />
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
         <mkdir dir="${basedir}/build/phpdox"/>
         <antcall target="composer" />
+        <antcall target="npm" />
+        <antcall target="bower" />
     </target>
 
     <target name="composer" description="Installing composer dependencies">
@@ -69,7 +87,19 @@
         </exec>
     </target>
 
-    <target name="lint" description="Checks php files for Syntax errors">
+    <target name="npm" description="Installing npm dependencies">
+        <exec executable="npm" failonerror="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <target name="bower" description="Installing bower dependencies">
+        <exec executable="${node_modules_bin_dir}/bower" failonerror="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <target name="phplint" description="Checks php files for Syntax errors">
         <exec executable="sh" failonerror="true">
             <arg value="-c" />
             <arg value="find ${project.paths.php.space-separated} -name *.php -print0 | xargs -0 -n1 -P0 php -l"/>
@@ -172,6 +202,19 @@
         </exec>
     </target>
 
+    <target name="jsdoc" description="Generate AngularJS documentation">
+        <exec executable="${node_modules_bin_dir}/jsdoc" failonerror="false" output="${basedir}/build/jshint.xml">
+            <arg line="-c" />
+            <arg value="${node_modules_dir}/angular-jsdoc/conf.json" />
+            <arg line="-t" />
+            <arg line="${node_modules_dir}/angular-jsdoc/template" />
+            <arg line="-r" />
+            <arg line="${project.paths.js.space-separated}" />
+            <arg line="-d" />
+            <arg line="${basedir}/build/jsdoc" />
+        </exec>
+    </target>
+
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${toolsdir}/phpunit" failonerror="true">
             <arg line="-c" />
@@ -192,6 +235,15 @@
 
             <arg line="--log-junit" />
             <arg value="${basedir}/build/logs/junit.xml" />
+        </exec>
+    </target>
+
+    <target name="jshint" description="Check style in JS files">
+        <exec executable="${node_modules_bin_dir}/jshint" failonerror="false" output="${basedir}/build/jshint.xml">
+            <arg line="-c" />
+            <arg value="${basedir}/.jshintrc" />
+            <arg line="--reporter=checkstyle" />
+            <arg line="${project.paths.js.space-separated}" />
         </exec>
     </target>
 </project>

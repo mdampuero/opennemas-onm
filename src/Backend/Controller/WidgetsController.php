@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -23,22 +24,13 @@ use Onm\Settings as s;
 class WidgetsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     */
-    public function init()
-    {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('WIDGET_MANAGER');
-    }
-
-    /**
      * List widgets.
      *
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_ADMIN')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function listAction()
     {
@@ -53,6 +45,8 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -62,13 +56,18 @@ class WidgetsController extends Controller
         $category = $request->query->get('category', 'home');
 
         $widget = new \Widget($id);
-
-        if (is_string($widget->params)) {
+        $widgetParams = [];
+        if (is_string($widget->params) && !empty($widget->params)) {
             $widget->params = unserialize($widget->params);
-            if (!is_array($widget->params)) {
-                $widget->params = array();
+
+            foreach ($widget->params as $key => $value) {
+                $widgetParams []= [
+                    'name' => $key,
+                    'value' => $value
+                ];
             }
         }
+        $widget->params = $widgetParams;
         if (is_null($widget->id)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -102,28 +101,35 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_CREATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $post   = $request->request;
-            $items  = $post->get('items', array());
-            $values = $post->get('values', array());
+            $post = $request->request;
 
             $widgetData = array(
                 'id'             => $post->getDigits('id'),
                 'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
                 'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING),
-                'content_status' => $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'content_status' => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
                 'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
                 'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
                 'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
-                'params'         => array_combine($items, $values),
+                'params'          => json_decode($post->get('parsedParams', null)),
             );
-
             if ($widgetData['renderlet'] == 'intelligentwidget') {
-                $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+                $widgetData['content'] = $post->filter('intelligent_type', null, FILTER_SANITIZE_STRING);
+            }
+
+            if (count($widgetData['params']) > 0) {
+                $newParams = [];
+                foreach ($widgetData['params'] as $param) {
+                    $newParams [$param->name]= $param->value;
+                }
+                $widgetData['params'] = $newParams;
             }
 
             try {
@@ -137,7 +143,7 @@ class WidgetsController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', _('Widget created successfully.'));
 
-            return $this->redirect($this->generateUrl('admin_widgets'));
+            return $this->redirect($this->generateUrl('admin_widget_show', ['id' => $widget->id]));
 
         } else {
             $allInteligentWidgets = \Widget::getAllInteligentWidgets();
@@ -160,6 +166,8 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -175,21 +183,27 @@ class WidgetsController extends Controller
             return $this->redirect($this->generateUrl('admin_widget_show', array('id' => $id)));
         }
 
-        $items  = $post->get('items', array());
-        $values = $post->get('values', array());
-
         $widgetData = array(
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING),
-            'content_status'  => $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'content_status'  => (int) $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
             'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
-            'params'          => array_combine($items, $values),
+            'params'          => json_decode($post->get('parsedParams', null)),
         );
+
+        if (count($widgetData['params']) > 0) {
+            $newParams = [];
+            foreach ($widgetData['params'] as $param) {
+                $newParams [$param->name]= $param->value;
+            }
+            $widgetData['params'] = $newParams;
+        }
+
         if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
             $widgetData['content'] = $widgetData['intelligentType'];
         }
@@ -220,6 +234,8 @@ class WidgetsController extends Controller
      *
      * @param  Request  $request the request object
      * @return Response          the response object
+     *
+     * @CheckModuleAccess(module="WIDGET_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -242,9 +258,23 @@ class WidgetsController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countWidgets,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countWidgets,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_widgets_content_provider',
                 array('category' => $categoryId)
             ),

@@ -28,7 +28,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          *
          * @type Object
          */
-        $scope.groups = data.results;
+        $scope.items = data.results;
 
         /**
          * The list of selected elements.
@@ -37,7 +37,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.selected = {
             all: false,
-            groups: []
+            items: []
         };
 
         /**
@@ -120,7 +120,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
                         return function() {
                             return itemService.deleteSelected(
                                 'manager_ws_user_groups_delete',
-                                $scope.selected.groups);
+                                $scope.selected.items);
                         };
                     }
                 }
@@ -132,7 +132,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
 
                     $scope.selected = {
                         all: false,
-                        groups: []
+                        items: []
                     };
 
                     // Show success message
@@ -183,7 +183,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          * @param string id The group id.
          */
         $scope.isSelected = function(id) {
-            return $scope.selected.groups.indexOf(id) != -1;
+            return $scope.selected.items.indexOf(id) != -1;
         };
 
         /**
@@ -213,11 +213,11 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
          */
         $scope.selectAll = function() {
             if ($scope.selected.all) {
-                $scope.selected.groups = $scope.groups.map(function(group) {
+                $scope.selected.items = $scope.items.map(function(group) {
                     return group.id;
                 });
             } else {
-                $scope.selected.groups = [];
+                $scope.selected.items = [];
             }
         };
 
@@ -251,7 +251,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
         $scope.$on('$destroy', function() {
             $scope.criteria         = null;
             $scope.epp              = null;
-            $scope.groups           = null;
+            $scope.items           = null;
             $scope.selected         = null;
             $scope.orderBy          = null;
             $scope.pagination.page  = null;
@@ -292,7 +292,7 @@ angular.module('ManagerApp.controllers').controller('UserGroupListCtrl', [
 
             itemService.list('manager_ws_user_groups_list', data).then(
                 function (response) {
-                    $scope.groups           = response.data.results;
+                    $scope.items           = response.data.results;
                     $scope.pagination.total = response.data.total;
                     $scope.loading          = 0;
 

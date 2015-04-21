@@ -51,7 +51,6 @@ class CategoryController extends Controller
 
         $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-
             $itemsPerPage = s::get('items_in_blog');
             if (empty($itemsPerPage )) {
                 $itemsPerPage = 8;
@@ -166,11 +165,9 @@ class CategoryController extends Controller
         // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
-        foreach ($syncParams as $siteUrl => $categoriesToSync) {
-            foreach ($categoriesToSync as $value) {
-                if (preg_match('/'.$categoryName.'/i', $value)) {
-                    $wsUrl = $siteUrl;
-                }
+        foreach ($syncParams as $siteUrl => $values) {
+            if (in_array($categoryName, $values['categories'])) {
+                $wsUrl = $siteUrl;
             }
         }
 

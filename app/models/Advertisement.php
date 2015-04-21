@@ -150,6 +150,7 @@ class Advertisement extends Content
      **/
     public function __construct($id = null)
     {
+        $this->content_type_l10n_name = _('Advertisement');
         $this->content_type = get_class();
         parent::__construct($id);
 

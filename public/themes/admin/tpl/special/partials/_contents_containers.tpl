@@ -1,42 +1,39 @@
-<hr>
-
-<div id="cates" class="special-container" style="display:{if $special->only_pdf eq 0}inline{else}none{/if};">
-    <table style="width:100%">
-        <tr>
-            <td>
-                <div id="column_right" class="column-receiver">
-                    <h5>  Para añadir contenidos columna izquierda arrastre sobre este cuadro </h5>
-                    <hr>
-                    <ul class="content-receiver" >
-                        {section name=d loop=$contentsRight}
-                            <li class="" data-type="{$contentsRight[d]->content_type}" data-id="{$contentsRight[d]->pk_content}">
-                                {$contentsRight[d]->created|date_format:"%d-%m-%Y"}:{$contentsRight[d]->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
-                            </li>
-                        {/section}
-                    </ul>
-                </div>
-
-                <div id="column_left" class="column-receiver">
-                        <h5> Para añadir contenidos columna derecha arrastre sobre este cuadro </h5>
-                        <hr>
-                        <ul class="content-receiver" >
-                        {section name=d loop=$contentsLeft}
-                            <li class="" data-type="{$contentsLeft[d]->content_type}" data-id="{$contentsLeft[d]->pk_content}">
-                                {$contentsLeft[d]->created|date_format:"%d-%m-%Y"}:{$contentsLeft[d]->title|clearslash}
-                                <span class="icon"><i class="icon-trash"></i></span>
-                            </li>
-                        {/section}
-                        </ul>
-                </div>
-        <tr>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                {include file="article/related/_related_provider.tpl"}
-
-            </td>
-        </tr>
-    </table>
+<div class="grid simple">
+  <div class="grid-title">
+    <h4>{t}Special contents{/t}</h4>
+  </div>
+  <div class="grid-body">
+    <div class="row">
+      <div class="col-md-6" {if isset($contentsLeft)}ng-init="contentsLeft = {json_encode($contentsLeft)|replace:'"':'\''}"{/if}>
+        <h5>{t}Articles in left column{/t}</h5>
+        <div class="ng-cloak" ui-sortable ng-model="contentsLeft">
+          <div class="related-item" ng-repeat="content in contentsLeft">
+            <div class="related-item-info">[% content.content_type_l10n_name %] - [% content.title %]</div>
+            <button class="btn btn-white" ng-click="removeItem('contentsLeft', $index)">
+              <i class="fa fa-times text-danger"></i>
+            </button>
+          </div>
+        </div>
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsLeft" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
+          <button type="button" class="btn btn-primaty">{t}Click here to add contents{/t}</button>
+        </div>
+      </div>
+      <div class="col-md-6" {if isset($contentsRight)}ng-init="contentsRight = {json_encode($contentsRight)|replace:'"':'\''}"{/if}>
+        <h5>{t}Articles in right column{/t}</h5>
+        <div class="ng-cloak" ui-sortable ng-model="contentsRight">
+          <div class="related-item" ng-repeat="content in contentsRight">
+            <div class="related-item-info">[% content.content_type_l10n_name %] - [% content.title %]</div>
+            <button class="btn btn-white" ng-click="removeItem('contentsRight', $index)">
+              <i class="fa fa-times text-danger"></i>
+            </button>
+          </div>
+        </div>
+        <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsRight" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
+          <button type="button" class="btn btn-primaty">{t}Click here to add contents{/t}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<input type="hidden" id="noticias_right_input" name="noticias_right_input" ng-value="relatedRight">
+<input type="hidden" id="noticias_left_input" name="noticias_left_input" ng-value="relatedLeft">

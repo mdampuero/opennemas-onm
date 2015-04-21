@@ -61,7 +61,7 @@ class ContentController extends Controller
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = $this->convertToUtf8($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
         foreach ($results as &$result) {
@@ -82,6 +82,67 @@ class ContentController extends Controller
             )
         );
     }
+
+    /**
+     * Returns a list of contents in home in JSON format.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function listHomeAction(Request $request, $contentType)
+    {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
+                        )
+                    )
+                )
+            );
+        }
+
+        $em = $this->get('entity_repository');
+
+        $order = '`position` asc';
+        $search = [
+            'content_type_name' => [ [ 'value' => $contentType ] ],
+            'in_home' => [ [ 'value' => 1 ] ],
+        ];
+
+        $results = $em->findBy($search, $order);
+        $results = \Onm\StringUtils::convertToUtf8($results);
+        $total   = $em->countBy($search);
+
+        foreach ($results as &$result) {
+            $createdTime = new \DateTime($result->created);
+            $result->created = $createdTime->format(\DateTime::ISO8601);
+
+            $updatedTime = new \DateTime($result->changed);
+            $result->changed = $updatedTime->format(\DateTime::ISO8601);
+        }
+
+        return new JsonResponse(
+            array(
+                'extra'             => $this->loadExtraData($results),
+                'results'           => $results,
+                'total'             => $total,
+            )
+        );
+    }
+
 
     /**
      * Deletes a content.
@@ -415,7 +476,7 @@ class ContentController extends Controller
                 $content->remove($id);
                 $success[] = array(
                     'id'      => $id,
-                    'message' => _('Item removed permanently successfully'),
+                    'message' => _('Item permanently removed successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
@@ -506,7 +567,89 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) removed successfully'), count($updated)),
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'messages'  => array_merge($success, $errors)
+            )
+        );
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function emptyTrashAction(Request $request)
+    {
+        // Check permissions
+        if (!in_array('TRASH_ADMIN', $this->getUser()->getRoles())) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => sprintf(_('Access denied (%s)'), 'TRASH_ADMIN')
+                        )
+                    )
+                )
+            );
+        }
+
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        $contents = $this->get('entity_repository')->findBy([
+            'in_litter' => [
+                [
+                    'operator' => '=',
+                    'value'    => '1'
+                ]
+            ]
+        ]);
+
+        if (is_array($contents) && count($contents) > 0) {
+            foreach ($contents as $content) {
+                $id = $content->id;
+                if (!is_null($content->id)) {
+                    try {
+                        $content->remove($id);
+                        $updated[] = $id;
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
+                            'type'    => 'error'
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    );
+                }
+            }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => sprintf(
+                    _('%d item(s) permanently removed successfully'),
+                    count($updated)
+                ),
                 'type'    => 'success'
             );
         }
@@ -560,10 +703,15 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->setAvailable($status, $this->getUser()->id);
 
+            if ($status) {
+                $message = _('Item published successfully');
+            } else {
+                $message = _('Item unpublished successfully');
+            }
             $status = $content->content_status;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -573,8 +721,6 @@ class ContentController extends Controller
                 'type'    => 'error'
             );
         }
-
-
 
         return new JsonResponse(
             array(
@@ -653,9 +799,15 @@ class ContentController extends Controller
         }
 
         if ($updated > 0) {
+            if ($available) {
+                $message = sprintf(_('%d item(s) published successfully'), count($updated));
+            } else {
+                $message = sprintf(_('%d item(s) unpublished successfully'), count($updated));
+            }
+
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => $message,
                 'type'    => 'success'
             );
         }
@@ -709,9 +861,16 @@ class ContentController extends Controller
             $content->toggleFavorite();
 
             $favorite = $content->favorite;
+
+            if ($favorite) {
+                $message = _('Item added to favorites successfully');
+            } else {
+                $message = _('Item removed from favorites successfully');
+            }
+
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -771,10 +930,16 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->toggleInHome();
 
+            if ($content->in_home) {
+                $message = _('Item added to home successfully');
+            } else {
+                $message = _('Item removed from home successfully');
+            }
+
             $inHome = $content->in_home;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully'),
+                'message' => $message,
                 'type'    => 'success'
             );
         } else {
@@ -862,9 +1027,15 @@ class ContentController extends Controller
         }
 
         if ($updated > 0) {
+            if ($inHome) {
+                $message = sprintf(_('%d item(s) added to home successfully'), count($updated));
+            } else {
+                $message = sprintf(_('%d item(s) removed from home successfully'), count($updated));
+            }
+
             $success[] = array(
                 'id'      => $updated,
-                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
+                'message' => $message,
                 'type'    => 'success'
             );
         }
@@ -917,7 +1088,8 @@ class ContentController extends Controller
         ) {
             $pos = 1;
             foreach ($positions as $id) {
-                $file= new \Attachment($id);
+                $contentType = \classify($contentType);
+                $file= new $contentType($id);
 
                 if ($file->setPosition($pos)) {
                     $updated[] = $id;
@@ -1038,29 +1210,14 @@ class ContentController extends Controller
             $extra['authors'][$user->id] = $user->eraseCredentials();
         }
 
-        return $extra;
-    }
+        $ccm = \ContentCategoryManager::get_instance();
+        $categories = $ccm->findAll();
+        $extra['categories'] = [];
 
-    /**
-     * Converts all contents to utf-8.
-     *
-     * @param  array $contents Contents to convert.
-     * @return array           Contents with properties in utf-8.
-     */
-    protected function convertToUtf8($contents)
-    {
-        foreach ($contents as &$content) {
-            foreach (get_object_vars($content) as $key => $value) {
-                if (is_string($value)) {
-                    $content->{$key} = iconv(
-                        mb_detect_encoding($value),
-                        'utf-8',
-                        $value
-                    );
-                }
-            }
+        foreach ($categories as $category) {
+            $extra['categories'][$category->name] = $category->title;
         }
 
-        return $contents;
+        return $extra;
     }
 }

@@ -13,8 +13,10 @@ namespace Framework\Assetic;
 
 use Assetic\FilterManager;
 use Assetic\Exception\FilterException;
-use Assetic\Filter\UglifyCssFilter;
 use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\LessFilter;
+use Framework\Assetic\Filter\LessNonCachedFilter;
+use Assetic\Filter\UglifyCssFilter;
 
 /**
  * Asset manager to handle stylesheets assets.
@@ -50,6 +52,21 @@ class StylesheetManager extends AssetManager
                             $this->config['filters']['uglifycss']['node']
                         )
                     );
+                    break;
+                case 'less':
+                    $filter = new LessFilter(
+                        $this->config['filters']['less']['node'],
+                        $this->config['filters']['less']['node_paths']
+                    );
+
+                    if ($this->env == 'dev') {
+                        $filter = new LessNonCachedFilter(
+                            $this->config['filters']['less']['node'],
+                            $this->config['filters']['less']['node_paths']
+                        );
+                    }
+
+                    $this->fm->set('less', $filter);
                     break;
                 default:
                     throw new FilterException();

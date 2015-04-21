@@ -1,18 +1,22 @@
-<div class="modal hide fade" id="modal-edit-album-errors">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Complete all the required album information before save it{/t}</h3>
-    </div>
-    <div class="modal-body">
+<div class="modal fade" id="modal-edit-album-errors">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{t}Complete all the required album information before save it{/t}</h4>
+      </div>
+      <div class="modal-body">
         <ul>
-            <li>{t}Check that you have included more than one image in this album{/t}</li>
-            <li>{t}Assign an image as a cover image{/t}</li>
-        </ul><!-- / -->
-    </div>
-    <div class="modal-footer">
-        <a class="btn btn-primary accept" href="#">{t}Close{/t}</a>
-    </div>
-</div>
+          <li>{t}Check that you have included more than one image in this album{/t}</li>
+          <li>{t}Assign an image as a cover image{/t}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="button">{t}Close{/t}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
 jQuery("#modal-edit-album-errors").modal({

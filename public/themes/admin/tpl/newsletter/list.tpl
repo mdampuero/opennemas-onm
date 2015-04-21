@@ -1,135 +1,199 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
-    {javascripts src="@AdminTheme/js/onm/jquery-functions.js"}
-        <script type="text/javascript" src="{$asset_url}"></script>
-    {/javascripts}
-{/block}
-
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario">
-    <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsletters{/t}</h2></div>
-            <ul class="old-button">
-                <li>
-                    <a href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/list-add.png" alt="{t}New newsletter{/t}"><br />{t}New newsletter{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                        {t}Settings{/t}
-                    </a>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
-                        <img src="{$params.IMAGE_DIR}authors.png" title="{t}Subscriptors{/t}" alt="{t}Subscriptors{/t}"><br />{t}Subscriptors{/t}
-                    </a>
-                </li>
-            </ul>
+<div ng-app="BackendApp" ng-controller="NewsletterListCtrl" ng-init="init('newsletter', { title_like: '' }, 'created', 'desc', 'backend_ws_newsletter_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+  <div class="page-navbar actions-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section">
+          <li class="quicklinks">
+            <h4>
+              <i class="fa fa-home fa-lg"></i>
+              {t}Newsletters{/t}
+            </h4>
+          </li>
+        </ul>
+        <div class="all-actions pull-right">
+          <ul class="nav quick-section">
+            <li>
+              <a class="btn btn-link" href="{url name=admin_newsletter_config}" class="admin_add" title="{t}Config newsletter module{/t}">
+                <span class="fa fa-cog fa-lg"></span>
+              </a>
+            </li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="hidden-xs">
+              <a class="btn btn-white" href="{url name=admin_newsletter_subscriptors}" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
+                <span class="fa fa-users"></span>
+                {t}Subscriptors{/t}
+              </a>
+            </li>
+            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks">
+              <a class="btn btn-primary" href="{url name=admin_newsletter_create}" accesskey="N" tabindex="1">
+                <i class="fa fa-plus"></i>
+                {t}Create{/t}
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="wrapper-content">
+  {*<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section pull-left">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+              <i class="fa fa-arrow-left fa-lg"></i>
+            </button>
+          </li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks">
+            <h4>
+              [% selected.contents.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+            </h4>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right">
+          <li class="quicklinks">
+            <button class="btn btn-link" ng-click="removePermanentlySelected()" tooltip="{t}Remove{/t}" tooltip-placement="bottom" type="button">
+              <i class="fa fa-trash-o fa-lg"></i> <span class="hidden-xs">{t}Remove{/t}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>*}
 
-        {render_messages}
+  <div class="page-navbar filters-navbar">
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <ul class="nav quick-section filter-components">
+          <li class="m-r-10 input-prepend inside search-input no-boarder">
+            <span class="add-on">
+              <span class="fa fa-search fa-lg"></span>
+            </span>
+            <input class="no-boarder" name="title" ng-model="criteria.title_like" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by subject{/t}" type="text"/>
+          </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
+          <li class="quicklinks hidden-xs">
+            <span class="info">{$message}</span>
+          </li>
+        </ul>
+        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks hidden-xs">
+            <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-        <div id="warnings-validation"></div>
+  <div class="content">
 
-        <div class="table-info clearfix">
-            {if $maxAllowed gt 0}
-                {t 1=$lastInvoice 2=$totalSendings 3=$maxAllowed} Since %1 you have sent %2 of %3 allowed{/t}
-            {else}
-                {t 1=$lastInvoice 2=$totalSendings} Since %1 you have sent %2 emails{/t}
-            {/if}
+    {render_messages}
+
+    <div class="grid simple">
+      <div class="grid-body no-padding">
+        <div class="spinner-wrapper" ng-if="loading">
+          <div class="loading-spinner"></div>
+          <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <table class="table table-hover table-condensed">
+        <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+          <div class="center">
+            <h4>{t}Unable to find any newsletter that matches your search.{/t}</h4>
+            <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
+          </div>
+        </div>
+        <div class="table-wrapper ng-cloak" ng-if="!loading && contents.length > 0">
+          <table class="table table-hover no-margin">
             <thead>
-                <tr>
-                    {if count($newsletters) > 0}
-                    <th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
-                    </th>
-                    <th>{t}Title{/t}</th>
-                    <th class="left"  style="width:150px;">{t}Created{/t}</th>
-                    <th class="left"  style="width:150px;">{t}Updated{/t}</th>
-                    <th class="left">{t}Sendings{/t}</th>
-                    <th class="right" style="width:100px;">{t}Actions{/t}</th>
-                    {else}
-                    <th class="center">
-                        &nbsp;
-                    </th>
-                    {/if}
-                </tr>
+              <tr>
+                {*<th class="checkbox-cell">
+                  <div class="checkbox checkbox-default">
+                    <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="selectAll();">
+                    <label for="select-all"></label>
+                  </div>
+                </th>*}
+                <th>{t}Title{/t}</th>
+                <th class="center hidden-xs hidden-sm" style="width:250px;">{t}Updated{/t}</th>
+                <th class="right">{t}Sendings{/t}</th>
+              </tr>
             </thead>
             <tbody>
-                {foreach name=c from=$newsletters item=newsletter}
-                <tr data-id="{$newsletter->id}" style="cursor:pointer;">
-                    <td>
-                        <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$newsletter->id}"  style="cursor:pointer;">
-                    </td>
-                    <td class="left">
-                        {if !empty($newsletter->title)}
-                            {$newsletter->title}
-                        {else}
-                            {t}Newsletter{/t}  -  {$newsletter->created}
-                        {/if}
-                    </td>
-                    <td class="left">
-                        {$newsletter->created}
-                    </td>
-                    <td class="left">
-                        {$newsletter->updated}
-                    </td>
-                    <td class="left">
-                    {if $newsletter->sent gt 0}
-                        {$newsletter->sent}
-                    {else}
-                        {t}No{/t}
-                    {/if}
-                    </td>
-                    <td style="padding:1px; font-size:11px;" class="right">
-                        <div class="btn-group">
-                            <a class="btn" href="{url name=admin_newsletter_show_contents id=$newsletter->id}" title="{t}Edit{/t}" >
-                                <i class="icon-pencil"></i> {t}Edit{/t}
-                            </a>
+              <tr ng-repeat="content in contents" ng-class="{ row_selected: isSelected(content.id) }">
+                {*<td class="checkbox-cell">
+                  <div class="checkbox check-default">
+                    <input id="checkbox[%$index%]" checklist-model="selected.contents" checklist-value="content.id" type="checkbox">
+                    <label for="checkbox[%$index%]"></label>
+                  </div>
+                </td>*}
+                <td class="left">
+                  <p ng-if="content.title != ''">[% content.title %]</p>
+                  <p ng-if="content.title == ''">{t}Newsletter{/t}  -  [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</p>
+                  <div class="small-text">
+                    <strong>{t}Created:{/t}</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                  </div>
 
-                            <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
-                                <i class="icon-eye-open"></i>
-                            </a>
-                            {if $newsletter->sent lt 1}
-                            <a class="del btn btn-danger"
-                               data-id="{$newsletter->id}"
-                               href="{url name=admin_newsletter_delete id=$newsletter->id}" >
-                                <i class="icon-trash icon-white"></i>
-                            </a>
-                            {/if}
-                        </div>
-                    </td>
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td class="empty" colspan="8">
-                        {t}There is no newsletters yet.{/t}
-                    </td>
-                </tr>
-                {/foreach}
+                  <div class="listing-inline-actions">
+                    <a class="link" href="[% edit(content.id, 'admin_newsletter_show_contents') %]" title="{t}Edit{/t}" >
+                      <i class="fa fa-pencil"></i> {t}Edit{/t}
+                    </a>
+
+                    <a href="[% edit(content.id, 'admin_newsletter_preview') %]" title="{t}Preview{/t}" class="link">
+                      <i class="fa fa-eye"></i>
+                      {t}Show contents{/t}
+                    </a>
+                    <button ng-if="content.sent < 1" class="link link-danger" ng-click="removePermanently(content)" type="button">
+                      <i class="fa fa-trash-o"></i>
+                      {t}Delete{/t}
+                    </button>
+                  </div>
+                </td>
+                <td class="center hidden-xs hidden-sm">
+                  [% content.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                </td>
+                <td class="right">
+                  [% content.sent != 0 ? content.sent : '{t}No{/t}' %]
+                </td>
+              </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="10" class="center">
-                        <div class="pagination">
-                            {$pagination|default:""}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
+          </table>
+        </div>
+      </div>
+      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
+        <div class="pull-right">
+          <onm-pagination ng-model="pagination.page" items-per-page="pagination.epp" total-items="pagination.total"></onm-pagination>
+        </div>
+      </div>
     </div>
-</form>
+
+  </div>
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/modals/_modalDelete.tpl"}
+  </script>
+
+  <script type="text/ng-template" id="modal-batch-remove-permanently">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+      <h4 class="modal-title">
+        <i class="fa fa-trash-o"></i>
+        {t}Remove permanently selected items{/t}
+      </h4>
+    </div>
+    <div class="modal-body">
+      <p>{t escape=off}Are you sure you want to remove permanently [% template.selected.contents.length %] item(s)?{/t}</p>
+      <p class="alert alert-error">{t} You will not be able to restore them back.{/t}</p>
+    </div>
+    <div class="modal-footer">
+      <span class="loading" ng-if="deleting == 1"></span>
+      <button class="btn btn-primary" ng-click="confirm()" type="button">{t}Yes, remove them all{/t}</button>
+      <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
+    </div>
+  </script>
+</div>
 {/block}

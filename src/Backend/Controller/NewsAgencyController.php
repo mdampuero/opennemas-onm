@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -35,9 +36,6 @@ class NewsAgencyController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
-
         $this->syncFrom = array(
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
@@ -74,6 +72,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function listAction(Request $request)
     {
@@ -98,19 +98,10 @@ class NewsAgencyController extends Controller
         );
 
         $message = '';
-        if ($minutesFromLastSync > 100) {
-            $message = _('A long time ago from synchronization.');
-        } elseif ($minutesFromLastSync > 10) {
-            $message = sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync);
-        }
-        if ($message) {
+        if ($minutesFromLastSync > 10) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
-                $message
-                . _(
-                    'Try syncing the news list from server by clicking '
-                    .'in "Sync with server" button above'
-                )
+                sprintf(_('Last sync was %d minutes ago.'), $minutesFromLastSync)
             );
         }
 
@@ -134,25 +125,28 @@ class NewsAgencyController extends Controller
     }
 
     /**
+     * Fetches the list elements that are synced
      *
+     * @param Request $request the request object
      *
-     * @return void
-     * @author
+     * @return JsonResponse
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function webServiceAction(Request $request)
     {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
+        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
 
         $filterSource = $filterTitle = '*';
 
         if (is_array($search)) {
             if (array_key_exists('source', $search)) {
-                $filterSource          = $search['source'][0]['value'];
+                $filterSource = $search['source'][0]['value'];
             }
             if (array_key_exists('title', $search)) {
-                $filterTitle     = $search['title'][0]['value'];
+                $filterTitle = $search['title'][0]['value'];
             }
         }
 
@@ -236,6 +230,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function showAction(Request $request)
     {
@@ -263,12 +259,17 @@ class NewsAgencyController extends Controller
                 $this->generateUrl('admin_news_agency', array('page' => $page))
             );
         }
+        if ($alreadyImported) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                _('This content was imported before. You may cause a content duplication while importing it.')
+            );
+        }
 
         return $this->render(
             'news_agency/show.tpl',
             array(
                 'element'  => $element,
-                'imported' => $alreadyImported,
             )
         );
     }
@@ -281,6 +282,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function importAction(Request $request)
     {
@@ -298,10 +301,15 @@ class NewsAgencyController extends Controller
         if ($article == 'redirect_list') {
             return $this->redirect($this->generateUrl('admin_news_agency'));
         } elseif ($article == 'redirect_category') {
-            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array(
-                'id'        => $id,
-                'source_id' => $sourceId
-            )));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_pickcategory',
+                    array(
+                        'id'        => $id,
+                        'source_id' => $sourceId
+                    )
+                )
+            );
         }
 
         // TODO: change this redirection when creating the ported article controller
@@ -328,6 +336,10 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function batchImportAction(Request $request)
     {
@@ -365,6 +377,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function selectCategoryWhereToImportAction(Request $request)
     {
@@ -417,10 +431,15 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * undocumented function
+     * Get the most similar category based on category metadata of element
      *
-     * @return void
-     * @author
+     * @param Object $element the element object
+     *
+     * @return int Category id
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function getSimilarCategoryIdForElement($element)
     {
@@ -459,6 +478,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function showAttachmentAction(Request $request)
     {
@@ -519,6 +540,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function unlockAction(Request $request)
     {
@@ -542,6 +565,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function syncAction(Request $request)
     {
@@ -580,6 +605,8 @@ class NewsAgencyController extends Controller
      * @return void
      *
      * @Security("has_role('IMPORT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configListServersAction()
     {
@@ -602,6 +629,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configUpdateServerAction(Request $request)
     {
@@ -647,6 +676,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configShowServerAction(Request $request)
     {
@@ -672,6 +703,10 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function toogleEnabledAction(Request $request)
     {
@@ -709,6 +744,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configCreateServerAction(Request $request)
     {
@@ -721,43 +758,47 @@ class NewsAgencyController extends Controller
             );
 
             return $this->render('news_agency/config/new.tpl');
-        } else {
-            $servers = s::get('news_agency_config');
-
-            if (!is_array($servers)) {
-                $servers = array();
-            }
-
-            $latestServerId = max(array_keys($servers));
-
-            $server = array(
-                'id'            => $latestServerId + 1,
-                'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
-                'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
-                'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
-                'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
-                'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
-                'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
-                'activated'     => $request->request->getDigits('activated', 0),
-            );
-
-            $servers[$server['id']] = $server;
-
-            s::set('news_agency_config', $servers);
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('News agency server added.')
-            );
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_server_show',
-                    array('id' => $server['id'])
-                )
-            );
         }
+
+        $servers = s::get('news_agency_config');
+
+        if (!is_array($servers)) {
+            $servers = [];
+        }
+
+        if (count($servers) <= 0) {
+            $latestServerId = 0;
+        } else {
+            $latestServerId = max(array_keys($servers));
+        }
+
+        $server = array(
+            'id'            => $latestServerId + 1,
+            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
+            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'     => $request->request->getDigits('activated', 0),
+        );
+
+        $servers[$server['id']] = $server;
+
+        s::set('news_agency_config', $servers);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('News agency server added.')
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_news_agency_server_show',
+                array('id' => $server['id'])
+            )
+        );
     }
 
     /**
@@ -768,6 +809,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function configDeleteServerAction(Request $request)
     {
@@ -817,6 +860,8 @@ class NewsAgencyController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
+     *
+     * @CheckModuleAccess(module="NEWS_AGENCY_IMPORTER")
      **/
     public function removeServerFilesAction(Request $request)
     {

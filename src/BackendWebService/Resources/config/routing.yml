@@ -10,12 +10,12 @@ backend_ws_menus:
     resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
     prefix:   /
 
-backend_ws_widgets:
-    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
-    prefix:   /
-
 backend_ws_opinions:
     resource: @BackendWebServiceBundle/Resources/config/routing/opinions.yml
+    prefix:   /
+
+backend_ws_picker:
+    resource: @BackendWebServiceBundle/Resources/config/routing/picker.yml
     prefix:   /
 
 backend_ws_users:
@@ -24,6 +24,26 @@ backend_ws_users:
 
 backend_ws_usergroups:
     resource: @BackendWebServiceBundle/Resources/config/routing/usergroups.yml
+    prefix:   /
+
+backend_ws_widgets:
+    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
+    prefix:   /
+
+backend_ws_keywords:
+    resource: @BackendWebServiceBundle/Resources/config/routing/keywords.yml
+    prefix:   /
+
+backend_ws_cachemanager:
+    resource: @BackendWebServiceBundle/Resources/config/routing/cachemanager.yml
+    prefix:   /
+
+backend_ws_newsletter:
+    resource: @BackendWebServiceBundle/Resources/config/routing/newsletter.yml
+    prefix:   /
+
+backend_ws_newsletter_subscriptor:
+    resource: @BackendWebServiceBundle/Resources/config/routing/newsletter_subscriptors.yml
     prefix:   /
 
 backend_ws_content:

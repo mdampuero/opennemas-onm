@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -33,9 +34,6 @@ class AlbumsController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ALBUM_MANAGER');
-
         $request = $this->get('request');
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');
@@ -66,10 +64,31 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function listAction()
     {
-        return $this->render('album/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'album/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -78,6 +97,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function widgetAction()
     {
@@ -96,6 +117,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_CREATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -130,14 +153,14 @@ class AlbumsController extends Controller
 
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array( '0' => _(' - Select one author - '));
+            $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
 
             return $this->render(
                 'album/new.tpl',
-                array ( 'authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
+                array ('authors' => $authors, 'commentsConfig' => s::get('comments_config'),)
             );
         }
     }
@@ -149,6 +172,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_DELETE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -196,6 +221,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -214,7 +241,7 @@ class AlbumsController extends Controller
 
         $photos          = $album->_getAttachedPhotos($id);
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors         = array( '0' => _(' - Select one author - '));
+        $authors         = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -238,6 +265,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -319,6 +348,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -352,6 +383,8 @@ class AlbumsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -374,9 +407,26 @@ class AlbumsController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countAlbums,
-            'base_url'          => $this->generateUrl('admin_albums_content_provider', ['category' => $categoryId]),
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countAlbums,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
+                'admin_albums_content_provider',
+                ['category' => $categoryId]
+            ),
         ]);
 
         return $this->render(
@@ -393,6 +443,8 @@ class AlbumsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -445,6 +497,8 @@ class AlbumsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ALBUM_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="ALBUM_MANAGER")
      */
     public function configAction(Request $request)
     {

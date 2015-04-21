@@ -489,6 +489,11 @@ class InstanceManager extends BaseManager
                 $instance->{$key} = $value;
             }
         }
+
+        // Check for changes in modules
+        if (is_null($instance->changes_in_modules)) {
+            $instance->changes_in_modules = [];
+        }
     }
 
     /**
@@ -628,7 +633,7 @@ class InstanceManager extends BaseManager
         $this->cache->setNamespace($instance->internal_name);
         $this->sm->setConfig(array('database' => $instance->getDatabaseName()));
 
-        $settings = array('pass_level', 'piwik', 'max_mailing');
+        $settings = array('pass_level', 'piwik', 'max_mailing', 'max_users');
 
         foreach ($settings as $key) {
             $this->sm->invalidate($key);

@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -32,8 +33,6 @@ class PollsController extends Controller
      */
     public function init()
     {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
-
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
         $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
@@ -66,10 +65,31 @@ class PollsController extends Controller
      * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function listAction()
     {
-        return $this->render('poll/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'poll/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -78,6 +98,8 @@ class PollsController extends Controller
      * @return void
      *
      * @Security("has_role('POLL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function widgetAction()
     {
@@ -104,6 +126,8 @@ class PollsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('POLL_CREATE')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -120,7 +144,7 @@ class PollsController extends Controller
                 'visualization'  => $request->request->getDigits('visualization', 0),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
-                'item'           => $request->request->get('item'),
+                'item'           => json_decode($request->request->get('parsedAnswers')),
                 'params'         => $request->request->get('params'),
             );
             $poll = $poll->create($data);
@@ -132,10 +156,7 @@ class PollsController extends Controller
                 );
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_poll_show',
-                        array('id' => $poll->id)
-                    )
+                    $this->generateUrl('admin_poll_show', ['id' => $poll->id])
                 );
             } else {
                 $this->get('session')->getFlashBag()->add(
@@ -144,10 +165,7 @@ class PollsController extends Controller
                 );
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_polls',
-                        array('category' => $data['category'])
-                    )
+                    $this->generateUrl('admin_polls', ['category' => $data['category']])
                 );
             }
 
@@ -164,6 +182,8 @@ class PollsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('POLL_UPDATE')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -199,6 +219,8 @@ class PollsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('POLL_UPDATE')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -225,19 +247,18 @@ class PollsController extends Controller
 
 
         $data = array(
-            'id'            => $id,
-            'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-            'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'visualization' => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
-            'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'favorite'      => $request->request->getDigits('favorite', 0),
-            'with_comment'  => $request->request->getDigits('with_comment', 0),
-            'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-            'available'     => $request->request->getDigits('available', 0),
-            'item'          => $request->request->get('item'),
-            'votes'         => $request->request->get('votes'),
-            'params'        => $request->request->get('params'),
+            'id'             => $id,
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'visualization'  => $request->request->filter('visualization', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'favorite'       => $request->request->getDigits('favorite', 0),
+            'with_comment'   => $request->request->getDigits('with_comment', 0),
+            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->getDigits('content_status', 0),
+            'item'           => json_decode($request->request->get('parsedAnswers')),
+            'params'         => $request->request->get('params'),
         );
 
         if ($poll->update($data)) {
@@ -264,6 +285,8 @@ class PollsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('POLL_DELETE')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -305,6 +328,8 @@ class PollsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -327,9 +352,23 @@ class PollsController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countPolls,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countPolls,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_polls_content_provider',
                 array('category' => $categoryId)
             ),
@@ -349,6 +388,8 @@ class PollsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -402,6 +443,8 @@ class PollsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('POLL_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="POLL_MANAGER")
      */
     public function configAction(Request $request)
     {

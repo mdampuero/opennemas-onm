@@ -2,7 +2,11 @@
 
 {block name="title"}<title>{t 1=$server->get('SERVER_NAME')}'%1' not activated - Opennemas{/t}</title>{/block}
 
-{block name="content"}
-    <div class="desc">{t 1=$server->get('SERVER_NAME')}%1 temporary deactivated.{/t}</div>
-    <div class="explanation">This newspaper is temporary deactivated, please come back soon.</div>
+{block name="page_container"}
+  <div class="error-container">
+    <div class="error-main">
+      <div class="error-description">{t 1=$server->get('SERVER_NAME')}%1 temporary deactivated.{/t}</div>
+      <div class="error-description-mini">This newspaper is temporary deactivated, please come back soon.</div>
+    </div>
+  </div>
 {/block}

@@ -86,13 +86,15 @@ class NewsletterManager extends BaseManager
             $newsletterContent = array();
         }
 
+        $er = getService('entity_repository');
         foreach ($newsletterContent as $container) {
             foreach ($container->items as &$item) {
                 if (!empty($item->id) && $item->content_type !='label') {
+                    $content = $er->find($item->content_type, $item->id);
                     $content = new $item->content_type($item->id);
 
                     //if is a real content include it in the contents array
-                    if (!empty($content) && is_object($content)) {
+                    if (is_object($content) && !is_null($content->id)) {
                         $content = $content->get($item->id);
                         $item->content_type = $content->content_type;
                         $item->title        = $content->title;
@@ -137,12 +139,12 @@ class NewsletterManager extends BaseManager
 
         $tpl->assign('newsletterContent', $newsletterContent);
 
-        //render menu
+        // render menu
         $menuManager = new \Menu();
         $menuFrontpage= $menuManager->getMenu('frontpage');
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
-        //render ads
+        // render ads
         $ads = \Advertisement::findForPositionIdsAndCategory(array(1001, 1009), 0);
         $tpl->assign('advertisements', $ads);
 
@@ -169,8 +171,13 @@ class NewsletterManager extends BaseManager
 
         $tpl->assign('current_date', $currentDate);
 
-        $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
-        $tpl->assign('URL_PUBLIC', $publicUrl);
+        $publicUrl = preg_replace(
+            '@^http[s]?://(.*?)/$@i',
+            'http://$1',
+            getService('instance_manager')->current_instance->getMainDomain()
+        );
+
+        $tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
         $configurations = s::get(
             array(

@@ -76,7 +76,6 @@ class Poll extends Content
      **/
     public function __get($name)
     {
-
         switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
@@ -125,18 +124,19 @@ class Poll extends Content
         $this->total_votes   = $rs->fields['total_votes'];
         $this->visualization = $rs->fields['visualization'];
         $this->used_ips      = unserialize($rs->fields['used_ips']);
-
         $this->items         = $this->getItems($this->id);
 
         $this->status = 'opened';
         if (is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
-        if (is_array($this->params) && array_key_exists('closetime', $this->params)
+        if (is_array($this->params)
+            && array_key_exists('closetime', $this->params)
             && (!empty($this->params['closetime']))
             && ($this->params['closetime'] != date('00-00-00 00:00:00'))
-            && ($this->params['closetime'] < date('Y-m-d H:i:s'))) {
-                $this->status = 'closed';
+            && ($this->params['closetime'] < date('Y-m-d H:i:s'))
+        ) {
+            $this->status = 'closed';
         }
 
         return $this;
@@ -156,8 +156,8 @@ class Poll extends Content
         if ($data['item']) {
             foreach ($data['item'] as $item) {
                 $sql    = 'INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
-                $tags   = StringUtils::getTags($item);
-                $values = array($this->id,$item, $tags);
+                $tags   = StringUtils::getTags($item->item);
+                $values = array($this->id,$item->item, $tags);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);
             }
@@ -188,28 +188,28 @@ class Poll extends Content
     public function update($data)
     {
         parent::update($data);
-
+        $total = 0;
         if ($data['item']) {
-            //Insertamos
+            // Insertamos
             $keys =  '';
-            $total = 0;
             foreach ($data['item'] as $k => $item) {
+                if (!isset($item->pk_item)) {
+                    $item->pk_item = $k + 1;
+                }
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
-                $values = array((int) $k, (int) $this->id, $item, $data['votes'][$k]);
+                $values = array($item->pk_item, (int) $this->id, $item->item, $item->votes);
 
-                $GLOBALS['application']->conn->Execute($sql, $values);
-                $keys .= $k.', ';
-                $total += $data['votes'][$k];
+                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+                $keys .= $item->pk_item.', ';
+                $total += $item->votes;
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
             $values = array((int)$this->id);
             $GLOBALS['application']->conn->Execute($sql, $values);
-
         }
 
-        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?
-                        WHERE pk_poll= ?";
+        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=? WHERE pk_poll= ?";
 
         $values = array(
             $data['subtitle'],
@@ -273,7 +273,7 @@ class Poll extends Content
         while (!$rs->EOF) {
             $items[$i]['pk_item']  = $rs->fields['pk_item'];
             $items[$i]['item']     = $rs->fields['item'];
-            $items[$i]['votes']    = $rs->fields['votes'];
+            $items[$i]['votes']    = isset($rs->fields['votes']) ? $rs->fields['votes'] : 0;
             $items[$i]['metadata'] = $rs->fields['metadata'];
             $total                 += $items[$i]['votes'];
             $rs->MoveNext();

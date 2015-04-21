@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,20 +29,13 @@ use Onm\Settings as s;
 class LettersController extends Controller
 {
     /**
-     * Common code for all the actions.
-     */
-    public function init()
-    {
-        // Check MODULE
-        \Onm\Module\ModuleManager::checkActivatedOrForward('LETTER_MANAGER');
-    }
-
-    /**
      * Lists all the letters.
      *
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function listAction()
     {
@@ -55,6 +49,8 @@ class LettersController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_CREATE')")
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -102,6 +98,8 @@ class LettersController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_UPDATE')")
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -136,6 +134,8 @@ class LettersController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('LETTER_UPDATE')")
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -184,6 +184,8 @@ class LettersController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -205,9 +207,23 @@ class LettersController extends Controller
         $countLetters = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countLetters,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countLetters,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_letters_content_provider',
                 array('category' => $categoryId)
             ),
@@ -227,6 +243,8 @@ class LettersController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="LETTER_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {

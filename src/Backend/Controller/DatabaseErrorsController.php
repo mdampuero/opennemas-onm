@@ -9,6 +9,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -30,11 +31,15 @@ class DatabaseErrorsController extends Controller
      * @return string the response
      *
      * @Security("has_role('ROLE_MASTER')")
+     *
+     * @CheckModuleAccess(module="LOG_SQL")
      **/
     public function defaultAction(Request $request)
     {
         $where        = "";
         $itemsPerPage = 10;
+        // $totalErrors  = (int) $rsTotalErrors;
+        $totalErrors = 0;
         $page         = $request->query->getDigits('page', 1);
         $search       = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
 
@@ -50,11 +55,14 @@ class DatabaseErrorsController extends Controller
                ." ORDER BY created DESC"
                .' LIMIT '.($page-1)*$itemsPerPage.', '.($itemsPerPage);
 
-        $errors = $GLOBALS['application']->conn->Execute($sql, $values);
+        $errors = $GLOBALS['application']->conn->GetArray($sql, $values);
+        if ($errors === false) {
+            $errors = [];
+        }
 
         $pagination = $this->get('paginator')->create([
             'elements_per_page' => $itemsPerPage,
-            'total_items'       => (int) $rsTotalErrors,
+            'total_items'       => $totalErrors,
             'base_url'          => $this->generateUrl('admin_databaseerrors'),
         ]);
 
@@ -77,19 +85,11 @@ class DatabaseErrorsController extends Controller
      * @return string the response
      *
      * @Security("has_role('ROLE_MASTER')")
+     *
+     * @CheckModuleAccess(module="LOG_SQL")
      **/
     public function purgeAction()
     {
-        // TODO: this if block is redundant according to Security annotation
-        if (!Acl::isMaster()) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                _("You don't have permissions")
-            );
-
-            return $this->redirect($this->generateUrl('admin_welcome'));
-        }
-
         $sql = "TRUNCATE TABLE `adodb_logsql`";
         $GLOBALS['application']->conn->Execute($sql);
 

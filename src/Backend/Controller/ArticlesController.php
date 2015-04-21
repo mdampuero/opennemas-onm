@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +36,6 @@ class ArticlesController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
-
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
 
@@ -66,6 +64,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_PENDINGS') and has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function listAction()
     {
@@ -84,12 +84,39 @@ class ArticlesController extends Controller
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
+        $authors = [
+            [ 'name' => _('All'), 'value' => -1 ],
+        ];
+
+        foreach ($allAuthors as $author) {
+            $authors[] = [ 'name' => $author->name, 'value' => $author->id ];
+        }
+
+        $categories = [
+            [ 'name' => _('All'), 'value' => -1 ],
+        ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name'  => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name'  => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
         $_SESSION['_from'] = $this->generateUrl('admin_articles');
 
         return $this->render(
             'article/list.tpl',
             array(
-                'authors' => $allAuthors,
+                'authors'    => $authors,
+                'categories' => $categories,
             )
         );
     }
@@ -102,6 +129,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_CREATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -218,7 +247,7 @@ class ArticlesController extends Controller
 
         } else {
             $authorsComplete = \User::getAllUsersAuthors();
-            $authors = array( '0' => _(' - Select one author - '));
+            $authors = array('0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
                 $authors[$author->id] = $author->name;
             }
@@ -239,9 +268,7 @@ class ArticlesController extends Controller
                         34 => '34'
                     ),
                     'authors'        => $authors,
-                    'commentsConfig' => s::get('comments_config'),
-                    // TODO: clean this from here
-                    'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
+                    'commentsConfig' => s::get('comments_config')
                 )
             );
         }
@@ -255,6 +282,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -365,7 +394,7 @@ class ArticlesController extends Controller
         }
 
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array( '0' => _(' - Select one author - '));
+        $authors = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -393,6 +422,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -522,6 +553,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_DELETE')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -568,6 +601,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderInFrontpageAction(Request $request)
     {
@@ -619,6 +654,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderSuggestedAction(Request $request)
     {
@@ -640,10 +677,23 @@ class ArticlesController extends Controller
         $countArticles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => 8,
-            'total_items'       => $countArticles,
-            'delta'             => 4,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => 8,
+            'total_items'           => $countArticles,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_articles_content_provider_suggested',
                 ['category' => $category]
             ),
@@ -663,6 +713,8 @@ class ArticlesController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderCategoryAction(Request $request)
     {
@@ -688,9 +740,23 @@ class ArticlesController extends Controller
         $countArticles = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => 8,
-            'total_items'       => $countArticles,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => 8,
+            'total_items'           => $countArticles,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_articles_content_provider_category',
                 ['category' => $categoryId]
             ),
@@ -710,6 +776,8 @@ class ArticlesController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -763,6 +831,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -863,6 +933,8 @@ class ArticlesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ARTICLE_MANAGER")
      **/
     public function getPreviewAction()
     {

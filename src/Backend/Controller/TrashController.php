@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,12 +34,11 @@ class TrashController extends Controller
      * @return void
      *
      * @Security("has_role('TRASH_ADMIN')")
+     *
+     * @CheckModuleAccess(module="TRASH_MANAGER")
      **/
     public function defaultAction()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('TRASH_MANAGER');
-
         $cm           = new \ContentManager();
         $contentTypes = $cm->getContentTypes();
 

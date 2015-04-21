@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -28,22 +29,13 @@ use Onm\Settings as s;
 class AclUserGroupsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        // Check if this module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('USER_GROUP_MANAGER');
-    }
-
-    /**
      * List all the user groups
      *
      * @return Response the response object
      *
      * @Security("has_role('GROUP_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function listAction()
     {
@@ -58,11 +50,14 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_UPDATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function showAction(Request $request)
     {
         $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
+        // Check if user group exists
         $userGroup = new \UserGroup($id);
         if (is_null($userGroup->id)) {
             $this->get('session')->getFlashBag()->add(
@@ -72,13 +67,26 @@ class AclUserGroupsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_acl_usergroups'));
         }
+
+        // Get all privileges groupd by module
         $privilege = new \Privilege();
+        $allPrivilegesByModules = $privilege->getPrivilegesByModules();
+        $totalPrivilegesByModule = [];
+        foreach ($allPrivilegesByModules as $module => $elements) {
+            $totalPrivilegesByModule[$module] = 0;
+            foreach ($elements as $element) {
+                if (is_array($userGroup) && in_array($element->id, $userGroup->privileges)) {
+                    $totalPrivilegesByModule[$module]++;
+                }
+            }
+        }
 
         return $this->render(
             'acl/user_group/new.tpl',
             array(
-                'user_group' => $userGroup,
-                'modules'    => $privilege->getPrivilegesByModules(),
+                'user_group'      => $userGroup,
+                'modules'         => $allPrivilegesByModules,
+                'total_activated' => $totalPrivilegesByModule,
             )
         );
     }
@@ -91,6 +99,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_CREATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -145,6 +155,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_UPDATE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -182,6 +194,8 @@ class AclUserGroupsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('GROUP_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_GROUP_MANAGER")
      **/
     public function deleteAction(Request $request)
     {

@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ * To learn more see {@link http://bit.ly/197017v}
  */
 class Configuration implements ConfigurationInterface
 {
@@ -55,7 +55,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(true)
                         ->end()
                         ->scalarNode('output_path')
-                            ->defaultValue('/compile/assetic')
+                            ->defaultValue('/public/build/assets')
                         ->end()
                         ->scalarNode('root')
                             ->defaultValue(SITE_PATH)
@@ -72,6 +72,14 @@ class Configuration implements ConfigurationInterface
                                     ->children()
                                         ->scalarNode('bin')->end()
                                         ->scalarNode('node')->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('less')
+                                    ->children()
+                                        ->scalarNode('node')->end()
+                                        ->arrayNode('node_paths')
+                                            ->prototype('scalar')->end()
+                                        ->end()
                                     ->end()
                                 ->end()
                             ->end()

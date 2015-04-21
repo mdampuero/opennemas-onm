@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -33,8 +34,6 @@ class AdsController extends Controller
      */
     public function init()
     {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('ADS_MANAGER');
-
         $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
@@ -64,6 +63,8 @@ class AdsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function listAction()
     {
@@ -73,28 +74,53 @@ class AdsController extends Controller
         $map      = $positionManager->getAllAdsPositions();
         $adsNames = $positionManager->getAllAdsNames();
 
-        // Filters
-        $filterOptions = array(
-            'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
-            'content_status' => array(
-                '-1' => _("-- All --"),
-                '0'  => _("No published"),
-                '1'  => _("Published")
-            ),
-            'type'  => array(
-                '-1' => _("-- All --"),
-                '0' => _("Multimedia"),
-                '1' => _("Javascript"),
-                '2' => _("OpenX"),
-                '3' => _("Google DFP")
-            ),
-        );
+        $typeAdvertisement = [
+            [ 'name' => _("All"), 'value' => -1 ],
+        ];
+
+        foreach ($adsNames as $key => $value) {
+            $typeAdvertisement[] = [ 'name' => $value, 'value' => $key];
+        }
+
+        $types = [
+            [ 'name' => _("All"), 'value' => -1 ],
+            [ 'name' => _("Multimedia"), 'value' => 0 ],
+            [ 'name' => _("Javascript"), 'value' => 1 ],
+            [ 'name' => _("OpenX"), 'value' => 2 ],
+            [ 'name' => _("Google DFP"), 'value' => 3 ]
+        ];
+
+        $categories = [
+            [ 'name' => _('All'), 'value' => -1 ],
+            [ 'name' => _('HOMEPAGE'), 'value' => 0, 'group' => _('Special elements') ],
+            [ 'name' => _('OPINION'), 'value' => 4, 'group' => _('Special elements') ],
+            [ 'name' => _('ALBUM'), 'value' => 3, 'group' => _('Special elements') ],
+            [ 'name' => _('VIDEO'), 'value' => 6, 'group' => _('Special elements') ]
+        ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name,
+                'group' => _('Categories')
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name,
+                    'group' => _('Categories')
+                ];
+            }
+        }
 
         return $this->render(
             'advertisement/list.tpl',
             array(
-                'filter_options' => $filterOptions,
-                'map'            => json_encode($map)
+                'categories'        => $categories,
+                'typeAdvertisement' => $typeAdvertisement,
+                'types'             => $types,
+                'map'               => json_encode($map)
             )
         );
     }
@@ -106,6 +132,8 @@ class AdsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_CREATE')")
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -197,6 +225,8 @@ class AdsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -259,6 +289,8 @@ class AdsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_UPDATE')")
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -298,7 +330,6 @@ class AdsController extends Controller
             'available'          => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'content_status'     => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'with_script'        => $request->request->getDigits('with_script', 0),
-            'img1'               => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'overlap'            => $request->request->filter('overlap', '', FILTER_SANITIZE_STRING),
             'type_medida'        => $request->request->filter('type_medida', '', FILTER_SANITIZE_STRING),
             'num_clic'           => $request->request->filter('num_clic', '', FILTER_SANITIZE_STRING),
@@ -349,6 +380,8 @@ class AdsController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -368,9 +401,26 @@ class AdsController extends Controller
         $countAds = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countAds,
-            'base_url'          => $this->generateUrl('admin_ads_content_provider', ['category' => $categoryId]),
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countAds,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
+                'admin_ads_content_provider',
+                ['category' => $categoryId]
+            ),
         ]);
 
         return $this->render(
@@ -389,6 +439,8 @@ class AdsController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('ADVERTISEMENT_ADMIN')")
+     *
+     * @CheckModuleAccess(module="ADS_MANAGER")
      */
     public function configAction(Request $request)
     {

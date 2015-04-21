@@ -99,7 +99,7 @@ class Categories
     /*
     * @url GET /categories/lists
     */
-    public function lists()
+    protected function lists()
     {
         $menu = new \Menu();
         $menuCategories = $menu->getMenu('frontpage');

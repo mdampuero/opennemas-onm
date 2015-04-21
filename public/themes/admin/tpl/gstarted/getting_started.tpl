@@ -1,151 +1,170 @@
-<!DOCTYPE html style="width: 100%">
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="{$smarty.const.CURRENT_LANGUAGE|default:"en"}"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
+{extends file="base/admin.tpl"}
 
-    <meta name="author"    content="OpenHost,SL">
-    <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{block name="header-css" append}
+  {stylesheets src="@AdminTheme/less/_wizard.less" filters="cssrewrite,less"}
+    <link rel="stylesheet" href="{$asset_url}">
+  {/stylesheets}
+{/block}
 
-    {block name="meta"}
-        <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
-    {/block}
-
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
-    {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css" common=1}
-        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
-        {css_tag href="/style.css" common=1}
-        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/bootstrap-nav-wizard.css" media="all" type="text/css"}
-	{/block}
-
-    {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js" common=1}
-        {script_tag src="/libs/bootstrap.js" common=1}
-    {/block}
-
-    {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js" common=1}
-        {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js" common=1}
-    {/block}
-</head>
-<body>
-    {acl isAllowed="ROLE_BACKEND"}
-    <header class="clearfix">
-        <div class="navbar navbar-inverse global-nav" style="position:fixed">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-
-                <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
-                <div class="nav-collapse collapse navbar-inverse-collapse">
-                    <ul class="nav pull-right">
-                        <li class="help dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">
-                            {if $smarty.session.avatar_url}
-                            <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
-                            {else}
-                                {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="18"}
-                            {/if}
-                            <span class="longtext">{$smarty.session.username}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+{block name="body"}
+  <div class="wizard-wrapper clearfix" ng-controller="GettingStartedCtrl">
+    <div class="wizard-container welcome active" ng-class="{ 'active': !step || step == 1 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}Welcome to Opennemas{/t}</h1>
         </div>
-    </header>
-    {/acl}
-    {block name="content"}
-        <div class="welcome-page" style="background-position-y: 40px; margin-top: 0; margin-bottom: 40px;">
-            <div style="height: 40px;"></div>
-            <div class="wrapper-content ">
-                {render_messages}
-                <div class="brand-link">
-                    {t}First steps in OpenNeMaS{/t}
-                </div>
-                <div class="row-fluid">
-                    <div class="span12">
-                        {include file="welcome/wizard.tpl"}
-                    </div>
-                </div>
-            </div>
+        <p>
+          {t}Now you will be able to publish your own news, articles and take part of the information around everyone.{/t}
+        </p>
+        <p>
+          {t}Before starting to work on it you have to perform some tasks, sush as setup your social networks and get some information about how to use Opennemas{/t}
+        </p>
+        <div class="wizard-button">
+          <button class="btn btn-block btn-success" ng-click="goToStep(2)">
+            <h4>{t}Next{/t}</h4>
+          </button>
         </div>
-    {/block}
-    {block name="copyright"}
-    <footer style="bottom: 0; width: 100%;">
-        <div class="wrapper-content clearfix">
-            <nav class="left">
-                <ul>
-                    <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
-                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
-                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
-
-                </ul><!-- / -->
-            </nav>
-            <nav class="right">
-                <ul>
-                    <li>
-                        <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FOpenNemas%2F282535299100&amp;width=100&amp;height=21&amp;colorscheme=light&amp;layout=button_count&amp;action=like&amp;show_faces=true&amp;send=false&amp;appId=229591810467176" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
-                    </li>
-                    <li>
-                        <div class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/103592875488169354089" data-rel="publisher"></div>
-                        <script type="text/javascript">
-                          (function() {
-                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                            po.src = 'https://apis.google.com/js/plusone.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                          })();
-                        </script>
-                    </li>
-                    <li>
-                        {literal}
-                        <a href="https://twitter.com/opennemas" class="twitter-follow-button" data-show-count="true" data-show-screen-name="false">Seguir</a>
-                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        {/literal}
-                    </li>
-                </ul>
-            </nav>
-        </div><!-- / -->
-    </footer>
-	{/block}
-
-    {block name="footer-js"}
-        {browser_update}
-        {script_tag src="/onm/footer-functions.js" common=1}
-        {script_tag src="/libs/tinycon.min.js"}
-        {script_tag src="/jquery/bootstrap-nav-wizard.js"}
-        {script_tag src="/onm/md5.min.js" common=1}
-        {script_tag src="/admin.js" common=1}
-        <script type="text/javascript">
-        Tinycon.setBubble({count_pending_comments});
-        </script>
-        {uservoice_widget}
-	{/block}
-</body>
-</html>
+      </div>
+    </div>
+    <div class="wizard-container terms-and-conditions" ng-class="{ 'active': step == 2 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <p>
+          {t}In order to use Opennemas you must accept the terms of use{/t}
+        </p>
+        <div class="terms-wrapper">
+          <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
+          <div class="checkbox">
+            <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" ng-value="termsAccepted" type="checkbox">
+            <label for="accept-terms">
+              {t}Accept the terms of use{/t}
+            </label>
+            <div class="arrow"></div>
+          </div>
+        </div>
+        <div class="wizard-button">
+          <button class="btn btn-block btn-success" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
+            <h4>{t}Next{/t}</h4>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-container help" ng-class="{ 'active': step == 3 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}Do you need some help?{/t}</h1>
+        </div>
+        <p>
+          {t}You can read and learn how to use your Opennemas by using our online documentation and videos.
+          Take a look around and you will find it.{/t}
+        </p>
+        <div class="help-items-wrapper clearfix">
+          <div class="help-item">
+            <div class="orb">
+              <i class="fa fa-support fa-3x"></i>
+            </div>
+            <div class="item-text">
+              {t escape=off}Our <a href="http://help.opennemas.com/" target="_blank">knownledge base</a> has manuals and howtos about how to create contents and improve your newspaper.{/t}
+            </div>
+          </div>
+          <div class="help-item">
+            <div class="orb">
+              <i class="fa fa-youtube fa-3x"></i>
+            </div>
+            <div class="item-text">
+              {t escape=off}See our <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank">video tutorials</a> for getting step-by-step guidance.{/t}
+            </div>
+          </div>
+          <div class="help-item">
+            <div class="orb">
+              <i class="fa fa-question fa-3x"></i>
+            </div>
+            <div class="item-text">
+              {t escape=off}If you need further information you can always contact us by using the <span class="fa fa-support"></span> Help button in the upper right corner.{/t}
+            </div>
+          </div>
+        </div>
+        <div class="wizard-button">
+          <button class="btn btn-block btn-success" ng-click="goToStep(4)">
+            <h4>{t}Next{/t}</h4>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-container social-networks" ng-class="{ 'active': step == 4 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}Do you have a Facebook or a Twitter account?{/t}</h1>
+        </div>
+        <p>{t}Then you can associate those accounts to access your opennemas. It will make easier to get into your administration panel.{/t}</p>
+        <div class="social-items-wrapper clearfix">
+          <div class="social-item">
+            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook' style='orb'}" frameborder="0"></iframe>
+          </div>
+          <div class="social-item">
+            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter' style='orb'}" frameborder="0"></iframe>
+          </div>
+        </div>
+        <div class="wizard-button">
+          <button class="btn btn-block btn-success" ng-click="goToStep(5)">
+            <h4>{t}Next{/t}</h4>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-container ready" ng-class="{ 'active': step == 5 }">
+      <div class="wizard-overlay"></div>
+      <div class="wizard-content">
+        <div class="wizard-title">
+          <h1>{t}That's it!{/t}</h1>
+        </div>
+        <h4>{t}You can start to use your newspaper.{/t}</h4>
+        <p>
+          {t}Hope you will enjoy opennemas!{/t}
+        </p>
+        <div class="wizard-button">
+          <a class="btn btn-block btn-success" href="{url name='admin_getting_started_finish'}">
+            <h4>{t}Finish{/t}</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="wizard-footer">
+      <div class="wizard-footer-wrapper">
+        <button class="wizard-step" ng-class="{ 'active': !step || step >= 1 }" ng-click="goToStep(1)">
+          <div class="wizard-orb">
+            <h4>1</h4>
+          </div>
+          <h5>{t}Welcome!{/t}</h5>
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 1 }" ng-click="goToStep(2)">
+          <div class="wizard-orb">
+            <h4>2</h4>
+          </div>
+          <h5>{t}Terms & conditions{/t}</h5>
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 2 }" ng-click="goToStep(3)" ng-disabled="!termsAccepted">
+          <div class="wizard-orb">
+            <h4>3</h4>
+          </div>
+          <h5>{t}Getting help{/t}</h5>
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 3 }" ng-click="goToStep(4)" ng-disabled="!termsAccepted">
+          <div class="wizard-orb">
+            <h4>4</h4>
+          </div>
+          <h5>{t}Social Network{/t}</h5>
+        </button>
+        <button class="wizard-step"  ng-class="{ 'active': step > 4 }" ng-click="goToStep(5)" ng-disabled="!termsAccepted">
+          <div class="wizard-orb">
+            <h4>5</h4>
+          </div>
+          <h5>{t}Ready!{/t}</h5>
+        </button>
+      </div>
+    </div>
+  </div>
+{/block}

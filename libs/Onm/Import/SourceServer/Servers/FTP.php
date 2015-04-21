@@ -56,7 +56,6 @@ class FTP extends ServerAbstract implements ServerInterface
 
         // if there is a ftp login configuration use it
         if (isset($params['username'])) {
-
             $loginResult = ftp_login(
                 $this->ftpConnection,
                 $params['username'],
@@ -105,7 +104,7 @@ class FTP extends ServerAbstract implements ServerInterface
             true
         );
 
-        $files = $this->_filterOldFiles(
+        $files = $this->filterOldFiles(
             $this->formatRawFtpFileList($files),
             $params['sync_from']
         );
@@ -203,8 +202,8 @@ class FTP extends ServerAbstract implements ServerInterface
                 $arraypointer[] = array(
                     'filename'   => $info[8],
                     'isDir'  => $info[0]{0} == 'd',
-                    'size'   => $this->_byteconvert($info[4]),
-                    'chmod'  => $this->_chmodnum($info[0]),
+                    'size'   => $this->byteConvert($info[4]),
+                    'chmod'  => $this->chmodNum($info[0]),
                     'date'   => \DateTime::createFromFormat(
                         'd M H:i',
                         $info[6] . ' ' . $info[5] . ' ' . $info[7]
@@ -225,7 +224,7 @@ class FTP extends ServerAbstract implements ServerInterface
      * @param  integer $bytes the amount of bytes of the file
      * @return string  the human readable file size
      */
-    protected function _byteconvert($bytes)
+    protected function byteConvert($bytes)
     {
         $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
         if ($bytes > 0) {
@@ -242,7 +241,7 @@ class FTP extends ServerAbstract implements ServerInterface
      * @param  string  $chmod the chmod string-based file perms
      * @return integer the numeric based file permissions
      */
-    protected function _chmodnum($chmod)
+    protected function chmodNum($chmod)
     {
         $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
         $chmod = substr(strtr($chmod, $trans), 1);

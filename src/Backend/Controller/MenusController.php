@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,8 +35,6 @@ class MenusController extends Controller
      **/
     public function init()
     {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
-
         $this->pages = array(array('title'=>_("Frontpage"),'link'=>"/"));
 
         if (\Onm\Module\ModuleManager::isActivated('OPINION_MANAGER')) {
@@ -85,6 +84,8 @@ class MenusController extends Controller
      * @return void
      *
      * @Security("has_role('MENU_ADMIN')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function listAction()
     {
@@ -101,6 +102,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_UPDATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -133,31 +136,13 @@ class MenusController extends Controller
         $menu = new \Menu($id);
         $menu->loadItems();
 
-        // Overload sync category color if exists
+        // Fetch synchronized elements if exists
+        $syncSites = [];
         if ($syncParams = s::get('sync_params')) {
-            $colorSites = s::get('sync_colors', array());
-            $allSites = $colors = array();
-            foreach ($syncParams as $siteUrl => $categories) {
-                $allSites[] = array ($siteUrl => $categories);
-
-                if (array_key_exists($siteUrl, $colorSites)) {
-                    $colors[$siteUrl] = $colorSites[$siteUrl];
-                }
-            }
-
-            $this->view->assign('elements', $allSites);
-            $this->view->assign('colors', $colors);
-
-            foreach ($menu->items as &$item) {
-                foreach ($syncParams as $siteUrl => $categories) {
-                    foreach ($categories as $category) {
-                        if ($item->type == 'syncCategory' && $item->link == $category) {
-                            $item->color = $colors[$siteUrl];
-                        }
-                    }
-                }
-            }
+            $syncSites = $syncParams;
         }
+
+        $menu->items = array_values($menu->items);
 
         return $this->render(
             'menues/new.tpl',
@@ -170,6 +155,7 @@ class MenusController extends Controller
                 'pages'           => $this->pages,
                 'menu'            => $menu,
                 'menu_positions'  => $this->menuPositions,
+                'elements'        => $syncSites,
             )
         );
     }
@@ -182,6 +168,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_CREATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -240,19 +228,10 @@ class MenusController extends Controller
             $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
             $menues = \Menu::find();
 
+            // Fetch synchronized elements if exists
+            $syncSites = [];
             if ($syncParams = s::get('sync_params')) {
-                // Fetch all elements from settings
-                $colorSites = s::get('sync_colors');
-                $allSites = array();
-                foreach ($syncParams as $siteUrl => $categories) {
-                    $allSites[] = array ($siteUrl => $categories);
-                    if (array_key_exists($siteUrl, $colorSites)) {
-                        $colors[$siteUrl] = $colorSites[$siteUrl];
-                    }
-                }
-
-                $this->view->assign('elements', $allSites);
-                $this->view->assign('colors', $colors);
+                $syncSites = $syncParams;
             }
 
             return $this->render(
@@ -267,6 +246,7 @@ class MenusController extends Controller
                     'menues'          => $menues,
                     'pages'           => $this->pages,
                     'menu_positions'  => $this->menuPositions,
+                    'elements'        => $syncSites,
                 )
             );
         }
@@ -280,6 +260,8 @@ class MenusController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('MENU_UPDATE')")
+     *
+     * @CheckModuleAccess(module="MENU_MANAGER")
      **/
     public function updateAction(Request $request)
     {

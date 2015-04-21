@@ -6,8 +6,10 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            show_save_frontpage_dialog();
             frontpage_info.changed=true;
+        },
+        stop: function(event,ui) {
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -20,8 +22,10 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            show_save_frontpage_dialog();
             frontpage_info.changed=true;
+        },
+        stop: function(event,ui) {
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -42,7 +46,24 @@ function check_available_new_version() {
     });
 }
 
+    function get_contents_in_frontpage() {
+      var els = [];
 
+      $('div.placeholder').each(function() {
+        var placeholder = $(this).data('placeholder');
+        $(this).find('div.content-provider-element').each(function(index) {
+          els.push({
+            'id' : $(this).data('content-id'),
+            'content_type': $(this).data('class'),
+            'placeholder': placeholder,
+            'position': index,
+            'params': {}
+          });
+        });
+      });
+
+      return els;
+    }
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -111,29 +132,19 @@ function remove_element(element) {
     });
 }
 
-function get_contents_in_frontpage() {
-    var els = [];
+function showMessage(message, type, time) {
+  Messenger.options = {
+      extraClasses: 'messenger-fixed messenger-on-bottom',
+  };
 
-    jQuery('div.placeholder').each(function() {
-        var placeholder = jQuery(this).data('placeholder');
-        jQuery(this).find('div.content-provider-element').each(function(index) {
-            els.push({
-                'id' : jQuery(this).data('content-id'),
-                'content_type': jQuery(this).data('class'),
-                'placeholder': placeholder,
-                'position': index,
-                'params': {}
-            });
-        });
-
-    });
-    return els;
+  Messenger().post({
+    message: message,
+    type: type,
+    hideAfter: time,
+    showCloseButton: true,
+    id: new Date().getTime()
+  });
 }
-
-function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
-}
-
 
 function initializePopovers() {
     jQuery('div.placeholder div.content-provider-element .info').each(function() {
@@ -167,6 +178,10 @@ jQuery(function($) {
         e.preventDefault();
         $('#modal-new-version').modal('hide');
     });
+    $('#modal-new-version').on('click', 'a.btn.yes', function(e,ui) {
+        e.preventDefault();
+        location.reload();
+    });
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
@@ -178,7 +193,7 @@ jQuery(function($) {
     $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
         $('#modal-batch-delete').modal('hide');
         remove_element(contents);
         e.preventDefault();
@@ -202,19 +217,9 @@ jQuery(function($) {
             frontpage_urls.set_arquived,
             { 'ids': ids }
         ).done(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data +
-                '</div>'
-            );
+            showMessage(data, 'success', 5);
         }).fail(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data.responseText +
-                '</div>'
-            );
+            showMessage(data.responseText, 'error', 5);
         });
         $('#modal-batch-arquive').modal('hide');
         remove_element(contents);
@@ -276,18 +281,9 @@ jQuery(function($) {
                 frontpage_urls.set_arquived,
                 { 'ids': [delId] }
             ).done(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data +
-                    '</div>');
+                showMessage(data, 'success', 5);
             }).fail(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data.responseText +
-                    '</div>'
-                );
+                showMessage(data.responseText, 'error', 5);
             });
 
         }
@@ -307,7 +303,7 @@ jQuery(function($) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
         remove_element(parent);
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
     });
 
     // suggest-home
@@ -347,7 +343,7 @@ jQuery(function($) {
                 { id: delId }
             );
         }
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
         $('#modal-element-send-trash').modal('hide');
         $('body').data('element-for-del').animate({ 'backgroundColor': '#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
             $(this).remove();
@@ -546,7 +542,7 @@ jQuery(function($) {
     * Content provider code
     ***************************************************************************/
 
-    $('#content-provider').dialog({ minWidth: 720, autoOpen: false, maxHeight: 500 });
+    $('#content-provider').dialog({ minWidth: 800, autoOpen: false, maxHeight: 500 });
 
     $('#content-provider .content-provider-block-wrapper').tabs({
         ajaxOptions: {
@@ -611,57 +607,16 @@ jQuery(function($) {
                 dataType: 'json',
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
-                    $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>"+
-                        "Saving"+
-                    '</div>');
+                    //showMessage('Saving', 'info', 1);
                 }
             }).done(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-success'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data.message +
-                    '</div>');
+                showMessage(data.message, 'success', 5);
                 frontpage_info.last_saved = data.date;
             }).fail(function(data, ajaxOptions, thrownError) {
                 var response = $.parseJSON(data.responseText);
-                $('#warnings-validation').html(
-                    "<div class='alert alert-error'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        response.message +
-                    '</div>'
-                );
+                showMessage(response.message, 'error', 5);
             });
         }
-    });
-
-    $('#button_previewfrontpage').on('click', function(e, ui) {
-        e.preventDefault();
-        var contents = get_contents_in_frontpage();
-        var category = $(this).data('category-name');
-        var encodedContents = JSON.stringify(get_contents_in_frontpage());
-
-        $.ajax({
-            type: 'POST',
-            url: frontpage_urls.preview_frontpage,
-            data: {
-                'contents': encodedContents,
-                'category_name': category
-            },
-            beforeSend: function(xhr) {
-                $('#warnings-validation').html(
-                    "<div class='alert alert-notice'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        "Generating frontpage. Please wait..." +
-                    "</div>"
-                );
-            },
-            success: function() {
-                $.colorbox({href: frontpage_urls.get_preview_frontpage, iframe : true, width: '95%', height: '95%'});
-                $('#warnings-validation').html('');
-            }
-        });
     });
 
     $('#button_multiple_delete').on('click', function(e,ui) {
@@ -697,10 +652,6 @@ jQuery(function($) {
             }).fail(function(data) {
             });
         }
-    });
-
-    $('#pick-layout, .settings-panel .close').click('click', function(e, ui) {
-        $('.settings-panel').slideToggle();
     });
 
 });

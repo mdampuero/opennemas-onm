@@ -186,8 +186,8 @@ class Kiosko extends Content
     {
         parent::update($data);
 
-        $sql  = "UPDATE kioskos SET `date`=?, `price`=? WHERE pk_kiosko=?";
-        $values = array($data['date'], $data['price'], $data['id']);
+        $sql  = "UPDATE kioskos SET `name`=?, `date`=?, `price`=? WHERE pk_kiosko=?";
+        $values = array($data['name'], $data['date'], $data['price'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;

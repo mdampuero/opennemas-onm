@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -34,9 +35,6 @@ class SpecialsController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('SPECIAL_MANAGER');
-
         $this->contentType = \ContentManager::getContentTypeIdFromName('special');
 
         $this->category = $this->get('request')->query->getDigits('category', null);
@@ -65,10 +63,31 @@ class SpecialsController extends Controller
      * @return void
      *
      * @Security("has_role('SPECIAL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function listAction()
     {
-        return $this->render('special/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'special/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -77,6 +96,8 @@ class SpecialsController extends Controller
      * @return void
      *
      * @Security("has_role('SPECIAL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function widgetAction()
     {
@@ -105,6 +126,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_CREATE')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -154,6 +177,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_UPDATE')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -211,6 +236,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_UPDATE')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -272,6 +299,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_DELETE')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -317,6 +346,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_ADMIN')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -360,6 +391,8 @@ class SpecialsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('SPECIAL_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="SPECIAL_MANAGER")
      **/
     public function configAction(Request $request)
     {

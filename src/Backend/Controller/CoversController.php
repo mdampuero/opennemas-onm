@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,9 +36,6 @@ class CoversController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('KIOSKO_MANAGER');
-
         if (!defined('KIOSKO_DIR')) {
             define('KIOSKO_DIR', "kiosko".SS);
         }
@@ -47,7 +45,7 @@ class CoversController extends Controller
         $category = $this->get('request')->query->getDigits('category', 'all');
 
         $ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
         $timezones = \DateTimeZone::listIdentifiers();
@@ -56,9 +54,9 @@ class CoversController extends Controller
         $this->view->assign(
             array(
                 'category'     => $category,
-                'subcat'       => $subcat,
-                'allcategorys' => $parentCategories,
-                'datos_cat'    => $categoryData,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->parentCategories,
+                'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
@@ -70,12 +68,33 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function listAction()
     {
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
         return $this->render(
             'covers/list.tpl',
-            array('KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,)
+            [
+                'categories' => $categories,
+                'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR
+            ]
         );
     }
 
@@ -85,6 +104,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function widgetAction()
     {
@@ -107,6 +128,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -120,11 +143,11 @@ class CoversController extends Controller
                 sprintf(_('Unable to find the cover with the id "%d"'), $id)
             );
 
-            return $this->redirect($this->generateUrl('admin_covers'));
+            return $this->redirect($this->generateUrl('admin_kioskos'));
         }
 
         return $this->render(
-            'covers/read.tpl',
+            'covers/new.tpl',
             array(
                 'cover'          => $cover,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
@@ -140,11 +163,13 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_CREATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function createAction(Request $request)
     {
         if ('POST' !== $request->getMethod()) {
-            return $this->render('covers/read.tpl');
+            return $this->render('covers/new.tpl');
         }
 
         $postInfo = $request->request;
@@ -188,13 +213,12 @@ class CoversController extends Controller
             }
 
             $kiosko = new \Kiosko();
-            // TODO: clean the post var
             if (!$kiosko->create($coverData)) {
                 throw new \Exception(_('Unable to create the file. Try again'));
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
+                $this->generateUrl('admin_kioskos', array('category' => $postInfo->getDigits('category')))
             );
 
         } catch (\Exception $e) {
@@ -202,7 +226,7 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $postInfo->getDigits('category'),
                     )
@@ -219,6 +243,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -230,14 +256,13 @@ class CoversController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_covers',
+                    'admin_kioskos',
                     array(
                         'category' => $cover->category,
                     )
                 )
             );
         }
-        $_POST['fk_user_last_editor'] = $_SESSION['userid'];
 
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
@@ -247,19 +272,73 @@ class CoversController extends Controller
                 'error',
                 _("You can't modify this cover because you don't have enough privileges.")
             );
-        } else {
+
+            return $this->redirect(
+                $this->generateUrl('admin_kiosko_show', [ 'id' => $cover->id ])
+            );
+        }
+
+        try {
+            $_POST['fk_user_last_editor'] = $_SESSION['userid'];
+            $_POST['name'] = $cover->name;
+            $_POST['thumb_url'] = $cover->thumb_url;
+
+            if (!$request->request->get('cover') && !empty($cover->name)) {
+                $coverFile = $cover->kiosko_path . $cover->path . $cover->name;
+                $coverThumb = $cover->kiosko_path . $cover->path . $cover->thumb_url;
+
+                // Remove old files if fileinput changed
+                if (file_exists($coverFile)) {
+                    unlink($coverFile);
+                }
+
+                if (file_exists($coverThumb)) {
+                    unlink($coverThumb);
+                }
+
+                $_POST['name'] = '';
+                $_POST['thumb_url'] = '';
+            }
+
+            // Handle new file
+            if ($request->files->get('cover')) {
+                $_POST['name'] = date('His').'-'.$_POST['category'].'.pdf';
+                $_POST['thumb_url'] = preg_replace('/\.pdf$/', '.jpg', $_POST['name']);
+                $path = $cover->kiosko_path . $cover->path;
+
+                // Create folder if it doesn't exist
+                if (!file_exists($path)) {
+                    \Onm\FilesManager::createDirectory($path);
+                }
+                $uploadStatus = false;
+
+                $file = $request->files->get('cover');
+                $uploadStatus = $file->isValid() && $file->move(realpath($path), $_POST['name']);
+
+                if (!$uploadStatus) {
+                    throw new \Exception(
+                        sprintf(
+                            _('Unable to upload the file. Try to upload a file smaller than %d MB'),
+                            (int) ini_get('upload_max_filesize')
+                        )
+                    );
+                }
+
+                $cover->createThumb($_POST['name'], $cover->path);
+            }
+
             $cover->update($_POST);
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Cover updated successfully.")
             );
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_cover_show',
-                array('id' => $cover->id)
-            )
+            $this->generateUrl('admin_kiosko_show', [ 'id' => $cover->id ])
         );
     }
 
@@ -271,6 +350,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_DELETE')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -291,7 +372,7 @@ class CoversController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_covers',
+                'admin_kioskos',
                 array(
                     'category' => $cover->category,
                     'page'     => $page
@@ -308,6 +389,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -344,6 +427,8 @@ class CoversController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('KIOSKO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KIOSKO_MANAGER")
      **/
     public function configAction(Request $request)
     {
@@ -373,6 +458,6 @@ class CoversController extends Controller
             _('Settings saved successfully.')
         );
 
-        return $this->redirect($this->generateUrl('admin_covers_config'));
+        return $this->redirect($this->generateUrl('admin_kioskos_config'));
     }
 }

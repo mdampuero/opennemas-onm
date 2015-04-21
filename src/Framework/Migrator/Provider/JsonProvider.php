@@ -45,7 +45,7 @@ class JsonProvider extends MigrationProvider
             }
 
             $files = $finder->in($schema['source']['path']);
-        } else if (is_file($schema['source']['path'])) {
+        } elseif (is_file($schema['source']['path'])) {
             $files = array(new File($schema['source']['path']));
         }
 
@@ -70,7 +70,7 @@ class JsonProvider extends MigrationProvider
             ) {
                 // Associative array (1 item per file)
                 $builded = $this->itemToFlat($item, $schema);
-            } else if (is_array($item)
+            } elseif (is_array($item)
                 && array_keys($item) === range(0, count($item) - 1)
             ) {
                 // Non-Associative array (1..* items per file)
@@ -131,7 +131,7 @@ class JsonProvider extends MigrationProvider
                         && array_key_exists($value['field'], $b)
                     ) {
                         $filtered[$key] = $b[$value['field']];
-                    } else if (array_key_exists($key, $b)) {
+                    } elseif (array_key_exists($key, $b)) {
                         $filtered[$key] = $b[$key];
                     } else {
                         $filtered[$key] = null;
@@ -195,13 +195,9 @@ class JsonProvider extends MigrationProvider
                         $i = 0;
                         while ($i < count($keys)
                             && (
-                                !array_key_exists(
-                                    'field',
-                                    $schema['fields'][$keys[$i]]
-                                ) || (array_key_exists(
-                                    'field',
-                                    $schema['fields'][$keys[$i]]
-                                ) && $schema['fields'][$keys[$i]]['field'] != $name)
+                                !array_key_exists('field', $schema['fields'][$keys[$i]])
+                                || (array_key_exists('field', $schema['fields'][$keys[$i]])
+                                && $schema['fields'][$keys[$i]]['field'] != $name)
                             )
                         ) {
                             $i++;

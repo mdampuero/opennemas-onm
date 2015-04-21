@@ -1,0 +1,50 @@
+.grid {
+  margin-bottom: 15px;
+}
+
+.grid-footer {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: 0;
+  padding: 15px;
+}
+
+.page-content .content .row > [class^=col-],
+.page-content .content .row > [class*= col-] {
+  padding-left: 8px;
+  padding-right: 7px;
+}
+
+.page-content .content .row > [class^=col-]:first-child,
+.page-content .content .row > [class*= col-]:first-child {
+  padding-left: 15px;
+}
+
+.page-content .content .row > [class^=col-]:last-child,
+.page-content .content .row > [class*= col-]:last-child {
+  padding-right: 15px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+@media (max-width: 991px) and (min-width: 768px){
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .content > .grid {
+    border:0;
+  }
+
+  .page-content .content .row > [class^=col-],
+  .page-content .content .row > [class*= col-] {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Security\Acl;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -33,25 +34,46 @@ class AclUserController extends Controller
     /**
      * Show a paginated list of backend users
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 
         $groupsOptions = array();
         foreach ($groups as $cat) {
-            $groupsOptions[$cat->id] = $cat->name;
+            $groupsOptions[] = [ 'name' => $cat->name, 'value' => $cat->id];
         }
+
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total allowed users before creating new one
+        $createEnabled = true;
+        if ($maxUsers > 0) {
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+        }
+
+        if (!$createEnabled) {
+            $request->getSession()->getFlashBag()->add(
+                'notice',
+                _('You have reach the maximum users allowed. If you want to create more users, please contact us.')
+            );
+        }
+
+        array_unshift($groupsOptions, [ 'name' => _('All'), 'value' => -1 ]);
 
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'user_groups'     => $groups,
-                'groupsOptions'   => $groupsOptions,
+                'groups'        => $groupsOptions,
+                'createEnabled' => $createEnabled,
             )
         );
     }
@@ -59,11 +81,13 @@ class AclUserController extends Controller
     /**
      * Shows the user information given its id
      *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
+     *
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -141,16 +165,18 @@ class AclUserController extends Controller
     /**
      * Handles the update action for a user given its id
      *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
+     *
      * @param Request $request the request object
      *
      * @return Response the response object
      *
-     * @Security("has_role('USER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-
         if ($userId != $_SESSION['userid']) {
             if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
@@ -178,6 +204,7 @@ class AclUserController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
             'ids_category'    => $request->request->get('ids_category'),
@@ -186,48 +213,67 @@ class AclUserController extends Controller
 
         $file = $request->files->get('avatar');
 
-        try {
-            // Upload user avatar if exists
-            if (!is_null($file)) {
-                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
-                $data['avatar_img_id'] = $photoId;
-            } elseif (($data['avatar_img_id']) == 1) {
-                $data['avatar_img_id'] = $user->avatar_img_id;
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total activated users remaining before updating
+        $updateEnabled = true;
+        if ($data['activated'] == '1' && $maxUsers > 0) {
+            $updateEnabled = \User::getTotalActivatedUsersRemaining($maxUsers + $user->activated);
+        }
+
+        if ($updateEnabled) {
+            try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::getTitle($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } elseif (($data['avatar_img_id']) == 1) {
+                    $data['avatar_img_id'] = $user->avatar_img_id;
+                }
+
+                // Process data
+                if ($user->update($data)) {
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    // Set usermeta paywall time limit
+                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                    if (!empty($paywallTimeLimit)) {
+                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                        $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                    }
+
+                    if ($user->id == $_SESSION['userid']) {
+                        $_SESSION['user_language'] = $meta['user_language'];
+                    }
+
+                    // Clear caches
+                    $this->dispatchEvent('user.update', array('user' => $user));
+                    // Check if is an author and delete caches
+                    if (in_array('3', $data['id_user_group'])) {
+                        $this->dispatchEvent('author.update', array('id' => $userId));
+                    }
+
+                    $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
+                } else {
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to update the user with that information')
+                    );
+                }
+            } catch (\Exception $e) {
+                $request->getSession()->getFlashBag()->add('error', $e->getMessage());
             }
-
-            // Process data
-            if ($user->update($data)) {
-                // Set all usermeta information (twitter, rss, language)
-                $meta = $request->request->get('meta');
-                foreach ($meta as $key => $value) {
-                    $user->setMeta(array($key => $value));
-                }
-
-                // Set usermeta paywall time limit
-                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
-                if (!empty($paywallTimeLimit)) {
-                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                    $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                }
-
-                if ($user->id == $_SESSION['userid']) {
-                    $_SESSION['user_language'] = $meta['user_language'];
-                }
-
-                // Clear caches
-                $this->dispatchEvent('author.update', array('id' => $userId));
-
-                $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
-            } else {
-                $request->getSession()->getFlashBag()->add(
-                    'error',
-                    _('Unable to update the user with the submitted information.')
-                );
-            }
-        } catch (\Exception $e) {
-            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
+        } else {
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to change user backend access. You have reached the max number of users.')
+            );
         }
 
         return $this->redirect(
@@ -243,10 +289,24 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_CREATE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function createAction(Request $request)
     {
         $user = new \User();
+
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total allowed users before creating new one
+        $createEnabled = true;
+        if ($maxUsers > 0) {
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+        }
+
+        if (!$createEnabled) {
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
 
         if ($request->getMethod() == 'POST') {
             $data = array(
@@ -260,7 +320,7 @@ class AclUserController extends Controller
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => $request->request->get('id_user_group', array()),
                 'ids_category'    => $request->request->get('ids_category', array()),
-                'activated'       => 1,
+                'activated'       => $request->request->filter('activated', '1', FILTER_SANITIZE_STRING),
                 'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
@@ -345,6 +405,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -375,6 +437,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_DELETE')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -406,6 +470,10 @@ class AclUserController extends Controller
 
     /**
      * Sets a user configuration given the meta key and the meta value
+     *
+     * This action is not mapped with CheckModuleAccess annotation because it's
+     * used in edit profile action that should be available to all users with
+     * or without having users module activated.
      *
      * @param Request $request the request object
      *
@@ -441,6 +509,8 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
+     *
+     * @CheckModuleAccess(module="USER_MANAGER")
      **/
     public function toogleEnabledAction(Request $request)
     {
@@ -481,7 +551,7 @@ class AclUserController extends Controller
             return $this->render('login/recover_pass.tpl');
         } else {
             $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
+            $token = '';
             // Get user by email
             $user = new \User();
             $user->findByEmail($email);
@@ -617,6 +687,8 @@ class AclUserController extends Controller
      */
     public function socialAction(Request $request, $id, $resource)
     {
+        $template = 'acl/user/social.tpl';
+
         $user = $this->get('user_repository')->find($id);
 
         $session = $request->getSession();
@@ -642,10 +714,14 @@ class AclUserController extends Controller
             $resourceName = 'Twitter';
         }
 
+        if ($request->get('style') && $request->get('style') == 'orb') {
+            $template = 'acl/user/social_alt.tpl';
+        }
+
         $this->dispatchEvent('social.disconnect', array('user' => $user));
 
         return $this->render(
-            'acl/user/social.tpl',
+            $template,
             array(
                 'current_user_id' => $this->getUser()->id,
                 'connected'       => $connected,
@@ -662,9 +738,9 @@ class AclUserController extends Controller
      *
      * @param  Request  $request The request object.
      * @param  integer  $id      The user's id.
-     * @return void
+     * @return Response          The response object.
      */
-    public function disconnectAction($id, $resource)
+    public function disconnectAction(Request $request, $id, $resource)
     {
         $user = $this->get('user_repository')->find($id);
 
@@ -682,7 +758,11 @@ class AclUserController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'admin_acl_user_social',
-                array('id' => $id, 'resource' => $resource)
+                [
+                    'id'       => $id,
+                    'resource' => $resource,
+                    'style'    => $request->get('style')
+                ]
             )
         );
     }

@@ -1,0 +1,46 @@
+.notifications {
+  .dropdown-menu {
+    margin-left: -200px;
+    width: 400px;
+  }
+}
+
+.notification-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    border-radius: 3px;
+    display: block;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .title {
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 85%;
+      font-style: italic;
+      margin: 0;
+    }
+  }
+
+  .notification-error {
+    background-color: fade(@error-color, 25%);
+  }
+
+  .notification-success {
+    background-color: fade(@success-color, 25%);
+  }
+
+  .notification-warning {
+    background-color: fade(@warning-color, 25%);
+  }
+}
+

@@ -1,12 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {javascripts src="@Common/js/jquery/jquery-ui-timepicker-addon.js,
-        @Common/js/jquery/jquery.multiselect.js,
+    {javascripts src="@Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
         @Common/js/jquery/jquery.validate.min.js,
         @Common/js/jquery/localization/messages_es.js,
         @Common/js/onm/jquery.password-strength.js,
-        @Common/js/onm/bootstrap-fileupload.min.js,
+        @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
         @Common/js/admin.js "}
         <script type="text/javascript" src="{$asset_url}"></script>
     {/javascripts}
@@ -33,56 +32,19 @@
                     '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
                 );
             }
-
         }
-
-        $('#user-editing-form').tabs();
-
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        // Show/hide privilege tab depending on userType backend/frontend
-        if($('select#usertype').val() == '1') {
-            $('#id_user_group').removeAttr('required');
-            $('#privileges').hide();
-            $('.privileges-tab').hide();
-        }
-        $('select#usertype').change(function() {
-            if($(this).val() == '1'){
-                $('#id_user_group').removeAttr('required');
-                $('#privileges').hide();
-                $('.privileges-tab').hide();
-            } else {
-                $('#privileges').show();
-                $('.privileges-tab').show();
-                $('#id_user_group').attr('required', 'required');
-            }
-        });
 
         // Avatar image uploader
-        $('.fileupload').fileupload({
-            name: 'avatar',
-            uploadtype:'image'
+        $('.fileinput').fileinput({
+          name: 'avatar',
+          uploadtype:'image'
         });
-
-        $('.delete').on('click', function(){
-            $('.file-input').val('0');
-        })
-
-        // Use multiselect on user groups and categories
-        $('select#id_user_group').twosidedmultiselect();
-        $('select#ids_category').twosidedmultiselect();
 
         // Paywall datepicker only if available
         {acl isAllowed='USER_ADMIN'}
             {is_module_activated name='PAYWALL'}
-            jQuery('#paywall_time_limit').datetimepicker({
-                hourGrid: 4,
-                showAnim: 'fadeIn',
-                dateFormat: 'yy-mm-dd',
-                timeFormat: 'hh:mm:ss',
-                minuteGrid: 10
+            $('#paywall_time_limit').datetimepicker({
+              format: 'YYYY-MM-D HH:mm:ss'
             });
             {/is_module_activated}
         {/acl}
@@ -91,307 +53,313 @@
 {/block}
 
 {block name="header-css" append}
-{stylesheets src="@Common/css/bootstrap/bootstrap-fileupload.min.css" css="cssrewrite"}
+  {stylesheets src="@Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" css="cssrewrite"}
     <link rel="stylesheet" href="{$asset_url}">
-{/stylesheets}
-
-<style type="text/css">
-label {
-    font-weight:normal;
-}
-.avatar, .user-info {
-    vertical-align: top;
-    display:inline-block;
-}
-.avatar {
-    margin-right:20px;
-}
-.avatar img {
-    width:150px;
-    height:150px;
-}
-
-.tooltip {
-    max-width:160px;
-}
-/* Styles for password strenght */
-.alert-pass {
-    background: #F8D47A url("/assets/images/alert-ok-small.png") no-repeat 16px;
-    display: inline-block;
-    margin: 0;
-    padding: 5px 15px 5px 50px;
-    margin-left: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    color: white;
-}
-.alert-pass.alert-success { background: #468847 url("/assets/images/alert-ok-small.png") no-repeat 16px; }
-.alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
-/* Recommended styles tsms */
-.tsmsselect {
-        float: left;
-}
-
-.tsmsselect select {
-}
-
-.tsmsoptions {
-        width: 10%;
-        float: left;
-}
-
-.tsmsoptions p {
-        margin: 2px;
-        text-align: center;
-        font-size: larger;
-        cursor: pointer;
-}
-
-.tsmsoptions p:hover {
-        color: White;
-        background-color: Silver;
-}
-.groups, .categorys {
-    display: inline-block;
-    width: 100%;
-}
-</style>
+  {/stylesheets}
 {/block}
 
 {block name="content"}
 <form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
-
-	<div class="top-action-bar clearfix">
-		<div class="wrapper-content">
-			<div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
-			<ul class="old-button">
-                <li>
-                    <button action="submit"  name="action" value="validate">
-                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_acl_user type=$user->type}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                    </a>
-                </li>
-			</ul>
-		</div>
-	</div>
-
-    <div class="wrapper-content">
+    <div class="page-navbar actions-navbar">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav quick-section">
+                    <li class="quicklinks">
+                        <h4>
+                            <i class="fa fa-user fa-lg"></i>
+                            Users
+                        </h4>
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <span class="h-seperate"></span>
+                    </li>
+                    <li class="quicklinks hidden-xs">
+                        <h5>
+                            {if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}
+                        </h5>
+                    </li>
+                </ul>
+                <div class="all-actions pull-right">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a class="btn btn-link" href="{url name=admin_acl_user type=$user->type}">
+                                <i class="fa fa-reply"></i>
+                            </a>
+                        </li>
+                        <li class="quicklinks">
+                            <span class="h-seperate"></span>
+                        </li>
+                        <li class="quicklinks">
+                            <button class="btn btn-primary" name="action" type="submit" value="validate">
+                                <i class="fa fa-save"></i>
+                                {t}Save{/t}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
         {render_messages}
-        <div id="user-editing-form" class="wrapper-content tabs">
-            <ul>
-                <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
-                {if isset($user->id)}
-                <li><a href="#social" title="{t}Social Networks{/t}">{t}Social Networks{/t}</a></li>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}User info{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">
+                                        {t}Display name{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="name" name="name" maxlength="50" required="required" type="text" value="{$user->name|escape:"html"|default:""}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="login">
+                                        {t}User name{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="login" maxlength="20" name="login" required="required" type="text" value="{$user->username|default:""}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">
+                                        {t}Email{/t}
+                                    </label>
+                                    <div class="controls">
+                                        <input class="form-control" id="email" name="email" placeholder="test@example.com" required="required"type="email" value="{$user->email|default:""}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                              <div class="fileinput {if $user->photo}fileinput-exists{else}fileinput-new{/if}" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
+                                </div>
+                                {if $user->photo->name}
+                                <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;">
+                                  <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                                </div>
+                                {else}
+                                <div class="fileinput-exists fileinput-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
+                                  {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                </div>
+                                {/if}
+                                <div>
+                                  <span class="btn btn-file">
+                                    <span class="fileinput-new">{t}Add new photo{/t}</span>
+                                    <span class="fileinput-exists">{t}Change{/t}</span>
+                                    <input type="file"/>
+                                    <input type="hidden" name="avatar" class="file-input" value="1">
+                                  </span>
+                                  <a href="#" class="btn btn-danger fileinput-exists delete" data-dismiss="fileinput">
+                                    <i class="fa fa-trash-o"></i>
+                                    {t}Remove{/t}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="url">
+                                {t}Blog Url{/t}
+                            </label>
+                            <div class="controls">
+                                <input class="form-control" id="url" name="url" placeholder="http://" type="text" value="{$user->url|default:""}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="bio">
+                                {t}Short Biography{/t}
+                            </label>
+                            <div class="controls">
+                                <input class="form-control" id="bio" name="bio" type="text" value="{$user->bio|default:""}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="bio">
+                                {t}Biography{/t}
+                            </label>
+                            <div class="controls">
+                                <textarea class="form-control" id="bio" name="meta[bio_description]" rows="3">{$user->meta['bio_description']|default:""}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">
+                                {t}Password{/t}
+                            </label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-key"></i>
+                                    </span>
+                                    <input class="form-control" id="password" minlength="6" name="password" data-min-strength="{$min_pass_level}" type="password" value="" {if $user->id eq null}required="required"{/if} maxlength="20"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="passwordconfirm">
+                                {t}Confirm password{/t}
+                            </label>
+                            <div class="controls">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-key"></i>
+                                    </span>
+                                    <input class="form-control validate-password-confirm" data-password-equals="password" id="passwordconfirm" maxlength="20" minlength=6 name="passwordconfirm" type="password" value=""/>
+                                </div>
+                                  <span class="checker"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                {if isset($user->id) && $user->id == $smarty.session.userid }
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="grid simple">
+                                <div class="grid-title">
+                                    <h4>{t}Social Networks{/t}</h4>
+                                </div>
+                                <div class="grid-body">
+                                    <div class="form-group">
+                                        <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
+                                        <div class="controls">
+                                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
+                                        <div class="controls">
+                                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {/if}
-                <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
-                {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
-                <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
-                {/acl}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="grid simple">
+                            <div class="grid-title">
+                                <h4>{t}Settings{/t}</h4>
+                            </div>
+                            <div class="grid-body">
+                                <div class="form-group">
+                                  <label class="form-label" for="usertype">
+                                    {t}User type{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select id="usertype" name="type">
+                                      <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                                      <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="meta">
+                                    {t}User language{/t}
+                                  </label>
+                                  <div class="controls">
+                                    {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
+                                    <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="activated">
+                                    {t}Status{/t}
+                                  </label>
+                                  <div class="controls">
+                                    <select id="activated" name="activated">
+                                      <option value="0" {if ($user->activated eq "0")}selected{/if}>{t}Deactivated{/t}</option>
+                                      <option value="1" {if ($user->activated eq "1")}selected{/if}>{t}Activated{/t}</option>
+                                    </select>
+                                    <div class="help-block">{t}Used to enable or disable user access to control panel.{/t}</div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {acl isAllowed="USER_ADMIN"}
-                {is_module_activated name="PAYWALL"}
-                <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
-                {/is_module_activated}
-                {/acl}
-            </ul><!-- / -->
-            <div id="basic">
-                <div class="avatar">
-                    <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
-                        {if $user->photo->name}
-                        <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
-                            <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
-                        </div>
-                        {else}
-                        <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
-                        </div>
-                        {/if}
-                        <div>
-                            <span class="btn btn-file">
-                                <span class="fileupload-new">{t}Add new photo{/t}</span>
-                                <span class="fileupload-exists">{t}Change{/t}</span>
-                                <input type="file"/>
-                                <input type="hidden" name="avatar" class="file-input" value="1">
-                            </span>
-                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload" title="{t}Remove image{/t}"><i class="icon-trash"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="user-info form-vertical">
-                    <fieldset>
-                        <div class="control-group">
-                            <label for="name" class="control-label">{t}Display name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="name" name="name" value="{$user->name|escape:"html"|default:""}" class="input-xlarge required" required="required" maxlength="50"/>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset>
-                        <div class="control-group">
-                            <label for="login" class="control-label">{t}User name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required="required" maxlength="20"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="email" class="control-label">{t}Email{/t}</label>
-                            <div class="controls">
-                                <input class="input-xlarge" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="url" class="control-label">{t}Blog Url{/t}</label>
-                            <div class="controls">
-                                <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="bio" class="control-label">{t}Short Biography{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="bio" name="bio" class="input-xxlarge" value="{$user->bio|default:""}">
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="meta[bio_description]" class="control-label">{t}Biography{/t}</label>
-                            <div class="controls">
-                                <textarea id="meta[bio_description]" name="meta[bio_description]" rows="3" class="input-xxlarge">{$user->meta['bio_description']|default:""}</textarea>
-                            </div>
-                        </div>
-
-                    </fieldset>
-
-                    <fieldset>
-                        <div class="control-group">
-                            <label for="password" class="control-label">{t}Password{/t}</label>
-                            <div class="controls">
-                                <div class="input-prepend">
-                                    <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="password" minlength=6 name="password" data-min-strength="{$min_pass_level}" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
-                            <div class="controls">
-                                <div class="input-prepend">
-                                    <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="passwordconfirm" minlength=6 name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
-                                    <span class="checker"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div><!-- /personal -->
-            {if isset($user->id)}
-            <div id="social">
-                <div class="form-horizontal social-connections">
-                    <div class="control-group">
-                        <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
-                        <div class="controls">
-                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">{t}Twitter{/t}</label>
-                        <div class="controls">
-                            <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/if}
-            <div id="settings">
-                <div class="form-horizontal">
                     {is_module_activated name="PAYWALL"}
-                    <div class="control-group">
-                        <label for="user_language" class="control-label">{t}User type{/t}</label>
-                        <div class="controls">
-                            <select id="usertype" name="type">
-                                <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                                <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="grid simple">
+                                    <div class="grid-title">
+                                        <h4>{t}Paywall{/t}</h4>
+                                    </div>
+                                    <div class="grid-body">
+                                        <div class="form-group">
+                                            <label class="form-label" for="paywall_time_limit">
+                                                {t}Paywall time limit:{/t}
+                                            </label>
+                                            <div class="controls">
+                                                <input id="paywall_time_limit" name="paywall_time_limit" type="datetime" value="{datetime date=$user->meta['paywall_time_limit']}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                     {/is_module_activated}
-
-                    <div class="control-group">
-                        <label for="meta[user_language]" class="control-label">{t}User language{/t}</label>
-                        <div class="controls">
-                            {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
-                        </div>
+                {/acl}
+            </div>
+            <div class="col-xs-12">
+                <div class="grid simple">
+                    <div class="grid-title">
+                        <h4>{t}Privileges{/t}</h4>
+                    </div>
+                    <div class="grid-body">
+                        {acl isAllowed="GROUP_CHANGE"}
+                            <div class="form-group">
+                                <label for="id_user_group">
+                                    {t}User group{/t}
+                                </label>
+                                <select class="select2-multi" id="id_user_group" name="id_user_group[]" multiple="multiple" size="8" title="{t}User group:{/t}">
+                                    {if $smarty.session.isMaster}
+                                        <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
+                                    {/if}
+                                    {foreach $user_groups as $group}
+                                        {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
+                                            <option  value="{$group->id}" selected="selected">{$group->name}</option>
+                                        {else}
+                                            <option  value="{$group->id}">{$group->name}</option>
+                                        {/if}
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/acl}
+                        {acl isAllowed="USER_CATEGORY"}
+                            <div class="form-group">
+                                <label for="id_user_group">
+                                    {t}Categories{/t}
+                                </label>
+                                <select class="select2-multi" id="ids_category" multiple="multiple" name="ids_category[]" size="12" title="{t}Categories{/t}">
+                                    <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
+                                    {foreach item="c_it" from=$content_categories}
+                                        <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
+                                        {if count($c_it->childNodes)>0}
+                                            {foreach item="sc_it" from=$c_it->childNodes}
+                                                <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+                                                        {$sc_it->title}
+                                                </option>
+                                            {/foreach}
+                                        {/if}
+                                    {/foreach}
+                                </select>
+                            </div>
+                        {/acl}
                     </div>
                 </div>
             </div>
-
-            <div id="privileges">
-            {acl isAllowed="GROUP_CHANGE"}
-                <div class="groups">
-                    <label for="id_user_group">{t}User group:{/t}</label>
-                    <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
-                        {if $smarty.session.isMaster}
-                            <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
-                        {/if}
-                        {foreach $user_groups as $group}
-                            {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
-                                <option  value="{$group->id}" selected="selected">{$group->name}</option>
-                            {else}
-                                <option  value="{$group->id}">{$group->name}</option>
-                            {/if}
-                        {/foreach}
-                    </select>
-                </div>
-            {/acl}
-            <label>&nbsp;</label>
-            {acl isAllowed="USER_CATEGORY"}
-                <div class="categorys">
-                    <label>&nbsp;</label>
-                    <label for="id_user_group">{t}Categories{/t}:</label>
-                    <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
-                        <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                        {foreach item="c_it" from=$content_categories}
-                            <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                            {if count($c_it->childNodes)>0}
-                                {foreach item="sc_it" from=$c_it->childNodes}
-                                    <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                            &nbsp; &rArr; {$sc_it->title}
-                                    </option>
-                                {/foreach}
-                            {/if}
-                        {/foreach}
-                    </select>
-                </div>
-                <label>&nbsp;</label>
-            {/acl}
-            </div><!-- /privileges -->
-
-            {acl isAllowed="USER_ADMIN"}
-            {is_module_activated name="PAYWALL"}
-            <div id="paywall">
-                <div class="form-horizontal">
-                        <div class="control-group">
-                        <label for="paywall_time_limit" class="control-label">{t}Paywall time limit:{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/is_module_activated}
-            {/acl}
-            <!-- paywall -->
         </div>
     </div>
 </form>

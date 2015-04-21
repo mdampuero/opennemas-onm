@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
@@ -27,17 +28,6 @@ use Onm\Settings as s;
  **/
 class KeywordsController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
-    }
-
     /**
      * Lists all the keywords
      *
@@ -46,6 +36,8 @@ class KeywordsController extends Controller
      * @return Response
      *
      * @Security("has_role('PCLAVE_ADMIN')")
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function listAction(Request $request)
     {
@@ -88,6 +80,8 @@ class KeywordsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PCLAVE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -113,6 +107,8 @@ class KeywordsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PCLAVE_CREATE')")
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -152,6 +148,8 @@ class KeywordsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PCLAVE_UPDATE')")
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -183,6 +181,8 @@ class KeywordsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('PCLAVE_DELETE')")
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -201,6 +201,8 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Reponse the response object
+     *
+     * @CheckModuleAccess(module="KEYWORD_MANAGER")
      **/
     public function autolinkAction(Request $request)
     {

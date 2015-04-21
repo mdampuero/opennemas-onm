@@ -18,6 +18,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -38,106 +40,131 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function showAction(Request $request)
     {
-        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $categoryId = $request->query->filter('category', '0', FILTER_SANITIZE_STRING);
 
-        $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', array('category' => $category));
-
-        $this->view->assign('category', $category);
-
-        /**
-         * Getting categories
-        */
-        $ccm = \ContentCategoryManager::get_instance();
-        $section = $ccm->getName($category);
-        $section = (empty($section))? 'home': $section;
-        $categoryID = ($category == 'home') ? 0 : $category;
-        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
-
-        $this->view->assign(
-            array(
-                'subcat'       => $subcat,
-                'allcategorys' => $parentCategories,
-                'datos_cat'    => $datos_cat
-            )
+        $_SESSION['_from'] = $this->generateUrl(
+            'admin_frontpage_list',
+            array('category' => $categoryId)
         );
 
         // Check if the user can edit frontpages
-        if (!Acl::check('ARTICLE_FRONTPAGE')) {
+        if (!Acl::checkCategoryAccess($categoryId)) {
             throw new AccessDeniedException();
-        } elseif (!Acl::checkCategoryAccess($categoryID)) {
-            $categoryID = $_SESSION['accesscategories'][0];
-            $section = $ccm->getName($categoryID);
-            $_REQUEST['category'] = $categoryID;
-            list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
-
-            $this->view->assign('subcat', $subcat);
-            $this->view->assign('allcategorys', $parentCategories);
-            $this->view->assign('datos_cat', $datos_cat);
-            $this->view->assign('category', $_REQUEST['category']);
         }
 
-        $layoutTheme = s::get('frontpage_layout_'.$categoryID, 'default');
-        $layoutSettings = $this->container->get('instance_manager')->current_instance->theme->getLayout($layoutTheme);
+        // Fetch all categories
+        $categories[] = [
+            'id'    => 0,
+            'name'  => _('Frontpage'),
+            'value' => 'home',
+            'group' => _('Frontpages')
+        ];
+        $ccm = \ContentCategoryManager::get_instance();
+        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryId);
+        unset($datos_cat);
+        foreach ($parentCategories as $key => $category) {
+            $categories[$category->id] = [
+                'id'    => $category->id,
+                'name'  => $category->title,
+                'value' => $category->name,
+                'group' => _('Categories')
+            ];
 
+            foreach ($subcat[$key] as $subcategory) {
+                $categories[$subcategory->id] = [
+                    'id'    => $subcategory->id,
+                    'name'  => $subcategory->title,
+                    'value' => $subcategory->name,
+                    'group' => _('Categories')
+                ];
+            }
+        }
+
+        // Fetch menu categories and override group
         $menu = new \Menu();
-        $menu->getMenu($layoutSettings['menu']);
-        if (!empty($menu->items )) {
-            foreach ($menu->items as &$item) {
-                $item->categoryID = $ccm->get_id($item->link);
-                if (!empty($item->submenu)) {
-                    foreach ($item->submenu as &$subitem) {
-                        $subitem->categoryID = $ccm->get_id($subitem->link);
+        $menuFrontpage = $menu->getMenu('frontpage');
+        foreach ($menuFrontpage->items as $item) {
+            $id = $ccm->get_id($item->link);
+            if ($item->type == 'category') {
+                $categories[$id] = [
+                    'id'    => $id,
+                    'name'  => $item->title,
+                    'value' => $item->link,
+                    'group' => _('Frontpages')
+                ];
+            }
+            if (!empty($item->submenu)) {
+                foreach ($item->submenu as $subitem) {
+                    if ($subitem->type == 'category') {
+                        $id = $ccm->get_id($subitem->link);
+                        $categories[$id] = [
+                            'id'    => $id,
+                            'name'  => $subitem->title,
+                            'value' => $subitem->link,
+                            'group' => _('Frontpages')
+                        ];
                     }
                 }
             }
-            $this->view->assign('menuItems', $menu->items);
         }
 
-        $cm = new \ContentManager();
-
-        // Get contents for this home
-        $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
-
-        // Sort all the elements by its position
-        $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
-
+        // Get theme layout
+        $layoutTheme = s::get('frontpage_layout_'.$categoryId, 'default');
         $lm = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
+        );
+        $layoutSettings = $this->container->get('instance_manager')
+            ->current_instance->theme->getLayout($layoutTheme);
+
+        // Get contents for this home
+        $cm = new \ContentManager();
+        $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory(
+            $categoryId
+        );
+
+        // Sort all the elements by its position
+        $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty(
+            $contentElementsInFrontpage,
+            'position'
         );
 
         $layout = $lm->render(
             array(
                 'contents'  => $contentElementsInFrontpage,
-                'home'      => ($categoryID == 0),
+                'home'      => ($categoryId == 0),
                 // 'smarty'    => $this->view,
-                'category'  => $category,
+                'category'  => $categoryId,
             )
         );
 
-        $layouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
-        $lastSaved = s::get('frontpage_'.$categoryID.'_last_saved');
+        $layouts = $this->container->get('instance_manager')
+            ->current_instance->theme->getLayouts();
 
+        // Get last saved and check
+        $lastSaved = s::get('frontpage_'.$categoryId.'_last_saved');
         if ($lastSaved == false) {
             // Save the actual date for
             $date = new \Datetime("now");
             $dateForDB = $date->format(\DateTime::ISO8601);
-            s::set('frontpage_'.$categoryID.'_last_saved', $dateForDB);
+            s::set('frontpage_'.$categoryId.'_last_saved', $dateForDB);
             $lastSaved = $dateForDB;
         }
 
         return $this->render(
             'frontpagemanager/list.tpl',
             array(
-                'category'             => $category,
-                'category_id'          => $categoryID,
+                'category_id'          => $categoryId,
                 'frontpage_articles'   => $contentElementsInFrontpage,
                 'layout'               => $layout,
                 'available_layouts'    => $layouts,
                 'layout_theme'         => $layoutSettings,
                 'frontpage_last_saved' => $lastSaved,
+                'categories'           => $categories,
             )
         );
     }
@@ -150,6 +177,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -238,7 +267,7 @@ class FrontpagesController extends Controller
             return new JsonResponse([ 'message' =>  $message ]);
         }
 
-        /* Notice log of this action */
+        // Notice log of this action
         $logger->info(
             'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
             .' action Frontpage save positions at category '.$categoryID.' Ids '.json_encode($contentsPositions)
@@ -265,6 +294,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function pickLayoutAction(Request $request)
     {
@@ -321,6 +352,8 @@ class FrontpagesController extends Controller
      * @return Response the response instance
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function lastVersionAction(Request $request)
     {
@@ -349,6 +382,8 @@ class FrontpagesController extends Controller
      * @return void
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function previewAction(Request $request)
     {
@@ -379,7 +414,7 @@ class FrontpagesController extends Controller
         $ads = \Frontend\Controller\FrontpagesController::getAds($actualCategoryId, $contentsInHomepage);
         $this->view->assign('advertisements', $ads);
 
-        /***** GET ALL FRONTPAGE'S IMAGES *******/
+        // Get all frontpage images
         $imageIdsList = array();
         foreach ($contentsInHomepage as $content) {
             if (isset($content->img1)) {
@@ -406,9 +441,7 @@ class FrontpagesController extends Controller
         }
         $this->view->assign('column', $contentsInHomepage);
 
-        /**
-         * Getting categories
-        */
+        // Getting categories
         $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId = $ccm->get_id($categoryName);
         $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
@@ -437,6 +470,8 @@ class FrontpagesController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('ARTICLE_FRONTPAGE')")
+     *
+     * @CheckModuleAccess(module="FRONTPAGE_MANAGER")
      **/
     public function getPreviewAction()
     {

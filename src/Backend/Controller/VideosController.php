@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -33,10 +34,6 @@ class VideosController extends Controller
      */
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
-
-        /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
         $request = $this->get('request');
@@ -58,13 +55,10 @@ class VideosController extends Controller
                 'category'     => $this->category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
-                //TODO: ¿datoscat?¿
                 'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
-
-        /******************* GESTION CATEGORIAS  *****************************/
     }
 
     /**
@@ -73,10 +67,31 @@ class VideosController extends Controller
      * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function listAction()
     {
-        return $this->render('video/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'video/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -85,6 +100,8 @@ class VideosController extends Controller
      * @return void
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function widgetAction()
     {
@@ -107,6 +124,8 @@ class VideosController extends Controller
      * @return Response         The response object.
      *
      * @Security("has_role('VIDEO_CREATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function createAction(Request $request)
     {
@@ -151,16 +170,14 @@ class VideosController extends Controller
 
                 try {
                     $video = new \Video();
-                    $video->createFromLocalFile($videoFileData);
+                    $videoId = $video->createFromLocalFile($videoFileData);
                 } catch (\Exception $e) {
                     $this->get('session')->getFlashBag()->add('error', $e->getMessage());
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
             } elseif ($type == 'external' || $type == 'script') {
-
-                $information = $_POST['infor'];
-
+                $information = $requestPost->get('infor');
                 $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
 
                 $video = new \Video();
@@ -178,7 +195,7 @@ class VideosController extends Controller
                 );
 
                 try {
-                    $video->create($videoData);
+                    $videoId = $video->create($videoData);
 
                     $cacheManager = $this->get('template_cache_manager');
                     $cacheManager->setSmarty(new \Template(TEMPLATE_USER_PATH));
@@ -191,13 +208,11 @@ class VideosController extends Controller
                 }
 
             } elseif ($type == 'web-source') {
-
                 if (!empty($_POST['information'])) {
-
                     $video = new \Video();
                     $_POST['information'] = json_decode($_POST['information'], true);
                     try {
-                        $video->create($_POST);
+                        $videoId = $video->create($_POST);
 
                         // Clean cache album home and frontpage for category
                         $cacheManager = $this->get('template_cache_manager');
@@ -230,10 +245,9 @@ class VideosController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_videos',
+                    'admin_video_show',
                     array(
-                        'category' => $category,
-                        'page' => $page
+                        'id' => $videoId
                     )
                 )
             );
@@ -244,7 +258,7 @@ class VideosController extends Controller
                 return $this->render('video/selecttype.tpl');
             } else {
                 $authorsComplete = \User::getAllUsersAuthors();
-                $authors = array( '0' => _(' - Select one author - '));
+                $authors = array('0' => _(' - Select one author - '));
                 foreach ($authorsComplete as $author) {
                     $authors[$author->id] = $author->name;
                 }
@@ -268,6 +282,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function updateAction(Request $request)
     {
@@ -289,7 +305,6 @@ class VideosController extends Controller
                     _("You can't modify this video because you don't have enought privileges.")
                 );
             } else {
-
                 if ($video->author_name == 'external' || $video->author_name == 'script') {
                     $information = $_POST['infor'];
                     $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
@@ -308,6 +323,7 @@ class VideosController extends Controller
                         'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
                         'starttime'      => $video->starttime,
                     );
+// var_dump($videoData);die();
 
                     $video->update($videoData);
                 } else {
@@ -324,26 +340,12 @@ class VideosController extends Controller
             $cacheManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
             $cacheManager->delete('home|1');
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_video_show',
-                        array('id' => $video->id)
-                    )
-                );
-            } else {
-                $page = $request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_videos',
-                        array(
-                            'category' => $video->category,
-                            'page'     => $page,
-                        )
-                    )
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_video_show',
+                    array('id' => $video->id)
+                )
+            );
         }
     }
 
@@ -354,6 +356,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_DELETE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function deleteAction(Request $request)
     {
@@ -401,6 +405,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_UPDATE')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function showAction(Request $request)
     {
@@ -416,17 +422,15 @@ class VideosController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos'));
         }
-
         if (($video->author_name == 'external' || $video->author_name == 'script')
             && is_array($video->information)) {
-            $video->thumbnail = '';
+
             if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
-                $video->thumb_image = new \Photo($video->information['thumbnail']);
-                $video->thumbnail   = $video->thumb_image->path_file.$video->thumb_image->name;
+                $video->thumb = $video->getThumb();
             }
         }
         $authorsComplete = \User::getAllUsersAuthors();
-        $authors = array( '0' => _(' - Select one author - '));
+        $authors = array('0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {
             $authors[$author->id] = $author->name;
         }
@@ -449,6 +453,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function videoInformationAction(Request $request)
     {
@@ -482,6 +488,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_SETTINGS')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function configAction(Request $request)
     {
@@ -519,6 +527,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function relationsAction(Request $request)
     {
@@ -548,6 +558,8 @@ class VideosController extends Controller
      * @return Response          The response object.
      *
      * @Security("has_role('VIDEO_ADMIN')")
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function savePositionsAction(Request $request)
     {
@@ -589,6 +601,8 @@ class VideosController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderAction(Request $request)
     {
@@ -611,9 +625,23 @@ class VideosController extends Controller
 
         // Build the pager
         $pagination = $this->get('paginator')->create([
-            'elements_per_page' => $itemsPerPage,
-            'total_items'       => $countVideos,
-            'base_url'          => $this->generateUrl(
+            'spacesBeforeSeparator' => 0,
+            'spacesAfterSeparator'  => 0,
+            'firstLinkTitle'        => '',
+            'lastLinkTitle'         => '',
+            'separator'             => '',
+            'firstPagePre'          => '',
+            'firstPageText'         => '',
+            'firstPagePost'         => '',
+            'lastPagePre'           => '',
+            'lastPageText'          => '',
+            'lastPagePost'          => '',
+            'prevImg'               => _('Previous'),
+            'nextImg'               => _('Next'),
+            'elements_per_page'     => $itemsPerPage,
+            'total_items'           => $countVideos,
+            'delta'                 => 1,
+            'base_url'              => $this->generateUrl(
                 'admin_videos_content_provider',
                 array('category' => $categoryId)
             ),
@@ -633,6 +661,8 @@ class VideosController extends Controller
      *
      * @param  Request $request The request object.
      * @return Response         The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderRelatedAction(Request $request)
     {
@@ -683,6 +713,8 @@ class VideosController extends Controller
      *
      * @param  Request  $request The request object.
      * @return Response          The response object.
+     *
+     * @CheckModuleAccess(module="VIDEO_MANAGER")
      */
     public function contentProviderGalleryAction(Request $request)
     {

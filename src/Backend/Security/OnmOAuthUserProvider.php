@@ -50,6 +50,10 @@ class OnmOAuthUserProvider extends BaseOAuthUserProvider
      */
     public function loadUserByUsername($username)
     {
+        if (strpos($username, '\\')) {
+            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
+        }
+
         $user = $this->container->get('user_repository')
             ->findBy(
                 array(

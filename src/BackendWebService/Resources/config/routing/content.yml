@@ -52,6 +52,12 @@ backend_ws_contents_batch_remove_permanently:
     options:
         expose: true
 
+backend_ws_contents_empty_trash:
+    path:     /trash/remove-all
+    defaults: { _controller: BackendWebServiceBundle:Content:emptyTrash }
+    options:
+        expose: true
+
 backend_ws_content_set_content_status:
     path:     /{contentType}s/{id}/set-content-status
     defaults: { _controller: BackendWebServiceBundle:Content:setContentStatus }
@@ -85,6 +91,12 @@ backend_ws_content_toggle_favorite:
 backend_ws_contents_list:
     path:     /{contentType}s
     defaults: { _controller: BackendWebServiceBundle:Content:list }
+    options:
+        expose: true
+
+backend_ws_contents_list_home:
+    path:     /{contentType}s/home
+    defaults: { _controller: BackendWebServiceBundle:Content:listHome }
     options:
         expose: true
 

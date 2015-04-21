@@ -16,6 +16,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Backend\Annotation\CheckModuleAccess;
 use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -35,22 +36,19 @@ class BooksController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
-        \Onm\Module\ModuleManager::checkActivatedOrForward('BOOK_MANAGER');
-
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
         $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $categoryData) =
+        list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category, $contentType);
 
-        $bookCategories = array();
-        foreach ($parentCategories as $bCat) {
+        $this->bookCategories = array();
+        foreach ($this->parentCategories as $bCat) {
             if ($bCat->internal_category == $contentType) {
-                $bookCategories[] = $bCat;
+                $this->bookCategories[] = $bCat;
             }
         }
 
@@ -60,9 +58,9 @@ class BooksController extends Controller
         $this->view->assign(
             array(
                 'category'     => $this->category,
-                'subcat'       => $subcat,
-                'allcategorys' => $bookCategories,
-                'datos_cat'    => $categoryData,
+                'subcat'       => $this->subcat,
+                'allcategorys' => $this->bookCategories,
+                'datos_cat'    => $this->categoryData,
                 'timezone'     => $timezone->getName()
             )
         );
@@ -74,6 +72,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function listAction()
     {
@@ -87,7 +87,26 @@ class BooksController extends Controller
             );
         }
 
-        return $this->render('book/list.tpl');
+        $categories = [ [ 'name' => _('All'), 'value' => -1 ] ];
+
+        foreach ($this->parentCategories as $key => $category) {
+            $categories[] = [
+                'name' => $category->title,
+                'value' => $category->name
+            ];
+
+            foreach ($this->subcat[$key] as $subcategory) {
+                $categories[] = [
+                    'name' => '&rarr; ' . $subcategory->title,
+                    'value' => $subcategory->name
+                ];
+            }
+        }
+
+        return $this->render(
+            'book/list.tpl',
+            [ 'categories' => $categories ]
+        );
     }
 
     /**
@@ -96,6 +115,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function widgetAction()
     {
@@ -125,6 +146,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_CREATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function createAction(Request $request)
     {
@@ -132,41 +155,37 @@ class BooksController extends Controller
             $this->view->assign('category', $this->category);
 
             return $this->render('book/new.tpl');
-
-        } else {
-
-            $data = array(
-                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'cover_id'    => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
-                'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getInt('category', 0),
-                'position'    => $request->request->getInt('position', 1),
-                'content_status'   => $request->request->getInt('content_status', 0),
-            );
-
-            $book = new \Book();
-            $id   = $book->create($data);
-
-            if (!empty($id)) {
-
-                $book->setPosition($data['position']);
-                $book = $book->read($id);
-
-                return $this->render('book/new.tpl', array('book' => $book));
-
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Unable to create the new book.")
-                );
-            }
-
-            return $this->render('book/new.tpl');
         }
+
+        $data = [
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'cover_id'       => $request->request->getInt('book_cover_id'),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getInt('category', 0),
+            'position'       => $request->request->getInt('position', 1),
+            'content_status' => $request->request->getInt('content_status', 0),
+        ];
+
+        $book = new \Book();
+        $id   = $book->create($data);
+
+        if (!empty($id)) {
+            $book->setPosition($data['position']);
+            $book = $book->read($id);
+
+            return $this->render('book/new.tpl', array('book' => $book));
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("Unable to create the new book.")
+            );
+        }
+
+        return $this->render('book/new.tpl');
     }
 
     /**
@@ -177,6 +196,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_UPDATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function showAction(Request $request)
     {
@@ -210,6 +231,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_UPDATE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function updateAction(Request $request)
     {
@@ -247,13 +270,13 @@ class BooksController extends Controller
             'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
             'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
             'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'cover_id'       => $request->request->filter('cover_image', '', FILTER_SANITIZE_STRING),
+            'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category'),
-            'position'       => $request->request->getInt('position'),
-            'content_status' => $request->request->getInt('content_status'),
+            'category'       => $request->request->getInt('category', 0),
+            'position'       => $request->request->getInt('position', 1),
+            'content_status' => $request->request->getInt('content_status', 0),
         ];
 
         if ($book->update($data)) {
@@ -283,6 +306,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_DELETE')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function deleteAction(Request $request)
     {
@@ -320,6 +345,8 @@ class BooksController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('BOOK_ADMIN')")
+     *
+     * @CheckModuleAccess(module="BOOK_MANAGER")
      **/
     public function savePositionsAction(Request $request)
     {

@@ -1,201 +1,108 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-#newsletter-content-provider, #newsletter-contents {
-    display:inline-block;
-    width: 49%;
-    vertical-align: top;
-}
-.content-receiver {
-    border:1px solid #ccc;
-    border-top:0;
-}
-.container-label { position:relative; }
-.container-buttons {
-    position:absolute;
-    top:-1px;
-    right:10px;
-    display:inline-block;
-}
-.container-buttons i {
-    margin-top:0;
-    margin-left:3px;
-}
-.toolbar {
-    margin-bottom:5px;
-}
-.related-content-provider {
-    width:100%;
-}
-#newsletter-content-provider {
-    width:50%;
-}
-#newsletter-content-provider .toolbar{
-    text-align:right
-}
-.contents ul {
-    margin:0 !important;
-    width:100%;
-}
-.contents ul li {
-    margin:4px 0;
-}
-.placeholder-element {
-    min-height:24px !important;
-    background:#efefef !important;
-    border:1px dashed Gray !important;
-}
-</style>
-{/block}
-
-{block name="footer-js" append}
-    {script_tag src="/onm/newsletter.js"}
-    {script_tag src="/onm/content-provider.js"}
-    {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
-    <script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('#newsletter-pick-elements-form').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-    });
-    {if $with_html}
-    var has_contents = true;
-    {else}
-    var has_contents = false;
-    {/if}
-    </script>
-{/block}
-
 {block name="content"}
-
-<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form">
-
-    <div id="buttons-contents" class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title">
-                <h2>{t}Newsletter{/t} :: {t}Newsletter contents{/t}</h2>
-            </div>
-
-            <ul class="old-button">
-                <li>
-                    <button type="submit" title="{t}Next{/t}" id="next-button">
-                        <img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
-                        {t}Next step{/t}
-                    </button>
-                </li>
-                <li class="separator"></li>
-                <li>
-                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
-                        {t}Back to list{/t}
-                    </a>
-                </li>
+<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|replace:'"':'\''})">
+    <div class="page-navbar actions-navbar">
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav quick-section">
+            <li class="quicklinks">
+              <h4>
+                <i class="fa fa-home fa-lg"></i>
+                {t}Newsletters{/t}
+              </h4>
+            </li>
+            <li class="quicklinks hidden-xs"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs">
+              <h5>{t}Pick contents{/t}</h5>
+            </li>
+          </ul>
+          <div class="all-actions pull-right">
+            <ul class="nav quick-section">
+              <li class="quicklinks">
+                <a href="{url name=admin_newsletters}" class="btn btn-link" title="{t}Go back to list{/t}">
+                  <span class="fa fa-reply"></span>
+                </a>
+              </li>
+              <li class="quicklinks"><span class="h-seperate"></span></li>
+              <li class="quicklinks btn-group">
+                <button class="btn btn-primary" type="submit" title="{t}Next{/t}" id="next-button">
+                  <span class="hidden-xs">{t}Next{/t}</span>
+                  <span class="fa fa-chevron-right"></span>
+                </button>
+              </li>
             </ul>
-
+          </div>
         </div>
+      </div>
     </div>
-
-    <div class="wrapper-content">
-
-        {render_messages}
-
-        <div class="panel">
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Email subject{/t}</label>
-                <div class="controls">
-                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name}" required class="input-xlarge"/>
-                </div>
+    <div class="content newsletter-manager">
+      {render_messages}
+      <div class="grid simple">
+        <div class="grid-body">
+          <div class="form-group">
+            <label for="name" class="form-label">{t}Email subject{/t}</label>
+            <div class="controls">
+              <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control"/>
             </div>
-
-            <div>{t}Drag elements from the right column to include them into the newsletter{/t}</div>
-
-            <div class="newsletter-contents">
-
-                <div id="newsletter-contents">
-                    <div class="btn-group toolbar">
-                        <button id="button-add-container" class="btn">
-                            <span class="icon-plus"></span> {t}Add Container{/t}
-                        </button>
-                        <button class="btn" title="{t}Clean containers{/t}" id="clean-button">
-                            <i class="icon-remove"></i> {t}Clean contents{/t}
-                        </button>
-                    </div>
-                    <div id="newsletter-container" class="column-receiver">
-
-                        {if empty($newsletterContent)}
-                            <div class="container-receiver active"  data-title="En Portada" data-id="1" >
-                                <div class="container-label">
-                                    <span>{t}In Frontpage{/t}</span>
-                                    <div class="container-buttons">
-                                        <i class="icon-chevron-up"></i>
-                                        <i class="icon-pencil"></i>
-                                        <i class="icon-remove"></i>
-                                        <i class="icon-trash"></i>
-                                    </div>
-                                </div>
-                                <ul class="content-receiver">
-                                </ul>
-                            </div>
-                        {else}
-                            {section name=c loop=$newsletterContent}
-                                {assign var='contents' value=$newsletterContent[c]->items}
-                                <div class="container-receiver {if $smarty.section.c.first} active{/if}"
-                                    data-title="{$newsletterContent[c]->title|clearslash|clean_for_html_attributes}" data-id="{$newsletterContent[c]->id}">
-                                    <div class="container-label"><span>{$newsletterContent[c]->title|clearslash}</span>
-                                        <div class="container-buttons btn-group">
-                                            {if $smarty.section.c.first || count($contents) > 0}
-                                                <i class="icon-chevron-up"></i>
-                                            {else}
-                                                <i class="icon-chevron-down"></i>
-                                            {/if}
-                                            <i class="icon-pencil"></i>
-                                            <i class="icon-remove"></i>
-                                            <i class="icon-trash"></i>
-                                        </div>
-                                    </div>
-                                    <ul class="content-receiver"
-                                    {if $smarty.section.c.first || count($contents) > 0}style="display:block;"{/if}>
-                                        {section name=d loop=$contents}
-                                            {if !empty($contents[d]->title)}
-                                            <li  data-id="{$contents[d]->id}"
-                                                class="content"
-                                                {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
-                                                data-title="{$contents[d]->title|clearslash|clean_for_html_attributes}" data-type="{$contents[d]->content_type}" >
-                                                {$contents[d]->type} {$contents[d]->title|clean_for_html_attributes}
-                                                <span class="icon"><i class="icon-trash"></i></span>
-                                            </li>
-                                            {/if}
-                                        {/section}
-                                    </ul>
-                                </div>
-                            {/section}
-                        {/if}
-
-                    </div>
-                </div>
-                <div id="newsletter-content-provider">
-                    <div class="btn-group toolbar">
-                        <a id="button-check-all" href="#" class="btn"  title="{t}Check All{/t}">
-                            <i class="icon-check"></i> {t}Check All{/t}
-                        </a>
-                        <a class="btn" id="add-selected" href="#"  title="{t}Add Selected items{/t}" >
-                            <i class="icon-plus"></i> {t}Add selected contents{/t}
-                        </a>
-                    </div>
-                    {include file="newsletter/_partials/container_contents.tpl"}
-                </div>
-
-                <input type="hidden" id="content_ids" name="content_ids">
-                <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="newsletter-contents">
+        <div class="grid simple" >
+          <div class="grid-title clearfix">
+            <div class="pull-left">{t}Add contents to groups by using the "Add contents" button{/t}</div>
+            <div class="pull-right">
+              <button type="button" class="btn btn-mini" ng-click="addContainer()">
+                <span class="fa fa-plus"></span> {t}Add Container{/t}
+              </button>
+              <button type="button" title="{t}Clean containers{/t}" class="btn btn-mini" ng-click="cleanContainers()">
+                <i class="fa fa-trash-o"></i> {t}Clean contents{/t}
+              </button>
+            </div>
+          </div>
+          <div class="grid-body" id="newsletter-contents">
+            <div class="newsletter-container ng-cloak animate" ng-repeat="container in newsletterContents">
+              <div class="newsletter-container-title clearfix">
+                <div class="input-group title pull-left">
+                  <input ng-model="container.title" type="text" class="form-control">
+                  <span class="input-group-addon" id="basic-addon1"><span class="fa fa-pencil"></span></span>
+                </div>
+                <div class="container-actions pull-right">
+                  <button type="button" class="btn btn-white" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="30" content-picker-target="container.items" media-picker-type="album,article,opinion,poll,video">
+                    <span class="fa fa-add"></span>
+                    {t}Add contents{/t}
+                  </button>
+                  <button type="button" ng-click="moveContainerUp(container)" class="btn btn-white" ng-if="$index !== 0">
+                    <i class="fa fa-chevron-up"></i>
+                  </button>
+                  <button type="button" ng-click="moveContainerDown(container)" class="btn btn-white" ng-if="$index+1 < newsletterContents.length">
+                    <i class="fa fa-chevron-down"></i>
+                  </button>
+                  <button class="btn btn-white" ng-click="removeContainer(container)" type="button">
+                    <i class="fa fa-trash-o text-danger"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="newsletter-container-contents clearfix">
+                <div ng-if="container.items.length == 0" class="hint-message">
+                  {t}Click in "Add contents" button above or drop contents from other containers{/t}
+                </div>
+                <ul ui-sortable="sortableOptions" ng-model="container.items" class="newsletter-container-contents-sortable">
+                  <li class="newsletter-content clearfix" ng-repeat="content in container.items">
+                    <span class="content-type">[% content.content_type_l10n_name %]</span> [% content.title %]
+                    <button class="btn btn-white pull-right" ng-click="removeContent(container, content)" type="button">
+                      <i class="fa fa-trash-o text-danger"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-</form>
-{include file="newsletter/modals/_add_container_label.tpl"}
-{include file="newsletter/modals/_update_container_label.tpl"}
-{include file="newsletter/modals/_activate_container_alert.tpl"}
-{include file="newsletter/modals/_back_contents_accept.tpl"}
+    <input type="hidden" name="content_ids" ng-value="contents">
+    <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
+  </form>
 {/block}
-

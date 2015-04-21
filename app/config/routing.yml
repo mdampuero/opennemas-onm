@@ -2,6 +2,10 @@ backend:
     resource: @BackendBundle/Resources/config/routing.yml
     prefix:   /admin
 
+backend_webservice:
+    resource: @BackendWebServiceBundle/Resources/config/routing.yml
+    prefix:   /admin/entityws
+
 frontendmobile:
     resource: @FrontendMobileBundle/Resources/config/routing.yml
     prefix:   /mobile
@@ -21,10 +25,6 @@ webservice:
 frontend:
     resource: @FrontendBundle/Resources/config/routing.yml
     prefix:   /
-
-backend_webservice:
-    resource: @BackendWebServiceBundle/Resources/config/routing.yml
-    prefix:   /admin/entityws
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -26,7 +26,7 @@
                 <span class="type">{t}{$content->content_type_l10n_name}{/t} -</span>
                 <span class="date">{t}{$content->created|date_format:"%d-%m-%Y"}{/t} -</span>
                 {$content->title|clean_for_html_attributes}
-                <span class="icon"><i class="icon-trash"></i></span>
+                <span class="icon"><i class="fa fa-trash"></i></span>
             </li>
         {/foreach}
     </ul>

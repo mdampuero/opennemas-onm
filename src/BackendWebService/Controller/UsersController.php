@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
+use Onm\Settings as s;
 
 class UsersController extends ContentController
 {
@@ -130,6 +131,28 @@ class UsersController extends ContentController
         $success = array();
         $updated = array();
 
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+        // Check total activated users before creating new one
+        if ($maxUsers > 0 && $enabled) {
+            $createEnabled = \User::getTotalActivatedUsersRemaining($maxUsers);
+            if ($createEnabled < count($ids)) {
+                return new JsonResponse(
+                    array(
+                        'messages'  => array(
+                            array(
+                                'id'      => '500',
+                                'type'    => 'error',
+                                'message' => _(
+                                    'Unable to change user backend access. You have reach the maximum allowed'
+                                ),
+                            )
+                        )
+                    )
+                );
+            }
+        }
+
         foreach ($ids as $id) {
             if (!is_null($id)) {
                 $user = new \User();
@@ -159,8 +182,8 @@ class UsersController extends ContentController
 
         return new JsonResponse(
             array(
-                'activated'  => $enabled,
-                'messages' => array_merge($success, $errors)
+                'activated' => $enabled,
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -269,7 +292,7 @@ class UsersController extends ContentController
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = $this->convertToUtf8($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($search);
 
         return new JsonResponse(
@@ -313,35 +336,64 @@ class UsersController extends ContentController
             );
         }
 
-        $enabled  = $request->request->getDigits('value');
-        $messages = array();
-
-        if (!is_null($id)) {
-            $user = new \User();
-            if ($enabled) {
-                $user->activateUser($id);
-            } else {
-                $user->deactivateUser($id);
-            }
-
-            $messages[] = array(
-                'id'      => $id,
-                'message' => _('Item updated successfully'),
-                'type'    => 'success'
-            );
-        } else {
-            $messages[] = array(
-                'id'      => $id,
-                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
-                'type'    => 'error'
+        if (is_null($id)) {
+            return new JsonResponse(
+                [
+                    'messages' => array(
+                        'id'      => $id,
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
+                        'type'    => 'error'
+                    )
+                ],
+                404
             );
         }
 
+        $enabled  = $request->request->getDigits('value');
+        $messages = array();
+
+        $user = new \User($id);
+        // Get max users from settings
+        $maxUsers = s::get('max_users');
+
+        // Check total activated users before creating new one
+        if (!$user->isMaster() && $maxUsers > 0 && $enabled) {
+            if (!\User::getTotalActivatedUsersRemaining($maxUsers)) {
+                return new JsonResponse(
+                    [
+                        'messages'  => [
+                            [
+                                'id'      => '500',
+                                'type'    => 'error',
+                                'message' => _(
+                                    'Unable to change user backend access. You have reach the maximum allowed'
+                                ),
+                            ]
+                        ]
+                    ],
+                    403
+                );
+            }
+        }
+
+        $user = new \User($id);
+        if ($enabled) {
+            $user->activateUser($id);
+        } else {
+            $user->deactivateUser($id);
+        }
+
         return new JsonResponse(
-            array(
+            [
                 'activated' => $enabled,
-                'messages'  => $messages
-            )
+                'messages'  => [
+                    [
+                        'id'      => $id,
+                        'message' => _('Item updated successfully'),
+                        'type'    => 'success'
+                    ]
+                ]
+            ]
         );
     }
 
