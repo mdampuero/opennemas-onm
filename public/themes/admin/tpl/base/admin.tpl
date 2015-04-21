@@ -28,7 +28,6 @@
 
   {block name="header-css"}
     {stylesheets src="
-      @Common/components/font-awesome/css/font-awesome.min.css,
       @Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/pace/themes/blue/pace-theme-minimal.css,
