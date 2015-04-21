@@ -23,7 +23,7 @@
   {/block}
 
   <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
 
   {block name="header-css"}
