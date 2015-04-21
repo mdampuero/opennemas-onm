@@ -663,7 +663,6 @@ angular.module('onm.picker')
        */
       var search;
       $scope.$watch('[date,title,criteria]', function(nv, ov) {
-        console.log('watcher');
         if (nv === ov) {
           return false;
         }
