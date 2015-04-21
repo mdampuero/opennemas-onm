@@ -54,28 +54,28 @@
     <div class="content">
       {render_messages}
       <div class="grid simple">
-        <div class="grid-title">
-          <h4><span class="semi-bold">{t}Basic information{/t}</span></h4>
-        </div>
         <div class="grid-body">
-          <div class="form-group">
-            <label for="name" class="form-label">{t}Name{/t}</label>
-            <div class="controls">
-              <input type="text" id="name" name="name" value="{$menu->name|default:""}"
-              maxlength="120" tabindex="1" required="required" class="form-input"
-              {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+          <div class="row">
+            <div class="col-md-6 col-xs-12 form-group">
+              <label for="name" class="form-label">{t}Name{/t}</label>
+              <div class="controls">
+                <input type="text" id="name" name="name" value="{$menu->name|default:""}"
+                maxlength="120" tabindex="1" required="required" class="form-control"
+                {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if} />
+              </div>
             </div>
           </div>
-
-          {if count($menu_positions) > 1}
-          <div class="form-group">
-            <label for="name" class="form-label">{t}Position{/t}</label>
-            <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
-            <div class="controls">
-              {html_options options=$menu_positions selected=$menu->position name=position}
+          <div class="row">
+            {if count($menu_positions) > 1}
+            <div class="col-md-6 col-xs-12 form-group">
+              <label for="name" class="form-label">{t}Position{/t}</label>
+              <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
+              <div class="controls">
+                {html_options options=$menu_positions selected=$menu->position name=position}
+              </div>
             </div>
+            {/if}
           </div>
-          {/if}
         </div>
       </div>
       <div class="grid simple">
