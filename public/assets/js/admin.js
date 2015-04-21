@@ -60,7 +60,7 @@ $(document).ready(function() {
 
     // Hide alerts after 5 seconds
     window.setInterval(function() {
-      $(".messages .alert").slideDown(2000, function(){
+      $('.messages .alert').slideDown(2000, function(){
         $(this).remove();
       });
     }, 5000);
