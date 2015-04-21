@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-20 16:49+0200\n"
-"PO-Revision-Date: 2015-04-20 16:52+0200\n"
+"POT-Creation-Date: 2015-04-21 17:34+0200\n"
+"PO-Revision-Date: 2015-04-21 17:37+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1360,8 +1360,8 @@ msgstr "Widget actualizado correctamente."
 msgid "Browse"
 msgstr "Examinar"
 
-msgid "Welcome"
-msgstr "Benvido"
+msgid "Dashboard"
+msgstr "Inicio"
 
 msgid "Website"
 msgstr "Sitio web"
@@ -1762,6 +1762,12 @@ msgstr "Detalles do elemento"
 msgid "items selected"
 msgstr "elementos seleccionados"
 
+msgid "Load more"
+msgstr "Cargar máis"
+
+msgid "Loading..."
+msgstr "Cargando…"
+
 msgid "Search by name"
 msgstr "Filtrar por nome"
 
@@ -2053,9 +2059,6 @@ msgstr "%s instancias eliminadas correctamente."
 #, php-format
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
-
-msgid "Dashboard"
-msgstr "Taboleiro"
 
 msgid "Instances"
 msgstr "Instancias"
@@ -3183,6 +3186,9 @@ msgstr "Guía de inicio"
 msgid "Log out"
 msgstr "Sair da sesión"
 
+msgid "Welcome"
+msgstr "Benvido"
+
 msgid "No notifications for now"
 msgstr "Non hai notificacións por agora"
 
@@ -3804,12 +3810,12 @@ msgstr ""
 "\"_blank\">titoriais en vídeo</a> para obter guias paso a paso."
 
 msgid ""
-"If you need further information you can always contact us by using the  "
-"<span class=\"fa fa-support fa-2x\"></span> Help  button in the upper right "
-"corner."
+"If you need further information you can always contact us by using the <span "
+"class=\"fa fa-support\"></span> Help button in the upper right corner."
 msgstr ""
-"Se precisas máis información podes contactar connosco usando o botón de "
-"axuda <span class=\"fa fa-support\"></span> na esquina superior dereita."
+"Se precisas máis información sempre poderás contactar connosco usando o "
+"botón de axuda <span class=\"fa fa-support\"></span> na esquina superior "
+"dereita."
 
 msgid "Do you have a Facebook or a Twitter account?"
 msgstr "Tes unha conta en Facebook ou Twitter?"
@@ -3964,6 +3970,9 @@ msgstr "Grupo"
 
 msgid "Unable to find any user that matches your search."
 msgstr "Non se puideron atopar usuarios que coincidan coa súa busca."
+
+msgid "Avatar"
+msgstr "Avatar"
 
 msgid "Full name"
 msgstr "Nome completo"
@@ -4500,9 +4509,6 @@ msgstr "Crear novo autor"
 
 msgid "Unable to find any author that matches your search."
 msgstr "Non se puideron atopar autores que coincidan coa súa busca."
-
-msgid "Avatar"
-msgstr "Avatar"
 
 msgid "No biography set"
 msgstr "No ten biografía estabelecida"
@@ -9159,9 +9165,6 @@ msgstr ""
 #~ "Se pola contra queres indagar por ti mesmo, a continuación móstranse "
 #~ "algunhas accións que realizan a maioría das persoas para configurar un "
 #~ "novo sitio OpenNemas."
-
-#~ msgid "Learn more"
-#~ msgstr "Saber máis"
 
 #~ msgid "Basic Settings"
 #~ msgstr "Preferencias básicas"
