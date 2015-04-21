@@ -208,6 +208,8 @@ class PickerController extends Controller
             'insert'              => _('Insert'),
             'itemDetails'         => _('Item details'),
             'itemsSelected'       => _('items selected'),
+            'loadMore'            => _('Load more'),
+            'loading'             => _('Loading...'),
             'menuItem'            => _('Browse'),
             'search'              => _('Search by name'),
             'title'               => _('Title'),

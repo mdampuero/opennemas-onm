@@ -65,7 +65,7 @@ angular.module('onm.picker')
                 </div>\
                 <div class=\"picker-panel-wrapper\">\
                   <div class=\"picker-panel-content\" when-scrolled=\"scroll()\">\
-                    <div class=\"items\" ng-if=\"!searchLoading\">\
+                    <div class=\"clearfix items\" ng-if=\"!searchLoading\">\
                       <div class=\"media-item\" ng-repeat=\"item in uploader.queue\">\
                         <div class=\"img-thumbnail\">\
                           <i class=\"fa fa-picture-o fa-5x\"></i>\
@@ -80,6 +80,13 @@ angular.module('onm.picker')
                           + "\" ng-if=\"content.content_type_name == 'photo'\" ng-model=\"content\" width=\"80\" transform=\"zoomcrop,120,120,center,center\"></dynamic-image>\
                         <dynamic-image class=\"img-thumbnail\" ng-if=\"content.content_type_name == 'video'\" path=\"[% content.thumb %]\"></dynamic-image>\
                       </div>\
+                    </div>\
+                    <div class=\"text-center m-b-30 p-t-15 p-b-30 pointer\" ng-click=\"scroll()\" ng-if=\"!searchLoading && total != contents.length\">\
+                      <h5>\
+                        <i class=\"fa fa-circle-o-notch fa-spin fa-lg\" ng-if=\"loadingMore\"></i>\
+                        <span ng-if=\"!loadingMore\">[% picker.params.explore.loadMore %]</span>\
+                        <span ng-if=\"loadingMore\">[% picker.params.explore.loading %]</span>\
+                      </h5>\
                     </div>\
                     <div class=\"items-loading\" ng-if=\"searchLoading\">\
                       <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
@@ -652,6 +659,8 @@ angular.module('onm.picker')
        * @param {boolean} reset Whether to reset the list or append more items.
        */
       $scope.list = function (reset) {
+        $scope.loadingMore = true;
+
         if (reset) {
           $scope.page = 1;
           $scope.searchLoading = true;
@@ -676,6 +685,8 @@ angular.module('onm.picker')
         var url = routing.generate('backend_ws_picker_list', data);
 
         $http.get(url).then(function(response) {
+          $scope.loadingMore = false;
+
           if (reset) {
             $scope.contents      = response.data.results;
             $scope.total         = response.data.total;
