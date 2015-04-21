@@ -67,14 +67,19 @@
         <div class="form-group">
           <label class="form-label" for="title">{t}Commented on{/t}</label>
           <div class="controls">
-            <strong>{$comment->content->content_type_l10n_name}</strong> - {$comment->content->title|clearslash}
+            <strong>{t}{$comment->content->content_type_name|capitalize}{/t}</strong> - {$comment->content->title|clearslash}
           </div>
         </div>
         {acl isAllowed="COMMENT_AVAILABLE"}
         <div class="form-group">
           <label class="form-label" for="content_status">{t}Status{/t}</label>
           <div class="controls">
-            {html_radios name=status options=$statuses selected=$comment->status id="conten_status"}
+            {foreach $statuses as $item}
+            {if $item['value'] neq -1}
+            <input type="radio" name="status" value="{$item['value']}" {if $comment->status == {$item['value']}}checked{/if}> {$item['title']}
+            <br>
+            {/if}
+            {/foreach}
           </div>
         </div>
         {/acl}
