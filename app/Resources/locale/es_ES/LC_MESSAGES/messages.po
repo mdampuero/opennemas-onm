@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-20 16:49+0200\n"
-"PO-Revision-Date: 2015-04-20 16:51+0200\n"
+"POT-Creation-Date: 2015-04-21 17:34+0200\n"
+"PO-Revision-Date: 2015-04-21 17:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1375,8 +1375,8 @@ msgstr "Widget actualizado correctamente."
 msgid "Browse"
 msgstr "Explorar"
 
-msgid "Welcome"
-msgstr "Bienvenido"
+msgid "Dashboard"
+msgstr "Inicio"
 
 msgid "Website"
 msgstr "Sitio web"
@@ -1778,6 +1778,12 @@ msgstr "Detalles del elemento"
 msgid "items selected"
 msgstr "elementos seleccionados"
 
+msgid "Load more"
+msgstr "Cargar máis"
+
+msgid "Loading..."
+msgstr "Cargando…"
+
 msgid "Search by name"
 msgstr "Filtrar por nombre"
 
@@ -2071,9 +2077,6 @@ msgstr "%s instancias eliminadas correctamente."
 #, php-format
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
-
-msgid "Dashboard"
-msgstr "Inicio"
 
 msgid "Instances"
 msgstr "Instancias"
@@ -3211,6 +3214,9 @@ msgstr "Guía de inicio"
 msgid "Log out"
 msgstr "Salir"
 
+msgid "Welcome"
+msgstr "Bienvenido"
+
 msgid "No notifications for now"
 msgstr "No hay notificaciones por ahora"
 
@@ -3839,13 +3845,12 @@ msgstr ""
 "guías paso a paso."
 
 msgid ""
-"If you need further information you can always contact us by using the  "
-"<span class=\"fa fa-support fa-2x\"></span> Help  button in the upper right "
-"corner."
+"If you need further information you can always contact us by using the <span "
+"class=\"fa fa-support\"></span> Help button in the upper right corner."
 msgstr ""
-"Si necesitas más información siempre puedes contactar con nosotros usando el "
-"botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la esquina "
-"superior derecha."
+"Si necesitas más información siempre siempre puedes contactar con nosotros "
+"usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
+"esquina superior derecha."
 
 msgid "Do you have a Facebook or a Twitter account?"
 msgstr "¿Tienes una cuenta de Facebook o Twitter?"
@@ -4001,6 +4006,9 @@ msgstr "Grupo"
 
 msgid "Unable to find any user that matches your search."
 msgstr "No se pudieron encontrar usuarios que coincidan con tu búsqueda."
+
+msgid "Avatar"
+msgstr "Avatar"
 
 msgid "Full name"
 msgstr "Nombre completo"
@@ -4539,9 +4547,6 @@ msgstr "Crear nuevo autor"
 
 msgid "Unable to find any author that matches your search."
 msgstr "No se pudieron encontrar autores que coincidan con tu búsqueda."
-
-msgid "Avatar"
-msgstr "Avatar"
 
 msgid "No biography set"
 msgstr "No tiene biografía establecida"
