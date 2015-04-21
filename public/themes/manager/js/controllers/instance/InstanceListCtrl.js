@@ -431,11 +431,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
       }
 
       var cleaned = itemService.cleanFilters($scope.criteria);
-
-      if (cleaned.name && cleaned.domains && cleaned.contact_mail) {
-        // OR operator
-        cleaned.union = $scope.union;
-      }
+      cleaned.union = $scope.union;
 
       var data = {
         criteria: cleaned,
