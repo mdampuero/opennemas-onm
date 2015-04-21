@@ -6,8 +6,10 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            show_save_frontpage_dialog();
             frontpage_info.changed=true;
+        },
+        stop: function(event,ui) {
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -20,8 +22,10 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            show_save_frontpage_dialog();
             frontpage_info.changed=true;
+        },
+        stop: function(event,ui) {
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -128,17 +132,19 @@ function remove_element(element) {
     });
 }
 
+function showMessage(message, type, time) {
+  Messenger.options = {
+      extraClasses: 'messenger-fixed messenger-on-bottom',
+  };
 
-
-function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html(
-        "<div class='messages'><div class='alert alert-notice messenger-message'>" +
-            "<button class='close' data-dismiss='alert'>×</button>" +
-            frontpage_messages.remember_save_positions +
-        "</div></div>"
-    );
+  Messenger().post({
+    message: message,
+    type: type,
+    hideAfter: time,
+    showCloseButton: true,
+    id: new Date().getTime()
+  });
 }
-
 
 function initializePopovers() {
     jQuery('div.placeholder div.content-provider-element .info').each(function() {
@@ -187,7 +193,7 @@ jQuery(function($) {
     $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui) {
         e.preventDefault();
         var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
         $('#modal-batch-delete').modal('hide');
         remove_element(contents);
         e.preventDefault();
@@ -211,19 +217,9 @@ jQuery(function($) {
             frontpage_urls.set_arquived,
             { 'ids': ids }
         ).done(function(data) {
-            $('#warnings-validation').html(
-                "<div class='messages'><div class='alert alert-success messenger-message'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data +
-                '</div></div>'
-            );
+            showMessage(data, 'success', 5);
         }).fail(function(data) {
-            $('#warnings-validation').html(
-                "<div class='messages'><div class='alert alert-error messenger-message'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data.responseText +
-                '</div></div>'
-            );
+            showMessage(data.responseText, 'error', 5);
         });
         $('#modal-batch-arquive').modal('hide');
         remove_element(contents);
@@ -285,18 +281,9 @@ jQuery(function($) {
                 frontpage_urls.set_arquived,
                 { 'ids': [delId] }
             ).done(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data +
-                    '</div></div>');
+                showMessage(data, 'success', 5);
             }).fail(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data.responseText +
-                    '</div></div>'
-                );
+                showMessage(data.responseText, 'error', 5);
             });
 
         }
@@ -316,7 +303,7 @@ jQuery(function($) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
         remove_element(parent);
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
     });
 
     // suggest-home
@@ -356,7 +343,7 @@ jQuery(function($) {
                 { id: delId }
             );
         }
-        show_save_frontpage_dialog();
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
         $('#modal-element-send-trash').modal('hide');
         $('body').data('element-for-del').animate({ 'backgroundColor': '#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
             $(this).remove();
@@ -620,27 +607,14 @@ jQuery(function($) {
                 dataType: 'json',
                 data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
-                    $('#warnings-validation').html(
-                    "<div class='messages'><div class='alert alert-notice messenger-message'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>"+
-                        "Saving"+
-                    '</div></div>');
+                    //showMessage('Saving', 'info', 1);
                 }
             }).done(function(data) {
-                $('#warnings-validation').html(
-                    "<div class='messages'><div class='alert alert-success messenger-message'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        data.message +
-                    '</div></div>');
+                showMessage(data.message, 'success', 5);
                 frontpage_info.last_saved = data.date;
             }).fail(function(data, ajaxOptions, thrownError) {
                 var response = $.parseJSON(data.responseText);
-                $('#warnings-validation').html(
-                    "<div class='messages'><div class='alert alert-error messenger-message'>" +
-                        "<button class='close' data-dismiss='alert'>×</button>" +
-                        response.message +
-                    '</div></div>'
-                );
+                showMessage(response.message, 'error', 5);
             });
         }
     });
