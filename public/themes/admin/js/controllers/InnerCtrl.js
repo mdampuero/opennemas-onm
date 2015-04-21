@@ -2,8 +2,8 @@
  * Controller to use in inner sections.
  */
 angular.module('BackendApp.controllers').controller('InnerCtrl', [
-  '$rootScope', '$scope', '$timeout', 'Editor', 'renderer',
-  function($rootScope, $scope, $timeout, Editor, renderer) {
+  '$rootScope', '$scope', '$timeout', 'Editor', 'Renderer',
+  function($rootScope, $scope, $timeout, Editor, Renderer) {
     'use strict';
 
     /**
@@ -17,14 +17,14 @@ angular.module('BackendApp.controllers').controller('InnerCtrl', [
 
       if (items instanceof Array) {
         for (var i = 0; i < items.length; i++) {
-          html = renderer.renderImage(items[i]);
+          html = Renderer.renderImage(items[i]);
           Editor.get(target).insertHtml(html);
         }
 
         return;
       }
 
-      html = renderer.renderImage(items);
+      html = Renderer.renderImage(items);
       Editor.get(target).insertHtml(html);
     };
 

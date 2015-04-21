@@ -12,11 +12,11 @@
  * @param Object $window          The window object.
  * @param Object paginationConfig The pagination configuration object.
  * @param Object routing          The routing service.
- * @param Object sidebar          The sidebar factory.
+ * @param Object Sidebar          The sidebar factory.
  */
 angular.module('BackendApp.controllers').controller('MasterCtrl', [
-  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'messenger', 'routing', 'sidebar',
-  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, messenger, routing, sidebar) {
+  '$filter', '$http', '$location', '$modal', '$rootScope', '$scope', '$translate', '$timeout', '$window', 'paginationConfig', 'messenger', 'routing', 'Sidebar',
+  function ($filter, $http, $location, $modal, $rootScope, $scope, $translate, $timeout, $window, paginationConfig, messenger, routing, Sidebar) {
     'use strict';
 
     /**
@@ -24,7 +24,7 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
      *
      * @type Object
      */
-    $scope.sidebar = sidebar.init();
+    $scope.sidebar = Sidebar.init();
 
     /**
      * Configures the language, translates the pagination texts and
