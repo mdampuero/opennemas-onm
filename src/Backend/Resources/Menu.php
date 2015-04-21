@@ -12,9 +12,9 @@ $menuXml = [
     ],
 
     [
-        'id'      => 'welcome',
+        'id'      => 'dashboard',
         'link'    => url('admin_welcome'),
-        'title'   => _("Welcome"),
+        'title'   => _("Dashboard"),
         'icon'    => 'fa fa-home',
     ],
 
