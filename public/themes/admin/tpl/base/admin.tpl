@@ -295,14 +295,14 @@
                         </a>
                       </div>
                       <div class="quick-item">
-                        <a href="http://help.opennemas.com" title="{t}F.A.Q.{/t}">
+                        <a href="http://help.opennemas.com" target="_blank" title="{t}F.A.Q.{/t}">
                           <i class="fa fa-question-circle"></i>
                           <span class="title">{t}F.A.Q.{/t}</span>
                           <span class="subtitle">{t}Read what user ask more{/t}</span>
                         </a>
                       </div>
                       <div class="quick-item">
-                        <a href="http://www.youtube.com/user/OpennemasPublishing" title="{t}Youtube channel{/t}">
+                        <a href="http://www.youtube.com/user/OpennemasPublishing" target="_blank" title="{t}Youtube channel{/t}">
                           <i class="fa fa-youtube"></i>
                           <span class="title">{t}Videotutorials{/t}</span>
                           <span class="subtitle">{t}Use videos to get walkthrough guides{/t}</span>
