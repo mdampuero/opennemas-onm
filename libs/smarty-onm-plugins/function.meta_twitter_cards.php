@@ -26,7 +26,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         $summary = $content->summary;
         $summary = trim(\Onm\StringUtils::htmlAttribute($summary));
         if (empty($summary)) {
-            $summary = mb_substr($content->body, 0, 80)."...";
+            $summary = mb_substr(trim(\Onm\StringUtils::htmlAttribute($content->body)), 0, 80)."...";
         }
         $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
         $url = "http://".SITE.'/'.$content->uri;
