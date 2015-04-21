@@ -31,7 +31,8 @@
     {t}Synched blog category{/t}
   </span>
   <span class="h-seperate"></span>
-  <span class="no-padding">
+  <span class="input-wrapper no-padding">
+    <i class="fa fa-pencil"></i>
     <input ng-model="item.title" type="text">
   </span>
   <button data-nodrag class="btn btn-white pull-right" ng-click="removeItem($index{if $subitem}, parentIndex{/if})" type="button">
