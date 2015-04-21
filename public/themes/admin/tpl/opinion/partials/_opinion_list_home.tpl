@@ -58,7 +58,7 @@
       <span class="h-seperate hidden-xs"></span>
       <span class="hidden-xs item-views">{t}Views{/t}: [% item.views ? item.views : 0 %]</span>
       {acl isAllowed="OPINION_HOME"}
-        <button data-nodrag class="btn btn-white pull-right" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', 0, 'home_loading')" type="button">
+        <button data-nodrag class="btn btn-white pull-right" ng-click="updateItem($index, item.id, 'backend_ws_content_toggle_in_home', 'in_home', 0, 'home_loading');reloadPage();" type="button">
           <i data-nodrag class="fa fa-home text-info" ng-class="{ 'fa-circle-o-notch': item.home_loading }"></i>
           <i data-nodrag class="fa fa-times fa-sub text-danger" ng-if="!item.home_loading"></i>
         </button>

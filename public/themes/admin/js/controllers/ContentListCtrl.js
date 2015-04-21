@@ -322,6 +322,18 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       }
     };
 
+    /**
+     * Reloads the full page.
+     */
+    $scope.reloadPage = function() {
+      $window.location.reload();
+    }
+
+    /**
+     * Sort by function
+     *
+     * @param  String field The field to sort.
+     */
     $scope.sort = function(field) {
       if ($scope.sort_by === field) {
         if ($scope.sort_order === 'asc') {
