@@ -10,16 +10,6 @@
         }
 
         return true;
-      }).on('click', '.cover-image .unset', function (e, ui) {
-          e.preventDefault();
-
-          var parent = $(this).closest('.contentbox');
-
-          parent.find('.related-element-id').val('');
-          parent.find('.related-element-footer').val('');
-          parent.find('.image').html('');
-
-          parent.removeClass('assigned');
       });
 
       $('#title').on('change', function(e, ui) {
@@ -193,17 +183,33 @@
                 <div class="album-thumbnail-sortable" ng-repeat="photo in photos">
                   <input type="hidden" name="album_photos_id[]" ng-value="ids[$index]"/>
                   <input type="hidden" name="album_photos_footer[]" ng-value="footers[$index]"/>
-                  <div class="dynamic-image-placeholder">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,500,500">
-                      <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="removeItem('photos', $index)">
-                          <i class="fa fa-trash-o fa-2x"></i>
-                        </div>
+                  <div class="thumbnail-wrapper">
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }"></div>
+                    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_[% $index %]'] }">
+                      <p>{t}Are you sure?{/t}</p>
+                      <div class="confirm-actions">
+                        <button class="btn btn-link" ng-click="toggleOverlay('photo_[% $index %]')" type="button">
+                          <i class="fa fa-times fa-lg"></i>
+                          {t}No{/t}
+                        </button>
+                        <button class="btn btn-link" ng-click="removeItem('photos', $index);toggleOverlay('photo_[% $index %]')" type="button">
+                          <i class="fa fa-check fa-lg"></i>
+                          {t}Yes{/t}
+                        </button>
                       </div>
-                    </dynamic-image>
-                  </div>
-                  <div class="form-group">
-                    <textarea class="album-thumbnail-description form-control" ng-model="footers[$index]"></textarea>
+                    </div>
+                    <div class="dynamic-image-placeholder">
+                      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo" transform="zoomcrop,500,500">
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_[% $index %]', $index)">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
+                        </div>
+                      </dynamic-image>
+                    </div>
+                    <div class="form-group">
+                      <textarea class="album-thumbnail-description form-control" ng-model="footers[$index]"></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
