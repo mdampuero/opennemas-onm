@@ -29,6 +29,8 @@ class OJDAnalyticsListener
         if (!preg_match('/\/admin\/frontpages/', $referer)
             && !preg_match('/\/manager/', $uri)
             && !preg_match('/\/managerws/', $uri)
+            && !preg_match('/\/share-by-email/', $uri)
+            && !preg_match('/\/sharrre/', $uri)
         ) {
             $this->addFrontendCode($event);
             return;
