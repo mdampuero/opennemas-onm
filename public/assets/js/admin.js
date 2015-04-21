@@ -57,4 +57,11 @@ $(document).ready(function() {
     });
 
     $('.nav-pills, .nav-tabs').tabdrop();
+
+    // Hide alerts after 5 seconds
+    window.setInterval(function() {
+      $(".messages .alert").slideDown(2000, function(){
+        $(this).remove();
+      });
+    }, 5000);
 });
