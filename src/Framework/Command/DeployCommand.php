@@ -244,7 +244,7 @@ EOF
     {
         $this->execProcess('npm install');
 
-        $this->execProcess('node_modules/.bin/bower install');
+        $this->execProcess('node_modules/.bin/bower install --allow-root');
     }
 
     /**
