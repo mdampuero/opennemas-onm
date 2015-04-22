@@ -218,7 +218,7 @@
                                         {t}Tags{/t}
                                     </label>
                                     <div class="controls">
-                                        <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
+                                        <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$opinion->metadata|clearslash|escape:"html"}"/>
                                     </div>
                                 </div>
                             </div>
