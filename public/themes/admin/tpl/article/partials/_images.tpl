@@ -48,7 +48,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group ng-cloak" ng-if="photo1">
+                  <div class="form-group ng-cloak" ng-show="photo1">
                     <label class="form-label" for="img1_footer">
                       {t}Footer text{/t}
                     </label>
@@ -99,7 +99,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group ng-cloak" ng-if="photo2">
+                  <div class="form-group ng-cloak" ng-show="photo2">
                     <label class="form-label" for="title">
                       {t}Footer text{/t}
                     </label>
@@ -152,7 +152,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="form-group ng-cloak" ng-if="photo3">
+                    <div class="form-group ng-cloak" ng-show="photo3">
                       <label class="form-label" for="params[imageHomeFooter]">
                         {t}Footer text{/t}
                       </label>
