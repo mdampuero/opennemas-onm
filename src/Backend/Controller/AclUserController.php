@@ -249,7 +249,8 @@ class AclUserController extends Controller
                     }
 
                     if ($user->id == $_SESSION['userid']) {
-                        $_SESSION['user_language'] = $meta['user_language'];
+                        $session = $request->getSession();
+                        $session->set('user_language', $meta['user_language']);
                     }
 
                     // Clear caches
