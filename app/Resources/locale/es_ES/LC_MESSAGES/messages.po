@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-21 20:15+0200\n"
+"POT-Creation-Date: 2015-04-22 18:52+0200\n"
 "PO-Revision-Date: 2015-04-22 13:47+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -3018,6 +3018,9 @@ msgstr "%1"
 msgid "List of words separated by commas"
 msgstr "Lista de palabras separadas por comas"
 
+msgid "Write a tag and press Enter..."
+msgstr "Escriba una etiqueta y pulse Intro…"
+
 msgid "Publish"
 msgstr "Publicar"
 
@@ -5396,9 +5399,6 @@ msgstr "Antetítulo"
 msgid "Summary"
 msgstr "Entradilla"
 
-msgid "Allow coments"
-msgstr "Permitir comentarios"
-
 msgid "Put in category frontpage"
 msgstr "Poner en portada de categoría"
 
@@ -7121,6 +7121,9 @@ msgstr ""
 "No hay ningún usuario creado aún <br/>o tu criterio de búsqueda no coincide "
 "con ningún usuario."
 
+#~ msgid "Allow coments"
+#~ msgstr "Permitir comentarios"
+
 #~ msgid "Basic information"
 #~ msgstr "Información básica"
 
@@ -7590,9 +7593,6 @@ msgstr ""
 
 #~ msgid "Use this option only if you are avanced user"
 #~ msgstr "Use esta opción solo si eres un usuario avanzado"
-
-#~ msgid "Write a tag and press Enter..."
-#~ msgstr "Escriba una etiqueta y pulse Intro…"
 
 #~ msgid "New widget"
 #~ msgstr "Nuevo widget"
