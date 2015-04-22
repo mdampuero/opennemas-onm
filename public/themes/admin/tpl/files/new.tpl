@@ -110,7 +110,7 @@
             <div class="form-group">
               <label for="metadata" class="form-label">{t}Tags{/t}</label>
               <div class="controls">
-                <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$attaches->metadata|clearslash}">
+                <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$attaches->metadata|clearslash}">
               </div>
             </div>
 

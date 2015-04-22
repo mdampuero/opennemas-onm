@@ -174,7 +174,7 @@
                 <label for="metadata" class="form-label">{t}Keywords{/t}</label>
                 <span class="help">{t}List of words separated by commas{/t}.</span>
                 <div class="controls">
-                  <input data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$cover->metadata|default:""}"/>
+                  <input data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$cover->metadata|default:""}"/>
                 </div>
               </div>
             </div>
