@@ -60,12 +60,14 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo1', function(nv, ov) {
-      $scope.img1        = null;
-      $scope.img1_footer = null;
+      $scope.img1 = null;
 
       if ($scope.photo1) {
-        $scope.img1        = $scope.photo1.id;
-        $scope.img1_footer = $scope.photo1.description;
+        $scope.img1 = $scope.photo1.id;
+
+        if (!$scope.img1_footer) {
+          $scope.img1_footer = $scope.photo1.description;
+        }
       }
     }, true);
 
@@ -76,12 +78,14 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo2', function(nv, ov) {
-      $scope.img2        = null;
-      $scope.img2_footer = null;
+      $scope.img2 = null;
 
       if ($scope.photo2) {
-        $scope.img2        = $scope.photo2.id;
-        $scope.img2_footer = $scope.photo2.description;
+        $scope.img2 = $scope.photo2.id;
+
+        if (!$scope.img2_footer) {
+          $scope.img2_footer = $scope.photo2.description;
+        }
       }
     }, true);
 
@@ -92,12 +96,14 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo3', function(nv, ov) {
-      $scope.imageHome       = null;
-      $scope.imageHomeFooter = null;
+      $scope.imageHome = null;
 
       if ($scope.photo3) {
-        $scope.imageHome       = $scope.photo3.id;
-        $scope.imageHomeFooter = $scope.photo3.description;
+        $scope.imageHome = $scope.photo3.id;
+
+        if (!$scope.imageHomeFooter) {
+          $scope.imageHomeFooter = $scope.photo3.description;
+        }
       }
     }, true);
 
