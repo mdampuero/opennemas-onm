@@ -31,6 +31,7 @@ class ComScoreAnalyticsListener
             && !preg_match('/\/managerws/', $uri)
             && !preg_match('/\/share-by-email/', $uri)
             && !preg_match('/\/sharrre/', $uri)
+            && !preg_match('/\/ads/', $uri)
         ) {
             $this->addFrontendCode($event);
             return;
