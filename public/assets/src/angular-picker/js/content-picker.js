@@ -166,8 +166,8 @@ angular.module('onm.picker')
             },
             target: attrs.contentPickerTarget,
             types: {
-              enabled:   [ 'album', 'article', 'opinion', 'poll', 'video' ],
-              available: [ 'album', 'article', 'opinion', 'poll', 'video' ]
+              enabled:   [ ],
+              available: [ 'album', 'article', 'opinion', 'poll', 'video', 'attachment' ]
             },
 
             /**
@@ -327,6 +327,10 @@ angular.module('onm.picker')
             $http.post(url).then(function(response) {
               $scope.loading = false;
               $scope.picker.params = response.data;
+
+              for (var ctype in response.data.explore.contentTypes) {
+                $scope.picker.setType(ctype);
+              }
 
               $scope.explore();
             });
