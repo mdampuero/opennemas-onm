@@ -520,7 +520,6 @@ class Content
 
         if (array_key_exists('content_status', $data)
             && $data['content_status'] == 1
-            && $this->content_status == 0
             && array_key_exists('starttime', $data)
             && ($data['starttime'] =='0000-00-00 00:00:00'
                 || empty($data['starttime']))
@@ -893,7 +892,10 @@ class Content
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
-            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+            if ($status == 1
+                && ($this->starttime =='0000-00-00 00:00:00'
+                    || empty($this->starttime))
+            ) {
                 $this->starttime = date("Y-m-d H:i:s");
             }
             $values = array(
