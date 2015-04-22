@@ -33,6 +33,7 @@ class GoogleAnalyticsListener
             && !preg_match('/\/share-by-email/', $uri)
             && !preg_match('/\/sharrre/', $uri)
             && !preg_match('/\/ads/', $uri)
+            && !preg_match('/\/comments/', $uri)
         ) {
             $this->addFrontendCode($event);
             return;
