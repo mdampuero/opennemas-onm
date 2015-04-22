@@ -248,7 +248,7 @@
                       <div class="checkbox">
                         <input {if (!isset($article) && (!isset($commentsConfig['with_comments']) || $commentsConfig['with_comments']) eq 1) || (isset($article) && $article->with_comment eq 1)}checked{/if} id="with_comment" name="with_comment" type="checkbox" value="1"/>
                         <label class="form-label" for="with_comment">
-                          {t}Allow coments{/t}
+                          {t}Allow comments{/t}
                         </label>
                       </div>
                     </div>
