@@ -3,7 +3,7 @@
   display: block;
   margin: 0 auto !important;
   float: none !important;
-  color:#6f7b8a;
+  color:#505458;
 }
 #frontpagemanager .last {margin-right: 0 auto !important;}
 #frontpagemanager .content {margin-top:0;}
@@ -33,11 +33,14 @@
 #frontpagemanager .placeholder,
 #frontpagemanager .placeholder div.content {
     background: #f4f4f4;
-    border-radius: 4px;
+    border-radius: 2px;
 }
-/*#frontpagemanager .placeholder div.content {
+#frontpagemanager .placeholder div.content {
   min-height:10px !important;
-}*/
+}
+#frontpagemanager .placeholder div.content .content-icon-suggested {
+  display:none;
+}
 #frontpagemanager .content div:hover .content-action-buttons {display:block;}
 #frontpagemanager .content > div {position:relative;}
 #frontpagemanager .static {
