@@ -19,7 +19,11 @@
 
         // Fill tags from title and category
         if (!metaTags.val()) {
-          var tags = title.val() + " " + category.data('name');
+          var tags = title.val();
+
+          if (category.data('name')) {
+            tags += " " + category.data('name');
+          }
           fill_tags(tags, '#metadata', '{url name=admin_utils_calculate_tags}');
         }
       });
@@ -323,7 +327,7 @@
                       {t}Tags{/t}
                     </label>
                     <div class="controls">
-                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
+                      <input class="tagsinput" data-role="tagsinput" id="metadata" name="metadata" placeholder="{t}Write a tag and press Enter...{/t}" required="required" type="text" value="{$article->metadata|clearslash|escape:"html"}"/>
                     </div>
                   </div>
                   <div class="form-group">

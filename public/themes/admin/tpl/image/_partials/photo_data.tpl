@@ -32,7 +32,7 @@
     <div class="form-group">
       <label for="metadata-{$photo->id}" class="form-label">{t}Keywords{/t}</label>
       <div class="controls">
-        <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" required="required" value="{$photo->metadata|strip}" class="form-control" />
+        <input data-role="tagsinput" type="text" id="metadata-{$photo->id}" name="metadata[{$photo->id}]" placeholder="{t}Write a tag and press Enter...{/t}" required="required" value="{$photo->metadata|strip}" class="form-control" />
         <div class="help-block">{t}Used for searches and automated suggestions.{/t}</div>
       </div>
     </div>
