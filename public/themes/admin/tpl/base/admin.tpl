@@ -370,6 +370,7 @@
         <!-- END PAGE CONTAINER -->
       </div>
     {/block}
+    {block name="modals"}{/block}
   {/block}
   <!--[if lt IE 7 ]>
   <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>

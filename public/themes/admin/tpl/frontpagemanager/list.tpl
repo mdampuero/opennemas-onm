@@ -291,17 +291,18 @@
     <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
   </div>
 </script>
+{/block}
 
 
-{include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
-{include file="frontpagemanager/modals/_modal_archive.tpl"}
-{include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
-{include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
-{include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
-{include file="frontpagemanager/modals/_modal_new_version.tpl"}
+{block name="modals"}
+  {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
+  {include file="frontpagemanager/modals/_modal_archive.tpl"}
+  {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
+  {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
+  {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
+  {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 
-{is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
-{include file="frontpagemanager/modals/_modal_customize_content.tpl"}
-{/is_module_activated}
-
+  {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
+  {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
+  {/is_module_activated}
 {/block}
