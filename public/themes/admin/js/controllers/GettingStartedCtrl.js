@@ -8,7 +8,7 @@ angular.module('BackendApp.controllers')
 
     $scope.step = 1;
 
-    $scope.termsAccepted = true;
+    $scope.termsAccepted = false;
 
     /**
      * Sends a request to accepts/reject terms and conditions.
