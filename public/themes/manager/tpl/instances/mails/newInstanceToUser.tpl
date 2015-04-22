@@ -11,4 +11,5 @@
 
 {t}In case you have any problems, please contact via e-mail{/t} {$companyMail}.
 
-{t}Sincerely{/t}, OpenHost SL.
+{t}Sincerely{/t},
+OpenHost SL.

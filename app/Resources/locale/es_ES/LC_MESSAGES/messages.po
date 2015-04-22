@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-21 20:15+0200\n"
-"PO-Revision-Date: 2015-04-21 17:36+0200\n"
+"PO-Revision-Date: 2015-04-22 13:47+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2161,7 +2161,7 @@ msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
 
 msgid "is now on-line"
-msgstr "está agora conectado"
+msgstr "está ahora conectado"
 
 #, php-format
 msgid "Seems that the server configuration for %s is not correct."
@@ -7060,20 +7060,20 @@ msgid "No rank"
 msgstr "Sin clasificación"
 
 msgid "Welcome to OpenNemas"
-msgstr "Bienvenido a OpenneMas"
+msgstr "Bienvenido a Opennemas"
 
 msgid "Your Opennemas' Newspaper is now available"
 msgstr "Tu periódico Opennemas está disponible"
 
 msgid "To enable your account go to:"
-msgstr "Para activar su cuenta vaya a:"
+msgstr "Para activar tu cuenta vete a:"
 
 msgid "You can access to newspaper with this link"
 msgstr "Puedes acceder al diario con este enlace"
 
 msgid "You can also access the administrative area through this link"
 msgstr ""
-"Tambien puedes acceder a la zona administrativa a través de este enlace"
+"Tambien puedes acceder al panel de administración a través de este enlace"
 
 msgid "using the username and password provided in the email"
 msgstr ""
@@ -7082,7 +7082,7 @@ msgstr ""
 msgid ""
 "Please change your password on your first access to the administrative area"
 msgstr ""
-"Por favor, cambie tu contraseña al acceder por primera vez al área de "
+"Por favor, cambia tu contraseña al acceder por primera vez al panel de "
 "administración"
 
 msgid "In case you have any problems, please contact via e-mail"
