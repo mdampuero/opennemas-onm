@@ -55,7 +55,8 @@ class WebServiceController extends Controller
         $im = $this->get('instance_manager');
 
         // Check for repeated internalnameshort and if so, add a number at the end
-        $im->checkInternalName($instance);
+        $iv = $this->get('onm.validator.instance');
+        $iv->validateInternalName($instance);
 
         if (count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
