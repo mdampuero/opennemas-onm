@@ -1,17 +1,12 @@
 <?php
 /**
- * Defines the PaywallController class
- *
- * @package  Backend_Controllers
- **/
-/**
  *
  * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -35,22 +30,25 @@ use PayPal\PayPalAPI\RefundTransactionRequestType;
 use PayPal\Service\PayPalAPIInterfaceServiceService;
 use Backend\Annotation\CheckModuleAccess;
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
-/**
- * Handles the actions for paywall module
- *
- * @package Backend_Controllers
- **/
 class PaywallController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
-     **/
+     */
     public function init()
     {
+        $this->settings = [
+            'developer_mode'          => 0,
+            'money_unit'              => 'USD',
+            'payment_modes'           => [],
+            'recurring'               => 0,
+            'recurring_payment_modes' => [],
+            'valid_credentials'       => 0,
+            'valid_ipn'               => 1,
+            'vat_percentage'          => '0'
+        ];
+
         $this->times = array(
             'Day'       => _('Day'),
             'Week'      => _('Week'),
@@ -63,6 +61,14 @@ class PaywallController extends Controller
             'EUR' => '€',
             'USD' => '$',
         );
+
+        $this->sm = $this->get('setting_repository');
+        if ($this->sm->get('paywall_settings')) {
+            $this->settings = array_merge(
+                $this->settings,
+                $this->sm->get('paywall_settings')
+            );
+        }
     }
 
     /**
@@ -73,35 +79,26 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function defaultAction()
     {
-        $settings = s::get('paywall_settings');
-
-        if (empty($settings)) {
+        if (empty($this->settings)) {
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please configure your Paywall module before using it.')
             );
             return $this->redirect($this->generateUrl('admin_paywall_settings'));
         }
-        $users = \User::getUsersWithSubscription(array('limit' => 10));
+        $users = \User::getUsersWithSubscription([ 'limit' => 10 ]);
 
         $countUsersPaywall = \User::countUsersWithSubscription();
 
         // Get the last purchases
-        $purchases = \Order::find(
-            "type='paywall'",
-            array(
-                'limit' => 10
-            )
-        );
-
+        $purchases = \Order::find("type='paywall'", [ 'limit' => 10 ]);
 
         // Count how many purchases were done in the last month
         $time = new \DateTime();
-        $time->setTimezone(new \DateTimeZone('UTC'))
-             ->modify("-1 month");
+        $time->setTimezone(new \DateTimeZone('UTC'))->modify("-1 month");
         $time = $time->format('Y-m-d H:i:s');
 
         $purchasesLastMonth = \Order::count(
@@ -115,7 +112,7 @@ class PaywallController extends Controller
                 'count_users_paywall'        => $countUsersPaywall,
                 'purchases'                  => $purchases,
                 'count_purchases_last_month' => $purchasesLastMonth,
-                'settings'                   => $settings,
+                'settings'                   => $this->settings,
                 'money_units'                => $this->moneyUnits,
             )
         );
@@ -131,15 +128,13 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function usersAction(Request $request)
     {
         $page  = $request->query->getDigits('page', 1);
         $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
         $order = $request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
-
-        $settings = s::get('paywall_settings');
 
         $users = array();
         if ($type === '0') {
@@ -180,7 +175,7 @@ class PaywallController extends Controller
             );
         }
 
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->sm->get('items_per_page') ?: 20;
 
         $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
 
@@ -201,7 +196,7 @@ class PaywallController extends Controller
             'paywall/users.tpl',
             array(
                 'users'       => $usersPage,
-                'settings'    => $settings,
+                'settings'    => $this->settings,
                 'money_units' => $this->moneyUnits,
                 'pagination'  => $pagination,
             )
@@ -218,7 +213,7 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function userListExportAction(Request $request)
     {
         $type  = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
@@ -292,13 +287,12 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function purchasesListExportAction(Request $request)
     {
         $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
-        $settings = s::get('paywall_settings');
         $purchases = \Order::find(
             "type='paywall'",
             array(
@@ -330,7 +324,7 @@ class PaywallController extends Controller
             'paywall/partials/purchases_csv.tpl',
             array(
                 'purchases'   => $purchases,
-                'settings'    => $settings,
+                'settings'    => $this->settings,
                 'money_units' => $this->moneyUnits,
             )
         );
@@ -358,20 +352,14 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function purchasesAction(Request $request)
     {
         $page  = $request->query->getDigits('page', 1);
         $order = $request->query->filter('order', '', FILTER_SANITIZE_STRING);
         $name  = $request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
-        $settings = s::get('paywall_settings');
-        $purchases = \Order::find(
-            "type='paywall'",
-            array(
-                'limit' => 0
-            )
-        );
+        $purchases = \Order::find("type='paywall'", [ 'limit' => 0 ]);
 
         // Sort array of users by property
         if (isset($order) && !empty($order)) {
@@ -393,7 +381,7 @@ class PaywallController extends Controller
             );
         }
 
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $itemsPerPage = $this->sm->get('items_per_page') ?: 20;
 
         $purchasesPage = array_slice($purchases, ($page-1)*$itemsPerPage, $itemsPerPage);
 
@@ -413,7 +401,7 @@ class PaywallController extends Controller
             'paywall/purchases.tpl',
             array(
                 'purchases'   => $purchasesPage,
-                'settings'    => $settings,
+                'settings'    => $this->settings,
                 'money_units' => $this->moneyUnits,
                 'pagination'  => $pagination,
             )
@@ -428,15 +416,13 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function settingsAction()
     {
-        $settings = s::get('paywall_settings');
-
         return $this->render(
             'paywall/settings.tpl',
             array(
-                'settings'    => $settings,
+                'settings'    => $this->settings,
                 'times'       => $this->times,
                 'money_units' => $this->moneyUnits,
             )
@@ -453,82 +439,25 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function settingsSaveAction(Request $request)
     {
-        $settingsForm = $request->request->get('settings');
+        if ($request->request->get('settings')) {
+            $settings = $request->request->get('settings');
+            $settings = json_decode($settings, true);
 
-        $settings = array(
-            'payment_modes' => array(),
-            'recurring_payment_modes' => array(),
-        );
-
-        // Check values
-        $settings['paypal_username']  = $request->request->filter(
-            'settings[paypal_username]',
-            '',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['paypal_password']  = $request->request->filter(
-            'settings[paypal_password]',
-            '',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['paypal_signature'] = $request->request->filter(
-            'settings[paypal_signature]',
-            '',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['money_unit']       = $request->request->filter(
-            'settings[money_unit]',
-            'USD',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['recurring']        = $request->request->filter(
-            'settings[recurring]',
-            '0',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['terms']            = $request->request->filter(
-            'settings[terms]',
-            '0',
-            FILTER_SANITIZE_STRING
-        );
-        $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
-        $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
-
-        // Check API credentials
-        $isValid = (s::get('valid_credentials'))? s::get('valid_credentials') : false;
-
-        // Check IPN end point if recurring payment is enabled
-        $isIpnValid = true;
-
-        if ($settings['recurring'] == '1') {
-            $isIpnValid = (s::get('valid_ipn'))? s::get('valid_ipn') : false;
+            $this->settings = array_merge($this->settings, $settings);
         }
 
-        // Check direct payment modes
-        $number = count($settingsForm['payment_modes']['time']);
-        if ($number > 0) {
-            for ($i=0; $i < $number; $i++) {
-                $settings['payment_modes'] []= array(
-                    'time'              => $settingsForm['payment_modes']['time'][$i],
-                    'description'       => $settingsForm['payment_modes']['description'][$i],
-                    'price'             => $settingsForm['payment_modes']['price'][$i],
-                );
-            }
-        }
-
-        if (!$isValid) {
+        if (!$this->settings['valid_credentials']) {
             $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect."));
-        } elseif ($isIpnValid === 'waiting') {
+        } elseif ($this->settings['valid_ipn'] === 'waiting') {
             $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute."));
-        } elseif (!$isIpnValid) {
+        } elseif (!$this->settings['valid_ipn']) {
             $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it."));
         } else {
             $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
-            // If config is all ok save data
-            s::set('paywall_settings', $settings);
+            $this->sm->set('paywall_settings', $this->settings);
         }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));
@@ -547,7 +476,7 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function validateCredentialsAction(Request $request)
     {
         $userName  = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
@@ -582,10 +511,14 @@ class PaywallController extends Controller
 
         // Connection is ok return true
         if (isset($getBalanceResponse) && $getBalanceResponse->Ack == 'Success') {
-            s::set('valid_credentials', 'valid');
+            $this->settings['valid_credentials'] = 1;
+            $this->sm->set('paywall_settings', $this->settings);
+
             return new Response('ok', '200');
         } else {
-            s::set('valid_credentials', false);
+            $this->settings['valid_credentials'] = 0;
+            $this->sm->set('paywall_settings', $this->settings);
+
             return new Response('fail', '404');
         }
     }
@@ -600,7 +533,7 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function setValidateIpnAction(Request $request)
     {
         $userName  = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
@@ -626,7 +559,7 @@ class PaywallController extends Controller
             array('username' => $userName, 'password' => $password, 'signature' => $signature, 'mode' => $mode),
             true
         );
-        $setECReqDetails->BrandName = s::get('site_name');
+        $setECReqDetails->BrandName = $this->sm->get('site_name');
 
         $setECReqType = new SetExpressCheckoutRequestType();
         $setECReqType->SetExpressCheckoutRequestDetails = $setECReqDetails;
@@ -670,7 +603,7 @@ class PaywallController extends Controller
      * @Security("has_role('PAYWALL_ADMIN')")
      *
      * @CheckModuleAccess(module="PAYWALL")
-     **/
+     */
     public function doValidateIpnAction(Request $request)
     {
         $token     = $request->query->get('token');
@@ -729,7 +662,7 @@ class PaywallController extends Controller
 
         // Payment done, let's update some registries in the app
         if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
-            s::set('valid_ipn', 'waiting');
+            $this->sm->set('valid_ipn', 'waiting');
 
             $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
             // Do the refund of the transaction
