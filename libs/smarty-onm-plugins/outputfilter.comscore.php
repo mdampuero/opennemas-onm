@@ -2,10 +2,10 @@
 /*
  * Smarty plugin
  * -------------------------------------------------------------
- * File:     outputfilter.piwik.php
+ * File:     outputfilter.comscore.php
  * Type:     outputfilter
  * Name:     canonical_url
- * Purpose:  Prints piwik analytics HTML code
+ * Purpose:  Prints ComScore analytics code
  * -------------------------------------------------------------
  */
 function smarty_outputfilter_comscore($output, &$smarty)
@@ -13,10 +13,6 @@ function smarty_outputfilter_comscore($output, &$smarty)
     $request = getService('request');
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
-
-    if (preg_match('/\/admin/', $uri)) {
-        return $output;
-    }
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
@@ -26,13 +22,13 @@ function smarty_outputfilter_comscore($output, &$smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        return addComscoreFrontendCode($output);
+        return addComScoreCode($output);
     }
 
     return $output;
 }
 
-function addComscoreFrontendCode($output)
+function addComScoreCode($output)
 {
     $config = getService('setting_repository')->get('comscore');
 
