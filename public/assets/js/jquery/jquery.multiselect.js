@@ -15,14 +15,14 @@
     function AddDoubleClickEvents(targetName) {
         // Event handlers
 
-        $("#" + targetName).live("dblclick", function() {
+        $("#" + targetName).on("dblclick", function() {
             $(this).children(":selected").remove().appendTo("#" + targetName + nameModifier);
             $("#" + targetName + nameModifier + " options").removeAttr("selected");
             OrderMyList();
             return false;
         });
 
-        $("#" + targetName + nameModifier).live("dblclick", function() {
+        $("#" + targetName + nameModifier).on("dblclick", function() {
             $(this).children(":selected").remove().appendTo("#" + targetName);
             $("#" + targetName + nameModifier + " options").removeAttr("selected");
             OrderMyList();
@@ -31,8 +31,8 @@
     };
 
     function OrderMyList() {
-        window.clearTimeout(orderTimer);
-        orderTimer = window.setTimeout(OrderAllLists, 500);
+        // window.clearTimeout(orderTimer);
+        // orderTimer = window.setTimeout(OrderAllLists, 500);
     }
 
     function OrderAllLists() {
@@ -105,10 +105,10 @@
 
             // Create our element to hold the selections and the buttons for moving elements
             var htmlBlock = "<div class=\"" + nameModifier + "options\">" +
-            "<p class=\"AddOne\" rel=\"" + newName + "\" title=\"Add Selected\"><span class='icon-chevron-right'></span></p>" +
-            // "<p class=\"AddAll\" rel=\"" + newName + "\" title=\"Add All\">&raquo;</p>" +
-            "<p class=\"RemoveOne\" rel=\"" + newName + "\" title=\"Remove Selected\"><span class='icon-chevron-left'></span></p>" +
-            // "<p class=\"RemoveAll\" rel=\"" + newName + "\" title=\"Remove All\">&laquo;</p>" +
+            "<p class=\"AddOne\" rel=\"" + newName + "\" title=\"Add Selected\"><span><i class=\"fa fa-angle-right\"></i></span></p>" +
+            "<p class=\"AddAll\" rel=\"" + newName + "\" title=\"Add All\"><span><i class=\"fa fa-angle-double-right\"></i></span></p>" +
+            "<p class=\"RemoveOne\" rel=\"" + newName + "\" title=\"Remove Selected\"><span><i class=\"fa fa-angle-left\"></i></span></p>" +
+            "<p class=\"RemoveAll\" rel=\"" + newName + "\" title=\"Remove All\"><span><i class=\"fa fa-angle-double-left\"></i></span></p>" +
             "</div>" +
             "<div class=\"" + nameModifier + "select\">" +
             "<select name=\"" + originalName + arrayName + "\" id=\"" + newName + "\" size=\"" + size + "\"multiple=\"multiple\" size=\"8\" class=\"" + originalClass + "TakeOver\"></select>" +
