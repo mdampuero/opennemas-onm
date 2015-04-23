@@ -1,0 +1,62 @@
+<?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     outputfilter.piwik.php
+ * Type:     outputfilter
+ * Name:     canonical_url
+ * Purpose:  Prints piwik analytics HTML code
+ * -------------------------------------------------------------
+ */
+function smarty_outputfilter_ojd($output, &$smarty)
+{
+    $request = getService('request');
+    $uri     = $request->getUri();
+    $referer = $request->headers->get('referer');
+
+    if (preg_match('/\/admin/', $uri)) {
+        return $output;
+    }
+
+    if (!preg_match('/\/admin\/frontpages/', $referer)
+        && !preg_match('/\/manager/', $uri)
+        && !preg_match('/\/managerws/', $uri)
+        && !preg_match('/\/share-by-email/', $uri)
+        && !preg_match('/\/sharrre/', $uri)
+        && !preg_match('/\/ads/', $uri)
+        && !preg_match('/\/comments/', $uri)
+    ) {
+        return addOJDFrontendCode($output);
+    }
+
+    return $output;
+}
+
+function addOJDFrontendCode($output)
+{
+    $config = getService('setting_repository')->get('ojd');
+
+    if (!is_array($config)
+        || !array_key_exists('page_id', $config)
+        || empty(trim($config['page_id']))
+    ) {
+        return $output;
+    }
+
+    $code = '<!-- START Nielsen//NetRatings SiteCensus V5.3 -->'
+        . '<!-- COPYRIGHT 2007 Nielsen//NetRatings -->'
+        . '<script type="text/javascript">'
+        . 'var _rsCI="'. $config['page_id'] .'";'
+        . 'var _rsCG="0";'
+        . 'var _rsDN="//secure-uk.imrworldwide.com/";'
+        . 'var _rsCC=0;'
+        . '</script>'
+        . '<script type="text/javascript" src="//secure-uk.imrworldwide.com/v53.js"></script>'
+        . '<noscript>'
+        . '<div><img src="//secure-uk.imrworldwide.com/cgi-bin/m?ci='
+        . $config['page_id'] .'&amp;cg=0" alt=""/></div>'
+        . '</noscript>'
+        . '<!-- END Nielsen//NetRatings SiteCensus V5.3 -->';
+
+    return str_replace('</body>', $code . '</body>', $output);
+}
