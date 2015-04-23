@@ -101,14 +101,14 @@ class AdsController extends Controller
         foreach ($this->parentCategories as $key => $category) {
             $categories[] = [
                 'name' => $category->title,
-                'value' => $category->name,
+                'value' => $category->id,
                 'group' => _('Categories')
             ];
 
             foreach ($this->subcat[$key] as $subcategory) {
                 $categories[] = [
                     'name' => '&rarr; ' . $subcategory->title,
-                    'value' => $subcategory->name,
+                    'value' => $subcategory->id,
                     'group' => _('Categories')
                 ];
             }
