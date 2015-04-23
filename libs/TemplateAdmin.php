@@ -43,11 +43,8 @@ class TemplateAdmin extends Template
     public function registerCustomPlugins()
     {
         $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "comscore");
         $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "google_analytics");
         $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "ojd");
-        $this->addFilter("output", "piwik");
+        $this->addFilter("output", "backend_analytics");
     }
 }
