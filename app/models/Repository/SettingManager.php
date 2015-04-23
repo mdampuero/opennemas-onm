@@ -33,7 +33,11 @@ class SettingManager extends BaseManager
      * @var array
      */
     protected $toAutoload = [
+        'comscore',
         'favico',
+        'google_analytics',
+        'ojd',
+        'piwik',
         'site_color',
         'site_description',
         'site_footer',

@@ -1,0 +1,99 @@
+<?php
+/*
+ * Smarty plugin
+ * -------------------------------------------------------------
+ * File:     outputfilter.piwik.php
+ * Type:     outputfilter
+ * Name:     canonical_url
+ * Purpose:  Prints piwik analytics HTML code
+ * -------------------------------------------------------------
+ */
+function smarty_outputfilter_piwik($output, &$smarty)
+{
+    $request = getService('request');
+    $uri     = $request->getUri();
+    $referer = $request->headers->get('referer');
+
+    if (preg_match('/\/admin/', $uri)) {
+        if (getService('service_container')->getParameter('backend_analytics.enabled')) {
+            return addPiwikBackendCode($output);
+        }
+
+        return $output;
+    }
+
+    if (!preg_match('/\/admin\/frontpages/', $referer)
+        && !preg_match('/\/manager/', $uri)
+        && !preg_match('/\/managerws/', $uri)
+        && !preg_match('/\/share-by-email/', $uri)
+        && !preg_match('/\/sharrre/', $uri)
+        && !preg_match('/\/ads/', $uri)
+        && !preg_match('/\/comments/', $uri)
+    ) {
+        return addPiwikFrontendCode($output);
+    }
+
+    return $output;
+}
+
+function addPiwikBackendCode($output)
+{
+    $code = '<!-- Piwik -->'
+        . '<script type="text/javascript">'
+        . 'var _paq = _paq || [];'
+        . '_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);'
+        . '_paq.push(["setCookieDomain", "*.opennemas.com"]);'
+        . '_paq.push([\'trackPageView\']);'
+        . '_paq.push([\'enableLinkTracking\']);'
+        . '(function() {'
+        . 'var u="//piwik.openhost.es/";'
+        . '_paq.push([\'setTrackerUrl\', u+\'piwik.php\']);'
+        . '_paq.push([\'setSiteId\', 139]);'
+        . 'var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];'
+        . 'g.type=\'text/javascript\'; g.async=true; g.defer=true; g.src=u+\'piwik.js\'; s.parentNode.insertBefore(g,s);'
+        . '})();'
+        . '</script>'
+        . '<noscript><p><img src="//piwik.openhost.es/piwik.php?idsite=139" style="border:0;" alt="" /></p></noscript>'
+        . '<!-- End Piwik Code -->';
+
+    return str_replace('</body>', $code . '</body>', $output);
+}
+
+function addPiwikFrontendCode($output)
+{
+    $config = getService('setting_repository')->get('piwik');
+
+    if (!is_array($config)
+        || !array_key_exists('page_id', $config)
+        || !array_key_exists('server_url', $config)
+        || empty(trim($config['page_id']))
+    ) {
+        return $output;
+    }
+
+    $httpsHost = preg_replace("/http:/", "https:", $config['server_url']);
+
+    $code = '<!-- Piwik -->
+        <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push([\'trackPageView\']);
+        _paq.push([\'enableLinkTracking\']);
+        (function() {
+            var u = (("https:" == document.location.protocol) ? "'.
+            $httpsHost . '" : "' . $config['server_url'] .'");
+            _paq.push([\'setTrackerUrl\', u+\'piwik.php\']);
+            _paq.push([\'setSiteId\', ' . $config['page_id'].']);
+            var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
+            g.type=\'text/javascript\';
+            g.async=true; g.defer=true;
+            g.src=u+\'piwik.js\'; s.parentNode.insertBefore(g,s);
+        })();
+        </script>
+        <noscript>
+            <p><img src="'. $config['server_url'] .'piwik.php?idsite='.
+            $config['page_id'] .'" style="border:0" alt="" /></p>
+        </noscript>
+        <!-- End Piwik Tracking Code -->';
+
+    return str_replace('</body>', $code . '</body>', $output);
+}

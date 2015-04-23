@@ -305,11 +305,14 @@ class Template extends Smarty
      **/
     public function registerCustomPlugins()
     {
-        $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "generate_fb_admin_tag");
         $this->addFilter("output", "ads_generator");
-        // $this->addFilter("output", "trimwhitespace");
+        $this->addFilter("output", "canonical_url");
+        $this->addFilter("output", "comscore");
+        $this->addFilter("output", "css_includes");
+        $this->addFilter("output", "generate_fb_admin_tag");
+        $this->addFilter("output", "google_analytics");
+        $this->addFilter("output", "js_includes");
+        $this->addFilter("output", "ojd");
+        $this->addFilter("output", "piwik");
     }
 }
