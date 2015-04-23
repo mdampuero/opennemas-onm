@@ -2,10 +2,10 @@
 /*
  * Smarty plugin
  * -------------------------------------------------------------
- * File:     outputfilter.piwik.php
+ * File:     outputfilter.google_analytics.php
  * Type:     outputfilter
  * Name:     canonical_url
- * Purpose:  Prints piwik analytics HTML code
+ * Purpose:  Prints Google Analytics code
  * -------------------------------------------------------------
  */
 function smarty_outputfilter_google_analytics($output, &$smarty)
@@ -13,14 +13,6 @@ function smarty_outputfilter_google_analytics($output, &$smarty)
     $request = getService('request');
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
-
-    if (preg_match('/\/admin/', $uri)) {
-        if (getService('service_container')->getParameter('backend_analytics.enabled')) {
-            return addGoogleAnalyticsBackendCode($output);
-        }
-
-        return $output;
-    }
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
@@ -30,27 +22,13 @@ function smarty_outputfilter_google_analytics($output, &$smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        return addGoogleAnalyticsFrontendCode($output);
+        return addGoogleAnalyticsCode($output);
     }
 
     return $output;
 }
 
-function addGoogleAnalyticsBackendCode($output)
-{
-    $code = '<script>'
-        . '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){'
-        . '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),'
-        . 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)'
-        . '})(window,document,\'script\',\'//www.google-analytics.com/analytics.js\',\'ga\');'
-        . 'ga(\'create\', \'UA-40838799-4\', \'auto\');'
-        . 'ga(\'send\', \'pageview\');'
-        . '</script>';
-
-    return str_replace('</body>', $code . '</body>', $output);
-}
-
-function addGoogleAnalyticsFrontendCode($output)
+function addGoogleAnalyticsCode($output)
 {
     $config = getService('setting_repository')->get('google_analytics');
 

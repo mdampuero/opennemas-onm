@@ -5,7 +5,7 @@
  * File:     outputfilter.piwik.php
  * Type:     outputfilter
  * Name:     canonical_url
- * Purpose:  Prints piwik analytics HTML code
+ * Purpose:  Prints Piwik code
  * -------------------------------------------------------------
  */
 function smarty_outputfilter_piwik($output, &$smarty)
@@ -13,14 +13,6 @@ function smarty_outputfilter_piwik($output, &$smarty)
     $request = getService('request');
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
-
-    if (preg_match('/\/admin/', $uri)) {
-        if (getService('service_container')->getParameter('backend_analytics.enabled')) {
-            return addPiwikBackendCode($output);
-        }
-
-        return $output;
-    }
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
@@ -30,36 +22,13 @@ function smarty_outputfilter_piwik($output, &$smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        return addPiwikFrontendCode($output);
+        return addPiwikCode($output);
     }
 
     return $output;
 }
 
-function addPiwikBackendCode($output)
-{
-    $code = '<!-- Piwik -->'
-        . '<script type="text/javascript">'
-        . 'var _paq = _paq || [];'
-        . '_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);'
-        . '_paq.push(["setCookieDomain", "*.opennemas.com"]);'
-        . '_paq.push([\'trackPageView\']);'
-        . '_paq.push([\'enableLinkTracking\']);'
-        . '(function() {'
-        . 'var u="//piwik.openhost.es/";'
-        . '_paq.push([\'setTrackerUrl\', u+\'piwik.php\']);'
-        . '_paq.push([\'setSiteId\', 139]);'
-        . 'var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];'
-        . 'g.type=\'text/javascript\'; g.async=true; g.defer=true; g.src=u+\'piwik.js\'; s.parentNode.insertBefore(g,s);'
-        . '})();'
-        . '</script>'
-        . '<noscript><p><img src="//piwik.openhost.es/piwik.php?idsite=139" style="border:0;" alt="" /></p></noscript>'
-        . '<!-- End Piwik Code -->';
-
-    return str_replace('</body>', $code . '</body>', $output);
-}
-
-function addPiwikFrontendCode($output)
+function addPiwikCode($output)
 {
     $config = getService('setting_repository')->get('piwik');
 

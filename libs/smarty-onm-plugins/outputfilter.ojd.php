@@ -2,10 +2,10 @@
 /*
  * Smarty plugin
  * -------------------------------------------------------------
- * File:     outputfilter.piwik.php
+ * File:     outputfilter.ojd.php
  * Type:     outputfilter
  * Name:     canonical_url
- * Purpose:  Prints piwik analytics HTML code
+ * Purpose:  Prints OJD analytics code
  * -------------------------------------------------------------
  */
 function smarty_outputfilter_ojd($output, &$smarty)
@@ -13,10 +13,6 @@ function smarty_outputfilter_ojd($output, &$smarty)
     $request = getService('request');
     $uri     = $request->getUri();
     $referer = $request->headers->get('referer');
-
-    if (preg_match('/\/admin/', $uri)) {
-        return $output;
-    }
 
     if (!preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
@@ -26,13 +22,13 @@ function smarty_outputfilter_ojd($output, &$smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
     ) {
-        return addOJDFrontendCode($output);
+        return addOJDCode($output);
     }
 
     return $output;
 }
 
-function addOJDFrontendCode($output)
+function addOJDCode($output)
 {
     $config = getService('setting_repository')->get('ojd');
 
