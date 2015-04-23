@@ -235,6 +235,9 @@ class HooksSubscriber implements EventSubscriberInterface
                 'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
             );
             $cacheManager->delete(
+                'category|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
+            );
+            $cacheManager->delete(
                 preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS'
             );
 
