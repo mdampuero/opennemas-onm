@@ -849,10 +849,14 @@ admin_paywall_settings_save:
 admin_paywall_validate_api:
     path:     /paywall/settings/validate/api
     defaults: { _controller  : BackendBundle:Paywall:validateCredentials }
+    options:
+        expose: true
 
 admin_paywall_set_validate_ipn:
     path:     /paywall/settings/set/validate/ipn
     defaults: { _controller  : BackendBundle:Paywall:setValidateIpn }
+    options:
+        expose: true
 
 admin_paywall_do_validate_ipn:
     path:     /paywall/settings/do/validate/ipn
