@@ -222,34 +222,43 @@
             </div>
           </div>
         </div>
-
-      </div>
-      <div class="col-md-4">
-        {if isset($user->id) && $user->id == $smarty.session.userid }
-        <div class="row">
-          <div class="col-md-12">
-            <div class="grid simple">
-              <div class="grid-title">
-                <h4>{t}Social Networks{/t}</h4>
-              </div>
-              <div class="grid-body">
-                <div class="form-group">
-                  <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
-                  <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                  </div>
+        <div class="grid simple">
+          <div class="grid-title">
+            <h4>{t}Privileges{/t}</h4>
+          </div>
+          <div class="grid-body">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
+                <div class="controls" ng-init="groups = {json_encode($user_groups)|replace:'"':'\''};selectedGroups = {json_encode($selected_groups)|replace:'"':'\''}">
+                  <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                 </div>
-                <div class="form-group">
-                  <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
-                  <div class="controls">
-                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
-                  </div>
+                <div class="selected">
+                  <span class="badge" ng-repeat="group in selectedGroups">
+                    [% group.name %]
+                    <input type="hidden" name="id_user_group[]" value="[% group.id %]">
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
+                <div class="controls" ng-init="categories = {json_encode($content_categories)|replace:'"':'\''};selectedCategories = {json_encode($content_categories_select)|replace:'"':'\''}">
+                  <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                </div>
+                <div class="selected">
+                  <span class="badge" ng-repeat="category in selectedCategories">
+                    [% category.title %]
+                    <input type="hidden" name="ids_category[]" value="[% category.id %]">
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/if}
+      </div>
+      <div class="col-md-4">
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">
@@ -293,45 +302,31 @@
             </div>
           </div>
         </div>
+        {if isset($user->id) && $user->id == $smarty.session.userid }
         <div class="row">
           <div class="col-md-12">
             <div class="grid simple">
               <div class="grid-title">
-                <h4>{t}Privileges{/t}</h4>
+                <h4>{t}Social Networks{/t}</h4>
               </div>
               <div class="grid-body">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
-                    <div class="controls" ng-init="groups = {json_encode($user_groups)|replace:'"':'\''};selectedGroups = {json_encode($selected_groups)|replace:'"':'\''}">
-                      <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
-                    </div>
-                    <div class="selected">
-                      <span class="badge" ng-repeat="group in selectedGroups">
-                        [% group.name %]
-                        <input type="hidden" name="id_user_group[]" value="[% group.id %]">
-                      </span>
-                    </div>
+                <div class="form-group">
+                  <label class="control-label" for="facebook_login">{t}Facebook{/t}</label>
+                  <div class="controls">
+                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
-                    <div class="controls" ng-init="categories = {json_encode($content_categories)|replace:'"':'\''};selectedCategories = {json_encode($content_categories_select)|replace:'"':'\''}">
-                      <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
-                    </div>
-                    <div class="selected">
-                      <span class="badge" ng-repeat="category in selectedCategories">
-                        [% category.title %]
-                        <input type="hidden" name="ids_category[]" value="[% category.id %]">
-                      </span>
-                    </div>
+                <div class="form-group">
+                  <label class="control-label" for="twitter_login">{t}Twitter{/t}</label>
+                  <div class="controls">
+                    <iframe src="{url name=admin_acl_user_social id=$user->id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {/if}
         {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="PAYWALL"}
         <div class="row">
