@@ -67,7 +67,9 @@
         <div class="pull-right">
           <span class="fa fa-question-circle"></span>
           {t}Get this parameters from your {/t}
-          <a href="#" id="paypal-get-identification">{t}Paypal identification data{/t}</a>
+          <a href="#" ng-click="getIdentification()">
+            {t}Paypal identification data{/t}
+          </a>
         </div>
       </div>
       <div class="grid-body">
@@ -125,7 +127,10 @@
         <div class="row">
           <div class="col-md-12">
             {t}Validate here your Paypal API credentials in the selected mode{/t}
-            <a href="#" id="validate-credentials" class="btn btn-success pull-right">{t}Validate{/t}</a>
+            <button class="btn pull-right" ng-class="{ 'btn-danger': !settings.valid_credentials, 'btn-success': settings.valid_credentials }" ng-click="validateCredentials()" type="button">
+              <i class="fa fa-circle-o-notch fa-spin" ng-if="validatingCredentials"></i>
+              {t}Validate{/t}
+            </button>
             <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image">
           </div>
         </div>
@@ -214,14 +219,12 @@
             </li>
             <li>
               {t}Click on the validate button to check ipn is working fine and enable recurring payment{/t}.
-              {if $smarty.capture.ipn == 'valid'}
-                <a id="validate-ipn" class="btn btn-mini btn-success">{t}Valid{/t}</a>
-              {elseif $smarty.capture.ipn == 'waiting'}
-                <a id="validate-ipn" class="btn btn-mini btn-warning">{t}Waiting{/t}</a>
-              {else}
-                <a id="validate-ipn" class="btn btn-mini btn-danger">{t}Validate{/t}</a>
-              {/if}
-              <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image_ipn">
+              <button class="btn" ng-class="{ 'btn-danger': !settings.valid_ipn || settings.valid_ipn == 'invalid', 'btn-success': settings.valid_ipn == 'valid'}" ng-click="validateIpn()" type="button">
+                <i class="fa fa-circle-o-notch fa-spin" ng-if="validatingIpn"></i>
+                <span ng-if="!settings.valid_ipn || settings.valid_ipn == 'invalid'">{t}Validate{/t}</span>
+                <span ng-if="settings.valid_ipn == 'waiting'">{t}Waiting{/t}</span>
+                <span ng-if="settings.valid_ipn == 'valid'">{t}Valid{/t}</span>
+              </button>
             </li>
             <li>
               {t}Finally, click in the "Save" button to save this configuration{/t}.
@@ -276,104 +279,4 @@
     </div>
   </script>
 </form>
-{/block}
-
-{block name="footer-js"}
-<script>
-    $(function() {
-        $('#paypal-get-identification').on('click', function() {
-            identificationButtonClicked = true;
-            var url = 'https://www.paypal.com/us/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true';
-            var title = 'PayPal identification informations';
-            window.open (url, title, config='height=500, width=360, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
-            return false;
-        });
-
-        $('#validate-ipn').on('click', function(e, ui) {
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var signature = $("#signature").val();
-
-            if ($('#developer_mode_no').is(':checked')) {
-                var mode = 'live';
-            } else {
-                var mode = 'sandbox';
-            }
-
-            $('#loading_image_ipn').show();
-            $.ajax({
-                url: '{url name=admin_paywall_set_validate_ipn}',
-                type: "POST",
-                data: {
-                    username : username,
-                    password : password,
-                    signature : signature,
-                    mode : mode
-                }
-            }).done(function(data) {
-                window.location.href = data;
-            }).fail(function () {
-                $('#warnings-validation').html(
-                    '<div class="alert alert-error">'+
-                        '<button class="close" data-dismiss="alert">×</button>'+
-                        '{t}Could not connect to PayPal. Validate your API credentials and try again{/t}'+
-                    '</div>'
-                );
-                $('#loading_image_ipn').hide();
-            });
-        });
-
-        $('#validate-credentials').on('click', function(e, ui) {
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var signature = $("#signature").val();
-
-            if ($('#developer_mode_no').is(':checked')) {
-                var mode = 'live';
-            } else {
-                var mode = 'sandbox';
-            }
-
-            $('#loading_image').show();
-            $.ajax({
-                url: '{url name=admin_paywall_validate_api}',
-                type: "POST",
-                data: {
-                    username : username,
-                    password : password,
-                    signature : signature,
-                    mode : mode
-                }
-            }).done(function() {
-                $('#warnings-validation').html(
-                    '<div class="alert alert-success">'+
-                        '<button class="close" data-dismiss="alert">×</button>'+
-                        '{t}Paypal API authentication is correct.{/t}'+
-                    '</div>'
-                );
-                $('#loading_image').hide();
-                $('#validate-credentials').removeClass('btn-danger').addClass('btn-success');
-            }).fail(function() {
-                $('#warnings-validation').html(
-                    '<div class="alert alert-error">'+
-                        '<button class="close" data-dismiss="alert">×</button>'+
-                        '{t}Paypal API authentication is incorrect. Please try again.{/t}'+
-                    '</div>'
-                );
-                $('#loading_image').hide();
-            });
-        });
-
-        $('#recurring_checkbox').on('change', function(e, ui) {
-            var checkbox = $(this);
-
-            if (checkbox.is(':checked')) {
-                $('.recurring-paypal-help').show();
-            } else {
-                $('.recurring-paypal-help').hide();
-            }
-        })
-
-    });
-</script>
 {/block}

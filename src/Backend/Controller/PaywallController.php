@@ -45,7 +45,7 @@ class PaywallController extends Controller
             'recurring'               => 0,
             'recurring_payment_modes' => [],
             'valid_credentials'       => 0,
-            'valid_ipn'               => 1,
+            'valid_ipn'               => 'valid',
             'vat_percentage'          => '0'
         ];
 
