@@ -87,9 +87,9 @@ class ContentsController extends Controller
         // Getting Synchronize setting params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
-        foreach ($syncParams as $siteUrl => $categoriesToSync) {
-            foreach ($categoriesToSync as $value) {
-                if (preg_match('/'.$categoryName.'/i', $value)) {
+        if ($syncParams) {
+            foreach ($syncParams as $siteUrl => $values) {
+                if (in_array($categoryName, $values['categories'])) {
                     $wsUrl = $siteUrl;
                 }
             }
@@ -145,9 +145,11 @@ class ContentsController extends Controller
                 // Get sync params
                 $wsUrl = '';
                 $syncParams = s::get('sync_params');
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (in_array($categoryName, $values['categories'])) {
-                        $wsUrl = $siteUrl;
+                if ($syncParams) {
+                    foreach ($syncParams as $siteUrl => $values) {
+                        if (in_array($categoryName, $values['categories'])) {
+                            $wsUrl = $siteUrl;
+                        }
                     }
                 }
                 $cm = new \ContentManager();
@@ -252,9 +254,11 @@ class ContentsController extends Controller
                 // Get sync params
                 $wsUrl = '';
                 $syncParams = s::get('sync_params');
-                foreach ($syncParams as $siteUrl => $values) {
-                    if (in_array($categoryName, $values['categories'])) {
-                        $wsUrl = $siteUrl;
+                if ($syncParams) {
+                    foreach ($syncParams as $siteUrl => $values) {
+                        if (in_array($categoryName, $values['categories'])) {
+                            $wsUrl = $siteUrl;
+                        }
                     }
                 }
                 $cm = new \ContentManager();

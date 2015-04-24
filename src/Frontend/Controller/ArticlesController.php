@@ -198,9 +198,11 @@ class ArticlesController extends Controller
         // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
-        foreach ($syncParams as $siteUrl => $values) {
-            if (in_array($categoryName, $values['categories'])) {
-                $wsUrl = $siteUrl;
+        if ($syncParams) {
+            foreach ($syncParams as $siteUrl => $values) {
+                if (in_array($categoryName, $values['categories'])) {
+                    $wsUrl = $siteUrl;
+                }
             }
         }
 
