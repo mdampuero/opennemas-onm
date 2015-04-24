@@ -22,6 +22,16 @@
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
+         * memberOf MenuCtrl
+         *
+         * @description
+         *   Default menu object
+         *
+         * @type {Object}
+         */
+        $scope.menu = {};
+
+        /**
          * @function open
          * @memberOf MenuCtrl
          *
@@ -36,6 +46,10 @@
           });
 
           modal.result.then(function(response) {
+            if (!$scope.menu.items) {
+              $scope.menu.items = [];
+            }
+
             $scope.menu.items = $scope.menu.items.concat(response.items);
           });
         };
@@ -61,7 +75,7 @@
         // Updates the menu items input value when menu items change.
         $scope.$watch('menu.items', function() {
           $scope.menuItems = angular.toJson($scope.menu.items);
-        }, true)
+        }, true);
 
         // Prevent form submit on enter key press
         $('.menu-items').on('keypress', function(e) {
