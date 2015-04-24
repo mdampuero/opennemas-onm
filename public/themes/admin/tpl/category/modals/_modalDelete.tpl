@@ -1,16 +1,21 @@
-<div class="modal hide fade" id="modal-category-delete">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Delete category{/t}</h3>
+<div class="modal fade" id="modal-category-delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+          {t}Delete category{/t}
+        </h4>
+      </div>
+      <div class="modal-body">
+          <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
+      </div>
+      <div class="modal-footer">
+          <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
+          <a class="btn secondary no" href="#">{t}No{/t}</a>
+      </div>
     </div>
-    <div class="modal-body">
-        <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
-
-    </div>
-    <div class="modal-footer">
-        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
-        <a class="btn secondary no" href="#">{t}No{/t}</a>
-    </div>
+  </div>
 </div>
 
 <script>
@@ -21,7 +26,6 @@ jQuery("#modal-category-delete").modal({
 });
 
 jQuery('.del-category').click(function(e, ui) {
-
     jQuery('#modal-category-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-category-delete").modal('show');
