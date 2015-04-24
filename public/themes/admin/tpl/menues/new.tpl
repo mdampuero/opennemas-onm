@@ -67,7 +67,7 @@
           </div>
           <div class="row">
             {if count($menu_positions) > 1}
-            <div class="col-md-6 col-xs-12 form-group">
+            <div class="col-md-7 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Position{/t}</label>
               <span class="help">{t}(If your theme has defined positions for menus you can assign one menu to each of them){/t}</span>
               <div class="controls">
@@ -93,7 +93,7 @@
             </div>
           </div>
         </div>
-        <div class="grid-body" ng-init="menu = {json_encode($menu)|replace:'"':'\''}">
+        <div class="grid-body" {if $menu}ng-init="menu = {json_encode($menu)|replace:'"':'\''}"{/if}>
           <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
