@@ -27,6 +27,7 @@
     "angular-ui-sortable": "~0.*",
     "angular-ui-tree": "~2.2.*",
     "angular-webstorage": "~0.*",
+    "angular-bootstrap-multiselect": "0.3.0",
     "autoNumeric": "~1.9.*",
     "blockui": "2.70",
     "blueimp-file-upload": "9.9.*",
