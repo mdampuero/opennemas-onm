@@ -139,24 +139,52 @@ class AclUserController extends Controller
             );
         }
 
-        $userGroup = new \UserGroup();
-        $tree      = $ccm->getCategoriesTree();
-        $languages = $this->container->getParameter('available_languages');
-        $languages = array_merge(array('default' => _('Default system language')), $languages);
+        // Get all categories
+        $allcategorys = $this->get('category_repository')->findBy('internal_category = 1', 'name ASC');
+        // Add Frontpage to available categories
+        $frontpage = new \ContentCategory();
+        $frontpage->id = 0;
+        $frontpage->title = _('Frontpage');
+        $frontpage->pk_fk_content_category = 0;
+        array_unshift($allcategorys, $frontpage);
+
+        // Get available languages
+        $languages    = $this->container->getParameter('available_languages');
+        $languages    = array_merge(array('default' => _('Default system language')), $languages);
 
         // Get minimum password level
         $defaultLevel  = $this->container->getParameter('password_min_level');
         $instanceLevel = s::get('pass_level');
         $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
 
+        // Get selected groups
+        $userGroup    = new \UserGroup();
+        $selectedGroups = [];
+        foreach ($userGroup->find() as $group) {
+            if (in_array($group->id, $user->id_user_group)) {
+                $selectedGroups[] = $group;
+            }
+            if (in_array(4, $user->id_user_group)) {
+                $selectedGroups[] = $group;
+            }
+        }
+
+        // Add Frontpage to selected categories if is in users privileges
+        if (in_array(0, $user->getAccessCategoryIds())) {
+            $user->accesscategories[0]->id = 0;
+            $user->accesscategories[0]->title = _('Frontpage');
+            $user->accesscategories[0]->pk_fk_content_category = 0;
+        }
+
         return $this->render(
             'acl/user/new.tpl',
             array(
                 'user'                      => $user,
                 'user_groups'               => $userGroup->find(),
+                'selected_groups'           => $selectedGroups,
                 'languages'                 => $languages,
-                'content_categories'        => $tree,
-                'content_categories_select' => $user->getAccessCategoryIds(),
+                'content_categories'        => $allcategorys,
+                'content_categories_select' => $user->accesscategories,
                 'min_pass_level'            => $minPassLevel,
             )
         );

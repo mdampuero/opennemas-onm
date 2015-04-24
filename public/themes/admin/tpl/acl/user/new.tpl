@@ -293,6 +293,45 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>{t}Privileges{/t}</h4>
+              </div>
+              <div class="grid-body">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
+                    <div class="controls" ng-init="groups = {json_encode($user_groups)|replace:'"':'\''};selectedGroups = {json_encode($selected_groups)|replace:'"':'\''}">
+                      <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                    </div>
+                    <div class="selected">
+                      <span class="badge" ng-repeat="group in selectedGroups">
+                        [% group.name %]
+                        <input type="hidden" name="id_user_group[]" value="[% group.id %]">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
+                    <div class="controls" ng-init="categories = {json_encode($content_categories)|replace:'"':'\''};selectedCategories = {json_encode($content_categories_select)|replace:'"':'\''}">
+                      <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
+                    </div>
+                    <div class="selected">
+                      <span class="badge" ng-repeat="category in selectedCategories">
+                        [% category.title %]
+                        <input type="hidden" name="ids_category[]" value="[% category.id %]">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {acl isAllowed="USER_ADMIN"}
         {is_module_activated name="PAYWALL"}
         <div class="row">
@@ -316,64 +355,6 @@
         </div>
         {/is_module_activated}
         {/acl}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>{t}Privileges{/t}</h4>
-          </div>
-          <div class="grid-body">
-            {acl isAllowed="GROUP_CHANGE"}
-            <div class="col-md-12 col-lg-6 col-sm-12 col-xs-12 resize">
-              <div class="groups">
-                <div class="form-group">
-                  <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
-                  <div class="controls">
-                    <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
-                      {if $smarty.session.isMaster}
-                      <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
-                      {/if}
-                      {foreach $user_groups as $group}
-                      {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
-                      <option  value="{$group->id}" selected="selected">{$group->name}</option>
-                      {else}
-                      <option  value="{$group->id}">{$group->name}</option>
-                      {/if}
-                      {/foreach}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/acl}
-            {acl isAllowed="USER_CATEGORY"}
-            <div class="col-md-12 col-lg-6 col-sm-12 col-xs-12 resize">
-              <div class="categorys">
-                <div class="form-group">
-                  <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
-                  <div class="controls">
-                    <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
-                      <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                      {foreach item="c_it" from=$content_categories}
-                      <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                      {if count($c_it->childNodes)>0}
-                      {foreach item="sc_it" from=$c_it->childNodes}
-                      <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                        &nbsp; &rArr; {$sc_it->title}
-                      </option>
-                      {/foreach}
-                      {/if}
-                      {/foreach}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/acl}
-          </div>
-        </div>
       </div>
     </div>
   </div>
