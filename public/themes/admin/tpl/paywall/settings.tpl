@@ -182,7 +182,7 @@
         </div>
       </div>
     </div>
-    <div class="grid simple">
+    {*<div class="grid simple">
       <div class="grid-title">
         <h4><div class="step-number">4</div> {t}Recurring payments (optional){/t}</h4>
       </div>
@@ -232,7 +232,7 @@
           </ol>
         </div>
       </div>
-    </div>
+    </div>*}
     <div class="grid simple">
       <div class="grid-title">
         <h4>
