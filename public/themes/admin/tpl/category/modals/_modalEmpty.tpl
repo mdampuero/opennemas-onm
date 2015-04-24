@@ -1,16 +1,19 @@
-<div class="modal hide fade" id="modal-category-empty">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Delete all the contents in category{/t}</h3>
-    </div>
-    <div class="modal-body">
+<div class="modal fade" id="modal-category-empty">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>{t}Delete all the contents in category{/t}</h4>
+      </div>
+      <div class="modal-body">
         <p>{t escape=off}Are you sure that do you want delete all the contents in the category "<span>%title%</span>"?{/t}</p>
-
-    </div>
-    <div class="modal-footer">
+      </div>
+      <div class="modal-footer">
         <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
         <a class="btn secondary no" href="#">{t}No{/t}</a>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
