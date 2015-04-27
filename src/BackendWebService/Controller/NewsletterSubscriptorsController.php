@@ -49,6 +49,7 @@ class NewsletterSubscriptorsController extends Controller
 
         $user = new \Subscriptor();
         $subscriptors = $user->getUsers($where, ($elementsPerPage*($page-1)) . ',' . $elementsPerPage, $orderBy);
+        $subscriptors = \Onm\StringUtils::convertToUtf8($subscriptors);
 
         $total = $user->countUsers($where);
 

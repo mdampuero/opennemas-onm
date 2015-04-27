@@ -738,10 +738,10 @@ EOF;
         foreach ($objects as &$object) {
             foreach (get_object_vars($object) as $key => $value) {
                 if (is_string($value)) {
-                    $object->{$key} = iconv(
-                        mb_detect_encoding($value),
-                        'utf-8',
-                        $value
+                    $object->{$key} = mb_convert_encoding(
+                        $value,
+                        'UTF-8',
+                        mb_detect_encoding($value)
                     );
                 }
             }

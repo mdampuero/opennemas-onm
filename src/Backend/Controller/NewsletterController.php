@@ -350,6 +350,8 @@ class NewsletterController extends Controller
             }
         }
 
+        $accounts = \Onm\StringUtils::convertToUtf8($accounts);
+
         // Ajax request
         if ($request->isXmlHttpRequest()) {
             return new Response(
