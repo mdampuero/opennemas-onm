@@ -336,9 +336,13 @@
                     </label>
                     <div class="controls">
                       <input class="form-control" id="slug" name="slug" type="text" value="{$article->slug|clearslash}">
-                      {if $article}
+                      {if $article && $article->content_status eq 1}
                       {assign var=uri value="\" "|explode:$article->uri}
-                      <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$uri.0|clearslash}</span>
+                      <span class="help-block">
+                        <a href="{$smarty.const.SITE_URL}{$uri.0|clearslash}">
+                          <i class="fa fa-external-link"></i> {t}Link{/t}
+                        </a>
+                      </span>
                       {/if}
                     </div>
                   </div>
