@@ -46,7 +46,7 @@
       <div class="grid-title">
         {t}Please select your desired persons to sent the newsletter to.{/t}
       </div>
-      <div class="grid-body" ng-init="source.items = {json_encode($accounts)|replace:'"':'\''}">
+      <div class="grid-body" ng-init="source.items = {json_encode($accounts)|replace:'\'':'\\\''|replace:'"':'\''}">
         <div class="row">
           <div class="col-sm-5">
             <button class="btn btn-default btn-mini pull-right" ng-click="addRecipients()" ng-disabled="source.selected.length == 0" type="button">
