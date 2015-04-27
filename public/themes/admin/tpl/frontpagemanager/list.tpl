@@ -70,7 +70,7 @@
             <h5>
               {$categories[$category_id]['name']}
               {if $available_layouts > 1}
-                <small>({$layout_theme['name']})</small>
+                <small class="hidden-xs hidden-sm hidden-md">({$layout_theme['name']})</small>
               {/if}
             </h5>
           </li>
