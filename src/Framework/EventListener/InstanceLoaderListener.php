@@ -78,7 +78,8 @@ class InstanceLoaderListener implements EventSubscriberInterface
         if (preg_match("@^\/(manager|_profiler|_wdt)@", $request->getRequestUri())) {
             $this->instance = $this->im->loadManager();
         } else {
-            $this->instance = $this->cache->fetch('instance_'.$host);
+            $this->cache->setNamespace('instance');
+            $this->instance = $this->cache->fetch($host);
 
             if ($this->instance === false) {
                 $criteria = array(
