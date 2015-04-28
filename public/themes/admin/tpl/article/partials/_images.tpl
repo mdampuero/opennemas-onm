@@ -111,7 +111,7 @@
                 </div>
               </div>
               {is_module_activated name="CRONICAS_MODULES"}
-                {if $article->content_type_name == 'article'}
+                {if strpos($smarty.server.REQUEST_URI, 'articles') !== false}
                 <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
                   <h5>{t}Home image{/t}</h5>
                   <div class="thumbnail-wrapper">
