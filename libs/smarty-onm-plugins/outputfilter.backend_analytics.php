@@ -54,5 +54,5 @@ function addBackendCodes($output)
         . '</script>'
         . '<!-- End Google Analytics -->';
 
-    return str_replace('</body>', $code . '</body>', $output);
+    return str_replace('</head>', $code . '</head>', $output);
 }
