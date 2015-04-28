@@ -52,8 +52,8 @@ class FrontpagesController extends Controller
             array('category' => $categoryId)
         );
 
-        // Check if the user can edit frontpages
-        if (!Acl::checkCategoryAccess($categoryId)) {
+        // Check if the user can access a frontpage from other category
+        if ((int) $categoryId !== 0 && !Acl::checkCategoryAccess($categoryId)) {
             throw new AccessDeniedException();
         }
 
