@@ -83,10 +83,14 @@ class Redis extends AbstractCache
             $data = $this->getRedis()->mGet($id);
 
             $newData = [];
-            $keystoFetch = array_values($id);
-            foreach ($keystoFetch as $key) {
-                if (array_key_exists($key, $data)) {
-                    $newData[$key] = @unserialize($data[$key]);
+            for ($i = 0; $i < count($id); $i++) {
+                if ($data[$i]) {
+                    $dataUnserialized = @unserialize($data[$i]);
+                    if ($dataUnserialized !== false || $data[$i] === 'b:0;') {
+                        $newData[$id[$i]] = $dataUnserialized;
+                    } else {
+                        $newData[$id[$i]] = $data[$i];
+                    }
                 }
             }
 
