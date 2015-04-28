@@ -61,5 +61,5 @@ function addGoogleAnalyticsCode($output)
         ."})();\n"
         ."</script>\n";
 
-    return str_replace('</body>', $code . '</body>', $output);
+    return str_replace('</head>', $code . '</head>', $output);
 }
