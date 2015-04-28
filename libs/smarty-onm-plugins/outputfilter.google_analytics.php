@@ -53,11 +53,11 @@ function addGoogleAnalyticsCode($output)
     }
 
     $code .= "_gaq.push(['_trackPageview']);\n"
-        . "(function() {"
-        . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;"
-        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';"
-        . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);"
-        . "})();"
+        . "(function() {\n"
+        . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
+        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n"
+        . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);\n"
+        . "})();\n"
         . "</script>\n";
 
     return str_replace('</head>', $code . '</head>', $output);
