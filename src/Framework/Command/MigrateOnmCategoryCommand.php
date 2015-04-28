@@ -102,12 +102,15 @@ EOF
     protected function migrateArticles($input, $output)
     {
         $sql = 'SELECT * FROM articles, contents, contents_categories '
-                .' WHERE  pk_fk_content_category = \''.$input->getArgument('originCategory')
+                .' WHERE  pk_fk_content_category = ?'
                 .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                 .'AND  `articles`.`pk_article` = `contents`.`pk_content` ';
 
         $request = $this->originConnection->Prepare($sql);
-        $rs = $this->originConnection->Execute($request);
+        $rs = $this->originConnection->Execute(
+            $request,
+            [ $input->getArgument('originCategory') ]
+        );
 
         if (!$rs) {
             $output->writeln('DB problem: '. $this->originConnection->ErrorMsg());
@@ -188,12 +191,15 @@ EOF
     protected function migrateImages($input, $output)
     {
         $sql = 'SELECT * FROM photos, contents, contents_categories '
-                .' WHERE  pk_fk_content_category = \''.$input->getArgument('originCategory')
+                .' WHERE  pk_fk_content_category = ?'
                 .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                 .' AND  `photos`.`pk_photo` = `contents`.`pk_content` ';
 
         $request = $this->originConnection->Prepare($sql);
-        $rs = $this->originConnection->Execute($request);
+        $rs = $this->originConnection->Execute(
+            $request,
+            [ $input->getArgument('originCategory') ]
+        );
 
         if ($rs) {
             $totalRows = $rs->_numOfRows;

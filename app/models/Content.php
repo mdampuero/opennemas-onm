@@ -492,8 +492,8 @@ class Content
             return false;
         }
 
-        $sql = 'SELECT * FROM contents, contents_categories
-                WHERE pk_content = ? AND pk_content = pk_fk_content';
+        $sql = 'SELECT * FROM contents, contents_categories'
+                . ' WHERE pk_content = ? AND pk_content = pk_fk_content';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
@@ -1922,7 +1922,7 @@ class Content
             $values []= $property[1];
         }
 
-        $sql = 'SELECT `fk_content`,    `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
+        $sql = 'SELECT `fk_content`, `meta_name`, `meta_value` FROM `contentmeta` WHERE ('.implode(' OR ', $map).')';
         $value = $GLOBALS['application']->conn->GetArray($sql, $values);
 
         return $value;
