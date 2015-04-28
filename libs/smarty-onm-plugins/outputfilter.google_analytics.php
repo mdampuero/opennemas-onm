@@ -41,25 +41,24 @@ function addGoogleAnalyticsCode($output)
 
     $apiKey = trim($config['api_key']);
 
-    $code = "<script type=\"text/javascript\">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', '" . $apiKey . "']);";
+    $code = "\n<script type=\"text/javascript\">\n"
+        . "var _gaq = _gaq || [];\n"
+        . "_gaq.push(['_setAccount', '" . $apiKey . "']);\n";
 
     // If base domain for ganalytics is set append it to the final output.
     if (array_key_exists('base_domain', $config)
         && !empty($config['base_domain'])
     ) {
-        $code .= " _gaq.push(['_setDomainName', '". $config['base_domain'] ."']); ";
+        $code .= "_gaq.push(['_setDomainName', '". $config['base_domain'] ."']);\n";
     }
 
-    $code .= "_gaq.push(['_trackPageview']);"
-        ."(function() {\n"
-        ."var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
-        ."ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://')"
-        ." + 'stats.g.doubleclick.net/dc.js';\n"
-        ."var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n"
-        ."})();\n"
-        ."</script>\n";
+    $code .= "_gaq.push(['_trackPageview']);\n"
+        . "(function() {"
+        . "var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;"
+        . "ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';"
+        . "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);"
+        . "})();"
+        . "</script>\n";
 
     return str_replace('</head>', $code . '</head>', $output);
 }
