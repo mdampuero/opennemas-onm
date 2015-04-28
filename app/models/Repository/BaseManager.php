@@ -27,6 +27,13 @@ abstract class BaseManager
     protected $cacheSeparator = '-';
 
     /**
+     * The lost value to save in cache when setting is not in database.
+     *
+     * @var string
+     */
+    protected $lostValue = '-lost-';
+
+    /**
      * Initializes the menu manager
      *
      * @param DatabaseConnection $dbConn      The database connection.

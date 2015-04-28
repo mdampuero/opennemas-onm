@@ -96,8 +96,6 @@ class SettingManager extends BaseManager
             return false;
         }
 
-        $settingValue = $default;
-
         if (count($this->autoloaded) < count($this->toAutoload)) {
             $this->autoloadSettings();
         }
@@ -121,7 +119,7 @@ class SettingManager extends BaseManager
         $missed = array_diff($searched, $this->toAutoload);
         $fromAutoload = array_diff($searched, $missed);
 
-        // Load settings from autoload
+        // Add auto-loaded settings to final results
         $results = array_merge(
             $results,
             array_intersect_key(
@@ -130,13 +128,12 @@ class SettingManager extends BaseManager
             )
         );
 
-        // Load settings from cache
+        // Add missed settings to final results from cache
         $results = array_merge($results, $this->cache->fetch($missed));
 
-        // Check the settings to fetch from database
-        $missed = array_diff($searched, array_keys($results));
 
-        // Load the settings from database
+        // Fetch missed settings from database and add them to cache
+        $missed = array_diff($searched, array_keys($results));
         if (!empty($missed)) {
             $sql = "SELECT name, value FROM `settings` WHERE name IN ('"
                 . implode("', '", $missed) . "')";
@@ -148,7 +145,18 @@ class SettingManager extends BaseManager
 
                 $this->cache->save($setting['name'], $value);
             }
+
+            // Save lost settings (not in database) in cache as lost
+            $notInDatabase = array_diff($missed, array_values($results));
+            foreach ($notInDatabase as $name) {
+                $this->cache->save($name, $this->lostValue);
+            }
         }
+
+        // Remove lost settings from results
+        $results = array_filter($results, function($value) {
+            return $value !== $this->lostValue;
+        });
 
         if (is_array($default)) {
             $results = array_merge($default, $results);
@@ -225,31 +233,36 @@ class SettingManager extends BaseManager
     public function autoloadSettings()
     {
         // Build autoload
-        if (empty($this->autoloaded)) {
-            // First search from cache
-            $this->autoloaded = $this->cache->fetch($this->toAutoload);
-
-            // Check for missed properties
-            $missed = array_diff(
-                $this->toAutoload,
-                array_keys($this->autoloaded)
-            );
-
-            // Second search in database
-            $rs = $this->conn->fetchAll(
-                "SELECT * FROM `settings` WHERE name IN ('"
-                . implode("', '", $missed) . "')"
-            );
-
-            $names = array();
-            foreach ($rs as $setting) {
-                $value = unserialize($setting['value']);
-                $names[] = $setting['name'];
-
-                $this->autoloaded[$setting['name']] = $value;
-                $this->cache->save($setting['name'], $value);
-            }
+        if (!empty($this->autoloaded)) {
+            return $this;
         }
+
+        // First search from cache
+        $this->autoloaded = $this->cache->fetch($this->toAutoload);
+
+        // Check for missed properties
+        $missed = array_diff($this->toAutoload, array_keys($this->autoloaded));
+
+        if (empty($missed)) {
+            return $this;
+        }
+
+        // Second search in database
+        $rs = $this->conn->fetchAll(
+            "SELECT * FROM `settings` WHERE name IN ('"
+            . implode("', '", $missed) . "')"
+        );
+
+        $names = array();
+        foreach ($rs as $setting) {
+            $value = unserialize($setting['value']);
+            $names[] = $setting['name'];
+
+            $this->autoloaded[$setting['name']] = $value;
+            $this->cache->save($setting['name'], $value);
+        }
+
+        $notInDatabase = array_diff($missed, array_values($this->autoloaded));
 
         return $this;
     }
