@@ -18,6 +18,7 @@
           {acl isAllowed="GROUP_CREATE"}
           <li>
             <a href="{url name="admin_acl_usergroups_create"}" class="btn btn-primary">
+              <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>
           </li>
