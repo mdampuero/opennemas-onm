@@ -529,6 +529,7 @@ class InstanceController extends Controller
 
         try {
             $instance = $im->find($id);
+            $oldDomains = $instance->domains;
 
             $keys = array_unique(array_merge(
                 array_keys($request->request->all()),
@@ -545,6 +546,20 @@ class InstanceController extends Controller
                     $instance->{$key} = null;
                 }
             }
+
+            // Delete instance from cache for deleted domains
+            $cache = $this->get('cache');
+            $oldNamespace = $cache->getNamespace();
+
+            $cache->setNamespace('instance');
+
+            $deletedDomains = array_diff($oldDomains, $instance->domains);
+
+            foreach ($deletedDomains as $domain) {
+                $cache->delete($domain);
+            }
+
+            $cache->setNamespace($oldNamespace);
 
             $this->get('onm.validator.instance')->validate($instance);
             $im->persist($instance);
