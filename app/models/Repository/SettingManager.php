@@ -147,7 +147,7 @@ class SettingManager extends BaseManager
             }
 
             // Save lost settings (not in database) in cache as lost
-            $notInDatabase = array_diff($missed, array_values($results));
+            $notInDatabase = array_diff($missed, array_keys($results));
             foreach ($notInDatabase as $name) {
                 $this->cache->save($name, $this->lostValue);
             }
