@@ -131,7 +131,6 @@ class SettingManager extends BaseManager
         // Add missed settings to final results from cache
         $results = array_merge($results, $this->cache->fetch($missed));
 
-
         // Fetch missed settings from database and add them to cache
         $missed = array_diff($searched, array_keys($results));
         if (!empty($missed)) {
