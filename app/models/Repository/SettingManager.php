@@ -262,7 +262,7 @@ class SettingManager extends BaseManager
             $this->cache->save($setting['name'], $value);
         }
 
-        $notInDatabase = array_diff($missed, array_values($this->autoloaded));
+        $notInDatabase = array_diff($missed, array_keys($this->autoloaded));
 
         return $this;
     }
