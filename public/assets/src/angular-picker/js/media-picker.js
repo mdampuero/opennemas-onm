@@ -105,8 +105,11 @@ angular.module('onm.picker')
                         + "\" ng-model=\"selected.lastSelected\" transform=\"thumbnail,220,220\">\
                       </dynamic-image>\
                     </div>\
-                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video'\">\
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image\">\
                       <dynamic-image autoscale=\"true\" ng-model=\"selected.lastSelected\" property=\"thumb\"></dynamic-image>\
+                    </div>\
+                    <div class=\"media-thumbnail-wrapper\" ng-if=\"selected.lastSelected.content_type_name == 'video' && selected.lastSelected.thumb_image\">\
+                      <dynamic-image autoscale=\"true\" instance=\""+instanceMedia+"\" ng-model=\"selected.lastSelected.thumb_image\"></dynamic-image>\
                     </div>\
                     <div class=\"media-thumbnail-wrapper\" ng-if=\"isFlash(selected.lastSelected)\">\
                       <dynamic-image autoscale=\"true\" instance=\""
