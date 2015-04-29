@@ -83,8 +83,9 @@ class Redis extends AbstractCache
             $data = $this->getRedis()->mGet($id);
 
             $newData = [];
+
             for ($i = 0; $i < count($id); $i++) {
-                if ($data[$i]) {
+                if ($data[$i] !== false) {
                     $dataUnserialized = @unserialize($data[$i]);
                     if ($dataUnserialized !== false || $data[$i] === 'b:0;') {
                         $newData[$id[$i]] = $dataUnserialized;
