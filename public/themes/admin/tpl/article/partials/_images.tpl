@@ -206,7 +206,20 @@
                               <h5>Pick a video</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video1">
+                          <div class="dynamic-image-placeholder" ng-if="video1 && video1.thumb_image">
+                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="video1.thumb_image" instance="{$smarty.const.INSTANCE_MEDIA}">
+                              <div class="thumbnail-actions">
+                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
+                                  <i class="fa fa-trash-o fa-2x"></i>
+                                </div>
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video">
+                                  <i class="fa fa-film fa-2x"></i>
+                                </div>
+                              </div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video1" media-picker-type="video"></div>
+                            </dynamic-image>
+                          </div>
+                          <div class="dynamic-image-placeholder" ng-if="video1 && !video1.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video1">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
@@ -261,7 +274,20 @@
                               <h5>Pick a video</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder" ng-if="video2">
+                          <div class="dynamic-image-placeholder" ng-if="video2 && video2.thumb_image">
+                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="video2.thumb_image" instance="{$smarty.const.INSTANCE_MEDIA}">
+                              <div class="thumbnail-actions">
+                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
+                                  <i class="fa fa-trash-o fa-2x"></i>
+                                </div>
+                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video">
+                                  <i class="fa fa-film fa-2x"></i>
+                                </div>
+                              </div>
+                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="video2" media-picker-type="video"></div>
+                            </dynamic-image>
+                          </div>
+                          <div class="dynamic-image-placeholder" ng-if="video2 && !video2.thumb_image">
                             <dynamic-image autoscale="true" class="img-thumbnail" property="thumb" ng-model="video2">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
