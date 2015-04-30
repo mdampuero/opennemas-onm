@@ -380,7 +380,7 @@ class ArticlesController extends Controller
                 $galleries['inner'] = null;
             }
 
-            \Onm\StringUtils::convertToUtf8($galleries)
+            \Onm\StringUtils::convertToUtf8($galleries);
             $this->view->assign('galleries', $galleries);
 
             $orderHome = array();
