@@ -62,7 +62,7 @@
     </script>
   {/block}
 </head>
-<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned() }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
+<body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'pinned': sidebar.isPinned(), 'unauthorized': !auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
   <div class="application-loading" ng-hide="loaded">
     <div class="loading-message">
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -186,14 +186,14 @@
     </div>
   </header>
   <sidebar class="sidebar" ng-class="{ 'hidden': !$parent.auth.status }" footer="true" id="sidebar" ng-model="sidebar" position="left" src="manager_ws_sidebar_list" swipeable="true" pinnable="true"></sidebar>
-  <div class="page-container row-fluid ng-cloak" ng-show="auth.status || (!auth.status && auth.modal)">
+  <div class="page-container row-fluid ng-cloak" ng-class="{ 'hidden': !auth.status }">
     <!-- BEGIN PAGE CONTAINER-->
     <div class="page-content">
       <div class="view" id="view" ng-view autoscroll="true"></div>
     </div>
     <!-- END PAGE CONTAINER -->
   </div>
-  <div class="login-container-wrapper ng-cloak" ng-show="!auth.status && !auth.modal">
+  <div class="login-container-wrapper ng-cloak" ng-class="{ 'hidden': auth.status }">
     <div class="container">
       <div class="row login-container column-seperation">
         <div class="col-md-5 col-md-offset-1">
@@ -253,7 +253,7 @@
             <div class="row">
               <div class="col-md-10">
                 <button class="btn btn-primary pull-right" ng-disabled="loading" type="submit">
-                  <i class="fa fa-circle-o-notch fa-spin" ng-show="loading"></i>
+                  <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
                   {t}Login{/t}
                 </button>
               </div>

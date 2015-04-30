@@ -138,8 +138,13 @@ angular.module('ManagerApp.controllers').controller('MasterCtrl', [
          * @param array  args  The list of arguments.
          */
         $scope.$on('auth-login-required', function (event, args) {
+            if (args.config.ignoreAuthModule) {
+              messenger.post({ id: 1, type: 'error', message: args.data.message });
+            }
+
             $scope.auth.status = false;
             $scope.loaded      = true;
+            $scope.loading     = false;
 
             webStorage.local.remove('token');
             webStorage.local.remove('user');

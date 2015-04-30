@@ -40,6 +40,7 @@ ul.messenger.messenger-fixed.messenger.on-top {
     background-color: @warning-color;
     color: #fff;
   }
+
   .messenger-close {
     -webkit-appearance: none;
     background: transparent;
@@ -59,7 +60,6 @@ ul.messenger.messenger-fixed.messenger.on-top {
   }
 
   .messenger-message-inner:before {
-    content: "\f00c";
     display: inline-block;
     font-family: 'FontAwesome';
     font-size: 120%;
@@ -69,6 +69,22 @@ ul.messenger.messenger-fixed.messenger.on-top {
     top: 50%;
     width: 13px;
   }
+
+  &.success {
+    .messenger-message-inner:before {
+      content: "\f00c";
+    }
+  }
+
+  &.error {
+    .messenger-message-inner:before {
+      content: "\f00d";
+    }
+  }
+}
+
+.unauthorized ul.messenger.messenger-fixed {
+  padding-left: 0;
 }
 
 @media (max-width: (@phone-width - 1px)) {

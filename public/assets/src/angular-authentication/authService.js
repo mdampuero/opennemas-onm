@@ -54,7 +54,7 @@ angular.module('onm.auth', []).factory('authService', function ($http,
 
         var url = routing.generate(route);
 
-        return $http.post(url, data).then(function (response) {
+        return $http.post(url, data, { ignoreAuthModule: true }).then(function (response) {
             if (!response.data.success && attempts > 2) {
                 vcRecaptchaService.reload();
             }
