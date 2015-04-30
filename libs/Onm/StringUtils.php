@@ -754,7 +754,6 @@ EOF;
      */
     public static function convertObjectToUtf8(&$object)
     {
-        var_dump($object);
         foreach (get_object_vars($object) as $key => $value) {
             if (is_string($value)) {
                 $object->{$key} = mb_convert_encoding(
