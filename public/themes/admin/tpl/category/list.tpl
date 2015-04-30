@@ -295,6 +295,9 @@
       </div>
     </div>
   </div>
+{/block}
+
+{block name="modals"}
   {include file="category/modals/_modalDelete.tpl"}
   {include file="category/modals/_modalEmpty.tpl"}
 {/block}
