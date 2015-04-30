@@ -19,7 +19,7 @@
        * example if you need to pass through details of the user that was logged in
        */
       loginConfirmed: function(data, configUpdater) {
-        var updater = configUpdater || function(config) {return config;};
+        var updater = configUpdater || function(config) { return config; };
         $rootScope.$broadcast('auth-login-confirmed', data);
         httpBuffer.retryAll(updater);
       },
@@ -46,9 +46,13 @@
     $httpProvider.interceptors.push(['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
       return {
         responseError: function(rejection) {
-          if (rejection.status === 401 && !rejection.config.ignoreAuthModule) {
+          if (rejection.status === 401) {
             var deferred = $q.defer();
-            httpBuffer.append(rejection.config, deferred);
+
+            if (!rejection.config.ignoreAuthModule) {
+              httpBuffer.append(rejection.config, deferred);
+            }
+
             $rootScope.$broadcast('auth-login-required', rejection);
             return deferred.promise;
           } else if ((rejection.status === 404 || rejection.status === 500)
