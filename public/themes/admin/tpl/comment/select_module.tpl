@@ -24,8 +24,6 @@
 
     <div class="content">
         {render_messages}
-
-        {include file="comment/modals/_modalChange.tpl"}
         <script>
         $(function() {
             jQuery("#modal-comment-change").modal('show');
@@ -33,4 +31,8 @@
         });
         </script>
     </div>
+{/block}
+
+{block name="modals"}
+  {include file="comment/modals/_modalChange.tpl"}
 {/block}
