@@ -730,23 +730,39 @@ EOF;
     /**
      * Converts all object properties to utf-8.
      *
-     * @param  array $objects List of objects to convert
-     * @return array           List of objects with properties in utf-8.
+     * @param  mixed $objects Object or list of objects to convert.
+     * @return mixed          Object or list of objects with properties in utf-8.
      */
     public static function convertToUtf8($objects)
     {
+        if (!is_array($objects)) {
+            self::convertObjectToUtf8($objects);
+            return $objects;
+        }
+
         foreach ($objects as &$object) {
-            foreach (get_object_vars($object) as $key => $value) {
-                if (is_string($value)) {
-                    $object->{$key} = mb_convert_encoding(
-                        $value,
-                        'UTF-8',
-                        mb_detect_encoding($value)
-                    );
-                }
-            }
+            self::convertObjectToUtf8($object);
         }
 
         return $objects;
+    }
+
+    /**
+     * Converts all object properties to utf-8.
+     *
+     * @param Object $objects Objects to convert
+     */
+    public static function convertObjectToUtf8(&$object)
+    {
+        var_dump($object);
+        foreach (get_object_vars($object) as $key => $value) {
+            if (is_string($value)) {
+                $object->{$key} = mb_convert_encoding(
+                    $value,
+                    'UTF-8',
+                    mb_detect_encoding($value)
+                );
+            }
+        }
     }
 }

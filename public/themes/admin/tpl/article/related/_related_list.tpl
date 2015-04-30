@@ -3,7 +3,7 @@
     <h4>{t}Related contents{/t}</h4>
   </div>
   <div class="grid-body">
-    <div class="m-b-40" {if isset($orderFront)}ng-init="relatedInFrontpage = {json_encode($orderFront)|replace:'"':'\''}"{/if}>
+    <div class="m-b-40" {if isset($orderFront)}ng-init="relatedInFrontpage = {json_encode($orderFront)|replace:'\'':'\\\''|replace:'"':'\''}"{/if}>
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in frontpage{/t}</h5>
         <div class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInFrontpage">
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="m-b-40" {if isset($orderInner)}ng-init="relatedInInner = {json_encode($orderInner)|replace:'"':'\''}"{/if}>
+    <div class="m-b-40" {if isset($orderInner)}ng-init="relatedInInner = {json_encode($orderInner)|replace:'\'':'\\\''|replace:'"':'\''}"{/if}>
       <div class="clearfix">
         <h5 class="pull-left">{t}Related in inner{/t}</h5>
         <div class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInInner">
@@ -44,7 +44,7 @@
       </div>
     </div>
     {is_module_activated name="CRONICAS_MODULES"}
-      <div class="m-b-40" {if isset($orderHome)}ng-init="relatedInHome = {json_encode($orderHome)|replace:'"':'\''}"{/if}>
+      <div class="m-b-40" {if isset($orderHome)}ng-init="relatedInHome = {json_encode($orderHome)|replace:'\'':'\\\''|replace:'"':'\''}"{/if}>
         <div class="clearfix">
           <h5 class="pull-left">{t}Related in home{/t}</h5>
           <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInHome" type="button">
