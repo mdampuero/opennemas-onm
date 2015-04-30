@@ -89,5 +89,8 @@
       </div>
     </div>
   </form>
+{/block}
+
+{block name="modals"}
   {include file="comment/modals/_modalChange.tpl"}
 {/block}
