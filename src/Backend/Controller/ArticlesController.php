@@ -351,14 +351,14 @@ class ArticlesController extends Controller
             $orderFront[] =  new \Content($aret);
         }
 
-        $this->view->assign('orderFront', $orderFront);
+        $this->view->assign('orderFront', \Onm\StringUtils::convertToUtf8($orderFront));
 
         $orderInner = array();
         $relations = $relationsHandler->getRelationsForInner($id);//de interor
         foreach ($relations as $aret) {
             $orderInner[] = new \Content($aret);
         }
-        $this->view->assign('orderInner', $orderInner);
+        $this->view->assign('orderInner', \Onm\StringUtils::convertToUtf8($orderInner));
 
         if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
             $galleries = array();
@@ -380,6 +380,7 @@ class ArticlesController extends Controller
                 $galleries['inner'] = null;
             }
 
+            \Onm\StringUtils::convertToUtf8($galleries)
             $this->view->assign('galleries', $galleries);
 
             $orderHome = array();
@@ -388,7 +389,7 @@ class ArticlesController extends Controller
                 foreach ($relations as $aret) {
                     $orderHome[] = new \Content($aret);
                 }
-                $this->view->assign('orderHome', $orderHome);
+                $this->view->assign('orderHome', \Onm\StringUtils::convertToUtf8($orderHome));
             }
 
         }
