@@ -76,6 +76,10 @@
         {
             "type": "vcs",
             "url":  "https://github.com/openhost/jwt-authentication-bundle"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/zikula/NativeSession"
         }
     ],
     "scripts": {
