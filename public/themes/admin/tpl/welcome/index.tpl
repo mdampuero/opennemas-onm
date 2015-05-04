@@ -156,7 +156,5 @@
       </div>
     </div>
   </div>
-
 </div>
-{include file="welcome/modals/policies.tpl"}
 {/block}
