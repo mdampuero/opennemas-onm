@@ -79,7 +79,7 @@ class OnmUserProvider implements UserProviderInterface
 
         if (!$user) {
             $this->um->selectDatabase('onm-instances');
-            $this->cache->setNamespace('instance');
+            $this->cache->setNamespace('onm_manager');
             $GLOBALS['application']->conn->selectDatabase('onm-instances');
 
             $user = $this->um->findOneBy($criteria);
