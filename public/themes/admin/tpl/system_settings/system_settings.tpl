@@ -64,11 +64,16 @@
         btn.find('i').toggleClass('fa-unlock-alt');
       });
 
+      $('.external-link').on('click', function(e) {
+        e.stopPropagation();
+      });
+
       // Logo, mobile and favico image uploader
       $('.fileinput.site-logo').fileinput({ name: 'site_logo', uploadtype:'image' });
       $('.fileinput.favico').fileinput({ name: 'favico', uploadtype:'image' });
       $('.fileinput.mobile-logo').fileinput({ name: 'mobile_logo', uploadtype:'image' });
     });
+
   </script>
 {/block}
 
@@ -433,7 +438,7 @@
                               <div class="controls">
                                 <input class="form-control" id="google_analytics_api_key" name="google_analytics[api_key]" type="text" value="{$configs['google_analytics']['api_key']|default:""}">
                                 <span class="help">
-                                  {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
+                                  {t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}
                                 </span>
                               </div>
                             </div>
@@ -539,7 +544,7 @@
                             </div>
                           </div>
                           <span class="help">
-                            {t escape=off}Get your reCaptcha key from <a href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
+                            {t escape=off}Get your reCaptcha key from <a class="external-link" href="https://www.google.com/recaptcha/admin#whyrecaptcha" target="_blank">this page</a>.{/t} {t}Used when we want to test if the user is an human and not a robot.{/t}
                           </span>
                         </div>
                       </div>
@@ -606,7 +611,7 @@
                             <div class="controls">
                               <input class="form-control" id="paypal_mail" name="paypal_mail" type="text" value="{$configs['paypal_mail']|default:""}">
                               <div class="help">
-                                {t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
+                                {t escape=off}You can get your PayPal account email from <a class="external-link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}
                               </div>
                             </div>
                           </div>
@@ -633,7 +638,7 @@
                             <div class="controls">
                               <input class="form-control" id="google_custom_search_api_key" name="google_custom_search_api_key" type="text" value="{$configs['google_custom_search_api_key']|default:""}">
                               <span class="help">
-                                {t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create" target="_blank">Google Search sign up website</a>.{/t}
+                                {t escape=off}You can get your Google <strong>Search</strong> API Key from <a class="external-link" href="http://www.google.com/cse/manage/create" target="_blank">Google Search sign up website</a>.{/t}
                               </span>
                             </div>
                           </div>
@@ -644,7 +649,7 @@
                             <div class="controls">
                               <input class="form-control" id="google_news_name" name="google_news_name" type="text" value="{$configs['google_news_name']|default:""}">
                               <span class="help">
-                                {t escape=off}You can get your Publication name in <a href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}
+                                {t escape=off}You can get your Publication name in <a class="external-link" href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank">Google News search</a> for your site.{/t}
                               </span>
                             </div>
                           </div>
@@ -655,7 +660,7 @@
                             <div class="controls">
                               <input class="form-control" id="google_maps_api_key" name="google_maps_api_key" type="text" value="{$configs['google_maps_api_key']|default:""}">
                               <span class="help">
-                                {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}
+                                {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a class="external-link" href="http://code.google.com/apis/maps/signup.html" target="_blank">Google maps sign up website</a>.{/t}
                               </span>
                             </div>
                           </div>
@@ -740,7 +745,7 @@
                             <div class="controls">
                               <input class="form-control" id="facebook_api_key" name="facebook[api_key]" type="text" value="{$configs['facebook']['api_key']|default:""}">
                               <span class="help">
-                                {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
+                                {t escape=off}You can get your Facebook App Keys from <a class="external-link" href="https://developers.facebook.com/apps" target="_blank">Facebook Developers website</a>.{/t}
                               </span>
                             </div>
                           </div>
