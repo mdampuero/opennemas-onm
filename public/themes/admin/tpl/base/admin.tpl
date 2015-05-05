@@ -315,6 +315,9 @@
                 </li>
                 <li class="quicklinks user-info dropdown">
                   <span class="link" data-toggle="dropdown">
+                    {if $smarty.session.isMaster}
+                      <i class="fa fa-rebel text-danger master-user"></i>
+                    {/if}
                     <span class="title">
                       {$smarty.session.realname}
                     </span>
@@ -324,6 +327,14 @@
                     <i class="fa fa-angle-down"></i>
                   </span>
                   <ul class="dropdown-menu on-right" role="menu">
+                    {if $smarty.session.isMaster}
+                      <li class="text-danger">
+                        <span class="dropdown-static-item">
+                          {t}This user is a master{/t}
+                        </span>
+                      </li>
+                      <li class="divider"></li>
+                    {/if}
                     <li>
                       {if $smarty.session.isMaster}
                         <a ng-href="/manager#/user/{$smarty.session.userid}/show">
