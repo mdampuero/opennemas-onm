@@ -156,6 +156,7 @@
             </li>
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
+                <i class="fa fa-rebel text-danger master-user"></i>
                 <span class="title">
                   [% user.name %]
                 </span>
@@ -164,7 +165,13 @@
                 </div>
                 <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu on-right" role="menu">
+              <ul class="dropdown-menu" role="menu">
+                <li class="text-danger">
+                  <span class="dropdown-static-item">
+                    {t}This user is a master{/t}
+                  </span>
+                </li>
+                <li class="divider"></li>
                 <li>
                   <a ng-href="[% routing.ngGenerate('manager_user_show', { id: 'me' }) %]">
                     <i class="fa fa-user"></i>
