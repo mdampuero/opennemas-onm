@@ -160,7 +160,7 @@
                   [% user.name %]
                 </span>
                 <div class="profile-pic">
-                  <img class="gravatar" email="[% user.email %]" image="1" size="25" width="25" height="25">
+                  <gravatar ng-model="user.email" size="25"></gravatar>
                 </div>
                 <i class="fa fa-angle-down"></i>
               </span>
