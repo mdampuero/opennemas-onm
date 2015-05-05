@@ -37,6 +37,7 @@ class Template extends Smarty
     {
         // Call the parent constructor
         parent::__construct();
+
         $this->themeName = $theme;
 
         $this->setBaseCachePath();
@@ -48,6 +49,8 @@ class Template extends Smarty
         $this->registerCustomPlugins();
 
         $this->setTemplateVars($theme);
+
+        $this->assign('app', getService('templating.globals'));
 
         // Load filters
         foreach ($this->filters as $filterSectionName => $filters) {
