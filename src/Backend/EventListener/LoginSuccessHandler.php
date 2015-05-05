@@ -95,11 +95,24 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['user_language']    = $user->getMeta('user_language');
         $_SESSION['valid']            = $valid;
         $_SESSION['meta']             = $user->getMeta();
+        $_SESSION['isAdmin']          = $user->isAdmin();
+        $_SESSION['isMaster']         = $user->isMaster();
 
         $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
             $this->session->get('intention'),
             $request->get('_token')
         );
+
+        $im = getService('instance_manager');
+        $um = getService('user_repository');
+        $cache = getService('cache');
+
+        $database = $im->current_instance->getDatabaseName();
+        $namespace = $im->current_instance->internal_name;
+
+        $um->selectDatabase($database);
+        $cache->setNamespace($namespace);
+        $GLOBALS['application']->conn->selectDatabase($database);
 
         if (!$isTokenValid || $valid === false) {
             if (isset($_SESSION['failed_login_attempts'])) {

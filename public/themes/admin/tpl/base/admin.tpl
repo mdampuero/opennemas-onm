@@ -325,10 +325,17 @@
                   </span>
                   <ul class="dropdown-menu on-right" role="menu">
                     <li>
-                      <a href="{url name=admin_acl_user_show id=me}">
-                        <i class="fa fa-user"></i>
-                        {t}Profile{/t}
-                      </a>
+                      {if $smarty.session.isMaster}
+                        <a ng-href="/manager#/user/{$smarty.session.userid}/show">
+                          <i class="fa fa-user"></i>
+                          {t}Profile{/t}
+                        </a>
+                      {else}
+                        <a href="{url name=admin_acl_user_show id=me}">
+                          <i class="fa fa-user"></i>
+                          {t}Profile{/t}
+                        </a>
+                      {/if}
                     </li>
                     <li class="divider"></li>
                     <li>
