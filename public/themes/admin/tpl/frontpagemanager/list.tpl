@@ -149,7 +149,7 @@
         <li class="quicklinks">
           <span class="info">{t}Managing frontpage:{/t}</span>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak"  ng-init="category='{$categories[$category_id]['value']}'; categories = {json_encode(array_values($categories))|replace:'"':'\''}">
+        <li class="quicklinks hidden-xs ng-cloak"  ng-init="category='{$categories[$category_id]['value']}'; categories = {json_encode(array_values($categories))|replace:'\'':'\\\''|replace:'"':'\''}">
           <ui-select name="author" theme="select2" ng-model="category" ng-change=changeCategory($select.selected.id)>
             <ui-select-match>
               <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
