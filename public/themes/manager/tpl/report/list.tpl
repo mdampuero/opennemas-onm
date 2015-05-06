@@ -4,7 +4,7 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a ng-href="[% routing.ngGenerate('manager_users_list') %]">
+            <a ng-href="[% routing.ngGenerate('manager_reports_list') %]">
               <i class="fa fa-files-o fa-lg"></i>
               {t}Reports{/t}
             </a>
@@ -30,21 +30,34 @@
 </div>
 <div class="content">
   <div class="grid simple">
-    <div class="grid-body">
+    <div class="grid-body no-padding">
       <div class="grid-overlay" ng-if="loading"></div>
-      <div ng-if="items.length > 0">
-        <div class="row" ng-repeat="item in items|filter:criteria">
-          <div class="col-md-9">
-            <h5>[% item.title %]</h5>
-            <div>[% item.description %]</div>
-          </div>
-          <div class="col-md-3 text-right">
-            <a class="btn btn-white" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
-              <i class="fa fa-download"></i>
-              {t}Download{/t}
-            </a>
-          </div>
-        </div>
+      <div class="table-wrapper">
+        <table class="table no-margin">
+          <thead>
+            <tr>
+              <th>{t}Report{/t}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-if="items.length == 0">
+              <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
+            </tr>
+            <tr ng-if="items.length >= 0" ng-repeat="item in items|filter:criteria" ng-class="{ row_selected: isSelected(item.id) }">
+              <td>
+                <h4>[% item.title %]</h4>
+                [% item.description %]
+              </td>
+              <td class="text-right">
+                <a class="btn btn-white" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+                  <i class="fa fa-download"></i>
+                  {t}Download{/t}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="text-center" ng-if="items.length == 0">
         {t escape=off}There is no reports created yet or <br/>your search don't match your criteria{/t}
