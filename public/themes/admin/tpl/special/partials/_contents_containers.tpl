@@ -4,7 +4,7 @@
   </div>
   <div class="grid-body">
     <div class="row">
-      <div class="col-md-6" {if isset($contentsLeft)}ng-init="contentsLeft = {json_encode($contentsLeft)|replace:'"':'\''}"{/if}>
+      <div class="col-md-6" {if isset($contentsLeft)}ng-init="contentsLeft = {json_encode($contentsLeft)|clear_json}"{/if}>
         <h5>{t}Articles in left column{/t}</h5>
         <div class="ng-cloak" ui-sortable ng-model="contentsLeft">
           <div class="related-item" ng-repeat="content in contentsLeft">
@@ -18,7 +18,7 @@
           <button type="button" class="btn btn-primaty">{t}Click here to add contents{/t}</button>
         </div>
       </div>
-      <div class="col-md-6" {if isset($contentsRight)}ng-init="contentsRight = {json_encode($contentsRight)|replace:'"':'\''}"{/if}>
+      <div class="col-md-6" {if isset($contentsRight)}ng-init="contentsRight = {json_encode($contentsRight)|clear_json}"{/if}>
         <h5>{t}Articles in right column{/t}</h5>
         <div class="ng-cloak" ui-sortable ng-model="contentsRight">
           <div class="related-item" ng-repeat="content in contentsRight">

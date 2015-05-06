@@ -132,7 +132,7 @@
               <h4>{t}Image for Special{/t}</h4>
             </div>
             <div class="grid-body">
-              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
                 <div class="form-group ng-cloak">
                   <div class="thumbnail-placeholder">
                     <div class="img-thumbnail" ng-if="!photo1">

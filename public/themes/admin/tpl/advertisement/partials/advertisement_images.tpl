@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="thumbnail-placeholder" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''};loaded=true"{/if}>
+    <div class="thumbnail-placeholder" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json};loaded=true"{/if}>
       <div class="img-thumbnail" ng-if="!photo1 || !loaded">
         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
           <i class="fa fa-picture-o fa-2x"></i>

@@ -21,7 +21,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_paywall_settings_save}" method="post" ng-controller="PaywallSettingsCtrl" ng-init="parseSettings({json_encode($settings)|replace:'"':'\''})">
+<form action="{url name=admin_paywall_settings_save}" method="post" ng-controller="PaywallSettingsCtrl" ng-init="parseSettings({json_encode($settings)|clear_json})">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">

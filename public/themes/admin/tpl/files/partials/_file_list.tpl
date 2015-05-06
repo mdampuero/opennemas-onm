@@ -54,7 +54,7 @@
         <li class="quicklinks hidden-xs">
           <span class="h-seperate"></span>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+        <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
           <ui-select name="author" theme="select2" ng-model="criteria.category_name">
             <ui-select-match>
               <strong>{t}Category{/t}:</strong> [% $select.selected.name %]

@@ -80,7 +80,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks ng-cloak" ng-init="statuses = {json_encode($statuses)|replace:'"':'\''}">
+            <li class="quicklinks ng-cloak" ng-init="statuses = {json_encode($statuses)|clear_json}">
               <ui-select name="status" theme="select2" ng-model="criteria.status" data-label="{t}Status{/t}">
                 <ui-select-match placeholder="Select a report">
                   <strong>{t}Status{/t}:</strong> [% $select.selected.title %]

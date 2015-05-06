@@ -173,7 +173,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-8" {if !empty($photos)}ng-init="parsePhotos({json_encode($photos)|replace:'"':'\''})"{/if}>
+        <div class="col-md-8" {if !empty($photos)}ng-init="parsePhotos({json_encode($photos)|clear_json})"{/if}>
           <div class="grid simple">
             <div class="grid-title">
               <h4>{t}Album images{/t}</h4>
@@ -224,7 +224,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" {if isset($album->cover_image) && $album->cover_image->id}ng-init="cover = {json_encode($album->cover_image)|replace:'"':'\''}"{/if}>
+        <div class="col-md-4" {if isset($album->cover_image) && $album->cover_image->id}ng-init="cover = {json_encode($album->cover_image)|clear_json}"{/if}>
           <div class="grid simple">
             <div class="grid-title">
               <h4>{t}Cover image{/t}</h4>

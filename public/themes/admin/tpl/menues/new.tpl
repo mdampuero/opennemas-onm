@@ -93,7 +93,7 @@
             </div>
           </div>
         </div>
-        <div class="grid-body" {if $menu}ng-init="menu = {json_encode($menu)|replace:'"':'\''}"{/if}>
+        <div class="grid-body" {if $menu}ng-init="menu = {json_encode($menu)|clear_json}"{/if}>
           <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
             <ol ui-tree-nodes="" ng-model="menu.items">
               <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
