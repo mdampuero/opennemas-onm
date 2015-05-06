@@ -230,7 +230,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="id_user_group">{t}User group:{/t}</label>
-                <div class="controls" ng-init="groups = {json_encode($user_groups)|replace:'"':'\''};selectedGroups = {json_encode($selected_groups)|replace:'"':'\''}">
+                <div class="controls" ng-init="groups = {json_encode($user_groups)|clear_json};selectedGroups = {json_encode($selected_groups)|clear_json}">
                   <multiselect ng-model="selectedGroups" options="g.name for g in groups" ms-header="{t}Select{/t}" ms-selected="[% selectedGroups.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                 </div>
                 <div class="selected">
@@ -244,7 +244,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="ids_category">{t}Categories{/t}:</label>
-                <div class="controls" ng-init="categories = {json_encode($content_categories)|replace:'"':'\''};selectedCategories = {json_encode($content_categories_select)|replace:'"':'\''}">
+                <div class="controls" ng-init="categories = {json_encode($content_categories)|clear_json};selectedCategories = {json_encode($content_categories_select)|clear_json}">
                   <multiselect ng-model="selectedCategories" options="c.title for c in categories" ms-header="{t}Select{/t}" ms-selected="[% selectedCategories.length %] {t}selected{/t}" data-compare-by="id" scroll-after-rows="5" data-multiple="true"></multiselect>
                 </div>
                 <div class="selected">

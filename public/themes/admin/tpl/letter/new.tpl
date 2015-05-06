@@ -160,7 +160,7 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+              <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
                   <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">

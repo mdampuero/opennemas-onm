@@ -93,7 +93,7 @@
               </div>
             </div>
 
-            <div class="form-group ng-cloak" {if isset($book->cover_img) && $book->cover_img}ng-init="book_cover = {json_encode($book->cover_img)|replace:'"':'\''}"{/if}>
+            <div class="form-group ng-cloak" {if isset($book->cover_img) && $book->cover_img}ng-init="book_cover = {json_encode($book->cover_img)|clear_json}"{/if}>
                 <h5>{t}Cover image{/t}</h5>
                 <div class="form-group">
                   <div class="thumbnail-placeholder">

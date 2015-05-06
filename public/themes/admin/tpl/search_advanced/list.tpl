@@ -31,7 +31,7 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|clear_json}">
             <ui-select name="type" theme="select2" ng-model="criteria.content_type_name">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]

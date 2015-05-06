@@ -70,7 +70,7 @@
       </div>
     </div>
     {if count($categories) > 0}
-      <div ng-if="type == 'category'" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+      <div ng-if="type == 'category'" ng-init="categories = {json_encode($categories)|clear_json}">
         <div class="form-group" ng-repeat="category in categories">
           <div class="checkbox col-md-6">
             <input id="checkbox-frontpage-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -83,7 +83,7 @@
     {/if}
     {is_module_activated name="ALBUM_MANAGER"}
       {if count($albumCategories) > 0}
-        <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($albumCategories)|replace:'"':'\''}">
+        <div ng-if="type == 'albumCategory'" ng-init="albumCategories = {json_encode($albumCategories)|clear_json}">
           <div class="form-group" ng-repeat="category in albumCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-album-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -97,7 +97,7 @@
     {/is_module_activated}
     {is_module_activated name="VIDEO_MANAGER"}
       {if count($videoCategories) > 0}
-        <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($videoCategories)|replace:'"':'\''}">
+        <div ng-if="type == 'videoCategory'" ng-init="videoCategories = {json_encode($videoCategories)|clear_json}">
           <div class="form-group" ng-repeat="category in videoCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-video-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -111,7 +111,7 @@
     {/is_module_activated}
     {is_module_activated name="POLL_MANAGER"}
       {if count($pollCategories) > 0}
-        <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($pollCategories)|replace:'"':'\''}">
+        <div ng-if="type == 'pollCategory'" ng-init="pollCategories = {json_encode($pollCategories)|clear_json}">
           <div class="form-group" ng-repeat="category in pollCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -124,7 +124,7 @@
       {/if}
     {/is_module_activated}
     {if count($pages) > 0}
-      <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|replace:'"':'\''}">
+      <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|clear_json}">
         <div class="form-group" ng-repeat="page in pages">
           <div class="checkbox col-md-6">
             <input id="checkbox-module-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
@@ -136,7 +136,7 @@
       </div>
     {/if}
     {if count($staticPages) > 0}
-      <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($staticPages)|replace:'"':'\''}">
+      <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($staticPages)|clear_json}">
         <div class="form-group" ng-repeat="page in staticPages">
           <div class="checkbox col-md-6">
             <input id="checkbox-static-pages-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
@@ -149,7 +149,7 @@
     {/if}
     {is_module_activated name="SYNC_MANAGER"}
       {if count($elements) > 0}
-        <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($elements)|replace:'"':'\''}">
+        <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
           <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
             <div class="form-group" ng-repeat="category in params.categories" >
@@ -166,7 +166,7 @@
     {/is_module_activated}
     {is_module_activated name="FRONTPAGES_LAYOUT"}
       {if count($categories) > 0}
-        <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|replace:'"':'\''}">
+        <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
           <div class="form-group" ng-repeat="category in automaticCategories">
             <div class="checkbox col-md-6">
               <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
@@ -179,7 +179,7 @@
       {/if}
       {is_module_activated name="SYNC_MANAGER"}
        {if count($elements) > 0}
-        <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|replace:'"':'\''}">
+        <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($elements)|clear_json}">
           <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
             <h5>[% site %]</h5>
             <div class="form-group" ng-repeat="category in params.categories">

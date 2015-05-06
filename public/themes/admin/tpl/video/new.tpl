@@ -157,7 +157,7 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-12" {if isset($video->thumb_image)}ng-init="thumbnail = {json_encode($video->thumb_image)|replace:'"':'\''}"{/if}>
+              <div class="col-md-12" {if isset($video->thumb_image)}ng-init="thumbnail = {json_encode($video->thumb_image)|clear_json}"{/if}>
                 <div class="form-group">
                   <div class="thumbnail-placeholder ng-cloak">
                     <div class="img-thumbnail" ng-if="!thumbnail">

@@ -103,7 +103,7 @@
                         <div class="form-group">
                             <label class="form-label" for="answers">{t}Answers{/t}</label>
                             <div class="controls">
-                                <input type="hidden" id="parsedAnswers" name="parsedAnswers" ng-model="parsedAnswers" ng-value="parsedAnswers" ng-init="parseAnswers({json_encode($items)|replace:'"':'\''})">
+                                <input type="hidden" id="parsedAnswers" name="parsedAnswers" ng-model="parsedAnswers" ng-value="parsedAnswers" ng-init="parseAnswers({json_encode($items)|clear_json})">
                                 <div id="answers">
                                     <div class="ng-cloak" ng-repeat="answer in answers track by $index">
                                         <div>

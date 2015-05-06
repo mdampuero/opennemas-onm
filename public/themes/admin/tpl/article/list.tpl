@@ -89,7 +89,7 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+          <li class="quicklinks dropdown hidden-xs ng-cloak" ng-init="categories = {json_encode($categories)|clear_json}">
             <ui-select name="author" theme="select2" ng-model="criteria.category_name">
               <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
@@ -109,7 +109,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-init="authors = {json_encode($authors)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs hidden-sm ng-cloak" ng-init="authors = {json_encode($authors)|clear_json}">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_author">
               <ui-select-match>
                 <strong>{t}Author{/t}:</strong> [% $select.selected.name %]
