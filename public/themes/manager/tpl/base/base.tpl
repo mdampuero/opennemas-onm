@@ -125,7 +125,7 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" ng-if="user.id">
           <ul class="nav quick-section">
             <li class="quicklinks notifications dropdown">
               <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
