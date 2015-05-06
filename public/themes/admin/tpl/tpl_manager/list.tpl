@@ -65,7 +65,7 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="type = {json_encode($types)|clear_json}">
             <ui-select name="type" theme="select2" ng-model="criteria.type">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]

@@ -86,7 +86,7 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
             <ui-select name="author" theme="select2" ng-model="criteria.fk_content_categories">
               <ui-select-match>
                 <strong>{t}Category{/t}:</strong> [% $select.selected.name %]
@@ -96,7 +96,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="hidden-xs ng-cloak" ng-init="typeAdvertisement = {json_encode($typeAdvertisement)|replace:'"':'\''}">
+          <li class="hidden-xs ng-cloak" ng-init="typeAdvertisement = {json_encode($typeAdvertisement)|clear_json}">
             <ui-select name="type_advertisement" theme="select2" ng-model="criteria.type_advertisement">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
@@ -106,7 +106,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="hidden-xs hidden-sm ng-cloak" ng-init="type = {json_encode($types)|replace:'"':'\''}">
+          <li class="hidden-xs hidden-sm ng-cloak" ng-init="type = {json_encode($types)|clear_json}">
             <ui-select name="type" theme="select2" ng-model="criteria.with_script">
               <ui-select-match>
                 <strong>{t}Type{/t}:</strong> [% $select.selected.name %]

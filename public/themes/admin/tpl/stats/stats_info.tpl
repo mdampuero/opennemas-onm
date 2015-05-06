@@ -172,7 +172,7 @@
               </div>
             </div>
             {*
-            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+            <div class="tiles-body hidden" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {$plans};modules = {$available_modules}">
               <div class="plans-wrapper">
                 <div class="inline p-r-30" ng-repeat="plan in plans">
                   <div class="checkbox">
@@ -216,7 +216,7 @@
                 </button>
               </div>*}
             </div>
-            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|replace:'"':'\''};plans = {$plans};modules = {$available_modules}">
+            <div class="tiles-body" style="overflow: auto;" ng-init="hasChanges = ({$hasChanges} ? 1: 0 );instance = {json_encode($instance)|clear_json};plans = {$plans};modules = {$available_modules}">
               <div class="plans-wrapper">
                 <div class="plan-wrapper" ng-repeat="plan in plans" ng-if="countActivatedModulesForPlan(plan.id)" >
                   <h5 class="plan-title">

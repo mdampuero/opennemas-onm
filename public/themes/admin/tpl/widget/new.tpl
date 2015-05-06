@@ -106,7 +106,7 @@
               <div  class="form-group ng-cloak" ng-show="renderlet == 'intelligentwidget'">
                 <label for="params" ng-if="params.length > 0">{t}Parameters{/t}</label>
                 <div id="params">
-                    <input type="hidden" name="parsedParams" ng-model="parsedParams" ng-value="parsedParams" ng-init="parseParams({json_encode($widget->params)|replace:'"':'\''})">
+                    <input type="hidden" name="parsedParams" ng-model="parsedParams" ng-value="parsedParams" ng-init="parseParams({json_encode($widget->params)|clear_json})">
                     <label for="" class="sr-only">{t}Parameter name{/t}</label>
                     <div class="form-group ng-cloak" ng-repeat="param in params track by $index">
                       <input type="text" name="items[]" ng-model="param.name" placeholder="{t}Parameter name{/t}" />

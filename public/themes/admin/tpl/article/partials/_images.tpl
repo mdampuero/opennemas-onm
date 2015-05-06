@@ -8,7 +8,7 @@
           </div>
           <div class="grid-body">
             <div class="row">
-              <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|replace:'"':'\''}"{/if}>
+              <div class="col-md-4" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
                 <h5>{t}Image to show in frontpages{/t}</h5>
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
@@ -59,7 +59,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo2 = {json_encode($photo2)|replace:'"':'\''}"{/if}>
+              <div class="col-md-4" {if isset($photo2) && $photo2->name}ng-init="photo2 = {json_encode($photo2)|clear_json}"{/if}>
                 <h5>{t}Image to show in inner{/t}</h5>
                 <div class="thumbnail-wrapper">
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo2 }"></div>
@@ -112,7 +112,7 @@
               </div>
               {is_module_activated name="CRONICAS_MODULES"}
                 {if strpos($smarty.server.REQUEST_URI, 'articles') !== false}
-                <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|replace:'"':'\''}"{/if}>
+                <div class="col-md-4" {if isset($photo3) && $photo3->name}ng-init="photo3 = {json_encode($photo3)|clear_json}"{/if}>
                   <h5>{t}Home image{/t}</h5>
                   <div class="thumbnail-wrapper">
                     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo3 }"></div>

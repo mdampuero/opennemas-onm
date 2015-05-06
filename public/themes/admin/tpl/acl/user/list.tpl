@@ -96,7 +96,7 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="groups = {json_encode($groups)|replace:'"':'\''}">
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="groups = {json_encode($groups)|clear_json}">
             <ui-select name="group" theme="select2" ng-model="criteria.fk_user_group">
               <ui-select-match>
                 <strong>{t}Group{/t}:</strong> [% $select.selected.name %]
