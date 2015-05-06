@@ -22,7 +22,7 @@
           <span class="add-on">
             <span class="fa fa-search fa-lg"></span>
           </span>
-          <input class="no-boarder" ng-keyup="searchByKeypress($event)" ng-model="criteria.name_like[0].value" placeholder="Filter report by name or description" type="text" style="width:250px;"/>
+          <input class="no-boarder" ng-model="criteria.title" placeholder="Filter report by name" type="text" style="width:250px;"/>
         </li>
       </ul>
     </div>
@@ -33,16 +33,16 @@
     <div class="grid-body">
       <div class="grid-overlay" ng-if="loading"></div>
       <div ng-if="items.length > 0">
-        <div class="row" ng-repeat="item in items">
+        <div class="row" ng-repeat="item in items|filter:criteria">
           <div class="col-md-9">
             <h5>[% item.title %]</h5>
             <div>[% item.description %]</div>
           </div>
           <div class="col-md-3 text-right">
-            <button class="btn btn-white">
+            <a class="btn btn-white" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
               <i class="fa fa-download"></i>
               {t}Download{/t}
-            </button>
+            </a>
           </div>
         </div>
       </div>
