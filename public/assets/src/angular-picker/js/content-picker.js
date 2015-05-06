@@ -71,6 +71,13 @@ angular.module('onm.picker')
                         </div>\
                       </div>\
                     </div>\
+                    <div class=\"text-center m-b-30 p-t-15 p-b-30 pointer\" ng-click=\"scroll()\" ng-if=\"!searchLoading && total != contents.length\">\
+                      <h5>\
+                        <i class=\"fa fa-circle-o-notch fa-spin fa-lg\" ng-if=\"loadingMore\"></i>\
+                        <span ng-if=\"!loadingMore\">[% picker.params.explore.loadMore %]</span>\
+                        <span ng-if=\"loadingMore\">[% picker.params.explore.loading %]</span>\
+                      </h5>\
+                    </div>\
                     <div class=\"items-loading\" ng-if=\"searchLoading\">\
                       <i class=\"fa fa-circle-o-notch fa-spin fa-4x\"></i>\
                     </div>\
@@ -487,6 +494,8 @@ angular.module('onm.picker')
        * @param {boolean} reset Whether to reset the list or append more items.
        */
       $scope.list = function (reset) {
+        $scope.loadingMore = true;
+
         if (reset) {
           $scope.searchLoading = true;
         }
@@ -512,6 +521,8 @@ angular.module('onm.picker')
         var url = routing.generate('backend_ws_picker_list', data);
 
         $http.get(url).then(function(response) {
+          $scope.loadingMore = false;
+
           if (reset) {
             $scope.contents      = response.data.results;
             $scope.total         = response.data.total;
