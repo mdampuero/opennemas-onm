@@ -70,7 +70,8 @@
         "recaptcha/php5": "1.1.0",
         "smarty/smarty" : "3.1.21",
         "smarty-gettext/smarty-gettext": "@stable",
-        "lexik/jwt-authentication-bundle": "dev-master"
+        "lexik/jwt-authentication-bundle": "dev-master",
+        "league/csv": "~7.0"
     },
     "repositories": [
         {
