@@ -80,6 +80,9 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['mockHookAction', 0],
             ],
             // Content hooks
+            'content.repository-delete' => [
+                ['deleteEntityRepositoryCache', 5]
+            ],
             'content.create' => [
                 ['mockHookAction', 0],
             ],
