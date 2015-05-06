@@ -130,7 +130,7 @@ class MenusController extends Controller
                 $pollCategories[] = $category;
             }
         }
-        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title');
 
         // Get categories from menu
         $menu = new \Menu($id);
@@ -225,7 +225,7 @@ class MenusController extends Controller
                     $pollCategories[] = $category;
                 }
             }
-            $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ');
+            $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title');
             $menues = \Menu::find();
 
             // Fetch synchronized elements if exists
