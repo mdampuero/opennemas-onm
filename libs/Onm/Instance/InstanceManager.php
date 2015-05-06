@@ -198,11 +198,33 @@ class InstanceManager extends BaseManager
     }
 
     /**
+     * Finds the list of instances created in the current month.
+     *
+     * @return array Array of instances.
+     */
+    public function findLastCreatedInstances()
+    {
+        // Executing the SQL
+        $sql = "SELECT id FROM `instances` "
+            ."WHERE MONTH(created) = MONTH(NOW())";
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = $item['id'];
+        }
+
+        return $this->findMulti($ids);
+    }
+
+    /**
      * Find multiple contents from a given array of instance ids.
      *
      * @param array $data Array of instance ids.
      *
-     * @return array Array of contents.
+     * @return array Array of instances.
      */
     public function findMulti($data)
     {
@@ -250,6 +272,28 @@ class InstanceManager extends BaseManager
 
         $this->cache->setNamespace($previousNamespace);
         return $ordered;
+    }
+
+    /**
+     * Finds the list of instances not used in the current month.
+     *
+     * @return array Array of instances.
+     */
+    public function findNotUsedInstances()
+    {
+        // Executing the SQL
+        $sql = "SELECT id FROM `instances` "
+            ."WHERE last_login IS NULL OR MONTH(last_login) < MONTH(NOW())";
+
+        $this->conn->selectDatabase('onm-instances');
+        $rs = $this->conn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $item) {
+            $ids[] = $item['id'];
+        }
+
+        return $this->findMulti($ids);
     }
 
     /*
