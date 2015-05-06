@@ -30,19 +30,11 @@
         $scope.items = data.results;
 
         /**
-         * List of filtered items.
-         *
-         * @type {Object}
-         */
-        $scope.filtered = $scope.items;
-
-        /**
          * Marks variables to delete for garbage collector;
          */
         $scope.$on('$destroy', function() {
-            $scope.criteria = null;
-            $scope.items    = null;
-            $scope.filtered = null;
+          $scope.criteria = null;
+          $scope.items    = null;
         });
 
         if (webStorage.local.get('token')) {
