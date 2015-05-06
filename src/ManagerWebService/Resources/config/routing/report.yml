@@ -1,0 +1,13 @@
+manager_ws_reports_list:
+    path:     /reports
+    defaults: { _controller: ManagerWebServiceBundle:Report:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_reports_csv:
+    path:     /reports/csv
+    defaults: { _controller: ManagerWebServiceBundle:Report:export }
+    methods:  [ GET ]
+    options:
+        expose: true

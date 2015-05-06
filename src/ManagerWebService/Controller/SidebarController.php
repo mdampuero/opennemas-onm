@@ -26,6 +26,12 @@ class SidebarController extends Controller
                     'name' => _('Instances'),
                     'icon' => 'fa-cubes',
                     'route' => 'manager_instances_list',
+                    'click' => true
+                ],
+                [
+                    'name' => _('Reports'),
+                    'icon' => 'fa-files-o',
+                    'route' => 'manager_reports_list',
                     'click' => 'true'
                 ],
                 [
@@ -47,7 +53,7 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
-                    'name' => _('Settings'),
+                    'name' => _('System'),
                     'icon' => 'fa-gears',
                     'items' => [
                         [
