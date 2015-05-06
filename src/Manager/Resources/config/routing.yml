@@ -12,10 +12,6 @@ manager_instance:
     prefix:   /manager
     resource: @ManagerBundle/Resources/config/routing/instance.yml
 
-manager_report:
-    prefix:   /manager
-    resource: @ManagerBundle/Resources/config/routing/report.yml
-
 manager_commands:
     prefix:   /manager/
     resource: @ManagerBundle/Resources/config/routing/command.yml
@@ -23,6 +19,10 @@ manager_commands:
 manager_opcache:
     prefix:   /manager/
     resource: @ManagerBundle/Resources/config/routing/opcache.yml
+
+manager_report:
+    prefix:   /manager
+    resource: @ManagerBundle/Resources/config/routing/report.yml
 
 manager_user:
     prefix:   /manager
