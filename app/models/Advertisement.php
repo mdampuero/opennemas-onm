@@ -404,7 +404,7 @@ class Advertisement extends Content
     /**
      * Increase by one click the number of clicks given an advertisement id
      *
-     * @param int $id the id of the advertisement ot increase num_count
+     * @param int $id the id of the advertisement to increase num_count
      *
      * @return void
      **/
@@ -418,6 +418,10 @@ class Advertisement extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
+
+        // Clean entity repository cache
+        $ad = new \Advertisement($id);
+        dispatchEventWithParams('content.repository-delete', array('content' => $ad));
     }
 
     /**
