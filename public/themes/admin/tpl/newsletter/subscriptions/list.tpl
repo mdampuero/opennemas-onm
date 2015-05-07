@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: -1   }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<div ng-app="BackendApp" ng-controller="NewsletterSubscriptorListCtrl" ng-init="init('subscriptors', {  title_like: '', subscription: -1, status: -1 }, 'created', 'desc', 'backend_ws_newsletter_subscriptors', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
@@ -109,6 +109,16 @@
           <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
+          <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Yes{/t}', value: 2 }, { name: '{t}No{/t}', value: 3 } ]">
+            <ui-select name="filters[status]" theme="select2" ng-model="criteria.status">
+              <ui-select-match>
+                <strong>{t}Activated{/t}:</strong> [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in activated | filter: { name: $select.search }">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
           <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: -1 }, { name: '{t}Subscribed{/t}', value: 1 }, { name: '{t}No subscribed{/t}', value: 0 } ]">
             <ui-select name="filters[subscription]" theme="select2" ng-model="criteria.subscription">
               <ui-select-match>
@@ -116,6 +126,16 @@
               </ui-select-match>
               <ui-select-choices repeat="item.value as item in status | filter: { name: $select.search }">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+          <li class="quicklinks hidden-sm hidden-xs ng-cloak">
+            <ui-select name="view" theme="select2" ng-model="pagination.epp">
+              <ui-select-match>
+                <strong>{t}View{/t}:</strong> [% $select.selected %]
+              </ui-select-match>
+              <ui-select-choices repeat="item in views  | filter: $select.search">
+                <div ng-bind-html="item | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </li>
