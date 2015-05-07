@@ -1,5 +1,5 @@
 <div class="menu-item clearfix" ui-tree-handle>
-  [% index %]
+  <span></span>
   <span class="item-type" ng-if="item.type == 'external'">
     {t}External link{/t}
   </span>
