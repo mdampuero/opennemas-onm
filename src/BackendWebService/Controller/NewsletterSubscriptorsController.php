@@ -344,26 +344,23 @@ class NewsletterSubscriptorsController extends Controller
      **/
     private function buildFilter($filters)
     {
-        $filters['text'] = '';
-        $filters['subscription'] = -1;
-        $filters['status'] = -1;
-
         $orderBy = 'name, email';
 
+
         $fltr = array();
-        if (isset($filters['text'])
-            && !empty($filters['text'])
+        if (isset($filters['title'])
+            && !empty($filters['title'])
         ) {
-            $fltr[] = "name LIKE '%".addslashes($filters['text'])."%' OR ".
-                      "email LIKE '%".addslashes($filters['text'])."%'";
+            $fltr[] = "(name LIKE '".addslashes($filters['title'][0]['value'])."' OR ".
+                      "email LIKE '".addslashes($filters['title'][0]['value'])."')";
         }
 
-        if (isset($filters['subscription']) && ($filters['subscription']>=0)) {
-            $fltr[] = '`subscription`=' . $filters['subscription'];
+        if (isset($filters['subscription']) && ($filters['subscription'][0]['value']>=0)) {
+            $fltr[] = '`subscription`=' . $filters['subscription'][0]['value'];
         }
 
-        if (isset($filters['status']) && ($filters['status']>=0)) {
-            $fltr[] = '`status`=' . $filters['status'];
+        if (isset($filters['status']) && ($filters['status'][0]['value']>=0)) {
+            $fltr[] = '`status`=' . $filters['status'][0]['value'];
         }
 
         $where = null;
