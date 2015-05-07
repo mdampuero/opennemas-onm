@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|replace:'"':'\''})">
+<form action="{url name=admin_newsletter_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -85,11 +85,11 @@
                 </div>
               </div>
               <div class="newsletter-container-contents clearfix" ui-tree data-max-depth="1">
+                <div class="hint-message p-b-15" ng-if="container.items.length == 0">
+-                 {t}Click in "Add contents" button above or drop contents from other containers{/t}
+-               </div>
                 <ol ui-tree-nodes="" ng-model="container.items">
                   <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
-                </ol>
-                <ol ng>
-                  <li></li>
                 </ol>
               </div>
             </div>
