@@ -4,7 +4,10 @@
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$content->id}">
+        <div class="checkbox check-default">
+          <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
+          <label for="checkbox-{$content->id}"></label>
+        </div>
         <div class="title">
             {if $content->author_object->meta['is_blog'] neq 1}
                 <span class="type">{t}Opinion{/t}</span>
@@ -12,8 +15,6 @@
             {else}
                 <strong>{t}Blog{/t}</strong> {$content->author_object->name} - {$content->title}
             {/if}
-
-
         </div>
     </div>
     <div class="content-action-buttons btn-group">

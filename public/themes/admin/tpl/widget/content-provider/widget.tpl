@@ -1,6 +1,9 @@
 <div data-content-id="{$content->id}" data-class="Widget" class="content-provider-element clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.widget_loop.index}">
+        <div class="checkbox check-default">
+          <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
+          <label for="checkbox-{$content->id}"></label>
+        </div>
         <div class="title">
             <span class="type">{t}Widget{/t}</span>
             {$content->title}
