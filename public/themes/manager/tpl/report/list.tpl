@@ -33,11 +33,11 @@
     <div class="grid-body no-padding">
       <div class="grid-overlay" ng-if="loading"></div>
       <div class="table-wrapper">
-        <table class="table no-margin">
+        <table class="table table-hover no-margin">
           <thead>
             <tr>
               <th>{t}Report{/t}</th>
-              <th></th>
+              <th class="text-right">{t}Action{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -46,11 +46,13 @@
             </tr>
             <tr ng-if="items.length >= 0" ng-repeat="item in items|filter:criteria" ng-class="{ row_selected: isSelected(item.id) }">
               <td>
-                <h4>[% item.title %]</h4>
-                [% item.description %]
+                [% item.title %]
+                <div class="help-block">
+                  [% item.description %]
+                </div>
               </td>
               <td class="text-right">
-                <a class="btn btn-white" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
+                <a class="btn btn-primary" ng-href="{url name=manager_ws_reports_csv}?id=[% item.id %]&token=[% token %]">
                   <i class="fa fa-download"></i>
                   {t}Download{/t}
                 </a>

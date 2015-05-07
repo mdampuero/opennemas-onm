@@ -31,13 +31,13 @@ class ReportController extends Controller
         $results = [
             [
                 'id'          => 'not-used',
-                'title'       => _('Instances not used in the last month'),
-                'description' =>  _('Report with the list of instances not used in the last month')
+                'title'       => _('Instances not used in last month'),
+                'description' =>  _('Generates a report listing instances that were not used in the last month.')
             ],
             [
                 'id'          => 'last-created',
                 'title'       => _('Instances created in the last month'),
-                'description' =>  _('Report with the list of new instances created in last month')
+                'description' => _('Generates a report listing instances created in the last month.')
             ]
         ];
 
