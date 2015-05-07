@@ -9,6 +9,110 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+    /**
+     * The list of selected elements.
+     *
+     * @type array
+     */
+    $scope.selected = {
+      contents: []
+    };
+
+    $scope.deselectAll = function() {
+      $scope.selected.contents = [];
+    };
+
+    /**
+     * Removes the selected contents from this frontpage
+     */
+    $scope.removeSelectedContents = function () {
+      var modal = $modal.open({
+        templateUrl: 'modal-drop-selected',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return true;
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          var selected =
+            $('.content-provider-element input[type="checkbox"]:checked')
+              .closest('.content-provider-element');
+
+          selected.each(function() {
+              $(this).fadeTo('slow', 0.01, function() {
+                  $(this).slideUp('slow', function() {
+                      $(this).remove();
+                  });
+               });
+          });
+
+          showMessage(frontpage_messages.remember_save_positions, 'info', 5);
+
+          $scope.selected.contents = [];
+        };
+      });
+    };
+
+    /**
+     * Archives the selected contents from all the frontpages
+     */
+    $scope.archiveSelectedContents = function () {
+      var modal = $modal.open({
+        templateUrl: 'modal-archive-selected',
+        backdrop: 'static',
+        controller: 'modalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              selected: $scope.selected
+            };
+          },
+          success: function() {
+            return function() {
+              var url = frontpage_urls.set_arquived;
+
+              return $http.get(url, { params: {'ids[]': $scope.selected.contents} })
+                .success(function(response){
+                  showMessage(response, 'success', 5);
+                }).error(function(response){
+                  showMessage(response.responseText, 'error', 5);
+                })
+            };
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if(response.status == 200) {
+          var selected =
+            $('.content-provider-element input[type="checkbox"]:checked')
+              .closest('.content-provider-element');
+
+          selected.each(function() {
+              $(this).fadeTo('slow', 0.01, function() {
+                  $(this).slideUp('slow', function() {
+                      $(this).remove();
+                  });
+               });
+          });
+
+          showMessage(frontpage_messages.remember_save_positions, 'info', 5);
+
+          $scope.selected.contents = [];
+        }
+      });
+    };
+
     function getContentsInFrontpage() {
       var els = [];
 
@@ -28,10 +132,24 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       return els;
     }
 
+    function showMessage(message, type, time) {
+      Messenger.options = {
+          extraClasses: 'messenger-fixed messenger-on-bottom',
+      };
+
+      Messenger().post({
+        message: message,
+        type: type,
+        hideAfter: time,
+        showCloseButton: true,
+        id: new Date().getTime()
+      });
+    }
+
     $scope.changeCategory = function(category) {
       window.location = routing.generate('admin_frontpage_list',
         {category: category});
-    }
+    };
 
     $scope.preview = function(category) {
       $scope.loading = true;
