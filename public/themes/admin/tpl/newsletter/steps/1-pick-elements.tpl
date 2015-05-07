@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="grid-body" id="newsletter-contents">
-            <div class="newsletter-container ng-cloak animate" ng-repeat="container in newsletterContents">
+            <div class="newsletter-container ng-cloak" ng-repeat="container in newsletterContents">
               <div class="newsletter-container-title clearfix">
                 <div class="input-group title pull-left">
                   <input ng-model="container.title" type="text" class="form-control">
@@ -84,18 +84,13 @@
                   </button>
                 </div>
               </div>
-              <div class="newsletter-container-contents clearfix">
-                <div ng-if="container.items.length == 0" class="hint-message">
-                  {t}Click in "Add contents" button above or drop contents from other containers{/t}
-                </div>
-                <ul ui-sortable="sortableOptions" ng-model="container.items" class="newsletter-container-contents-sortable">
-                  <li class="newsletter-content clearfix" ng-repeat="content in container.items">
-                    <span class="content-type">[% content.content_type_l10n_name %]</span> [% content.title %]
-                    <button class="btn btn-white pull-right" ng-click="removeContent(container, content)" type="button">
-                      <i class="fa fa-trash-o text-danger"></i>
-                    </button>
-                  </li>
-                </ul>
+              <div class="newsletter-container-contents clearfix" ui-tree data-max-depth="1">
+                <ol ui-tree-nodes="" ng-model="container.items">
+                  <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
+                </ol>
+                <ol ng>
+                  <li></li>
+                </ol>
               </div>
             </div>
           </div>
@@ -104,5 +99,16 @@
     </div>
     <input type="hidden" name="content_ids" ng-value="contents">
     <input type="hidden" name="id" value="{$newsletter->pk_newsletter}">
+    <script type="text/ng-template" id="item">
+      <div class="newsletter-item clearfix" ui-tree-handle>
+        <span></span>
+        <span>[% content.content_type_l10n_name %]</span>
+        <span class="h-seperate"></span>
+        <span class="item-title">[% content.title %]</span>
+        <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
+          <i class="fa fa-trash-o text-danger"></i>
+        </button>
+      </div>
+    </script>
   </form>
 {/block}
