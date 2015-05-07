@@ -101,12 +101,12 @@
   </div>
 </div>
 
-<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }" style="display: none;">
+<div class="page-navbar selected-navbar collapsed" class="hidden" ng-class="{ 'collapsed': selected.contents.length == 0 }">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section pull-left">
         <li class="quicklinks">
-          <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+          <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right" type="button">
             <i class="fa fa-check fa-lg"></i>
           </button>
         </li>
@@ -121,22 +121,15 @@
       </ul>
       <ul class="nav quick-section pull-right">
         <li class="quicklinks">
-          <a href="#" id="button_multiple_delete">
+          <button class="btn btn-link" ng-click="removeSelectedContents()" type="button">
             <i class="fa fa-times"></i> {t}Remove from this frontpage{/t}
-          </a>
+          </button>
         </li>
         <li class="quicklinks">
-          <a href="#" id="button_multiple_arquive">
+          <button class="btn btn-link" ng-click="archiveSelectedContents()" type="button">
             <i class="fa fa-inbox"></i> {t}Arquive{/t}
-          </a>
+          </button>
         </li>
-        {if $category_id != 0}
-        <li class="quicklinks">
-          <a href="#" id="button_multiple_suggest">
-            <i class="fa fa-star"></i>{t}Toggle suggest{/t}
-          </a>
-        </li>
-        {/if}
       </ul>
     </div>
   </div>
@@ -291,15 +284,18 @@
     <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
   </div>
 </script>
+<script type="text/ng-template" id="modal-drop-selected">
+  {include file="common/modals/_modalDropSelected.tpl"}
+</script>
+<script type="text/ng-template" id="modal-archive-selected">
+  {include file="common/modals/_modalArchiveSelected.tpl"}
+</script>
 {/block}
 
 
 {block name="modals"}
   {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
   {include file="frontpagemanager/modals/_modal_archive.tpl"}
-  {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
-  {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
-  {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
   {include file="frontpagemanager/modals/_modal_new_version.tpl"}
 
   {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}

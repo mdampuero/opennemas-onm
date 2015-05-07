@@ -182,50 +182,6 @@ jQuery(function($) {
         e.preventDefault();
         location.reload();
     });
-    /***************************************************************************
-    * Batch Actions
-    ***************************************************************************/
-    $('#modal-batch-delete').modal({ backdrop: 'static', keyboard: true, show: false });
-    $('#modal-batch-delete').on('click', 'a.btn.no', function(e,ui) {
-        e.preventDefault();
-        $('#modal-batch-delete').modal('hide');
-    });
-    $('#modal-batch-delete').on('click', 'a.btn.yes', function(e, ui) {
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
-        $('#modal-batch-delete').modal('hide');
-        remove_element(contents);
-        e.preventDefault();
-    });
-
-    $('#modal-batch-arquive').modal({ backdrop: 'static', keyboard: true, show: false });
-    $('#modal-batch-arquive').on('click', 'a.btn.no', function(e,ui) {
-        e.preventDefault();
-        $('#modal-batch-arquive').modal('hide');
-    });
-    $('#modal-batch-arquive').on('click', 'a.btn.yes', function(e, ui) {
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        var ids = [];
-
-        contents.each(function() {
-            log($(this).closest('.content-provider-element').data('content-id'));
-            ids.push($(this).closest('.content-provider-element').data('content-id'));
-        });
-        $.get(
-            frontpage_urls.set_arquived,
-            { 'ids': ids }
-        ).done(function(data) {
-            showMessage(data, 'success', 5);
-        }).fail(function(data) {
-            showMessage(data.responseText, 'error', 5);
-        });
-        $('#modal-batch-arquive').modal('hide');
-        remove_element(contents);
-        e.preventDefault();
-    });
-
 
     /***************************************************************************
     * Content elements in frontpage code
@@ -282,6 +238,7 @@ jQuery(function($) {
                 { 'ids': [delId] }
             ).done(function(data) {
                 showMessage(data, 'success', 5);
+                showMessage(frontpage_messages.remember_save_positions, 'info', 5);
             }).fail(function(data) {
                 showMessage(data.responseText, 'error', 5);
             });
@@ -355,9 +312,9 @@ jQuery(function($) {
         $('#modal-element-send-trash').modal('hide');
         e.preventDefault();
     });
-
-
-    // CUSTOMIZE CONTENTS
+    /***************************************************************************
+    * Customized content
+    ***************************************************************************/
     $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.change-color', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
@@ -536,12 +493,9 @@ jQuery(function($) {
         $('#modal-element-customize-content').modal('hide');
         e.preventDefault();
     });
-
-
     /***************************************************************************
     * Content provider code
     ***************************************************************************/
-
     $('#content-provider').dialog({ minWidth: 800, autoOpen: false, maxHeight: 500 });
 
     $('#content-provider .content-provider-block-wrapper').tabs({
@@ -579,12 +533,9 @@ jQuery(function($) {
             $('#content-provider .spinner').hide();
         });
     });
-
-
     /***************************************************************************
     * General buttons actions code
     ***************************************************************************/
-
     $('#button_addnewcontents').on('click', function(e, ui) {
         e.preventDefault();
         $('#content-provider').dialog('open');
@@ -618,40 +569,4 @@ jQuery(function($) {
             });
         }
     });
-
-    $('#button_multiple_delete').on('click', function(e,ui) {
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if (contents.length > 0) {
-            $('#modal-batch-delete').modal('show');
-        }
-    });
-
-    $('#button_multiple_arquive').on('click', function(e,ui) {
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        if (contents.length > 0) {
-            $('#modal-batch-arquive').modal('show');
-        }
-    });
-
-    $('#button_multiple_suggest').on('click', function(e,ui) {
-        e.preventDefault();
-        var contents = $('#frontpagemanager .content-provider-element input[type="checkbox"]:checked').closest('.content-provider-element');
-        var contentIds = [];
-        $(contents).each(function() {
-            $(this).toggleClass('suggested');
-            contentIds.push($(this).data('content-id'));
-        });
-        if (contentIds) {
-            log(frontpage_urls.toggle_suggested, contentIds);
-            $.get(
-                frontpage_urls.toggle_suggested,
-                { 'ids': contentIds }
-            ).done(function(data) {
-            }).fail(function(data) {
-            });
-        }
-    });
-
 });
