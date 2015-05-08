@@ -47,7 +47,7 @@
                     "homepage": "http://www.lickmychip.com/"
                 },
                 {
-                    "name": "nlegoff",
+                    "name": "Nicolas Le Goff",
                     "email": "legoff.n@gmail.com"
                 },
                 {
@@ -948,8 +948,14 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zikula/NativeSession",
-                "reference": "81653296944b00be03364a6ccc111ccafa52f087"
+                "url": "https://github.com/drak/NativeSession.git",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/f2b14ad483605a8d4b898c260bec7512347ca600",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
@@ -961,6 +967,7 @@
                     "Drak": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -971,7 +978,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2015-03-31 17:40:46"
+            "time": "2013-03-11 11:07:59"
         },
         {
             "name": "drexarj/disqus-php",
@@ -1045,23 +1052,24 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "b8b3d61b3ff22912f457c16efd8bb855c024f2a6"
+                "reference": "92a4fa310972729618094e2bd2748db894d67690"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/b8b3d61b3ff22912f457c16efd8bb855c024f2a6",
-                "reference": "b8b3d61b3ff22912f457c16efd8bb855c024f2a6",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/92a4fa310972729618094e2bd2748db894d67690",
+                "reference": "92a4fa310972729618094e2bd2748db894d67690",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": ">=5.4"
             },
             "require-dev": {
-                "behat/behat": "2.4.*@stable"
+                "behat/behat": "2.5.*",
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -1084,7 +1092,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2014-09-09 11:28:01"
+            "time": "2015-05-08 16:15:01"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -2354,13 +2362,13 @@
             "version": "v3.1.21",
             "source": {
                 "type": "git",
-                "url": "https://github.com/smarty-php/smarty.git",
-                "reference": "1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a"
+                "url": "https://github.com/uwetews/smarty3-dist.git",
+                "reference": "1441f32fce8494a0b153551fe2b659f5ce8e7eed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smarty-php/smarty/zipball/1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a",
-                "reference": "1f878e6d746ecc8ec8d00d9c75044cf7d23ad94a",
+                "url": "https://api.github.com/repos/uwetews/smarty3-dist/zipball/1441f32fce8494a0b153551fe2b659f5ce8e7eed",
+                "reference": "1441f32fce8494a0b153551fe2b659f5ce8e7eed",
                 "shasum": ""
             },
             "require": {
@@ -2402,7 +2410,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-31 04:22:20"
+            "time": "2014-10-17 23:19:29"
         },
         {
             "name": "swiftmailer/swiftmailer",
