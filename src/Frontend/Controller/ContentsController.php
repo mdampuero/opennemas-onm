@@ -103,7 +103,7 @@ class ContentsController extends Controller
 
         // Fetch content
         $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
-        $content = unserialize($content);
+        $content = @unserialize($content);
 
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
