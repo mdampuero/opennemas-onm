@@ -51,9 +51,9 @@
   <div class="row">
     <div class="col-md-12">
       <div class="radio">
-        <input id="video-inner-button-column-265x95" name="type_advertisement" type="radio" value="303" {if isset($advertisement) && $advertisement->type_advertisement == 303}checked="checked" {/if}/>
-        <label for="video-inner-button-column-265x95">
-          Button Column (265x95)
+        <input id="video-inner-button-column-300x250" name="type_advertisement" type="radio" value="303" {if isset($advertisement) && $advertisement->type_advertisement == 303}checked="checked" {/if}/>
+        <label for="video-inner-button-column-300x250">
+          Button Column (300x250)
         </label>
       </div>
     </div>
