@@ -14,7 +14,7 @@
         <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
         <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
         {block name="header-css"}
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="stylesheet" type="text/css" href="/assets/components/font-awesome/css/font-awesome.min.css">
 
         {stylesheets src="
