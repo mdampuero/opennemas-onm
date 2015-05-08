@@ -133,21 +133,28 @@
       </div>
     </div>
   </div>
-  <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="radio">
-        <input id="button-column-1-position-3-200x200" name="type_advertisement" type="radio" value="13" {if isset($advertisement) && $advertisement->type_advertisement == 13}checked="checked" {/if}/>
-        <label for="button-column-1-position-3-200x200">
-          Button Column 1 position 3  (200x200)
+        <input id="button-column-1-position-3-300x*" name="type_advertisement" type="radio" value="13" {if isset($advertisement) && $advertisement->type_advertisement == 13}checked="checked" {/if}/>
+        <label for="button-column-1-position-3-300x*">
+          Button Column 1 position 3  (300X*)
         </label>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="radio">
-        <input id="button-column-3-position-3-200x200" name="type_advertisement" type="radio" value="33" {if isset($advertisement) && $advertisement->type_advertisement == 33}checked="checked" {/if}/>
-        <label for="button-column-3-position-3-200x200">
-          Button Column 3 position 3 (200x200)
+        <input id="button-column-2-position-3-300x*" name="type_advertisement" type="radio" value="23" {if isset($advertisement) && $advertisement->type_advertisement == 23}checked="checked" {/if}/>
+        <label for="button-column-3-position-3-300x*">
+          Button Column 3 position 3 (300X*)
+        </label>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="radio">
+        <input id="button-column-3-position-3-300x*" name="type_advertisement" type="radio" value="33" {if isset($advertisement) && $advertisement->type_advertisement == 33}checked="checked" {/if}/>
+        <label for="button-column-3-position-3-300x*">
+          Button Column 3 position 3 (300X*)
         </label>
       </div>
     </div>
@@ -224,21 +231,28 @@
       </div>
     </div>
   </div>
-  <hr>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="radio">
-        <input id="button-column-1-position-6-200x200" name="type_advertisement" type="radio" value="16" {if isset($advertisement) && $advertisement->type_advertisement == 16}checked="checked" {/if}/>
-        <label for="button-column-1-position-6-200x200">
-          Button Column 1 position 6  (200x200)
+        <input id="button-column-1-position-6-300x*" name="type_advertisement" type="radio" value="16" {if isset($advertisement) && $advertisement->type_advertisement == 16}checked="checked" {/if}/>
+        <label for="button-column-1-position-6-300x*">
+          Button Column 1 position 6  (300X*)
         </label>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <div class="radio">
-        <input id="button-column-3-position-6-200x200" name="type_advertisement" type="radio" value="36" {if isset($advertisement) && $advertisement->type_advertisement == 36}checked="checked" {/if}/>
-        <label for="button-column-3-position-6-200x200">
-          Button Column 3 position 6 (200x200)
+        <input id="button-column-2-position-6-300x*" name="type_advertisement" type="radio" value="26" {if isset($advertisement) && $advertisement->type_advertisement == 26}checked="checked" {/if}/>
+        <label for="button-column-2-position-6-300x*">
+          Button Column 2 position 6 (300X*)
+        </label>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="radio">
+        <input id="button-column-3-position-6-300x*" name="type_advertisement" type="radio" value="36" {if isset($advertisement) && $advertisement->type_advertisement == 36}checked="checked" {/if}/>
+        <label for="button-column-3-position-6-300x*">
+          Button Column 3 position 6 (300X*)
         </label>
       </div>
     </div>
