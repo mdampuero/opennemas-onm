@@ -460,10 +460,11 @@ class VideosController extends Controller
     {
         $url = $request->query->get('url', null, FILTER_DEFAULT);
         $url = rawurldecode($url);
+        $params = $this->container->getParameter('panorama');
 
         if ($url) {
             try {
-                $videoP = new \Panorama\Video($url);
+                $videoP = new \Panorama\Video($url, $params);
                 $information = $videoP->getVideoDetails();
 
                 $output = $this->renderView(
@@ -505,7 +506,6 @@ class VideosController extends Controller
 
             return $this->redirect($this->generateUrl('admin_videos_config'));
         } else {
-
             $configurationsKeys = array(
                 'video_settings',
             );
