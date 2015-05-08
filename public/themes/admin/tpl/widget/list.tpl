@@ -18,7 +18,7 @@
           <ul class="nav quick-section">
             {acl isAllowed="WIDGET_CREATE"}
             <li class="quicklinks">
-              <a href="{url name=admin_widget_create category=$category}" class="btn btn-primary">
+              <a href="{url name=admin_widget_create}" class="btn btn-primary">
                 <i class="fa fa-plus fa-lg"></i>
                 {t}Create{/t}
               </a>

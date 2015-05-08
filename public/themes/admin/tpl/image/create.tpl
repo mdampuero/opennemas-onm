@@ -86,7 +86,7 @@ var image_uploader ={
         {t}Please click in the "Edit uploaded" button from above to edit latest upload photo's data{/t}
     </div><!-- / -->
 
-    <form id="fileupload" action="{url name=admin_image_create category=$category}" method="POST" enctype="multipart/form-data">
+    <form id="fileupload" action="{url name=admin_image_create}" method="POST" enctype="multipart/form-data">
     <div class="grid simple">
         <div class="grid-title">
             <div class="fileupload-buttonbar pull-left">

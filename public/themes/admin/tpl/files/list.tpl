@@ -61,7 +61,7 @@
             {/if}
             {acl isAllowed="BOOK_CREATE"}
             <li>
-              <a class="btn btn-primary" href="{url name=admin_files_create category=$category page=$page}" title="{t}New file{/t}">
+              <a class="btn btn-primary" href="{url name=admin_files_create}" title="{t}New file{/t}">
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>

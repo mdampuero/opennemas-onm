@@ -65,7 +65,7 @@
             {/acl}
             {acl isAllowed="ALBUM_CREATE"}
             <li class="quicklinks">
-              <a class="btn btn-primary" href="{url name=admin_album_create category=$category}" title="{t}New album{/t}" >
+              <a class="btn btn-primary" href="{url name=admin_album_create}" title="{t}New album{/t}" >
                 <span class="fa fa-plus"></span>
                 {t}Create{/t}
               </a>
