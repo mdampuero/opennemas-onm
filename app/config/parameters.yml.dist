@@ -120,3 +120,7 @@ parameters:
     sales_email: sales@openhost.es
 
     backend_analytics.enabled: false
+
+    panorama:
+        youtube:
+            api_key: your api_key here
