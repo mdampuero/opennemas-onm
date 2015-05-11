@@ -47,7 +47,7 @@ class WelcomeController extends Controller
         shuffle($availableModules);
         $availableModules = array_splice($availableModules, 0, 5);
 
-        $youtubeVideoIds = $this->getYoutubeVideoIds();
+        $youtubeVideoIds = ['N40x_kPXLdU','UUNlwGeFgL0', 'uPj6dsEuQdk'];
 
         $user = $this->getUser();
         $tourDone = $user->getMeta('initial_tour_done');
