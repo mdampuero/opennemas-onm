@@ -1016,12 +1016,25 @@ class NewsAgencyController extends Controller
                     // Fetch author data
                     $authorArray = get_object_vars($authorObj);
 
+                    // Set user as deactivated author without privileges.
+                    $authorArray['activated'] = 0;
+                    $authorArray['id_user_group'] = ['3'];
+                    $authorArray['accesscategories'] = [];
+
                     // Create author
                     $user = new \User();
 
                     if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
                         // Create new user
-                        $user->create($authorArray);
+                        if ($user->create($authorArray)) {
+                            // Write in log
+                            $logger = $this->get('application.log');
+                            $logger->info(
+                                'User '.$authorArray['username'].
+                                ' was created from importer by user '.
+                                $_SESSION['username'].' ('.$_SESSION['userid'].')'
+                            );
+                        }
 
                         // Set user meta if exists
                         if ($authorObj->meta) {
