@@ -198,12 +198,13 @@ class AssetController extends Controller
 
         // render
         if (count($contentsInHomepage) > 0) {
-            $response .= "/********************************"
-                      ." * CSS for contents in frontpage of category $categoryName"
-                      ." *********************************/";
+            $response .= "/**********************************************************\n"
+                      ."   CSS for contents in frontpage of category $categoryName\n"
+                      ." **********************************************************/\n";
 
-            // Font and background color
+            $response .= "@media(min-width:768px) {\n";
             foreach ($contentsInHomepage as $content) {
+                // Background color
                 if (!empty($content->bgcolor)) {
                     $response .= "#content-{$content->pk_content}.onm-new { "
                             ."background-color:{$content->bgcolor} !important; }\n";
@@ -211,11 +212,6 @@ class AssetController extends Controller
                     $response .= "#content-{$content->pk_content}.colorize { "
                             ."padding:10px !important; border-radius:5px !important; }\n";
                 }
-            }
-
-            // Font size only for desktop
-            $response .= "@media(min-width:768px) {\n";
-            foreach ($contentsInHomepage as $content) {
                 if (!empty($content->title_props)) {
                     $response .= "#content-{$content->pk_content} .custom-text, "
                                 ."#content-{$content->pk_content} .title a, "
