@@ -1044,7 +1044,7 @@ CREATE TABLE `user_groups` (
 
 LOCK TABLES `user_groups` WRITE;
 /*!40000 ALTER TABLE `user_groups` DISABLE KEYS */;
-INSERT INTO `user_groups` VALUES (3,'Autores'),(4,'Masters'),(5,'Administrador'),(6,'Usuarios');
+INSERT INTO `user_groups` VALUES (3,'Autores'),(5,'Administrador'),(6,'Usuarios');
 /*!40000 ALTER TABLE `user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1133,7 +1133,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'convallis-vitae','4ee78fcf5fa4d511213d004f69453d80',15,'','',0,'convallis@opennemas.com','Convallis Vitae',0,0,NULL,0,'3'),(2,'director','4ee78fcf5fa47511213d004f69453d80',15,'','',0,'director@opennemas.com','Director',0,0,NULL,0,'3'),(1,'editorial','0dc4de960c0e39e92e8d7136239e77ed',15,'','',0,'editorial@opennemas.com','Editorial',0,0,NULL,0,'3'),(4,'macada','2f575705daf41049194613e47027200b',30,'','',0,'david.martinez@openhost.es','David Martinez',0,0,NULL,1,'4'),(5,'fran','6d87cd9493f11b830bbfdf628c2c4f08',65,'','',0,'fran@openhost.es','Francisco Dieguez',0,0,NULL,1,'4'),(6,'alex','4c246829b53bc5712d52ee777c52ebe7',60,'','',0,'alex@openhost.es','Alexandre Rico',0,0,NULL,1,'4'),(7,'sandra','bd80e7c35b56dccd2d1796cf39cd05f6',99,'','',0,'sandra@openhost.es','Sandra Pereira',0,0,NULL,1,'4');
+INSERT INTO `users` VALUES (3,'convallis-vitae','4ee78fcf5fa4d511213d004f69453d80',15,'','',0,'convallis@opennemas.com','Convallis Vitae',0,0,NULL,0,'3'),(2,'director','4ee78fcf5fa47511213d004f69453d80',15,'','',0,'director@opennemas.com','Director',0,0,NULL,0,'3'),(1,'editorial','0dc4de960c0e39e92e8d7136239e77ed',15,'','',0,'editorial@opennemas.com','Editorial',0,0,NULL,0,'3');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
