@@ -431,7 +431,10 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
       }
 
       var cleaned = itemService.cleanFilters($scope.criteria);
-      cleaned.union = $scope.union;
+
+      if (Object.getOwnPropertyNames(cleaned).length > 0) {
+        cleaned.union = $scope.union;
+      }
 
       var data = {
         criteria: cleaned,
