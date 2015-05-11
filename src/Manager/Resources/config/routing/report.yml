@@ -1,0 +1,5 @@
+manager_reports_list:
+    path: /reports
+    options:
+        expose: true
+

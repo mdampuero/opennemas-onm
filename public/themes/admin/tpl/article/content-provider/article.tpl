@@ -4,7 +4,10 @@
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} {in_frontpage_class item=$content} clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$content->id}">
+        <div class="checkbox check-default">
+          <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
+          <label for="checkbox-{$content->id}"></label>
+        </div>
         <div class="title">
             {if $content->in_frontpage && ($params['home'] != true)}<span class="in_frontpage"></span>{/if}
             {if !($content->in_frontpage) && ($params['home'] != true)}<i class="fa fa-star content-icon-suggested"></i>{/if}

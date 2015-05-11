@@ -99,7 +99,9 @@
 
 .content-provider-element {display:block;}
 
-.content .description div {width:90%;display:inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align:middle}
+.content .description div {width:85%;display:inline-block;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align:middle}
+.content .description div.checkbox {display: inline;}
+.content .description div.checkbox label {margin-right: 0;padding-left: 20px;}
 .content .description span.type {font-weight:bold;}
 .content .content-action-buttons{display:none;position:absolute;top:3px;right:3px;}
 

@@ -21,13 +21,38 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 class OnmUserProvider implements UserProviderInterface
 {
     /**
-     * Initializes the OnmUserProvider.
+     * The cache service.
      *
-     * @param Onm\Database\DbalWrapper $conn The database connection.
+     * @var AbstractCache
      */
-    public function __construct($conn)
+    protected $cache;
+
+    /**
+     * The instance manager service.
+     *
+     * @var InstanceManager
+     */
+    protected $im;
+
+    /**
+     * The user repository service
+     *
+     * @var UserManager
+     */
+    protected $um;
+
+    /**
+     * Initializes the current user provider.
+     *
+     * @param CacheInterface  $cache The cache object.
+     * @param InstanceManager $im    The instance manager.
+     * @param UserRepository  $um    The user repository.
+     */
+    public function __construct($cache, $im, $um)
     {
-        $this->conn = $conn;
+        $this->cache = $cache;
+        $this->im = $im;
+        $this->um = $um;
     }
 
     /**
@@ -44,22 +69,25 @@ class OnmUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        if (strpos($username, '\\')) {
-            throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
+        $criteria = array(
+            'union' => 'OR',
+            'username' => array(array('value' => $username)),
+            'email' => array(array('value' => $username))
+        );
+
+        $user = $this->um->findOneBy($criteria);
+
+        if (!$user) {
+            $this->um->selectDatabase('onm-instances');
+            $this->cache->setNamespace('onm_manager');
+            $GLOBALS['application']->conn->selectDatabase('onm-instances');
+
+            $user = $this->um->findOneBy($criteria);
         }
 
-        $user = new \User();
-        if (!$user->checkIfExistsUserName($username)
-            && !$user->checkIfExistsUserEmail($username)
-        ) {
+        if (!$user) {
             throw new UsernameNotFoundException(_('Could not find user. Sorry!'));
         }
-
-        $username = $this->conn->quote($username);
-        $sql = 'SELECT `id` FROM users WHERE username = ' . $username . ' OR email = ' . $username;
-        $results = $this->conn->fetchAssoc($sql);
-
-        $user->read($results['id']);
 
         return $user;
     }

@@ -20,6 +20,13 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     'use strict';
 
     /**
+     * The routing service.
+     *
+     * @type Object
+     */
+    $scope.routing = routing;
+
+    /**
      * The current sidebar.
      *
      * @type Object

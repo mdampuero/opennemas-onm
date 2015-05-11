@@ -67,7 +67,7 @@
          */
         this.getDefaults = function() {
           return this.defaults;
-        }
+        };
 
         /**
          * @function getUrl

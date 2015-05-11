@@ -3,7 +3,10 @@
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
-        <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.video_loop.index}">
+        <div class="checkbox check-default">
+          <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
+          <label for="checkbox-{$content->id}"></label>
+        </div>
         <div class="title">
             <span class="type">Video</span>
             {$content->title}

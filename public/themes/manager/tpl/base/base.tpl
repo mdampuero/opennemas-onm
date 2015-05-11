@@ -125,7 +125,7 @@
             </li>
           </ul>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" ng-if="user.id">
           <ul class="nav quick-section">
             <li class="quicklinks notifications dropdown">
               <a href="#" data-toggle="dropdown" tooltip="{t}Notifications{/t}" tooltip-placement="bottom">
@@ -156,15 +156,22 @@
             </li>
             <li class="quicklinks user-info dropdown">
               <span class="link" data-toggle="dropdown">
+                <i class="fa fa-rebel text-danger master-user"></i>
                 <span class="title">
                   [% user.name %]
                 </span>
                 <div class="profile-pic">
-                  <img class="gravatar" email="[% user.email %]" image="1" size="25" width="25" height="25">
+                  <gravatar ng-model="user.email" size="25"></gravatar>
                 </div>
                 <i class="fa fa-angle-down"></i>
               </span>
-              <ul class="dropdown-menu on-right" role="menu">
+              <ul class="dropdown-menu" role="menu">
+                <li class="text-danger">
+                  <span class="dropdown-static-item">
+                    {t}This user is a master{/t}
+                  </span>
+                </li>
+                <li class="divider"></li>
                 <li>
                   <a ng-href="[% routing.ngGenerate('manager_user_show', { id: 'me' }) %]">
                     <i class="fa fa-user"></i>
