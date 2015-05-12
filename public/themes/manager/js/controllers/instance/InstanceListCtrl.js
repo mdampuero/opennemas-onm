@@ -80,13 +80,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
     }
 
     /**
-     * Default join operator for filters.
-     *
-     * @type string
-     */
-    $scope.union = 'OR';
-
-    /**
      * Checks if a columns is selected.
      *
      * @param string id The columns name.
@@ -432,10 +425,6 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
 
       var cleaned = itemService.cleanFilters($scope.criteria);
 
-      if (Object.getOwnPropertyNames(cleaned).length > 0) {
-        cleaned.union = $scope.union;
-      }
-
       var data = {
         criteria: cleaned,
         orderBy: $scope.orderBy,
@@ -444,7 +433,7 @@ angular.module('ManagerApp.controllers').controller('InstanceListCtrl', [
       };
 
       itemService.encodeFilters($scope.criteria, $scope.orderBy,
-        $scope.pagination.epp, $scope.pagination.page, $scope.union);
+        $scope.pagination.epp, $scope.pagination.page);
 
       itemService.list('manager_ws_instances_list', data).then(
         function(response) {

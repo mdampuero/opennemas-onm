@@ -341,6 +341,10 @@ class InstanceController extends Controller
             $order[$value['name']] = $value['value'];
         }
 
+        if (!empty($criteria)) {
+            $criteria['union'] = 'OR';
+        }
+
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
