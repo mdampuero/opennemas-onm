@@ -46,7 +46,15 @@ class GettingStartedController extends Controller
 
         $params = array();
 
-        $user = $this->get('user_repository')->find($this->getUser()->id);
+        $database = $this->get('instance_manager')->current_instance->getDatabaseName();
+        $namespace = $this->get('cache')->getNamespace();
+
+        $user = $this->get('onm_user_provider')->loadUserByUsername(
+            $this->getUser()->getUsername()
+        );
+
+        $this->get('dbal_connection')->selectDatabase($database);
+        $this->get('cache')->setNamespace($namespace);
 
         if ($user->getMeta('facebook_id')) {
             $params['facebook'] = true;
@@ -68,15 +76,20 @@ class GettingStartedController extends Controller
      */
     public function acceptTermsAction(Request $request)
     {
+        $user = $this->getUser();
+
+        if ($user->isMaster()) {
+            $GLOBALS['application']->conn->selectDatabase('onm-instances');
+        }
+
         if ($request->get('accept') && $request->get('accept') === 'true') {
             $date = new \DateTime(null, new \DateTimeZone('UTC'));
-            $user = $this->getUser();
+
             $newMeta = array('terms_accepted' => $date->format('Y-m-d H:i:s'));
             $user->setMeta($newMeta);
 
             $user->meta = array_merge($user->meta, $newMeta);
         } else {
-            $user = $this->getUser();
             $user->deleteMetaKey($user->id, 'terms_accepted');
         }
 
