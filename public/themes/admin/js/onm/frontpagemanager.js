@@ -9,7 +9,7 @@ function makeContentProviderAndPlaceholdersSortable() {
             frontpage_info.changed=true;
         },
         stop: function(event,ui) {
-            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3, 1234);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -25,7 +25,7 @@ function makeContentProviderAndPlaceholdersSortable() {
             frontpage_info.changed=true;
         },
         stop: function(event,ui) {
-            showMessage(frontpage_messages.remember_save_positions, 'info', 3);
+            showMessage(frontpage_messages.remember_save_positions, 'info', 3, 1234);
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -132,7 +132,7 @@ function remove_element(element) {
     });
 }
 
-function showMessage(message, type, time) {
+function showMessage(message, type, time, id) {
   Messenger.options = {
       extraClasses: 'messenger-fixed messenger-on-bottom',
   };
@@ -142,7 +142,7 @@ function showMessage(message, type, time) {
     type: type,
     hideAfter: time,
     showCloseButton: true,
-    id: new Date().getTime()
+    id: id
   });
 }
 
@@ -237,10 +237,10 @@ jQuery(function($) {
                 frontpage_urls.set_arquived,
                 { 'ids': [delId] }
             ).done(function(data) {
-                showMessage(data, 'success', 5);
-                showMessage(frontpage_messages.remember_save_positions, 'info', 5);
+                showMessage(data, 'success', 5, new Date().getTime());
+                showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
             }).fail(function(data) {
-                showMessage(data.responseText, 'error', 5);
+                showMessage(data.responseText, 'error', 5, new Date().getTime());
             });
 
         }
@@ -260,7 +260,7 @@ jQuery(function($) {
         e.preventDefault();
         var parent = $(this).closest('.content-provider-element');
         remove_element(parent);
-        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
     });
 
     // suggest-home
@@ -300,7 +300,7 @@ jQuery(function($) {
                 { id: delId }
             );
         }
-        showMessage(frontpage_messages.remember_save_positions, 'info', 5);
+        showMessage(frontpage_messages.remember_save_positions, 'info', 5, new Date().getTime());
         $('#modal-element-send-trash').modal('hide');
         $('body').data('element-for-del').animate({ 'backgroundColor': '#fb6c6c' },300).animate({ 'opacity': 0, 'height': 0 }, 300, function() {
             $(this).remove();
@@ -561,11 +561,11 @@ jQuery(function($) {
                     //showMessage('Saving', 'info', 1);
                 }
             }).done(function(data) {
-                showMessage(data.message, 'success', 5);
+                showMessage(data.message, 'success', 5, new Date().getTime());
                 frontpage_info.last_saved = data.date;
             }).fail(function(data, ajaxOptions, thrownError) {
                 var response = $.parseJSON(data.responseText);
-                showMessage(response.message, 'error', 5);
+                showMessage(response.message, 'error', 5, new Date().getTime());
             });
         }
     });
