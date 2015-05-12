@@ -1,0 +1,5 @@
+backend_ws_market_list:
+    path:     /market/list
+    defaults: { _controller: BackendWebServiceBundle:Market:list }
+    options:
+        expose: true
