@@ -373,6 +373,12 @@ $menuXml = [
         ],
     ],
     [
+        'id'    => 'market',
+        'title' => _('Market'),
+        'icon'  => 'fa fa-shopping-cart',
+        'link'  => url('admin_market_list')
+    ],
+    [
         'id'      => 'faq_and_support',
         'class'   => 'visible-xs',
         'link'    => '#',
