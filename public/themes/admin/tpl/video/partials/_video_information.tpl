@@ -23,7 +23,7 @@
   <div class="controls">
     <div class="thumbnail center">
       <div class="video_player" style="max-width:600px; overflow:hidden; margin:0 auto">
-        {$information['embedHTML']}
+        {$information['embedHTML']|replace:'http://':'https://'}
       </div>
     </div>
     <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
