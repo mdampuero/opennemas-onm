@@ -1739,7 +1739,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function isEnabled()
     {
-        return $this->activated;
+        return $this->isMaster() || $this->activated;
     }
 
     /**
