@@ -11,6 +11,8 @@
 
 namespace Framework\EventListener;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -35,13 +37,15 @@ class UserListener implements EventSubscriberInterface
     /**
      * Initializes the listener.
      *
-     * @param SecurityContextInterface $context  The security context service.
-     * @param OnmUserProvider          $provider The user provider.
+     * @param SecurityContext $context  The security context service.
+     * @param OnmUserProvider $provider The user provider.
+     * @param Router          $router   The router service.
      */
-    public function __construct($context, $provider)
+    public function __construct($context, $provider, $router)
     {
         $this->context  = $context;
         $this->provider = $provider;
+        $this->router   = $router;
     }
 
     /**
@@ -49,11 +53,11 @@ class UserListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelResponse(GetResponseEvent $event)
     {
-        if (preg_match('@^/_.*@', $event->getRequest()->getRequestUri()) != 1
-            && $this->context->getToken()
-        ) {
+        $uri = $event->getRequest()->getRequestUri();
+
+        if (preg_match('@^/_.*@', $uri) != 1 && $this->context->getToken()) {
             $token = $this->context->getToken();
             $user = $token->getUser();
 
@@ -61,6 +65,30 @@ class UserListener implements EventSubscriberInterface
                 $user = $this->provider->loadUserByUsername($user->getUsername());
                 $user->eraseCredentials();
                 $token->setUser($user);
+            }
+
+            $database  = getService('instance_manager')->current_instance->getDatabaseName();
+            $namespace = getService('instance_manager')->current_instance->internal_name;
+
+            getService('dbal_connection')->selectDatabase($database);
+            getService('cache')->setNamespace($namespace);
+            $GLOBALS['application']->conn->selectDatabase($database);
+
+            if ($user->isMaster() || $user->isEnabled()) {
+                return;
+            }
+
+            if (preg_match('@^/admin.*@', $uri) === 1) {
+                $response =  new RedirectResponse(
+                    $this->router->generate('admin_logout')
+                );
+
+                $event->setResponse($response);
+            }
+
+            if (preg_match('@^/manager(ws).*@', $uri) === 1) {
+                $response = new JsonResponse('', 401);
+                $event->setResponse($response);
             }
         }
     }
