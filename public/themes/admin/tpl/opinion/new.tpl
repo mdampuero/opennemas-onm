@@ -207,7 +207,7 @@
                                                 {/foreach}
                                             </select>
                                         {aclelse}
-                                            <select id="fk_author" name="fk_author" required="required">
+                                            <select id="fk_author" name="fk_author">
                                                 <option value="{$smarty.session.id}" selected >{$smarty.session.realname}</option>
                                             </select>
                                         {/acl}
