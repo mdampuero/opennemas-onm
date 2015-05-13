@@ -86,7 +86,7 @@
                                                 <div class="form-group recaptcha-element">
                                                   <label for="recaptcha" class="form-label">{t}Search for numbers and letters in the image and write them below:{/t}</label>
                                                   <div class="controls">
-                                                      <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                                                      <script type="text/javascript" src="//www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
                                                       <noscript>
                                                       <iframe src="//www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
                                                       <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
