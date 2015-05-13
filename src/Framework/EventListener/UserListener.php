@@ -53,7 +53,7 @@ class UserListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelResponse(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
         $uri = $event->getRequest()->getRequestUri();
 
