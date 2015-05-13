@@ -138,7 +138,8 @@ angular.module('onm.picker')
                               <i class=\"fa\" ng-class=\"{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }\"></i>\
                             </div>\
                           </label>\
-                          <textarea id=\"description\" ng-blur=\"saveDescription(selected.lastSelected.id)\" ng-model=\"selected.lastSelected.description\" cols=\"30\" rows=\"2\"></textarea>\
+                          [% selected.lastSelected.description %]\
+                          <!--<textarea id=\"description\" ng-blur=\"saveDescription(selected.lastSelected.id)\" ng-model=\"selected.lastSelected.description\" cols=\"30\" rows=\"2\"></textarea>-->\
                         </div>\
                       </li>\
                     </ul>\
