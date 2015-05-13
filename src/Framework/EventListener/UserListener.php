@@ -57,15 +57,17 @@ class UserListener implements EventSubscriberInterface
     {
         $uri = $event->getRequest()->getRequestUri();
 
-        if (preg_match('@^/_.*@', $uri) != 1 && $this->context->getToken()) {
+        if (preg_match('@^/_.*@', $uri) != 1
+            && $this->context->getToken()
+            && $this->context->getToken()->getUser()
+            && $this->context->getToken()->getUser() != 'anon.'
+        ) {
             $token = $this->context->getToken();
             $user = $token->getUser();
 
-            if ($user && $user != 'anon.') {
-                $user = $this->provider->loadUserByUsername($user->getUsername());
-                $user->eraseCredentials();
-                $token->setUser($user);
-            }
+            $user = $this->provider->loadUserByUsername($user->getUsername());
+            $user->eraseCredentials();
+            $token->setUser($user);
 
             $database  = getService('instance_manager')->current_instance->getDatabaseName();
             $namespace = getService('instance_manager')->current_instance->internal_name;
