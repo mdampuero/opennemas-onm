@@ -46,6 +46,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * Constructs a new handler.
      *
      * @param SecurityContext $context The security context.
+     * @param Router          $router   The router service.
      * @param Session         $session The session.
      */
     public function __construct($context, $router, $session)
