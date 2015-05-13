@@ -58,14 +58,37 @@
           return $scope.cart && $scope.cart.indexOf(item) !== -1;
         };
 
+        /**
+         * @function list
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Finds the list of available modules.
+         */
         $scope.list = function() {
           var url = routing.generate('backend_ws_market_list');
 
           $http.get(url).success(function(response) {
             $scope.contents = response.results;
-          }).error(function() {
-            messenger.post({ type: 'error' });
+          }).error(function(response) {
+            messenger.post({ type: 'error', message: response });
           });
+        };
+
+        /**
+         * @function removeFromCart
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Removes an item from cart.
+         *
+         * @param {Object} item  The item to remove.
+         * @param {Object} event The click event object.
+         */
+        $scope.removeFromCart = function(item, event) {
+          event.stopPropagation();
+
+          $scope.cart.splice($scope.cart.indexOf(item), 1);
         };
 
         $scope.list();
