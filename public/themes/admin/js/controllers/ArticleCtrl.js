@@ -65,7 +65,10 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       if ($scope.photo1) {
         $scope.img1 = $scope.photo1.id;
 
-        if (angular.isUndefined($scope.img1_footer) || nv.id !== ov.id) {
+        if (angular.isUndefined($scope.img1_footer)
+          || angular.isUndefined(ov)
+          || nv.id !== ov.id
+        ) {
           $scope.img1_footer = $scope.photo1.description;
         }
       }
@@ -83,7 +86,10 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       if ($scope.photo2) {
         $scope.img2 = $scope.photo2.id;
 
-        if (angular.isUndefined($scope.img2_footer) || nv.id !== ov.id) {
+        if (angular.isUndefined($scope.img2_footer)
+          || angular.isUndefined(ov)
+          || nv.id !== ov.id
+        ) {
           $scope.img2_footer = $scope.photo2.description;
         }
       }
@@ -101,7 +107,10 @@ angular.module('BackendApp.controllers').controller('ArticleCtrl', [
       if ($scope.photo3) {
         $scope.imageHome = $scope.photo3.id;
 
-        if (angular.isUndefined($scope.imageHomeFooter) || nv.id !== ov.id) {
+        if (angular.isUndefined($scope.imageHomeFooter)
+          || angular.isUndefined(ov)
+          || nv.id !== ov.id
+        ) {
           $scope.imageHomeFooter = $scope.photo3.description;
         }
       }
