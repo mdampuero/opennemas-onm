@@ -78,17 +78,21 @@ class UserListener implements EventSubscriberInterface
                 return;
             }
 
-            if (preg_match('@^/admin.*@', $uri) === 1) {
-                $response =  new RedirectResponse(
-                    $this->router->generate('admin_logout')
-                );
-
-                $event->setResponse($response);
+            // Logout for web services
+            if (preg_match('@^/admin/entityws.*@', $uri) === 1
+                || preg_match('@^/manager(ws).*@', $uri) === 1
+            ) {
+                $event->setResponse(new JsonResponse(null, 401));
+                return;
             }
 
-            if (preg_match('@^/manager(ws).*@', $uri) === 1) {
-                $response = new JsonResponse('', 401);
-                $event->setResponse($response);
+            // Logout for backend
+            if (preg_match('@^/admin.*@', $uri) === 1) {
+                $event->setResponse(
+                    new RedirectResponse(
+                        $this->router->generate('admin_logout')
+                    )
+                );
             }
         }
     }
