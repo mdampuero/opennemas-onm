@@ -64,6 +64,7 @@ EOF
             throw new \InvalidArgumentException('Please specify an internal name or id.');
         }
 
+        $outputFile = $input->getOption('output_file');
         if (empty($outputFile)) {
             throw new \InvalidArgumentException('Please specify a path where you want to save the dump.');
         }
@@ -71,7 +72,6 @@ EOF
         $instanceName = $options['name'];
         $instanceId   = $options['id'];
         $databaseName = $this->getDatabaseName($instanceName, $instanceId);
-        $outputFile   = $input->getOption('output_file');
 
 
         $dumpCommand = $this->getMysqlDumpCommand($databaseName, $outputFile);
