@@ -15,34 +15,33 @@
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            <li class="quicklinks">
-              <a href="{url name=admin_menu_create}" class="btn btn-link">
-                <i class="fa fa-cart-arrow-down"></i>
-                {t}My purchases{/t}
-              </a>
-            </li>
-            <li class="quicklinks">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks dropdown">
-              <a href="#" data-toggle="dropdown">
-                {t}Cart{/t}
-                <i class="fa fa-angle-down"></i>
-              </a>
-              <div class="dropdown-menu pull-right" style="height: 200px;">
-                <scrollable>
-                  <ul>
-                    <li ng-repeat="item in cart">
-                      <a href="#">[% item.name %]</a>
-                    </li>
-                    <li>
-                      <a class="text-center" href="#">
-                        <i class="fa fa-shopping-cart"></i>
-                        {t}Checkout{/t}
-                      </a>
-                    </li>
-                  </ul>
-                </scrollable>
+            <li class="quicklinks shopping-cart dropdown">
+              <div class="p-10" data-toggle="dropdown">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="p-l-5 p-r-5">
+                  {t}Cart{/t}
+                </span>
+                <i class="fa fa-caret-down"></i>
+              </div>
+              <div class="dropdown-menu pull-right">
+                <div class="shopping-cart-placeholder">
+                  <scrollable>
+                    <ul>
+                      <li class="clearfix" ng-repeat="item in cart">
+                        <a href="#">[% item.name %]</a>
+                        <button class="btn btn-white pull-right" ng-click="removeFromCart(item, $event)">
+                          <i class="fa fa-times fa-lg text-danger"></i>
+                        </button>
+                      </li>
+                    </ul>
+                  </scrollable>
+                </div>
+                <div class="p-r-10 p-t-15">
+                  <button class="btn btn-block btn-white">
+                    <i class="fa fa-shopping-cart"></i>
+                    {t}Checkout{/t}
+                  </button>
+                </div>
               </div>
             </li>
           </ul>
@@ -118,7 +117,7 @@
       </div>
     </div>
     <div class="infinite-row clearfix">
-      <div class="col-md-4 col-sm-6" ng-repeat="content in contents | filter:criteria">
+      <div class="col-lg-4 col-sm-6" ng-repeat="content in contents | filter:criteria">
         <div class="grid simple">
           <div class="grid-body">
             <div class="row">
@@ -127,26 +126,29 @@
               </div>
               <div class="col-sm-8">
                 <h4>[% content.name %]</h4>
-                <p>[% content.description %]</p>
+                <p class="p-b-15 hidden-md">
+                  [% content.description | limitTo: 140 %]
+                  [% content.description.length > 140 ? '...' : '' %]
+                </p>
+                <div class="text-right">
+                  <button class="btn btn-white" ng-click="addToCart(content)" ng-disabled="isInCart(content)">
+                    <i class="fa fa-plus"></i>
+                    {t}Add to cart{/t}
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="pull-right pull-bottom m-b-15 m-r-15">
-              <button class="btn btn-white" ng-click="addToCart(content)" ng-disabled="isInCart(content)">
-                <i class="fa fa-plus"></i>
-                {t}Add to cart{/t}
-              </button>
             </div>
           </div>
           <div class="grid-footer">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-sm-4">
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star-o"></i>
               </div>
-              <div class="col-md-6 text-right">
-                {t}Last updated{/t}: [% content.last_updated | moment %]
+              <div class="col-sm-8 text-right">
+                {t}Updated{/t}: [% content.last_updated | moment %]
               </div>
             </div>
           </div>

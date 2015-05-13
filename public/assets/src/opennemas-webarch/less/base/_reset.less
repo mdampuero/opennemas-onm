@@ -5,23 +5,19 @@
 a {
   color:#376092;
   transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
-}
 
-a:hover,
-a:focus {
-  color:#376092;
-}
-
-.a {
-  cursor: pointer;
+  &:hover,
+  &:focus {
+    color:#376092;
+  }
 }
 
 i.ng-hide-add-active, .ng-hide-remove {
   display: inline-block !important;
 }
 
-.table td {
-  font-size: 107%;
+.a {
+  cursor: pointer;
 }
 
 .actions-navbar ul.nav li.dropdown > ul.dropdown-menu {
@@ -39,6 +35,24 @@ i.ng-hide-add-active, .ng-hide-remove {
   margin-right: 0;
 }
 
+.iconset {
+  background:none !important;
+}
+
+.table td {
+  font-size: 107%;
+}
+
+// Fix right margins for dropdowns in actions navbar
+.navbar .pull-right > li.open > .dropdown-menu, .navbar .nav > li.open > .dropdown-menu.pull-right {
+  margin-right: 0;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot');
+  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
 
 @media (min-width: 900px) {
   .actions-navbar ul.nav li.dropdown:hover > ul.dropdown-menu {
@@ -48,15 +62,4 @@ i.ng-hide-add-active, .ng-hide-remove {
   .actions-navbar ul.nav li.dropdown.open:hover > ul.dropdown-menu {
     display: block !important;
   }
-}
-
-.iconset {
-  background:none !important;
-}
-
-@font-face {
-  font-family: 'Glyphicons Halflings';
-
-  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot');
-  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
