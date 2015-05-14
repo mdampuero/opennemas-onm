@@ -25,7 +25,7 @@ class MarketController extends Controller
         }
 
         $available = \Onm\Module\ModuleManager::getAvailableModules();
-        $instance = $this->get('instance');
+        $instance  = $this->get('instance');
         $modules   = $request->request->get('modules');
 
         // Filter request to ignore invalid modules
@@ -34,7 +34,7 @@ class MarketController extends Controller
         });
 
         // Get names for filtered modules to use in template
-        $available = array_intersect_key($available, array_flip($modules));
+        $purchased = array_intersect_key($available, array_flip($modules));
 
         // Create email from template
         $message = \Swift_Message::newInstance()
@@ -46,7 +46,7 @@ class MarketController extends Controller
                     'market/email/purchase.tpl',
                     [
                         'instance' => $instance,
-                        'modules'  => $available
+                        'modules'  => $purchased
                     ]
                 ),
                 'text/html'
