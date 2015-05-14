@@ -104,23 +104,21 @@
       </div>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
         <div class="col-lg-4 col-md-6 col-sm-6" ng-repeat="item in items | filter:criteria">
-          <div class="grid simple module-grid">
+          <div class="grid simple module-grid pointer" ng-click="showDetails(item)">
             <div class="grid-body">
               <div class="purchased-ribbon" ng-if="isActivated(item)">{t}Purchased{/t}</div>
               <div class="row">
                 <div class="col-sm-4">
-                  <img class="img-responsive" src="http://placehold.it/300x300" alt="">
+                  <img class="img-responsive" src="http://placehold.it/300x300">
                 </div>
                 <div class="col-sm-8">
-                  <a href="#" ng-click="showDetails(item)">
-                    <h4>[% item.name %]</h4>
-                  </a>
+                  <h4>[% item.name %]</h4>
                   <p class="p-b-15">
                     [% item.description | limitTo: 140 %]
                     [% item.description.length > 140 ? '...' : '' %]
                   </p>
                   <div class="text-right">
-                    <button class="btn btn-white" ng-click="addToCart(item)" ng-disabled="isInCart(item)" ng-if="!isActivated(item)">
+                    <button class="btn btn-white" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isActivated(item)">
                       <i class="fa fa-plus m-r-5"></i>
                       {t}Add to cart{/t}
                     </button>
