@@ -19,8 +19,8 @@
      *   Handles actions for market.
      */
     .controller('MarketListCtrl', [
-      '$http', '$modal', '$scope', 'routing', 'messenger',
-      function($http, $modal, $scope, routing, messenger) {
+      '$http', '$modal', '$scope', 'routing', 'messenger', 'webStorage',
+      function($http, $modal, $scope, routing, messenger, webStorage) {
         /**
          * @function addToCart
          * @memberOf MarketListCtrl
@@ -111,7 +111,17 @@
          *                   false.
          */
         $scope.isInCart = function(item) {
-          return $scope.cart && $scope.cart.indexOf(item) !== -1;
+          if (!$scope.cart) {
+            return false;
+          }
+
+          for (var i = 0; i < $scope.cart.length; i++) {
+            if ($scope.cart[i].id === item.id) {
+              return true;
+            }
+          }
+
+          return false;
         };
 
         /**
@@ -126,7 +136,7 @@
 
           $http.get(url).success(function(response) {
             $scope.activated = response.activated;
-            $scope.contents  = response.results;
+            $scope.items     = response.results;
           }).error(function(response) {
             messenger.post({ type: 'error', message: response });
           });
@@ -148,6 +158,51 @@
           $scope.cart.splice($scope.cart.indexOf(item), 1);
         };
 
+        /**
+         * @function showDetails
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Opens a modal window with the module details
+         *
+         * @param {Object} item The item to detail.
+         */
+        $scope.showDetails = function(item) {
+          var modal = $modal.open({
+            templateUrl: 'modal-details',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  inCart: $scope.isInCart(item),
+                  item: item
+                };
+              },
+              success: function() {
+                return null
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              $scope.addToCart(item);
+            }
+          });
+        };
+
+        // Save changes in chart in web storage
+        $scope.$watch('cart', function(nv) {
+          webStorage.local.add('cart', nv);
+        }, true);
+
+        // Initialize the shopping cart from the webStorage
+        if (webStorage.local.has('cart')) {
+          $scope.cart = webStorage.local.get('cart');
+        }
+
+        // Get modules list
         $scope.list();
     }]);
 })();
