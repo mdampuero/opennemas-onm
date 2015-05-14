@@ -1,5 +1,13 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+  {stylesheets src="
+    @AdminTheme/less/_market.less
+  " filters="cssrewrite,less"}
+    <link rel="stylesheet" type="text/css" href="{$asset_url}">
+  {/stylesheets}
+{/block}
+
 {block name="content"}
   <div ng-controller="MarketListCtrl">
     <div class="page-navbar actions-navbar">
@@ -20,6 +28,9 @@
                   <i class="fa fa-shopping-cart"></i>
                   <span class="p-l-5 p-r-5">
                     {t}Cart{/t}
+                    <span class="ng-cloak" ng-if="cart.length > 0">
+                      ([% cart.length %])
+                    </span>
                   </span>
                   <i class="fa fa-caret-down"></i>
                 </div>
@@ -85,40 +96,35 @@
         <div class="loading-spinner"></div>
         <div class="spinner-text">{t}Loading{/t}...</div>
       </div>
-      <div class="listing-no-contents ng-cloak" ng-if="!loading && contents.length == 0">
+      <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
         <div class="center">
           <h4>{t}Unable to find any menu that matches your search.{/t}</h4>
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <div class="infinite-row clearfix ng-cloak" ng-if="!loading && contents && contents.length > 0">
-        <div class="col-lg-4 col-sm-6" ng-repeat="content in contents | filter:criteria">
-          <div class="grid simple">
+      <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
+        <div class="col-lg-4 col-sm-6" ng-repeat="item in items | filter:criteria">
+          <div class="grid simple module-grid">
             <div class="grid-body">
+              <div class="purchased-ribbon" ng-if="isActivated(item)">{t}Purchased{/t}</div>
               <div class="row">
                 <div class="col-sm-4">
                   <img class="img-responsive" src="http://placehold.it/300x300" alt="">
                 </div>
                 <div class="col-sm-8">
-                  <h4>[% content.name %]</h4>
+                  <h4>[% item.name %]</h4>
                   <p class="p-b-15 hidden-md">
-                    [% content.description | limitTo: 140 %]
-                    [% content.description.length > 140 ? '...' : '' %]
+                    [% item.description | limitTo: 140 %]
+                    [% item.description.length > 140 ? '...' : '' %]
                   </p>
                   <div class="text-right">
-                    <button class="btn btn-white" ng-click="addToCart(content)" ng-disabled="isActivated(content)" ng-if="!isInCart(content)">
-                      <span ng-if="!isActivated(content) && !isInCart(content)">
-                        <i class="fa fa-plus m-r-5"></i>
-                        {t}Add to cart{/t}
-                      </span>
-                      <span ng-if="isActivated(content)">
-                        <i class="fa fa-shopping-cart m-r-5"></i>
-                        {t}Purchased{/t}
-                      </span>
+                    <button class="btn btn-white" ng-click="showDetails(item)">
+                      <i class="fa fa-info m-r-5"></i>
+                      {t}More information{/t}
                     </button>
-                    <button class="btn btn-white" ng-click="removeFromCart(content, $event)" ng-if="isInCart(content)">
-                      <i class="fa fa-trash-o m-r-5"></i>
-                      {t}Remove from cart{/t}
+                    <button class="btn btn-white" ng-click="addToCart(item)" ng-disabled="isInCart(item)" ng-if="!isActivated(item)">
+                      <i class="fa fa-plus m-r-5"></i>
+                      {t}Add to cart{/t}
                     </button>
                   </div>
                 </div>
@@ -133,7 +139,7 @@
                   <i class="fa fa-star-o"></i>
                 </div>
                 <div class="col-sm-8 text-right">
-                  {t}Updated{/t}: [% content.last_updated | moment %]
+                  {t}Updated{/t}: [% item.last_updated | moment %]
                 </div>
               </div>
             </div>
@@ -142,7 +148,10 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-checkout">
-      {include file="market/modal/_modalCheckout.tpl"}
+      {include file="market/modal/_checkout.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-details">
+      {include file="market/modal/_details.tpl"}
     </script>
   </div>
 {/block}
