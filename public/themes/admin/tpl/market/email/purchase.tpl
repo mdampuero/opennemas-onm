@@ -2,7 +2,7 @@
 
 {t}Modules to purchase{/t}:
 <ul>
-  {foreach from=$modules item=$module}
-    <li>{$module->name}</li>
+  {foreach from=$modules item=module}
+    <li>{$module}</li>
   {/foreach}
 </ul>
