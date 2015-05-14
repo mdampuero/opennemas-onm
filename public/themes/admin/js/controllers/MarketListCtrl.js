@@ -68,7 +68,7 @@
                     return e.id;
                   });
 
-                  return $http.post(url, data);
+                  return $http.post(url, { modules: data });
                 };
               }
             }
