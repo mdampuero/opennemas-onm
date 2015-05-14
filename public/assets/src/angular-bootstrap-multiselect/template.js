@@ -1,6 +1,6 @@
 angular.module("multiselect.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("multiselect.tpl.html",
-      "<div class=\"btn-group\">\n" +
+      "<div class=\"btn-group dropup\">\n" +
       "  <button type=\"button\" class=\"btn btn-default dropdown-toggle\" ng-click=\"toggleSelect()\" ng-disabled=\"disabled\" ng-class=\"{'error': !valid()}\">\n" +
       "    {{header}} <span class=\"caret\"></span>\n" +
       "  </button>\n" +
