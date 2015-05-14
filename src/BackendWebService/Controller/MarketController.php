@@ -43,7 +43,7 @@ class MarketController extends Controller
             ->setTo($this->container->getParameter('sales_email'))
             ->setBody(
                 $this->renderView(
-                    'market/email/purchase.tpl',
+                    'market/email/_purchase.tpl',
                     [
                         'instance' => $instance,
                         'modules'  => $purchased
