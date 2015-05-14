@@ -130,7 +130,7 @@ class MenusController extends Controller
                 $pollCategories[] = $category;
             }
         }
-        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title');
+        $staticPages = $cm->find('StaticPage', '1=1', 'ORDER BY created DESC ', 'title, slug, pk_content');
 
         // Get categories from menu
         $menu = new \Menu($id);
