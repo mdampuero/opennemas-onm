@@ -5,11 +5,10 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-sm-4">
-
+        <img class="img-responsive" src="http://placehold.it/300x300" alt="">
       </div>
       <div class="col-sm-8">
         [% template.item.description %]
-
       </div>
     </div>
   </div>
