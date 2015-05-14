@@ -116,6 +116,8 @@ class PickerController extends Controller
 
         $conn = $this->get('dbal_connection');
 
+        $this->get('cache')->delete('Photo' . "-" . $id);
+
         try {
             $conn->executeUpdate($sql, array($description, $id));
             return new JsonResponse();
