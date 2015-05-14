@@ -2,7 +2,7 @@
 
 namespace BackendWebService\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Onm\Framework\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,6 +17,44 @@ class MarketController extends Controller
      */
     public function checkoutAction(Request $request)
     {
+        if (!$request->request->get('modules')) {
+            return new JsonResponse(
+                _('Your request could not been registered'),
+                400
+            );
+        }
+
+        $available = \Onm\Module\ModuleManager::getAvailableModules();
+        $instance = $this->get('instance');
+        $modules   = $request->request->get('modules');
+
+        // Filter request to ignore invalid modules
+        $modules = array_filter($modules, function ($e) use ($available) {
+            return array_key_exists($e, $available);
+        });
+
+        // Get names for filtered modules to use in template
+        $available = array_intersect_key($available, array_flip($modules));
+
+        // Create email from template
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Opennemas Market purchase request')
+            ->setFrom($instance->contact_mail)
+            ->setTo($this->container->getParameter('sales_email'))
+            ->setBody(
+                $this->renderView(
+                    'market/email/purchase.tpl',
+                    [
+                        'instance' => $instance,
+                        'modules'  => $available
+                    ]
+                ),
+                'text/html'
+            );
+
+        // Send an email
+        $this->get('mailer')->send($message);
+
         return new JsonResponse(_('Your request has been registered'));
     }
 
