@@ -1,5 +1,13 @@
+backend_ws_market_checkout:
+    path:     /market/checkout
+    defaults: { _controller: BackendWebServiceBundle:Market:checkout }
+    methods:  [ POST ]
+    options:
+        expose: true
+
 backend_ws_market_list:
     path:     /market/list
     defaults: { _controller: BackendWebServiceBundle:Market:list }
+    methods:  [ GET ]
     options:
         expose: true

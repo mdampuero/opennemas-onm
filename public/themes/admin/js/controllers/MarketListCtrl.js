@@ -19,8 +19,8 @@
      *   Handles actions for market.
      */
     .controller('MarketListCtrl', [
-      '$http', '$scope', 'routing', 'messenger',
-      function($http, $scope, routing, messenger) {
+      '$http', '$modal', '$scope', 'routing', 'messenger',
+      function($http, $modal, $scope, routing, messenger) {
         /**
          * @function addToCart
          * @memberOf MarketListCtrl
@@ -40,6 +40,62 @@
           }
 
           $scope.cart.push(item);
+        };
+
+        /**
+         * @function checkout
+         * @memberOf MarketListctrl
+         *
+         * @description
+         *   Opens a modal window to confirm the cart.
+         *
+         */
+        $scope.checkout = function() {
+          var modal = $modal.open({
+            templateUrl: 'modal-checkout',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  cart: $scope.cart
+                };
+              },
+              success: function() {
+                return function() {
+                  var url = routing.generate('backend_ws_market_checkout');
+                  var data = $scope.cart.map(function(e) {
+                    return e.id;
+                  });
+
+                  return $http.post(url, data);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            var message = response.data;
+            var type    = response.status === 200 ? 'success' : 'error';
+
+            messenger.post(message, type);
+          });
+        };
+
+        /**
+         * @function isActivated
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Checks if an item is already activated.
+         *
+         * @param {Object} name The item to check.
+         *
+         * @return {Boolean} True, if the item is already activated. Otherwise,
+         *                   returns false.
+         */
+        $scope.isActivated = function(item) {
+          return $scope.activated.indexOf(item.id) !== -1;
         };
 
         /**
@@ -69,7 +125,8 @@
           var url = routing.generate('backend_ws_market_list');
 
           $http.get(url).success(function(response) {
-            $scope.contents = response.results;
+            $scope.activated = response.activated;
+            $scope.contents  = response.results;
           }).error(function(response) {
             messenger.post({ type: 'error', message: response });
           });
