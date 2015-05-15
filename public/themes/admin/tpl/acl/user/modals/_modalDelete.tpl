@@ -7,7 +7,7 @@
 </div>
 <div class="modal-body">
     <p>
-      {t escape=off}Are you sure that do you want send to the trash this comment from "[% template.content.author %]"?{/t}
+      {t escape=off}Are you sure that you want to delete the user "[% template.content.name %]"?{/t}
     </p>
 </div>
 <div class="modal-footer">
