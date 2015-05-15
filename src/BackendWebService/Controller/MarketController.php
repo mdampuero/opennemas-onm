@@ -74,7 +74,7 @@ class MarketController extends Controller
                     'market/email/_purchaseToCustomer.tpl',
                     [
                         'instance' => $instance,
-                        'modules'  => $purchased
+                        'modules'  => $modules
                     ]
                 ),
                 'text/html'
