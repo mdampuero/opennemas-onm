@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-28 10:03+0000\n"
-"PO-Revision-Date: 2015-04-28 12:55+0200\n"
+"POT-Creation-Date: 2015-05-15 09:55+0000\n"
+"PO-Revision-Date: 2015-05-15 12:01+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2061,8 +2061,26 @@ msgstr "%s instancias eliminadas correctamente."
 msgid "%s instances updated successfully."
 msgstr "%s instancias actualizadas correctamente."
 
+#, fuzzy
+msgid "Instances not used in last month"
+msgstr "Instancia non atopada"
+
+msgid ""
+"Generates a report listing instances that were not used in the last month."
+msgstr ""
+
+msgid "Instances created in the last month"
+msgstr ""
+
+msgid "Generates a report listing instances created in the last month."
+msgstr ""
+
 msgid "Instances"
 msgstr "Instancias"
+
+#, fuzzy
+msgid "Reports"
+msgstr "Importar"
 
 msgid "Framework"
 msgstr "Framework"
@@ -2072,9 +2090,6 @@ msgstr "Ordes"
 
 msgid "OpCache Status"
 msgstr "Estado de Opcache"
-
-msgid "Settings"
-msgstr "Preferencias"
 
 msgid "User groups"
 msgstr "Grupos de usuarios"
@@ -2498,6 +2513,9 @@ msgstr "Escribe unha etiqueta e preme Intro…"
 msgid "Create new page"
 msgstr "Crear nova páxina"
 
+msgid "Clear selection"
+msgstr "Limpar selección"
+
 msgid "Search by title"
 msgstr "Buscar por titulo"
 
@@ -2651,6 +2669,9 @@ msgstr "Engadir imaxes"
 
 msgid "Cover image"
 msgstr "Imaxe principal"
+
+msgid "Settings"
+msgstr "Preferencias"
 
 msgid "Total in widget home"
 msgstr "Elementos no widget de portada"
@@ -4036,23 +4057,21 @@ msgstr "Outra información"
 msgid "Original Title"
 msgstr "Titulo orixinal"
 
-msgid "FLV"
-msgstr "FLV"
-
-msgid "Download Url"
-msgstr "Url de descarga"
-
 msgid "Service"
 msgstr "Servizo"
 
 msgid "Duration"
 msgstr "Duración"
 
+msgid "Embed Url"
+msgstr "URL de ficheiro embebido"
+
 msgid "Thumbnail URL"
 msgstr "URL da miniatura"
 
-msgid "Embed Url"
-msgstr "URL de ficheiro embebido"
+#, fuzzy
+msgid "Thumbnail image"
+msgstr "URL da miniatura"
 
 msgid "Pick type"
 msgstr "Escolla tipo"
@@ -4127,8 +4146,7 @@ msgstr "Publicidade publicidades"
 msgid ""
 "Are you sure that do you want send to the trash \"[% template.content.title "
 "%]\"?"
-msgstr ""
-"Tes certeza que queres restaurar do lixo «[% template.content.title %]»?"
+msgstr "Tes certeza que queres enviar ao lixo «[% template.content.title %]»?"
 
 msgid "Update selected items"
 msgstr "Eliminar os elementos seleccionados"
@@ -4207,6 +4225,44 @@ msgstr "Non poderá restauralos de novo."
 
 msgid "Yes, remove"
 msgstr "Si, eliminar"
+
+msgid "Drop these elements"
+msgstr "Eliminar estes elementos"
+
+msgid ""
+"Are you sure that do you want to delete the selected elements from this "
+"frontpage?"
+msgstr ""
+"Tes certeza que queres eliminar os elementos seleccionados desta portada?"
+
+msgid ""
+"This will temporary remove all the contents but after that you have to save "
+"the frontpage."
+msgstr ""
+"Isto eliminará de forma temporal todos os contidos pero logo terá que gardar "
+"a portada."
+
+msgid "Drop"
+msgstr "Quitar"
+
+msgid "Keep"
+msgstr "Manter"
+
+msgid "Arquive these elements"
+msgstr "Arquivar estes elementos"
+
+msgid ""
+"Are you sure that do you want to arquive the selected elements from this "
+"frontpage?"
+msgstr ""
+"Tes certeza que queres arquivar os elementos seleccionados desta portada?"
+
+msgid ""
+"This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
+"they will remain available for read."
+msgstr ""
+"Isto eliminará estes contidos de <strong>TODAS AS PORTADAS</strong> aínda "
+"que permanecerán dispoñibeis para a súa visualización."
 
 msgid "Restore item"
 msgstr "Restaurar elemento"
@@ -4691,45 +4747,8 @@ msgstr "Videotitoriais"
 msgid "Use videos to get walkthrough guides"
 msgstr "Use os vídeos para obter guías paso a paso"
 
-msgid "Drop these elements"
-msgstr "Eliminar estes elementos"
-
-msgid ""
-"Are you sure that do you want to delete the selected elements from this "
-"frontpage?"
+msgid "This user is a master"
 msgstr ""
-"Tes certeza que queres eliminar os elementos seleccionados desta portada?"
-
-msgid ""
-"This will temporary remove all the contents but after that you have to save "
-"the frontpage."
-msgstr ""
-"Isto eliminará de forma temporal todos os contidos pero logo terá que gardar "
-"a portada."
-
-msgid "Drop"
-msgstr "Quitar"
-
-msgid "Keep"
-msgstr "Manter"
-
-msgid "Suggest element to frontpage"
-msgstr "Suxerir elemento á portada"
-
-msgid "Drop suggestion to frontpage"
-msgstr "Eliminar suxestión de portada"
-
-msgid "Are you sure that to suggest this element to frontpage?"
-msgstr "Tes certeza que queres suxerir este elemento á portada?"
-
-msgid "Are you sure that to drop suggestion of this element of frontpage?"
-msgstr "Tes certeza que queres suxerir este elemento á portada?"
-
-msgid "Yes, Suggest"
-msgstr "Si, suxerir"
-
-msgid "Drop suggest"
-msgstr "Eliminar suxestión"
 
 msgid "Customize font and color style"
 msgstr "Personalizar estilo do tipo de letra e cor"
@@ -4815,22 +4834,6 @@ msgstr "Imaxe á esquerda"
 msgid "Reset"
 msgstr "Restabelecer"
 
-msgid "Arquive these elements"
-msgstr "Arquivar estes elementos"
-
-msgid ""
-"Are you sure that do you want to arquive the selected elements from this "
-"frontpage?"
-msgstr ""
-"Tes certeza que queres arquivar os elementos seleccionados desta portada?"
-
-msgid ""
-"This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
-"they will remain available for read."
-msgstr ""
-"Isto eliminará estes contidos de <strong>TODAS AS PORTADAS</strong> aínda "
-"que permanecerán dispoñibeis para a súa visualización."
-
 msgid "Are you sure that do you want to send to trash the next element?"
 msgstr "Tes certeza que queres enviar ao lixo o seguinte elemento?"
 
@@ -4868,9 +4871,6 @@ msgstr "Non se puido cargar esta lapela. Tentaremos arranxalo canto antes."
 
 msgid "Preview frontpage with actual content positions"
 msgstr "Previsualizar portada coas posicións de contidos actuais"
-
-msgid "Toggle suggest"
-msgstr "Trocar suxerido"
 
 msgid "Managing frontpage:"
 msgstr "Xestionar portada:"
@@ -5058,10 +5058,12 @@ msgstr "Google Analytics"
 msgid "Google Analytics API key"
 msgstr "Chave da API de Google Analytics"
 
+#, fuzzy
 msgid ""
-"You can get your Google Analytics Site ID from <a href=\"https://www.google."
-"com/analytics/\" target=\"_blank\">GAnalytics site</a> under the General "
-"Overview list (should be something like UA-546457-3)."
+"You can get your Google Analytics Site ID from <a class=\"external-link\" "
+"href=\"https://www.google.com/analytics/\" target=\"_blank\">GAnalytics "
+"site</a> under the General Overview list (should be something like "
+"UA-546457-3)."
 msgstr ""
 "Podes obter o teu ID de sitio web de Google Analytics desde <a href="
 "\"https://www.google.com/analytics/\" target=\"_blank\">o sitio web de "
@@ -5111,9 +5113,10 @@ msgstr "Chave pública"
 msgid "Private key"
 msgstr "Chave privada"
 
+#, fuzzy
 msgid ""
-"Get your reCaptcha key from <a href=\"https://www.google.com/recaptcha/"
-"admin#whyrecaptcha\" target=\"_blank\">this page</a>."
+"Get your reCaptcha key from <a class=\"external-link\" href=\"https://www."
+"google.com/recaptcha/admin#whyrecaptcha\" target=\"_blank\">this page</a>."
 msgstr ""
 "Pode obter as túas chaves de reCAPTCHA desde <a href=\"https://www.google."
 "com/recaptcha/whyrecaptcha\" target=\"_blank\">esta páxina</a>."
@@ -5133,10 +5136,12 @@ msgstr "Opcións de Paypal"
 msgid "Account email:"
 msgstr "Correo-e da conta:"
 
+#, fuzzy
 msgid ""
-"You can get your PayPal account email from <a href=\"https://www.paypal.com/"
-"us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
-"This must be a business account for receiving payments"
+"You can get your PayPal account email from <a class=\"external-link\" href="
+"\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target="
+"\"_blank\">PayPal site</a>. This must be a business account for receiving "
+"payments"
 msgstr ""
 "Podes obter a túa conta de correo-e de Paypal desde <a href=\"https://www."
 "paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank"
@@ -5149,10 +5154,11 @@ msgstr "Servizos de Google"
 msgid "Google Search API key:"
 msgstr "Chave da API de Google Search:"
 
+#, fuzzy
 msgid ""
-"You can get your Google <strong>Search</strong> API Key from <a href="
-"\"http://www.google.com/cse/manage/create\" target=\"_blank\">Google Search "
-"sign up website</a>."
+"You can get your Google <strong>Search</strong> API Key from <a class="
+"\"external-link\" href=\"http://www.google.com/cse/manage/create\" target="
+"\"_blank\">Google Search sign up website</a>."
 msgstr ""
 "Podes obter as túas chaves de Google <strong>Search</strong> desde <a href="
 "\"http://www.google.com/cse/manage/create\" target=\"_blank\">o sitio web "
@@ -5164,10 +5170,11 @@ msgstr "Nome da publicación en Google News"
 msgid "Google Maps API key"
 msgstr "Chave da API de Google Maps"
 
+#, fuzzy
 msgid ""
-"You can get your Google <strong>Maps</strong> API Key from <a href=\"http://"
-"code.google.com/apis/maps/signup.html\" target=\"_blank\">Google maps sign "
-"up website</a>."
+"You can get your Google <strong>Maps</strong> API Key from <a class="
+"\"external-link\" href=\"http://code.google.com/apis/maps/signup.html\" "
+"target=\"_blank\">Google maps sign up website</a>."
 msgstr ""
 "Podes obter as túas chaves de API de Google <strong>Maps</strong> desde <a "
 "href=\"http://code.google.com/apis/maps/signup.html\" target=\"_blank\">o "
@@ -5215,9 +5222,11 @@ msgstr "Id de Facebook"
 msgid "APP key"
 msgstr "Chave do aplicativo"
 
+#, fuzzy
 msgid ""
-"You can get your Facebook App Keys from <a href=\"https://developers."
-"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
+"You can get your Facebook App Keys from <a class=\"external-link\" href="
+"\"https://developers.facebook.com/apps\" target=\"_blank\">Facebook "
+"Developers website</a>."
 msgstr ""
 "Podes obter as túas chaves de aplicativo de Facebook desde <a href=\"https://"
 "developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
@@ -5267,36 +5276,6 @@ msgstr ""
 
 msgid "Logged in users"
 msgstr "Usuarios conectados"
-
-msgid "Terms of Service Agreement"
-msgstr "Aceptación dos termos do servizo"
-
-msgid ""
-"In order to use the Opennemas platform you must read and accept our terms of "
-"use. You can find these terms in the next link <a href=\"http://help."
-"opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" "
-"title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>"
-msgstr ""
-"Para usar a plataforma Opennemas debes ler e aceptar os termos de uso. Podes "
-"atopar o texto integro na seguinte ligazón <a href=\"http://help.opennemas."
-"com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title="
-"\"Terms of use in Opennemas\">Termos de uso en Opennemas</a>"
-
-msgid ""
-"I have read and accept the Opennemas <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms "
-"of use in Opennemas\">Terms of use</a> and <a href=\"http://help.opennemas."
-"com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-"\">Privacy policy</a>."
-msgstr ""
-"Lin e acepto os <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in "
-"Opennemas\">termos de uso</a> and <a href=\"http://help.opennemas.com/"
-"knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
-"\">politica de privacidade</a> de Opennemas."
-
-msgid "Yes, accept"
-msgstr "Si, aceptar"
 
 msgid "Welcome to Opennemas"
 msgstr "Benvido a Opennemas"
@@ -5366,14 +5345,10 @@ msgstr ""
 "Podes obter máis axuda cos nosos videotitoriais na <a href=\"%1\" class="
 "\"text-white bold\">nosa canle de YouTube</a> ou subscribirte a ela."
 
-msgid "Delete comments"
-msgstr "Eliminar comentarios"
-
-msgid "Delete comment"
-msgstr "Eliminar comentario"
-
-msgid "Are you sure you want to delete <span>%num%</span> comments?"
-msgstr "Tes certeza que queres eliminar <span>%num%</span>  comentarios?"
+msgid ""
+"Are you sure that do you want send to the trash this comment from \"[% "
+"template.content.author %]\"?"
+msgstr "Tes certeza que queres enviar ao lixo «[% template.content.author %]»?"
 
 msgid "Change comment manager"
 msgstr "Cambiar xestor de comentarios"
@@ -5425,6 +5400,14 @@ msgid ""
 msgstr ""
 "Para poder moderar os comentarios do teu sitio en Facebook debes crear e "
 "configurar aquí o teu <strong>Id de aplicación de Facebook</strong>."
+
+msgid ""
+"You can get your Facebook App Keys from <a href=\"https://developers."
+"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
+msgstr ""
+"Podes obter as túas chaves de aplicativo de Facebook desde <a href=\"https://"
+"developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
+"Developers</a>."
 
 msgid "Config facebook module"
 msgstr "Configuración do módulo «Facebook»"
@@ -5963,6 +5946,12 @@ msgstr "Clics:"
 msgid "Viewed:"
 msgstr "Visto:"
 
+msgid ""
+"Are you sure that you want to delete the user \"[% template.content.name "
+"%]\"?"
+msgstr ""
+"Tes certeza que queres eliminar o usuario «[% template.content.name %]»?"
+
 msgid "Your account is connected to %1."
 msgstr "A túa conta está conectada a %1."
 
@@ -6023,12 +6012,6 @@ msgstr "Limite de tiempo del paywall:"
 msgid "Allows you to login into Opennemas with %1"
 msgstr "Permiteche iniciar sesión en Opennemas con %1"
 
-msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
-msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
-
-msgid "Editing user group"
-msgstr "Editando grupo de usuarios"
-
 msgid "Group"
 msgstr "Grupo"
 
@@ -6043,6 +6026,9 @@ msgstr "Creando grupo de usuario"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
+msgstr "Tes certeza que queres eliminar «<span>%title%</span>»?"
 
 msgid "Unable to find any user group that matches your search."
 msgstr "Non se puideron atopar grupos de usuarios que coincidan coa súa busca."
@@ -6868,6 +6854,21 @@ msgstr ""
 "Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
 "coincide con ningún usuario."
 
+#, fuzzy
+msgid "Report"
+msgstr "Importar"
+
+#, fuzzy
+msgid "Action"
+msgstr "Accións"
+
+#, fuzzy
+msgid ""
+"There is no reports created yet or <br/>your search don't match your criteria"
+msgstr ""
+"Non hai ningún usuario creado ainda ou <br/>o teu criterio de busca non "
+"coincide con ningún usuario."
+
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -6883,9 +6884,6 @@ msgstr "Descargouse unha nova versión de Opennemas. Desexa iniciala?"
 
 msgid "Launch"
 msgstr "Iniciar"
-
-msgid "Clear selection"
-msgstr "Limpar selección"
 
 msgid "Download CSV of selected"
 msgstr "Descargar CSV dos seleccionados"
@@ -7040,6 +7038,75 @@ msgstr "Memoria"
 
 msgid "Hits"
 msgstr "Impactos"
+
+#~ msgid "Delete comments"
+#~ msgstr "Eliminar comentarios"
+
+#~ msgid "Delete comment"
+#~ msgstr "Eliminar comentario"
+
+#~ msgid "Are you sure you want to delete <span>%num%</span> comments?"
+#~ msgstr "Tes certeza que queres eliminar <span>%num%</span>  comentarios?"
+
+#~ msgid "Editing user group"
+#~ msgstr "Editando grupo de usuarios"
+
+#~ msgid "FLV"
+#~ msgstr "FLV"
+
+#~ msgid "Download Url"
+#~ msgstr "Url de descarga"
+
+#~ msgid "Suggest element to frontpage"
+#~ msgstr "Suxerir elemento á portada"
+
+#~ msgid "Drop suggestion to frontpage"
+#~ msgstr "Eliminar suxestión de portada"
+
+#~ msgid "Are you sure that to suggest this element to frontpage?"
+#~ msgstr "Tes certeza que queres suxerir este elemento á portada?"
+
+#~ msgid "Are you sure that to drop suggestion of this element of frontpage?"
+#~ msgstr "Tes certeza que queres suxerir este elemento á portada?"
+
+#~ msgid "Yes, Suggest"
+#~ msgstr "Si, suxerir"
+
+#~ msgid "Drop suggest"
+#~ msgstr "Eliminar suxestión"
+
+#~ msgid "Toggle suggest"
+#~ msgstr "Trocar suxerido"
+
+#~ msgid "Terms of Service Agreement"
+#~ msgstr "Aceptación dos termos do servizo"
+
+#~ msgid ""
+#~ "In order to use the Opennemas platform you must read and accept our terms "
+#~ "of use. You can find these terms in the next link <a href=\"http://help."
+#~ "opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
+#~ "\" title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>"
+#~ msgstr ""
+#~ "Para usar a plataforma Opennemas debes ler e aceptar os termos de uso. "
+#~ "Podes atopar o texto integro na seguinte ligazón <a href=\"http://help."
+#~ "opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
+#~ "\" title=\"Terms of use in Opennemas\">Termos de uso en Opennemas</a>"
+
+#~ msgid ""
+#~ "I have read and accept the Opennemas <a href=\"http://help.opennemas.com/"
+#~ "knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title="
+#~ "\"Terms of use in Opennemas\">Terms of use</a> and <a href=\"http://help."
+#~ "opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-"
+#~ "privacidad\">Privacy policy</a>."
+#~ msgstr ""
+#~ "Lin e acepto os <a href=\"http://help.opennemas.com/knowledgebase/"
+#~ "articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in "
+#~ "Opennemas\">termos de uso</a> and <a href=\"http://help.opennemas.com/"
+#~ "knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
+#~ "\">politica de privacidade</a> de Opennemas."
+
+#~ msgid "Yes, accept"
+#~ msgstr "Si, aceptar"
 
 #~ msgid "Master"
 #~ msgstr "Mestre"
