@@ -47,7 +47,7 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="AUTHOR_DELETE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="deleteSelected('backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -145,7 +145,7 @@
                     </a>
                     {/acl}
                     {acl isAllowed="AUTHOR_DELETE"}
-                    <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)" type="button">
+                    <button class="link link-danger" ng-click="delete(content, 'backend_ws_user_delete')" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
