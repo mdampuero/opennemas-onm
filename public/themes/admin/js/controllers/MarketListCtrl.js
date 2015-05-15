@@ -79,6 +79,10 @@
             var type    = response.status === 200 ? 'success' : 'error';
 
             messenger.post(message, type);
+
+            if (response.status === 200) {
+              $scope.cart = [];
+            }
           });
         };
 
@@ -180,7 +184,7 @@
                 };
               },
               success: function() {
-                return null
+                return null;
               }
             }
           });
@@ -194,6 +198,11 @@
 
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv) {
+          if (!nv || (nv instanceof Array && nv.length === 0)) {
+            webStorage.local.remove('cart');
+            return;
+          }
+
           webStorage.local.add('cart', nv);
         }, true);
 
