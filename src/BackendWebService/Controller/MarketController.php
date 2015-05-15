@@ -36,24 +36,8 @@ class MarketController extends Controller
         // Get names for filtered modules to use in template
         $purchased = array_intersect_key($available, array_flip($modules));
 
-        // Create email from template
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Opennemas Market purchase request')
-            ->setFrom($instance->contact_mail)
-            ->setTo($this->container->getParameter('sales_email'))
-            ->setBody(
-                $this->renderView(
-                    'market/email/_purchase.tpl',
-                    [
-                        'instance' => $instance,
-                        'modules'  => $purchased
-                    ]
-                ),
-                'text/html'
-            );
-
-        // Send an email
-        $this->get('mailer')->send($message);
+        $this->sendEmailToSales($instance, $purchased);
+        $this->sendEmailToCustomer($instance, $purchased);
 
         return new JsonResponse(_('Your request has been registered'));
     }
@@ -71,5 +55,57 @@ class MarketController extends Controller
         return new JsonResponse(
             [ 'results' => $modules, 'activated' => $activated ]
         );
+    }
+
+    /**
+     * Sends an email to the customer.
+     *
+     * @param Instance $instance The instance to upgrade.
+     * @param array    $modules  The requested modules.
+     */
+    private function sendEmailToCustomer($instance, $modules)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Opennemas Market purchase request')
+            ->setFrom($this->container->getParameter('sales_email'))
+            ->setTo($instance->contact_mail)
+            ->setBody(
+                $this->renderView(
+                    'market/email/_purchaseToCustomer.tpl',
+                    [
+                        'instance' => $instance,
+                        'modules'  => $purchased
+                    ]
+                ),
+                'text/html'
+            );
+
+        $this->get('mailer')->send($message);
+    }
+
+    /**
+     * Sends an email to sales department.
+     *
+     * @param Instance $instance The instance to upgrade.
+     * @param array    $modules  The requested modules.
+     */
+    private function sendEmailToSales($instance, $modules)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Opennemas Market purchase request')
+            ->setFrom($instance->contact_mail)
+            ->setTo($this->container->getParameter('sales_email'))
+            ->setBody(
+                $this->renderView(
+                    'market/email/_purchaseToSales.tpl',
+                    [
+                        'instance' => $instance,
+                        'modules'  => $modules
+                    ]
+                ),
+                'text/html'
+            );
+
+        $this->get('mailer')->send($message);
     }
 }
