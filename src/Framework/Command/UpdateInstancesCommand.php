@@ -221,6 +221,8 @@ class UpdateInstancesCommand extends ContainerAwareCommand
             }
         }
 
+        $this->im->getConnection()->close();
+
         // Get the page views from Piwik
         if ($views && !empty($piwik) && !empty($lastInvoice)) {
             $i->page_views = $this->getViews($piwik['page_id'], $lastInvoice);
@@ -271,7 +273,7 @@ class UpdateInstancesCommand extends ContainerAwareCommand
 
         $views = json_decode($resp, true);
 
-        if (array_key_exists('value', $views)) {
+        if (is_array($views) && array_key_exists('value', $views)) {
             return $views['value'];
         }
 
