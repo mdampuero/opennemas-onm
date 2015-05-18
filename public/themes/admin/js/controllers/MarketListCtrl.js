@@ -179,8 +179,9 @@
             resolve: {
               template: function() {
                 return {
-                  inCart: $scope.isInCart(item),
-                  item: item
+                  activated: $scope.isActivated(item),
+                  inCart:    $scope.isInCart(item),
+                  item:      item
                 };
               },
               success: function() {
