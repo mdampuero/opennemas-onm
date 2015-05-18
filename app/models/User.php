@@ -220,16 +220,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
-        // Log action
-        $activatedUsers = self::getTotalActivatedUsersRemaining(1, 1);
-        $logger = getService('application.log');
-        $logger->info(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') '.
-            'created a new user: username ('.$data['username'].') '.
-            '- user group ('.$data['id_user_group'].') '.
-            '- activated flag ('.$data['activated'].') '.
-            '- total users activated ('.$activatedUsers.') '
-        );
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $this->id, $data);
 
         dispatchEventWithParams('user.create', array('user' => $this));
 
@@ -380,16 +372,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
-        // Log action
-        $activatedUsers = self::getTotalActivatedUsersRemaining(1, 1);
-        $logger = getService('application.log');
-        $logger->info(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') '.
-            'updated user: username ('.$data['username'].') '.
-            '- user group ('.$data['id_user_group'].') '.
-            '- activated flag ('.$data['activated'].') '.
-            '- total users activated ('.$activatedUsers.')'
-        );
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $this->id, $data);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -415,14 +399,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        // Log action
-        $activatedUsers = self::getTotalActivatedUsersRemaining(1, 1);
-        $logger = getService('application.log');
-        $logger->info(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') '.
-            'deleted user with id ('.$id.') '.
-            '- total users activated ('.$activatedUsers.')'
-        );
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.delete', array('user' => $this));
 
@@ -1185,14 +1163,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        // Log action
-        $activatedUsers = self::getTotalActivatedUsersRemaining(1, 1);
-        $logger = getService('application.log');
-        $logger->info(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') '.
-            'deactivated user with id ('.$id.') '.
-            '- total users activated ('.$activatedUsers.')'
-        );
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -1214,14 +1186,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
-        // Log action
-        $activatedUsers = self::getTotalActivatedUsersRemaining(1, 1);
-        $logger = getService('application.log');
-        $logger->info(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') '.
-            'activated user with id ('.$id.') '.
-            '- total users activated ('.$activatedUsers.')'
-        );
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
