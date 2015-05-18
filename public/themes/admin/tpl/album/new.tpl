@@ -3,15 +3,6 @@
 {block name="footer-js" append}
   <script>
     $(document).ready(function($){
-      $("#formulario").on("submit", function(event) {
-        if (!$('.album-thumbnail-sortable').length) {
-          $("#modal-edit-album-errors").modal('show');
-          return false;
-        }
-
-        return true;
-      });
-
       $('#title').on('change', function(e, ui) {
         var metaTags = $('#metadata');
 
@@ -26,7 +17,7 @@
 {/block}
 
 {block name="content"}
-  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario" ng-controller="AlbumCtrl">
+  <form action="{if isset($album->id)}{url name=admin_album_update id=$album->id}{else}{url name=admin_album_create}{/if}" method="POST" id="formulario" ng-controller="AlbumCtrl" ng-submit="validatePhotosAndCover($event);">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -273,6 +264,8 @@
       <input type="hidden" name="album_frontpage_image" id="album_frontpage_image" ng-value="cover.id" />
       <input type="hidden" name="id" id="id" value="{$album->id|default:""}" />
     </div>
+    <script type="text/ng-template" id="modal-edit-album-error">
+      {include file="album/modals/_edit_album_error.tpl"}
+    </script>
   </form>
-  {include file="album/modals/_edit_album_error.tpl"}
 {/block}

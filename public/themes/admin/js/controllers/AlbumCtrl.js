@@ -2,8 +2,8 @@ angular.module('BackendApp.controllers')
   /**
    * Handle actions for article inner.
   */
-  .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope',
-  function($controller, $rootScope, $scope) {
+  .controller('AlbumCtrl', ['$controller', '$rootScope', '$scope', '$modal',
+  function($controller, $rootScope, $scope, $modal) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -45,5 +45,27 @@ angular.module('BackendApp.controllers')
         $scope.ids.push(nv[i].id);
       }
     }, true);
+
+    /**
+     * Show modal warning for album missing photos
+     */
+    $scope.validatePhotosAndCover = function($event) {
+      if (!$scope.photos || !$scope.cover) {
+        $event.preventDefault();
+        var modal = $modal.open({
+          templateUrl: 'modal-edit-album-error',
+          backdrop: 'static',
+          controller: 'modalCtrl',
+          resolve: {
+            template: function() {
+              return null;
+            },
+            success: function() {
+              return null;
+            }
+          }
+        });
+      }
+    };
   }
 ]);
