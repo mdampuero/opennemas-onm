@@ -25,14 +25,15 @@
             <ul class="nav quick-section">
               <li class="quicklinks shopping-cart dropdown">
                 <div class="p-10" data-toggle="dropdown">
-                  <i class="fa fa-shopping-cart"></i>
                   <span class="p-l-5 p-r-5">
                     {t}Cart{/t}
-                    <span class="ng-cloak" ng-if="cart.length > 0">
-                      ([% cart.length %])
+                  </span>
+                  <span>
+                    <i class="fa fa-shopping-cart fa-lg p-r-10"></i>
+                    <span class="ng-cloak cart-orb" ng-if="cart.length > 0">
+                      [% cart.length %]
                     </span>
                   </span>
-                  <i class="fa fa-caret-down"></i>
                 </div>
                 <div class="dropdown-menu on-right">
                   <div class="shopping-cart-placeholder" ng-if="!cart || cart.length == 0">
@@ -69,14 +70,60 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text"/>
+            <li class="quicklinks hidden-xs">
+              <button class="btn btn-white">
+                <i class="fa fa-lg fa-th"></i>
+                {t}All{/t}
+              </button>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
-            {*<li class="quicklinks hidden-xs ng-cloak">
+            <li class="quicklinks hidden-xs">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-white">
+                <i class="fa fa-lg fa-dropbox"></i>
+                {t}Packs{/t}
+              </button>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-white">
+                <i class="fa fa-lg fa-cube"></i>
+                {t}Modules{/t}
+              </button>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-white">
+                <i class="fa fa-lg fa-eye"></i>
+                {t}Themes{/t}
+              </button>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="quicklinks">
+              <button class="btn btn-white">
+                <i class="fa fa-lg fa-support"></i>
+                {t}Services{/t}
+              </button>
+            </li>
+          </ul>
+          <ul class="hidden-xs nav quick-section pull-right">
+            <li class="quicklinks">
+              <div class="input-group" style="width: 200px">
+                <input name="name" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text"/>
+                <span class="input-group-addon">
+                  <span class="fa fa-search fa-lg"></span>
+                </span>
+              </div>
+            </li>
+            {*<li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs ng-cloak">
               <ui-select name="view" theme="select2" ng-model="pagination.epp">
                 <ui-select-match>
                   <strong>{t}View{/t}:</strong> [% $select.selected %]
@@ -103,40 +150,38 @@
         </div>
       </div>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
-        <div class="col-lg-4 col-md-6 col-sm-6" ng-repeat="item in items | filter:criteria">
-          <div class="grid simple module-grid pointer" ng-click="showDetails(item)">
-            <div class="grid-body">
-              <div class="purchased-ribbon" ng-if="isActivated(item)">{t}Purchased{/t}</div>
-              <div class="row">
-                <div class="col-sm-4">
-                  <img class="img-responsive" src="http://placehold.it/300x300">
-                </div>
-                <div class="col-sm-8">
-                  <h4>[% item.name %]</h4>
-                  <p class="p-b-15">
-                    [% item.description | limitTo: 140 %]
-                    [% item.description.length > 140 ? '...' : '' %]
-                  </p>
-                  <div class="text-right">
-                    <button class="btn btn-white" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item)" ng-if="!isActivated(item)">
-                      <i class="fa fa-plus m-r-5"></i>
-                      {t}Add to cart{/t}
-                    </button>
+        <div class="col-md-3 col-sm-4 col-xs-6 module-wrapper" ng-repeat="item in items | filter:criteria">
+          <div class="grid simple module-grid" ng-click="showDetails(item)">
+            <div class="grid-body no-padding">
+              <div class="overlay" ng-if="isActivated(item)">
+                <div class="block pull-bottom p-b-15 p-l-15 p-r-15">
+                  <div class="btn btn-block btn-default" ng-disabled="true">
+                    {t}Purchased{/t}
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="grid-footer">
-              <div class="row">
-                <div class="col-sm-4">
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star-o"></i>
+              <div class="module-header">
+                <img class="img-responsive" src="http://placehold.it/300x300">
+              </div>
+              <div class="module-body">
+                <div class="module-icon">
+                  <i class="fa fa-dropbox fa-lg"></i>
                 </div>
-                <div class="col-sm-8 text-right">
-                  {t}Updated{/t}: [% item.last_updated | moment %]
-                </div>
+                <h5 class="name">
+                  <strong>[% item.name %]</strong>
+                </h5>
+                <p class="description">
+                  [% item.description | limitTo: 140 %]
+                  [% item.description.length > 140 ? '...' : '' %]
+                </p>
+                <hr class="hidden-xs">
+                  <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
+                    {t}More info{/t}
+                  </button>
+                <button class="btn btn-block btn-default hidden-xs" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+                  <i class="fa fa-plus m-r-5"></i>
+                  {t}Add to cart{/t}
+                </button>
               </div>
             </div>
           </div>

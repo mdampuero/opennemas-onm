@@ -1,7 +1,48 @@
 @import "../../../assets/src/opennemas-webarch/less/helpers/_variables.less";
 
+.cart-orb {
+  background-color: @info-color;
+  border-radius: 100%;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  height: 18px;
+  line-height: 1.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 18px;
+}
+
+.modal {
+  .module-icon {
+    margin-top: -30px;
+    right: 30px;
+    position: absolute;
+  }
+}
+
+.module-icon {
+  background: #fff;
+  border-radius: 100%;
+  border: 1px solid #ccc;
+  height: 30px;
+  padding: 5px;
+  width: 30px;
+}
+
 .module-grid {
   overflow: hidden;
+  position: relative;
+
+  .btn {
+    text-transform: uppercase;
+  }
+
+  .description {
+    height: 60px;
+    margin-bottom: 15px;
+  }
 
   .grid-body {
     min-height: 220px;
@@ -9,6 +50,40 @@
 
   .img-responsive {
     margin: 0 auto;
+  }
+
+  .module-body {
+    position: relative;
+    padding: 0 15px 15px;
+  }
+
+  .module-icon {
+    position: absolute;
+    right: 15px;
+    top: -30px;
+  }
+
+  .more-info {
+    border-top: 1px solid @border-color;
+    padding: 15px 0;
+  }
+
+  .name {
+    margin-top: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .overlay {
+    background-color: fade(@background-color, 75%);
+    position: absolute;
+    opacity: 1;
+    visibility: visible;
+
+    .btn {
+      opacity: 1;
+    }
   }
 }
 
@@ -23,4 +98,22 @@
   text-transform: uppercase;
   top: 15px;
   transform: rotate(45deg);
+}
+
+@media (min-width: @tablet-width) and (max-width: (@desktop-width - 1)) {
+  .module-wrapper {
+    width: 25%;
+  }
+}
+
+@media (min-width: 1366px) {
+  .module-wrapper {
+    width: 20%;
+  }
+}
+
+@media (min-width: 1680px) {
+  .module-wrapper {
+    width: 16.666666667%;
+  }
 }
