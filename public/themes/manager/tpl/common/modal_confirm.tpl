@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();">&times;</button>
     <h4 class="modal-title">
         <i class="fa fa-trash-o"></i>
         <span ng-if="template.name == 'logout'">{t}Log out{/t}</span>
@@ -47,7 +47,7 @@
     </ul>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-link" data-dismiss="modal" ng-click="close();" ng-disabled="loading">
+    <button type="button" class="btn btn-link" data-dismiss="modal" ng-click="dismiss();" ng-disabled="loading">
         {t}No{/t}
     </button>
     <button type="button" class="btn btn-primary" ng-click="confirm();" ng-disabled="loading">

@@ -1,38 +1,66 @@
+(function () {
+  'use strict';
 
-angular.module('ManagerApp.controllers').controller('modalCtrl', [
-    '$modalInstance', '$scope', 'template', 'success',
-    function ($modalInstance, $scope, template, success) {
+  angular.module('ManagerApp.controllers')
+    /**
+     * @ngdoc controller
+     * @name  modalCtrl
+     *
+     * @requires $modalInstance
+     * @requires $scope
+     * @requires template
+     * @requires success
+     *
+     * @description
+     *   Handles actions for confirmation modal windows.
+     */
+    .controller('modalCtrl', [
+      '$modalInstance', '$scope', 'template', 'success',
+      function ($modalInstance, $scope, template, success) {
+        /**
+         * memberOf modalCtrl
+         *
+         * @description
+         *   The template parameters.
+         *
+         * @type {Object}
+         */
         $scope.template = template;
 
         /**
-         * Closes the current modal
+         * @function dismiss
+         * @memberOf modalCtrl
+         *
+         * @description
+         *   Close the modal without returning response.
          */
-        $scope.close = function() {
-            $modalInstance.close(false);
+        $scope.dismiss = function() {
+          $modalInstance.dismiss();
         };
 
         /**
-         * Confirms and executes the confirmed action.
+         * @function confirm
+         * @memberOf modalCtrl
+         *
+         * @description
+         *   Confirms and executes the confirmed action.
          */
         $scope.confirm = function() {
-            $scope.loading = 1;
+          $scope.loading = 1;
 
-            var getType = {};
-            if (success && getType.toString.call(success) === '[object Function]') {
-                success().then(function (response) {
-                    $modalInstance.close(response);
-                    $scope.loading = 0
-                });
-            } else {
-                $modalInstance.close(true);
-            }
-        }
+          var getType = {};
+          if (success && getType.toString.call(success) === '[object Function]') {
+            success($modalInstance);
+          } else {
+            $modalInstance.close(true);
+          }
+        };
 
-        /**
-         * Frees up memory before controller destroy event
-         */
+        // Frees up memory before controller destroy event
         $scope.$on('$destroy', function() {
-            $scope.template = null;
-        })
-    }
-]);
+          $scope.template = null;
+        });
+      }
+    ]);
+})();
+
