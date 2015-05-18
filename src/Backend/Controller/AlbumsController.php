@@ -317,8 +317,8 @@ class AlbumsController extends Controller
             'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
             'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
             'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'album_frontpage_image' =>
-                $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+            'with_comment'   => $request->request->filter('with_comment', 0, FILTER_SANITIZE_STRING),
+            'album_frontpage_image' => $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
             'album_photos_footer'   => $request->request->get('album_photos_footer'),
             'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
