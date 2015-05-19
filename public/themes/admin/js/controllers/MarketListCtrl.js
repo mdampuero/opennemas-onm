@@ -19,8 +19,8 @@
      *   Handles actions for market.
      */
     .controller('MarketListCtrl', [
-      '$http', '$modal', '$scope', 'routing', 'messenger', 'webStorage',
-      function($http, $modal, $scope, routing, messenger, webStorage) {
+      '$http', '$modal', '$scope', '$timeout', 'routing', 'messenger', 'webStorage',
+      function($http, $modal, $scope, $timeout, routing, messenger, webStorage) {
         /**
          * @function addToCart
          * @memberOf MarketListCtrl
@@ -198,13 +198,19 @@
         };
 
         // Save changes in chart in web storage
-        $scope.$watch('cart', function(nv) {
+        $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
+            $scope.empty = true;
             webStorage.local.remove('cart');
             return;
           }
 
+          $scope.changing = true;
           webStorage.local.add('cart', nv);
+          $timeout(function() {
+            $scope.changing = false;
+            $scope.empty    = false;
+          }, 1000);
         }, true);
 
         // Initialize the shopping cart from the webStorage

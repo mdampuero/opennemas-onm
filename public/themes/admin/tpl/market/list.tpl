@@ -30,7 +30,7 @@
                   </span>
                   <span>
                     <i class="fa fa-shopping-cart fa-lg p-r-10"></i>
-                    <span class="ng-cloak cart-orb" ng-if="cart.length > 0">
+                    <span class="ng-cloak cart-orb animated" ng-class="{ 'bounceIn': empty, 'pulse': !empty && changing }" ng-if="cart.length > 0">
                       [% cart.length %]
                     </span>
                   </span>
@@ -153,7 +153,7 @@
       </div>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
         <div class="col-md-3 col-sm-4 col-xs-6 module-wrapper" ng-repeat="item in items | filter:criteria">
-          <div class="grid simple module-grid" ng-click="showDetails(item)">
+          <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
             <div class="grid-body no-padding">
               <div class="overlay" ng-if="isActivated(item)">
                 <div class="block pull-bottom p-b-15 p-l-15 p-r-15">
