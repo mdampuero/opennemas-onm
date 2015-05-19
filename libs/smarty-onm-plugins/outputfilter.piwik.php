@@ -64,5 +64,5 @@ function addPiwikCode($output)
         </noscript>
         <!-- End Piwik Tracking Code -->';
 
-    return str_replace('</head>', $code . '</head>', $output);
+    return preg_replace('@(<body.*>)@', '${1}'.$code, $output);
 }
