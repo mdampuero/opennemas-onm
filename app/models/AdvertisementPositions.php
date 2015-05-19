@@ -99,12 +99,20 @@ class AdvertisementPositions
                 'name'  => 'Button Colunm 2 Position 2',
                 'group' => 'frontpage'
             ),
+            23 => array(
+                'name'  => 'Button Colunm 2 Position 3',
+                'group' => 'frontpage'
+            ),
             24 => array(
                 'name'  => 'Button Colunm 2 Position 4',
                 'group' => 'frontpage'
             ),
             25 => array(
                 'name'  => 'Button Colunm 2 Position 5',
+                'group' => 'frontpage'
+            ),
+            26 => array(
+                'name'  => 'Button Colunm 2 Position 6',
                 'group' => 'frontpage'
             ),
 
