@@ -28,6 +28,7 @@
     "angular-ui-tree": "~2.*",
     "angular-webstorage": "~0.*",
     "angular-bootstrap-multiselect": "0.3.0",
+    "animate.css": "~3.3.*",
     "autoNumeric": "~1.9.*",
     "blockui": "2.70",
     "blueimp-file-upload": "9.9.*",
