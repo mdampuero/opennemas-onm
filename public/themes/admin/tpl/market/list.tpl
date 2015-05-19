@@ -30,7 +30,7 @@
                   </span>
                   <span>
                     <i class="fa fa-shopping-cart fa-lg p-r-10"></i>
-                    <span class="ng-cloak cart-orb animated" ng-class="{ 'bounceIn': empty, 'pulse': !empty && changing }" ng-if="cart.length > 0">
+                    <span class="ng-cloak cart-orb animated" ng-class="{ 'bounceIn': bounce, 'pulse': pulse }" ng-if="cart.length > 0">
                       [% cart.length %]
                     </span>
                   </span>

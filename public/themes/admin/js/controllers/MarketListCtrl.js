@@ -200,17 +200,20 @@
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
           if (!nv || (nv instanceof Array && nv.length === 0)) {
-            $scope.empty = true;
             webStorage.local.remove('cart');
             return;
           }
 
-          $scope.changing = true;
-          webStorage.local.add('cart', nv);
-          $timeout(function() {
-            $scope.changing = false;
-            $scope.empty    = false;
-          }, 1000);
+          // Adding first item or initialization from webstorage
+          if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
+            $scope.bounce = true;
+            $timeout(function() { $scope.bounce = false; }, 1000);
+            return;
+          }
+
+          // Adding items
+          $scope.pulse = true;
+          $timeout(function() { $scope.pulse = false; }, 1000);
         }, true);
 
         // Initialize the shopping cart from the webStorage
