@@ -25,7 +25,7 @@
             <ul class="nav quick-section">
               <li class="quicklinks shopping-cart dropdown">
                 <div class="p-10" data-toggle="dropdown">
-                  <span class="p-l-5 p-r-5">
+                  <span class="hidden-xs p-l-5 p-r-5">
                     {t}Cart{/t}
                   </span>
                   <span>
@@ -45,10 +45,12 @@
                     <scrollable>
                       <ul>
                         <li class="clearfix" ng-repeat="item in cart">
-                          <a href="#">[% item.name %]</a>
-                          <button class="btn btn-white pull-right" ng-click="removeFromCart(item, $event)">
-                            <i class="fa fa-times fa-lg text-danger"></i>
-                          </button>
+                          <img class="img-responsive pull-left" src="http://placehold.it/300x300">
+                          <span class="pull-left">
+                            <a href="#">[% item.name %]</a>
+                            <p class="description">[% item.description %]</p>
+                          </span>
+                          <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
                         </li>
                       </ul>
                     </scrollable>
