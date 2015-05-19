@@ -43,11 +43,11 @@
                   </div>
                   <div class="shopping-cart-placeholder" ng-if="cart.length > 0">
                     <scrollable>
-                      <ul>
+                      <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart">
                           <img class="img-responsive pull-left" src="http://placehold.it/300x300">
                           <span class="pull-left">
-                            <a href="#">[% item.name %]</a>
+                            <h5>[% item.name %]</h5>
                             <p class="description">[% item.description %]</p>
                           </span>
                           <i class="fa fa-times pull-left" ng-click="removeFromCart(item, $event)"></i>
