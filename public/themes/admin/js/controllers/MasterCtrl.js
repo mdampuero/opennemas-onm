@@ -52,14 +52,6 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
     };
 
     /**
-     * Scrolls the page to top.
-     */
-
-     {
-      $('body').animate({ scrollTop: 0 }, 250);
-    };
-
-    /**
      * Updates the content margin-top basing on the filters-navbar height.
      */
     $scope.checkFiltersBar = function() {
@@ -72,6 +64,13 @@ angular.module('BackendApp.controllers').controller('MasterCtrl', [
 
         $('.content').css('margin-top', margin + 'px');
       }, 1000);
+    };
+
+
+    $scope.xsOnly = function(event, callback, args) {
+      if ($scope.windowWidth < 992) {
+        callback(args);
+      }
     };
 
     /**
