@@ -67,7 +67,9 @@ class ErrorController extends Controller
                         array(
                             'category_real_name' => $page->title,
                             'page'               => $page,
-                            'advertisements'     => $ads
+                            'advertisements'     => $ads,
+                            'x-tags'             => 'not_found',
+                            'x-cache-for'        => '1d'
                         )
                     );
                 }
