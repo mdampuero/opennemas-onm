@@ -19,7 +19,7 @@
 
         {stylesheets src="
         @Common/components/bootstrap/dist/css/bootstrap.min.css,
-        @Common/src/webarch/css/animate.min.css,
+        @Common/components/animate.css/animate.min.css,
         @Common/src/webarch/css/style.css,
         @Common/src/webarch/css/responsive.css,
         @Common/src/webarch/css/custom-icon-set.css,
