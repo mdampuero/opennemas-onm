@@ -1052,16 +1052,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.9",
+            "version": "1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "d8cd38c2f54024d0af57e929d5b773979d36bfea"
+                "reference": "13944ff2bb6e5e0d497275ab6702c2e9a5e35875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/d8cd38c2f54024d0af57e929d5b773979d36bfea",
-                "reference": "d8cd38c2f54024d0af57e929d5b773979d36bfea",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/13944ff2bb6e5e0d497275ab6702c2e9a5e35875",
+                "reference": "13944ff2bb6e5e0d497275ab6702c2e9a5e35875",
                 "shasum": ""
             },
             "require": {
@@ -1092,7 +1092,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2015-05-21 10:13:04"
+            "time": "2015-05-21 14:45:26"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
