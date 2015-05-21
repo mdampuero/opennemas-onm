@@ -47,7 +47,7 @@
                     "homepage": "http://www.lickmychip.com/"
                 },
                 {
-                    "name": "Nicolas Le Goff",
+                    "name": "nlegoff",
                     "email": "legoff.n@gmail.com"
                 },
                 {
@@ -1052,16 +1052,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.8",
+            "version": "1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "92a4fa310972729618094e2bd2748db894d67690"
+                "reference": "d8cd38c2f54024d0af57e929d5b773979d36bfea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/92a4fa310972729618094e2bd2748db894d67690",
-                "reference": "92a4fa310972729618094e2bd2748db894d67690",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/d8cd38c2f54024d0af57e929d5b773979d36bfea",
+                "reference": "d8cd38c2f54024d0af57e929d5b773979d36bfea",
                 "shasum": ""
             },
             "require": {
@@ -1092,7 +1092,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2015-05-08 16:15:01"
+            "time": "2015-05-21 10:13:04"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -1139,7 +1139,7 @@
                     "homepage": "https://github.com/friendsofsymfony/FOSJsRoutingBundle/contributors"
                 },
                 {
-                    "name": "William Durand",
+                    "name": "William DURAND",
                     "email": "william.durand1@gmail.com"
                 }
             ],
