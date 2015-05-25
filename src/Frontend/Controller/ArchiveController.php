@@ -88,6 +88,7 @@ class ArchiveController extends Controller
                 'cache_id' => $cacheID,
                 'newslibraryDate' => $date,
                 'actual_category' => 'archive',
+                'x-tags'          => 'archive-page,'.$date,
             )
         );
     }
@@ -123,7 +124,6 @@ class ArchiveController extends Controller
         if (($this->view->caching == 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-
             $cm = new \ContentManager();
 
             $library  = array();
@@ -151,6 +151,7 @@ class ArchiveController extends Controller
                 'category_name'   => $categoryName,
                 'actual_category' => 'archive',
                 'newslibraryDate' => $date,
+                'x-tags'          => 'archive-page,'.$date.$categoryName,
             )
         );
     }
