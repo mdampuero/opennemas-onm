@@ -204,6 +204,14 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       container.items.splice(position, 1);
     };
 
+    $scope.options = {
+      accept: function(sourceNode, destNodes, destIndex) {
+        var data = sourceNode.$modelValue;
+        var destType = destNodes.$element.attr('type');
+        return (data.content_type == destType);
+      }
+    };
+
     /**
      * Removes unnecessary fields from items and updates the JSON string to send
      * to server.
@@ -221,6 +229,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
               content_type_name:      $scope.newsletterContents[i].items[j].content_type_name,
               content_type_l10n_name: $scope.newsletterContents[i].items[j].content_type_l10n_name,
               title:                  $scope.newsletterContents[i].items[j].title,
+              content_type:           'content',
               position:               j
             };
 
