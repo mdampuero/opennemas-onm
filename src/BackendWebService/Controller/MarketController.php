@@ -52,6 +52,15 @@ class MarketController extends Controller
         $modules   = \Onm\Module\ModuleManager::getAvailableModulesGrouped();
         $activated = $this->get('instance')->activated_modules;
 
+        // Remove internal modules
+        $modules = array_filter($modules, function ($a) {
+            if (array_key_exists('type', $a) && $a['type'] === 'internal') {
+                return false;
+            }
+
+            return true;
+        });
+
         // Non-purchased modules first
         usort($modules, function ($a, $b) use ($activated) {
             if (in_array($a['id'], $activated)
