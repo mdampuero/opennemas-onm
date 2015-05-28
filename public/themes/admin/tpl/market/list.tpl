@@ -73,7 +73,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks hidden-xs">
-              <button class="btn btn-white">
+              <button class="btn btn-white" ng-click="type = undefined">
                 <i class="fa fa-lg fa-th"></i>
                 {t}All{/t}
               </button>
@@ -81,7 +81,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks module-filter">
+            <li class="quicklinks module-filter" ng-click="type = 'pack'">
               <button class="btn btn-block btn-white">
                 <i class="fa fa-lg fa-dropbox"></i>
                 {t}Packs{/t}
@@ -91,7 +91,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block btn-white">
+              <button class="btn btn-block btn-white" ng-click="type = 'module'">
                 <i class="fa fa-lg fa-cube"></i>
                 {t}Modules{/t}
               </button>
@@ -100,7 +100,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter">
-              <button class="btn btn-block btn-white">
+              <button class="btn btn-block btn-white" ng-click="type = 'theme'">
                 <i class="fa fa-lg fa-eye"></i>
                 {t}Themes{/t}
               </button>
@@ -109,7 +109,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block btn-white">
+              <button class="btn btn-block btn-white" ng-click="type = 'service'">
                 <i class="fa fa-lg fa-support"></i>
                 {t}Services{/t}
               </button>
@@ -152,7 +152,7 @@
         </div>
       </div>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter:criteria">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter: criteria | filter: { type: type }">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
             <div class="grid-body no-padding">
               <div class="overlay" ng-if="isActivated(item)">
