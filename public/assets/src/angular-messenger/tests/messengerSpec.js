@@ -43,7 +43,7 @@
       });
 
       describe('and checking a valid message', function() {
-        it('should return an object', function() {
+        it('should return true', function() {
           var valid = messenger.isValid('Hello');
           expect(valid).toBeTruthy();
 
@@ -56,7 +56,7 @@
       });
 
       describe('and checking a non-valid message', function() {
-        it('should return an object', function() {
+        it('should return false', function() {
           var valid = messenger.isValid(1234);
           expect(valid).toBeFalsy();
 
