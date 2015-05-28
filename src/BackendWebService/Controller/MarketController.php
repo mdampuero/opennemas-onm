@@ -52,6 +52,21 @@ class MarketController extends Controller
         $modules   = \Onm\Module\ModuleManager::getAvailableModulesGrouped();
         $activated = $this->get('instance')->activated_modules;
 
+        // Non-purchased modules first
+        usort($modules, function ($a, $b) use ($activated) {
+            if (in_array($a['id'], $activated)
+                && in_array($b['id'], $activated)
+            ) {
+                return 0;
+            }
+
+            if (in_array($a['id'], $activated)) {
+                return 1;
+            }
+
+            return -1;
+        });
+
         return new JsonResponse(
             [ 'results' => $modules, 'activated' => $activated ]
         );
