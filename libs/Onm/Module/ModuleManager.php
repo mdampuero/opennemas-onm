@@ -193,275 +193,321 @@ class ModuleManager
                     'id'   => 'ADS_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Advertisement'),
-                    'description' => _('You can add images or script tags to publish advertising banners')
+                    'description' => _('You can add images or script tags to publish advertising banners'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'ADVANCED_SEARCH',
                     'plan' => 'Base',
                     'name' => _('Advanced search'),
-                    'description' => _('It allows you to search for contents directly inside the manager')
+                    'description' => _('It allows you to search for contents directly inside the manager'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'ALBUM_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Albums'),
-                    'description' => _('Module to manage albums and galleries')
+                    'description' => _('Module to manage albums and galleries'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'ARTICLE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Articles'),
-                    'description' => _('Module for managing articles')
+                    'description' => _('Module for managing articles'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'AVANCED_ARTICLE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Advanced article options'),
-                    'description' => _('Module to allow the second article signature')
+                    'description' => _('Module to allow the second article signature'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'AVANCED_FRONTPAGE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Advanced frontpage managers'),
-                    'description' => _('Module for content personalization on frontpages')
+                    'description' => _('Module for content personalization on frontpages'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'BLOG_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Blog'),
-                    'description' => _('Module to manage reviews with blog format')
+                    'description' => _('Module to manage reviews with blog format'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'BOOK_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Books'),
-                    'description' => _('Module for managing book pages')
+                    'description' => _('Module for managing book pages'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'CACHE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Cache manager'),
-                    'description' => _('Module for managing the cache of pages')
+                    'description' => _('Module for managing the cache of pages'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'CATEGORY_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Category'),
-                    'description' => _('Module for managing categories')
+                    'description' => _('Module for managing categories'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'COMMENT_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Comments'),
-                    'description' => _('Module for managing comments')
+                    'description' => _('Module for managing comments'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'CRONICAS_MODULES',
                     'plan' => 'Other',
                     'name' => _('Cronicas customizations'),
-                    'description' => _('Module for managing Cronicas customizations')
+                    'description' => _('Module for managing Cronicas customizations'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'FILE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Files'),
-                    'description' => _('Allows the user to upload files')
+                    'description' => _('Allows the user to upload files'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'FORM_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Forms'),
-                    'description' => _('Allows to create new custom forms')
+                    'description' => _('Allows to create new custom forms'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'FRONTPAGE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Frontpages'),
-                    'description' => _('Module for managing elements in frontpages')
+                    'description' => _('Module for managing elements in frontpages'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'FRONTPAGES_LAYOUT',
                     'plan' => 'Silver',
                     'name' => _('Frontpages layout'),
-                    'description' => _('Allows to select different models for the frontpages')
+                    'description' => _('Allows to select different models for the frontpages'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'IMAGE_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Images'),
-                    'description' => _('Allows user to upload images')
+                    'description' => _('Allows user to upload images'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'KEYWORD_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Keywords'),
-                    'description' => _('Allows user to define keywords associated with url, mails and internal searches')
+                    'description' => _('Allows user to define keywords associated with url, mails and internal searches'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'KIOSKO_MANAGER',
                     'plan' => 'Gold',
                     'name' => _('Kiosko'),
-                    'description' => _('Create your own newsstand for publishing e-papers, magazines and others')
+                    'description' => _('Create your own newsstand for publishing e-papers, magazines and others'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'LETTER_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Letters'),
-                    'description' => _('Allows user to publish letters sent to the director')
+                    'description' => _('Allows user to publish letters sent to the director'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'LIBRARY_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Library'),
-                    'description' => _('With this module users can access all contents by date')
+                    'description' => _('With this module users can access all contents by date'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'MENU_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Menus'),
-                    'description' => _('Allows user to manage the menús')
+                    'description' => _('Allows user to manage the menús'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'NEWS_AGENCY_IMPORTER',
                     'plan' => 'Gold',
                     'name' => _('News Agency importer'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'NEWSLETTER_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Newsletter'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'OPINION_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Opinion'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'POLL_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Polls'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'PROMOTIONAL_BAR',
                     'plan' => 'Other',
                     'name' => _('Promotional bar'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'SCHEDULE_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Schedules'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'SETTINGS_MANAGER',
                     'plan' => 'Base',
                     'name' => _('System wide settings'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'SPECIAL_MANAGER',
                     'plan' => 'Other',
                     'name' => _('Specials'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'STATIC_LIBRARY',
                     'plan' => 'Other',
                     'name' => _('Static library'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'STATIC_PAGES_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Static pages'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'SYNC_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Instance synchronization'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'TRASH_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Trash'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'USER_GROUP_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('User groups'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'USER_MANAGER',
                     'plan' => 'Silver',
                     'name' => _('Users'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'USERVOICE_SUPPORT',
                     'plan' => 'Base',
                     'name' => _('UserVoice integration'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'internal'
                 ],
                 [
                     'id'   => 'VIDEO_MANAGER',
                     'plan' => 'Profesional',
                     'name' => _('Videos'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'WIDGET_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Widgets'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
                     'id'   => 'PAYWALL',
                     'plan' => 'Other',
                     'name' => _('Paywall'),
-                    'description' => _('Add description...')
+                    'description' => _('Add description...'),
+                    'type' => 'module'
                 ],
                 [
-                    'id' => 'SUPPORT_NONE',
+                    'id'   => 'SUPPORT_NONE',
                     'plan' => 'Support',
                     'name' => _('No support'),
-                    'description' => ''
+                    'description' => '',
+                    'type' => 'service'
                 ],
                 [
-                    'id' => 'SUPPORT_PRO',
+                    'id'   => 'SUPPORT_PRO',
                     'plan' => 'Support',
                     'name' => _('Profesional Support'),
-                    'description' => _('10 hours/month')
+                    'description' => _('10 hours/month'),
+                    'type'        => 'service'
                 ],
                 [
-                    'id' => 'SUPPORT_2',
+                    'id'   => 'SUPPORT_2',
                     'plan' => 'Support',
                     'name' => _('Support 2'),
-                    'description' => _('40 hours/month')
+                    'description' => _('40 hours/month'),
+                    'type' => 'service'
                 ],
                 [
-                    'id' => 'SUPPORT_4',
+                    'id'   => 'SUPPORT_4',
                     'plan' => 'Support',
                     'name' => _('Support 4'),
-                    'description' => _('80 hours/month')
+                    'description' => _('80 hours/month'),
+                    'type' => 'service'
                 ],
                 [
                     'id' => 'SUPPORT_8',
                     'plan' => 'Support',
                     'name' => _('Support 8'),
-                    'description' => _('160 hours/month')
+                    'description' => _('160 hours/month'),
+                    'type' => 'service'
                 ],
                 [
-                    'id' => 'SUPPORT_8_PLUS',
+                    'id'   => 'SUPPORT_8_PLUS',
                     'plan' => 'Support',
                     'name' => _('Support 8+'),
-                    'description' => _('240 hours/month')
+                    'description' => _('240 hours/month'),
+                    'type' => 'service'
                 ]
             ];
         }
