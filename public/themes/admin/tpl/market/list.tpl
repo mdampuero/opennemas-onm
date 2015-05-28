@@ -45,7 +45,7 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart">
-                          <img class="img-responsive pull-left" src="http://placehold.it/300x300">
+                          <img class="img-responsive pull-left" src="http://placehold.it/500x500">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
                             <p class="description">[% item.description %]</p>
@@ -81,35 +81,35 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <button class="btn btn-white">
+            <li class="quicklinks module-filter">
+              <button class="btn btn-block btn-white">
                 <i class="fa fa-lg fa-dropbox"></i>
                 {t}Packs{/t}
               </button>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <button class="btn btn-white">
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block btn-white">
                 <i class="fa fa-lg fa-cube"></i>
                 {t}Modules{/t}
               </button>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <button class="btn btn-white">
+            <li class="quicklinks module-filter">
+              <button class="btn btn-block btn-white">
                 <i class="fa fa-lg fa-eye"></i>
                 {t}Themes{/t}
               </button>
             </li>
-            <li class="quicklinks">
+            <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks">
-              <button class="btn btn-white">
+            <li class="quicklinks module-filter no-padding">
+              <button class="btn btn-block btn-white">
                 <i class="fa fa-lg fa-support"></i>
                 {t}Services{/t}
               </button>
@@ -152,7 +152,7 @@
         </div>
       </div>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-6 module-wrapper" ng-repeat="item in items | filter:criteria">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter:criteria">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
             <div class="grid-body no-padding">
               <div class="overlay" ng-if="isActivated(item)">
@@ -162,9 +162,7 @@
                   </div>
                 </div>
               </div>
-              <div class="module-header">
-                <img class="img-responsive" src="http://placehold.it/300x300">
-              </div>
+              <div class="module-header" style="background-image: url(http://placehold.it/500x500);"></div>
               <div class="module-body">
                 <div class="module-icon">
                   <i class="fa fa-dropbox fa-lg"></i>
