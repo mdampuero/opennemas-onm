@@ -105,9 +105,11 @@ class Synchronizer
     {
         $params   = $this->getSyncParams();
 
-        $fromTime = strtotime($params['lastimport']);
+        $interval = abs(strtotime($params['lastimport']) - time());
 
-        return $fromTime;
+        $minutes  = round($interval / 60);
+
+        return $minutes;
     }
 
     /**

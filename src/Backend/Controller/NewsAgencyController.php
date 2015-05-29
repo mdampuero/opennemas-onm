@@ -499,18 +499,14 @@ class NewsAgencyController extends Controller
             foreach ($element->getPhotos() as $photo) {
                 if ($photo->getId() == $attachmentId) {
                     $filePath = null;
+                    // Get image from HTTP
                     if (strpos($photo->getFilePath(), 'http://') !== false) {
-                        $filePath = $photo->getFilePath();
+                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
 
                     // Get image from FTP
                     if (!$filePath) {
                         $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->getFilePath());
-                    }
-
-                    // If no image from FTP check HTTP
-                    if (!$filePath) {
-                        $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->getName();
                     }
 
                     $content = @file_get_contents($filePath);
@@ -1024,7 +1020,11 @@ class NewsAgencyController extends Controller
                     // Create author
                     $user = new \User();
 
-                    if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
+                    if (!is_null($authorArray['id']) &&
+                        !$user->checkIfUserExists($authorArray) &&
+                        $user->checkIfExistsUserEmail($authorArray['email']) &&
+                        $user->checkIfExistsUserName($authorArray['username'])
+                    ) {
                         // Create new user
                         if ($user->create($authorArray)) {
                             // Write in log
