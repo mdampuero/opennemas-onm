@@ -136,12 +136,15 @@
          *   Finds the list of available modules.
          */
         $scope.list = function() {
+          $scope.loading = true;
           var url = routing.generate('backend_ws_market_list');
 
           $http.get(url).success(function(response) {
             $scope.activated = response.activated;
             $scope.items     = response.results;
+            $scope.loading = false;
           }).error(function(response) {
+            $scope.loading = false;
             messenger.post({ type: 'error', message: response });
           });
         };
