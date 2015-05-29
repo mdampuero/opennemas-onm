@@ -27,5 +27,7 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-default uppercase" ng-click="close()" type="button">{t}Save for later{/t}</button>
-    <button class="btn btn-success uppercase" ng-click="confirm()" type="button">{t}Checkout{/t}</button>
-  </div>
+    <button class="btn btn-success uppercase" ng-click="confirm()" type="button">
+      <i class="fa fa-circle-o-notch fa-3x" ng-show="saving"></i>
+      {t}Checkout{/t}
+    </button>

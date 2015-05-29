@@ -48,7 +48,6 @@
          *
          * @description
          *   Opens a modal window to confirm the cart.
-         *
          */
         $scope.checkout = function() {
           var modal = $modal.open({
@@ -63,6 +62,7 @@
               },
               success: function() {
                 return function() {
+                  $scope.saving = true;
                   var url = routing.generate('backend_ws_market_checkout');
                   var data = $scope.cart.map(function(e) {
                     return e.id;
@@ -78,11 +78,23 @@
             var message = response.data;
             var type    = response.status === 200 ? 'success' : 'error';
 
-            messenger.post(message, type);
-
             if (response.status === 200) {
               $scope.cart = [];
             }
+
+            $modal.open({
+              templateUrl: 'modal-success',
+              backdrop: 'static',
+              controller: 'modalCtrl',
+              resolve: {
+              template: function() {
+                return null;
+              },
+              success: function() {
+                return null;
+              }
+            }
+            });
           });
         };
 

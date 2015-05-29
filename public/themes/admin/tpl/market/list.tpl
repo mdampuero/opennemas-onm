@@ -151,7 +151,7 @@
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <h3 ng-if="!loading && items && items.length > 0">{t}Available{/t}</h3>
+      <h3 class="ng-cloak" ng-if="!loading && items && items.length > 0">{t}Available{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
         <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter: criteria | filter: { type: type }" ng-if="!isActivated(item)">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
@@ -188,7 +188,7 @@
           </div>
         </div>
       </div>
-      <h3 ng-if="!loading && items && items.length > 0">{t}Purchased{/t}</h3>
+      <h3 class="ng-cloak" ng-if="!loading && items && items.length > 0">{t}Purchased{/t}</h3>
       <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
         <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter: criteria | filter: { type: type }" ng-if="isActivated(item)">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
@@ -231,6 +231,9 @@
     </script>
     <script type="text/ng-template" id="modal-details">
       {include file="market/modal/_details.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-success">
+      {include file="market/modal/_success.tpl"}
     </script>
   </div>
 {/block}
