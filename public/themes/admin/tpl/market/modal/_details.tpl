@@ -15,12 +15,19 @@
         </h3>
         <p class="p-t-15">[% template.item.author ? template.item.author : 'Opennemas' %]</p>
         <div class="text-right p-t-15">
-          <div class="price">
+          <div class="price" ng-if="template.item.price.month">
             <h3 class="no-margin">
-              <strong>35</strong>
+              <strong>[% template.item.price.month %]</strong>
               <small>€</small>
             </h3>
             <h5 class="no-margin">{t}month{/t}</h5>
+          </div>
+          <div class="price p-t-15" ng-if="template.item.price.usage">
+            <h3 class="no-margin">
+              <strong>[% template.item.price.usage.price %]</strong>
+              <small>€</small>
+            </h3>
+            <h5 class="no-margin">[% template.item.price.usage.items %] [% template.item.price.usage.type %]</h5>
           </div>
           <div class="btn btn-default uppercase m-t-15" ng-disabled="true" ng-if="template.activated">
             {t}Purchased{/t}
@@ -32,9 +39,8 @@
       </div>
     </div>
     <hr class="inverted">
-    <p class="description">
-      [% template.item.description %]
-    </p>
+    <div class="description" ng-bind-html="template.item.description" ng-if="!template.item.long_description"></div>
+    <div class="description" ng-bind-html="template.item.long_description" ng-if="template.item.long_description"></div>
     <hr class="inverted">
     <h4 class="text-center uppercase">
       {t}Screenshots and videos{/t}
