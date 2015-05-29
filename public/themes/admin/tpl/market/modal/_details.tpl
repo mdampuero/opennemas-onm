@@ -42,13 +42,13 @@
     <div class="description" ng-bind-html="template.item.description" ng-if="!template.item.long_description"></div>
     <div class="description" ng-bind-html="template.item.long_description" ng-if="template.item.long_description"></div>
     <hr class="inverted">
-    <h4 class="text-center uppercase">
+    {*<h4 class="text-center uppercase">
       {t}Screenshots and videos{/t}
     </h4>
     <div class="clearfix infinite-row">
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
       <div class="col-xs-6"><img class="img-responsive" src="http://placehold.it/300x300" alt=""></div>
-    </div>
+    </div>*}
     <div class="row p-t-15">
       <div class="col-xs-4 text-left">
         <i class="fa fa-star"></i>
