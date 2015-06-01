@@ -73,7 +73,7 @@
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks hidden-xs">
-              <button class="btn btn-white" ng-click="type = undefined">
+              <button class="btn" ng-class="{ 'btn-primary': !type, 'btn-white': type }" ng-click="type = undefined">
                 <i class="fa fa-lg fa-th"></i>
                 {t}All{/t}
               </button>
@@ -81,8 +81,8 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            {*<li class="quicklinks module-filter" ng-click="type = 'pack'">
-              <button class="btn btn-block btn-white">
+            {*<li class="quicklinks module-filter" ng-class="{ 'btn-primary': type == 'pack', 'btn-white': type != 'pack' }" ng-click="type = 'pack'">
+              <button class="btn btn-block">
                 <i class="fa fa-lg fa-dropbox"></i>
                 {t}Packs{/t}
               </button>
@@ -91,7 +91,7 @@
               <span class="h-seperate"></span>
             </li>*}
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block btn-white" ng-click="type = 'module'">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'module', 'btn-white': type != 'module' }" ng-click="type = 'module'">
                 <i class="fa fa-lg fa-cube"></i>
                 {t}Modules{/t}
               </button>
@@ -100,7 +100,7 @@
               <span class="h-seperate"></span>
             </li>
             {*<li class="quicklinks module-filter">
-              <button class="btn btn-block btn-white" ng-click="type = 'theme'">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'theme', 'btn-white': type != 'theme' }" ng-click="type = 'theme'">
                 <i class="fa fa-lg fa-eye"></i>
                 {t}Themes{/t}
               </button>
@@ -109,7 +109,7 @@
               <span class="h-seperate"></span>
             </li>*}
             <li class="quicklinks module-filter no-padding">
-              <button class="btn btn-block btn-white" ng-click="type = 'service'">
+              <button class="btn btn-block" ng-class="{ 'btn-primary': type == 'service', 'btn-white': type != 'service' }" ng-click="type = 'service'">
                 <i class="fa fa-lg fa-support"></i>
                 {t}Services{/t}
               </button>
