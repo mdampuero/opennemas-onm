@@ -152,7 +152,6 @@ class ModuleManager
                 'NEWS_AGENCY_IMPORTER'      => _('News Agency importer'),
                 'NEWSLETTER_MANAGER'        => _('Newsletter'),
                 'OPINION_MANAGER'           => _('Opinion'),
-                'PAPER_IMPORT'              => _('Paper import'),
                 'POLL_MANAGER'              => _('Polls'),
                 'PROMOTIONAL_BAR'           => _('Promotional bar'),
                 'SCHEDULE_MANAGER'          => _('Schedules'),
