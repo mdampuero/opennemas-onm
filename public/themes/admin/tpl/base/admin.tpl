@@ -117,12 +117,14 @@
           {block name="header_links"}
             <div class="pull-left">
               <ul class="nav quick-section">
-                <li class="quicklinks">
-                  <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
-                    <i class="fa fa-bullseye"></i>
-                    {t}My newspaper{/t}
-                  </a>
-                </li>
+                {acl isAllowed="ROLE_ADMIN"}
+                  <li class="quicklinks">
+                    <a href="{url name=admin_client_info_page}" title="{t}Instance information{/t}">
+                      <i class="fa fa-bullseye"></i>
+                      {t}My newspaper{/t}
+                    </a>
+                  </li>
+                {/acl}
                 {block name="quick-create"}
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
