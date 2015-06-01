@@ -322,6 +322,32 @@
             $scope.selected = null;
           });
 
+        /**
+         * @function updateSupport
+         * @memberOf InstanceCtrl
+         *
+         * @description
+         *   Updates activated modules when support plan changes.
+         *
+         * @param {String} id The support plan id.
+         *
+         */
+        $scope.updateSupport = function(id) {
+          for (var i = 0; i < data.template.available_modules.length; i++) {
+            var module = data.template.available_modules[i];
+
+            if (module.plan === 'Support') {
+              var index = $scope.instance.activated_modules.indexOf(module.id);
+
+              if (index !== -1) {
+                $scope.instance.activated_modules.splice(index, 1);
+              }
+            }
+          }
+
+          $scope.instance.activated_modules.push(id);
+        };
+
         // Forces values to be integer.
         $scope.$watch(
           '[instance.external.max_users, instance.external.max_mailing]',
