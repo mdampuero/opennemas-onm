@@ -43,6 +43,33 @@
         };
 
         /**
+         * @function allActivated
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Check if all modules from array are already activated.
+         *
+         * @param {Array} source The array of modules to check.
+         *
+         * @return {Boolean} True if all modules are already activated.
+         *                   Otherwise, return false.
+         */
+        $scope.allActivated = function(source) {
+          if (!source) {
+            return true;
+          }
+
+          for (var i = 0; i < source.length; i++) {
+            if (source[i].type !== 'internal' &&
+                $scope.activated.indexOf(source[i].id) === -1) {
+              return false;
+            }
+          }
+
+          return true;
+        };
+
+        /**
          * @function checkout
          * @memberOf MarketListctrl
          *

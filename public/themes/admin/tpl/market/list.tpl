@@ -151,9 +151,9 @@
           <h6>{t}Maybe changing any filter could help or add one using the "Create" button above.{/t}</h6>
         </div>
       </div>
-      <h3 class="ng-cloak" ng-if="!loading && items && items.length > 0">{t}Available{/t}</h3>
-      <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter: criteria | filter: { type: type }" ng-if="!isActivated(item)">
+      <h3 class="ng-cloak" ng-show="!loading">{t}Available{/t}</h3>
+      <div class="infinite-row clearfix ng-cloak" ng-show="!loading && !allActivated(available) && available && available.length > 0">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in available = (items | filter: criteria | filter: { type: type })" ng-if="!isActivated(item)">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
             <div class="grid-body no-padding">
               <div class="overlay" ng-if="isActivated(item)">
@@ -188,9 +188,12 @@
           </div>
         </div>
       </div>
-      <h3 class="ng-cloak" ng-if="!loading && items && items.length > 0">{t}Purchased{/t}</h3>
-      <div class="infinite-row clearfix ng-cloak" ng-if="!loading && items && items.length > 0">
-        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in items | filter: criteria | filter: { type: type }" ng-if="isActivated(item)">
+      <div class="text-center ng-cloak" ng-show="!loading && allActivated(available)">
+        <h4>{t}No modules available to purchase{/t}</h4>
+      </div>
+      <h3 class="ng-cloak" ng-show="!loading">{t}Purchased{/t}</h3>
+      <div class="infinite-row clearfix ng-cloak" ng-show="!loading && purchased && purchased.length > 0">
+        <div class="col-md-3 col-sm-4 col-xs-12 module-wrapper" ng-repeat="item in purchased = (items | filter: criteria | filter: { type: type })" ng-if="isActivated(item)">
           <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
             <div class="grid-body no-padding">
               <div class="overlay" ng-if="isActivated(item)">
@@ -224,6 +227,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="text-center ng-cloak" ng-show="!loading && allActivated(purchased) && !purchased.length">
+        <h4>{t}No modules purchased{/t}</h4>
       </div>
     </div>
     <script type="text/ng-template" id="modal-checkout">
