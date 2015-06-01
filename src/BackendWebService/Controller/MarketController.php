@@ -124,7 +124,8 @@ class MarketController extends Controller
                     'market/email/_purchaseToSales.tpl',
                     [
                         'instance' => $instance,
-                        'modules'  => $modules
+                        'modules'  => $modules,
+                        'user'     => $this->getUser()
                     ]
                 ),
                 'text/html'
