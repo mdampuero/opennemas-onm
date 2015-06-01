@@ -52,7 +52,7 @@
          * @param {Array} source The array of modules to check.
          *
          * @return {Boolean} True if all modules are already activated.
-         *                   Otherwise, return false.
+         *                   Otherwise, returns false.
          */
         $scope.allActivated = function(source) {
           if (!source) {
@@ -62,6 +62,33 @@
           for (var i = 0; i < source.length; i++) {
             if (source[i].type !== 'internal' &&
                 $scope.activated.indexOf(source[i].id) === -1) {
+              return false;
+            }
+          }
+
+          return true;
+        };
+
+        /**
+         * @function allDeactivated
+         * @memberOf MarketListCtrl
+         *
+         * @description
+         *   Check if all modules from array are deactivated.
+         *
+         * @param {Array} source The array of modules to check.
+         *
+         * @return {Boolean} True if all modules are deactivated. Otherwise,
+         *                   returns false.
+         */
+        $scope.allDeactivated = function(source) {
+          if (!source) {
+            return true;
+          }
+
+          for (var i = 0; i < source.length; i++) {
+            if (source[i].type !== 'internal' &&
+                $scope.activated.indexOf(source[i].id) !== -1) {
               return false;
             }
           }
