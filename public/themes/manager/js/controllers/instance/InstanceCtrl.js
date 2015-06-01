@@ -200,7 +200,8 @@
             for (var module in $scope.template.available_modules) {
               module = $scope.template.available_modules[module];
 
-              if ($scope.instance.activated_modules.indexOf(module.id) === -1) {
+              if (module.plan !== 'Support' &&
+                  $scope.instance.activated_modules.indexOf(module.id) === -1) {
                 $scope.instance.activated_modules.push(module.id);
               }
             }
@@ -214,6 +215,8 @@
             $scope.selected.plan = {};
             $scope.instance.activated_modules = [];
           }
+
+          $scope.updateSupport($scope.instance.support_plan);
         };
 
         /**
@@ -356,7 +359,7 @@
             $scope.instance.external.max_mailing = parseInt($scope.instance.external.max_mailing);
           },
           true
-          );
+        );
 
         // Copy of changed_in_modules array
         if (data.instance) {
