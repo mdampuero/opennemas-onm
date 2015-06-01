@@ -129,7 +129,7 @@
                   <li class="quicklinks">
                     <span class="h-seperate"></span>
                   </li>
-                  <li class="quicklinks quick-items dropdown">
+                  <li class="quicklinks create-items quick-items dropdown">
                     <a href="#" data-toggle="dropdown">
                       <i class="fa fa-plus"></i>
                       {t}Create{/t}
