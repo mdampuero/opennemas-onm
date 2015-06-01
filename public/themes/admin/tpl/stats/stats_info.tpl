@@ -159,7 +159,7 @@
               <div>
                 <div class="more-plans clearfix">
                   <p class="col-xs-12 col-md-8">{t}Opennemas offers many more modules and solutions{/t}</p>
-                  <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
+                  <a href="{url name=admin_market_list}" target="_blank" class="btn btn-primary btn-large col-xs-12 col-md-4">
                     {t}Check out our modules{/t}
                   </a>
                 </div>
