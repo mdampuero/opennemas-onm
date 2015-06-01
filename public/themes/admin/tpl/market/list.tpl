@@ -228,7 +228,7 @@
           </div>
         </div>
       </div>
-      <div class="text-center ng-cloak" ng-show="!loading && allActivated(purchased) && !purchased.length">
+      <div class="text-center ng-cloak" ng-show="!loading && allDeactivated(purchased)">
         <h4>{t}No modules purchased{/t}</h4>
       </div>
     </div>
