@@ -204,7 +204,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Advanced search'),
                     'description' => _('It allows you to search for contents directly inside the manager'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'               => 'ALBUM_MANAGER',
@@ -219,7 +219,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Articles'),
                     'description' => _('Module for managing articles'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'AVANCED_ARTICLE_MANAGER',
@@ -265,28 +265,28 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Category'),
                     'description' => _('Module for managing categories'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'COMMENT_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Comments'),
                     'description' => _('Module for managing comments'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'CRONICAS_MODULES',
                     'plan'        => 'Other',
                     'name'        => _('Cronicas customizations'),
                     'description' => _('Module for managing Cronicas customizations'),
-                    'type'        => 'module'
+                    'type'        => 'internal'
                 ],
                 [
                     'id'          => 'FILE_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Files'),
                     'description' => _('Allows the user to upload files'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'               => 'FORM_MANAGER',
@@ -294,7 +294,7 @@ class ModuleManager
                     'name'             => _('Forms'),
                     'description'      => _('Allows to create new custom forms'),
                     'long_description' => _('<p>Let your readers be contributors.</p><p>Our feature Opennemas Connect will allow readers to submit their news, so that the newspaper can become the "voice of people/Internet".</p><p>You will be able to create custom submission forms for your contributors so that they can share daily in the easiest way.</p><p>All contributions can be moderated.</p>'),
-                    'type'             => 'module',
+                    'type'             => 'internal',
                     'price'            => [
                         'month' => 15
                     ]
@@ -304,7 +304,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Frontpages'),
                     'description' => _('Module for managing elements in frontpages'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
@@ -322,14 +322,14 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Images'),
                     'description' => _('Allows user to upload images'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'KEYWORD_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Keywords'),
                     'description' => _('Allows user to define keywords associated with url, mails and internal searches'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
@@ -361,7 +361,7 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Menus'),
                     'description' => _('Allows user to manage the menús'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
@@ -394,7 +394,7 @@ class ModuleManager
                     'id'   => 'OPINION_MANAGER',
                     'plan' => 'Base',
                     'name' => _('Opinion'),
-                    'type' => 'internal'
+                    'type' => 'module'
                 ],
                 [
                     'id'               => 'POLL_MANAGER',
@@ -412,7 +412,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Promotional bar'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'internal'
                 ],
                 [
                     'id'          => 'SCHEDULE_MANAGER',
@@ -465,21 +465,21 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Trash'),
                     'description' => _('Add description...'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'USER_GROUP_MANAGER',
                     'plan'        => 'Silver',
                     'name'        => _('User groups'),
                     'description' => _('Add description...'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'USER_MANAGER',
                     'plan'        => 'Silver',
                     'name'        => _('Users'),
                     'description' => _('Add description...'),
-                    'type'        => 'internal'
+                    'type'        => 'module'
                 ],
                 [
                     'id'          => 'USERVOICE_SUPPORT',
