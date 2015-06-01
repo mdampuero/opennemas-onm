@@ -45,6 +45,8 @@ class TemplateAdmin extends Template
         $this->addFilter("output", "canonical_url");
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "backend_analytics");
+        if (php_sapi_name() != 'cli') {
+            $this->addFilter("output", "backend_analytics");
+        }
     }
 }

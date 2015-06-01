@@ -30,11 +30,13 @@ angular.module(
     'BackendApp.controllers',
     'BackendApp.directives',
     'BackendApp.filters',
+    'BackendApp.interceptors',
     'BackendApp.services'
   ]);
 
 angular.module('BackendApp.controllers', []);
 angular.module('BackendApp.directives', []);
 angular.module('BackendApp.filters', []);
+angular.module('BackendApp.interceptors', []);
 angular.module('BackendApp.services', []);
 

@@ -460,10 +460,11 @@
       @Common/src/sidebar/js/sidebar.js,
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,
-      @AdminTheme/js/services/*,
-      @AdminTheme/js/filters/*,
-      @AdminTheme/js/directives/*,
       @AdminTheme/js/controllers/*,
+      @AdminTheme/js/directives/*,
+      @AdminTheme/js/filters/*,
+      @AdminTheme/js/interceptors/*,
+      @AdminTheme/js/services/*,
       @Common/js/admin.js
     "}
       <script type="text/javascript" src="{$asset_url}"></script>

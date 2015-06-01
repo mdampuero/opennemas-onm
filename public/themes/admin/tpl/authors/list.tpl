@@ -31,7 +31,7 @@
       <div class="navbar-inner">
         <ul class="nav quick-section pull-left">
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="deselectAll()" tooltip="Clear selection" tooltip-placement="right"type="button">
+            <button class="btn btn-link" ng-click="deselectAll()" tooltip="{t}Clear selection{/t}" tooltip-placement="right"type="button">
               <i class="fa fa-arrow-left fa-lg"></i>
             </button>
           </li>
@@ -47,7 +47,7 @@
         <ul class="nav quick-section pull-right">
           {acl isAllowed="AUTHOR_DELETE"}
           <li class="quicklinks">
-            <button class="btn btn-link" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <button class="btn btn-link" ng-click="deleteSelected('backend_ws_users_batch_delete')" tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
               <i class="fa fa-trash-o fa-lg"></i>
             </button>
           </li>
@@ -145,7 +145,7 @@
                     </a>
                     {/acl}
                     {acl isAllowed="AUTHOR_DELETE"}
-                    <button class="link link-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)" type="button">
+                    <button class="link link-danger" ng-click="delete(content, 'backend_ws_user_delete')" type="button">
                       <i class="fa fa-trash-o"></i>
                       {t}Delete{/t}
                     </button>
@@ -172,7 +172,7 @@
     </div>
   </div>
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/_modalDelete.tpl"}
+    {include file="acl/user/modals/_modalDelete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}

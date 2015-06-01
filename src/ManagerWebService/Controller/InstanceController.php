@@ -6,10 +6,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use Onm\Framework\Controller\Controller;
+use Onm\Exception\InstanceAlreadyExistsException;
 use Onm\Exception\InstanceNotFoundException;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
+use Onm\Exception\DatabaseNotRestoredException;
 use Onm\Instance\InstanceCreator;
 use Onm\Instance\Instance;
 use Onm\Instance\InstanceManager as im;
@@ -33,7 +35,6 @@ class InstanceController extends Controller
                     $request->request->filter($key, null, FILTER_SANITIZE_STRING);
             }
         }
-
         $instance->created = date('Y-m-d H:i:s');
 
         $im      = $this->get('instance_manager');
@@ -41,6 +42,7 @@ class InstanceController extends Controller
 
         try {
             $this->get('onm.validator.instance')->validate($instance);
+
             $im->persist($instance);
             $creator->createDatabase($instance->id);
             $creator->copyDefaultAssets($instance->internal_name);
@@ -59,6 +61,11 @@ class InstanceController extends Controller
             );
 
             return $response;
+        } catch (InstanceAlreadyExistsException $e) {
+            return new JsonResponse(
+                _('The instance already exists'),
+                409
+            );
         } catch (DatabaseNotRestoredException $e) {
             $creator->deleteDatabase($instance->id);
             $im->remove($instance);
@@ -158,7 +165,8 @@ class InstanceController extends Controller
      */
     public function deleteSelectedAction(Request $request)
     {
-        $messages   = [ 'errors' => [], 'success' => [] ];
+        $error      = [];
+        $messages   = [];
         $selected   = $request->request->get('selected', null);
         $statusCode = 200;
         $updated    = [];
@@ -204,24 +212,30 @@ class InstanceController extends Controller
 
                 $updated[] = $instance->id;
             } catch (InstanceNotFoundException $e) {
-                $messages['errors'][] = array(
-                    'error' => sprintf(_('Unable to find the instance with id "%s"'), $id),
-                );
+                $error[]    = $id;
+                $messages[] = [
+                    'message' => sprintf(_('Unable to find the instance with id "%s"'), $id),
+                    'type'    => 'error'
+                ];
             } catch (BackupException $e) {
                 $message = $e->getMessage();
 
                 $creator->deleteBackup($backupPath);
 
-                $messages['errors'][] = [
-                    'error' => sprintf(_($message), $id),
+                $error[]    = $id;
+                $messages[] = [
+                    'message' => sprintf(_($message), $id),
+                    'type'    => 'error'
                 ];
             } catch (AssetsNotDeletedException $e) {
                 $message = $e->getMessage();
 
                 $creator->restoreAssets($backupPath);
 
-                $messages['errors'][] = [
-                    'error' => sprintf(_($message), $id),
+                $error[]    = $id;
+                $messages[] = [
+                    'message' => sprintf(_($message), $id),
+                    'type'    => 'error'
                 ];
             } catch (DatabaseNotDeletedException $e) {
                 $message    = $e->getMessage();
@@ -229,31 +243,38 @@ class InstanceController extends Controller
                 $creator->restoreAssets($backupPath);
                 $creator->restoreDatabase($backupPath . DS . 'database.sql');
 
-                $messagtes['errors'][] = [
-                    'error' => sprintf(_($message), $id),
+                $error[]    = $id;
+                $messages[] = [
+                    'message' => sprintf(_($message), $id),
+                    'type'    => 'error'
                 ];
             } catch (\Exception $e) {
-                $messages['errors'][] = [
-                    'error' => $e->getMessage()
+                $error[]    = $id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error'
                 ];
             }
         }
 
         if (count($updated) > 0) {
-            $messages['success'] = [
-                'ids'     => $updated,
-                'message' => sprintf(_('%s instances deleted successfully.'), count($updated))
+            $messages = [
+                'message' => sprintf(_('%s instances deleted successfully.'), count($updated)),
+                'type'    => 'success'
             ];
         }
 
         // Return the proper status code
-        if (count($messages['errors']) > 0 && count($updated) > 0) {
+        if (count($errors) > 0 && count($updated) > 0) {
             $statusCode = 207;
-        } elseif (count($messages['errors']) > 0) {
+        } elseif (count($errors) > 0) {
             $statusCode = 409;
         }
 
-        return new JsonResponse($messages, $statusCode);
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages, 'success' => $success ],
+            $statusCode
+        );
     }
 
     /**
@@ -341,6 +362,10 @@ class InstanceController extends Controller
             $order[$value['name']] = $value['value'];
         }
 
+        if (!empty($criteria)) {
+            $criteria['union'] = 'OR';
+        }
+
         $im = $this->get('instance_manager');
         $instances = $im->findBy($criteria, $order, $epp, $page);
         $total = $im->countBy($criteria);
@@ -363,10 +388,10 @@ class InstanceController extends Controller
     public function newAction()
     {
         return new JsonResponse(
-            array(
+            [
                 'data'     => null,
                 'template' => $this->templateParams()
-            )
+            ]
         );
     }
 
@@ -407,7 +432,7 @@ class InstanceController extends Controller
                 404
             );
         } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 400);
+            return new JsonResponse(_($e->getMessage()), 400);
         }
     }
 
@@ -420,7 +445,8 @@ class InstanceController extends Controller
      */
     public function patchSelectedAction(Request $request)
     {
-        $messages   = [ 'errors' => [], 'success' => [] ];
+        $error      = [];
+        $messages   = [];
         $selected   = $request->request->get('selected', null);
         $statusCode = 200;
         $updated    = [];
@@ -462,27 +488,34 @@ class InstanceController extends Controller
                     );
                 }
             } catch (\Exception $e) {
-                $messages['errors'][] = [
-                    'id'    => $instance->id,
-                    'error' => $e->getMessage()
+                $error[]    = $instance->id;
+                $messages[] = [
+                    'message' => _($e->getMessage()),
+                    'type'    => 'error',
                 ];
             }
         }
 
         if (count($updated) > 0) {
-            $messages['success'] = [
-                'ids'     => $updated,
-                'message' => sprintf(_('%s instances updated successfully.'), count($updated))
+            $messages[] = [
+                'message' => sprintf(
+                    _('%s instances updated successfully.'),
+                    count($updated)
+                ),
+                'type' => 'success'
             ];
         }
 
-        if (count($messages['errors']) > 0 && count($updated) > 0) {
+        if (count($error) > 0 && count($updated) > 0) {
             $statusCode = 207;
-        } elseif (count($messages['errors']) > 0) {
+        } elseif (count($error) > 0) {
             $statusCode = 409;
         }
 
-        return new JsonResponse($messages, $statusCode);
+        return new JsonResponse(
+            [ 'error' => $error, 'messages' => $messages, 'success' => $updated ],
+            $statusCode
+        );
     }
 
     /**
@@ -512,7 +545,7 @@ class InstanceController extends Controller
                 404
             );
         } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 400);
+            return new JsonResponse(_($e->getMessage()), 400);
         }
     }
 
@@ -577,7 +610,7 @@ class InstanceController extends Controller
                 404
             );
         } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 400);
+            return new JsonResponse(_($e->getMessage()), 400);
         }
     }
 

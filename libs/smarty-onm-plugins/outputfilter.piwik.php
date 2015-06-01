@@ -59,10 +59,10 @@ function addPiwikCode($output)
         })();
         </script>
         <noscript>
-            <p><img src="'. $config['server_url'] .'piwik.php?idsite='.
-            $config['page_id'] .'" style="border:0" alt="" /></p>
+            <img src="'. $config['server_url'] .'piwik.php?idsite='.
+            $config['page_id'] .'" style="border:0" alt="" />
         </noscript>
         <!-- End Piwik Tracking Code -->';
 
-    return str_replace('</head>', $code . '</head>', $output);
+    return preg_replace('@(<body.*>)@', '${1}'.$code, $output);
 }

@@ -220,6 +220,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $this->id, $data);
+
         dispatchEventWithParams('user.create', array('user' => $this));
 
         return true;
@@ -369,6 +372,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $this->id, $data);
+
         dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
@@ -392,6 +398,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if (!$this->deleteMeta($id)) {
             return false;
         }
+
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.delete', array('user' => $this));
 
@@ -539,7 +548,6 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
         if (!$contentCategories) {
-
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
                  . 'WHERE pk_fk_user=?';
@@ -1155,6 +1163,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
             return false;
         }
 
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
+
         dispatchEventWithParams('user.update', array('user' => $this));
 
         return true;
@@ -1174,6 +1185,9 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
             return false;
         }
+
+        /* Notice log of this action */
+        logUserEvent(__METHOD__, $id);
 
         dispatchEventWithParams('user.update', array('user' => $this));
 
@@ -1396,8 +1410,8 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
         $users = array_values($users);
 
         return $users;
-    }
 
+}
     /**
      * Returns the total users that can be activated
      *
@@ -1405,7 +1419,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      *
      * @return int  total users
      **/
-    public static function getTotalActivatedUsersRemaining($maxUsers = false)
+    public static function getTotalActivatedUsersRemaining($maxUsers = false, $onlyActivated = false)
     {
         // The value isn't set on DB or is set to 0 (no limit)
         if (!$maxUsers) {
@@ -1420,6 +1434,10 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
 
         if ($rs === false) {
             return false;
+        }
+
+        if ($onlyActivated) {
+            return $rs->fields['total'];
         }
 
         if ($rs->fields['total'] > $maxUsers) {
@@ -1739,7 +1757,7 @@ class User extends OAuthUser implements AdvancedUserInterface, EquatableInterfac
      */
     public function isEnabled()
     {
-        return $this->activated;
+        return $this->isMaster() || $this->activated;
     }
 
     /**

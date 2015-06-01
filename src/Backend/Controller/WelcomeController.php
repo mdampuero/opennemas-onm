@@ -73,26 +73,37 @@ class WelcomeController extends Controller
     public function getYoutubeVideoIds()
     {
         $cm = new \ContentManager();
-        $youtubeRss = $cm->getUrlContent(
-            'http://gdata.youtube.com/feeds/base/users/OpennemasPublishing/'
-            .'uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile'
+        $params = getContainerParameter('panorama');
+
+        if (!array_key_exists('youtube', $params)
+            && !array_key_exists('api_key', $params['youtube'])
+            && empty($params['youtube']['api_key'])
+        ) {
+            throw new \Exception("Missing Youtube configuration.");
+        }
+
+        $apiKey = $params['youtube']['api_key'];
+        $channelId = 'UUQ-DzmEvQXw5zHgN3qV0T-A';
+
+        // Fetch videos for this playlist
+        $playlist = $cm->getUrlContent(
+            'https://www.googleapis.com/youtube/v3/playlistItems?'.
+            'part=snippet&maxResults=50&playlistId='.$channelId.'&key='.$apiKey,
+            true
         );
 
-        $xml = simplexml_load_string($youtubeRss);
-
-        $videosYoutubeIds = array();
-
-        // Parse youtube videos only if the request was done
-        if (is_object($xml)) {
-            foreach ($xml->channel->item as $item) {
-                preg_match('@v=(.*)&@', $item->link, $matches);
-
-                $videosYoutubeIds []= $matches[1];
-
+        $videosYoutubeIds = [];
+        if (!is_null($playlist) &&
+            $playlist->items &&
+            !empty($playlist->items)
+        ) {
+            foreach ($playlist->items as $video) {
+                $videosYoutubeIds[] = $video->snippet->resourceId->videoId;
             }
-            shuffle($videosYoutubeIds);
-            $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
         }
+
+        shuffle($videosYoutubeIds);
+        $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
 
         return $videosYoutubeIds;
     }

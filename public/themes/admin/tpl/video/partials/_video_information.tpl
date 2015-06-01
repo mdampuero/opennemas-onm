@@ -7,7 +7,7 @@
 <div class="form-group">
   <label for="description" class="form-label">{t}Description{/t}</label>
   <div class="controls">
-    <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:$information['title']}</textarea>
+    <textarea onm-editor onm-editor-preset="simple" name="description" id="description" required="required" rows="6" class="form-control">{$video->description|clearslash|default:''}</textarea>
   </div>
 </div>
 {if (!empty($video->uri))}
@@ -23,7 +23,7 @@
   <div class="controls">
     <div class="thumbnail center">
       <div class="video_player" style="max-width:600px; overflow:hidden; margin:0 auto">
-        {$information['embedHTML']}
+        {$information['embedHTML']|replace:'http://':'https://'}
       </div>
     </div>
     <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />

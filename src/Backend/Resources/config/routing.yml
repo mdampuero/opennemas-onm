@@ -1061,6 +1061,8 @@ admin_login_callback:
 admin_logout:
     path:     /logout
     defaults: { _controller  : BackendBundle:Authentication:logout }
+    options:
+        expose: true
 
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass

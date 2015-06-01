@@ -203,7 +203,7 @@ class Menu
 
         $saved = $this->setMenuElements($this->pk_menu, $data['items']);
 
-        dispatchEventWithParams('menu.update', array('menu' => $this));
+        dispatchEventWithParams('menu.update', array('content' => $this));
 
         return $saved;
     }

@@ -165,7 +165,7 @@ class Rss extends ServerAbstract implements ServerInterface
     public function canHandle($params)
     {
         // Check url
-        $res = preg_match('@rss|feed@', $params['url']);
+        $res = preg_match('@rss|feed|xml@', $params['url']);
         if ($res) {
             return true;
         }

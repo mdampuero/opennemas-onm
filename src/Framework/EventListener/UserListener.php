@@ -11,6 +11,8 @@
 
 namespace Framework\EventListener;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -35,13 +37,15 @@ class UserListener implements EventSubscriberInterface
     /**
      * Initializes the listener.
      *
-     * @param SecurityContextInterface $context  The security context service.
-     * @param OnmUserProvider          $provider The user provider.
+     * @param SecurityContext $context  The security context service.
+     * @param OnmUserProvider $provider The user provider.
+     * @param Router          $router   The router service.
      */
-    public function __construct($context, $provider)
+    public function __construct($context, $provider, $router)
     {
         $this->context  = $context;
         $this->provider = $provider;
+        $this->router   = $router;
     }
 
     /**
@@ -51,16 +55,46 @@ class UserListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (preg_match('@^/_.*@', $event->getRequest()->getRequestUri()) != 1
+        $uri = $event->getRequest()->getRequestUri();
+
+        if (preg_match('@^/_.*@', $uri) != 1
             && $this->context->getToken()
+            && $this->context->getToken()->getUser()
+            && $this->context->getToken()->getUser() != 'anon.'
         ) {
             $token = $this->context->getToken();
             $user = $token->getUser();
 
-            if ($user && $user != 'anon.') {
-                $user = $this->provider->loadUserByUsername($user->getUsername());
-                $user->eraseCredentials();
-                $token->setUser($user);
+            $user = $this->provider->loadUserByUsername($user->getUsername());
+            $user->eraseCredentials();
+            $token->setUser($user);
+
+            $database  = getService('instance_manager')->current_instance->getDatabaseName();
+            $namespace = getService('instance_manager')->current_instance->internal_name;
+
+            getService('dbal_connection')->selectDatabase($database);
+            getService('cache')->setNamespace($namespace);
+            $GLOBALS['application']->conn->selectDatabase($database);
+
+            if ($user->isMaster() || $user->isEnabled()) {
+                return;
+            }
+
+            // Logout for web services
+            if (preg_match('@^/admin/entityws.*@', $uri) === 1
+                || preg_match('@^/manager(ws).*@', $uri) === 1
+            ) {
+                $event->setResponse(new JsonResponse(null, 401));
+                return;
+            }
+
+            // Logout for backend
+            if (preg_match('@^/admin.*@', $uri) === 1) {
+                $event->setResponse(
+                    new RedirectResponse(
+                        $this->router->generate('admin_logout')
+                    )
+                );
             }
         }
     }
