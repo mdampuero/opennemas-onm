@@ -174,22 +174,22 @@
     <script type="text/ng-template" id="item">
       <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
         <div class="grid-body no-padding">
-          <div ng-if="item.type == 'module'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-modules.jpg);">
+          <div ng-if="item.type == 'module'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-modules.jpg);">
             <h5 class="name pointer" ng-click="showDetails(item)">
               <strong>[% item.name %]</strong>
             </h5>
           </div>
-          <div ng-if="item.type == 'pack'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);">
+          <div ng-if="item.type == 'pack'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-pack.jpg);">
             <h5 class="name pointer" ng-click="showDetails(item)">
               <strong>[% item.name %]</strong>
             </h5>
           </div>
-          <div ng-if="item.type == 'service'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-service-support.jpg);">
+          <div ng-if="item.type == 'service'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-service-support.jpg);">
             <h5 class="name pointer" ng-click="showDetails(item)">
               <strong>[% item.name %]</strong>
             </h5>
           </div>
-          <div ng-if="item.type == 'theme'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);">
+          <div ng-if="item.type == 'theme'" class="module-header pointer" style="background-image: url(/assets/images/market/generic-pack.jpg);">
             <h5 class="name pointer" ng-click="showDetails(item)">
               <strong>[% item.name %]</strong>
             </h5>
@@ -202,10 +202,10 @@
               [% item.description | limitTo: 140 %]
               [% item.description.length > 140 ? '...' : '' %]
             </p>
-            <div class="text-right p-t-15">
+            <div class="text-right p-t-5">
               <div class="price">
                 <h3 class="no-margin" ng-show="item.price">
-                  <span ng-if="item.price.month > 0"><strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small></span>
+                  <span ng-if="item.price.month !== 0"><strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small></span>
                   <span ng-if="item.price.month == 0"><strong><strong>{t}Free{/t}</strong></span>
                 </h3>
               </div>
@@ -214,7 +214,7 @@
             <button class="btn btn-block btn-link hidden-xs" ng-click="showDetails(item);$event.stopPropagation()">
               {t}More info{/t}
             </button>
-            <button class="btn btn-block hidden-xs" ng-class="{ 'btn-default': !isActivated(item), 'btn-success': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
+            <button class="btn btn-block hidden-xs" ng-class="{ 'btn-sucess': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
               <i class="fa fa-plus m-r-5" ng-if="!isActivated(item)"></i>
               <span ng-if="!isActivated(item)">{t}Add to cart{/t}</span>
               <span ng-if="isActivated(item)">{t}Purchased{/t}</span>

@@ -16,7 +16,7 @@
         <h3 class="no-margin">
           <strong>[% template.item.name %]</strong>
         </h3>
-        <p class="p-t-15">[% template.item.author ? template.item.author : 'Opennemas' %]</p>
+        <p class="p-t-15">{t}Creator:{/t} [% template.item.author ? template.item.author : 'Opennemas' %]</p>
         <div class="text-right p-t-15">
           <div class="price" ng-if="template.item.price.month">
             <h3 class="no-margin">
