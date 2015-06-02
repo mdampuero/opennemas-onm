@@ -220,8 +220,9 @@
               {t}More info{/t}
             </button>
             <button class="btn btn-block hidden-xs" ng-class="{ 'btn-success': !isActivated(item), 'btn-default': isActivated(item) }" ng-click="addToCart(item);$event.stopPropagation()" ng-disabled="isInCart(item) || isActivated(item)">
-              <i class="fa fa-plus m-r-5" ng-if="!isActivated(item)"></i>
-              <span ng-if="!isActivated(item)">{t}Add to cart{/t}</span>
+              <i class="fa fa-plus m-r-5" ng-if="!isActivated(item) && !isInCart(item)"></i>
+              <span ng-if="!isActivated(item) && !isInCart(item)">{t}Add to cart{/t}</span>
+              <span ng-if="!isActivated(item) && isInCart(item)">{t}Added to cart{/t}</span>
               <span ng-if="isActivated(item)">{t}Purchased{/t}</span>
             </button>
           </div>

@@ -6,14 +6,17 @@
       <scrollable>
         <ul class="cart-list">
           <li class="clearfix" ng-repeat="item in template.cart">
-            <img class="img-responsive pull-left" src="http://placehold.it/300x300">
+            <img ng-if="item.type == 'module'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-modules.jpg">
+            <img ng-if="item.type == 'pack'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.jpg">
+            <img ng-if="item.type == 'service'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-service-support.jpg">
+            <img ng-if="item.type == 'theme'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.jpg">
             <div class="p-l-100">
               <h5>[% item.name %]</h5>
               <p class="description">[% item.description %]</p>
               <div class="text-right p-r-15">
                 <div class="price">
                   <h3 class="no-margin">
-                    <strong>35</strong><small>€ / {t}month{/t}</small>
+                    <strong>[% item.price.month %]</strong><small>€ / {t}month{/t}</small>
                   </h3>
                 </div>
               </div>
