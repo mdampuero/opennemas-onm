@@ -45,7 +45,10 @@
                     <scrollable>
                       <ul class="cart-list">
                         <li class="clearfix" ng-repeat="item in cart">
-                          <img class="img-responsive pull-left" src="http://placehold.it/500x500">
+                          <img ng-if="item.type == 'module'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-modules.jpg">
+                          <img ng-if="item.type == 'pack'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.jpg">
+                          <img ng-if="item.type == 'service'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-service-support.jpg">
+                          <img ng-if="item.type == 'theme'" class="img-responsive pull-left" ng-src="/assets/images/market/generic-pack.jpg">
                           <span class="pull-left">
                             <h5>[% item.name %]</h5>
                             <p class="description">[% item.description %]</p>
@@ -171,7 +174,10 @@
     <script type="text/ng-template" id="item">
       <div class="grid simple module-grid" ng-click="xsOnly($event, showDetails, item);">
         <div class="grid-body no-padding">
-          <div class="module-header pointer" ng-click="showDetails(item)" style="background-image: url(http://placehold.it/500x500);"></div>
+          <div ng-if="item.type == 'module'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-modules.jpg);"></div>
+          <div ng-if="item.type == 'pack'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);"></div>
+          <div ng-if="item.type == 'service'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-service-support.jpg);"></div>
+          <div ng-if="item.type == 'theme'" class="module-header pointer" ng-click="showDetails(item)"  style="background-image: url(/assets/images/market/generic-pack.jpg);"></div>
           <div class="module-body">
             <div class="module-icon">
               <i class="fa fa-lg" ng-class="{ 'fa-cube': item.type == 'module', 'fa-dropbox': item.type == 'pack', 'fa-support': item.type == 'service', 'fa-eye': item.type == 'theme'}"></i>
