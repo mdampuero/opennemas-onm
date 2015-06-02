@@ -204,7 +204,10 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Advanced search'),
                     'description' => _('It allows you to search for contents directly inside the manager'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'ALBUM_MANAGER',
@@ -219,7 +222,10 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Articles'),
                     'description' => _('Module for managing articles'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'AVANCED_ARTICLE_MANAGER',
@@ -265,21 +271,30 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Category'),
                     'description' => _('Module for managing categories'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'COMMENT_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Comments'),
                     'description' => _('Module for managing comments'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'CRONICAS_MODULES',
                     'plan'        => 'Other',
                     'name'        => _('Cronicas customizations'),
                     'description' => _('Module for managing Cronicas customizations'),
-                    'type'        => 'internal'
+                    'type'        => 'internal',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'FILE_MANAGER',
@@ -304,7 +319,10 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Frontpages'),
                     'description' => _('Module for managing elements in frontpages'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'FRONTPAGES_LAYOUT',
@@ -322,14 +340,20 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Images'),
                     'description' => _('Allows user to upload images'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'KEYWORD_MANAGER',
                     'plan'        => 'Base',
                     'name'        => _('Keywords'),
                     'description' => _('Allows user to define keywords associated with url, mails and internal searches'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'KIOSKO_MANAGER',
@@ -361,7 +385,10 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Menus'),
                     'description' => _('Allows user to manage the menús'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'NEWS_AGENCY_IMPORTER',
@@ -419,7 +446,7 @@ class ModuleManager
                     'plan'        => 'Other',
                     'name'        => _('Schedules'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'internal'
                 ],
                 [
                     'id'          => 'SETTINGS_MANAGER',
@@ -447,7 +474,10 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Static pages'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'SYNC_MANAGER',
@@ -465,21 +495,30 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Trash'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'USER_GROUP_MANAGER',
                     'plan'        => 'Silver',
                     'name'        => _('User groups'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'USER_MANAGER',
                     'plan'        => 'Silver',
                     'name'        => _('Users'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'USERVOICE_SUPPORT',
@@ -499,13 +538,16 @@ class ModuleManager
                     'plan'        => 'Base',
                     'name'        => _('Widgets'),
                     'description' => _('Add description...'),
-                    'type'        => 'module'
+                    'type'        => 'module',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'               => 'PAYWALL',
                     'plan'             => 'Other',
                     'name'             => _('Paywall'),
-                    'description'      => _('Add description...'),
+                    'description'      => _('Earn money '),
                     'long_description' => _('<p>Make money while doing what you love.</p><p>The News business is a very challenging business and advertising alone often does not allow to newspapers to keep going. Add paywall to your newspaper and you will be able to select articles that you want to sell. This way in order to access this news users will need to register. </p><p>You will be able to set the payment/subscription the way you want (weekly, monthly, annual, etc) and also add currency and % of taxes that the item is subject to.</p>'),
                     'type'             => 'module',
                     'price'            => [
@@ -517,42 +559,65 @@ class ModuleManager
                     'plan'        => 'Support',
                     'name'        => _('No support'),
                     'description' => '',
-                    'type'        => 'internal'
+                    'type'        => 'internal',
+                    'price'            => [
+                        'month' => 0
+                    ]
                 ],
                 [
                     'id'          => 'SUPPORT_PRO',
                     'plan'        => 'Support',
                     'name'        => _('Profesional Support'),
-                    'description' => _('10 hours/month'),
-                    'type'        => 'service'
+                    'description' => _('Get 10 hours of development per month to tune your site.'),
+                    'long_description' => _('<ul><li>Modification and creation of widgets.</li><li>Ticket based support (SLA 24 hours max)</li></ul>'),
+                    'type'        => 'service',
+                    'price'            => [
+                        'month' => 100
+                    ]
                 ],
                 [
                     'id'          => 'SUPPORT_2',
                     'plan'        => 'Support',
                     'name'        => _('Support 2'),
-                    'description' => _('40 hours/month'),
-                    'type'        => 'service'
+                    'description' => _('Get 40 hours of development per month to tune your site.'),
+                    'long_description' => _('<ul><li>Cambios básicos en maquetas HTML/CSS</li><li>Soporte via tickets/e-mail  y hangout/skype</li></ul>'),
+                    'type'        => 'service',
+                    'price'            => [
+                        'month' => 300
+                    ]
                 ],
                 [
                     'id'          => 'SUPPORT_4',
                     'plan'        => 'Support',
                     'name'        => _('Support 4'),
-                    'description' => _('80 hours/month'),
-                    'type'        => 'service'
+                    'description' => _('Get 80 hours of development per month to tune your site.'),
+                    'long_description' => _('<ul><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Cambio en disposición de plantillas de home, Portadillas de categorías, Nuevas distribuciones en noticia interior</li><li>Soporte via tickets/e-mail y hangout/skype</li></ul>'),
+                    'type'        => 'service',
+                    'price'            => [
+                        'month' => 600
+                    ]
                 ],
                 [
                     'id'          => 'SUPPORT_8',
                     'plan'        => 'Support',
                     'name'        => _('Support 8'),
-                    'description' => _('160 hours/month'),
-                    'type'        => 'service'
+                    'description' => _('Get 160 hours of development per month to tune your site.'),
+                    'long_description' => _('<ul><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Creación de nuevas plantillas, estilos, maqueteros, Creación/modificación de plantillas para eventos, ocasiones, especiales, otras ediciones, etc.</li><li>Soporte via tickets/email, hangout/skype y Teléfono agente</li></ul>'),
+                    'type'        => 'service',
+                    'price'            => [
+                        'month' => 1200
+                    ]
                 ],
                 [
                     'id'          => 'SUPPORT_8_PLUS',
                     'plan'        => 'Support',
                     'name'        => _('Support 8+'),
-                    'description' => _('240 hours/month'),
-                    'type'        => 'service'
+                    'description' => _('Get 240 hours of development per month to tune your site.'),
+                    'long_description' => _('<ul><li>This Support is designed for all newspapers that need may need help including during the weekend.</li><li>Modificación y Creación de widgets, cambios básicos en maquetas HTML/CSS, Creación de nuevas plantillas, estilos, maqueteros, Creación/modificación de plantillas para eventos, ocasiones, especiales, otras ediciones, etc.</li></ul>'),
+                    'type'        => 'service',
+                    'price'            => [
+                        'month' => 3000
+                    ]
                 ]
             ];
         }
